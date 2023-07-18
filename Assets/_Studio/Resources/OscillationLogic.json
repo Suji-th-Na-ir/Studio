@@ -1,0 +1,44 @@
+{
+    "entities": [
+        {
+            "id": 1,
+            "primitiveType": "Cube",
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "components": [
+                {
+                    "type": "Terra.Studio.OscillateComponent",
+                    "data": {
+                        "fromPoint": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "toPoint": {
+                            "x": 5.0,
+                            "y": 5.0,
+                            "z": 5.0
+                        },
+                        "loop": true,
+                        "IsConditionAvailable": true,
+                        "ConditionType": "Terra.Studio.MouseAction",
+                        "ConditionData": "OnClick"
+                    }
+                }
+            ]
+        }
+    ]
+}
