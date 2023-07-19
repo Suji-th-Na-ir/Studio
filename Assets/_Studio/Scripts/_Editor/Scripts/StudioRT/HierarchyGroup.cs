@@ -1,21 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using RuntimeInspectorNamespace;
 using UnityEngine;
 
 namespace Terra.Studio
 {
     public class HierarchyGroup : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
-        {
-        
+        [SerializeField] private RuntimeHierarchy _hierarchy;
+
+        private void Awake()
+        {   
+            HideHierarchy();
         }
 
-        // Update is called once per frame
-        void Update()
+        public void ShowHierarchy()
         {
+            _hierarchy.gameObject.SetActive(true);
+        }
         
+        public void HideHierarchy()
+        {
+            _hierarchy.gameObject.SetActive(false);
         }
     }
 }

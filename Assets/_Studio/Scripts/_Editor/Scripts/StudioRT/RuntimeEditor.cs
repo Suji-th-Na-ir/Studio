@@ -1,21 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using RuntimeCommon;
 using UnityEngine;
 
 namespace Terra.Studio
 {
-    public class RuntimeEditor : MonoBehaviour
+    public class RuntimeEditor : MonoSingleton<RuntimeEditor>
     {
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
+        [SerializeField] private InspectorGroup _inspectorGroup;
+        [SerializeField] private HierarchyGroup _hierarchyGroup;
+        [SerializeField] private SelectionHandler _selectionHandler;
 
-        // Update is called once per frame
-        void Update()
+        private void Start()
         {
-        
+            _inspectorGroup.ShowHierarchy();
+            _hierarchyGroup.ShowHierarchy();
         }
     }
 }
