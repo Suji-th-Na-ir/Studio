@@ -1,27 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
-using RuntimeInspectorNamespace;
 using UnityEngine;
 
 namespace Terra.Studio
 {
     public class InspectorGroup : MonoBehaviour
     {
-        [SerializeField] private RuntimeInspector _inspector;
-
-        private void Awake()
-        {   
-            HideInspector();
-        }
-
-        public void ShowHierarchy()
+        // Start is called before the first frame update
+        void Start()
         {
-            _inspector.gameObject.SetActive(true);
-        }
         
-        public void HideInspector()
+        }
+
+        // Update is called once per frame
+        void Update()
         {
-            _inspector.gameObject.SetActive(false);
+        
         }
     }
 }

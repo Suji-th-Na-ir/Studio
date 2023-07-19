@@ -20,7 +20,7 @@ namespace StudioRT
             Debug.Log("Loop: " + loop);
             Debug.Log("Enable on click " + onClick);
 
-            var resp = SelectionHandler.Get.GetSceneData(this);
+            var resp = SelectionHandler.Instance.GetSceneData(this);
             Interop<SystemInterop>.Current.Resolve<CrossSceneDataHolder>().Set(resp);
         }
     }
