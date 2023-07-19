@@ -35,13 +35,13 @@ public class SelectionHandler : View
 
     private void Awake()
     {
-        Interop<EditorInterop>.Current.Register<SelectionHandler>(this);
+        Interop<EditorInterop>.Current.Register(this);
         runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
     }
 
     private void OnDestroy()
     {
-        Interop<EditorInterop>.Current.Unregister<SelectionHandler>(this);
+        Interop<EditorInterop>.Current.Unregister(this);
         runtimeHierarchy.OnSelectionChanged -= OnHierarchySelectionChanged;
     }
 
@@ -235,17 +235,19 @@ public class SelectionHandler : View
         wdd.entities[0].components = new EntityBasedComponent[1];
         wdd.entities[0].components[0].type = "Terra.Studio.OscillateComponent";
 
-        var compData = new Terra.Studio.OscillateComponent
-        {
-            fromPoint = oscialteComp.fromPoint,
-            toPoint = oscialteComp.toPoint,
-            loop = oscialteComp.loop,
-            speed = 1.5f,
-            ConditionType = "Terra.Studio.MouseAction",
-            ConditionData = "OnClick",
-            IsConditionAvailable = oscialteComp.onClick,
-            CanExecute = !oscialteComp.onClick
-        };
+        // var compData = new Terra.Studio.OscillateComponent
+        // {
+        //     fromPoint = oscialteComp.Component.fromPoint,
+        //     toPoint = oscialteComp.Component.toPoint,
+        //     loop = oscialteComp.Component.loop,
+        //     speed = 1.5f,
+        //     ConditionType = osci "Terra.Studio.MouseAction",
+        //     ConditionData = "OnClick",
+        //     IsConditionAvailable = oscialteComp.Component.IsConditionAvailable,
+        //     CanExecute = !oscialteComp.Component.CanExecute
+        // };
+
+        var compData = oscialteComp.Component;
 
         wdd.entities[0].components[0].data = compData;
         var json = JsonConvert.SerializeObject(wdd);

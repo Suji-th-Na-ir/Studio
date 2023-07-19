@@ -9,7 +9,7 @@ namespace Terra.Studio
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         public static void Init()
         {
-            var go = new GameObject("Cross-Scene Data Holder", typeof(CrossSceneDataHolder));
+            // var go = new GameObject("Cross-Scene Data Holder", typeof(CrossSceneDataHolder));
         }
 
         private void Awake()

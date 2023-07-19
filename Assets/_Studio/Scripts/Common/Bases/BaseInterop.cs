@@ -10,11 +10,13 @@ namespace Terra.Studio
 
         public virtual void Register<T>(T instance)
         {
+            // Debug.Log("registering "+instance.GetType().ToString());
             _instanceDict.Add(typeof(T), instance);
         }
 
         public virtual void Unregister<T>(T instance)
         {
+            // Debug.Log("um-registering "+instance.GetType().ToString());
             _instanceDict.Remove(typeof(T));
         }
 
