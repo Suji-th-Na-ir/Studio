@@ -30,11 +30,11 @@ namespace Terra.Studio
             componentsAttached.Remove(typeof(T));
         }
 
-        public StudioEditorBehaviour<T2> GetBehaviour<T1, T2>()
-        {
-            var behaviour = componentsAttached[typeof(T1)].Item2 as StudioEditorBehaviour<T2>;
-            return behaviour;
-        }
+        // public StudioEditorBehaviour<T2> GetBehaviour<T1, T2>()
+        // {
+        //     var behaviour = componentsAttached[typeof(T1)].Item2 as StudioEditorBehaviour<T2>;
+        //     return behaviour;
+        // }
 
         public static StudioGameObject CreateGameObject(PrimitiveType primitive)
         {

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using RTG;
 using RuntimeInspectorNamespace;
@@ -7,7 +8,7 @@ using StudioRT;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
 
-public class SelectionHandler : MonoSingleton<SelectionHandler>
+public class SelectionHandler : View
 {
     private enum GizmoId
     {
@@ -34,7 +35,14 @@ public class SelectionHandler : MonoSingleton<SelectionHandler>
 
     private void Awake()
     {
+        Interop<EditorInterop>.Current.Register<SelectionHandler>(this);
         runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
+    }
+
+    private void OnDestroy()
+    {
+        Interop<EditorInterop>.Current.Unregister<SelectionHandler>(this);
+        runtimeHierarchy.OnSelectionChanged -= OnHierarchySelectionChanged;
     }
 
     private void OnHierarchySelectionChanged(System.Collections.ObjectModel.ReadOnlyCollection<Transform> _allTransform)
@@ -49,7 +57,7 @@ public class SelectionHandler : MonoSingleton<SelectionHandler>
         }
     }
 
-    private void Start()
+    public override void Init()
     {
         objectMoveGizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
         objectRotationGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
@@ -60,6 +68,21 @@ public class SelectionHandler : MonoSingleton<SelectionHandler>
 
         _workGizmo = objectMoveGizmo;
         _workGizmoId = GizmoId.Move;
+    }
+    
+    public override void Draw()
+    {
+            
+    }
+
+    public override void Flush()
+    {
+            
+    }
+
+    public override void Repaint()
+    {
+            
     }
 
 

@@ -2,13 +2,37 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="19655a8e-b3ed-4fee-944c-7b9d3a6d1a07" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Resources/SystemSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Resources/SystemSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/TerraEditor.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scenes/Test.unity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scenes/Test.unity.meta" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.Studio/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_Studio/Scenes/Editor.unity" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_Studio/Scenes/Editor.unity.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Common/SelectionHandler.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Common/SelectionHandler.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Studio/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Studio/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Core/Wrappers/StudioGameObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Core/Wrappers/StudioGameObject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/EditorSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/EditorSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scenes.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scenes/Editor.unity" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scenes/Editor.unity.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/HierarchyGroup.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/HierarchyGroup.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/InspectorGroup.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/InspectorGroup.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/OscillateComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/OscillateComponent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/RuntimeEditor.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/RuntimeEditor.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/SelectionHandler.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/SelectionHandler.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Hierarchy/HierarchyView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Hierarchy/HierarchyView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components/AddComponent.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components/AddComponent/OscillateDrawComponent.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components/AddComponent/OscillateDrawComponent.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components/TRS.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components/TRS/TRSBinder.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components/TRS/TRSBinder.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components/TRS/TRSComponent.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components/TRS/TRSComponent.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/InspectorView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/InspectorView.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -17,7 +41,8 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/RuntimeEditor.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Hierarchy/HierarchyView.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/InspectorView.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Importers/ShaderGraphImporter.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Tests/Runtime/Canvas/CanvasSizeCorrectInAwakeAndStart.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Tests/Runtime/Canvas/CreateSceneUtility.cs" root0="SKIP_HIGHLIGHTING" />
@@ -27,15 +52,21 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="2SkRf4z92uKncuBWF0TIuz4IiD6" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Discover.Launch.Via.Unity": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "vue.rearranger.settings.migration": "true"
   },
@@ -94,6 +125,7 @@
       <option name="presentableId" value="Default" />
       <updated>1689688693747</updated>
       <workItem from="1689688696054" duration="3770000" />
+      <workItem from="1689762703471" duration="3096000" />
     </task>
     <servers />
   </component>
@@ -103,6 +135,7 @@
   <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="EditMode" />
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
 </project>

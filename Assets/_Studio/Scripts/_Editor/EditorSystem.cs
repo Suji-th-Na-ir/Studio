@@ -25,13 +25,17 @@ namespace Terra.Studio
             Interop<EditorInterop>.Current.Resolve<InspectorView>().Init();
             Interop<EditorInterop>.Current.Resolve<ToolbarView>().Init();
             Interop<EditorInterop>.Current.Resolve<SceneView>().Init();
+
             //Actually populate the UI list here
             Interop<EditorInterop>.Current.Resolve<HierarchyView>().Draw();
             Interop<EditorInterop>.Current.Resolve<InspectorView>().Draw();
             Interop<EditorInterop>.Current.Resolve<ToolbarView>().Draw();
             Interop<EditorInterop>.Current.Resolve<SceneView>().Draw();
 
-            Interop<EditorInterop>.Current.Register<StudioGameObjectsHolder>(StudioGameObjectsHolder.GetReference());
+            // Interop<EditorInterop>.Current.Register<StudioGameObjectsHolder>(StudioGameObjectsHolder.GetReference());
+            
+            // init selection handler 
+            Interop<EditorInterop>.Current.Resolve<SelectionHandler>().Init();
         }
 
         public void Dispose()

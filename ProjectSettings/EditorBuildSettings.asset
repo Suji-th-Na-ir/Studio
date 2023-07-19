@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/_Studio/Scenes/Runtime.unity
     guid: ccdede0e57c8a4cbeabafb32d0990643
   - enabled: 1
-    path: Assets/_Studio/Scripts/_Editor/Scenes/Editor.unity
+    path: Assets/_Studio/Scenes/Editor.unity
     guid: e940e4cfa34744c84bb9eb7cae90f6f8
   m_configObjects: {}
