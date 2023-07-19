@@ -9,12 +9,9 @@ EditorBuildSettings:
     path: Assets/_Studio/Scenes/Bootstrap.unity
     guid: 4d10b6ba31c4041a5bdcdc8253fc33dd
   - enabled: 1
-    path: Assets/_Studio/Scenes/Editor.unity
-    guid: 773528b6f067448988f06f78bfc9aa43
-  - enabled: 1
     path: Assets/_Studio/Scenes/Runtime.unity
     guid: ccdede0e57c8a4cbeabafb32d0990643
   - enabled: 1
-    path: Assets/_Studio/Scripts/TerraEditor/Scenes/Test.unity
+    path: Assets/_Studio/Scripts/_Editor/Scenes/Editor.unity
     guid: e940e4cfa34744c84bb9eb7cae90f6f8
   m_configObjects: {}
