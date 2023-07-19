@@ -7,7 +7,7 @@ using StudioRT;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
 
-public class SelectionHandler : MonoBehaviour
+public class SelectionHandler : MonoSingleton<SelectionHandler>
 {
     private enum GizmoId
     {
@@ -15,18 +15,6 @@ public class SelectionHandler : MonoBehaviour
         Rotate,
         Scale,
         Universal
-    }
-
-    private static SelectionHandler _instance;
-
-    public static SelectionHandler Instance
-    {
-        get
-        {
-            if (_instance == null)
-                _instance = new SelectionHandler();
-            return _instance;
-        }
     }
 
     [SerializeField] private Camera mainCamera;
