@@ -13,10 +13,12 @@ namespace Terra.Studio
                 default:
                 case "Terra.Studio.OscillateComponent":
                     return new OscillateAuthor();
+                case "Terra.Studio.Broadcaster":
+                    return new BroadcastAuthor();
             }
         }
 
-        public static void GetSystemForCondition(string dataType, Action<object> onConditionalCheck, bool subscribe)
+        public static void GetSystemForCondition(string dataType, Action<object> onConditionalCheck, bool subscribe, string conditionalCheck = null)
         {
             switch (dataType)
             {
@@ -30,6 +32,16 @@ namespace Terra.Studio
                     else
                     {
                         mouseEvents.OnClicked -= onConditionalCheck;
+                    }
+                    break;
+                case "Terra.Studio.Condition":
+                    if (conditionalCheck == null)
+                    {
+                        return;
+                    }
+                    if (subscribe)
+                    {
+                        Interop<RuntimeInterop>.Current.Resolve<ConditionHolder>().Set(conditionalCheck, () => { onConditionalCheck?.Invoke(null); });
                     }
                     break;
             }

@@ -15,7 +15,7 @@ namespace Terra.Studio
         public Action<GameObject> OnClicked { get; set; }
 
         private bool systemsAdded = false;
-            
+
         private void Awake()
         {
             Interop<SystemInterop>.Current.Register(this as ISubsystem);
@@ -26,18 +26,22 @@ namespace Terra.Studio
         {
             systemsAdded = false;
             ecsWorld = new EcsWorld();
-            initSystems = new EcsSystems(ecsWorld);
+            initSystems = new EcsSystems(ecsWorld)
+                .Add(new BroadcastSystem());
+            initSystems.Init();
             updateSystems = new EcsSystems(ecsWorld)
                 .Add(new ClickSystem());
-            // updateSystems.Init();
             fixedUpdateSystems = new EcsSystems(ecsWorld);
             Author<WorldAuthor>.Current.Generate();
+            Interop<RuntimeInterop>.Current.Register(new ConditionHolder());
         }
 
         private void Update()
         {
-            if(systemsAdded)
+            if (systemsAdded)
+            {
                 updateSystems.Run();
+            }
         }
 
         public void AddUpdateSystem<T>(T runSystem) where T : IEcsRunSystem
@@ -69,6 +73,7 @@ namespace Terra.Studio
 
         private void OnDestroy()
         {
+            Interop<RuntimeInterop>.Current.Unregister<ConditionHolder>();
             Interop<SystemInterop>.Current.Unregister(this as ISubsystem);
             Interop<RuntimeInterop>.Current.Unregister(this);
         }

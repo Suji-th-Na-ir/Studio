@@ -36,7 +36,7 @@ namespace Terra.Studio
             foreach (var entity in filter)
             {
                 ref var oscillatable = ref oscillatorPool.Get(entity);
-                if (!oscillatable.CanExecute)
+                if (oscillatable.IsConditionAvailable && !oscillatable.CanExecute)
                 {
                     return;
                 }
@@ -56,13 +56,9 @@ namespace Terra.Studio
                     }
                     else
                     {
-                        // var tempRef = oscillatable.fromPoint;
-                        // oscillatable.fromPoint = oscillatable.toPoint;
-                        // oscillatable.toPoint = tempRef;
                         (oscillatable.fromPoint, oscillatable.toPoint) = (oscillatable.toPoint, oscillatable.fromPoint);
                     }
                 }
-                Debug.Log("oscillating move towards");
                 targetTr.position = Vector3.MoveTowards(targetTr.position, oscillatable.toPoint, oscillatable.speed * Time.deltaTime);
             }
             if (currentExecutedCount == totalEntitiesCount)
@@ -73,7 +69,6 @@ namespace Terra.Studio
 
         public void OnConditionalCheck(object data)
         {
-            Debug.Log("on condition check");
             var tuple = ((int id, UnityEngine.GameObject reference, string conditionalData))data;
             if (!tuple.reference)
             {

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8db59e39f467b418ab20af00d3702918, type: 3}
   m_Name: SystemSettings
   m_EditorClassIdentifier: 
-  defaultStudioState: 0
+  defaultStudioState: 1
   editorSceneName: Test
   runtimeSceneName: Runtime

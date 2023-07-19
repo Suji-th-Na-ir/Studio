@@ -18,6 +18,11 @@ namespace Terra.Studio
             _instanceDict.Remove(typeof(T));
         }
 
+        public virtual void Unregister<T>()
+        {
+            _instanceDict.Remove(typeof(T));
+        }
+
         public virtual T Resolve<T>()
         {
             if (!_instanceDict.ContainsKey(typeof(T)))
