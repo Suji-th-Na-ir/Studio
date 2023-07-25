@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Terra.Studio;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,7 +12,8 @@ namespace RuntimeInspectorNamespace
 
 		public Scene Scene { get; private set; }
 
-		private readonly List<GameObject> rootObjects = new List<GameObject>();
+		private List<GameObject> rootObjects = new List<GameObject>();
+		private List<GameObject> filteredObjects = new List<GameObject>();
 
 		public HierarchyDataRootScene( RuntimeHierarchy hierarchy, Scene target ) : base( hierarchy )
 		{
@@ -22,8 +24,17 @@ namespace RuntimeInspectorNamespace
 		{
 			rootObjects.Clear();
 
-			if( Scene.isLoaded )
-				Scene.GetRootGameObjects( rootObjects );
+			if (Scene.isLoaded)
+			{
+				Scene.GetRootGameObjects(filteredObjects);
+				foreach (GameObject goo in filteredObjects)
+				{
+					if (goo.GetComponent<HideInHierarchy>() == null)
+					{
+						rootObjects.Add(goo);
+					}
+				}
+			}
 		}
 
 		public override Transform GetChild( int index )

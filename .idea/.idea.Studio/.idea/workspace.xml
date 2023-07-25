@@ -2,38 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="19655a8e-b3ed-4fee-944c-7b9d3a6d1a07" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.Studio/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/_Studio/Scenes/Editor.unity" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/_Studio/Scenes/Editor.unity.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Common/SelectionHandler.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Common/SelectionHandler.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/HideInHierarchy.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/HideInHierarchy.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Studio/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Studio/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Core/Wrappers/StudioGameObject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Core/Wrappers/StudioGameObject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/EditorSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/EditorSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scenes.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scenes/Editor.unity" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scenes/Editor.unity.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/HierarchyGroup.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/HierarchyGroup.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/InspectorGroup.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/InspectorGroup.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/OscillateComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/OscillateComponent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/RuntimeEditor.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/RuntimeEditor.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/SelectionHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/SelectionHandler.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Hierarchy/HierarchyView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Hierarchy/HierarchyView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components/AddComponent.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components/AddComponent/OscillateDrawComponent.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components/AddComponent/OscillateDrawComponent.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components/TRS.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components/TRS/TRSBinder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components/TRS/TRSBinder.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components/TRS/TRSComponent.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/Components/TRS/TRSComponent.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/InspectorView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/InspectorView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scenes/Bootstrap.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scenes/Bootstrap.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scenes/Editor.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scenes/Editor.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/RuntimeInspector/RuntimeHierarchy.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/RuntimeInspector/RuntimeHierarchy.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/RuntimeInspector/Scripts/RuntimeHierarchy.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/RuntimeInspector/Scripts/RuntimeHierarchy.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/RuntimeInspector/Scripts/RuntimeHierarchy/HierarchyDataRootScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/RuntimeInspector/Scripts/RuntimeHierarchy/HierarchyDataRootScene.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,12 +17,61 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/HideInHierarchy.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/OscillateComponent.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Hierarchy/HierarchyView.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/InspectorView.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.burst@1.8.2/Tests/Editor/SeparateAssembly/BurstReflectionTestsSeparateAssembly.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.burst@1.8.2/Tests/Editor/SeparateAssembly/TypeHashWrapper.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@12.1.10/Editor/Lighting/ProbeVolume/ProbeGIBaking.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@12.1.10/Editor/Lighting/ProbeVolume/ProbeSubdivisionContext.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@12.1.10/Editor/Lighting/ProbeVolume/ProbeVolumeUI.Drawer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@12.1.10/Editor/LookDev/Context.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@12.1.10/Editor/Volume/VolumeComponentListEditor.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@12.1.10/Runtime/Lighting/ProbeVolume/ProbeReferenceVolume.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@12.1.10/Runtime/Lighting/ProbeVolume/ProbeVolume.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@12.1.10/Runtime/Lighting/ProbeVolume/ProbeVolumeSceneData.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@12.1.10/Runtime/Textures/RTHandleSystem.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@12.1.10/Runtime/Passes/PostProcessPass.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@12.1.10/Runtime/RendererFeatures/DecalRendererFeature.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/AssetCallbacks/CreateShaderSubGraph.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Data/Nodes/Input/Scene/SceneDepthNode.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Drawing/Blackboard/SGBlackboardCategory.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Drawing/Blackboard/SGBlackboardRow.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Drawing/Controllers/ShaderInputViewController.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Drawing/EdgeConnectorListener.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Drawing/Inspector/PropertyDrawers/ProceduralVirtualTextureNodePropertyDrawer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Drawing/Inspector/PropertyDrawers/ShaderInputPropertyDrawer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Drawing/MaterialEditor/ShaderGraphPropertyDrawers.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Drawing/MaterialGraphPreviewGenerator.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Drawing/Views/PreviewSceneResources.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Generation/Collections/AssetCollection.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Generation/Contexts/TargetPropertyGUIContext.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Generation/Descriptors/AdditionalCommandDescriptor.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Generation/Enumerations/KeywordDefinition.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Generation/Enumerations/Platform.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Generation/Processors/CustomInterpolatorUtils.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Generation/Processors/Generator.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Generation/Processors/ShaderStringBuilder.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Generation/Targets/BuiltIn/Editor/AssetPostProcessors/MaterialPostprocessor.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Generation/Targets/BuiltIn/Editor/ShaderGraph/BuiltInFields.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Generation/Targets/VFXTarget.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Importers/ShaderGraphImporter.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Importers/ShaderGraphMetadata.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Importers/ShaderSubGraphImporter.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Serialization/JsonRef.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Serialization/MultiJsonInternal.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Editor/Util/IndexSet.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.shadergraph@12.1.10/Tests/Editor/UnitTests/PropertyNodeTests.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Tests/Runtime/Canvas/CanvasSizeCorrectInAwakeAndStart.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Tests/Runtime/Canvas/CreateSceneUtility.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Tests/Runtime/Canvas/NestedCanvas.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Tests/Runtime/Canvas/NestedCanvasMaintainsCorrectSize.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Tests/Runtime/Canvas/RectTransformValidAfterEnable.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Tests/Runtime/NestedLayout/SceneWithNestedLayoutElementsLoads.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Tests/Runtime/ScrollBar/ScrollBarClamp.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Tests/Runtime/ScrollRect/ScrollRectStableLayout.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/6b25a738344145fd98ec6dc5e0ff34f3159c00/90/f8833d3f/Scene.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -59,25 +84,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Discover.Launch.Via.Unity": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Discover.Launch.Via.Unity&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "rider.external.source.directories": [
-      "/Users/surendranchinnakonda/Library/Application Support/JetBrains/Rider2022.3/resharper-host/DecompilerCache",
-      "/Users/surendranchinnakonda/Library/Application Support/JetBrains/Rider2022.3/resharper-host/SourcesCache",
-      "/Users/surendranchinnakonda/.local/share/Symbols/src"
+  &quot;keyToStringList&quot;: {
+    &quot;rider.external.source.directories&quot;: [
+      &quot;/Users/surendranchinnakonda/Library/Application Support/JetBrains/Rider2022.3/resharper-host/DecompilerCache&quot;,
+      &quot;/Users/surendranchinnakonda/Library/Application Support/JetBrains/Rider2022.3/resharper-host/SourcesCache&quot;,
+      &quot;/Users/surendranchinnakonda/.local/share/Symbols/src&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="/Applications/Unity/Hub/Editor/2021.3.22f1/Unity.app/Contents/MacOS/Unity" />
