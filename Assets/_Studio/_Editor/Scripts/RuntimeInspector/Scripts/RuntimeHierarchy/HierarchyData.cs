@@ -13,8 +13,8 @@ namespace RuntimeInspectorNamespace
 		public abstract int ChildCount { get; }
 		public abstract Transform BoundTransform { get; }
 
-		protected List<HierarchyDataTransform> children;
-		protected HierarchyData parent;
+		public List<HierarchyDataTransform> children;
+		public HierarchyData parent;
 		public HierarchyDataRoot Root
 		{
 			get

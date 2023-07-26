@@ -46,5 +46,7 @@ namespace Terra.Studio
         {
             Interop<EditorInterop>.Current.Unregister(this);
         }
+        
+        
     }
 }
