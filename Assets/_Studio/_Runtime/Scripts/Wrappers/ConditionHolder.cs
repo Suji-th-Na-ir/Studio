@@ -2,26 +2,29 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 
-public class ConditionHolder
+namespace Terra.Studio
 {
-    private Dictionary<string, List<Action<object>>> conditionsHolder = new();
-
-    public IEnumerable<Action<object>> Get(string conditionName)
+    public class ConditionHolder
     {
-        if (conditionsHolder.ContainsKey(conditionName))
-        {
-            return conditionsHolder[conditionName];
-        }
-        Debug.Log($"No one is listening to {conditionName}");
-        return null;
-    }
+        private Dictionary<string, List<Action<object>>> conditionsHolder = new();
 
-    public void Set(string conditionName, Action<object> action)
-    {
-        if (!conditionsHolder.ContainsKey(conditionName))
+        public IEnumerable<Action<object>> Get(string conditionName)
         {
-            conditionsHolder.Add(conditionName, new List<Action<object>>());
+            if (conditionsHolder.ContainsKey(conditionName))
+            {
+                return conditionsHolder[conditionName];
+            }
+            Debug.Log($"No one is listening to {conditionName}");
+            return null;
         }
-        conditionsHolder[conditionName].Add(action);
+
+        public void Set(string conditionName, Action<object> action)
+        {
+            if (!conditionsHolder.ContainsKey(conditionName))
+            {
+                conditionsHolder.Add(conditionName, new List<Action<object>>());
+            }
+            conditionsHolder[conditionName].Add(action);
+        }
     }
 }
