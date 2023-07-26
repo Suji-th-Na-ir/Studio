@@ -10,11 +10,11 @@ namespace Terra.Studio
     {
         protected ISavableComponent[] GetOrderedSavableComponents()
         {
-            return FindObjectsOfTypeAll(typeof(Component))
+            return Resources.FindObjectsOfTypeAll(typeof(Component))
                 .Where(c => c is ISavableComponent)
                 .Select(c => (ISavableComponent)c)
                 .OrderBy(c => c.executionOrder)
-                .ToArray(); 
+                .ToArray();
         }
 
         public virtual void Save(string folderPath, string fileName, string fileFormat)
@@ -48,7 +48,7 @@ namespace Terra.Studio
 
             BinaryFormatter formatter = new BinaryFormatter();
             using (FileStream stream = new FileStream(folderPath + fileName + fileFormat, FileMode.Open))
-                componentsData = (Dictionary<int, ComponentData>) formatter.Deserialize(stream);
+                componentsData = (Dictionary<int, ComponentData>)formatter.Deserialize(stream);
 
             foreach (var savableComponent in GetOrderedSavableComponents())
                 if (componentsData.ContainsKey(savableComponent.uniqueID))

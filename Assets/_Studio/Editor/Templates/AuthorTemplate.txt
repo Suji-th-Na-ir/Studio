@@ -1,0 +1,13 @@
+using UnityEngine;
+using Newtonsoft.Json;
+
+namespace Terra.Studio
+{
+    public class REPLACEMEAuthor : BaseAuthor
+    {
+        public override void Generate(object data)
+        {
+            var tuple = ((int id, string type, string compData, GameObject obj))data;
+        }
+    }
+}
