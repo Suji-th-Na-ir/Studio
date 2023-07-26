@@ -47,7 +47,7 @@ namespace Terra.Studio
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
         {
-            Debug.Log($"Loaded scene: {scene.name}");
+            // Debug.Log($"Loaded scene: {scene.name}");
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
             Interop<SystemInterop>.Current.Resolve<ISubsystem>().Initialize();

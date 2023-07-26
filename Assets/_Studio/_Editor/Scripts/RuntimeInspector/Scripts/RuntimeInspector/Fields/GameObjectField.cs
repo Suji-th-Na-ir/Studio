@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Terra.Studio.RTEditor;
@@ -26,7 +27,7 @@ namespace RuntimeInspectorNamespace
 		internal static ExposedMethod addComponentMethod = new ExposedMethod( typeof( GameObjectField ).GetMethod( "AddComponentButtonClicked", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ), new RuntimeInspectorButtonAttribute( "Add Component", false, ButtonVisibility.InitializedObjects ), false );
 		internal static ExposedMethod removeComponentMethod = new ExposedMethod( typeof( GameObjectField ).GetMethod( "RemoveComponentButtonClicked", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static ), new RuntimeInspectorButtonAttribute( "Remove Component", false, ButtonVisibility.InitializedObjects ), true );
 		
-		internal static ExposedMethod exportComponentsMethod = new ExposedMethod( typeof( GameObjectField ).GetMethod( "ExportComponentsButtonClicked", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ), new RuntimeInspectorButtonAttribute( "Export", false, ButtonVisibility.InitializedObjects ), false );
+		// internal static ExposedMethod exportComponentsMethod = new ExposedMethod( typeof( GameObjectField ).GetMethod( "ExportComponentsButtonClicked", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ), new RuntimeInspectorButtonAttribute( "Export", false, ButtonVisibility.InitializedObjects ), false );
 
 		public override void Initialize()
 		{
@@ -117,7 +118,7 @@ namespace RuntimeInspectorNamespace
 			if( Inspector.ShowAddComponentButton )
 				CreateExposedMethodButton( addComponentMethod, () => this, ( value ) => { } );
 			
-			CreateExposedMethodButton( exportComponentsMethod, () => this, ( value ) => { } );
+			// CreateExposedMethodButton( exportComponentsMethod, () => this, ( value ) => { } );
 
 			componentsExpandedStates.Clear();
 		}
@@ -144,27 +145,27 @@ namespace RuntimeInspectorNamespace
 			// Regenerate components' drawers, if necessary
 			base.Refresh();
 		}
-
-		[UnityEngine.Scripting.Preserve]
-		private void ExportComponentsButtonClicked()
-		{
-			GameObject target = (GameObject) Value;
-			if (!target) return;
-
-			Debug.Log("Position "+target.transform.position.ToString());
-			Debug.Log("Rotation "+target.transform.rotation.ToString());
-			Debug.Log("Scale "+target.transform.localScale.ToString());
-			
-			IComponent icomp = target.GetComponent<IComponent>();
-			if (icomp == null) return;
-			
-			// get mesh type 
-			MeshFilter mff = target.GetComponent<MeshFilter>();
-			if(mff != null)
-				Debug.Log("primitiveType "+mff.mesh.name);
-
-			icomp.ExportData();
-		}
+		
+		// [UnityEngine.Scripting.Preserve]
+		// private void ExportComponentsButtonClicked()
+		// {
+		// 	GameObject target = (GameObject) Value;
+		// 	if (!target) return;
+		//
+		// 	Debug.Log("Position "+target.transform.position.ToString());
+		// 	Debug.Log("Rotation "+target.transform.rotation.ToString());
+		// 	Debug.Log("Scale "+target.transform.localScale.ToString());
+		// 	
+		// 	IComponent icomp = target.GetComponent<IComponent>();
+		// 	if (icomp == null) return;
+		// 	
+		// 	// get mesh type 
+		// 	MeshFilter mff = target.GetComponent<MeshFilter>();
+		// 	if(mff != null)
+		// 		Debug.Log("primitiveType "+mff.mesh.name);
+		//
+		// 	icomp.ExportData();
+		// }
 
 		[UnityEngine.Scripting.Preserve] // This method is bound to addComponentMethod
 		private void AddComponentButtonClicked()
@@ -201,6 +202,10 @@ namespace RuntimeInspectorNamespace
 					{
 						foreach( Type type in assembly.GetExportedTypes() )
 						{
+							// show classes that only inherits from Terra.Studio.RTEditor.IComponent
+							if(!type.GetTypeInfo().GetInterfaces().Contains(typeof(Terra.Studio.RTEditor.IComponent)))
+								continue;
+
 							if( !typeof( Component ).IsAssignableFrom( type ) )
 								continue;
 
