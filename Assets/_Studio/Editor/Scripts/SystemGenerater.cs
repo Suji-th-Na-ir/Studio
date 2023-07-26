@@ -23,11 +23,12 @@ namespace Terra.Studio.RTEditor
 
         private string systemName;
 
-        [MenuItem("Terra/Generate System")]
+        [MenuItem("Terra/Generate System %#.")]
         public static void Init()
         {
             var window = GetWindow<SystemGenerater>();
             window.titleContent = new GUIContent("Generate System");
+            window.titleContent.image = EditorGUIUtility.IconContent("cs Script Icon").image;
             window.Show();
         }
 
