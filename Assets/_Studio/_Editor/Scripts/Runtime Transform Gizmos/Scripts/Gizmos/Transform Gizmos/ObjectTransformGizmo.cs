@@ -375,7 +375,7 @@ namespace RTG
             }
 
             RefreshPositionAndRotation();
-            Debug.Log("on gizmo drag end");
+            // Debug.Log("on gizmo drag end");
         }
 
         private List<GameObject> GetTransformableParentObjects()
@@ -532,7 +532,6 @@ namespace RTG
 
         private void ScaleObject(GameObject gameObject, Vector3 scalePivot)
         {
-            Debug.Log("scaling object");
             Transform objectTransform = gameObject.transform;
             Vector3 scaleFactor = Gizmo.RelativeDragScale;
 

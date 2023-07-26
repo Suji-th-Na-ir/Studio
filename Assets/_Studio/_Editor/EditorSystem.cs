@@ -1,14 +1,19 @@
 using System;
+using PlayShifu.Terra;
 using UnityEngine;
 
 namespace Terra.Studio
 {
     public class EditorSystem : MonoBehaviour, ISubsystem
     {
+        private SaveSystem _saveSystem;
         private void Awake()
         {
             Interop<SystemInterop>.Current.Register(this as ISubsystem);
             Interop<EditorInterop>.Current.Register(this);
+
+            _saveSystem = gameObject.GetComponent<SaveSystem>();
+            if (_saveSystem == null) Debug.LogError("save system not attached.");
         }
 
         public void Initialize()
@@ -39,6 +44,16 @@ namespace Terra.Studio
         {
             //Check for busy state of the system, if there is any switch state already in progress
             Interop<SystemInterop>.Current.Resolve<System>().SwitchState();
+        }
+
+        public void RequestSaveScene()
+        {
+            _saveSystem.Save(Helper.GetCoreDataSavePath(), "core_data", ".data");
+        }
+
+        public void RequestLoadScene()
+        {
+            _saveSystem.Load(Helper.GetCoreDataSavePath(), "core_data", ".data");
         }
     }
 }

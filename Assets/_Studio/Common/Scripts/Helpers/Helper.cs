@@ -369,6 +369,11 @@ namespace PlayShifu.Terra
             return assets;
         }
 #endif
+        
+        public static string GetCoreDataSavePath()
+        {
+            return Application.persistentDataPath + "/studio_rt/";
+        }
 
     }
 }

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Terra.Studio;
 
-namespace StudioRT
+namespace Terra.Studio.RTEditor
 {
     public class OscillateComponent : MonoBehaviour, IComponent
     {

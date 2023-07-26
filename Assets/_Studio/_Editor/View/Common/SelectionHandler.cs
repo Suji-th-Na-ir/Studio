@@ -4,7 +4,7 @@ using RTG;
 using RuntimeInspectorNamespace;
 using RuntimeCommon;
 using Terra.Studio;
-using StudioRT;
+using Terra.Studio.RTEditor;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
 
@@ -216,7 +216,7 @@ public class SelectionHandler : View
         }
     }
 
-    public string GetSceneData(StudioRT.OscillateComponent oscialteComp)
+    public string GetSceneData(Terra.Studio.RTEditor.OscillateComponent oscialteComp)
     {
         WorldData wdd = new WorldData();
         wdd.entities = new VirtualEntity[1];

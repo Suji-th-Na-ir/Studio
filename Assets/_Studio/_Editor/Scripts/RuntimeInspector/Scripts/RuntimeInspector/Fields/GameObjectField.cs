@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using StudioRT;
+using Terra.Studio.RTEditor;
 
 namespace RuntimeInspectorNamespace
 {

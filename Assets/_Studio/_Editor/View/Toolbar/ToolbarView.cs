@@ -8,6 +8,8 @@ namespace Terra.Studio
     public class ToolbarView : View
     {
         private const string PLAY_BUTTON_LOC = "PlayButton";
+        private const string SAVE_BUTTON_LOC = "SaveButton";
+        private const string LOAD_BUTTON_LOC = "LoadButton";
 
         private void Awake()
         {
@@ -17,8 +19,17 @@ namespace Terra.Studio
         public override void Init()
         {
             var playButtonTr = Helper.FindDeepChild(transform, PLAY_BUTTON_LOC, true);
+            var saveButtonTr = Helper.FindDeepChild(transform, SAVE_BUTTON_LOC, true);
+            var loadButtonTr = Helper.FindDeepChild(transform, LOAD_BUTTON_LOC, true);
+            
             var playButton = playButtonTr.GetComponent<Button>();
             AddListenerEvent(playButton, Interop<EditorInterop>.Current.Resolve<EditorSystem>().RequestSwitchState);
+            
+            var saveButton = saveButtonTr.GetComponent<Button>();
+            AddListenerEvent(saveButton, Interop<EditorInterop>.Current.Resolve<EditorSystem>().RequestSaveScene);
+            
+            var loadButton = loadButtonTr.GetComponent<Button>();
+            AddListenerEvent(loadButton, Interop<EditorInterop>.Current.Resolve<EditorSystem>().RequestLoadScene);
         }
 
         public override void Draw()
