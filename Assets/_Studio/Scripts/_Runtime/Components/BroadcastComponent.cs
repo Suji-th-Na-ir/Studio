@@ -1,4 +1,6 @@
 using System;
+using UnityEngine;
+using Newtonsoft.Json;
 
 namespace Terra.Studio
 {
@@ -13,5 +15,7 @@ namespace Terra.Studio
         public bool IsConditionAvailable { get; set; }
         public string ConditionType { get; set; }
         public string ConditionData { get; set; }
+        [JsonIgnore] public GameObject reference;
+        [JsonIgnore] public bool isRegistered;
     }
 }

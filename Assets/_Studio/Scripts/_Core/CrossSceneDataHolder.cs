@@ -2,20 +2,9 @@ using UnityEngine;
 
 namespace Terra.Studio
 {
-    public class CrossSceneDataHolder : MonoBehaviour
+    public class CrossSceneDataHolder
     {
         private string crossSharableData;
-
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        public static void Init()
-        {
-            // var go = new GameObject("Cross-Scene Data Holder", typeof(CrossSceneDataHolder));
-        }
-
-        private void Awake()
-        {
-            Interop<SystemInterop>.Current.Register(this);
-        }
 
         public void Set(string data)
         {
@@ -25,11 +14,6 @@ namespace Terra.Studio
         public string Get()
         {
             return crossSharableData;
-        }
-
-        private void OnDestroy()
-        {
-            Interop<SystemInterop>.Current.Unregister(this);
         }
     }
 }

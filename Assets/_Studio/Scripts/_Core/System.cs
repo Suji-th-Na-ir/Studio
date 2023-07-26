@@ -33,6 +33,7 @@ namespace Terra.Studio
                 localPhysicsMode = LocalPhysicsMode.Physics3D
             };
             LoadSubsystemScene();
+            Interop<SystemInterop>.Current.Register(new CrossSceneDataHolder());
         }
 
         private void LoadSubsystemScene()
@@ -42,7 +43,6 @@ namespace Terra.Studio
                 ? configData.EditorSceneName
                 : configData.RuntimeSceneName;
             SceneManager.LoadSceneAsync(sceneToLoad, sceneLoadParameters);
-            
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
@@ -50,6 +50,7 @@ namespace Terra.Studio
             Debug.Log($"Loaded scene: {scene.name}");
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
+            Interop<SystemInterop>.Current.Resolve<ISubsystem>().Initialize();
         }
 
         public void SwitchState()
@@ -83,6 +84,7 @@ namespace Terra.Studio
             SceneManager.sceneLoaded -= OnSceneLoaded;
             Interop<SystemInterop>.Current.Resolve<ISubsystem>()?.Dispose();
             Interop<SystemInterop>.Current.Unregister(this);
+            Interop<SystemInterop>.Current.Unregister<CrossSceneDataHolder>();
             Interop<SystemInterop>.Flush();
             Interop<EditorInterop>.Flush();
             Interop<RuntimeInterop>.Flush();

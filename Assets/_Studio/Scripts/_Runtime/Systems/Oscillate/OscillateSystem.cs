@@ -3,12 +3,12 @@ using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
-    public class OscillateSystem : IEcsInitSystem, IEcsRunSystem, IConditionalOp
+    public class OscillateSystem : IAbsRunsystem, IEcsRunSystem, IConditionalOp
     {
-        public virtual void Init(IEcsSystems systems)
+        public void Init(EcsWorld currentWorld)
         {
-            var filter = systems.GetWorld().Filter<OscillateComponent>().End();
-            var oscillatorPool = systems.GetWorld().GetPool<OscillateComponent>();
+            var filter = currentWorld.Filter<OscillateComponent>().End();
+            var oscillatorPool = currentWorld.GetPool<OscillateComponent>();
             foreach (var entity in filter)
             {
                 ref var oscillatable = ref oscillatorPool.Get(entity);
@@ -17,21 +17,24 @@ namespace Terra.Studio
                     oscillatable.CanExecute = true;
                     return;
                 }
-                oscillatable.oscillatableTr.position = oscillatable.fromPoint;
-                var conditionalData = oscillatable.ConditionData;
-                ComponentsData.GetSystemForCondition(conditionalData, (obj) =>
+                if (oscillatable.isRegistered)
+                {
+                    continue;
+                }
+                var conditionType = oscillatable.ConditionType;
+                var conditionData = oscillatable.ConditionData;
+                oscillatable.isRegistered = true;
+                ComponentsData.GetSystemForCondition(conditionType, (obj) =>
                 {
                     var go = obj != null ? obj as GameObject : null;
-                    OnConditionalCheck((entity, go, conditionalData));
-                }, true);
+                    OnConditionalCheck((entity, go, conditionType));
+                }, true, conditionData);
             }
         }
 
         public virtual void Run(IEcsSystems systems)
         {
             var filter = systems.GetWorld().Filter<OscillateComponent>().End();
-            var totalEntitiesCount = filter.GetEntitiesCount();
-            var currentExecutedCount = 0;
             var oscillatorPool = systems.GetWorld().GetPool<OscillateComponent>();
             foreach (var entity in filter)
             {
@@ -42,7 +45,6 @@ namespace Terra.Studio
                 }
                 if (oscillatable.IsExecuted)
                 {
-                    currentExecutedCount++;
                     continue;
                 }
                 var targetTr = oscillatable.oscillatableTr;
@@ -61,10 +63,6 @@ namespace Terra.Studio
                 }
                 targetTr.position = Vector3.MoveTowards(targetTr.position, oscillatable.toPoint, oscillatable.speed * Time.deltaTime);
             }
-            if (currentExecutedCount == totalEntitiesCount)
-            {
-                Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().RemoveUpdateSystem(this);
-            }
         }
 
         public void OnConditionalCheck(object data)
@@ -72,6 +70,7 @@ namespace Terra.Studio
             var tuple = ((int id, UnityEngine.GameObject reference, string conditionalData))data;
             if (!tuple.reference)
             {
+                ComponentsData.GetSystemForCondition(tuple.conditionalData, OnConditionalCheck, false);
                 return;
             }
             var world = Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().World;
@@ -79,7 +78,8 @@ namespace Terra.Studio
             var oscillatorPool = world.GetPool<OscillateComponent>();
             ref var oscillatable = ref oscillatorPool.Get(tuple.id);
             oscillatable.CanExecute = true;
-            ComponentsData.GetSystemForCondition(tuple.conditionalData, OnConditionalCheck, false);
+            oscillatable.IsExecuted = false;
+            oscillatable.oscillatableTr.position = oscillatable.fromPoint;
         }
     }
 }

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public class ConditionHolder
 {
-    private Dictionary<string, List<Action>> conditionsHolder = new();
+    private Dictionary<string, List<Action<object>>> conditionsHolder = new();
 
-    public IEnumerable<Action> Get(string conditionName)
+    public IEnumerable<Action<object>> Get(string conditionName)
     {
         if (conditionsHolder.ContainsKey(conditionName))
         {
@@ -16,11 +16,11 @@ public class ConditionHolder
         return null;
     }
 
-    public void Set(string conditionName, Action action)
+    public void Set(string conditionName, Action<object> action)
     {
         if (!conditionsHolder.ContainsKey(conditionName))
         {
-            conditionsHolder.Add(conditionName, new List<Action>());
+            conditionsHolder.Add(conditionName, new List<Action<object>>());
         }
         conditionsHolder[conditionName].Add(action);
     }

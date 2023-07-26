@@ -57,13 +57,12 @@ namespace Terra.Studio
             }
         }
         public bool loop;
-        [JsonIgnore]
-        public Transform oscillatableTr;
         public bool CanExecute { get; set; }
-        [JsonIgnore]
-        public bool IsExecuted { get; set; }
         public string ConditionType { get; set; }
         public string ConditionData { get; set; }
         public bool IsConditionAvailable { get; set; }
+        [JsonIgnore] public bool isRegistered;
+        [JsonIgnore] public Transform oscillatableTr;
+        [JsonIgnore] public bool IsExecuted { get; set; }
     }
 }

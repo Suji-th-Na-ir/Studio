@@ -1,67 +1,65 @@
 using System;
 using UnityEngine;
 using Leopotam.EcsLite;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
     public class RuntimeSystem : MonoBehaviour, ISubsystem, IMouseEvents
     {
         private EcsWorld ecsWorld;
-        private IEcsSystems initSystems;
         private IEcsSystems updateSystems;
-        private IEcsSystems fixedUpdateSystems;
+        private Dictionary<Type, object> typeToInstances;
 
         public EcsWorld World { get { return ecsWorld; } }
         public Action<GameObject> OnClicked { get; set; }
-
-        private bool systemsAdded = false;
 
         private void Awake()
         {
             Interop<SystemInterop>.Current.Register(this as ISubsystem);
             Interop<RuntimeInterop>.Current.Register(this);
+            Interop<RuntimeInterop>.Current.Register(new ConditionHolder());
+            Interop<RuntimeInterop>.Current.Register(new BroadcastSystem());
         }
 
-        private void Start()
+        public void Initialize()
         {
-            systemsAdded = false;
+            InitializeEcs();
+        }
+
+        private void InitializeEcs()
+        {
             ecsWorld = new EcsWorld();
-            initSystems = new EcsSystems(ecsWorld)
-                .Add(new BroadcastSystem());
-            initSystems.Init();
-            updateSystems = new EcsSystems(ecsWorld)
-                .Add(new ClickSystem());
-            fixedUpdateSystems = new EcsSystems(ecsWorld);
+            InitializeUpdateSystems();
             Author<WorldAuthor>.Current.Generate();
-            Interop<RuntimeInterop>.Current.Register(new ConditionHolder());
+        }
+
+        private void InitializeUpdateSystems()
+        {
+            typeToInstances = new();
+            typeToInstances
+                .Add(new OscillateSystem())
+                .Add(new ClickSystem());
+            updateSystems = new EcsSystems(ecsWorld);
+            foreach (var item in typeToInstances)
+            {
+                updateSystems.Add(item.Value as IEcsRunSystem);
+            }
+            updateSystems.Init();
         }
 
         private void Update()
         {
-            if (systemsAdded)
-            {
-                updateSystems.Run();
-            }
+            updateSystems?.Run();
         }
 
-        public void AddUpdateSystem<T>(T runSystem) where T : IEcsRunSystem
+        public IAbsRunsystem GetRunningInstance<T>()
         {
-            if (updateSystems.GetAllSystems().Contains(runSystem))
+            if (typeToInstances.ContainsKey(typeof(T)))
             {
-                return;
+                return (T)typeToInstances[typeof(T)] as IAbsRunsystem;
             }
-            updateSystems.Add(runSystem);
-            updateSystems.Init();
-            systemsAdded = true;
-        }
-
-        public void RemoveUpdateSystem<T>(T runSystem) where T : IEcsRunSystem
-        {
-            if (!updateSystems.GetAllSystems().Contains(runSystem))
-            {
-                return;
-            }
-            //Figure out how to remove the added entities
+            return default;
         }
 
         public void Dispose()
@@ -74,6 +72,7 @@ namespace Terra.Studio
         private void OnDestroy()
         {
             Interop<RuntimeInterop>.Current.Unregister<ConditionHolder>();
+            Interop<RuntimeInterop>.Current.Unregister<BroadcastSystem>();
             Interop<SystemInterop>.Current.Unregister(this as ISubsystem);
             Interop<RuntimeInterop>.Current.Unregister(this);
         }

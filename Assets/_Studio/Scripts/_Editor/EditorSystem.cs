@@ -11,30 +11,12 @@ namespace Terra.Studio
             Interop<EditorInterop>.Current.Register(this);
         }
 
-        private void Start()
+        public void Initialize()
         {
-            //Some kind of data binder is needed here as well
-            //Because we might load json to reload a saved scene
-            Initialize();
-        }
-
-        private void Initialize()
-        {
-            //Prep all the data here
             Interop<EditorInterop>.Current.Resolve<HierarchyView>().Init();
             Interop<EditorInterop>.Current.Resolve<InspectorView>().Init();
             Interop<EditorInterop>.Current.Resolve<ToolbarView>().Init();
             Interop<EditorInterop>.Current.Resolve<SceneView>().Init();
-
-            //Actually populate the UI list here
-            Interop<EditorInterop>.Current.Resolve<HierarchyView>().Draw();
-            Interop<EditorInterop>.Current.Resolve<InspectorView>().Draw();
-            Interop<EditorInterop>.Current.Resolve<ToolbarView>().Draw();
-            Interop<EditorInterop>.Current.Resolve<SceneView>().Draw();
-
-            // Interop<EditorInterop>.Current.Register<StudioGameObjectsHolder>(StudioGameObjectsHolder.GetReference());
-            
-            // init selection handler 
             Interop<EditorInterop>.Current.Resolve<SelectionHandler>().Init();
         }
 
@@ -44,6 +26,7 @@ namespace Terra.Studio
             Interop<EditorInterop>.Current.Resolve<InspectorView>().Flush();
             Interop<EditorInterop>.Current.Resolve<ToolbarView>().Flush();
             Interop<EditorInterop>.Current.Resolve<SceneView>().Flush();
+            Interop<EditorInterop>.Current.Resolve<SelectionHandler>().Flush();
         }
 
         private void OnDestroy()

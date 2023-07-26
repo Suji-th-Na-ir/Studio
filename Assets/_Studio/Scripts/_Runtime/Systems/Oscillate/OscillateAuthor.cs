@@ -20,12 +20,13 @@ namespace Terra.Studio
             compRef.toPoint = oscillateCompData.toPoint;
             compRef.loop = oscillateCompData.loop;
             compRef.oscillatableTr = tuple.obj.transform;
-            compRef.speed = 1.5f;
+            compRef.speed = oscillateCompData.speed;
             compRef.IsConditionAvailable = oscillateCompData.IsConditionAvailable;
             compRef.IsExecuted = oscillateCompData.IsExecuted;
             compRef.ConditionType = oscillateCompData.ConditionType;
             compRef.ConditionData = oscillateCompData.ConditionData;
-            Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().AddUpdateSystem(new OscillateSystem());
+            var instance = Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().GetRunningInstance<OscillateSystem>();
+            instance.Init(ecsWorld);
         }
     }
 }

@@ -5,6 +5,40 @@
             "primitiveType": "Cube",
             "position": [
                 0.12,
+                5.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                4.0,
+                1.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "Terra.Studio.Broadcaster",
+                    "data": {
+                        "CanExecute": false,
+                        "ConditionType": "Terra.Studio.MouseAction",
+                        "ConditionData": "OnClick",
+                        "IsConditionAvailable": true,
+                        "IsBroadcastable": true,
+                        "Broadcast": "OscillateAll",
+                        "IsTargeted": false,
+                        "IsExecuted": false
+                    }
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "primitiveType": "Cube",
+            "position": [
+                0.12,
                 0.0,
                 0.0
             ],
@@ -22,7 +56,7 @@
                 {
                     "type": "Terra.Studio.OscillateComponent",
                     "data": {
-                        "speed": 1.5,
+                        "speed": 5,
                         "fromPoint": [
                             0.0,
                             0.0,
@@ -47,7 +81,7 @@
             "primitiveType": "Cube",
             "position": [
                 0.12,
-                5.0,
+                -3.0,
                 0.0
             ],
             "rotation": [
@@ -70,7 +104,50 @@
                         "IsConditionAvailable": true,
                         "IsBroadcastable": true,
                         "Broadcast": "OscillateAll",
-                        "IsTargeted": false
+                        "IsTargeted": false,
+                        "IsExecuted": false
+                    }
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "primitiveType": "Cube",
+            "position": [
+                -1.12,
+                0.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "Terra.Studio.OscillateComponent",
+                    "data": {
+                        "speed": 2,
+                        "fromPoint": [
+                            1.0,
+                            1.0,
+                            1.0
+                        ],
+                        "toPoint": [
+                            -1.0,
+                            -2.0,
+                            -1.0
+                        ],
+                        "loop": false,
+                        "CanExecute": false,
+                        "ConditionType": "Terra.Studio.Condition",
+                        "ConditionData": "OscillateAll",
+                        "IsConditionAvailable": true
                     }
                 }
             ]

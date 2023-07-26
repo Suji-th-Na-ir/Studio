@@ -69,20 +69,20 @@ public class SelectionHandler : View
         _workGizmo = objectMoveGizmo;
         _workGizmoId = GizmoId.Move;
     }
-    
+
     public override void Draw()
     {
-            
+
     }
 
     public override void Flush()
     {
-            
+
     }
 
     public override void Repaint()
     {
-            
+
     }
 
 
@@ -159,20 +159,17 @@ public class SelectionHandler : View
         // Build a ray using the current mouse cursor position
         Ray ray = Camera.main.ScreenPointToRay(RTInput.MousePosition);
         Vector3 worldPoint = Camera.main.ScreenToWorldPoint(RTInput.MousePosition);
-        // Check if the ray intersects a game object. If it does, return it
-        
-        RaycastHit rayHit;
         // in additive scene the normal raycast doesn't work
         // if (Physics.Raycast(ray, out rayHit, float.MaxValue))
         //     return rayHit.collider.gameObject;
-        
+
         PhysicsScene pScene = SceneManager.GetActiveScene().GetPhysicsScene();
         if (pScene.Raycast(worldPoint, ray.direction, out var hit, float.MaxValue))
             return hit.collider.gameObject;
 
         return null;
     }
-    
+
     public void SelectObjectInHierarchy(GameObject _obj)
     {
         runtimeHierarchy.Select(_obj.transform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
@@ -234,25 +231,10 @@ public class SelectionHandler : View
         wdd.entities[0].scale = cubeObject.transform.localScale;
         wdd.entities[0].components = new EntityBasedComponent[1];
         wdd.entities[0].components[0].type = "Terra.Studio.OscillateComponent";
-
-        // var compData = new Terra.Studio.OscillateComponent
-        // {
-        //     fromPoint = oscialteComp.Component.fromPoint,
-        //     toPoint = oscialteComp.Component.toPoint,
-        //     loop = oscialteComp.Component.loop,
-        //     speed = 1.5f,
-        //     ConditionType = osci "Terra.Studio.MouseAction",
-        //     ConditionData = "OnClick",
-        //     IsConditionAvailable = oscialteComp.Component.IsConditionAvailable,
-        //     CanExecute = !oscialteComp.Component.CanExecute
-        // };
-
         var compData = oscialteComp.Component;
-
         wdd.entities[0].components[0].data = compData;
         var json = JsonConvert.SerializeObject(wdd);
         Debug.Log($"Data: {json}");
-
         return json;
     }
 }

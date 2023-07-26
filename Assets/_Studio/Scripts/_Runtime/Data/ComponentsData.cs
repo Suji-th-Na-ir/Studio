@@ -41,7 +41,7 @@ namespace Terra.Studio
                     }
                     if (subscribe)
                     {
-                        Interop<RuntimeInterop>.Current.Resolve<ConditionHolder>().Set(conditionalCheck, () => { onConditionalCheck?.Invoke(null); });
+                        Interop<RuntimeInterop>.Current.Resolve<ConditionHolder>().Set(conditionalCheck, onConditionalCheck);
                     }
                     break;
             }

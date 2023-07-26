@@ -20,9 +20,7 @@ namespace Terra.Studio
                 {
                     return;
                 }
-                Debug.Log($"Clicked!");
                 isPressedDown = false;
-                Debug.Log("get selection "+GetSelection());
                 Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().OnClicked?.Invoke(GetSelectionPhysicsScene());
             }
         }
@@ -40,11 +38,11 @@ namespace Terra.Studio
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            
             PhysicsScene pScene = SceneManager.GetActiveScene().GetPhysicsScene();
             if (pScene.Raycast(worldPoint, ray.direction, out var hit, float.MaxValue))
+            {
                 return hit.collider.gameObject;
-
+            }
             return null;
         }
     }
