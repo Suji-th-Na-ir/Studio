@@ -1,6 +1,6 @@
 {
-    "name": "com.studio.editor",
-    "rootNamespace": "",
+    "name": "com.terra.studio.editor",
+    "rootNamespace": "Terra.Studio.RTEditor",
     "references": [],
     "includePlatforms": [
         "Editor"
