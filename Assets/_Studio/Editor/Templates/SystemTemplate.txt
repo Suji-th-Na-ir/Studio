@@ -7,7 +7,12 @@ namespace Terra.Studio
     {
         public void Init(EcsWorld currentWorld)
         {
-            
+            var filter = currentWorld.Filter<REPLACEMEComponent>().End();
+            var pool = currentWorld.GetPool<REPLACEMEComponent>();
+            foreach (var entity in filter)
+            {
+                
+            }
         }
 
         public void OnConditionalCheck(object data)
