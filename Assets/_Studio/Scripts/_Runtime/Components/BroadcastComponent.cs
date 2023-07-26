@@ -15,6 +15,7 @@ namespace Terra.Studio
         public bool IsConditionAvailable { get; set; }
         public string ConditionType { get; set; }
         public string ConditionData { get; set; }
+        public int TargetId { get; set; }
         [JsonIgnore] public GameObject reference;
         [JsonIgnore] public bool isRegistered;
     }

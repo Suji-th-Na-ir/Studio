@@ -5,5 +5,6 @@ namespace Terra.Studio
         public bool IsBroadcastable { get; set; }
         public string Broadcast { get; set; }
         public bool IsTargeted { get; set; }
+        public int TargetId { get; set; }
     }
 }
