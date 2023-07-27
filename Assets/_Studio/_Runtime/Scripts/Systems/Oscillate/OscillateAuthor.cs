@@ -4,6 +4,7 @@ using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
+    [Author("Terra.Studio.Oscillate")]
     public class OscillateAuthor : BaseAuthor
     {
         public override void Generate(object data)

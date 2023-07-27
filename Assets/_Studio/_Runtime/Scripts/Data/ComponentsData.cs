@@ -1,75 +1,83 @@
 using System;
+using System.Linq;
 using UnityEngine;
+using System.Reflection;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
     public class ComponentsData
     {
-        public static BaseAuthor GetAuthorForType(string dataType)
+        private Dictionary<string, Type> authorMap;
+        private Dictionary<string, Type> eventMap;
+
+        private void GetAllAuthors()
         {
-            switch (dataType)
+            authorMap = new();
+            var assembly = Assembly.GetExecutingAssembly();
+            var derivedTypes = assembly.GetTypes()
+                .Where(type => type.IsSubclassOf(typeof(BaseAuthor)))
+                .ToArray();
+            foreach (var derivedType in derivedTypes)
             {
-                default:
-                    Debug.Log($"No author found for: {dataType}");
-                    return null;
-                case "Terra.Studio.Oscillate":
-                    return new OscillateAuthor();
-                case "Terra.Studio.Collectable":
-                    return new CollectableAuthor();
+                var authorAttribute = derivedType.GetCustomAttribute<AuthorAttribute>();
+                if (authorAttribute != null)
+                {
+                    authorMap.Add(authorAttribute.AuthorTarget, derivedType);
+                }
             }
         }
 
-        public static void GetSystemForCondition(string dataType, Action<object> onConditionalCheck, bool subscribe, object conditionalCheck = null)
+        public BaseAuthor GetAuthorForType(string dataType)
         {
-            switch (dataType)
+            if (authorMap == null)
             {
-                default:
-                    Debug.Log($"No system condition is met! {dataType}");
-                    break;
-                case "Terra.Studio.MouseAction":
-                    var mouseEvents = Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>() as IMouseEvents;
-                    if (subscribe)
-                    {
-                        mouseEvents.OnClicked += onConditionalCheck;
-                    }
-                    else
-                    {
-                        mouseEvents.OnClicked -= onConditionalCheck;
-                    }
-                    break;
-                case "Terra.Studio.TriggerAction":
-                    if (conditionalCheck == null)
-                    {
-                        return;
-                    }
-                    var tuple = ((GameObject goRef, string tagCheck))conditionalCheck;
-                    var go = tuple.goRef;
-                    if (subscribe)
-                    {
-                        var triggerAction = go.AddComponent<OnTriggerAction>();
-                        triggerAction.TagAgainst = tuple.tagCheck;
-                        triggerAction.onTriggered = () =>
-                        {
-                            triggerAction.onTriggered = null;
-                            onConditionalCheck?.Invoke(null);
-                        };
-                    }
-                    else if (go.TryGetComponent(out OnTriggerAction triggerAction1))
-                    {
-                        UnityEngine.Object.Destroy(triggerAction1);
-                    }
-                    break;
-                case "Terra.Studio.Listener":
-                    var broadcaster = Interop<RuntimeInterop>.Current.Resolve<Broadcaster>();
-                    if (subscribe)
-                    {
-                        broadcaster.ListenTo((string)conditionalCheck, () => { onConditionalCheck?.Invoke(null); });
-                    }
-                    else
-                    {
-                        broadcaster.StopListenTo((string)conditionalCheck, () => { onConditionalCheck?.Invoke(null); });
-                    }
-                    break;
+                GetAllAuthors();
+            }
+            if (authorMap.ContainsKey(dataType))
+            {
+                var type = authorMap[dataType];
+                var instance = Activator.CreateInstance(type);
+                return instance as BaseAuthor;
+            }
+            Debug.Log($"Author for type does not exist: {dataType}");
+            return null;
+        }
+
+        private void GetAllEvents()
+        {
+            eventMap = new();
+            var assembly = Assembly.GetExecutingAssembly();
+            var derivedTypes = assembly.GetTypes()
+                .Where(type => type.IsValueType && !type.IsEnum)
+                .Where(type => type.GetInterfaces().Contains(typeof(IEventExecutor)))
+                .Where(type => type.GetCustomAttribute<EventExecutorAttribute>() != null)
+                .ToArray();
+            foreach (var derivedType in derivedTypes)
+            {
+                var eventAttribute = derivedType.GetCustomAttribute<EventExecutorAttribute>();
+                if (eventAttribute != null)
+                {
+                    eventMap.Add(eventAttribute.EventTarget, derivedType);
+                }
+            }
+        }
+
+        public void ProvideEventContext(string dataType, Action<object> onConditionalCheck, bool subscribe, object conditionalCheck = null)
+        {
+            if (eventMap == null)
+            {
+                GetAllEvents();
+            }
+            if (eventMap.ContainsKey(dataType))
+            {
+                var type = eventMap[dataType];
+                var instance = Activator.CreateInstance(type) as IEventExecutor;
+                instance.Execute(onConditionalCheck, subscribe, conditionalCheck);
+            }
+            else
+            {
+                Debug.Log($"Event for type does not exist: {dataType}");
             }
         }
     }

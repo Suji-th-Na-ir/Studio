@@ -19,6 +19,7 @@ namespace Terra.Studio
             Interop<SystemInterop>.Current.Register(this as ISubsystem);
             Interop<RuntimeInterop>.Current.Register(this);
             Interop<RuntimeInterop>.Current.Register(new Broadcaster());
+            Interop<RuntimeInterop>.Current.Register(new ComponentsData());
         }
 
         public void Initialize()
@@ -93,6 +94,7 @@ namespace Terra.Studio
             updateSystems?.Destroy();
             ecsWorld?.Destroy();
             Interop<RuntimeInterop>.Current.Unregister<Broadcaster>();
+            Interop<RuntimeInterop>.Current.Unregister<ComponentsData>();
             Interop<SystemInterop>.Current.Unregister(this as ISubsystem);
             Interop<RuntimeInterop>.Current.Unregister(this);
         }

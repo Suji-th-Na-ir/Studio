@@ -81,7 +81,7 @@
             ]
         },
         {
-            "id": 3,
+            "id": 4,
             "primitiveType": "Sphere",
             "position": [
                 1.12,
@@ -101,6 +101,40 @@
             "components": [
                 {
                     "type": "Terra.Studio.Collectable",
+                    "data": {
+                        "CanExecute": false,
+                        "ConditionType": "Terra.Studio.MouseAction",
+                        "ConditionData": "OnClick",
+                        "IsConditionAvailable": true,
+                        "IsBroadcastable": true,
+                        "Broadcast": "Collected",
+                        "IsTargeted": false,
+                        "IsExecuted": false
+                    }
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "primitiveType": "Cylinder",
+            "position": [
+                2.12,
+                -3.0,
+                0.0
+            ],
+            "rotation": [
+                70.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "Terra.Studio.DestroyOn",
                     "data": {
                         "CanExecute": false,
                         "ConditionType": "Terra.Studio.MouseAction",

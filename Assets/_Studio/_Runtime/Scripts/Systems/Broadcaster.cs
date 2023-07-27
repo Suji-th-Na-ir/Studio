@@ -35,7 +35,7 @@ namespace Terra.Studio
             }
         }
 
-        public void Broadcast(string broadcastData)
+        public void Broadcast(string broadcastData, bool removeOnceBroadcasted = false)
         {
             var listeners = GetListeners(broadcastData);
             if (listeners == null || listeners.Count() == 0)
@@ -47,6 +47,19 @@ namespace Terra.Studio
             {
                 listener?.Invoke();
             }
+            if (removeOnceBroadcasted)
+            {
+                RemoveBroadcastable(broadcastData);
+            }
+        }
+
+        private void RemoveBroadcastable(string broadcastData)
+        {
+            if (!broadcastDict.ContainsKey(broadcastData))
+            {
+                return;
+            }
+            broadcastDict.Remove(broadcastData);
         }
 
         private IEnumerable<Action> GetListeners(string broadcastData)

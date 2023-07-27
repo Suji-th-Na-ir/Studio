@@ -5,6 +5,9 @@ namespace Terra.Studio
 {
     public class OscillateSystem : IAbsRunsystem, IEcsRunSystem, IConditionalOp
     {
+        //TODO
+        //Modify that by directly initializing one entity rather than looping through all
+
         public void Init(EcsWorld currentWorld)
         {
             var filter = currentWorld.Filter<OscillateComponent>().End();
@@ -24,7 +27,8 @@ namespace Terra.Studio
                 var conditionType = oscillatable.ConditionType;
                 var conditionData = oscillatable.ConditionData;
                 oscillatable.isRegistered = true;
-                ComponentsData.GetSystemForCondition(conditionType, (obj) =>
+                var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
+                compsData.ProvideEventContext(conditionType, (obj) =>
                 {
                     var go = obj != null ? obj as GameObject : null;
                     OnConditionalCheck((entity, go, conditionType, conditionData));
@@ -88,7 +92,8 @@ namespace Terra.Studio
                     return;
                 }
             }
-            ComponentsData.GetSystemForCondition(tuple.conditionType, OnConditionalCheck, false, tuple.conditionData);
+            var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
+            compsData.ProvideEventContext(tuple.conditionType, OnConditionalCheck, false, tuple.conditionData);
             oscillatable.CanExecute = true;
             oscillatable.IsExecuted = false;
             oscillatable.oscillatableTr.position = oscillatable.fromPoint;

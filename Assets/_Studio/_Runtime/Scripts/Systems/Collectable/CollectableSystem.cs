@@ -18,10 +18,13 @@ namespace Terra.Studio
                     continue;
                 }
                 collectable.isRegistered = true;
+                //Always look for some condition.
+                //Do not have this check if condition is available at all
                 var conditionType = collectable.ConditionType;
                 var goRef = collectable.refObject;
                 var conditionData = collectable.ConditionData;
-                ComponentsData.GetSystemForCondition(conditionType, (obj) =>
+                var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
+                compsData.ProvideEventContext(conditionType, (obj) =>
                 {
                     OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
                 },
@@ -43,7 +46,8 @@ namespace Terra.Studio
                     return;
                 }
             }
-            ComponentsData.GetSystemForCondition(tuple.conditionType, null, false, (tuple.go, tuple.conditionData));
+            var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
+            compsData.ProvideEventContext(tuple.conditionType, null, false, (tuple.go, tuple.conditionData));
             var world = Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().World;
             var filter = world.Filter<CollectableComponent>().End();
             var collectablePool = world.GetPool<CollectableComponent>();
@@ -57,8 +61,11 @@ namespace Terra.Studio
             //Unsubscribe to all listeners
             //Destroy gracefully
             UnityEngine.Object.Destroy(component.refObject);
-            Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().Broadcast(component.Broadcast);
             Author<EntityAuthor>.Current.Degenerate(entityID);
+            if (component.IsBroadcastable)
+            {
+                Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
+            }
         }
     }
 }

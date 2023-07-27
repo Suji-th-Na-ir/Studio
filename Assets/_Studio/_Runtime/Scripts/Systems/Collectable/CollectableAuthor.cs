@@ -4,6 +4,7 @@ using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
+    [Author("Terra.Studio.Collectable")]
     public class CollectableAuthor : BaseAuthor
     {
         public override void Generate(object data)
