@@ -52,7 +52,6 @@ namespace Terra.Studio
 
         public void OnDemandRun(int entityID, ref CollectableComponent component)
         {
-            Debug.Log("Collected!!!!");
             UnityEngine.Object.Destroy(component.refObject);
             Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().Broadcast(component.Broadcast);
             Author<EntityAuthor>.Current.Degenerate(entityID);
