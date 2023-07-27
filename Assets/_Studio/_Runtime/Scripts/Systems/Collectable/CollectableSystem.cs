@@ -52,6 +52,10 @@ namespace Terra.Studio
 
         public void OnDemandRun(int entityID, ref CollectableComponent component)
         {
+            //Play SFX if any
+            //Play VFX if any
+            //Unsubscribe to all listeners
+            //Destroy gracefully
             UnityEngine.Object.Destroy(component.refObject);
             Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().Broadcast(component.Broadcast);
             Author<EntityAuthor>.Current.Degenerate(entityID);
