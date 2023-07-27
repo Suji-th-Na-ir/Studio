@@ -15,6 +15,8 @@ namespace RuntimeInspectorNamespace
 		[SerializeField]
 		protected LayoutElement layoutElement;
 
+		[SerializeField] protected bool ignoreLayout = false;
+
 		[SerializeField]
 		protected Text variableNameText;
 
@@ -226,7 +228,7 @@ namespace RuntimeInspectorNamespace
 
 		protected virtual void OnSkinChanged()
 		{
-			if( layoutElement )
+			if( layoutElement && !ignoreLayout)
 				layoutElement.SetHeight( Skin.LineHeight * HeightMultiplier );
 
 			if( variableNameText )
@@ -238,7 +240,7 @@ namespace RuntimeInspectorNamespace
 
 		protected virtual void OnDepthChanged()
 		{
-			if( variableNameText != null )
+			if( variableNameText != null && !ignoreLayout)
 				variableNameText.rectTransform.sizeDelta = new Vector2( -Skin.IndentAmount * Depth, 0f );
 		}
 
