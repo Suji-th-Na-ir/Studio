@@ -6,33 +6,30 @@ namespace Terra.Studio
 {
     public class CollectableSystem : IAbsRunsystem, IConditionalOp
     {
-        public void Init(EcsWorld currentWorld)
+        public void Init(EcsWorld currentWorld, int entity)
         {
             var filter = currentWorld.Filter<CollectableComponent>().End();
             var collectablePool = currentWorld.GetPool<CollectableComponent>();
-            foreach (var entity in filter)
+            ref var collectable = ref collectablePool.Get(entity);
+            if (collectable.isRegistered)
             {
-                ref var collectable = ref collectablePool.Get(entity);
-                if (collectable.isRegistered)
-                {
-                    continue;
-                }
-                collectable.isRegistered = true;
-                //Always look for some condition.
-                //Do not have this check if condition is available at all
-                var conditionType = collectable.ConditionType;
-                var goRef = collectable.refObject;
-                var conditionData = collectable.ConditionData;
-                var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(conditionType, (obj) =>
-                {
-                    OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
-                },
-                true, (goRef, conditionData));
-                if (collectable.IsBroadcastable)
-                {
-                    Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().SetBroadcastable(collectable.Broadcast);
-                }
+                return;
+            }
+            collectable.isRegistered = true;
+            //Always look for some condition.
+            //Do not have this check if condition is available at all
+            var conditionType = collectable.ConditionType;
+            var goRef = collectable.refObject;
+            var conditionData = collectable.ConditionData;
+            var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
+            compsData.ProvideEventContext(conditionType, (obj) =>
+            {
+                OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
+            },
+            true, (goRef, conditionData));
+            if (collectable.IsBroadcastable)
+            {
+                Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().SetBroadcastable(collectable.Broadcast);
             }
         }
 

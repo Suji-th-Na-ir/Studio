@@ -5,36 +5,30 @@ namespace Terra.Studio
 {
     public class OscillateSystem : IAbsRunsystem, IEcsRunSystem, IConditionalOp
     {
-        //TODO
-        //Modify that by directly initializing one entity rather than looping through all
-
-        public void Init(EcsWorld currentWorld)
+        public void Init(EcsWorld currentWorld, int entity)
         {
             var filter = currentWorld.Filter<OscillateComponent>().End();
             var oscillatorPool = currentWorld.GetPool<OscillateComponent>();
-            foreach (var entity in filter)
+            ref var oscillatable = ref oscillatorPool.Get(entity);
+            if (oscillatable.IsExecuted || !oscillatable.IsConditionAvailable)
             {
-                ref var oscillatable = ref oscillatorPool.Get(entity);
-                if (oscillatable.IsExecuted || !oscillatable.IsConditionAvailable)
-                {
-                    oscillatable.CanExecute = true;
-                    return;
-                }
-                if (oscillatable.isRegistered)
-                {
-                    continue;
-                }
-                var conditionType = oscillatable.ConditionType;
-                var conditionData = oscillatable.ConditionData;
-                oscillatable.isRegistered = true;
-                var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(conditionType, (obj) =>
-                {
-                    var go = obj != null ? obj as GameObject : null;
-                    OnConditionalCheck((entity, go, conditionType, conditionData));
-                },
-                true, conditionData);
+                oscillatable.CanExecute = true;
+                return;
             }
+            if (oscillatable.isRegistered)
+            {
+                return;
+            }
+            var conditionType = oscillatable.ConditionType;
+            var conditionData = oscillatable.ConditionData;
+            oscillatable.isRegistered = true;
+            var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
+            compsData.ProvideEventContext(conditionType, (obj) =>
+            {
+                var go = obj != null ? obj as GameObject : null;
+                OnConditionalCheck((entity, go, conditionType, conditionData));
+            },
+            true, conditionData);
         }
 
         public virtual void Run(IEcsSystems systems)

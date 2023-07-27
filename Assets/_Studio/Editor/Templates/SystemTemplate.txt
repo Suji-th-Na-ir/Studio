@@ -5,24 +5,16 @@ namespace Terra.Studio
 {
     public class REPLACEMESystem : IAbsRunsystem, IConditionalOp
     {
-        public void Init(EcsWorld currentWorld)
+        public void Init(EcsWorld currentWorld, int entity)
         {
             var filter = currentWorld.Filter<REPLACEMEComponent>().End();
             var pool = currentWorld.GetPool<REPLACEMEComponent>();
-            foreach (var entity in filter)
-            {
-                
-            }
+            ref var entityRef = ref pool.Get(entity);
         }
 
         public void OnConditionalCheck(object data)
         {
             
-        }
-
-        public void OnDemandRun(EcsWorld currentWorld)
-        {
-
         }
     }
 }

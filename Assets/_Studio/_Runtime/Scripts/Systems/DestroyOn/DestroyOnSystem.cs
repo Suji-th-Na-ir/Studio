@@ -5,32 +5,29 @@ namespace Terra.Studio
 {
     public class DestroyOnSystem : IAbsRunsystem, IConditionalOp
     {
-        public void Init(EcsWorld currentWorld)
+        public void Init(EcsWorld currentWorld, int entity)
         {
             var filter = currentWorld.Filter<DestroyOnComponent>().End();
             var pool = currentWorld.GetPool<DestroyOnComponent>();
-            foreach (var entity in filter)
+            ref var destroyable = ref pool.Get(entity);
+            if (destroyable.isRegistered)
             {
-                ref var destroyable = ref pool.Get(entity);
-                if (destroyable.isRegistered)
-                {
-                    continue;
-                }
-                destroyable.isRegistered = true;
-                var conditionType = destroyable.ConditionType;
-                var conditionData = destroyable.ConditionData;
-                var goRef = destroyable.refObj;
-                var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(conditionType, (obj) =>
-                {
-                    var go = obj == null ? null : obj as GameObject;
-                    OnConditionalCheck((entity, conditionType, conditionData, goRef, go));
-                },
-                true, (goRef, conditionData));
-                if (destroyable.IsBroadcastable)
-                {
-                    Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().SetBroadcastable(destroyable.Broadcast);
-                }
+                return;
+            }
+            destroyable.isRegistered = true;
+            var conditionType = destroyable.ConditionType;
+            var conditionData = destroyable.ConditionData;
+            var goRef = destroyable.refObj;
+            var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
+            compsData.ProvideEventContext(conditionType, (obj) =>
+            {
+                var go = obj == null ? null : obj as GameObject;
+                OnConditionalCheck((entity, conditionType, conditionData, goRef, go));
+            },
+            true, (goRef, conditionData));
+            if (destroyable.IsBroadcastable)
+            {
+                Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().SetBroadcastable(destroyable.Broadcast);
             }
         }
 

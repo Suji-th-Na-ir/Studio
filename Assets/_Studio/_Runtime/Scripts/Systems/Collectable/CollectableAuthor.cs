@@ -27,7 +27,7 @@ namespace Terra.Studio
             compRef.TargetId = collectableCompData.TargetId;
             compRef.refObject = tuple.obj;
             var instance = runtimeSystem.AddRunningInstance<CollectableSystem>();
-            instance.Init(ecsWorld);
+            instance.Init(ecsWorld, tuple.id);
         }
     }
 }

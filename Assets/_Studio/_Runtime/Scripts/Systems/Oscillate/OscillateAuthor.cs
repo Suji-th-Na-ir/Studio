@@ -26,7 +26,7 @@ namespace Terra.Studio
             compRef.Broadcast = oscillateCompData.Broadcast;
             compRef.oscillatableTr = tuple.obj.transform;
             var instance = Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().GetRunningInstance<OscillateSystem>();
-            instance.Init(ecsWorld);
+            instance.Init(ecsWorld, entity);
         }
     }
 }

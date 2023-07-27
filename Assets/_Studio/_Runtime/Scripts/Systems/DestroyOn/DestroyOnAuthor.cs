@@ -24,7 +24,7 @@ namespace Terra.Studio
             compRef.TargetId = compData.TargetId;
             compRef.refObj = tuple.obj;
             var instance = runtimeSystem.AddRunningInstance<DestroyOnSystem>();
-            instance.Init(runtimeSystem.World);
+            instance.Init(runtimeSystem.World, tuple.id);
         }
     }
 }

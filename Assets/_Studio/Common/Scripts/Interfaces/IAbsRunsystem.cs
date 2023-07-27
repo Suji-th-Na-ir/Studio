@@ -4,6 +4,6 @@ namespace Terra.Studio
 {
     public interface IAbsRunsystem
     {
-        public void Init(EcsWorld currentWorld);
+        public void Init(EcsWorld currentWorld, int entity);
     }
 }
