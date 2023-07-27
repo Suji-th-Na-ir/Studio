@@ -27,8 +27,9 @@ namespace Terra.Studio
                 ComponentsData.GetSystemForCondition(conditionType, (obj) =>
                 {
                     var go = obj != null ? obj as GameObject : null;
-                    OnConditionalCheck((entity, go, conditionType));
-                }, true, conditionData);
+                    OnConditionalCheck((entity, go, conditionType, conditionData));
+                },
+                true, conditionData);
             }
         }
 
@@ -54,6 +55,10 @@ namespace Terra.Studio
                     if (!oscillatable.loop)
                     {
                         oscillatable.IsExecuted = true;
+                        if (oscillatable.IsBroadcastable)
+                        {
+                            Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().Broadcast(oscillatable.Broadcast);
+                        }
                         continue;
                     }
                     else
@@ -67,16 +72,23 @@ namespace Terra.Studio
 
         public void OnConditionalCheck(object data)
         {
-            var tuple = ((int id, UnityEngine.GameObject reference, string conditionalData))data;
-            if (!tuple.reference)
-            {
-                ComponentsData.GetSystemForCondition(tuple.conditionalData, OnConditionalCheck, false);
-                return;
-            }
+            var tuple = ((int id, UnityEngine.GameObject reference, string conditionType, string conditionData))data;
             var world = Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().World;
             var filter = world.Filter<OscillateComponent>().End();
             var oscillatorPool = world.GetPool<OscillateComponent>();
             ref var oscillatable = ref oscillatorPool.Get(tuple.id);
+            if (tuple.conditionType.Equals("Terra.Studio.MouseAction"))
+            {
+                if (!tuple.reference)
+                {
+                    return;
+                }
+                else if (tuple.reference != oscillatable.oscillatableTr.gameObject)
+                {
+                    return;
+                }
+            }
+            ComponentsData.GetSystemForCondition(tuple.conditionType, OnConditionalCheck, false, tuple.conditionData);
             oscillatable.CanExecute = true;
             oscillatable.IsExecuted = false;
             oscillatable.oscillatableTr.position = oscillatable.fromPoint;

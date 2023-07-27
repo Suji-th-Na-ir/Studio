@@ -21,7 +21,7 @@ namespace Terra.Studio
                     return;
                 }
                 isPressedDown = false;
-                Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().OnClicked?.Invoke(GetSelectionPhysicsScene());
+                Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().OnClicked?.Invoke(GetSelection());
             }
         }
 

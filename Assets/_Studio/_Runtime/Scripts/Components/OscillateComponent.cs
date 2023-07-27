@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Terra.Studio
 {
     [Serializable]
-    public struct OscillateComponent : IBaseComponent, IConditional
+    public struct OscillateComponent : IBaseComponent, IConditional, IBroadcastData
     {
         public float speed;
         [JsonProperty("fromPoint")]
@@ -61,6 +61,10 @@ namespace Terra.Studio
         public string ConditionType { get; set; }
         public string ConditionData { get; set; }
         public bool IsConditionAvailable { get; set; }
+        public bool IsBroadcastable { get; set; }
+        public string Broadcast { get; set; }
+        public bool IsTargeted { get; set; }
+        public int TargetId { get; set; }
         [JsonIgnore] public bool isRegistered;
         [JsonIgnore] public Transform oscillatableTr;
         [JsonIgnore] public bool IsExecuted { get; set; }

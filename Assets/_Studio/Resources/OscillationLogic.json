@@ -1,117 +1,7 @@
 {
     "entities": [
         {
-            "id": 1,
-            "primitiveType": "Cube",
-            "position": [
-                0.12,
-                5.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                4.0,
-                1.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "type": "Terra.Studio.Broadcaster",
-                    "data": {
-                        "CanExecute": false,
-                        "ConditionType": "Terra.Studio.MouseAction",
-                        "ConditionData": "OnClick",
-                        "IsConditionAvailable": true,
-                        "IsBroadcastable": true,
-                        "Broadcast": "OscillateAll",
-                        "IsTargeted": false,
-                        "IsExecuted": false
-                    }
-                }
-            ]
-        },
-        {
-            "id": 1,
-            "primitiveType": "Cube",
-            "position": [
-                0.12,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                1.0,
-                1.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "type": "Terra.Studio.OscillateComponent",
-                    "data": {
-                        "speed": 5,
-                        "fromPoint": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "toPoint": [
-                            1.0,
-                            2.0,
-                            1.0
-                        ],
-                        "loop": true,
-                        "CanExecute": false,
-                        "ConditionType": "Terra.Studio.Condition",
-                        "ConditionData": "OscillateAll",
-                        "IsConditionAvailable": true
-                    }
-                }
-            ]
-        },
-        {
-            "id": 1,
-            "primitiveType": "Cube",
-            "position": [
-                0.12,
-                -3.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                4.0,
-                1.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "type": "Terra.Studio.Broadcaster",
-                    "data": {
-                        "CanExecute": false,
-                        "ConditionType": "Terra.Studio.MouseAction",
-                        "ConditionData": "OnClick",
-                        "IsConditionAvailable": true,
-                        "IsBroadcastable": true,
-                        "Broadcast": "OscillateAll",
-                        "IsTargeted": false,
-                        "IsExecuted": false
-                    }
-                }
-            ]
-        },
-        {
-            "id": 1,
+            "id": 2,
             "primitiveType": "Cube",
             "position": [
                 -1.12,
@@ -124,30 +14,102 @@
                 0.0
             ],
             "scale": [
+                4.0,
+                1.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "Terra.Studio.Collectable",
+                    "data": {
+                        "CanExecute": false,
+                        "ConditionType": "Terra.Studio.TriggerAction",
+                        "ConditionData": "Player",
+                        "IsConditionAvailable": true,
+                        "IsBroadcastable": true,
+                        "Broadcast": "Collected",
+                        "IsTargeted": false,
+                        "IsExecuted": false
+                    }
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "primitiveType": "Capsule",
+            "position": [
+                0.12,
+                -2.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
                 1.0,
                 1.0,
                 1.0
             ],
             "components": [
                 {
-                    "type": "Terra.Studio.OscillateComponent",
+                    "type": "Terra.Studio.Oscillate",
                     "data": {
-                        "speed": 2,
+                        "CanExecute": false,
+                        "ConditionType": "Terra.Studio.Listener",
+                        "ConditionData": "Collected",
+                        "IsConditionAvailable": true,
+                        "IsBroadcastable": true,
+                        "Broadcast": "I Oscillated!",
+                        "IsTargeted": false,
+                        "IsExecuted": false,
+                        "speed": 5,
                         "fromPoint": [
-                            1.0,
-                            1.0,
-                            1.0
+                            0.0,
+                            0.0,
+                            0.0
                         ],
                         "toPoint": [
-                            -1.0,
-                            -2.0,
-                            -1.0
+                            1.0,
+                            2.0,
+                            1.0
                         ],
-                        "loop": false,
+                        "loop": false
+                    }
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "primitiveType": "Sphere",
+            "position": [
+                1.12,
+                -3.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "Terra.Studio.Collectable",
+                    "data": {
                         "CanExecute": false,
-                        "ConditionType": "Terra.Studio.Condition",
-                        "ConditionData": "OscillateAll",
-                        "IsConditionAvailable": true
+                        "ConditionType": "Terra.Studio.MouseAction",
+                        "ConditionData": "OnClick",
+                        "IsConditionAvailable": true,
+                        "IsBroadcastable": true,
+                        "Broadcast": "Collected",
+                        "IsTargeted": false,
+                        "IsExecuted": false
                     }
                 }
             ]

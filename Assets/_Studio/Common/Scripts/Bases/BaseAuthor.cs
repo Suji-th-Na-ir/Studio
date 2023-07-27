@@ -17,7 +17,10 @@ namespace Terra.Studio
 
         }
 
+        public virtual void Degenerate(int entityID)
+        {
 
+        }
     }
 
     public class Author<T> where T : IAuthor

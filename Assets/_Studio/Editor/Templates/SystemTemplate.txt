@@ -19,5 +19,10 @@ namespace Terra.Studio
         {
             
         }
+
+        public void OnDemandRun(EcsWorld currentWorld)
+        {
+
+        }
     }
 }

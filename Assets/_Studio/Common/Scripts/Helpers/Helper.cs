@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using UnityEngine.EventSystems;
 using System.Collections;
+using System.Reflection;
 
 namespace PlayShifu.Terra
 {
@@ -369,11 +370,21 @@ namespace PlayShifu.Terra
             return assets;
         }
 #endif
-        
+
         public static string GetCoreDataSavePath()
         {
             return Application.persistentDataPath + "/studio_rt/";
         }
 
+        public static void CopyStructFieldValues<T>(T source, ref T target) where T : struct
+        {
+            Type structType = typeof(T);
+            var fields = structType.GetFields(BindingFlags.Instance | BindingFlags.Public);
+            foreach (var field in fields)
+            {
+                object value = field.GetValue(source);
+                field.SetValueDirect(__makeref(target), value);
+            }
+        }
     }
 }

@@ -1,7 +1,6 @@
+using System.Linq;
 using UnityEngine;
 using Leopotam.EcsLite;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -21,6 +20,21 @@ namespace Terra.Studio
             {
                 Author<ComponentAuthor>.Current.Generate((entity, component, go));
             }
+        }
+
+        public override void Degenerate(int entityID)
+        {
+            var ecsWorld = Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().World;
+            var entities = new int[0];
+            ecsWorld.GetAllEntities(ref entities);
+            if (entities.Length == 0 || entities.Any(x => x == entityID) == false)
+            {
+                Debug.Log($"Entity {entityID} not found!");
+                return;
+            }
+            //Delete all backlogs
+            //Destroy gameobject by having a bank of gos
+            ecsWorld.DelEntity(entityID);
         }
     }
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
@@ -16,15 +17,13 @@ namespace Terra.Studio
             var compPool = ecsWorld.GetPool<OscillateComponent>();
             compPool.Add(entity);
             ref var compRef = ref compPool.Get(entity);
-            compRef.fromPoint = oscillateCompData.fromPoint;
-            compRef.toPoint = oscillateCompData.toPoint;
-            compRef.loop = oscillateCompData.loop;
-            compRef.oscillatableTr = tuple.obj.transform;
-            compRef.speed = oscillateCompData.speed;
-            compRef.IsConditionAvailable = oscillateCompData.IsConditionAvailable;
-            compRef.IsExecuted = oscillateCompData.IsExecuted;
-            compRef.ConditionType = oscillateCompData.ConditionType;
+            Helper.CopyStructFieldValues(oscillateCompData, ref compRef);
             compRef.ConditionData = oscillateCompData.ConditionData;
+            compRef.ConditionType = oscillateCompData.ConditionType;
+            compRef.IsConditionAvailable = oscillateCompData.IsConditionAvailable;
+            compRef.IsBroadcastable = oscillateCompData.IsBroadcastable;
+            compRef.Broadcast = oscillateCompData.Broadcast;
+            compRef.oscillatableTr = tuple.obj.transform;
             var instance = Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().GetRunningInstance<OscillateSystem>();
             instance.Init(ecsWorld);
         }

@@ -18,8 +18,7 @@ namespace Terra.Studio
         {
             Interop<SystemInterop>.Current.Register(this as ISubsystem);
             Interop<RuntimeInterop>.Current.Register(this);
-            Interop<RuntimeInterop>.Current.Register(new ConditionHolder());
-            Interop<RuntimeInterop>.Current.Register(new BroadcastSystem());
+            Interop<RuntimeInterop>.Current.Register(new Broadcaster());
         }
 
         public void Initialize()
@@ -53,6 +52,17 @@ namespace Terra.Studio
             updateSystems?.Run();
         }
 
+        public IAbsRunsystem AddRunningInstance<T>() where T : IAbsRunsystem
+        {
+            if (typeToInstances.ContainsKey(typeof(T)))
+            {
+                return (IAbsRunsystem)typeToInstances[typeof(T)];
+            }
+            var instance = Activator.CreateInstance<T>();
+            typeToInstances.Add(typeof(T), instance);
+            return (IAbsRunsystem)instance;
+        }
+
         public IAbsRunsystem GetRunningInstance<T>()
         {
             if (typeToInstances.ContainsKey(typeof(T)))
@@ -60,6 +70,15 @@ namespace Terra.Studio
                 return (T)typeToInstances[typeof(T)] as IAbsRunsystem;
             }
             return default;
+        }
+
+        public void RemoveRunningInstance<T>() where T : IAbsRunsystem
+        {
+            if (!typeToInstances.ContainsKey(typeof(T)))
+            {
+                return;
+            }
+            typeToInstances.Remove(typeof(T));
         }
 
         public void Dispose()
@@ -71,8 +90,9 @@ namespace Terra.Studio
 
         private void OnDestroy()
         {
-            Interop<RuntimeInterop>.Current.Unregister<ConditionHolder>();
-            Interop<RuntimeInterop>.Current.Unregister<BroadcastSystem>();
+            updateSystems?.Destroy();
+            ecsWorld?.Destroy();
+            Interop<RuntimeInterop>.Current.Unregister<Broadcaster>();
             Interop<SystemInterop>.Current.Unregister(this as ISubsystem);
             Interop<RuntimeInterop>.Current.Unregister(this);
         }
