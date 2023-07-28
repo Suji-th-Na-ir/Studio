@@ -83,6 +83,44 @@
                     }
                 }
             ]
+        },
+        {
+            "id": 2,
+            "primitiveType": "Capsule",
+            "position": [
+                1.12,
+                1.0,
+                0.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "type": "Terra.Studio.Collectable",
+                    "data": {
+                        "CanExecute": false,
+                        "ConditionType": "Terra.Studio.MouseAction",
+                        "ConditionData": "OnClick",
+                        "IsConditionAvailable": true,
+                        "IsBroadcastable": true,
+                        "Broadcast": "I got collected Hurray!",
+                        "IsTargeted": false,
+                        "IsExecuted": false,
+                        "canPlaySFX": true,
+                        "sfxName": "success_1",
+                        "canPlayVFX": true,
+                        "vfxName": "vfx_ArrowGreen"
+                    }
+                }
+            ]
         }
     ]
 }
