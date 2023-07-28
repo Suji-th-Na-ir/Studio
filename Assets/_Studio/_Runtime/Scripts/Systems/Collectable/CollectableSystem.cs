@@ -53,16 +53,22 @@ namespace Terra.Studio
 
         public void OnDemandRun(int entityID, ref CollectableComponent component)
         {
-            //Play SFX if any
-            //Play VFX if any
             //Unsubscribe to all listeners
             //Destroy gracefully
-            UnityEngine.Object.Destroy(component.refObject);
-            Author<EntityAuthor>.Current.Degenerate(entityID);
+            if (component.canPlaySFX)
+            {
+                RuntimeWrappers.PlaySFX(component.sfxName);
+            }
+            if (component.canPlayVFX)
+            {
+                RuntimeWrappers.PlayVFX(component.vfxName, component.refObject.transform.position);
+            }
             if (component.IsBroadcastable)
             {
                 Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
             }
+            UnityEngine.Object.Destroy(component.refObject);
+            Author<EntityAuthor>.Current.Degenerate(entityID);
         }
     }
 }

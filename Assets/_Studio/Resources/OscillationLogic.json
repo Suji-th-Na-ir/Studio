@@ -77,9 +77,9 @@
                         "IsTargeted": false,
                         "IsExecuted": false,
                         "canPlaySFX": true,
-                        "sfxName": "bell_1",
+                        "sfxName": "success_1",
                         "canPlayVFX": true,
-                        "vfxName": "vfx_ArrowBlue"
+                        "vfxName": "vfx_ArrowGreen"
                     }
                 }
             ]

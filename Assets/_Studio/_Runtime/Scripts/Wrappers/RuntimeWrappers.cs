@@ -66,7 +66,7 @@ namespace Terra.Studio
         {
             var vfxObj = Resources.Load<GameObject>($"vfx/{vfxName}") as GameObject;
             var vfx = UnityEngine.Object.Instantiate(vfxObj);
-            vfxObj.transform.position = position;
+            vfx.transform.position = position;
             var destroyAfter = vfx.AddComponent<DestroyAfter>();
             destroyAfter.seconds = 2f;
         }
