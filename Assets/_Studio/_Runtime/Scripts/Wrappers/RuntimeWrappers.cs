@@ -70,5 +70,10 @@ namespace Terra.Studio
             var destroyAfter = vfx.AddComponent<DestroyAfter>();
             destroyAfter.seconds = 2f;
         }
+
+        public static void AddScore(float addBy)
+        {
+            Debug.Log($"Adding score by: {addBy}");
+        }
     }
 }
