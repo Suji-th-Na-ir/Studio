@@ -1,5 +1,6 @@
 using UnityEngine;
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
@@ -14,6 +15,7 @@ namespace Terra.Studio
             var compPool = runtimeSystem.World.GetPool<DestroyOnComponent>();
             compPool.Add(tuple.id);
             ref var compRef = ref compPool.Get(tuple.id);
+            Helper.CopyStructFieldValues(compData, ref compRef);
             compRef.CanExecute = compData.CanExecute;
             compRef.IsConditionAvailable = compData.IsConditionAvailable;
             compRef.ConditionType = compData.ConditionType;

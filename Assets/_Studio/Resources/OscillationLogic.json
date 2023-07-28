@@ -1,7 +1,7 @@
 {
     "entities": [
         {
-            "id": 2,
+            "id": 1,
             "primitiveType": "Cube",
             "position": [
                 -1.12,
@@ -20,51 +20,17 @@
             ],
             "components": [
                 {
-                    "type": "Terra.Studio.Collectable",
-                    "data": {
-                        "CanExecute": false,
-                        "ConditionType": "Terra.Studio.TriggerAction",
-                        "ConditionData": "Player",
-                        "IsConditionAvailable": true,
-                        "IsBroadcastable": true,
-                        "Broadcast": "Collected",
-                        "IsTargeted": false,
-                        "IsExecuted": false
-                    }
-                }
-            ]
-        },
-        {
-            "id": 3,
-            "primitiveType": "Capsule",
-            "position": [
-                0.12,
-                -2.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                1.0,
-                1.0,
-                1.0
-            ],
-            "components": [
-                {
                     "type": "Terra.Studio.Oscillate",
                     "data": {
                         "CanExecute": false,
                         "ConditionType": "Terra.Studio.Listener",
-                        "ConditionData": "Collected",
+                        "ConditionData": "I got destroyed Hurray!",
                         "IsConditionAvailable": true,
                         "IsBroadcastable": true,
-                        "Broadcast": "I Oscillated!",
+                        "Broadcast": "I Oscillated Hurray!",
                         "IsTargeted": false,
                         "IsExecuted": false,
-                        "speed": 5,
+                        "speed": 2,
                         "fromPoint": [
                             0.0,
                             0.0,
@@ -81,49 +47,15 @@
             ]
         },
         {
-            "id": 4,
+            "id": 2,
             "primitiveType": "Sphere",
             "position": [
                 1.12,
-                -3.0,
+                0.0,
                 0.0
             ],
             "rotation": [
                 0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                1.0,
-                1.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "type": "Terra.Studio.Collectable",
-                    "data": {
-                        "CanExecute": false,
-                        "ConditionType": "Terra.Studio.MouseAction",
-                        "ConditionData": "OnClick",
-                        "IsConditionAvailable": true,
-                        "IsBroadcastable": true,
-                        "Broadcast": "Collected",
-                        "IsTargeted": false,
-                        "IsExecuted": false
-                    }
-                }
-            ]
-        },
-        {
-            "id": 5,
-            "primitiveType": "Cylinder",
-            "position": [
-                2.12,
-                -3.0,
-                0.0
-            ],
-            "rotation": [
-                70.0,
                 0.0,
                 0.0
             ],
@@ -141,9 +73,13 @@
                         "ConditionData": "OnClick",
                         "IsConditionAvailable": true,
                         "IsBroadcastable": true,
-                        "Broadcast": "Collected",
+                        "Broadcast": "I got destroyed Hurray!",
                         "IsTargeted": false,
-                        "IsExecuted": false
+                        "IsExecuted": false,
+                        "canPlaySFX": true,
+                        "sfxName": "bell_1",
+                        "canPlayVFX": true,
+                        "vfxName": "vfx_ArrowBlue"
                     }
                 }
             ]

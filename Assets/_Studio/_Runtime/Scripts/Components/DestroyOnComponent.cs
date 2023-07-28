@@ -20,6 +20,10 @@ namespace Terra.Studio
         public string Broadcast { get; set; }
         public bool IsTargeted { get; set; }
         public int TargetId { get; set; }
+        public bool canPlaySFX;
+        public bool canPlayVFX;
+        public string sfxName;
+        public string vfxName;
         [JsonIgnore] public GameObject refObj;
         [JsonIgnore] public bool isRegistered;
     }

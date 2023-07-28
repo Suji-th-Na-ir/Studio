@@ -51,8 +51,14 @@ namespace Terra.Studio
 
         public void OnDemandRun(int entityID, ref DestroyOnComponent component)
         {
-            //Play SFX if any
-            //Play VFX if any
+            if (component.canPlaySFX)
+            {
+                RuntimeWrappers.PlaySFX(component.sfxName);
+            }
+            if (component.canPlayVFX)
+            {
+                RuntimeWrappers.PlayVFX(component.vfxName, component.refObj.transform.position);
+            }
             //Unsubscribe to all listeners
             //Destroy gracefully
             UnityEngine.Object.Destroy(component.refObj);

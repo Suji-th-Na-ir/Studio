@@ -49,5 +49,26 @@ namespace Terra.Studio
             var go = SpawnPrimitive(primitive, trs);
             return go;
         }
+
+        public static void PlaySFX(string sfxName)
+        {
+            var go = new GameObject("SFX_Holder");
+            var audioSource = go.AddComponent<AudioSource>();
+            var sfx = Resources.Load<AudioClip>($"sfx/{sfxName}") as AudioClip;
+            audioSource.clip = sfx;
+            audioSource.loop = false;
+            audioSource.Play();
+            var destroyAfter = go.AddComponent<DestroyAfter>();
+            destroyAfter.seconds = 2f;
+        }
+
+        public static void PlayVFX(string vfxName, Vector3 position)
+        {
+            var vfxObj = Resources.Load<GameObject>($"vfx/{vfxName}") as GameObject;
+            var vfx = UnityEngine.Object.Instantiate(vfxObj);
+            vfxObj.transform.position = position;
+            var destroyAfter = vfx.AddComponent<DestroyAfter>();
+            destroyAfter.seconds = 2f;
+        }
     }
 }

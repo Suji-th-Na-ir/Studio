@@ -38,7 +38,7 @@ namespace Terra.Studio
         {
             typeToInstances = new();
             typeToInstances
-                .Add(new OscillateSystem())
+                .Add(new OscillateSystem()) //This system need not be running always
                 .Add(new ClickSystem());
             updateSystems = new EcsSystems(ecsWorld);
             foreach (var item in typeToInstances)
