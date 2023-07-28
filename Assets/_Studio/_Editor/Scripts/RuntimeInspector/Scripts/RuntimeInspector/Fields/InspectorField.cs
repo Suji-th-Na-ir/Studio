@@ -112,11 +112,25 @@ namespace RuntimeInspectorNamespace
 		private Getter getter;
 		private Setter setter;
 
+		// state manager start
+		public InspectorStateManager stateManager;
+		private GameObject targetObject = null; // where the field rendered for.
+
 		public virtual void Initialize()
 		{
 			if( visibleArea )
 				visibleArea.onCullStateChanged.AddListener( ( bool isCulled ) => m_isVisible = !isCulled );
 		}
+		
+		protected void StateManagerSetup()
+		{
+			if (Inspector != null && Inspector.InspectedObject != null)
+			{
+				targetObject = (GameObject)Inspector.InspectedObject;
+				stateManager = targetObject.GetComponent<InspectorStateManager>();
+			}
+		}
+		// state manager end
 
 		public abstract bool SupportsType( Type type );
 

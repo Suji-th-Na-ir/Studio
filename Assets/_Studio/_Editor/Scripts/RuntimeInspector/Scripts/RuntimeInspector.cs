@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Terra.Studio.RTEditor;
 using UnityEngine;
@@ -553,19 +554,24 @@ namespace RuntimeInspectorNamespace
 
 		private void UpdateMemberInstances(InspectorField _inspectorField, Type _type)
 		{
-			if (_type == typeof(Collectible))
-			{
-				GameObject insp = (GameObject)m_inspectedObject;
-				Debug.Log("gameobject name "+insp.name); 
-				Debug.Log("creating drawer for collectable " + _type.Name);
-			}
+			// if (_type.GetInterfaces().Contains(typeof(IComponent)))
+			// {
+			// 	_inspectorField.gameObject.AddComponent<InspectorStateManager>();
+			// }
 
-			if (_type == typeof(Atom.PlaySFX))
-			{
-				GameObject insp = (GameObject)m_inspectedObject;
-				Debug.Log("gameobject name "+insp.name); 
-				Debug.Log("creating drawer for sfx " + _type.Name);
-			}
+			// if (_type == typeof(Collectible))
+			// {
+			// 	GameObject insp = (GameObject)m_inspectedObject;
+			// 	Debug.Log("gameobject name "+insp.name); 
+			// 	Debug.Log("creating drawer for collectable " + _type.Name);
+			// }
+			//
+			// if (_type == typeof(Atom.PlaySFX))
+			// {
+			// 	GameObject insp = (GameObject)m_inspectedObject;
+			// 	Debug.Log("gameobject name "+insp.name); 
+			// 	Debug.Log("creating drawer for sfx " + _type.Name);
+			// }
 		}
 
 		private InspectorField InstantiateDrawer( InspectorField drawer, Transform drawerParent )

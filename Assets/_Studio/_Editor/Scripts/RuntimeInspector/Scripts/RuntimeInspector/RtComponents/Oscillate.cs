@@ -2,8 +2,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Terra.Studio;
+using RuntimeInspectorNamespace;
 
-namespace Terra.Studio.RTEditor
+namespace RuntimeInspectorNamespace
 {
     public class Oscillate : MonoBehaviour, IComponent
     {

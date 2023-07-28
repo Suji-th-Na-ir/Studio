@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Terra.Studio.RTEditor;
 using TMPro;
+using UnityEngine.Serialization;
 
 namespace RuntimeInspectorNamespace
 {
@@ -17,21 +18,39 @@ namespace RuntimeInspectorNamespace
         private Toggle input;
 
         [SerializeField] 
-        private Dropdown optionsDropdown; 
-        
+        private Dropdown optionsDropdown;
 #pragma warning restore 0649
+
+        private const string sfxToggleKey = "sfx_toggle";
+        private const string sfxDropdownkey  = "sfx_dropdown";
+        private const string resourceFolder = "sfx";
 
         public override void Initialize()
         {
             base.Initialize();
-            input.onValueChanged.AddListener( OnValueChanged );
+            input.onValueChanged.AddListener( OnToggleValueChanged );
+            optionsDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
             LoadSfxClips();
-            
+        }
+
+        private void OnEnable()
+        {
+            LoadItems();
+        }
+
+        public void LoadItems()
+        {
+            base.StateManagerSetup();
+            if (stateManager != null)
+            {
+                input.isOn = stateManager.GetItem<bool>(sfxToggleKey);
+                optionsDropdown.value = stateManager.GetItem<int>(sfxDropdownkey);
+            }
         }
 
         private void LoadSfxClips()
         {
-            var sfxClips = Resources.LoadAll("sfx", typeof(AudioClip)).Cast<AudioClip>().ToArray();
+            var sfxClips = Resources.LoadAll(resourceFolder, typeof(AudioClip)).Cast<AudioClip>().ToArray();
             optionsDropdown.options.Clear();
             foreach (var clip in sfxClips)
             {
@@ -46,13 +65,21 @@ namespace RuntimeInspectorNamespace
             return type == typeof( Atom.PlaySFX );
         }
 
-        private void OnValueChanged( bool input )
+        private void OnDropdownValueChanged(int index)
         {
-            // Debug.Log($"goo {Inspector.InspectedObject == null} {(Inspector.InspectedObject as GameObject)?.name}");
+            base.StateManagerSetup();
+            stateManager.SetItem(sfxDropdownkey, index);
+        }
+
+        private void OnToggleValueChanged( bool input )
+        {
             LoadSfxClips();
             Value = input;
             Inspector.RefreshDelayed();
             SetOptionsDropdown(input);
+
+            base.StateManagerSetup();
+            stateManager.SetItem(sfxToggleKey, input);
         }
 
         private void SetOptionsDropdown(bool _value)
@@ -76,17 +103,6 @@ namespace RuntimeInspectorNamespace
         {
             base.Refresh();
             SetOptionsDropdown(input.isOn);
-            // input.isOn = (Atom.PlaySFX) Value;
         }
-
-        public bool IsOn()
-        {
-            return input.isOn;
-        }
-
-        public string GetOption()
-        {
-            return optionsDropdown.options[optionsDropdown.value].ToString();
-        } 
     }
 }

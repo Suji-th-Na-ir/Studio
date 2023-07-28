@@ -203,7 +203,7 @@ namespace RuntimeInspectorNamespace
 						foreach( Type type in assembly.GetExportedTypes() )
 						{
 							// show classes that only inherits from Terra.Studio.RTEditor.IComponent
-							if(!type.GetTypeInfo().GetInterfaces().Contains(typeof(Terra.Studio.RTEditor.IComponent)))
+							if(!type.GetTypeInfo().GetInterfaces().Contains(typeof(IComponent)))
 								continue;
 
 							if( !typeof( Component ).IsAssignableFrom( type ) )

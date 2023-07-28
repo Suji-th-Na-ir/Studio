@@ -5,7 +5,7 @@ using Terra.Studio.RTEditor;
 using UnityEngine;
 
 
-namespace Terra.Studio.RTEditor
+namespace RuntimeInspectorNamespace
 {
     public enum DestroyOnEventType
     {

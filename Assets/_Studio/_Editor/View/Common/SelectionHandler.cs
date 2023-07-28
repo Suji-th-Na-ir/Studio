@@ -216,7 +216,7 @@ public class SelectionHandler : View
         }
     }
 
-    public string GetSceneData(Terra.Studio.RTEditor.Oscillate oscialteComp)
+    public string GetSceneData(Oscillate oscialteComp)
     {
         WorldData wdd = new WorldData();
         wdd.entities = new VirtualEntity[1];
