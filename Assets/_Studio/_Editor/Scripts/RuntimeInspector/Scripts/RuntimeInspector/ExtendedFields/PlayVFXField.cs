@@ -24,19 +24,26 @@ namespace RuntimeInspectorNamespace
         private const string sfxToggleKey = "vfx_toggle";
         private const string sfxDropdownkey  = "vfx_dropdown";
         private const string resourceFolder = "vfx";
+        
+        private static string[] vfxClipNames;
 
         public override void Initialize()
         {
             base.Initialize();
             input.onValueChanged.AddListener( OnToggleValueChanged );
             optionsDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
-            LoadSfxClips();
+            LoadVfxClips();
         }
 
         private void OnEnable()
         {
             LoadItems();
         }
+        
+        public static string GetVfxClipName(int index)
+        {
+            return vfxClipNames[index];
+        } 
 
         public void LoadItems()
         {
@@ -48,15 +55,24 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        private void LoadSfxClips()
+        private void LoadVfxClips()
         {
             var prefabs = Resources.LoadAll(resourceFolder, typeof(GameObject)).Cast<GameObject>().ToArray();
             optionsDropdown.options.Clear();
-            foreach (var pb in prefabs)
+            // foreach (var pb in prefabs)
+            // {
+            //     optionsDropdown.options.Add(new Dropdown.OptionData() {
+            //         text =pb.name
+            //     });
+            // }
+            
+            for (int i =0;i< prefabs.Length;i++)
             {
-                optionsDropdown.options.Add(new Dropdown.OptionData() {
-                    text =pb.name
+                optionsDropdown.options.Add(new Dropdown.OptionData()
+                {
+                    text = prefabs[i].name
                 });
+                vfxClipNames[i] = prefabs[i].name;
             }
         }
 
@@ -73,7 +89,7 @@ namespace RuntimeInspectorNamespace
 
         private void OnToggleValueChanged( bool input )
         {
-            LoadSfxClips();
+            LoadVfxClips();
             Value = input;
             Inspector.RefreshDelayed();
             SetOptionsDropdown(input);

@@ -3891,6 +3891,7 @@ GameObject:
   - component: {fileID: 792619810}
   - component: {fileID: 792619811}
   - component: {fileID: 792619808}
+  - component: {fileID: 792619812}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -3953,6 +3954,21 @@ MonoBehaviour:
   runtimeHierarchy: {fileID: 625497295}
   runtimeInspector: {fileID: 1580585407}
   cubeObject: {fileID: 449704938}
+--- !u!114 &792619812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 792619807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d36767d8316c43b1b71f1554f5d1f57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneObjects:
+  - {fileID: 449704938}
+  - {fileID: 257157174}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

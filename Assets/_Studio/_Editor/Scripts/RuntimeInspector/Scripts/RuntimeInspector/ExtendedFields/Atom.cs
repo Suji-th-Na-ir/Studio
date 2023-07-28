@@ -22,7 +22,16 @@ namespace Terra.Studio.RTEditor
         {
             None,
             CoinCollected,
-            CollidedWithPlayer
+            CollidedWithPlayer,
+            OnClick
+        }
+
+        public enum BroadCastListen
+        {
+            None,
+            CoinCollected,
+            CollidedWithPlayer,
+            OnClick
         }
     }
 }

@@ -25,6 +25,7 @@ namespace RuntimeInspectorNamespace
         private const string sfxDropdownkey  = "sfx_dropdown";
         private const string resourceFolder = "sfx";
 
+        private static string[] sfxClipNames;
         public override void Initialize()
         {
             base.Initialize();
@@ -32,6 +33,11 @@ namespace RuntimeInspectorNamespace
             optionsDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
             LoadSfxClips();
         }
+
+        public static string GetSfxClipName(int index)
+        {
+            return sfxClipNames[index];
+        } 
 
         private void OnEnable()
         {
@@ -52,11 +58,15 @@ namespace RuntimeInspectorNamespace
         {
             var sfxClips = Resources.LoadAll(resourceFolder, typeof(AudioClip)).Cast<AudioClip>().ToArray();
             optionsDropdown.options.Clear();
-            foreach (var clip in sfxClips)
+            sfxClipNames = new String[sfxClips.Length];
+
+            for (int i =0;i< sfxClips.Length;i++)
             {
-                optionsDropdown.options.Add(new Dropdown.OptionData() {
-                    text =clip.name
+                optionsDropdown.options.Add(new Dropdown.OptionData()
+                {
+                    text = sfxClips[i].name
                 });
+                sfxClipNames[i] = sfxClips[i].name;
             }
         }
 
