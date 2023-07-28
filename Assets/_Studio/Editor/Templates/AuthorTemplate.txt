@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 
 namespace Terra.Studio
 {
+    [Author("Terra.Studio.REPLACEME")]
     public class REPLACEMEAuthor : BaseAuthor
     {
         public override void Generate(object data)
