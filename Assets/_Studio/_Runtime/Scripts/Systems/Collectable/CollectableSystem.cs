@@ -67,6 +67,10 @@ namespace Terra.Studio
             {
                 Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
             }
+            if (component.canUpdateScore)
+            {
+                RuntimeWrappers.AddScore(component.scoreValue);
+            }
             UnityEngine.Object.Destroy(component.refObject);
             Author<EntityAuthor>.Current.Degenerate(entityID);
         }
