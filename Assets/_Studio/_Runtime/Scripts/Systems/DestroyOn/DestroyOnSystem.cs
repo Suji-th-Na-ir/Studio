@@ -55,13 +55,12 @@ namespace Terra.Studio
             //Play VFX if any
             //Unsubscribe to all listeners
             //Destroy gracefully
-            Debug.Log($"Destroying and broadcasting: {component.Broadcast}");
             UnityEngine.Object.Destroy(component.refObj);
-            Author<EntityAuthor>.Current.Degenerate(entityID);
             if (component.IsBroadcastable)
             {
                 Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
             }
+            Author<EntityAuthor>.Current.Degenerate(entityID);
         }
     }
 }
