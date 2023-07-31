@@ -1,6 +1,6 @@
 using System;
-using PlayShifu.Terra;
 using UnityEngine;
+using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
@@ -9,41 +9,40 @@ namespace Terra.Studio
         private SaveSystem _saveSystem;
         private void Awake()
         {
-            Interop<SystemInterop>.Current.Register(this as ISubsystem);
-            Interop<EditorInterop>.Current.Register(this);
-
+            SystemOp.Register(this as ISubsystem);
+            EditorOp.Register(this);
             _saveSystem = gameObject.GetComponent<SaveSystem>();
             if (_saveSystem == null) Debug.LogError("save system not attached.");
         }
 
         public void Initialize()
         {
-            Interop<EditorInterop>.Current.Resolve<HierarchyView>().Init();
-            Interop<EditorInterop>.Current.Resolve<InspectorView>().Init();
-            Interop<EditorInterop>.Current.Resolve<ToolbarView>().Init();
-            Interop<EditorInterop>.Current.Resolve<SceneView>().Init();
-            Interop<EditorInterop>.Current.Resolve<SelectionHandler>().Init();
+            EditorOp.Resolve<HierarchyView>().Init();
+            EditorOp.Resolve<InspectorView>().Init();
+            EditorOp.Resolve<ToolbarView>().Init();
+            EditorOp.Resolve<SceneView>().Init();
+            EditorOp.Resolve<SelectionHandler>().Init();
         }
 
         public void Dispose()
         {
-            Interop<EditorInterop>.Current.Resolve<HierarchyView>().Flush();
-            Interop<EditorInterop>.Current.Resolve<InspectorView>().Flush();
-            Interop<EditorInterop>.Current.Resolve<ToolbarView>().Flush();
-            Interop<EditorInterop>.Current.Resolve<SceneView>().Flush();
-            Interop<EditorInterop>.Current.Resolve<SelectionHandler>().Flush();
+            EditorOp.Resolve<HierarchyView>().Flush();
+            EditorOp.Resolve<InspectorView>().Flush();
+            EditorOp.Resolve<ToolbarView>().Flush();
+            EditorOp.Resolve<SceneView>().Flush();
+            EditorOp.Resolve<SelectionHandler>().Flush();
         }
 
         private void OnDestroy()
         {
-            Interop<SystemInterop>.Current.Unregister(this as ISubsystem);
-            Interop<EditorInterop>.Current.Unregister(this);
+            SystemOp.Unregister(this as ISubsystem);
+            EditorOp.Unregister(this);
         }
 
         public void RequestSwitchState()
         {
             //Check for busy state of the system, if there is any switch state already in progress
-            Interop<SystemInterop>.Current.Resolve<System>().SwitchState();
+            SystemOp.Resolve<System>().SwitchState();
         }
 
         public void RequestSaveScene()

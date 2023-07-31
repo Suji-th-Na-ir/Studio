@@ -9,7 +9,7 @@ namespace Terra.Studio
     {
         public void Execute(Action<object> onConditionalCheck, bool subscribe, object conditionalCheck = null)
         {
-            var mouseEvents = Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>() as IMouseEvents;
+            var mouseEvents = RuntimeOp.Resolve<RuntimeSystem>() as IMouseEvents;
             if (subscribe)
             {
                 mouseEvents.OnClicked += onConditionalCheck;

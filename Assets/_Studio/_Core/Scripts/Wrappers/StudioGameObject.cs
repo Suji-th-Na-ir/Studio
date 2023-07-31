@@ -17,7 +17,7 @@ namespace Terra.Studio
             componentsAttached = new();
             _id = Guid.NewGuid().ToString("N");
             reference = GameObject.CreatePrimitive(primitive);
-            Interop<EditorInterop>.Current.Resolve<StudioGameObjectsHolder>().RegisterStudioGO(this);
+            EditorOp.Resolve<StudioGameObjectsHolder>().RegisterStudioGO(this);
         }
 
         public void RegisterComponent<T1, T2>(T2 behaviour)

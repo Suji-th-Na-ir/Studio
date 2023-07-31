@@ -35,13 +35,13 @@ public class SelectionHandler : View
 
     private void Awake()
     {
-        Interop<EditorInterop>.Current.Register(this);
+        EditorOp.Register(this);
         runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
     }
 
     private void OnDestroy()
     {
-        Interop<EditorInterop>.Current.Unregister(this);
+        EditorOp.Unregister(this);
         runtimeHierarchy.OnSelectionChanged -= OnHierarchySelectionChanged;
     }
 

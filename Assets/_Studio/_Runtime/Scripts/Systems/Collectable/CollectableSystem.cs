@@ -21,7 +21,7 @@ namespace Terra.Studio
             var conditionType = collectable.ConditionType;
             var goRef = collectable.refObject;
             var conditionData = collectable.ConditionData;
-            var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(conditionType, (obj) =>
             {
                 OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
@@ -29,7 +29,7 @@ namespace Terra.Studio
             true, (goRef, conditionData));
             if (collectable.IsBroadcastable)
             {
-                Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().SetBroadcastable(collectable.Broadcast);
+                RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(collectable.Broadcast);
             }
         }
 
@@ -43,9 +43,9 @@ namespace Terra.Studio
                     return;
                 }
             }
-            var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(tuple.conditionType, null, false, (tuple.go, tuple.conditionData));
-            var world = Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().World;
+            var world = RuntimeOp.Resolve<RuntimeSystem>().World;
             var filter = world.Filter<CollectableComponent>().End();
             var collectablePool = world.GetPool<CollectableComponent>();
             OnDemandRun(tuple.entity, ref collectablePool.Get(tuple.entity));
@@ -65,14 +65,14 @@ namespace Terra.Studio
             }
             if (component.IsBroadcastable)
             {
-                Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
+                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
             }
             if (component.canUpdateScore)
             {
                 RuntimeWrappers.AddScore(component.scoreValue);
             }
             UnityEngine.Object.Destroy(component.refObject);
-            Author<EntityAuthor>.Current.Degenerate(entityID);
+            EntityAuthorOp.Degenerate(entityID);
         }
     }
 }

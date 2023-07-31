@@ -26,8 +26,8 @@ namespace RuntimeInspectorNamespace
 
         public void ExportData()
         {
-            var resp = Interop<EditorInterop>.Current.Resolve<SelectionHandler>().GetSceneData(this);
-            Interop<SystemInterop>.Current.Resolve<CrossSceneDataHolder>().Set(resp);
+            var resp = EditorOp.Resolve<SelectionHandler>().GetSceneData(this);
+            SystemOp.Resolve<CrossSceneDataHolder>().Set(resp);
         }
     }
 }

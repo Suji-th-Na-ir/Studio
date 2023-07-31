@@ -14,7 +14,7 @@ namespace Terra.Studio
             var jString = tuple.compData;
             var go = tuple.obj;
             var oscillateCompData = JsonConvert.DeserializeObject<OscillateComponent>(jString);
-            var ecsWorld = Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().World;
+            var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
             var compPool = ecsWorld.GetPool<OscillateComponent>();
             compPool.Add(entity);
             ref var compRef = ref compPool.Get(entity);
@@ -25,7 +25,7 @@ namespace Terra.Studio
             compRef.IsBroadcastable = oscillateCompData.IsBroadcastable;
             compRef.Broadcast = oscillateCompData.Broadcast;
             compRef.oscillatableTr = tuple.obj.transform;
-            var instance = Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().GetRunningInstance<OscillateSystem>();
+            var instance = RuntimeOp.Resolve<RuntimeSystem>().GetRunningInstance<OscillateSystem>();
             instance.Init(ecsWorld, entity);
         }
     }

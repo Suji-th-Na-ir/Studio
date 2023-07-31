@@ -18,7 +18,7 @@ namespace Terra.Studio
             var conditionType = destroyable.ConditionType;
             var conditionData = destroyable.ConditionData;
             var goRef = destroyable.refObj;
-            var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(conditionType, (obj) =>
             {
                 var go = obj == null ? null : obj as GameObject;
@@ -27,7 +27,7 @@ namespace Terra.Studio
             true, (goRef, conditionData));
             if (destroyable.IsBroadcastable)
             {
-                Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().SetBroadcastable(destroyable.Broadcast);
+                RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(destroyable.Broadcast);
             }
         }
 
@@ -41,9 +41,9 @@ namespace Terra.Studio
                     return;
                 }
             }
-            var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(tuple.conditionType, null, false, (tuple.go, tuple.conditionData));
-            var world = Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().World;
+            var world = RuntimeOp.Resolve<RuntimeSystem>().World;
             var filter = world.Filter<DestroyOnComponent>().End();
             var destroyPool = world.GetPool<DestroyOnComponent>();
             OnDemandRun(tuple.entity, ref destroyPool.Get(tuple.entity));
@@ -64,9 +64,9 @@ namespace Terra.Studio
             UnityEngine.Object.Destroy(component.refObj);
             if (component.IsBroadcastable)
             {
-                Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
+                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
             }
-            Author<EntityAuthor>.Current.Degenerate(entityID);
+            EntityAuthorOp.Degenerate(entityID);
         }
     }
 }

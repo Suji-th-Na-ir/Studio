@@ -10,7 +10,7 @@ namespace Terra.Studio
     {
         public void Execute(Action<object> onConditionalCheck, bool subscribe, object conditionalCheck = null)
         {
-            var broadcaster = Interop<RuntimeInterop>.Current.Resolve<Broadcaster>();
+            var broadcaster = RuntimeOp.Resolve<Broadcaster>();
             var tuple = ((GameObject go, string condition))conditionalCheck;
             if (subscribe)
             {

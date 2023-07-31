@@ -8,7 +8,7 @@ namespace Terra.Studio
     {
         private void Awake()
         {
-            Interop<EditorInterop>.Current.Register(this);
+            EditorOp.Register(this);
         }
 
         public override void Init()
@@ -33,7 +33,7 @@ namespace Terra.Studio
 
         private void OnDestroy()
         {
-            Interop<EditorInterop>.Current.Unregister(this);
+            EditorOp.Unregister(this);
         }
     }
 }

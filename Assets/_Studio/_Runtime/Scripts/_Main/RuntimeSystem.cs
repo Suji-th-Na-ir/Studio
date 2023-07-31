@@ -16,10 +16,10 @@ namespace Terra.Studio
 
         private void Awake()
         {
-            Interop<SystemInterop>.Current.Register(this as ISubsystem);
-            Interop<RuntimeInterop>.Current.Register(this);
-            Interop<RuntimeInterop>.Current.Register(new Broadcaster());
-            Interop<RuntimeInterop>.Current.Register(new ComponentsData());
+            SystemOp.Register(this as ISubsystem);
+            RuntimeOp.Register(this);
+            RuntimeOp.Register(new Broadcaster());
+            RuntimeOp.Register(new ComponentsData());
         }
 
         public void Initialize()
@@ -31,7 +31,7 @@ namespace Terra.Studio
         {
             ecsWorld = new EcsWorld();
             InitializeUpdateSystems();
-            Author<WorldAuthor>.Current.Generate();
+            WorldAuthorOp.Generate();
         }
 
         private void InitializeUpdateSystems()
@@ -84,19 +84,19 @@ namespace Terra.Studio
 
         public void Dispose()
         {
-            Author<WorldAuthor>.Flush();
-            Author<ComponentAuthor>.Flush();
-            Author<EntityAuthor>.Flush();
+            WorldAuthorOp.Flush();
+            ComponentAuthorOp.Flush();
+            EntityAuthorOp.Flush();
         }
 
         private void OnDestroy()
         {
             updateSystems?.Destroy();
             ecsWorld?.Destroy();
-            Interop<RuntimeInterop>.Current.Unregister<Broadcaster>();
-            Interop<RuntimeInterop>.Current.Unregister<ComponentsData>();
-            Interop<SystemInterop>.Current.Unregister(this as ISubsystem);
-            Interop<RuntimeInterop>.Current.Unregister(this);
+            RuntimeOp.Unregister<Broadcaster>();
+            RuntimeOp.Unregister<ComponentsData>();
+            SystemOp.Unregister(this as ISubsystem);
+            RuntimeOp.Unregister(this);
         }
     }
 }

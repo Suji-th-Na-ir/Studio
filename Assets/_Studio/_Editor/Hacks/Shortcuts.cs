@@ -12,7 +12,7 @@ namespace Terra.Studio
                 if (Input.GetKeyDown(KeyCode.N))
                 {
                     var go = StudioGameObject.CreateGameObject(PrimitiveType.Cube);
-                    Interop<EditorInterop>.Current.Resolve<SelectionManager>().OnSelected(go);
+                    EditorOp.Resolve<SelectionManager>().OnSelected(go);
                 }
             }
         }

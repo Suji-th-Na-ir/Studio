@@ -22,7 +22,7 @@ namespace Terra.Studio
             var conditionType = oscillatable.ConditionType;
             var conditionData = oscillatable.ConditionData;
             oscillatable.isRegistered = true;
-            var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(conditionType, (obj) =>
             {
                 var go = obj != null ? obj as GameObject : null;
@@ -55,7 +55,7 @@ namespace Terra.Studio
                         oscillatable.IsExecuted = true;
                         if (oscillatable.IsBroadcastable)
                         {
-                            Interop<RuntimeInterop>.Current.Resolve<Broadcaster>().Broadcast(oscillatable.Broadcast);
+                            RuntimeOp.Resolve<Broadcaster>().Broadcast(oscillatable.Broadcast);
                         }
                         continue;
                     }
@@ -71,7 +71,7 @@ namespace Terra.Studio
         public void OnConditionalCheck(object data)
         {
             var tuple = ((int id, UnityEngine.GameObject reference, string conditionType, string conditionData))data;
-            var world = Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>().World;
+            var world = RuntimeOp.Resolve<RuntimeSystem>().World;
             var filter = world.Filter<OscillateComponent>().End();
             var oscillatorPool = world.GetPool<OscillateComponent>();
             ref var oscillatable = ref oscillatorPool.Get(tuple.id);
@@ -86,7 +86,7 @@ namespace Terra.Studio
                     return;
                 }
             }
-            var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(tuple.conditionType, OnConditionalCheck, false, (tuple.reference, tuple.conditionData));
             oscillatable.CanExecute = true;
             oscillatable.IsExecuted = false;

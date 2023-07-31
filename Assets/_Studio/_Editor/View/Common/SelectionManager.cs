@@ -10,7 +10,7 @@ namespace Terra.Studio
 
         private void Awake()
         {
-            Interop<EditorInterop>.Current.Register(this);
+            EditorOp.Register(this);
         }
 
         public void OnSelected(in StudioGameObject gameObject)

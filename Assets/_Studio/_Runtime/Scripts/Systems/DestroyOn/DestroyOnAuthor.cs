@@ -11,7 +11,7 @@ namespace Terra.Studio
         {
             var tuple = ((int id, string type, string compData, GameObject obj))data;
             var compData = JsonConvert.DeserializeObject<DestroyOnComponent>(tuple.compData);
-            var runtimeSystem = Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>();
+            var runtimeSystem = RuntimeOp.Resolve<RuntimeSystem>();
             var compPool = runtimeSystem.World.GetPool<DestroyOnComponent>();
             compPool.Add(tuple.id);
             ref var compRef = ref compPool.Get(tuple.id);

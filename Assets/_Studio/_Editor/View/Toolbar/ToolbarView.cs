@@ -13,7 +13,7 @@ namespace Terra.Studio
 
         private void Awake()
         {
-            Interop<EditorInterop>.Current.Register(this);
+            EditorOp.Register(this);
         }
 
         public override void Init()
@@ -25,16 +25,16 @@ namespace Terra.Studio
             var playButton = playButtonTr.GetComponent<Button>();
             AddListenerEvent(playButton, () =>
             {
-                var scene = Interop<EditorInterop>.Current.Resolve<SceneExporter>().ExportJson();
-                Interop<SystemInterop>.Current.Resolve<CrossSceneDataHolder>().Set(scene);
-                Interop<EditorInterop>.Current.Resolve<EditorSystem>().RequestSwitchState();
+                var scene = EditorOp.Resolve<SceneExporter>().ExportJson();
+                SystemOp.Resolve<CrossSceneDataHolder>().Set(scene);
+                EditorOp.Resolve<EditorSystem>().RequestSwitchState();
             });
 
             var saveButton = saveButtonTr.GetComponent<Button>();
-            AddListenerEvent(saveButton, Interop<EditorInterop>.Current.Resolve<EditorSystem>().RequestSaveScene);
+            AddListenerEvent(saveButton, EditorOp.Resolve<EditorSystem>().RequestSaveScene);
 
             var loadButton = loadButtonTr.GetComponent<Button>();
-            AddListenerEvent(loadButton, Interop<EditorInterop>.Current.Resolve<EditorSystem>().RequestLoadScene);
+            AddListenerEvent(loadButton, EditorOp.Resolve<EditorSystem>().RequestLoadScene);
         }
 
         public override void Draw()
@@ -60,9 +60,9 @@ namespace Terra.Studio
 
         private void OnDestroy()
         {
-            Interop<EditorInterop>.Current.Unregister(this);
+            EditorOp.Unregister(this);
         }
-        
-        
+
+
     }
 }

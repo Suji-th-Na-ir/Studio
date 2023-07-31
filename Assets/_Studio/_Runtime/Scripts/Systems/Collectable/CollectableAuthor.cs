@@ -11,7 +11,7 @@ namespace Terra.Studio
         {
             var tuple = ((int id, string type, string compData, GameObject obj))data;
             var collectableCompData = JsonConvert.DeserializeObject<CollectableComponent>(tuple.compData);
-            var runtimeSystem = Interop<RuntimeInterop>.Current.Resolve<RuntimeSystem>();
+            var runtimeSystem = RuntimeOp.Resolve<RuntimeSystem>();
             var ecsWorld = runtimeSystem.World;
             var compPool = ecsWorld.GetPool<CollectableComponent>();
             compPool.Add(tuple.id);

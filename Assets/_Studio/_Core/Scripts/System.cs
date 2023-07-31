@@ -14,7 +14,7 @@ namespace Terra.Studio
 
         private void Awake()
         {
-            Interop<SystemInterop>.Current.Register(this);
+            SystemOp.Register(this);
         }
 
         private void Start()
@@ -32,7 +32,7 @@ namespace Terra.Studio
                 loadSceneMode = LoadSceneMode.Additive
             };
             LoadSubsystemScene();
-            Interop<SystemInterop>.Current.Register(new CrossSceneDataHolder());
+            SystemOp.Register(new CrossSceneDataHolder());
         }
 
         private void LoadSubsystemScene()
@@ -49,7 +49,7 @@ namespace Terra.Studio
             Debug.Log($"Loaded scene: {scene.name}");
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
-            Interop<SystemInterop>.Current.Resolve<ISubsystem>().Initialize();
+            SystemOp.Resolve<ISubsystem>().Initialize();
         }
 
         public void SwitchState()
@@ -62,7 +62,7 @@ namespace Terra.Studio
 
         private void DisposeCurrentSubSystem(Action onUnloadComplete)
         {
-            var subSystem = Interop<SystemInterop>.Current.Resolve<ISubsystem>();
+            var subSystem = SystemOp.Resolve<ISubsystem>();
             subSystem?.Dispose();
             var operation = SceneManager.UnloadSceneAsync(currentActiveScene, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
             operation.completed += (result) =>
@@ -81,12 +81,12 @@ namespace Terra.Studio
         private void OnDestroy()
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
-            Interop<SystemInterop>.Current.Resolve<ISubsystem>()?.Dispose();
-            Interop<SystemInterop>.Current.Unregister(this);
-            Interop<SystemInterop>.Current.Unregister<CrossSceneDataHolder>();
-            Interop<SystemInterop>.Flush();
-            Interop<EditorInterop>.Flush();
-            Interop<RuntimeInterop>.Flush();
+            SystemOp.Resolve<ISubsystem>()?.Dispose();
+            SystemOp.Unregister(this);
+            SystemOp.Unregister<CrossSceneDataHolder>();
+            SystemOp.Flush();
+            EditorOp.Flush();
+            RuntimeOp.Flush();
         }
     }
 }

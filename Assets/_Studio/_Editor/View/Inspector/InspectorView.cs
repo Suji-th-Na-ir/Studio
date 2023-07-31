@@ -12,7 +12,7 @@ namespace Terra.Studio
 
         private void Awake()
         {
-            Interop<EditorInterop>.Current.Register<InspectorView>(this);
+            EditorOp.Register<InspectorView>(this);
         }
 
         public override void Init()
@@ -22,22 +22,22 @@ namespace Terra.Studio
 
         public override void Draw()
         {
-            
+
         }
 
         public override void Flush()
         {
-            
+
         }
 
         public override void Repaint()
         {
-            
+
         }
 
         private void OnDestroy()
         {
-            Interop<EditorInterop>.Current.Unregister<InspectorView>(this);
+            EditorOp.Unregister<InspectorView>(this);
         }
     }
 }
