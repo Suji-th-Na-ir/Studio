@@ -108,25 +108,23 @@ namespace RuntimeInspectorNamespace
 				return;
 
 			CreateDrawer( typeof( bool ), "Is Active", isActiveGetter, isActiveSetter );
-			// StringField nameField = CreateDrawer( typeof( string ), "Name", nameGetter, nameSetter ) as StringField;
-			// StringField tagField = CreateDrawer( typeof( string ), "Tag", tagGetter, tagSetter ) as StringField;
-			// CreateDrawerForVariable( layerProp, "Layer" );
+			StringField nameField = CreateDrawer( typeof( string ), "Name", nameGetter, nameSetter ) as StringField;
+			StringField tagField = CreateDrawer( typeof( string ), "Tag", tagGetter, tagSetter ) as StringField;
+			CreateDrawerForVariable( layerProp, "Layer" );
 
+			if( nameField )
+				nameField.SetterMode = StringField.Mode.OnSubmit;
+			
 			for( int i = 0, j = 0; i < components.Count; i++ )
 			{
-				if(hiddenComponentList.Contains(components[i].GetType()))
-				   continue;
-				   
-				   InspectorField componentDrawer = CreateDrawerForComponent( components[i] );
-				if( componentDrawer as ExpandableInspectorField && j < componentsExpandedStates.Count && componentsExpandedStates[j++] )
-					( (ExpandableInspectorField) componentDrawer ).IsExpanded = true;
+				InspectorField componentDrawer = CreateDrawerForComponent(components[i]);
+				if (componentDrawer as ExpandableInspectorField && j < componentsExpandedStates.Count &&
+				    componentsExpandedStates[j++])
+					((ExpandableInspectorField)componentDrawer).IsExpanded = true;
 			}
-
-			// if( nameField )
-			// 	nameField.SetterMode = StringField.Mode.OnSubmit;
-
-			// if( tagField )
-				// tagField.SetterMode = StringField.Mode.OnSubmit;
+			
+			if( tagField )
+				tagField.SetterMode = StringField.Mode.OnSubmit;
 
 			if( Inspector.ShowAddComponentButton )
 				CreateExposedMethodButton( addComponentMethod, () => this, ( value ) => { } );
