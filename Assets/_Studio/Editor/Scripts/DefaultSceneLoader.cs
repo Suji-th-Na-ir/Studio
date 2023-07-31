@@ -5,6 +5,8 @@ using UnityEngine;
 [InitializeOnLoadAttribute]
 public static class DefaultSceneLoader
 {
+    private static bool loadedDefaultScene = false;
+
     static DefaultSceneLoader()
     {
         EditorApplication.playModeStateChanged += LoadDefaultScene;
@@ -12,16 +14,20 @@ public static class DefaultSceneLoader
 
     static void LoadDefaultScene(PlayModeStateChange state)
     {
-        if (Application.isPlaying) return;
-
         if (state == PlayModeStateChange.ExitingEditMode)
         {
             EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
         }
 
-        if (state == PlayModeStateChange.EnteredPlayMode)
+        if (state == PlayModeStateChange.EnteredPlayMode && !loadedDefaultScene)
         {
             EditorSceneManager.LoadScene(0);
+            loadedDefaultScene = true;
+        }
+
+        if (state == PlayModeStateChange.EnteredEditMode)
+        {
+            loadedDefaultScene = false;
         }
     }
 }
