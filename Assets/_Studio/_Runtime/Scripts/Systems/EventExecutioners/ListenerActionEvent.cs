@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using UnityEngine.Scripting;
 
 namespace Terra.Studio
@@ -10,13 +11,14 @@ namespace Terra.Studio
         public void Execute(Action<object> onConditionalCheck, bool subscribe, object conditionalCheck = null)
         {
             var broadcaster = Interop<RuntimeInterop>.Current.Resolve<Broadcaster>();
+            var tuple = ((GameObject go, string condition))conditionalCheck;
             if (subscribe)
             {
-                broadcaster.ListenTo((string)conditionalCheck, () => { onConditionalCheck?.Invoke(null); });
+                broadcaster.ListenTo(tuple.condition, () => { onConditionalCheck?.Invoke(null); });
             }
             else
             {
-                broadcaster.StopListenTo((string)conditionalCheck, () => { onConditionalCheck?.Invoke(null); });
+                broadcaster.StopListenTo(tuple.condition, () => { onConditionalCheck?.Invoke(null); });
             }
         }
     }
