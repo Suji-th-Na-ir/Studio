@@ -20,8 +20,8 @@ namespace RuntimeInspectorNamespace
     public class DestroyOn : MonoBehaviour, IComponent
     {
         public DestroyOnEventType Start = DestroyOnEventType.None;
-        public Atom.BroadCast Broadcast = Atom.BroadCast.None;
-        public Atom.BroadCastListen BroadcastListen = Atom.BroadCastListen.None;
+        public string Broadcast = "";
+        public string BroadcastListen = "";
         public Atom.PlaySFX PlaySfx = Atom.PlaySFX.Off;
         public Atom.PlayVFX PlayVFX = Atom.PlayVFX.Off;
         
@@ -67,8 +67,8 @@ namespace RuntimeInspectorNamespace
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
-                IsBroadcastable = Broadcast != Atom.BroadCast.None,
-                Broadcast = Broadcast == Atom.BroadCast.None ? null : Broadcast.ToString(),
+                IsBroadcastable = Broadcast != "",
+                Broadcast = Broadcast == "" ? null : Broadcast.ToString(),
                 canPlaySFX = state.GetItem<bool>("sfx_toggle"),
                 canPlayVFX = state.GetItem<bool>("vfx_toggle"),
                 sfxName = !state.GetItem<bool>("sfx_toggle") ? null : PlaySFXField.GetSfxClipName(state.GetItem<int>("sfx_dropdown")),

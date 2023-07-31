@@ -18,20 +18,20 @@ namespace Terra.Studio.RTEditor
             Off
         }
 
-        public enum BroadCast
-        {
-            None,
-            CoinCollected,
-            CollidedWithPlayer,
-            OnClick
-        }
-
-        public enum BroadCastListen
-        {
-            None,
-            CoinCollected,
-            CollidedWithPlayer,
-            OnClick
-        }
+        // public enum BroadCast
+        // {
+        //     None,
+        //     CoinCollected,
+        //     CollidedWithPlayer,
+        //     OnClick
+        // }
+        //
+        // public enum BroadCastListen
+        // {
+        //     None,
+        //     CoinCollected,
+        //     CollidedWithPlayer,
+        //     OnClick
+        // }
     }
 }

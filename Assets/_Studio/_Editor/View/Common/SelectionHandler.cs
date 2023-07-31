@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using RTG;
 using RuntimeInspectorNamespace;
@@ -7,6 +8,7 @@ using Terra.Studio;
 using Terra.Studio.RTEditor;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
+using Object = System.Object;
 
 public class SelectionHandler : View
 {
@@ -85,12 +87,12 @@ public class SelectionHandler : View
 
     }
 
-
     private void Update()
     {
         Scan();
         SetGizmo();
     }
+
 
     private void ResetAllHandles()
     {
@@ -149,6 +151,8 @@ public class SelectionHandler : View
         if (RTInput.WasLeftMouseButtonPressedThisFrame() &&
             RTGizmosEngine.Get.HoveredGizmo == null)
         {
+            if (CheckIfThereIsAnyPopups()) return;
+            
             GameObject pickedObject = PickGameObject();
             if (pickedObject != null && pickedObject != _targetObject)
             {
@@ -156,6 +160,14 @@ public class SelectionHandler : View
                 SelectObjectInHierarchy(pickedObject);
             }
         }
+    }
+
+    bool CheckIfThereIsAnyPopups()
+    {
+        if (GameObject.FindObjectOfType<ObjectReferencePicker>() != null)
+            return true;
+
+        return false;
     }
 
     private GameObject PickGameObject()
