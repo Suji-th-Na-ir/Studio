@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine;
 
 [InitializeOnLoadAttribute]
 public static class DefaultSceneLoader
@@ -11,6 +12,8 @@ public static class DefaultSceneLoader
 
     static void LoadDefaultScene(PlayModeStateChange state)
     {
+        if (Application.isPlaying) return;
+
         if (state == PlayModeStateChange.ExitingEditMode)
         {
             EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();

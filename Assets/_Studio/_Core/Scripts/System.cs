@@ -75,7 +75,7 @@ namespace Terra.Studio
         {
             var index = (int)currentStudioState;
             var nextIndex = ++index % 2;
-            return (StudioState)index;
+            return (StudioState)nextIndex;
         }
 
         private void OnDestroy()
