@@ -46,7 +46,7 @@ namespace Terra.Studio
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
         {
-            Debug.Log($"Loaded scene: {scene.name}");
+            // Debug.Log($"Loaded scene: {scene.name}");
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
             SystemOp.Resolve<ISubsystem>().Initialize();
@@ -55,7 +55,7 @@ namespace Terra.Studio
         public void SwitchState()
         {
             //Get the state of objects and save them under a common parent with no editor references
-            Debug.Log($"Switching state");
+            // Debug.Log($"Switching state");
             DisposeCurrentSubSystem(LoadSubsystemScene);
             currentStudioState = GetNextState();
         }

@@ -22,8 +22,7 @@ namespace RuntimeInspectorNamespace
         public Atom.PlayVFX PlayVFX = Atom.PlayVFX.Off;
         public bool ShowScoreUI = false;
         public bool CanUpdateScore = false;
-        public int ScoreValue = 0;
-        // public Atom.BroadCast Broadcast = Atom.BroadCast.None;
+        public float ScoreValue = 0;
         public string Broadcast = "";
 
         public void ExportData()

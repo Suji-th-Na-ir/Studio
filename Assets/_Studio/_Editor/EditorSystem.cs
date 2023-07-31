@@ -22,6 +22,7 @@ namespace Terra.Studio
             EditorOp.Resolve<ToolbarView>().Init();
             EditorOp.Resolve<SceneView>().Init();
             EditorOp.Resolve<SelectionHandler>().Init();
+            EditorOp.Resolve<SceneExporter>().Init();
         }
 
         public void Dispose()

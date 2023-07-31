@@ -32,6 +32,12 @@ namespace RuntimeInspectorNamespace
             input.onValueChanged.AddListener( OnToggleValueChanged );
             optionsDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
             LoadSfxClips();
+            LoadState();
+        }
+
+        private void LoadState()
+        {
+            
         }
 
         public static string GetSfxClipName(int index)

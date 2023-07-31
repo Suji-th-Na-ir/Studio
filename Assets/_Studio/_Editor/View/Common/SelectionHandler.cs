@@ -61,6 +61,7 @@ public class SelectionHandler : View
 
     public override void Init()
     {
+        Debug.Log("selection handler init.");
         objectMoveGizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
         objectRotationGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
         objectScaleGizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();

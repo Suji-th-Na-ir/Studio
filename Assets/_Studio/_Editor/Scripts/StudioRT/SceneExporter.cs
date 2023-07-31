@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,30 +6,28 @@ using Newtonsoft.Json;
 using RuntimeInspectorNamespace;
 using Terra.Studio.RTEditor;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 namespace Terra.Studio
 {
     public class SceneExporter : MonoBehaviour
     {
-        private List<GameObject> sceneObjects = new List<GameObject>();
-
         private void Awake()
         {
             EditorOp.Register(this);
         }
-
-        void Update()
+        
+        public void Init()
         {
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-                Debug.Log(ExportJson());
-            }
+            // Debug.Log("selection handler ");
+            LoadScene();
         }
 
         private List<GameObject> GetAllSceneGameObjects()
         {
-            GameObject[] objects = SceneManager.GetActiveScene().GetRootGameObjects();
-            foreach (GameObject obj in objects)
+            var objects = SceneManager.GetActiveScene().GetRootGameObjects();
+            var newList = new List<GameObject>();
+            foreach (var obj in objects)
             {
                 if (obj.GetComponentInParent<HideInHierarchy>())
                 {
@@ -38,14 +37,14 @@ namespace Terra.Studio
                 {
                     continue;
                 }
-                sceneObjects.Add(obj);
+                newList.Add(obj);
             }
-            return sceneObjects;
+            return newList;
         }
 
         public string ExportJson()
         {
-            sceneObjects = GetAllSceneGameObjects();
+            var sceneObjects = GetAllSceneGameObjects();
             
             var entities = new List<VirtualEntity>();
             for (int i = 0; i < sceneObjects.Count; i++)
@@ -77,8 +76,103 @@ namespace Terra.Studio
                 entities = entities.ToArray()
             };
             var json = JsonConvert.SerializeObject(worldData);
-            Debug.Log($"Generated scene data: {json}");
+            // Debug.Log($"Generated scene data: {json}");
+            SaveScene(json);
             return json;
+        }
+
+        private void SaveScene(string data)
+        {
+            string filePath = Application.persistentDataPath + "/scene_data.json";
+            File.WriteAllText(filePath, data);
+        }
+
+        private void LoadScene()
+        {
+            string filePath = Application.persistentDataPath + "/scene_data.json";
+            if (File.Exists(filePath))
+            {
+                string jsonData = File.ReadAllText(filePath);
+
+                Debug.Log(jsonData);
+
+                WorldData wData = JsonConvert.DeserializeObject<WorldData>(jsonData);
+                
+                ReCreateScene(wData);
+            }
+            else
+            {
+                Debug.Log("save file do not exists.");
+            }
+        }
+
+        private void ReCreateScene(WorldData _data)
+        {
+            Debug.Log("recreating scene objects");
+            List<GameObject> sceneObjects = GetAllSceneGameObjects();
+            foreach (var gObject in sceneObjects)
+            {
+                Destroy(gObject);
+            }
+            
+            int objIndex = 0;
+            foreach (var entity in _data.entities)
+            {
+                GameObject genObject = null;
+                if(entity.primitiveType == "Cube")
+                    genObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+
+                if (genObject != null)
+                {
+                    genObject.name = "Cube_" + objIndex;
+                    objIndex++;
+                    genObject.transform.position = entity.position;
+                    genObject.transform.rotation = Quaternion.Euler(
+                        entity.rotation.x, entity.rotation.y,entity.rotation.z);
+                    genObject.transform.localScale = entity.scale;
+                    
+                    genObject.AddComponent<InspectorStateManager>();
+
+                    if(entity.components.Length > 0)
+                        AddComponents(entity, genObject);
+                }
+                else
+                {
+                    Debug.Log("primitive type not supported");
+                }
+            }
+        }
+
+        private void AddComponents(VirtualEntity _entity, GameObject _gameObject)
+        {
+            foreach (EntityBasedComponent comp in _entity.components)
+            {
+                if (comp.type == "Terra.Studio.Collectable")
+                {
+                    Collectible collectible = _gameObject.AddComponent<Collectible>();
+                    InspectorStateManager state = _gameObject.GetComponent<InspectorStateManager>();
+
+                    CollectableComponent cc = JsonConvert.DeserializeObject<CollectableComponent>($"{comp.data}");
+                    collectible.CanUpdateScore = cc.canUpdateScore;
+                    collectible.ShowScoreUI = cc.showScoreUI;
+                    collectible.ScoreValue = cc.scoreValue;
+                    
+                    if (cc.ConditionType == "Terra.Studio.TriggerAction")
+                        collectible.Start = CollectableEventType.OnPlayerCollide;
+                    else if (cc.ConditionType == "Terra.Studio.MouseAction")
+                        collectible.Start = CollectableEventType.OnClick;
+
+                    // collectible.PlaySfx = Atom.PlaySFX.On; //(cc.canPlaySFX) ? Atom.PlaySFX.On : Atom.PlaySFX.Off;
+                    // collectible.PlayVFX = Atom.PlayVFX.On; //(cc.canPlayVFX) ? Atom.PlayVFX.On : Atom.PlayVFX.Off;
+                    
+                    state.SetItem("sfx_toggle", true);
+                    state.SetItem("vfx_toggle", false);
+
+                    collectible.Broadcast = cc.Broadcast;
+
+                    // Debug.Log("collecting data loaded");
+                }
+            }
         }
 
         private void OnDestroy()
