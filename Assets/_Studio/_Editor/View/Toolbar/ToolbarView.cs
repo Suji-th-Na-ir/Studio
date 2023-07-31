@@ -21,13 +21,18 @@ namespace Terra.Studio
             var playButtonTr = Helper.FindDeepChild(transform, PLAY_BUTTON_LOC, true);
             var saveButtonTr = Helper.FindDeepChild(transform, SAVE_BUTTON_LOC, true);
             var loadButtonTr = Helper.FindDeepChild(transform, LOAD_BUTTON_LOC, true);
-            
+
             var playButton = playButtonTr.GetComponent<Button>();
-            AddListenerEvent(playButton, Interop<EditorInterop>.Current.Resolve<EditorSystem>().RequestSwitchState);
-            
+            AddListenerEvent(playButton, () =>
+            {
+                var scene = Interop<EditorInterop>.Current.Resolve<SceneExporter>().ExportJson();
+                Interop<SystemInterop>.Current.Resolve<CrossSceneDataHolder>().Set(scene);
+                Interop<EditorInterop>.Current.Resolve<EditorSystem>().RequestSwitchState();
+            });
+
             var saveButton = saveButtonTr.GetComponent<Button>();
             AddListenerEvent(saveButton, Interop<EditorInterop>.Current.Resolve<EditorSystem>().RequestSaveScene);
-            
+
             var loadButton = loadButtonTr.GetComponent<Button>();
             AddListenerEvent(loadButton, Interop<EditorInterop>.Current.Resolve<EditorSystem>().RequestLoadScene);
         }

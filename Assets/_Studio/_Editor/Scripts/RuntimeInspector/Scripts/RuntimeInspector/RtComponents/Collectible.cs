@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using RuntimeInspectorNamespace;
+using Terra.Studio;
 using Terra.Studio.RTEditor;
 using UnityEngine;
 
@@ -19,32 +21,56 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySFX PlaySfx = Atom.PlaySFX.Off;
         public Atom.PlayVFX PlayVFX = Atom.PlayVFX.Off;
         public bool ShowScoreUI = false;
+        public bool CanUpdateScore = false;
         public int ScoreValue = 0;
         public Atom.BroadCast Broadcast = Atom.BroadCast.None;
 
         public void ExportData()
         {
-            Debug.Log("name "+gameObject.name);
-            Debug.Log("start type "+Start.ToString());
-            Debug.Log("Broadcast "+Broadcast.ToString());
+            Debug.Log("name " + gameObject.name);
+            Debug.Log("start type " + Start.ToString());
+            Debug.Log("Broadcast " + Broadcast.ToString());
         }
-        
+
+        public (string type, string data) Export()
+        {
+            var state = GetComponent<InspectorStateManager>();
+            CollectableComponent collectable = new()
+            {
+                IsConditionAvailable = true,
+                ConditionType = GetStartEvent(),
+                ConditionData = GetStartCondition(),
+                IsBroadcastable = Broadcast != Atom.BroadCast.None,
+                Broadcast = Broadcast == Atom.BroadCast.None ? null : Broadcast.ToString(),
+                canPlaySFX = state.GetItem<bool>("sfx_toggle"),
+                canPlayVFX = state.GetItem<bool>("vfx_toggle"),
+                sfxName = !state.GetItem<bool>("sfx_toggle") ? null : PlaySFXField.GetSfxClipName(state.GetItem<int>("sfx_dropdown")),
+                vfxName = !state.GetItem<bool>("vfx_toggle") ? null : PlayVFXField.GetVfxClipName(state.GetItem<int>("vfx_dropdown")),
+                canUpdateScore = CanUpdateScore,
+                scoreValue = ScoreValue,
+                showScoreUI = ShowScoreUI
+            };
+            var type = "Terra.Studio.Collectable";
+            var data = JsonConvert.SerializeObject(collectable);
+            return (type, data);
+        }
+
         public string GetStartEvent()
         {
             if (Start == CollectableEventType.OnPlayerCollide)
                 return "Terra.Studio.TriggerAction";
-            
+
             if (Start == CollectableEventType.OnClick)
                 return "Terra.Studio.MouseAction";
 
             return "";
         }
-        
+
         public string GetStartCondition()
         {
             if (Start == CollectableEventType.OnPlayerCollide)
                 return "Player";
-            
+
             if (Start == CollectableEventType.OnClick)
                 return "OnClick";
 

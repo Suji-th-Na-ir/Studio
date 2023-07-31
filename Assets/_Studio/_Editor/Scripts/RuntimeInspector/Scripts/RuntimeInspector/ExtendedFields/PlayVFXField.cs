@@ -17,20 +17,20 @@ namespace RuntimeInspectorNamespace
         [SerializeField]
         private Toggle input;
 
-        [SerializeField] 
+        [SerializeField]
         private Dropdown optionsDropdown;
 #pragma warning restore 0649
 
         private const string sfxToggleKey = "vfx_toggle";
-        private const string sfxDropdownkey  = "vfx_dropdown";
+        private const string sfxDropdownkey = "vfx_dropdown";
         private const string resourceFolder = "vfx";
-        
+
         private static string[] vfxClipNames;
 
         public override void Initialize()
         {
             base.Initialize();
-            input.onValueChanged.AddListener( OnToggleValueChanged );
+            input.onValueChanged.AddListener(OnToggleValueChanged);
             optionsDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
             LoadVfxClips();
         }
@@ -39,11 +39,11 @@ namespace RuntimeInspectorNamespace
         {
             LoadItems();
         }
-        
+
         public static string GetVfxClipName(int index)
         {
             return vfxClipNames[index];
-        } 
+        }
 
         public void LoadItems()
         {
@@ -65,8 +65,8 @@ namespace RuntimeInspectorNamespace
             //         text =pb.name
             //     });
             // }
-            
-            for (int i =0;i< prefabs.Length;i++)
+            vfxClipNames = new string[prefabs.Length];
+            for (int i = 0; i < prefabs.Length; i++)
             {
                 optionsDropdown.options.Add(new Dropdown.OptionData()
                 {
@@ -76,9 +76,9 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        public override bool SupportsType( Type type )
+        public override bool SupportsType(Type type)
         {
-            return type == typeof( Atom.PlayVFX );
+            return type == typeof(Atom.PlayVFX);
         }
 
         private void OnDropdownValueChanged(int index)
@@ -87,7 +87,7 @@ namespace RuntimeInspectorNamespace
             stateManager.SetItem(sfxDropdownkey, index);
         }
 
-        private void OnToggleValueChanged( bool input )
+        private void OnToggleValueChanged(bool input)
         {
             LoadVfxClips();
             Value = input;
@@ -110,9 +110,9 @@ namespace RuntimeInspectorNamespace
             toggleBackground.color = Skin.InputFieldNormalBackgroundColor;
             input.graphic.color = Skin.ToggleCheckmarkColor;
 
-            Vector2 rightSideAnchorMin = new Vector2( Skin.LabelWidthPercentage, 0f );
+            Vector2 rightSideAnchorMin = new Vector2(Skin.LabelWidthPercentage, 0f);
             variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
-            ( (RectTransform) input.transform ).anchorMin = rightSideAnchorMin;
+            ((RectTransform)input.transform).anchorMin = rightSideAnchorMin;
         }
 
         public override void Refresh()

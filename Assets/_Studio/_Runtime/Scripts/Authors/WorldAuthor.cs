@@ -7,8 +7,8 @@ namespace Terra.Studio
     {
         public WorldData? GetWorldData()
         {
-            var resourceData = Resources.Load<TextAsset>("OscillationLogic").text;
-            //var resourceData = Interop<SystemInterop>.Current.Resolve<CrossSceneDataHolder>().Get();
+            //var resourceData = Resources.Load<TextAsset>("OscillationLogic").text;
+            var resourceData = Interop<SystemInterop>.Current.Resolve<CrossSceneDataHolder>().Get();
             if (string.IsNullOrEmpty(resourceData)) return null;
             var worldData = JsonConvert.DeserializeObject<WorldData>(resourceData);
             return worldData;

@@ -7,5 +7,6 @@ namespace RuntimeInspectorNamespace
     public interface IComponent
     {
         void ExportData();
+        (string type, string data) Export();
     }
 }

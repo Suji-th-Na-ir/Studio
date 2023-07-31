@@ -16,8 +16,16 @@ namespace Terra.Studio
             {
                 return;
             }
-            var jObject = (JObject)JToken.FromObject(compData.data);
-            var jString = jObject.ToString();
+            string jString = null;
+            try
+            {
+                var jObject = (JObject)JToken.FromObject(compData.data);
+                jString = jObject.ToString();
+            }
+            catch
+            {
+                jString = $"{compData.data}";
+            }
             var indivCompAuthor = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>().GetAuthorForType(compData.type);
             indivCompAuthor?.Generate((tuple.id, tuple.data.type, jString, tuple.obj));
         }

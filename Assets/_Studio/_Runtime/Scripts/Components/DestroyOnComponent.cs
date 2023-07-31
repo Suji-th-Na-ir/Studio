@@ -1,14 +1,10 @@
-using Newtonsoft.Json;
+using System;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace Terra.Studio
 {
-    /// <summary>
-    /// Can destroy on following conditions
-    /// 1. Listen to broadcast
-    /// 2. On player collider
-    /// 3. On click
-    /// </summary>
+    [Serializable]
     public struct DestroyOnComponent : IBaseComponent, IConditional, IBroadcastData
     {
         public bool CanExecute { get; set; }

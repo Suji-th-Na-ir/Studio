@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 using Newtonsoft.Json;
 
 namespace Terra.Studio
 {
+    [Serializable]
     public struct CollectableComponent : IBaseComponent, IConditional, IBroadcastData
     {
         public bool CanExecute { get; set; }
