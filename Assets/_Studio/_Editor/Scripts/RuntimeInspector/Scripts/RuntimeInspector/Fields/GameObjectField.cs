@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Terra.Studio;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Terra.Studio.RTEditor;
@@ -28,6 +29,15 @@ namespace RuntimeInspectorNamespace
 		internal static ExposedMethod removeComponentMethod = new ExposedMethod( typeof( GameObjectField ).GetMethod( "RemoveComponentButtonClicked", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static ), new RuntimeInspectorButtonAttribute( "Remove Component", false, ButtonVisibility.InitializedObjects ), true );
 		
 		// internal static ExposedMethod exportComponentsMethod = new ExposedMethod( typeof( GameObjectField ).GetMethod( "ExportComponentsButtonClicked", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ), new RuntimeInspectorButtonAttribute( "Export", false, ButtonVisibility.InitializedObjects ), false );
+
+		private List<Type> hiddenComponentList = new List<Type>()
+		{
+			typeof(UnityEngine.MeshFilter),
+			typeof(UnityEngine.MeshRenderer),
+			typeof(UnityEngine.BoxCollider),
+			typeof(TransformSaver),
+			typeof(RuntimeInspectorNamespace.InspectorStateManager)
+		};
 
 		public override void Initialize()
 		{
@@ -102,16 +112,17 @@ namespace RuntimeInspectorNamespace
 			StringField tagField = CreateDrawer( typeof( string ), "Tag", tagGetter, tagSetter ) as StringField;
 			CreateDrawerForVariable( layerProp, "Layer" );
 
-			for( int i = 0, j = 0; i < components.Count; i++ )
-			{
-				InspectorField componentDrawer = CreateDrawerForComponent( components[i] );
-				if( componentDrawer as ExpandableInspectorField && j < componentsExpandedStates.Count && componentsExpandedStates[j++] )
-					( (ExpandableInspectorField) componentDrawer ).IsExpanded = true;
-			}
-
 			if( nameField )
 				nameField.SetterMode = StringField.Mode.OnSubmit;
-
+			
+			for( int i = 0, j = 0; i < components.Count; i++ )
+			{
+				InspectorField componentDrawer = CreateDrawerForComponent(components[i]);
+				if (componentDrawer as ExpandableInspectorField && j < componentsExpandedStates.Count &&
+				    componentsExpandedStates[j++])
+					((ExpandableInspectorField)componentDrawer).IsExpanded = true;
+			}
+			
 			if( tagField )
 				tagField.SetterMode = StringField.Mode.OnSubmit;
 

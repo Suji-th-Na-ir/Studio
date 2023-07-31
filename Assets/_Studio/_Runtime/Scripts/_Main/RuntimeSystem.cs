@@ -81,6 +81,12 @@ namespace Terra.Studio
             }
             typeToInstances.Remove(typeof(T));
         }
+        
+        public void RequestSwitchState()
+        {
+            //Check for busy state of the system, if there is any switch state already in progress
+            SystemOp.Resolve<System>().SwitchState();
+        }
 
         public void Dispose()
         {

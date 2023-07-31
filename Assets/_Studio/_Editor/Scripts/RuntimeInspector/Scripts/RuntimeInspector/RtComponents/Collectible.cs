@@ -23,7 +23,8 @@ namespace RuntimeInspectorNamespace
         public bool ShowScoreUI = false;
         public bool CanUpdateScore = false;
         public int ScoreValue = 0;
-        public Atom.BroadCast Broadcast = Atom.BroadCast.None;
+        // public Atom.BroadCast Broadcast = Atom.BroadCast.None;
+        public string Broadcast = "";
 
         public void ExportData()
         {
@@ -40,8 +41,8 @@ namespace RuntimeInspectorNamespace
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
-                IsBroadcastable = Broadcast != Atom.BroadCast.None,
-                Broadcast = Broadcast == Atom.BroadCast.None ? null : Broadcast.ToString(),
+                IsBroadcastable = Broadcast != "",
+                Broadcast = Broadcast == "" ? null : Broadcast.ToString(),
                 canPlaySFX = state.GetItem<bool>("sfx_toggle"),
                 canPlayVFX = state.GetItem<bool>("vfx_toggle"),
                 sfxName = !state.GetItem<bool>("sfx_toggle") ? null : PlaySFXField.GetSfxClipName(state.GetItem<int>("sfx_dropdown")),
