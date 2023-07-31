@@ -28,7 +28,7 @@ namespace Terra.Studio
                 var go = obj != null ? obj as GameObject : null;
                 OnConditionalCheck((entity, go, conditionType, conditionData));
             },
-            true, conditionData);
+            true, (oscillatable.oscillatableTr.gameObject, conditionData));
         }
 
         public virtual void Run(IEcsSystems systems)

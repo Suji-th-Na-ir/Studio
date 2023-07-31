@@ -8,9 +8,9 @@ namespace Terra.Studio
     public struct OscillateComponent : IBaseComponent, IConditional, IBroadcastData
     {
         public float speed;
-        [JsonProperty("fromPoint")]
+        [JsonProperty("fromPoint"), HideInInspector]
         public float[] startPoint;
-        [JsonProperty("toPoint")]
+        [JsonProperty("toPoint"), HideInInspector]
         public float[] endPoint;
         [JsonIgnore]
         public Vector3 fromPoint
@@ -57,16 +57,16 @@ namespace Terra.Studio
             }
         }
         public bool loop;
-        public bool CanExecute { get; set; }
+        [HideInInspector] public bool CanExecute { get; set; }
         public string ConditionType { get; set; }
         public string ConditionData { get; set; }
         public bool IsConditionAvailable { get; set; }
         public bool IsBroadcastable { get; set; }
         public string Broadcast { get; set; }
-        public bool IsTargeted { get; set; }
-        public int TargetId { get; set; }
-        [JsonIgnore] public bool isRegistered;
-        [JsonIgnore] public Transform oscillatableTr;
-        [JsonIgnore] public bool IsExecuted { get; set; }
+        [HideInInspector] public bool IsTargeted { get; set; }
+        [HideInInspector] public int TargetId { get; set; }
+        [JsonIgnore, HideInInspector] public bool isRegistered;
+        [JsonIgnore, HideInInspector] public Transform oscillatableTr;
+        [JsonIgnore, HideInInspector] public bool IsExecuted { get; set; }
     }
 }
