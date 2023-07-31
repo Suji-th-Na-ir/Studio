@@ -87,7 +87,7 @@ namespace Terra.Studio
                 }
             }
             var compsData = Interop<RuntimeInterop>.Current.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(tuple.conditionType, OnConditionalCheck, false, tuple.conditionData);
+            compsData.ProvideEventContext(tuple.conditionType, OnConditionalCheck, false, (tuple.reference, tuple.conditionData));
             oscillatable.CanExecute = true;
             oscillatable.IsExecuted = false;
             oscillatable.oscillatableTr.position = oscillatable.fromPoint;
