@@ -46,7 +46,11 @@ namespace RuntimeInspectorNamespace
             Component.speed = Speed;
             Component.IsConditionAvailable = GetStartEvent() != "";
             
-            var data = JsonConvert.SerializeObject(Component);
+
+            var data = JsonConvert.SerializeObject(Component, Formatting.None, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
             return (type, data);
         }
         
