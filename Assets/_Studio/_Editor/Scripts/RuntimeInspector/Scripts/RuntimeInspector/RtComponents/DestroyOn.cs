@@ -22,6 +22,9 @@ namespace RuntimeInspectorNamespace
         public DestroyOnEventType Start = DestroyOnEventType.None;
         public Atom.BroadCast Broadcast = Atom.BroadCast.None;
         public Atom.BroadCastListen BroadcastListen = Atom.BroadCastListen.None;
+        public Atom.PlaySFX PlaySfx = Atom.PlaySFX.Off;
+        public Atom.PlayVFX PlayVFX = Atom.PlayVFX.Off;
+        
         public void ExportData()
         {
 
