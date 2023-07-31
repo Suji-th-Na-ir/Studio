@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,11 @@ namespace RuntimeInspectorNamespace
     public class Oscillate : MonoBehaviour, IComponent
     {
         public Terra.Studio.OscillateComponent Component;
+
+        private void Start()
+        {
+            Component.fromPoint = transform.position;
+        }
 
         public (string type, string data) Export()
         {

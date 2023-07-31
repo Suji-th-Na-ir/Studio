@@ -4,13 +4,13 @@ using UnityEngine;
 using Newtonsoft.Json;
 using RuntimeInspectorNamespace;
 using Terra.Studio.RTEditor;
+using UnityEngine.SceneManagement;
 
 namespace Terra.Studio
 {
     public class SceneExporter : MonoBehaviour
     {
-        [SerializeField]
-        private GameObject[] sceneObjects;
+        private List<GameObject> sceneObjects = new List<GameObject>();
 
         private void Awake()
         {
@@ -25,15 +25,35 @@ namespace Terra.Studio
             }
         }
 
+        private List<GameObject> GetAllSceneGameObjects()
+        {
+            GameObject[] objects = SceneManager.GetActiveScene().GetRootGameObjects();
+            foreach (GameObject obj in objects)
+            {
+                if (obj.GetComponentInParent<HideInHierarchy>())
+                {
+                    continue;
+                }
+                if (!obj.activeSelf)
+                {
+                    continue;
+                }
+                sceneObjects.Add(obj);
+            }
+            return sceneObjects;
+        }
+
         public string ExportJson()
         {
+            sceneObjects = GetAllSceneGameObjects();
+            
             var entities = new List<VirtualEntity>();
-            for (int i = 0; i < sceneObjects.Length; i++)
+            for (int i = 0; i < sceneObjects.Count; i++)
             {
                 var virutalEntity = new VirtualEntity
                 {
                     id = i,
-                    primitiveType = "Cube",
+                    primitiveType = sceneObjects[i].GetComponent<MeshFilter>().mesh.name.Split(' ')[0],
                     position = sceneObjects[i].transform.position,
                     rotation = sceneObjects[i].transform.eulerAngles,
                     scale = sceneObjects[i].transform.localScale
