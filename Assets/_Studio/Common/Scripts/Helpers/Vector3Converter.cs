@@ -19,9 +19,9 @@ public class Vector3Converter : JsonConverter<Vector3>
     public override Vector3 ReadJson(JsonReader reader, System.Type objectType, Vector3 existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         JObject jsonObject = JObject.Load(reader);
-        float x = jsonObject.GetValue("x").Value<float>();
-        float y = jsonObject.GetValue("y").Value<float>();
-        float z = jsonObject.GetValue("z").Value<float>();
+        var x = jsonObject.GetValue("x").Value<float>();
+        var y = jsonObject.GetValue("y").Value<float>();
+        var z = jsonObject.GetValue("z").Value<float>();
         return new Vector3(x, y, z);
     }
 }
