@@ -38,7 +38,7 @@ namespace Terra.Studio.RTEditor
 
         private static void GetAllAuthors()
         {
-            var dict = GetFileData(AUTHORS_FILE_PATH);
+            var dict = new Dictionary<string, string>();
             var assembly = Assembly.GetAssembly(typeof(BaseAuthor));
             var derivedTypes = assembly.GetTypes()
                 .Where(type => type.IsSubclassOf(typeof(BaseAuthor)))
@@ -59,7 +59,7 @@ namespace Terra.Studio.RTEditor
 
         private static void GetAllEvents()
         {
-            var dict = GetFileData(EVENT_FILE_PATH);
+            var dict = new Dictionary<string, string>();
             var assembly = Assembly.GetAssembly(typeof(IEventExecutor));
             var derivedTypes = assembly.GetTypes()
                 .Where(type => type.IsValueType && !type.IsEnum)
@@ -82,7 +82,7 @@ namespace Terra.Studio.RTEditor
 
         private static void GetAllDrawerComponents()
         {
-            var dict = GetFileData(COMPONENT_DRAWERS_FILE_PATH);
+            var dict = new Dictionary<string, string>();
             var assembly = Assembly.GetAssembly(typeof(BaseAuthor));
             var derivedTypes = assembly.GetTypes()
                 .Where(type => type.IsSubclassOf(typeof(MonoBehaviour)))
@@ -103,7 +103,7 @@ namespace Terra.Studio.RTEditor
 
         private static void GetAllEnumFieldComponents()
         {
-            var dict = GetFileData(COMPONENT_FIELDS_FILE_PATH);
+            var dict = new Dictionary<string, string>();
             var assembly = Assembly.GetAssembly(typeof(BaseAuthor));
             foreach (var type in assembly.GetTypes())
             {
@@ -147,17 +147,6 @@ namespace Terra.Studio.RTEditor
                 data = new();
             }
             File.WriteAllText(filePath, JsonConvert.SerializeObject(data, Formatting.Indented));
-        }
-
-        private static Dictionary<string, string> GetFileData(string filePath)
-        {
-            if (!File.Exists(filePath))
-            {
-                CreateFile(filePath);
-            }
-            var text = File.ReadAllText(filePath);
-            var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(text);
-            return dict;
         }
     }
 }
