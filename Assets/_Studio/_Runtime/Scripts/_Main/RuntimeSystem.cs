@@ -126,6 +126,7 @@ namespace Terra.Studio
 
         private void DestroyAllUpdatableSystems()
         {
+            if (customUpdateSystems == null) return;
             foreach (var customSystem in customUpdateSystems)
             {
                 customSystem.Value?.Destroy();
