@@ -16,11 +16,11 @@ namespace Terra.Studio
         public bool IsConditionAvailable { get; set; }
         public bool IsBroadcastable { get; set; }
         public string Broadcast { get; set; }
-        [HideInInspector] public bool CanExecute { get; set; }
-        [HideInInspector] public bool IsTargeted { get; set; }
-        [HideInInspector] public int TargetId { get; set; }
-        [HideInInspector] public bool isRegistered;
-        [HideInInspector] public Transform oscillatableTr;
-        [HideInInspector] public bool IsExecuted { get; set; }
+        public bool IsTargeted { get; set; }
+        public int TargetId { get; set; }
+        [JsonIgnore] public bool CanExecute { get; set; }
+        [JsonIgnore] public bool IsExecuted { get; set; }
+        [JsonIgnore] public bool isRegistered;
+        [JsonIgnore] public Transform oscillatableTr;
     }
 }

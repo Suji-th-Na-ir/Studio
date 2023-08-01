@@ -7,8 +7,6 @@ namespace Terra.Studio
     [Serializable]
     public struct DestroyOnComponent : IBaseComponent, IConditional, IBroadcastData
     {
-        public bool CanExecute { get; set; }
-        public bool IsExecuted { get; set; }
         public bool IsConditionAvailable { get; set; }
         public string ConditionType { get; set; }
         public string ConditionData { get; set; }
@@ -16,11 +14,13 @@ namespace Terra.Studio
         public string Broadcast { get; set; }
         public bool IsTargeted { get; set; }
         public int TargetId { get; set; }
+        [JsonIgnore] public bool CanExecute { get; set; }
+        [JsonIgnore] public bool IsExecuted { get; set; }
+        [JsonIgnore] public GameObject refObj;
+        [JsonIgnore] public bool isRegistered;
         public bool canPlaySFX;
         public bool canPlayVFX;
         public string sfxName;
         public string vfxName;
-        [JsonIgnore] public GameObject refObj;
-        [JsonIgnore] public bool isRegistered;
     }
 }
