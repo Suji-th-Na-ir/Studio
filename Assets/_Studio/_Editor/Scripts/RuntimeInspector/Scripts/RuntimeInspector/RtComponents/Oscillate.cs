@@ -43,6 +43,7 @@ namespace RuntimeInspectorNamespace
             Component.toPoint = toPoint;
             Component.ConditionType = GetStartEvent();
             Component.ConditionData = BroadcastListen;
+            Component.BroadcastListen = BroadcastListen;
             Component.loop = Loop;
             Component.speed = Speed;
             Component.IsConditionAvailable = GetStartEvent() != "";
@@ -55,9 +56,23 @@ namespace RuntimeInspectorNamespace
             return (type, data);
         }
 
-        public void Import(EntityBasedComponent data)
+        public void Import(EntityBasedComponent cdata)
         {   
-            
+            // var state = GetComponent<InspectorStateManager>();
+            OscillateComponent cc = JsonConvert.DeserializeObject<OscillateComponent>($"{cdata.data}");
+            fromPoint = cc.fromPoint;
+            toPoint = cc.toPoint;
+            Speed = cc.speed;
+            Loop = cc.loop;
+
+            if (cc.ConditionType == "Terra.Studio.TriggerAction")
+                Start = OscillateEventType.OnPlayerCollide;
+            else if (cc.ConditionType == "Terra.Studio.MouseAction")
+                Start = OscillateEventType.OnClick;
+            else if (cc.ConditionType == "Terra.Studio.Listener")
+                Start = OscillateEventType.OnBroadcastListen;
+
+            BroadcastListen = cc.BroadcastListen;
         }
 
         public string GetStartEvent()

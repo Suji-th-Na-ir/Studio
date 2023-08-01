@@ -386,5 +386,41 @@ namespace PlayShifu.Terra
                 field.SetValueDirect(__makeref(target), value);
             }
         }
+
+        public static string[] GetSfxClipNames()
+        {
+            var sfxClips = Resources.LoadAll("sfx", typeof(AudioClip)).Cast<AudioClip>().ToArray();
+            string[] names = new String[sfxClips.Length];
+            for (int i = 0; i < sfxClips.Length; i++)
+            {
+                names[i] = sfxClips[i].name;
+            }
+            return names;
+        }
+
+        public static string GetSfxClipNameByIndex(int _index)
+        {
+            string[] names = GetSfxClipNames();
+            if (names.Length < _index) return names[_index];
+            return "";
+        }
+
+        public static string[] GetVfxClipNames()
+        {
+            var vfxClips = Resources.LoadAll("vfx", typeof(GameObject)).Cast<GameObject>().ToArray();
+            string[] names = new string[vfxClips.Length];
+            for (int i = 0; i < vfxClips.Length; i++)
+            {
+                names[i] = vfxClips[i].name;
+            }
+            return names;
+        }
+
+        public static string GetVfxClipNameByIndex(int _index)
+        {
+            string[] names = GetVfxClipNames();
+            if (names.Length < _index) return names[_index];
+            return "";
+        }
     }
 }

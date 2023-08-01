@@ -114,17 +114,30 @@ namespace Terra.Studio
                 Destroy(gObject);
             }
             
-            int objIndex = 0;
+            // add inspector state manager to each gameobject 
+            List<GameObject> genObjects = new List<GameObject>();
+
             foreach (var entity in _data.entities)
             {
-                GameObject genObject = null;
-                if(entity.primitiveType == "Cube")
-                    genObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                GameObject newObj = null;
 
+                if (entity.primitiveType == "Cube")
+                    newObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                else
+                    newObj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+
+                newObj.AddComponent<InspectorStateManager>();
+                
+                genObjects.Add(newObj);
+            }
+            
+            for (int i =0; i< _data.entities.Length; i++)
+            {
+                var entity = _data.entities[i];
+                var genObject = genObjects[i];
                 if (genObject != null)
                 {
-                    genObject.name = "Cube_" + objIndex;
-                    objIndex++;
+                    genObject.name = "Cube_" + i;
                     genObject.transform.position = entity.position;
                     genObject.transform.rotation = Quaternion.Euler(
                         entity.rotation.x, entity.rotation.y,entity.rotation.z);
@@ -144,13 +157,19 @@ namespace Terra.Studio
         {
             foreach (EntityBasedComponent comp in _entity.components)
             {
-                // add inspector state manager 
-                _gameObject.AddComponent<InspectorStateManager>();
-
+                IComponent ic = null;
                 if (comp.type == "Terra.Studio.Collectable")
                 {
-                    Collectible cc = _gameObject.AddComponent<Collectible>();
-                    cc.Import(comp);
+                    ic = _gameObject.AddComponent<Collectible>();
+                    ic.Import(comp);
+                } else if (comp.type == "Terra.Studio.DestroyOn")
+                {
+                    ic = _gameObject.AddComponent<DestroyOn>();
+                    ic.Import(comp);
+                } else if (comp.type == "Terra.Studio.Oscillate")
+                {
+                    ic = _gameObject.AddComponent<Oscillate>();
+                    ic.Import(comp);
                 }
             }
         }

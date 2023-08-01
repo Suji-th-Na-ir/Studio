@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using PlayShifu.Terra;
 using UnityEngine;
 using UnityEngine.UI;
 using Terra.Studio.RTEditor;
@@ -25,21 +26,16 @@ namespace RuntimeInspectorNamespace
         public const string sfxDropdownkey  = "sfx_dropdown";
         public const string resourceFolder = "sfx";
 
-        private static string[] sfxClipNames;
         public override void Initialize()
         {
+            Debug.Log("created");
             base.Initialize();
             input.onValueChanged.AddListener( OnToggleValueChanged );
             optionsDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
             LoadSfxClips();
             LoadItems();
         }
-
-        public static string GetSfxClipName(int index)
-        {
-            return sfxClipNames[index];
-        }
-
+        
         public void LoadItems()
         {
             base.StateManagerSetup();
@@ -52,17 +48,13 @@ namespace RuntimeInspectorNamespace
 
         private void LoadSfxClips()
         {
-            var sfxClips = Resources.LoadAll(resourceFolder, typeof(AudioClip)).Cast<AudioClip>().ToArray();
             optionsDropdown.options.Clear();
-            sfxClipNames = new String[sfxClips.Length];
-
-            for (int i =0;i< sfxClips.Length;i++)
+            foreach (string clipName in Helper.GetSfxClipNames())
             {
                 optionsDropdown.options.Add(new Dropdown.OptionData()
                 {
-                    text = sfxClips[i].name
+                    text = clipName
                 });
-                sfxClipNames[i] = sfxClips[i].name;
             }
         }
 

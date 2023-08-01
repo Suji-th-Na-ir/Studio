@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 using RuntimeInspectorNamespace;
 using Terra.Studio;
 using Terra.Studio.RTEditor;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -58,26 +60,55 @@ namespace RuntimeInspectorNamespace
         public (string type, string data) Export()
         {
             var state = GetComponent<InspectorStateManager>();
-            DestroyOnComponent destroyOn = new()
-            {
-                IsConditionAvailable = true,
-                ConditionType = GetStartEvent(),
-                ConditionData = GetStartCondition(),
-                IsBroadcastable = Broadcast != "",
-                Broadcast = Broadcast == "" ? null : Broadcast.ToString(),
-                canPlaySFX = state.GetItem<bool>("sfx_toggle"),
-                canPlayVFX = state.GetItem<bool>("vfx_toggle"),
-                sfxName = !state.GetItem<bool>("sfx_toggle") ? null : PlaySFXField.GetSfxClipName(state.GetItem<int>("sfx_dropdown")),
-                vfxName = !state.GetItem<bool>("vfx_toggle") ? null : PlayVFXField.GetVfxClipName(state.GetItem<int>("vfx_dropdown"))
-            };
+            Debug.Log("state "+state);
+            DestroyOnComponent destroyOn = new();
+            
+            destroyOn.IsConditionAvailable = true;
+            destroyOn.ConditionType = GetStartEvent();
+            destroyOn.ConditionData = GetStartCondition();
+            destroyOn.IsBroadcastable = Broadcast != "";
+            destroyOn.Broadcast = Broadcast == "" ? null : Broadcast.ToString();
+            destroyOn.BroadcastListen = BroadcastListen == "" ? null : BroadcastListen.ToString();
+            destroyOn.canPlaySFX = state.GetItem<bool>("sfx_toggle");
+            destroyOn.canPlayVFX = state.GetItem<bool>("vfx_toggle");
+                
+            destroyOn.sfxName = !state.GetItem<bool>("sfx_toggle")
+                ? null
+                : Helper.GetSfxClipNameByIndex(state.GetItem<int>("sfx_dropdown"));
+                
+            destroyOn.vfxName = !state.GetItem<bool>("vfx_toggle")
+                ? null
+                : Helper.GetVfxClipNameByIndex(state.GetItem<int>("vfx_dropdown"));
+                destroyOn.sfxIndex = state.GetItem<int>("sfx_dropdown");
+                destroyOn.vfxIndex = state.GetItem<int>("vfx_dropdown");
+            
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(destroyOn);
             return (type, data);
         }
 
-        public void Import(EntityBasedComponent data)
+        public void Import(EntityBasedComponent cdata)
         {
+            var state = GetComponent<InspectorStateManager>();
+
+            DestroyOnComponent cc = JsonConvert.DeserializeObject<DestroyOnComponent>($"{cdata.data}");
             
+            if (cc.ConditionType == "Terra.Studio.TriggerAction")
+                Start = DestroyOnEventType.OnPlayerCollide;
+            else if (cc.ConditionType == "Terra.Studio.MouseAction")
+                Start = DestroyOnEventType.OnClick;
+            else if (cc.ConditionType == "Terra.Studio.Listener")
+                Start = DestroyOnEventType.BroadcastListen;
+            else
+                Start = DestroyOnEventType.None;
+            
+            Broadcast = cc.Broadcast;
+            BroadcastListen = cc.BroadcastListen;
+            
+            state.SetItem("sfx_toggle", cc.canPlaySFX);
+            state.SetItem("vfx_toggle", cc.canPlayVFX);
+            state.SetItem("sfx_dropdown", cc.sfxIndex);
+            state.SetItem("vfx_dropdown", cc.vfxIndex);
         }
     }
 }

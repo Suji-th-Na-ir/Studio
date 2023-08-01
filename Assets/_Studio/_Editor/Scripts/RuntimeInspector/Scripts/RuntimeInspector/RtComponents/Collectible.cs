@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 using RuntimeInspectorNamespace;
 using Terra.Studio;
 using Terra.Studio.RTEditor;
@@ -39,8 +40,8 @@ namespace RuntimeInspectorNamespace
                 Broadcast = Broadcast == "" ? null : Broadcast.ToString(),
                 canPlaySFX = state.GetItem<bool>("sfx_toggle"),
                 canPlayVFX = state.GetItem<bool>("vfx_toggle"),
-                sfxName = !state.GetItem<bool>("sfx_toggle") ? null : PlaySFXField.GetSfxClipName(state.GetItem<int>("sfx_dropdown")),
-                vfxName = !state.GetItem<bool>("vfx_toggle") ? null : PlayVFXField.GetVfxClipName(state.GetItem<int>("vfx_dropdown")),
+                sfxName = !state.GetItem<bool>("sfx_toggle") ? null : Helper.GetSfxClipNameByIndex(state.GetItem<int>("sfx_dropdown")),
+                vfxName = !state.GetItem<bool>("vfx_toggle") ? null : Helper.GetVfxClipNameByIndex(state.GetItem<int>("vfx_dropdown")),
                 sfxIndex = state.GetItem<int>("sfx_dropdown"),
                 vfxIndex = state.GetItem<int>("vfx_dropdown"),
                 canUpdateScore = CanUpdateScore,

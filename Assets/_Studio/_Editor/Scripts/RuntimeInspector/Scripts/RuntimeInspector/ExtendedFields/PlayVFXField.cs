@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using PlayShifu.Terra;
 using UnityEngine;
 using UnityEngine.UI;
 using Terra.Studio.RTEditor;
@@ -25,8 +26,6 @@ namespace RuntimeInspectorNamespace
         private const string vfxDropdownkey = "vfx_dropdown";
         private const string resourceFolder = "vfx";
 
-        private static string[] vfxClipNames;
-
         public override void Initialize()
         {
             base.Initialize();
@@ -34,11 +33,6 @@ namespace RuntimeInspectorNamespace
             optionsDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
             LoadVfxClips();
             LoadItems();
-        }
-        
-        public static string GetVfxClipName(int index)
-        {
-            return vfxClipNames[index];
         }
 
         public void LoadItems()
@@ -53,16 +47,14 @@ namespace RuntimeInspectorNamespace
 
         private void LoadVfxClips()
         {
-            var prefabs = Resources.LoadAll(resourceFolder, typeof(GameObject)).Cast<GameObject>().ToArray();
             optionsDropdown.options.Clear();
-            vfxClipNames = new string[prefabs.Length];
-            for (int i = 0; i < prefabs.Length; i++)
+
+            foreach (string clipName in Helper.GetVfxClipNames())
             {
                 optionsDropdown.options.Add(new Dropdown.OptionData()
                 {
-                    text = prefabs[i].name
+                    text = clipName
                 });
-                vfxClipNames[i] = prefabs[i].name;
             }
         }
 

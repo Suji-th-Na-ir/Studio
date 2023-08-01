@@ -126,6 +126,7 @@ namespace RuntimeInspectorNamespace
 		protected void StateManagerSetup()
 		{
 			var targetObject = EditorOp.Resolve<SelectionHandler>().GetSelectedObject();
+			// Debug.Log("target object "+targetObject);
 			if (targetObject != null && targetObject.GetComponent<InspectorStateManager>())
 			{
 				stateManager = targetObject.GetComponent<InspectorStateManager>();
