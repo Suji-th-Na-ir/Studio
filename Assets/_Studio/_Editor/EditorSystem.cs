@@ -17,6 +17,7 @@ namespace Terra.Studio
 
         public void Initialize()
         {
+            EditorOp.Register(new DataProvider());
             EditorOp.Resolve<HierarchyView>().Init();
             EditorOp.Resolve<InspectorView>().Init();
             EditorOp.Resolve<ToolbarView>().Init();
@@ -36,6 +37,7 @@ namespace Terra.Studio
 
         private void OnDestroy()
         {
+            EditorOp.Unregister<DataProvider>();
             SystemOp.Unregister(this as ISubsystem);
             EditorOp.Unregister(this);
         }

@@ -10,8 +10,9 @@ namespace Terra.Studio.RTEditor
 {
     public class GenerateVariants
     {
-        private const string AUTHORS_FILE_PATH = "Assets/_Studio/Resources/AuthorsVariants.txt";
-        private const string EVENT_FILE_PATH = "Assets/_Studio/Resources/EventsVariants.txt";
+        private const string AUTHORS_FILE_PATH = "Assets/_Studio/Resources/Runtime/AuthorsVariants.txt";
+        private const string EVENT_FILE_PATH = "Assets/_Studio/Resources/Runtime/EventsVariants.txt";
+        private const string COMPONENT_DRAWERS_FILE_PATH = "Assets/_Studio/Resources/Editortime/ComponentDrawersVariants.txt";
 
         [InitializeOnLoadMethod]
         private static void Generate()
@@ -26,8 +27,10 @@ namespace Terra.Studio.RTEditor
 
         private static void AfterAssemblyReload()
         {
+            CheckIfFolderExists();
             GetAllAuthors();
             GetAllEvents();
+            GetAllDrawerComponents();
         }
 
         private static void GetAllAuthors()
@@ -72,6 +75,39 @@ namespace Terra.Studio.RTEditor
                 }
             }
             CreateFile(EVENT_FILE_PATH, dict);
+        }
+
+        private static void GetAllDrawerComponents()
+        {
+            var dict = GetFileData(COMPONENT_DRAWERS_FILE_PATH);
+            var assembly = Assembly.GetAssembly(typeof(BaseAuthor));
+            var derivedTypes = assembly.GetTypes()
+                .Where(type => type.IsSubclassOf(typeof(MonoBehaviour)))
+                .ToArray();
+            foreach (var derivedType in derivedTypes)
+            {
+                var editorDrawAttribute = derivedType.GetCustomAttribute<EditorDrawComponentAttribute>();
+                if (editorDrawAttribute != null)
+                {
+                    if (!dict.ContainsKey(editorDrawAttribute.ComponentTarget))
+                    {
+                        dict.Add(editorDrawAttribute.ComponentTarget, derivedType.FullName);
+                    }
+                }
+            }
+            CreateFile(COMPONENT_DRAWERS_FILE_PATH, dict);
+        }
+
+        private static void CheckIfFolderExists()
+        {
+            if (!Directory.Exists("Assets/_Studio/Resources/Runtime"))
+            {
+                Directory.CreateDirectory("Assets/_Studio/Resources/Runtime");
+            }
+            if (!Directory.Exists("Assets/_Studio/Resources/Editortime"))
+            {
+                Directory.CreateDirectory("Assets/_Studio/Resources/Editortime");
+            }
         }
 
         private static void CreateFile(string filePath, Dictionary<string, string> data = null)

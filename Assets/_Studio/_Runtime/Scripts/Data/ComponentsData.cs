@@ -9,8 +9,8 @@ namespace Terra.Studio
 {
     public class ComponentsData
     {
-        private const string AUTHORS_RES_PATH = "AuthorsVariants";
-        private const string EVENT_RES_PATH = "EventsVariants";
+        private const string AUTHORS_RES_PATH = "Runtime/AuthorsVariants";
+        private const string EVENT_RES_PATH = "Runtime/EventsVariants";
 
         private Dictionary<string, Type> authorMap;
         private Dictionary<string, Type> eventMap;

@@ -2,7 +2,7 @@ using System;
 
 namespace Terra.Studio
 {
-    [AttributeUsage(AttributeTargets.Struct, AllowMultiple = true, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Struct, AllowMultiple = false, Inherited = false)]
     public class EventExecutorAttribute : Attribute
     {
         private readonly string eventTarget;

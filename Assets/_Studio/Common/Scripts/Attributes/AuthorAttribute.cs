@@ -2,7 +2,7 @@ using System;
 
 namespace Terra.Studio
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class AuthorAttribute : Attribute
     {
         private readonly string authorTarget;
