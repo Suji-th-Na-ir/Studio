@@ -1,5 +1,6 @@
 using UnityEngine;
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
@@ -14,6 +15,15 @@ namespace Terra.Studio
             var compPool = ecsWorld.GetPool<REPLACEMEComponent>();
             compPool.Add(tuple.id);
             ref var compRef = ref compPool.Get(tuple.id);
+            Helper.CopyStructFieldValues(compData, ref compRef);
+            compRef.IsConditionAvailable = compData.IsConditionAvailable;
+            compRef.ConditionType = compData.ConditionType;
+            compRef.ConditionData = compData.ConditionData;
+            compRef.IsBroadcastable = compData.IsBroadcastable;
+            compRef.Broadcast = compData.Broadcast;
+            compRef.IsTargeted = compData.IsTargeted;
+            compRef.TargetId = compData.TargetId;
+            compRef.refObject = tuple.obj;
         }
     }
 }
