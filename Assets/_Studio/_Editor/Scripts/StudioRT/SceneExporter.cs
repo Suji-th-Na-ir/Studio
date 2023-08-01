@@ -95,7 +95,7 @@ namespace Terra.Studio
                 string jsonData = File.ReadAllText(filePath);
 
                 Debug.Log(jsonData);
-
+                
                 WorldData wData = JsonConvert.DeserializeObject<WorldData>(jsonData);
                 
                 ReCreateScene(wData);
@@ -108,7 +108,6 @@ namespace Terra.Studio
 
         private void ReCreateScene(WorldData _data)
         {
-            Debug.Log("recreating scene objects");
             List<GameObject> sceneObjects = GetAllSceneGameObjects();
             foreach (var gObject in sceneObjects)
             {
@@ -131,8 +130,6 @@ namespace Terra.Studio
                         entity.rotation.x, entity.rotation.y,entity.rotation.z);
                     genObject.transform.localScale = entity.scale;
                     
-                    genObject.AddComponent<InspectorStateManager>();
-
                     if(entity.components.Length > 0)
                         AddComponents(entity, genObject);
                 }
@@ -147,30 +144,13 @@ namespace Terra.Studio
         {
             foreach (EntityBasedComponent comp in _entity.components)
             {
+                // add inspector state manager 
+                _gameObject.AddComponent<InspectorStateManager>();
+
                 if (comp.type == "Terra.Studio.Collectable")
                 {
-                    Collectible collectible = _gameObject.AddComponent<Collectible>();
-                    InspectorStateManager state = _gameObject.GetComponent<InspectorStateManager>();
-
-                    CollectableComponent cc = JsonConvert.DeserializeObject<CollectableComponent>($"{comp.data}");
-                    collectible.CanUpdateScore = cc.canUpdateScore;
-                    collectible.ShowScoreUI = cc.showScoreUI;
-                    collectible.ScoreValue = cc.scoreValue;
-                    
-                    if (cc.ConditionType == "Terra.Studio.TriggerAction")
-                        collectible.Start = CollectableEventType.OnPlayerCollide;
-                    else if (cc.ConditionType == "Terra.Studio.MouseAction")
-                        collectible.Start = CollectableEventType.OnClick;
-
-                    // collectible.PlaySfx = Atom.PlaySFX.On; //(cc.canPlaySFX) ? Atom.PlaySFX.On : Atom.PlaySFX.Off;
-                    // collectible.PlayVFX = Atom.PlayVFX.On; //(cc.canPlayVFX) ? Atom.PlayVFX.On : Atom.PlayVFX.Off;
-                    
-                    state.SetItem("sfx_toggle", true);
-                    state.SetItem("vfx_toggle", false);
-
-                    collectible.Broadcast = cc.Broadcast;
-
-                    // Debug.Log("collecting data loaded");
+                    Collectible cc = _gameObject.AddComponent<Collectible>();
+                    cc.Import(comp);
                 }
             }
         }

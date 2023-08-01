@@ -23,7 +23,6 @@ public class SelectionHandler : View
     [SerializeField] private Camera mainCamera;
     [SerializeField] private RuntimeHierarchy runtimeHierarchy;
     [SerializeField] private RuntimeInspector runtimeInspector;
-    [SerializeField] private GameObject cubeObject;
 
 
     private ObjectTransformGizmo objectMoveGizmo;
@@ -61,7 +60,6 @@ public class SelectionHandler : View
 
     public override void Init()
     {
-        Debug.Log("selection handler init.");
         objectMoveGizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
         objectRotationGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
         objectScaleGizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();
@@ -162,6 +160,8 @@ public class SelectionHandler : View
             }
         }
     }
+    
+    
 
     bool CheckIfThereIsAnyPopups()
     {
@@ -233,25 +233,8 @@ public class SelectionHandler : View
         }
     }
 
-    public string GetSceneData(Oscillate oscialteComp)
+    public GameObject GetSelectedObject()
     {
-        WorldData wdd = new WorldData();
-        wdd.entities = new VirtualEntity[1];
-        wdd.entities[0].id = 1;
-        wdd.entities[0].primitiveType = "Cube";
-        if (!cubeObject)
-        {
-            cubeObject = GameObject.Find("Cube");
-        }
-        wdd.entities[0].position = cubeObject.transform.position;
-        wdd.entities[0].rotation = cubeObject.transform.eulerAngles;
-        wdd.entities[0].scale = cubeObject.transform.localScale;
-        wdd.entities[0].components = new EntityBasedComponent[1];
-        wdd.entities[0].components[0].type = "Terra.Studio.OscillateComponent";
-        var compData = oscialteComp.Component;
-        wdd.entities[0].components[0].data = compData;
-        var json = JsonConvert.SerializeObject(wdd);
-        Debug.Log($"Data: {json}");
-        return json;
+        return _targetObject;
     }
 }
