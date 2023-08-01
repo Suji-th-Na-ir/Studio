@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using UnityEngine;
+using Newtonsoft.Json;
 using System.Reflection;
 using System.Collections.Generic;
 
@@ -8,23 +9,21 @@ namespace Terra.Studio
 {
     public class ComponentsData
     {
+        private const string AUTHORS_RES_PATH = "AuthorsVariants";
+        private const string EVENT_RES_PATH = "EventsVariants";
+
         private Dictionary<string, Type> authorMap;
         private Dictionary<string, Type> eventMap;
 
         private void GetAllAuthors()
         {
             authorMap = new();
-            var assembly = Assembly.GetExecutingAssembly();
-            var derivedTypes = assembly.GetTypes()
-                .Where(type => type.IsSubclassOf(typeof(BaseAuthor)))
-                .ToArray();
-            foreach (var derivedType in derivedTypes)
+            var authorRes = Resources.Load<TextAsset>(AUTHORS_RES_PATH).text;
+            var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(authorRes);
+            foreach (var item in data)
             {
-                var authorAttribute = derivedType.GetCustomAttribute<AuthorAttribute>();
-                if (authorAttribute != null)
-                {
-                    authorMap.Add(authorAttribute.AuthorTarget, derivedType);
-                }
+                var type = Type.GetType(item.Value);
+                authorMap.Add(item.Key, type);
             }
         }
 
@@ -47,19 +46,12 @@ namespace Terra.Studio
         private void GetAllEvents()
         {
             eventMap = new();
-            var assembly = Assembly.GetExecutingAssembly();
-            var derivedTypes = assembly.GetTypes()
-                .Where(type => type.IsValueType && !type.IsEnum)
-                .Where(type => type.GetInterfaces().Contains(typeof(IEventExecutor)))
-                .Where(type => type.GetCustomAttribute<EventExecutorAttribute>() != null)
-                .ToArray();
-            foreach (var derivedType in derivedTypes)
+            var authorRes = Resources.Load<TextAsset>(EVENT_RES_PATH).text;
+            var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(authorRes);
+            foreach (var item in data)
             {
-                var eventAttribute = derivedType.GetCustomAttribute<EventExecutorAttribute>();
-                if (eventAttribute != null)
-                {
-                    eventMap.Add(eventAttribute.EventTarget, derivedType);
-                }
+                var type = Type.GetType(item.Value);
+                eventMap.Add(item.Key, type);
             }
         }
 

@@ -1,0 +1,5 @@
+{
+  "Terra.Studio.Collectable": "Terra.Studio.CollectableAuthor",
+  "Terra.Studio.DestroyOn": "Terra.Studio.DestroyOnAuthor",
+  "Terra.Studio.Oscillate": "Terra.Studio.OscillateAuthor"
+}
