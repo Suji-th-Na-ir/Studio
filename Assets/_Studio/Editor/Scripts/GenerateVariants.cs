@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using UnityEditor;
@@ -5,7 +6,6 @@ using UnityEngine;
 using Newtonsoft.Json;
 using System.Reflection;
 using System.Collections.Generic;
-using System;
 
 namespace Terra.Studio.RTEditor
 {

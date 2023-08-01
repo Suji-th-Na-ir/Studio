@@ -16,8 +16,6 @@ namespace Terra.Studio
                 return;
             }
             collectable.isRegistered = true;
-            //Always look for some condition.
-            //Do not have this check if condition is available at all
             var conditionType = collectable.ConditionType;
             var goRef = collectable.refObject;
             var conditionData = collectable.ConditionData;

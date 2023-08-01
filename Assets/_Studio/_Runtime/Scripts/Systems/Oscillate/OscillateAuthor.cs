@@ -25,7 +25,7 @@ namespace Terra.Studio
             compRef.IsBroadcastable = oscillateCompData.IsBroadcastable;
             compRef.Broadcast = oscillateCompData.Broadcast;
             compRef.oscillatableTr = tuple.obj.transform;
-            var instance = RuntimeOp.Resolve<RuntimeSystem>().GetRunningInstance<OscillateSystem>();
+            var instance = RuntimeOp.Resolve<RuntimeSystem>().AddRunningInstance<OscillateSystem>();
             instance.Init(ecsWorld, entity);
         }
     }

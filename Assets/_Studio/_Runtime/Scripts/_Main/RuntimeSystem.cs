@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Linq;
 using Leopotam.EcsLite;
 using System.Collections.Generic;
 
@@ -8,8 +9,10 @@ namespace Terra.Studio
     public class RuntimeSystem : MonoBehaviour, ISubsystem, IMouseEvents
     {
         private EcsWorld ecsWorld;
-        private IEcsSystems updateSystems;
+        private IEcsSystems globalUpdateSystems;
         private Dictionary<Type, object> typeToInstances;
+        private Dictionary<Type, IEcsSystems> customUpdateSystems;
+        private Dictionary<Type, IEcsSystems>.Enumerator? customUpdateEnumerator;
 
         public EcsWorld World { get { return ecsWorld; } }
         public Action<GameObject> OnClicked { get; set; }
@@ -18,12 +21,12 @@ namespace Terra.Studio
         {
             SystemOp.Register(this as ISubsystem);
             RuntimeOp.Register(this);
-            RuntimeOp.Register(new Broadcaster());
-            RuntimeOp.Register(new ComponentsData());
         }
 
         public void Initialize()
         {
+            RuntimeOp.Register(new Broadcaster());
+            RuntimeOp.Register(new ComponentsData());
             InitializeEcs();
         }
 
@@ -36,52 +39,78 @@ namespace Terra.Studio
 
         private void InitializeUpdateSystems()
         {
+            customUpdateSystems = new();
             typeToInstances = new();
-            typeToInstances
-                .Add(new OscillateSystem()) //This system need not be running always
-                .Add(new ClickSystem());
-            updateSystems = new EcsSystems(ecsWorld);
-            foreach (var item in typeToInstances)
-            {
-                updateSystems.Add(item.Value as IEcsRunSystem);
-            }
-            updateSystems.Init();
+            globalUpdateSystems = new EcsSystems(ecsWorld)
+                                    .Add(new ClickSystem());
+            globalUpdateSystems.Init();
         }
 
         private void Update()
         {
-            updateSystems?.Run();
+            globalUpdateSystems?.Run();
+            UpdateCustomSystems();
+        }
+
+        private void UpdateCustomSystems()
+        {
+            try
+            {
+                if (customUpdateEnumerator != null)
+                {
+                    var enumerator = customUpdateEnumerator.Value;
+                    while (enumerator.MoveNext())
+                    {
+                        enumerator.Current.Value?.Run();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Gotten error at custom update");
+                Debug.LogError(ex);
+            }
         }
 
         public IAbsRunsystem AddRunningInstance<T>() where T : IAbsRunsystem
         {
-            if (typeToInstances.ContainsKey(typeof(T)))
+            var type = typeof(T);
+            if (typeToInstances.ContainsKey(type))
             {
-                return (IAbsRunsystem)typeToInstances[typeof(T)];
+                return (IAbsRunsystem)typeToInstances[type];
             }
             var instance = Activator.CreateInstance<T>();
-            typeToInstances.Add(typeof(T), instance);
+            typeToInstances.Add(type, instance);
+            if (typeof(T).GetInterfaces().Contains(typeof(IEcsRunSystem)))
+            {
+                var newSystem = new EcsSystems(World).Add((IEcsRunSystem)instance);
+                newSystem.Init();
+                customUpdateSystems.Add(type, newSystem);
+                customUpdateEnumerator = customUpdateSystems.GetEnumerator();
+            }
             return (IAbsRunsystem)instance;
         }
 
-        public IAbsRunsystem GetRunningInstance<T>()
+        public void RemoveRunningInstance<T>(T instance) where T : IAbsRunsystem
         {
-            if (typeToInstances.ContainsKey(typeof(T)))
-            {
-                return (T)typeToInstances[typeof(T)] as IAbsRunsystem;
-            }
-            return default;
-        }
-
-        public void RemoveRunningInstance<T>() where T : IAbsRunsystem
-        {
-            if (!typeToInstances.ContainsKey(typeof(T)))
+            var type = typeof(T);
+            if (!typeToInstances.ContainsKey(type))
             {
                 return;
             }
-            typeToInstances.Remove(typeof(T));
+            typeToInstances.Remove(type);
+            if (type.GetInterfaces().Contains(typeof(IEcsRunSystem)))
+            {
+                if (customUpdateSystems.ContainsKey(type))
+                {
+                    var system = customUpdateSystems[type];
+                    customUpdateSystems.Remove(type);
+                    system?.Destroy();
+                    customUpdateEnumerator = customUpdateSystems.GetEnumerator();
+                }
+            }
         }
-        
+
         public void RequestSwitchState()
         {
             //Check for busy state of the system, if there is any switch state already in progress
@@ -95,9 +124,19 @@ namespace Terra.Studio
             EntityAuthorOp.Flush();
         }
 
+        private void DestroyAllUpdatableSystems()
+        {
+            foreach (var customSystem in customUpdateSystems)
+            {
+                customSystem.Value?.Destroy();
+            }
+            customUpdateSystems = null;
+        }
+
         private void OnDestroy()
         {
-            updateSystems?.Destroy();
+            DestroyAllUpdatableSystems();
+            globalUpdateSystems?.Destroy();
             ecsWorld?.Destroy();
             RuntimeOp.Unregister<Broadcaster>();
             RuntimeOp.Unregister<ComponentsData>();

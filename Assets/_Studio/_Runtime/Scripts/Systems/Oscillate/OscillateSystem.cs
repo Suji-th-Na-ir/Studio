@@ -35,6 +35,7 @@ namespace Terra.Studio
         {
             var filter = systems.GetWorld().Filter<OscillateComponent>().End();
             var oscillatorPool = systems.GetWorld().GetPool<OscillateComponent>();
+            var totalEntitiesFinishedJob = 0;
             foreach (var entity in filter)
             {
                 ref var oscillatable = ref oscillatorPool.Get(entity);
@@ -44,6 +45,7 @@ namespace Terra.Studio
                 }
                 if (oscillatable.IsExecuted)
                 {
+                    totalEntitiesFinishedJob++;
                     continue;
                 }
                 var targetTr = oscillatable.oscillatableTr;
@@ -65,6 +67,10 @@ namespace Terra.Studio
                     }
                 }
                 targetTr.position = Vector3.MoveTowards(targetTr.position, oscillatable.toPoint, oscillatable.speed * Time.deltaTime);
+            }
+            if (totalEntitiesFinishedJob == filter.GetEntitiesCount())
+            {
+                RuntimeOp.Resolve<RuntimeSystem>().RemoveRunningInstance(this);
             }
         }
 
