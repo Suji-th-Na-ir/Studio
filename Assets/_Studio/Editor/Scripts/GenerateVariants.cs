@@ -5,6 +5,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using System.Reflection;
 using System.Collections.Generic;
+using System;
 
 namespace Terra.Studio.RTEditor
 {
@@ -13,6 +14,7 @@ namespace Terra.Studio.RTEditor
         private const string AUTHORS_FILE_PATH = "Assets/_Studio/Resources/Runtime/AuthorsVariants.txt";
         private const string EVENT_FILE_PATH = "Assets/_Studio/Resources/Runtime/EventsVariants.txt";
         private const string COMPONENT_DRAWERS_FILE_PATH = "Assets/_Studio/Resources/Editortime/ComponentDrawersVariants.txt";
+        private const string COMPONENT_FIELDS_FILE_PATH = "Assets/_Studio/Resources/Editortime/EnumFieldsVariants.txt";
 
         [InitializeOnLoadMethod]
         private static void Generate()
@@ -31,6 +33,7 @@ namespace Terra.Studio.RTEditor
             GetAllAuthors();
             GetAllEvents();
             GetAllDrawerComponents();
+            GetAllEnumFieldComponents();
         }
 
         private static void GetAllAuthors()
@@ -96,6 +99,33 @@ namespace Terra.Studio.RTEditor
                 }
             }
             CreateFile(COMPONENT_DRAWERS_FILE_PATH, dict);
+        }
+
+        private static void GetAllEnumFieldComponents()
+        {
+            var dict = GetFileData(COMPONENT_FIELDS_FILE_PATH);
+            var assembly = Assembly.GetAssembly(typeof(BaseAuthor));
+            foreach (var type in assembly.GetTypes())
+            {
+                if (type.IsEnum)
+                {
+                    var enumValues = Enum.GetValues(type);
+                    foreach (var enumValue in enumValues)
+                    {
+                        var name = enumValue.ToString();
+                        var fieldInfo = type.GetField(name);
+                        var attribute = fieldInfo.GetCustomAttribute<EditorEnumFieldAttribute>();
+                        if (attribute != null)
+                        {
+                            if (!dict.ContainsKey(attribute.ComponentTarget))
+                            {
+                                dict.Add(attribute.ComponentTarget, enumValue.ToString());
+                            }
+                        }
+                    }
+                }
+            }
+            CreateFile(COMPONENT_FIELDS_FILE_PATH, dict);
         }
 
         private static void CheckIfFolderExists()
