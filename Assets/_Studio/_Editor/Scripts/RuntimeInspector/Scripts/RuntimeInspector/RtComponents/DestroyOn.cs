@@ -17,6 +17,7 @@ namespace RuntimeInspectorNamespace
         BroadcastListen
     }
 
+    [EditorDrawComponent("Terra.Studio.DestroyOn")]
     public class DestroyOn : MonoBehaviour, IComponent
     {
         public DestroyOnEventType Start = DestroyOnEventType.None;
@@ -25,11 +26,6 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySFX PlaySfx = Atom.PlaySFX.Off;
         public Atom.PlayVFX PlayVFX = Atom.PlayVFX.Off;
         
-        public void ExportData()
-        {
-
-        }
-
         public string GetStartEvent()
         {
             if (Start == DestroyOnEventType.OnPlayerCollide)
@@ -74,9 +70,14 @@ namespace RuntimeInspectorNamespace
                 sfxName = !state.GetItem<bool>("sfx_toggle") ? null : PlaySFXField.GetSfxClipName(state.GetItem<int>("sfx_dropdown")),
                 vfxName = !state.GetItem<bool>("vfx_toggle") ? null : PlayVFXField.GetVfxClipName(state.GetItem<int>("vfx_dropdown"))
             };
-            var type = "Terra.Studio.DestroyOn";
+            var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(destroyOn);
             return (type, data);
+        }
+
+        public void Import(EntityBasedComponent data)
+        {
+            
         }
     }
 }

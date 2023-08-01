@@ -18,8 +18,10 @@ namespace Terra.Studio
         public int TargetId { get; set; }
         public bool canPlaySFX;
         public string sfxName;
+        public int sfxIndex;
         public bool canPlayVFX;
         public string vfxName;
+        public int vfxIndex;
         public bool canUpdateScore;
         public float scoreValue;
         public bool showScoreUI;

@@ -21,9 +21,9 @@ namespace RuntimeInspectorNamespace
         private Dropdown optionsDropdown;
 #pragma warning restore 0649
 
-        private const string sfxToggleKey = "sfx_toggle";
-        private const string sfxDropdownkey  = "sfx_dropdown";
-        private const string resourceFolder = "sfx";
+        public const string sfxToggleKey = "sfx_toggle";
+        public const string sfxDropdownkey  = "sfx_dropdown";
+        public const string resourceFolder = "sfx";
 
         private static string[] sfxClipNames;
         public override void Initialize()
@@ -32,22 +32,12 @@ namespace RuntimeInspectorNamespace
             input.onValueChanged.AddListener( OnToggleValueChanged );
             optionsDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
             LoadSfxClips();
-            LoadState();
-        }
-
-        private void LoadState()
-        {
-            
+            LoadItems();
         }
 
         public static string GetSfxClipName(int index)
         {
             return sfxClipNames[index];
-        } 
-
-        private void OnEnable()
-        {
-            LoadItems();
         }
 
         public void LoadItems()
@@ -91,7 +81,7 @@ namespace RuntimeInspectorNamespace
         {
             LoadSfxClips();
             Value = input;
-            Inspector.RefreshDelayed();
+            if(Inspector)  Inspector.RefreshDelayed();
             SetOptionsDropdown(input);
 
             base.StateManagerSetup();

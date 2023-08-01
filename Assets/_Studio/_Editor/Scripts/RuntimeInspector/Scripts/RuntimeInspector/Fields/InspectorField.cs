@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
+using Terra.Studio;
 
 namespace RuntimeInspectorNamespace
 {
@@ -124,9 +125,9 @@ namespace RuntimeInspectorNamespace
 		
 		protected void StateManagerSetup()
 		{
-			if (Inspector != null && Inspector.InspectedObject != null)
+			var targetObject = EditorOp.Resolve<SelectionHandler>().GetSelectedObject();
+			if (targetObject != null && targetObject.GetComponent<InspectorStateManager>())
 			{
-				targetObject = (GameObject)Inspector.InspectedObject;
 				stateManager = targetObject.GetComponent<InspectorStateManager>();
 			}
 		}

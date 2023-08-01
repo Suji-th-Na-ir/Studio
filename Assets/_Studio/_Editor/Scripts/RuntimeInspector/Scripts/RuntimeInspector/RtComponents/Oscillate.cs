@@ -16,6 +16,7 @@ namespace RuntimeInspectorNamespace
         OnBroadcastListen
     }
     
+    [EditorDrawComponent("Terra.Studio.Oscillate")]
     public class Oscillate : MonoBehaviour, IComponent
     {
         [HideInInspector]
@@ -36,7 +37,7 @@ namespace RuntimeInspectorNamespace
 
         public (string type, string data) Export()
         {
-            var type = "Terra.Studio.Oscillate";
+            var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             
             Component.fromPoint = fromPoint;
             Component.toPoint = toPoint;
@@ -53,7 +54,12 @@ namespace RuntimeInspectorNamespace
             });
             return (type, data);
         }
-        
+
+        public void Import(EntityBasedComponent data)
+        {   
+            
+        }
+
         public string GetStartEvent()
         {
             if (Start == OscillateEventType.OnPlayerCollide)
@@ -66,12 +72,6 @@ namespace RuntimeInspectorNamespace
                 return "Terra.Studio.Listener";
 
             return "";
-        }
-
-        public void ExportData()
-        {
-            var resp = EditorOp.Resolve<SelectionHandler>().GetSceneData(this);
-            SystemOp.Resolve<CrossSceneDataHolder>().Set(resp);
         }
     }
 }

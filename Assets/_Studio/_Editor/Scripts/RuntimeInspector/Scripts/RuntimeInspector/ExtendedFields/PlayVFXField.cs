@@ -21,8 +21,8 @@ namespace RuntimeInspectorNamespace
         private Dropdown optionsDropdown;
 #pragma warning restore 0649
 
-        private const string sfxToggleKey = "vfx_toggle";
-        private const string sfxDropdownkey = "vfx_dropdown";
+        private const string vfxToggleKey = "vfx_toggle";
+        private const string vfxDropdownkey = "vfx_dropdown";
         private const string resourceFolder = "vfx";
 
         private static string[] vfxClipNames;
@@ -33,13 +33,9 @@ namespace RuntimeInspectorNamespace
             input.onValueChanged.AddListener(OnToggleValueChanged);
             optionsDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
             LoadVfxClips();
-        }
-
-        private void OnEnable()
-        {
             LoadItems();
         }
-
+        
         public static string GetVfxClipName(int index)
         {
             return vfxClipNames[index];
@@ -50,8 +46,8 @@ namespace RuntimeInspectorNamespace
             base.StateManagerSetup();
             if (stateManager != null)
             {
-                input.isOn = stateManager.GetItem<bool>(sfxToggleKey);
-                optionsDropdown.value = stateManager.GetItem<int>(sfxDropdownkey);
+                input.isOn = stateManager.GetItem<bool>(vfxToggleKey);
+                optionsDropdown.value = stateManager.GetItem<int>(vfxDropdownkey);
             }
         }
 
@@ -59,12 +55,6 @@ namespace RuntimeInspectorNamespace
         {
             var prefabs = Resources.LoadAll(resourceFolder, typeof(GameObject)).Cast<GameObject>().ToArray();
             optionsDropdown.options.Clear();
-            // foreach (var pb in prefabs)
-            // {
-            //     optionsDropdown.options.Add(new Dropdown.OptionData() {
-            //         text =pb.name
-            //     });
-            // }
             vfxClipNames = new string[prefabs.Length];
             for (int i = 0; i < prefabs.Length; i++)
             {
@@ -84,18 +74,18 @@ namespace RuntimeInspectorNamespace
         private void OnDropdownValueChanged(int index)
         {
             base.StateManagerSetup();
-            stateManager.SetItem(sfxDropdownkey, index);
+            stateManager.SetItem(vfxDropdownkey, index);
         }
 
         private void OnToggleValueChanged(bool input)
         {
             LoadVfxClips();
             Value = input;
-            Inspector.RefreshDelayed();
+            if(Inspector) Inspector.RefreshDelayed();
             SetOptionsDropdown(input);
 
             base.StateManagerSetup();
-            stateManager.SetItem(sfxToggleKey, input);
+            stateManager.SetItem(vfxToggleKey, input);
         }
 
         private void SetOptionsDropdown(bool _value)
