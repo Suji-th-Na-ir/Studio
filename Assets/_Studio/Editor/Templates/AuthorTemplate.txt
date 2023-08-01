@@ -23,7 +23,6 @@ namespace Terra.Studio
             compRef.Broadcast = compData.Broadcast;
             compRef.IsTargeted = compData.IsTargeted;
             compRef.TargetId = compData.TargetId;
-            compRef.refObject = tuple.obj;
         }
     }
 }
