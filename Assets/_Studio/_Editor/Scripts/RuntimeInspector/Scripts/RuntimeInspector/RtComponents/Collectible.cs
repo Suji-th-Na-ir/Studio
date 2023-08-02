@@ -23,7 +23,7 @@ namespace RuntimeInspectorNamespace
                 collectable.IsConditionAvailable = true;
                 collectable.ConditionType = GetStartEvent();
                 collectable.ConditionData = GetStartCondition();
-                collectable.IsBroadcastable = Broadcast != "";
+                collectable.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
                 collectable.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
 
                 collectable.canPlaySFX = PlaySFX.canPlay;
