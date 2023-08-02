@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using System.Collections;
 using static Terra.Studio.RuntimeWrappers;
+using static Terra.Studio.GlobalEnums;
 
 namespace Terra.Studio
 {
@@ -15,9 +16,9 @@ namespace Terra.Studio
         private bool canPause = false;
         private float pauseForSeconds = 0f;
         private bool shouldPingPong = false;
-        private RotateComponent.Axis axis = RotateComponent.Axis.Y;
-        private RotateComponent.Direction direction = RotateComponent.Direction.Clockwise;
-        private RotateComponent.BroadcastAt broadcastAt = RotateComponent.BroadcastAt.Never;
+        private Axis axis = Axis.Y;
+        private Direction direction = Direction.Clockwise;
+        private BroadcastAt broadcastAt = BroadcastAt.Never;
 
         public void Rotate(RotateByParams rotateParams)
         {
@@ -38,7 +39,7 @@ namespace Terra.Studio
         private IEnumerator RotateCoroutine()
         {
             var currentRotateCount = 0;
-            var directionFactor = (direction == RotateComponent.Direction.Clockwise) ? 1f : -1f;
+            var directionFactor = (direction == Direction.Clockwise) ? 1f : -1f;
             do
             {
                 if (!rotateForever) currentRotateCount++;
@@ -54,7 +55,7 @@ namespace Terra.Studio
                 float finalRotation = targetRotation - currentRotation;
                 transform.Rotate(GetVector3(finalRotation * directionFactor));
                 currentRotation = targetRotation;
-                if (broadcastAt == RotateComponent.BroadcastAt.AtEveryInterval)
+                if (broadcastAt == BroadcastAt.AtEveryInterval)
                 {
                     onRotated?.Invoke();
                 }
@@ -72,7 +73,7 @@ namespace Terra.Studio
                 }
             }
             while (rotateForever || currentRotateCount < rotateCount);
-            if (broadcastAt == RotateComponent.BroadcastAt.End)
+            if (broadcastAt == BroadcastAt.End)
             {
                 onRotated?.Invoke();
             }
@@ -84,12 +85,12 @@ namespace Terra.Studio
             var eulerAngles = transform.rotation.eulerAngles;
             switch (axis)
             {
-                case RotateComponent.Axis.X:
+                case Axis.X:
                     return new Vector3(newRotation, 0f, 0f);
                 default:
-                case RotateComponent.Axis.Y:
+                case Axis.Y:
                     return new Vector3(0f, newRotation, 0f);
-                case RotateComponent.Axis.Z:
+                case Axis.Z:
                     return new Vector3(0f, 0f, newRotation);
             }
         }

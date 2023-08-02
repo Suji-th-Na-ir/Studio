@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using static Terra.Studio.GlobalEnums;
 
 namespace Terra.Studio
 {
@@ -87,9 +88,9 @@ namespace Terra.Studio
             public float rotateBy;
             public float rotationSpeed;
             public int rotationTimes;
-            public RotateComponent.Axis axis;
-            public RotateComponent.Direction direction;
-            public RotateComponent.BroadcastAt broadcastAt;
+            public Axis axis;
+            public Direction direction;
+            public BroadcastAt broadcastAt;
             public bool shouldPingPong;
             public Action onRotated;
             public bool shouldPause;

@@ -1,12 +1,10 @@
-using System;
 using UnityEngine;
 using Newtonsoft.Json;
 using static Terra.Studio.GlobalEnums;
 
 namespace Terra.Studio
 {
-    [Serializable]
-    public struct RotateComponent : IBaseComponent, IConditional, IBroadcastData
+    public struct TranslateComponent : IBaseComponent, IConditional, IBroadcastData
     {
         public bool IsConditionAvailable { get; set; }
         public string ConditionType { get; set; }
@@ -20,20 +18,21 @@ namespace Terra.Studio
         [JsonIgnore] public bool IsExecuted { get; set; }
         [JsonIgnore] public GameObject refObj;
 
-        public Axis axis;
-        public Direction direction;
-        public RotationType rotationType;
-        public RepeatType repeatType;
-        public BroadcastAt broadcastAt;
-        public float speed;
-        public float rotateBy;
-        public int pauseFor;
-        public int repeatFor;
         public bool canPlaySFX;
         public string sfxName;
         public int sfxIndex;
         public bool canPlayVFX;
         public string vfxName;
         public int vfxIndex;
+
+        [JsonConverter(typeof(Vector3Converter))] public Vector3 startPosition;
+        [JsonConverter(typeof(Vector3Converter))] public Vector3 targetPosition;
+        public Axis axis;
+        public Direction direction;
+        public RepeatType repeatType;
+        public BroadcastAt broadcastAt;
+        public float speed;
+        public int pauseFor;
+        public int repeatFor;
     }
 }
