@@ -5,18 +5,10 @@ using UnityEngine;
 
 namespace RuntimeInspectorNamespace
 {
-    public enum DestroyOnEventType
-    {
-        None,
-        OnPlayerCollide,
-        OnClick,
-        BroadcastListen
-    }
-
     [EditorDrawComponent("Terra.Studio.DestroyOn")]
     public class DestroyOn : MonoBehaviour, IComponent
     {
-        public DestroyOnEventType Start = DestroyOnEventType.None;
+        public GlobalEnums.StartOn Start = GlobalEnums.StartOn.None;
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
         public string Broadcast = "";
@@ -24,13 +16,13 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartEvent()
         {
-            if (Start == DestroyOnEventType.OnPlayerCollide)
+            if (Start == GlobalEnums.StartOn.OnPlayerCollide)
                 return "Terra.Studio.TriggerAction";
 
-            if (Start == DestroyOnEventType.OnClick)
+            if (Start == GlobalEnums.StartOn.OnClick)
                 return "Terra.Studio.MouseAction";
 
-            if (Start == DestroyOnEventType.BroadcastListen)
+            if (Start == GlobalEnums.StartOn.BroadcastListen)
                 return "Terra.Studio.Listener";
 
             return "";
@@ -38,13 +30,13 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartCondition()
         {
-            if (Start == DestroyOnEventType.OnPlayerCollide)
+            if (Start == GlobalEnums.StartOn.OnPlayerCollide)
                 return "Player";
 
-            if (Start == DestroyOnEventType.OnClick)
+            if (Start == GlobalEnums.StartOn.OnClick)
                 return "OnClick";
 
-            if (Start == DestroyOnEventType.BroadcastListen)
+            if (Start == GlobalEnums.StartOn.BroadcastListen)
                 return BroadcastListen.ToString();
 
             return "";
@@ -81,13 +73,13 @@ namespace RuntimeInspectorNamespace
             DestroyOnComponent cc = JsonConvert.DeserializeObject<DestroyOnComponent>($"{cdata.data}");
             
             if (cc.ConditionType == "Terra.Studio.TriggerAction")
-                Start = DestroyOnEventType.OnPlayerCollide;
+                Start = GlobalEnums.StartOn.OnPlayerCollide;
             else if (cc.ConditionType == "Terra.Studio.MouseAction")
-                Start = DestroyOnEventType.OnClick;
+                Start = GlobalEnums.StartOn.OnClick;
             else if (cc.ConditionType == "Terra.Studio.Listener")
-                Start = DestroyOnEventType.BroadcastListen;
+                Start = GlobalEnums.StartOn.BroadcastListen;
             else
-                Start = DestroyOnEventType.None;
+                Start = GlobalEnums.StartOn.None;
             
             Broadcast = cc.Broadcast;
             BroadcastListen = cc.BroadcastListen;

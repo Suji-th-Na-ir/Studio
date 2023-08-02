@@ -16,7 +16,7 @@ namespace RuntimeInspectorNamespace
     public class Oscillate : MonoBehaviour, IComponent
     {
         [HideInInspector]
-        public Terra.Studio.OscillateComponent Component;
+        public OscillateComponent Component;
 
         public Vector3 fromPoint;
         public Vector3 toPoint;
@@ -54,7 +54,6 @@ namespace RuntimeInspectorNamespace
 
         public void Import(EntityBasedComponent cdata)
         {   
-            // var state = GetComponent<InspectorStateManager>();
             OscillateComponent cc = JsonConvert.DeserializeObject<OscillateComponent>($"{cdata.data}");
             fromPoint = cc.fromPoint;
             toPoint = cc.toPoint;

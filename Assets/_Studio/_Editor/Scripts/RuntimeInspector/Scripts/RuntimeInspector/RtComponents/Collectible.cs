@@ -5,16 +5,10 @@ using UnityEngine;
 
 namespace RuntimeInspectorNamespace
 {
-    public enum CollectableEventType
-    {
-        OnPlayerCollide,
-        OnClick
-    }
-
     [EditorDrawComponent("Terra.Studio.Collectable")]
     public class Collectible : MonoBehaviour, IComponent
     {
-        public CollectableEventType Start = CollectableEventType.OnPlayerCollide;
+        public GlobalEnums.StartOn Start = GlobalEnums.StartOn.OnPlayerCollide;
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
         public bool ShowScoreUI = false;
@@ -58,9 +52,9 @@ namespace RuntimeInspectorNamespace
             ScoreValue = cc.scoreValue;
 
             if (cc.ConditionType == "Terra.Studio.TriggerAction")
-                Start = CollectableEventType.OnPlayerCollide;
+                Start = GlobalEnums.StartOn.OnPlayerCollide;
             else if (cc.ConditionType == "Terra.Studio.MouseAction")
-                Start = CollectableEventType.OnClick;
+                Start = GlobalEnums.StartOn.OnClick;
 
             Broadcast = cc.Broadcast;
 
@@ -74,10 +68,10 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartEvent()
         {
-            if (Start == CollectableEventType.OnPlayerCollide)
+            if (Start == GlobalEnums.StartOn.OnPlayerCollide)
                 return "Terra.Studio.TriggerAction";
 
-            if (Start == CollectableEventType.OnClick)
+            if (Start == GlobalEnums.StartOn.OnClick)
                 return "Terra.Studio.MouseAction";
 
             return "";
@@ -85,10 +79,10 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartCondition()
         {
-            if (Start == CollectableEventType.OnPlayerCollide)
+            if (Start == GlobalEnums.StartOn.OnPlayerCollide)
                 return "Player";
 
-            if (Start == CollectableEventType.OnClick)
+            if (Start == GlobalEnums.StartOn.OnClick)
                 return "OnClick";
 
             return "";

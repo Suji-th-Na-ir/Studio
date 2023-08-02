@@ -9,6 +9,15 @@ namespace Terra.Studio
             Z
         }
 
+        public enum StartOn
+        {
+            None,
+            GameStart,
+            OnPlayerCollide,
+            OnClick,
+            BroadcastListen
+        }
+
         public enum Direction
         {
             Clockwise,
