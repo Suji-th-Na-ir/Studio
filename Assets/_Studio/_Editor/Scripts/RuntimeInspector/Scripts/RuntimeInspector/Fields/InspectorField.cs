@@ -112,27 +112,12 @@ namespace RuntimeInspectorNamespace
 
 		private Getter getter;
 		private Setter setter;
-
-		// state manager start
-		public InspectorStateManager stateManager;
-		private GameObject targetObject = null; // where the field rendered for.
-
+		
 		public virtual void Initialize()
 		{
 			if( visibleArea )
 				visibleArea.onCullStateChanged.AddListener( ( bool isCulled ) => m_isVisible = !isCulled );
 		}
-		
-		protected void StateManagerSetup()
-		{
-			var targetObject = EditorOp.Resolve<SelectionHandler>().GetSelectedObject();
-			// Debug.Log("target object "+targetObject);
-			if (targetObject != null && targetObject.GetComponent<InspectorStateManager>())
-			{
-				stateManager = targetObject.GetComponent<InspectorStateManager>();
-			}
-		}
-		// state manager end
 
 		public abstract bool SupportsType( Type type );
 

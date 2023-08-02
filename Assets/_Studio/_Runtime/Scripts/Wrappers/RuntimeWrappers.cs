@@ -26,6 +26,10 @@ namespace Terra.Studio
         public static GameObject SpawnPrimitive(PrimitiveType type, params Vector3[] trs)
         {
             var go = SpawnPrimitive(type);
+            if (trs == null || trs.Length == 0)
+            {
+                return go;
+            }
             for (int i = 0; i < 3; i++)
             {
                 switch (i)

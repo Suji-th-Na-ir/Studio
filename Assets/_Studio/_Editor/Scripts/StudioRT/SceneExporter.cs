@@ -113,28 +113,18 @@ namespace Terra.Studio
             {
                 Destroy(gObject);
             }
-            
-            // add inspector state manager to each gameobject 
-            List<GameObject> genObjects = new List<GameObject>();
 
-            foreach (var entity in _data.entities)
-            {
-                GameObject newObj = null;
-
-                if (entity.primitiveType == "Cube")
-                    newObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                else
-                    newObj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-
-                newObj.AddComponent<InspectorStateManager>();
-                
-                genObjects.Add(newObj);
-            }
-            
             for (int i =0; i< _data.entities.Length; i++)
             {
                 var entity = _data.entities[i];
-                var genObject = genObjects[i];
+                GameObject genObject = RuntimeWrappers.SpawnPrimitive(entity.primitiveType);
+
+                // if (entity.primitiveType == PrimitiveType.Cube.ToString())
+                //     genObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                // else
+                //     genObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                             
+                
                 if (genObject != null)
                 {
                     genObject.name = "Cube_" + i;

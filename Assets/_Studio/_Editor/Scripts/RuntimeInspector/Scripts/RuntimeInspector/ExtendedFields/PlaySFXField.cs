@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using Terra.Studio.RTEditor;
 using TMPro;
 using UnityEngine.Serialization;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace RuntimeInspectorNamespace
 {
@@ -16,34 +18,19 @@ namespace RuntimeInspectorNamespace
         private Image toggleBackground;
 
         [SerializeField]
-        private Toggle input;
+        private Toggle toggleInput;
 
         [SerializeField] 
         private Dropdown optionsDropdown;
 #pragma warning restore 0649
-
-        public const string sfxToggleKey = "sfx_toggle";
-        public const string sfxDropdownkey  = "sfx_dropdown";
-        public const string resourceFolder = "sfx";
-
+        
         public override void Initialize()
         {
-            Debug.Log("created");
             base.Initialize();
-            input.onValueChanged.AddListener( OnToggleValueChanged );
+            toggleInput.onValueChanged.AddListener( OnToggleValueChanged );
             optionsDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
             LoadSfxClips();
-            LoadItems();
-        }
-        
-        public void LoadItems()
-        {
-            base.StateManagerSetup();
-            if (stateManager != null)
-            {
-                input.isOn = stateManager.GetItem<bool>(sfxToggleKey);
-                optionsDropdown.value = stateManager.GetItem<int>(sfxDropdownkey);
-            }
+            ShowHideOptionsDropdown();
         }
 
         private void LoadSfxClips()
@@ -60,29 +47,31 @@ namespace RuntimeInspectorNamespace
 
         public override bool SupportsType( Type type )
         {
-            return type == typeof( Atom.PlaySFX );
+            return type == typeof( Atom.PlaySfx );
         }
 
         private void OnDropdownValueChanged(int index)
         {
-            base.StateManagerSetup();
-            stateManager.SetItem(sfxDropdownkey, index);
+            Atom.PlaySfx sfx = (Atom.PlaySfx)Value;
+            sfx.clipName = Helper.GetSfxClipNameByIndex(index);
+            sfx.clipIndex = index;
         }
 
-        private void OnToggleValueChanged( bool input )
+        private void OnToggleValueChanged( bool _input )
         {
             LoadSfxClips();
-            Value = input;
             if(Inspector)  Inspector.RefreshDelayed();
-            SetOptionsDropdown(input);
-
-            base.StateManagerSetup();
-            stateManager.SetItem(sfxToggleKey, input);
+            Atom.PlaySfx sfx = (Atom.PlaySfx)Value;
+            sfx.canPlay = _input;
+            ShowHideOptionsDropdown();
         }
 
-        private void SetOptionsDropdown(bool _value)
+        void ShowHideOptionsDropdown()
         {
-            optionsDropdown.gameObject.SetActive(_value);
+            if(toggleInput.isOn)
+                optionsDropdown.gameObject.SetActive(true);
+            else 
+                optionsDropdown.gameObject.SetActive(false);
         }
 
         protected override void OnSkinChanged()
@@ -90,17 +79,27 @@ namespace RuntimeInspectorNamespace
             base.OnSkinChanged();
 
             toggleBackground.color = Skin.InputFieldNormalBackgroundColor;
-            input.graphic.color = Skin.ToggleCheckmarkColor;
+            toggleInput.graphic.color = Skin.ToggleCheckmarkColor;
 
             Vector2 rightSideAnchorMin = new Vector2( Skin.LabelWidthPercentage, 0f );
             variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
-            ( (RectTransform) input.transform ).anchorMin = rightSideAnchorMin;
+            ( (RectTransform) toggleInput.transform ).anchorMin = rightSideAnchorMin;
         }
 
         public override void Refresh()
         {
             base.Refresh();
-            SetOptionsDropdown(input.isOn);
+            LoadData();
+        }
+        
+        private void LoadData()
+        {
+            Atom.PlaySfx sfx = (Atom.PlaySfx)Value;
+            if (sfx != null)
+            {
+                toggleInput.isOn = sfx.canPlay;
+                optionsDropdown.value = sfx.clipIndex;
+            }
         }
     }
 }

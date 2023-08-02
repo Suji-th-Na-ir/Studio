@@ -1,37 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
+using RuntimeInspectorNamespace;
 using UnityEngine;
 
 namespace Terra.Studio.RTEditor
 {
-    public static class Atom
+    public class Atom
     {
-        public enum PlaySFX
+        [Serializable]
+        public class PlaySfx
         {
-            On,
-            Off
+            [HideInInspector] public PlaySFXField field;
+            [HideInInspector] public bool canPlay;
+            [HideInInspector] public string clipName;
+            [HideInInspector] public int clipIndex; 
         }
         
-        public enum  PlayVFX
+        [Serializable]
+        public class PlayVfx
         {
-            On,
-            Off
+            [HideInInspector] public PlayVFXField field;
+            [HideInInspector] public bool canPlay;
+            [HideInInspector] public string clipName;
+            [HideInInspector] public int clipIndex;
         }
-
-        // public enum BroadCast
-        // {
-        //     None,
-        //     CoinCollected,
-        //     CollidedWithPlayer,
-        //     OnClick
-        // }
-        //
-        // public enum BroadCastListen
-        // {
-        //     None,
-        //     CoinCollected,
-        //     CollidedWithPlayer,
-        //     OnClick
-        // }
     }
 }

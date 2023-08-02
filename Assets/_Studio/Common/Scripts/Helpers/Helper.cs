@@ -401,7 +401,9 @@ namespace PlayShifu.Terra
         public static string GetSfxClipNameByIndex(int _index)
         {
             string[] names = GetSfxClipNames();
-            if (names.Length < _index) return names[_index];
+            if (_index < names.Length)
+                return names[_index];
+            
             return "";
         }
 

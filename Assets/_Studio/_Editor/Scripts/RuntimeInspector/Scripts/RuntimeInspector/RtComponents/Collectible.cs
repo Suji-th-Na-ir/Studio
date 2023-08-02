@@ -1,13 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Newtonsoft.Json;
-using PlayShifu.Terra;
-using RuntimeInspectorNamespace;
 using Terra.Studio;
 using Terra.Studio.RTEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace RuntimeInspectorNamespace
 {
@@ -21,8 +15,8 @@ namespace RuntimeInspectorNamespace
     public class Collectible : MonoBehaviour, IComponent
     {
         public CollectableEventType Start = CollectableEventType.OnPlayerCollide;
-        public Atom.PlaySFX PlaySfx = Atom.PlaySFX.Off;
-        public Atom.PlayVFX PlayVFX = Atom.PlayVFX.Off;
+        public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
+        public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
         public bool ShowScoreUI = false;
         public bool CanUpdateScore = false;
         public float ScoreValue = 0;
@@ -30,24 +24,27 @@ namespace RuntimeInspectorNamespace
         
         public (string type, string data) Export()
         {
-            var state = GetComponent<InspectorStateManager>();
-            CollectableComponent collectable = new()
+            CollectableComponent collectable = new();
             {
-                IsConditionAvailable = true,
-                ConditionType = GetStartEvent(),
-                ConditionData = GetStartCondition(),
-                IsBroadcastable = Broadcast != "",
-                Broadcast = Broadcast == "" ? null : Broadcast.ToString(),
-                canPlaySFX = state.GetItem<bool>("sfx_toggle"),
-                canPlayVFX = state.GetItem<bool>("vfx_toggle"),
-                sfxName = !state.GetItem<bool>("sfx_toggle") ? null : Helper.GetSfxClipNameByIndex(state.GetItem<int>("sfx_dropdown")),
-                vfxName = !state.GetItem<bool>("vfx_toggle") ? null : Helper.GetVfxClipNameByIndex(state.GetItem<int>("vfx_dropdown")),
-                sfxIndex = state.GetItem<int>("sfx_dropdown"),
-                vfxIndex = state.GetItem<int>("vfx_dropdown"),
-                canUpdateScore = CanUpdateScore,
-                scoreValue = ScoreValue,
-                showScoreUI = ShowScoreUI
-            };
+                collectable.IsConditionAvailable = true;
+                collectable.ConditionType = GetStartEvent();
+                collectable.ConditionData = GetStartCondition();
+                collectable.IsBroadcastable = Broadcast != "";
+                collectable.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
+
+                collectable.canPlaySFX = PlaySFX.canPlay;
+                collectable.canPlayVFX = PlayVFX.canPlay;
+
+                collectable.sfxName = PlaySFX.clipName;
+                collectable.vfxName = PlayVFX.clipName;
+
+                collectable.sfxIndex = PlaySFX.clipIndex;
+                collectable.vfxIndex = PlayVFX.clipIndex;
+
+                collectable.canUpdateScore = CanUpdateScore;
+                collectable.scoreValue = ScoreValue;
+                collectable.showScoreUI = ShowScoreUI;
+            }
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(collectable);
             return (type, data);
@@ -55,8 +52,6 @@ namespace RuntimeInspectorNamespace
 
         public void Import(EntityBasedComponent cdata)
         {
-            var state = GetComponent<InspectorStateManager>();
-
             CollectableComponent cc = JsonConvert.DeserializeObject<CollectableComponent>($"{cdata.data}");
             CanUpdateScore = cc.canUpdateScore;
             ShowScoreUI = cc.showScoreUI;
@@ -68,11 +63,13 @@ namespace RuntimeInspectorNamespace
                 Start = CollectableEventType.OnClick;
 
             Broadcast = cc.Broadcast;
-            
-            state.SetItem("sfx_toggle", cc.canPlaySFX);
-            state.SetItem("vfx_toggle", cc.canPlayVFX);
-            state.SetItem("sfx_dropdown", cc.sfxIndex);
-            state.SetItem("vfx_dropdown", cc.vfxIndex);
+
+            PlaySFX.canPlay = cc.canPlaySFX;
+            PlaySFX.clipIndex = cc.sfxIndex;
+            PlaySFX.clipName = cc.sfxName;
+            PlayVFX.canPlay = cc.canPlayVFX;
+            PlayVFX.clipIndex = cc.vfxIndex;
+            PlayVFX.clipName = cc.vfxName;
         }
 
         public string GetStartEvent()

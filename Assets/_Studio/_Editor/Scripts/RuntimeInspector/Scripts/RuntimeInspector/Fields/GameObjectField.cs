@@ -35,8 +35,7 @@ namespace RuntimeInspectorNamespace
 			typeof(UnityEngine.MeshFilter),
 			typeof(UnityEngine.MeshRenderer),
 			typeof(UnityEngine.BoxCollider),
-			typeof(TransformSaver),
-			typeof(RuntimeInspectorNamespace.InspectorStateManager)
+			typeof(TransformSaver)
 		};
 
 		public override void Initialize()
