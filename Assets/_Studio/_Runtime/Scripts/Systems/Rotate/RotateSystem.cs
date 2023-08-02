@@ -1,6 +1,7 @@
 using UnityEngine;
 using Leopotam.EcsLite;
 using static Terra.Studio.RuntimeWrappers;
+using static Terra.Studio.GlobalEnums;
 
 namespace Terra.Studio
 {
@@ -58,7 +59,7 @@ namespace Terra.Studio
                 RuntimeWrappers.PlayVFX(rotatable.vfxName, rotatable.refObj.transform.position);
             }
             var rotateParams = GetParams(rotatable);
-            if (rotatable.rotationType == RotateComponent.RotationType.Oscillate)
+            if (rotatable.rotationType == RotationType.Oscillate)
             {
                 rotateParams.shouldPingPong = true;
             }
