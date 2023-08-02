@@ -75,5 +75,26 @@ namespace Terra.Studio
         {
             Debug.Log($"Adding score by: {addBy}");
         }
+
+        public static void RotateObject(RotateByParams rotateParams)
+        {
+            var rotateBy = rotateParams.targetObj.AddComponent<RotateByHelper>();
+            rotateBy.Rotate(rotateParams);
+        }
+
+        public struct RotateByParams
+        {
+            public float rotateBy;
+            public float rotationSpeed;
+            public int rotationTimes;
+            public RotateComponent.Axis axis;
+            public RotateComponent.Direction direction;
+            public RotateComponent.BroadcastAt broadcastAt;
+            public bool shouldPingPong;
+            public Action onRotated;
+            public bool shouldPause;
+            public float pauseForTime;
+            public GameObject targetObj;
+        }
     }
 }

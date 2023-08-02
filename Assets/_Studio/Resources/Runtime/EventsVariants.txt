@@ -1,4 +1,5 @@
 {
+  "Terra.Studio.GameStart": "Terra.Studio.GameStartActionEvent",
   "Terra.Studio.Listener": "Terra.Studio.ListenerActionEvent",
   "Terra.Studio.MouseAction": "Terra.Studio.MouseActionEvent",
   "Terra.Studio.TriggerAction": "Terra.Studio.TriggerActionEvent"

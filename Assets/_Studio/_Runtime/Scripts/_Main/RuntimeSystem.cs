@@ -27,7 +27,9 @@ namespace Terra.Studio
         {
             RuntimeOp.Register(new Broadcaster());
             RuntimeOp.Register(new ComponentsData());
+            RuntimeOp.Register(new GameStateHandler());
             InitializeEcs();
+            RuntimeOp.Resolve<GameStateHandler>().SwitchToNextState();
         }
 
         private void InitializeEcs()
@@ -141,6 +143,7 @@ namespace Terra.Studio
             ecsWorld?.Destroy();
             RuntimeOp.Unregister<Broadcaster>();
             RuntimeOp.Unregister<ComponentsData>();
+            RuntimeOp.Unregister<GameStateHandler>();
             SystemOp.Unregister(this as ISubsystem);
             RuntimeOp.Unregister(this);
         }

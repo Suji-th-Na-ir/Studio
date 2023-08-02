@@ -11,7 +11,7 @@
             "rotation": [
                 0.0,
                 0.0,
-                0.0
+                90.0
             ],
             "scale": [
                 4.0,
@@ -20,104 +20,29 @@
             ],
             "components": [
                 {
-                    "type": "Terra.Studio.Oscillate",
+                    "type": "Terra.Studio.Rotate",
                     "data": {
-                        "CanExecute": false,
-                        "ConditionType": "Terra.Studio.Listener",
-                        "ConditionData": "I got destroyed Hurray!",
+                        "axis": 2,
+                        "direction": 1,
+                        "rotationType": 0,
+                        "repeatType": 0,
+                        "speed": 100.0,
+                        "rotateBy": 360.0,
+                        "pauseFor": 1,
+                        "repeatFor": 2147483647,
+                        "canPlaySFX": true,
+                        "sfxName": "bell_1",
+                        "sfxIndex": 0,
+                        "canPlayVFX": true,
+                        "vfxName": "vfx_ArrowPoisoned",
+                        "vfxIndex": 0,
                         "IsConditionAvailable": true,
-                        "IsBroadcastable": true,
-                        "Broadcast": "I Oscillated Hurray!",
-                        "IsTargeted": false,
-                        "IsExecuted": false,
-                        "speed": 2,
-                        "fromPoint": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "toPoint": [
-                            1.0,
-                            2.0,
-                            1.0
-                        ],
-                        "loop": false
-                    }
-                }
-            ]
-        },
-        {
-            "id": 2,
-            "primitiveType": "Sphere",
-            "position": [
-                1.12,
-                0.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                1.0,
-                1.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "type": "Terra.Studio.DestroyOn",
-                    "data": {
-                        "CanExecute": false,
                         "ConditionType": "Terra.Studio.MouseAction",
                         "ConditionData": "OnClick",
-                        "IsConditionAvailable": true,
                         "IsBroadcastable": true,
-                        "Broadcast": "I got destroyed Hurray!",
+                        "Broadcast": "I rotated, Hurray!",
                         "IsTargeted": false,
-                        "IsExecuted": false,
-                        "canPlaySFX": true,
-                        "sfxName": "success_1",
-                        "canPlayVFX": true,
-                        "vfxName": "vfx_ArrowGreen"
-                    }
-                }
-            ]
-        },
-        {
-            "id": 2,
-            "primitiveType": "Capsule",
-            "position": [
-                1.12,
-                1.0,
-                0.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                1.0,
-                1.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "type": "Terra.Studio.Collectable",
-                    "data": {
-                        "CanExecute": false,
-                        "ConditionType": "Terra.Studio.MouseAction",
-                        "ConditionData": "OnClick",
-                        "IsConditionAvailable": true,
-                        "IsBroadcastable": true,
-                        "Broadcast": "I got collected Hurray!",
-                        "IsTargeted": false,
-                        "IsExecuted": false,
-                        "canPlaySFX": true,
-                        "sfxName": "success_1",
-                        "canPlayVFX": true,
-                        "vfxName": "vfx_ArrowGreen"
+                        "TargetId": -1
                     }
                 }
             ]
