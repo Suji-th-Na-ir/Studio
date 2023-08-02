@@ -49,7 +49,7 @@ namespace RuntimeInspectorNamespace
                 destroyOn.IsConditionAvailable = true;
                 destroyOn.ConditionType = GetStartEvent();
                 destroyOn.ConditionData = GetStartCondition();
-                destroyOn.IsBroadcastable = Broadcast != "";
+                destroyOn.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
                 destroyOn.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
                 destroyOn.BroadcastListen = BroadcastListen == "" ? null : BroadcastListen;
                 
