@@ -17,9 +17,13 @@ namespace Terra.Studio
 
         public enum RotationType
         {
-            Oscillate,
             RotateOnce,
-            RotateMultipleTimes
+            RotateForever,
+            Oscillate,
+            OscillateForever,
+            IncrementallyRotate,
+            IncrementallyRotateForever
+            // RotateMultipleTimes
         }
 
         public enum RepeatType
