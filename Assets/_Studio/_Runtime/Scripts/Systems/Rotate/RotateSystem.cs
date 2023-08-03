@@ -1,15 +1,18 @@
+using System;
 using UnityEngine;
 using Leopotam.EcsLite;
+using System.Collections.Generic;
 using static Terra.Studio.GlobalEnums;
 using static Terra.Studio.RuntimeWrappers;
 
 namespace Terra.Studio
 {
-    public class RotateSystem : IAbsRunsystem, IConditionalOp
+    public class RotateSystem : BaseSystem, IAbsRunsystem, IConditionalOp
     {
+        public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
+
         public void Init(EcsWorld currentWorld, int entity)
         {
-            var filter = currentWorld.Filter<RotateComponent>().End();
             var pool = currentWorld.GetPool<RotateComponent>();
             ref var entityRef = ref pool.Get(entity);
             entityRef.CanExecute = false;
@@ -20,12 +23,12 @@ namespace Terra.Studio
             {
                 RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(entityRef.Broadcast);
             }
-            RuntimeOp.Resolve<ComponentsData>()
-                .ProvideEventContext(conditionType, (obj) =>
-                {
-                    OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
-                },
-                true, (goRef, conditionData));
+            IdToConditionalCallback ??= new();
+            IdToConditionalCallback.Add(entity, (obj) =>
+            {
+                OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
+            });
+            RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (goRef, conditionData));
         }
 
         public void OnConditionalCheck(object data)
@@ -39,7 +42,8 @@ namespace Terra.Studio
                 }
             }
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(conditionType, null, false, (go, conditionData));
+            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (go, conditionData));
+            IdToConditionalCallback.Remove(entity);
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
             var pool = world.GetPool<RotateComponent>();
             ref var entityRef = ref pool.Get(entity);
@@ -58,10 +62,6 @@ namespace Terra.Studio
                 PlayVFX(rotatable.vfxName, rotatable.refObj.transform.position);
             }
             var rotateParams = GetParams(rotatable);
-            if (rotatable.rotationType == RotationType.Oscillate)
-            {
-                rotateParams.shouldPingPong = true;
-            }
             RotateObject(rotateParams);
         }
 
@@ -74,18 +74,25 @@ namespace Terra.Studio
                 rotationTimes = rotatable.repeatFor,
                 rotationSpeed = rotatable.speed,
                 rotateBy = rotatable.rotateBy,
-                onRotated = OnRotationDone,
-                shouldPause = rotatable.pauseFor > 0,
+                shouldPause = rotatable.pauseFor > 0f,
                 pauseForTime = rotatable.pauseFor,
                 targetObj = rotatable.refObj,
-                broadcastAt = rotatable.broadcastAt
+                broadcastAt = rotatable.broadcastAt,
+                shouldPingPong = rotatable.rotationType == RotationType.Oscillate || rotatable.rotationType == RotationType.OscillateForever,
+                onRotated = () =>
+                {
+                    if (rotatable.IsBroadcastable)
+                    {
+                        OnRotationDone(rotatable.Broadcast);
+                    }
+                }
             };
             return rotateParams;
         }
 
-        private void OnRotationDone()
+        private void OnRotationDone(string broadcast)
         {
-            Debug.Log("Rotated obj!!!");
+            RuntimeOp.Resolve<Broadcaster>().Broadcast(broadcast, true);
         }
     }
 }

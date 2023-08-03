@@ -23,6 +23,7 @@ namespace Terra.Studio
             compRef.Broadcast = compData.Broadcast;
             compRef.IsTargeted = compData.IsTargeted;
             compRef.TargetId = compData.TargetId;
+            compRef.refObj = tuple.obj;
             var instance = RuntimeOp.Resolve<RuntimeSystem>().AddRunningInstance<TranslateSystem>();
             instance.Init(ecsWorld, tuple.id);
         }

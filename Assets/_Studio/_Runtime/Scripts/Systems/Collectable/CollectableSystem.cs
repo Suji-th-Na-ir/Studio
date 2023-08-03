@@ -1,10 +1,14 @@
+using System;
 using UnityEngine;
 using Leopotam.EcsLite;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
-    public class CollectableSystem : IAbsRunsystem, IConditionalOp
+    public class CollectableSystem : BaseSystem, IAbsRunsystem, IConditionalOp
     {
+        public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
+
         public void Init(EcsWorld currentWorld, int entity)
         {
             var filter = currentWorld.Filter<CollectableComponent>().End();
@@ -19,11 +23,12 @@ namespace Terra.Studio
             var goRef = collectable.refObject;
             var conditionData = collectable.ConditionData;
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(conditionType, (obj) =>
+            IdToConditionalCallback ??= new();
+            IdToConditionalCallback.Add(entity, (obj) =>
             {
                 OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
-            },
-            true, (goRef, conditionData));
+            });
+            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (goRef, conditionData));
             if (collectable.IsBroadcastable)
             {
                 RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(collectable.Broadcast);
@@ -41,7 +46,8 @@ namespace Terra.Studio
                 }
             }
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(conditionType, null, false, (go, conditionData));
+            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (go, conditionData));
+            IdToConditionalCallback.Remove(entity);
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
             var collectablePool = world.GetPool<CollectableComponent>();
             OnDemandRun(entity, in collectablePool.Get(entity));
@@ -67,7 +73,7 @@ namespace Terra.Studio
             {
                 RuntimeWrappers.AddScore(component.scoreValue);
             }
-            Object.Destroy(component.refObject);
+            UnityEngine.Object.Destroy(component.refObject);
             EntityAuthorOp.Degenerate(entityID);
         }
     }

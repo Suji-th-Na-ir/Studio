@@ -1,10 +1,14 @@
+using System;
 using UnityEngine;
 using Leopotam.EcsLite;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
-    public class OscillateSystem : IAbsRunsystem, IEcsRunSystem, IConditionalOp
+    public class OscillateSystem : BaseSystem, IAbsRunsystem, IEcsRunSystem, IConditionalOp
     {
+        public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
+
         public void Init(EcsWorld currentWorld, int entity)
         {
             var filter = currentWorld.Filter<OscillateComponent>().End();
@@ -23,12 +27,39 @@ namespace Terra.Studio
             var conditionData = oscillatable.ConditionData;
             oscillatable.isRegistered = true;
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(conditionType, (obj) =>
+            IdToConditionalCallback ??= new();
+            IdToConditionalCallback.Add(entity, (obj) =>
             {
                 var go = obj != null ? obj as GameObject : null;
                 OnConditionalCheck((entity, go, conditionType, conditionData));
-            },
-            true, (oscillatable.oscillatableTr.gameObject, conditionData));
+            });
+            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (oscillatable.oscillatableTr.gameObject, conditionData));
+        }
+
+        public void OnConditionalCheck(object data)
+        {
+            var (id, reference, conditionType, conditionData) = ((int, GameObject, string, string))data;
+            var world = RuntimeOp.Resolve<RuntimeSystem>().World;
+            var filter = world.Filter<OscillateComponent>().End();
+            var oscillatorPool = world.GetPool<OscillateComponent>();
+            ref var oscillatable = ref oscillatorPool.Get(id);
+            if (conditionType.Equals("Terra.Studio.MouseAction"))
+            {
+                if (!reference)
+                {
+                    return;
+                }
+                else if (reference != oscillatable.oscillatableTr.gameObject)
+                {
+                    return;
+                }
+            }
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
+            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[id], false, (reference, conditionData));
+            IdToConditionalCallback.Remove(id);
+            oscillatable.CanExecute = true;
+            oscillatable.IsExecuted = false;
+            oscillatable.oscillatableTr.position = oscillatable.fromPoint;
         }
 
         public virtual void Run(IEcsSystems systems)
@@ -72,31 +103,6 @@ namespace Terra.Studio
             {
                 RuntimeOp.Resolve<RuntimeSystem>().RemoveRunningInstance(this);
             }
-        }
-
-        public void OnConditionalCheck(object data)
-        {
-            var (id, reference, conditionType, conditionData) = ((int, GameObject, string, string))data;
-            var world = RuntimeOp.Resolve<RuntimeSystem>().World;
-            var filter = world.Filter<OscillateComponent>().End();
-            var oscillatorPool = world.GetPool<OscillateComponent>();
-            ref var oscillatable = ref oscillatorPool.Get(id);
-            if (conditionType.Equals("Terra.Studio.MouseAction"))
-            {
-                if (!reference)
-                {
-                    return;
-                }
-                else if (reference != oscillatable.oscillatableTr.gameObject)
-                {
-                    return;
-                }
-            }
-            var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(conditionType, OnConditionalCheck, false, (reference, conditionData));
-            oscillatable.CanExecute = true;
-            oscillatable.IsExecuted = false;
-            oscillatable.oscillatableTr.position = oscillatable.fromPoint;
         }
     }
 }

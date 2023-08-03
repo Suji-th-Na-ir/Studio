@@ -85,34 +85,40 @@ namespace Terra.Studio
             rotateBy.Rotate(rotateParams);
         }
 
+        public static void TranslateObject(TranslateParams translateParams)
+        {
+            var translate = translateParams.targetObj.AddComponent<TranslateHelper>();
+            translate.Translate(translateParams);
+        }
+
         public struct RotateByParams
         {
             public float rotateBy;
             public float rotationSpeed;
             public int rotationTimes;
-            public Axis axis;
-            public Direction direction;
-            public BroadcastAt broadcastAt;
             public bool shouldPingPong;
-            public Action onRotated;
             public bool shouldPause;
             public float pauseForTime;
             public GameObject targetObj;
+            public Action onRotated;
+            public Axis axis;
+            public Direction direction;
+            public BroadcastAt broadcastAt;
         }
 
         public struct TranslateParams
         {
-            public float translateTo;
+            public Vector3 translateFrom;
+            public Vector3 translateTo;
             public float speed;
             public int translateTimes;
-            public Axis axis;
-            public Direction direction;
-            public BroadcastAt broadcastAt;
             public bool shouldPingPong;
-            public Action onTranslated;
             public bool shouldPause;
             public float pauseForTime;
+            public float pauseDistance;
             public GameObject targetObj;
+            public Action onTranslated;
+            public BroadcastAt broadcastAt;
         }
     }
 }

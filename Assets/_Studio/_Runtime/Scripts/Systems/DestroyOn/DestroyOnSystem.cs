@@ -1,10 +1,14 @@
+using System;
 using UnityEngine;
 using Leopotam.EcsLite;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
-    public class DestroyOnSystem : IAbsRunsystem, IConditionalOp
+    public class DestroyOnSystem : BaseSystem, IAbsRunsystem, IConditionalOp
     {
+        public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
+
         public void Init(EcsWorld currentWorld, int entity)
         {
             var filter = currentWorld.Filter<DestroyOnComponent>().End();
@@ -19,12 +23,13 @@ namespace Terra.Studio
             var conditionData = destroyable.ConditionData;
             var goRef = destroyable.refObj;
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(conditionType, (obj) =>
+            IdToConditionalCallback ??= new();
+            IdToConditionalCallback.Add(entity, (obj) =>
             {
                 var go = obj == null ? null : obj as GameObject;
                 OnConditionalCheck((entity, conditionType, conditionData, goRef, go));
-            },
-            true, (goRef, conditionData));
+            });
+            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (goRef, conditionData));
             if (destroyable.IsBroadcastable)
             {
                 RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(destroyable.Broadcast);
@@ -42,7 +47,8 @@ namespace Terra.Studio
                 }
             }
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(conditionType, null, false, (go, conditionData));
+            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (go, conditionData));
+            IdToConditionalCallback.Remove(entity);
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
             var destroyPool = world.GetPool<DestroyOnComponent>();
             OnDemandRun(entity, in destroyPool.Get(entity));
@@ -60,7 +66,7 @@ namespace Terra.Studio
             }
             //Unsubscribe to all listeners
             //Destroy gracefully
-            Object.Destroy(component.refObj);
+            UnityEngine.Object.Destroy(component.refObj);
             if (component.IsBroadcastable)
             {
                 RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);

@@ -1,10 +1,14 @@
+using System;
 using UnityEngine;
 using Leopotam.EcsLite;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
-    public class REPLACEMESystem : IAbsRunsystem, IConditionalOp
+    public class REPLACEMESystem : BaseSystem, IAbsRunsystem, IConditionalOp
     {
+        public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
+
         public void Init(EcsWorld currentWorld, int entity)
         {
             var filter = currentWorld.Filter<REPLACEMEComponent>().End();

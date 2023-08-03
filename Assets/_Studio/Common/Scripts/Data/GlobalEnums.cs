@@ -34,10 +34,20 @@ namespace Terra.Studio
             IncrementallyRotateForever
         }
 
+        public enum TranslateType
+        {
+            TargetDirection,
+            Oscillate
+        }
+
+        /// <summary>
+        /// 1. For X default value is 1
+        /// 2. For Forever hardcode int.MaxValue
+        /// </summary>
         public enum RepeatType
         {
-            Forever,
-            XTimes
+            XTimes,
+            Forever
         }
 
         public enum BroadcastAt

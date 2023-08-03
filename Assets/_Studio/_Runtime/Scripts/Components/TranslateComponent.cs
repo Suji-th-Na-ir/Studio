@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
 using Newtonsoft.Json;
 using static Terra.Studio.GlobalEnums;
 
 namespace Terra.Studio
 {
+    [Serializable]
     public struct TranslateComponent : IBaseComponent, IConditional, IBroadcastData
     {
         public bool IsConditionAvailable { get; set; }
@@ -27,12 +29,11 @@ namespace Terra.Studio
 
         [JsonConverter(typeof(Vector3Converter))] public Vector3 startPosition;
         [JsonConverter(typeof(Vector3Converter))] public Vector3 targetPosition;
-        public Axis axis;
-        public Direction direction;
-        public RepeatType repeatType;
+        public TranslateType translateType;
         public BroadcastAt broadcastAt;
         public float speed;
-        public int pauseFor;
+        public float pauseAtDistance;
+        public float pauseFor;
         public int repeatFor;
     }
 }

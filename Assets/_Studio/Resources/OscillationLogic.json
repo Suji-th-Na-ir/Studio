@@ -18,175 +18,20 @@
                 "y": 1,
                 "z": 1
             },
-            "components": []
+            "components": [
+                {
+                    "type": "Terra.Studio.Translate",
+                    "data": "{\"canPlaySFX\":true,\"sfxName\":\"bell_1\",\"sfxIndex\":0,\"canPlayVFX\":true,\"vfxName\":\"vfx_ArrowGreen\",\"vfxIndex\":0,\"startPosition\":{\"x\":-15.55,\"y\":0.0,\"z\":6.46},\"targetPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"translateType\":0,\"broadcastAt\":2,\"speed\":30,\"pauseAtDistance\":10.0,\"pauseFor\":1,\"repeatFor\":2,\"IsConditionAvailable\":true,\"ConditionType\":\"Terra.Studio.MouseAction\",\"ConditionData\":\"OnClick\",\"IsBroadcastable\":true,\"Broadcast\":\"I translated!\",\"IsTargeted\":false,\"TargetId\":0}"
+                }
+            ]
         },
         {
             "id": 1,
-            "primitiveType": "Cube",
+            "primitiveType": "Sphere",
             "position": {
-                "x": -12.42,
+                "x": -11.55,
                 "y": 0,
-                "z": 6.46
-            },
-            "rotation": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-            },
-            "scale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-            },
-            "components": []
-        },
-        {
-            "id": 2,
-            "primitiveType": "Cube",
-            "position": {
-                "x": -9.44,
-                "y": 0,
-                "z": 6.46
-            },
-            "rotation": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-            },
-            "scale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-            },
-            "components": []
-        },
-        {
-            "id": 3,
-            "primitiveType": "Cube",
-            "position": {
-                "x": -15.55,
-                "y": 0,
-                "z": 3.62
-            },
-            "rotation": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-            },
-            "scale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-            },
-            "components": []
-        },
-        {
-            "id": 4,
-            "primitiveType": "Cube",
-            "position": {
-                "x": -12.42,
-                "y": 0,
-                "z": 3.62
-            },
-            "rotation": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-            },
-            "scale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-            },
-            "components": []
-        },
-        {
-            "id": 5,
-            "primitiveType": "Cube",
-            "position": {
-                "x": -9.44,
-                "y": 0,
-                "z": 3.62
-            },
-            "rotation": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-            },
-            "scale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-            },
-            "components": []
-        },
-        {
-            "id": 6,
-            "primitiveType": "Cube",
-            "position": {
-                "x": -15.55,
-                "y": 0,
-                "z": 0.56
-            },
-            "rotation": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-            },
-            "scale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-            },
-            "components": []
-        },
-        {
-            "id": 7,
-            "primitiveType": "Cube",
-            "position": {
-                "x": -12.42,
-                "y": 0,
-                "z": 0.559999943
-            },
-            "rotation": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-            },
-            "scale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-            },
-            "components": []
-        },
-        {
-            "id": 8,
-            "primitiveType": "Cube",
-            "position": {
-                "x": -9.44,
-                "y": 0,
-                "z": 0.559999943
-            },
-            "rotation": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-            },
-            "scale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-            },
-            "components": []
-        },
-        {
-            "id": 9,
-            "primitiveType": "Cube",
-            "position": {
-                "x": -12.34,
-                "y": 0,
-                "z": -1.95
+                "z": 1.46
             },
             "rotation": {
                 "x": 0,
@@ -200,8 +45,33 @@
             },
             "components": [
                 {
-                    "type": "Terra.Studio.Oscillate",
-                    "data": "{\"speed\":5.0,\"fromPoint\":{\"x\":-12.34,\"y\":0.0,\"z\":-1.95},\"toPoint\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"loop\":true,\"ConditionType\":\"Terra.Studio.MouseAction\",\"ConditionData\":\"\",\"IsConditionAvailable\":true,\"IsBroadcastable\":false,\"Broadcast\":null,\"BroadcastListen\":\"\",\"IsTargeted\":false,\"TargetId\":0}"
+                    "type": "Terra.Studio.Collectable",
+                    "data": "{\"canPlaySFX\":false,\"sfxName\":null,\"sfxIndex\":0,\"canPlayVFX\":false,\"vfxName\":null,\"vfxIndex\":0,\"canUpdateScore\":false,\"scoreValue\":0.0,\"showScoreUI\":false,\"IsConditionAvailable\":true,\"ConditionType\":\"Terra.Studio.MouseAction\",\"ConditionData\":\"OnClick\",\"IsBroadcastable\":true,\"Broadcast\":\"Hello\",\"IsTargeted\":false,\"TargetId\":0}"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "primitiveType": "Cylinder",
+            "position": {
+                "x": -15.55,
+                "y": 0,
+                "z": 1.46
+            },
+            "rotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+            },
+            "components": [
+                {
+                    "type": "Terra.Studio.Collectable",
+                    "data": "{\"canPlaySFX\":false,\"sfxName\":null,\"sfxIndex\":0,\"canPlayVFX\":false,\"vfxName\":null,\"vfxIndex\":0,\"canUpdateScore\":false,\"scoreValue\":0.0,\"showScoreUI\":false,\"IsConditionAvailable\":true,\"ConditionType\":\"Terra.Studio.MouseAction\",\"ConditionData\":\"OnClick\",\"IsBroadcastable\":true,\"Broadcast\":\"Hello\",\"IsTargeted\":false,\"TargetId\":0}"
                 }
             ]
         }

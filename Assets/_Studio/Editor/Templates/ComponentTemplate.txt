@@ -1,7 +1,9 @@
+using System;
 using Newtonsoft.Json;
 
 namespace Terra.Studio
 {
+    [Serializable]
     public struct REPLACEMEComponent : IBaseComponent, IConditional, IBroadcastData
     {
         public bool IsConditionAvailable { get; set; }

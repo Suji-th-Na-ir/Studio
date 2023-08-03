@@ -27,7 +27,7 @@ namespace Terra.Studio
         public BroadcastAt broadcastAt;
         public float speed;
         public float rotateBy;
-        public int pauseFor;
+        public float pauseFor;
         public int repeatFor;
         public bool canPlaySFX;
         public string sfxName;
