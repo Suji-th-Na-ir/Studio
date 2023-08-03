@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 namespace Terra.Studio
 {
@@ -8,7 +7,7 @@ namespace Terra.Studio
         private enum State { PreGame, Game, PostGame }
         private State currentGameState = State.PreGame;
 
-        private event Action<object> onGameStarted;
+        private event Action<object> OnGameStarted;
 
         public void SwitchToNextState()
         {
@@ -21,14 +20,14 @@ namespace Terra.Studio
             }
             var nextState = (State)index;
             currentGameState = nextState;
-            onGameStarted?.Invoke(null);
+            OnGameStarted?.Invoke(null);
         }
 
         public void SubscribeToGameStart(bool subscribe, Action<object> callback)
         {
             if (currentGameState == State.Game && subscribe)
             {
-                onGameStarted?.Invoke(null);
+                OnGameStarted?.Invoke(null);
                 return;
             }
             if (callback == null)
@@ -37,11 +36,11 @@ namespace Terra.Studio
             }
             if (subscribe)
             {
-                onGameStarted += callback;
+                OnGameStarted += callback;
             }
             else
             {
-                onGameStarted -= callback;
+                OnGameStarted -= callback;
             }
         }
     }

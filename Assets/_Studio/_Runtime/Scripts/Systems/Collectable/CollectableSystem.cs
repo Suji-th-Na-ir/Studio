@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Leopotam.EcsLite;
 
@@ -33,23 +32,22 @@ namespace Terra.Studio
 
         public void OnConditionalCheck(object data)
         {
-            var tuple = ((int entity, string conditionType, GameObject go, string conditionData, object selection))data;
-            if (tuple.conditionType.Equals("Terra.Studio.MouseAction"))
+            var (entity, conditionType, go, conditionData, selection) = ((int, string, GameObject, string, object))data;
+            if (conditionType.Equals("Terra.Studio.MouseAction"))
             {
-                if (tuple.selection == null || tuple.selection as GameObject != tuple.go)
+                if (selection == null || selection as GameObject != go)
                 {
                     return;
                 }
             }
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(tuple.conditionType, null, false, (tuple.go, tuple.conditionData));
+            compsData.ProvideEventContext(conditionType, null, false, (go, conditionData));
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
-            var filter = world.Filter<CollectableComponent>().End();
             var collectablePool = world.GetPool<CollectableComponent>();
-            OnDemandRun(tuple.entity, ref collectablePool.Get(tuple.entity));
+            OnDemandRun(entity, in collectablePool.Get(entity));
         }
 
-        public void OnDemandRun(int entityID, ref CollectableComponent component)
+        public void OnDemandRun(int entityID, in CollectableComponent component)
         {
             //Unsubscribe to all listeners
             //Destroy gracefully
@@ -69,7 +67,7 @@ namespace Terra.Studio
             {
                 RuntimeWrappers.AddScore(component.scoreValue);
             }
-            UnityEngine.Object.Destroy(component.refObject);
+            Object.Destroy(component.refObject);
             EntityAuthorOp.Degenerate(entityID);
         }
     }

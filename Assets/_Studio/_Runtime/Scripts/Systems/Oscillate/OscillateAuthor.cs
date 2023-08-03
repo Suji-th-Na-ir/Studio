@@ -9,10 +9,9 @@ namespace Terra.Studio
     {
         public override void Generate(object data)
         {
-            var tuple = ((int id, string type, string compData, GameObject obj))data;
-            var entity = tuple.id;
-            var jString = tuple.compData;
-            var go = tuple.obj;
+            var (id, _, compData, obj) = ((int, string, string, GameObject))data;
+            var entity = id;
+            var jString = compData;
             var oscillateCompData = JsonConvert.DeserializeObject<OscillateComponent>(jString);
             var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
             var compPool = ecsWorld.GetPool<OscillateComponent>();
@@ -24,7 +23,7 @@ namespace Terra.Studio
             compRef.IsConditionAvailable = oscillateCompData.IsConditionAvailable;
             compRef.IsBroadcastable = oscillateCompData.IsBroadcastable;
             compRef.Broadcast = oscillateCompData.Broadcast;
-            compRef.oscillatableTr = tuple.obj.transform;
+            compRef.oscillatableTr = obj.transform;
             var instance = RuntimeOp.Resolve<RuntimeSystem>().AddRunningInstance<OscillateSystem>();
             instance.Init(ecsWorld, entity);
         }

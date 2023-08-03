@@ -76,24 +76,24 @@ namespace Terra.Studio
 
         public void OnConditionalCheck(object data)
         {
-            var tuple = ((int id, UnityEngine.GameObject reference, string conditionType, string conditionData))data;
+            var (id, reference, conditionType, conditionData) = ((int, GameObject, string, string))data;
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
             var filter = world.Filter<OscillateComponent>().End();
             var oscillatorPool = world.GetPool<OscillateComponent>();
-            ref var oscillatable = ref oscillatorPool.Get(tuple.id);
-            if (tuple.conditionType.Equals("Terra.Studio.MouseAction"))
+            ref var oscillatable = ref oscillatorPool.Get(id);
+            if (conditionType.Equals("Terra.Studio.MouseAction"))
             {
-                if (!tuple.reference)
+                if (!reference)
                 {
                     return;
                 }
-                else if (tuple.reference != oscillatable.oscillatableTr.gameObject)
+                else if (reference != oscillatable.oscillatableTr.gameObject)
                 {
                     return;
                 }
             }
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(tuple.conditionType, OnConditionalCheck, false, (tuple.reference, tuple.conditionData));
+            compsData.ProvideEventContext(conditionType, OnConditionalCheck, false, (reference, conditionData));
             oscillatable.CanExecute = true;
             oscillatable.IsExecuted = false;
             oscillatable.oscillatableTr.position = oscillatable.fromPoint;

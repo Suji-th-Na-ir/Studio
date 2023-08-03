@@ -13,6 +13,7 @@ namespace Terra.Studio
         private Dictionary<Type, object> typeToInstances;
         private Dictionary<Type, IEcsSystems> customUpdateSystems;
         private Dictionary<Type, IEcsSystems>.Enumerator? customUpdateEnumerator;
+        private List<Type> customUpdateSystemToRemove;
 
         public EcsWorld World { get { return ecsWorld; } }
         public Action<GameObject> OnClicked { get; set; }
@@ -43,6 +44,7 @@ namespace Terra.Studio
         {
             customUpdateSystems = new();
             typeToInstances = new();
+            customUpdateSystemToRemove = new();
             globalUpdateSystems = new EcsSystems(ecsWorld)
                                     .Add(new ClickSystem());
             globalUpdateSystems.Init();
@@ -56,21 +58,25 @@ namespace Terra.Studio
 
         private void UpdateCustomSystems()
         {
-            try
+            if (customUpdateEnumerator == null)
             {
-                if (customUpdateEnumerator != null)
-                {
-                    var enumerator = customUpdateEnumerator.Value;
-                    while (enumerator.MoveNext())
-                    {
-                        enumerator.Current.Value?.Run();
-                    }
-                }
+                return;
             }
-            catch (Exception ex)
+            var enumerator = customUpdateEnumerator.Value;
+            while (enumerator.MoveNext())
             {
-                Debug.LogError("Gotten error at custom update");
-                Debug.LogError(ex);
+                enumerator.Current.Value?.Run();
+            }
+            var isModified = false;
+            foreach (var toRemoveType in customUpdateSystemToRemove)
+            {
+                isModified = true;
+                customUpdateSystems.Remove(toRemoveType);
+            }
+            if (isModified)
+            {
+                customUpdateSystemToRemove.Clear();
+                customUpdateEnumerator = customUpdateSystems.GetEnumerator();
             }
         }
 
@@ -90,10 +96,10 @@ namespace Terra.Studio
                 customUpdateSystems.Add(type, newSystem);
                 customUpdateEnumerator = customUpdateSystems.GetEnumerator();
             }
-            return (IAbsRunsystem)instance;
+            return instance;
         }
 
-        public void RemoveRunningInstance<T>(T instance) where T : IAbsRunsystem
+        public void RemoveRunningInstance<T>(T _) where T : IAbsRunsystem
         {
             var type = typeof(T);
             if (!typeToInstances.ContainsKey(type))
@@ -106,9 +112,8 @@ namespace Terra.Studio
                 if (customUpdateSystems.ContainsKey(type))
                 {
                     var system = customUpdateSystems[type];
-                    customUpdateSystems.Remove(type);
+                    customUpdateSystemToRemove.Add(type);
                     system?.Destroy();
-                    customUpdateEnumerator = customUpdateSystems.GetEnumerator();
                 }
             }
         }

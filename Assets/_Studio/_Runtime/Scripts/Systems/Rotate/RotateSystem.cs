@@ -1,7 +1,7 @@
 using UnityEngine;
 using Leopotam.EcsLite;
-using static Terra.Studio.RuntimeWrappers;
 using static Terra.Studio.GlobalEnums;
+using static Terra.Studio.RuntimeWrappers;
 
 namespace Terra.Studio
 {
@@ -30,40 +30,39 @@ namespace Terra.Studio
 
         public void OnConditionalCheck(object data)
         {
-            var tuple = ((int entity, string conditionType, GameObject go, string conditionData, object selection))data;
-            if (tuple.conditionType.Equals("Terra.Studio.MouseAction"))
+            var (entity, conditionType, go, conditionData, selection) = ((int, string, GameObject, string, object))data;
+            if (conditionType.Equals("Terra.Studio.MouseAction"))
             {
-                if (tuple.selection == null || tuple.selection as GameObject != tuple.go)
+                if (selection == null || selection as GameObject != go)
                 {
                     return;
                 }
             }
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(tuple.conditionType, null, false, (tuple.go, tuple.conditionData));
+            compsData.ProvideEventContext(conditionType, null, false, (go, conditionData));
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
-            var filter = world.Filter<RotateComponent>().End();
             var pool = world.GetPool<RotateComponent>();
-            ref var entityRef = ref pool.Get(tuple.entity);
+            ref var entityRef = ref pool.Get(entity);
             entityRef.CanExecute = true;
-            OnDemandRun(tuple.entity, ref entityRef);
+            OnDemandRun(in entityRef);
         }
 
-        public void OnDemandRun(int entityID, ref RotateComponent rotatable)
+        public void OnDemandRun(in RotateComponent rotatable)
         {
             if (rotatable.canPlaySFX)
             {
-                RuntimeWrappers.PlaySFX(rotatable.sfxName);
+                PlaySFX(rotatable.sfxName);
             }
             if (rotatable.canPlayVFX)
             {
-                RuntimeWrappers.PlayVFX(rotatable.vfxName, rotatable.refObj.transform.position);
+                PlayVFX(rotatable.vfxName, rotatable.refObj.transform.position);
             }
             var rotateParams = GetParams(rotatable);
             if (rotatable.rotationType == RotationType.Oscillate)
             {
                 rotateParams.shouldPingPong = true;
             }
-            RuntimeWrappers.RotateObject(rotateParams);
+            RotateObject(rotateParams);
         }
 
         private RotateByParams GetParams(RotateComponent rotatable)

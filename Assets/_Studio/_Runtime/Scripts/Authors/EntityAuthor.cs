@@ -1,6 +1,5 @@
 using System.Linq;
 using UnityEngine;
-using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {

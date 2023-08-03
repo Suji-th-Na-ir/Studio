@@ -8,21 +8,21 @@ namespace Terra.Studio
     [EventExecutor("Terra.Studio.TriggerAction")]
     public struct TriggerActionEvent : IEventExecutor
     {
-        public void Execute(Action<object> onConditionalCheck, bool subscribe, object conditionalCheck = null)
+        public readonly void Execute(Action<object> onConditionalCheck, bool subscribe, object conditionalCheck = null)
         {
             if (conditionalCheck == null)
             {
                 return;
             }
-            var tuple = ((GameObject goRef, string tagCheck))conditionalCheck;
-            var go = tuple.goRef;
+            var (goRef, tagCheck) = ((GameObject, string))conditionalCheck;
+            var go = goRef;
             if (subscribe)
             {
                 var triggerAction = go.AddComponent<OnTriggerAction>();
-                triggerAction.TagAgainst = tuple.tagCheck;
-                triggerAction.onTriggered = () =>
+                triggerAction.TagAgainst = tagCheck;
+                triggerAction.OnTriggered = () =>
                 {
-                    triggerAction.onTriggered = null;
+                    triggerAction.OnTriggered = null;
                     onConditionalCheck?.Invoke(null);
                 };
             }

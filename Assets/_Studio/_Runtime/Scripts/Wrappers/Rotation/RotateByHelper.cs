@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
 using System.Collections;
-using static Terra.Studio.RuntimeWrappers;
 using static Terra.Studio.GlobalEnums;
+using static Terra.Studio.RuntimeWrappers;
 
 namespace Terra.Studio
 {
@@ -82,17 +82,12 @@ namespace Terra.Studio
 
         private Vector3 GetVector3(float newRotation)
         {
-            var eulerAngles = transform.rotation.eulerAngles;
-            switch (axis)
+            return axis switch
             {
-                case Axis.X:
-                    return new Vector3(newRotation, 0f, 0f);
-                default:
-                case Axis.Y:
-                    return new Vector3(0f, newRotation, 0f);
-                case Axis.Z:
-                    return new Vector3(0f, 0f, newRotation);
-            }
+                Axis.X => new Vector3(newRotation, 0f, 0f),
+                Axis.Z => new Vector3(0f, 0f, newRotation),
+                _ => new Vector3(0f, newRotation, 0f),
+            };
         }
 
         private void OnDestroy()

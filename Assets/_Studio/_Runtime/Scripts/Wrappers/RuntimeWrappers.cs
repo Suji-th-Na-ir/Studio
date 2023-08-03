@@ -1,7 +1,5 @@
 using System;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 using static Terra.Studio.GlobalEnums;
 
 namespace Terra.Studio
@@ -59,7 +57,7 @@ namespace Terra.Studio
         {
             var go = new GameObject("SFX_Holder");
             var audioSource = go.AddComponent<AudioSource>();
-            var sfx = Resources.Load<AudioClip>($"sfx/{sfxName}") as AudioClip;
+            var sfx = Resources.Load<AudioClip>($"sfx/{sfxName}");
             audioSource.clip = sfx;
             audioSource.loop = false;
             audioSource.Play();
@@ -69,7 +67,7 @@ namespace Terra.Studio
 
         public static void PlayVFX(string vfxName, Vector3 position)
         {
-            var vfxObj = Resources.Load<GameObject>($"vfx/{vfxName}") as GameObject;
+            var vfxObj = Resources.Load<GameObject>($"vfx/{vfxName}");
             var vfx = UnityEngine.Object.Instantiate(vfxObj);
             vfx.transform.position = position;
             var destroyAfter = vfx.AddComponent<DestroyAfter>();
@@ -97,6 +95,21 @@ namespace Terra.Studio
             public BroadcastAt broadcastAt;
             public bool shouldPingPong;
             public Action onRotated;
+            public bool shouldPause;
+            public float pauseForTime;
+            public GameObject targetObj;
+        }
+
+        public struct TranslateParams
+        {
+            public float translateTo;
+            public float speed;
+            public int translateTimes;
+            public Axis axis;
+            public Direction direction;
+            public BroadcastAt broadcastAt;
+            public bool shouldPingPong;
+            public Action onTranslated;
             public bool shouldPause;
             public float pauseForTime;
             public GameObject targetObj;

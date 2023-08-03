@@ -8,17 +8,17 @@ namespace Terra.Studio
     [EventExecutor("Terra.Studio.Listener")]
     public struct ListenerActionEvent : IEventExecutor
     {
-        public void Execute(Action<object> onConditionalCheck, bool subscribe, object conditionalCheck = null)
+        public readonly void Execute(Action<object> onConditionalCheck, bool subscribe, object conditionalCheck = null)
         {
             var broadcaster = RuntimeOp.Resolve<Broadcaster>();
-            var tuple = ((GameObject go, string condition))conditionalCheck;
+            var (_, condition) = ((GameObject go, string condition))conditionalCheck;
             if (subscribe)
             {
-                broadcaster.ListenTo(tuple.condition, () => { onConditionalCheck?.Invoke(null); });
+                broadcaster.ListenTo(condition, () => { onConditionalCheck?.Invoke(null); });
             }
             else
             {
-                broadcaster.StopListenTo(tuple.condition, () => { onConditionalCheck?.Invoke(null); });
+                broadcaster.StopListenTo(condition, () => { onConditionalCheck?.Invoke(null); });
             }
         }
     }

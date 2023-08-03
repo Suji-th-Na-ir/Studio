@@ -9,13 +9,13 @@ namespace Terra.Studio
     {
         public override void Generate(object data)
         {
-            var tuple = ((int id, string type, string compData, GameObject obj))data;
-            var collectableCompData = JsonConvert.DeserializeObject<CollectableComponent>(tuple.compData);
+            var (id, _, compData, obj) = ((int, string, string, GameObject))data;
+            var collectableCompData = JsonConvert.DeserializeObject<CollectableComponent>(compData);
             var runtimeSystem = RuntimeOp.Resolve<RuntimeSystem>();
             var ecsWorld = runtimeSystem.World;
             var compPool = ecsWorld.GetPool<CollectableComponent>();
-            compPool.Add(tuple.id);
-            ref var compRef = ref compPool.Get(tuple.id);
+            compPool.Add(id);
+            ref var compRef = ref compPool.Get(id);
             Helper.CopyStructFieldValues(collectableCompData, ref compRef);
             compRef.CanExecute = collectableCompData.CanExecute;
             compRef.IsConditionAvailable = collectableCompData.IsConditionAvailable;
@@ -25,9 +25,9 @@ namespace Terra.Studio
             compRef.Broadcast = collectableCompData.Broadcast;
             compRef.IsTargeted = collectableCompData.IsTargeted;
             compRef.TargetId = collectableCompData.TargetId;
-            compRef.refObject = tuple.obj;
+            compRef.refObject = obj;
             var instance = runtimeSystem.AddRunningInstance<CollectableSystem>();
-            instance.Init(ecsWorld, tuple.id);
+            instance.Init(ecsWorld, id);
         }
     }
 }

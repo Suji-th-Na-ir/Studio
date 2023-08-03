@@ -1,12 +1,11 @@
 using System;
 using UnityEngine;
-using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
     public class OnTriggerAction : MonoBehaviour
     {
-        public Action onTriggered { get; set; }
+        public Action OnTriggered { get; set; }
         public string TagAgainst { get; set; }
 
         private void Start()
@@ -19,8 +18,8 @@ namespace Terra.Studio
             if (!TryGetComponent(out Rigidbody rb))
             {
                 rb = gameObject.AddComponent<Rigidbody>();
-                rb.useGravity = false;
             }
+            rb.useGravity = false;
         }
 
         private void OnTriggerEnter(Collider other)
@@ -29,7 +28,7 @@ namespace Terra.Studio
             {
                 return;
             }
-            onTriggered?.Invoke();
+            OnTriggered?.Invoke();
         }
     }
 }

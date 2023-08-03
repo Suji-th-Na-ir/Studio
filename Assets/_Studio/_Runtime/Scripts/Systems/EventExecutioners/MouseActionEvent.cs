@@ -7,7 +7,7 @@ namespace Terra.Studio
     [EventExecutor("Terra.Studio.MouseAction")]
     public struct MouseActionEvent : IEventExecutor
     {
-        public void Execute(Action<object> onConditionalCheck, bool subscribe, object conditionalCheck = null)
+        public readonly void Execute(Action<object> onConditionalCheck, bool subscribe, object conditionalCheck = null)
         {
             var mouseEvents = RuntimeOp.Resolve<RuntimeSystem>() as IMouseEvents;
             if (subscribe)

@@ -1,6 +1,5 @@
 using UnityEngine;
 using Leopotam.EcsLite;
-using UnityEngine.SceneManagement;
 
 namespace Terra.Studio
 {
@@ -21,7 +20,8 @@ namespace Terra.Studio
                     return;
                 }
                 isPressedDown = false;
-                RuntimeOp.Resolve<RuntimeSystem>().OnClicked?.Invoke(GetSelection());
+                var selection = GetSelection();
+                RuntimeOp.Resolve<RuntimeSystem>().OnClicked?.Invoke(selection);
             }
         }
 
@@ -30,18 +30,6 @@ namespace Terra.Studio
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100f))
             {
                 return hit.transform.gameObject;
-            }
-            return null;
-        }
-
-        private GameObject GetSelectionPhysicsScene()
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            PhysicsScene pScene = SceneManager.GetActiveScene().GetPhysicsScene();
-            if (pScene.Raycast(worldPoint, ray.direction, out var hit, float.MaxValue))
-            {
-                return hit.collider.gameObject;
             }
             return null;
         }

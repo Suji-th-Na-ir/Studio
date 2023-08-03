@@ -33,23 +33,22 @@ namespace Terra.Studio
 
         public void OnConditionalCheck(object data)
         {
-            var tuple = ((int entity, string conditionType, string conditionData, GameObject go, GameObject selection))data;
-            if (tuple.conditionType.Equals("Terra.Studio.MouseAction"))
+            var (entity, conditionType, conditionData, go, selection) = ((int, string, string, GameObject, GameObject))data;
+            if (conditionType.Equals("Terra.Studio.MouseAction"))
             {
-                if (tuple.selection == null || tuple.selection != tuple.go)
+                if (selection == null || selection != go)
                 {
                     return;
                 }
             }
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(tuple.conditionType, null, false, (tuple.go, tuple.conditionData));
+            compsData.ProvideEventContext(conditionType, null, false, (go, conditionData));
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
-            var filter = world.Filter<DestroyOnComponent>().End();
             var destroyPool = world.GetPool<DestroyOnComponent>();
-            OnDemandRun(tuple.entity, ref destroyPool.Get(tuple.entity));
+            OnDemandRun(entity, in destroyPool.Get(entity));
         }
 
-        public void OnDemandRun(int entityID, ref DestroyOnComponent component)
+        public void OnDemandRun(int entityID, in DestroyOnComponent component)
         {
             if (component.canPlaySFX)
             {
@@ -61,7 +60,7 @@ namespace Terra.Studio
             }
             //Unsubscribe to all listeners
             //Destroy gracefully
-            UnityEngine.Object.Destroy(component.refObj);
+            Object.Destroy(component.refObj);
             if (component.IsBroadcastable)
             {
                 RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);

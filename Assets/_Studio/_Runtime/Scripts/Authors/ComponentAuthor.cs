@@ -1,8 +1,4 @@
-using System;
 using UnityEngine;
-using Newtonsoft.Json;
-using System.Collections;
-using Newtonsoft.Json.Linq;
 
 namespace Terra.Studio
 {
@@ -40,16 +36,7 @@ namespace Terra.Studio
                 {
                     return;
                 }
-                string jString = null;
-                try
-                {
-                    var jObject = (JObject)JToken.FromObject(compData.data);
-                    jString = jObject.ToString();
-                }
-                catch
-                {
-                    jString = $"{compData.data}";
-                }
+                var jString = (string)compData.data;
                 var indivCompAuthor = RuntimeOp.Resolve<ComponentsData>().GetAuthorForType(compData.type);
                 indivCompAuthor?.Generate((tuple.id, tuple.data.type, jString, tuple.obj));
             }
