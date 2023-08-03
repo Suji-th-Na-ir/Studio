@@ -1,11 +1,8 @@
 using System;
-using System.Linq;
 using PlayShifu.Terra;
 using UnityEngine;
 using UnityEngine.UI;
 using Terra.Studio.RTEditor;
-using TMPro;
-using UnityEngine.Serialization;
 
 namespace RuntimeInspectorNamespace
 {
@@ -52,7 +49,7 @@ namespace RuntimeInspectorNamespace
         private void OnDropdownValueChanged(int index)
         {
             Atom.PlayVfx vfx = (Atom.PlayVfx)Value;
-            vfx.clipName = Helper.GetSfxClipNameByIndex(index);
+            vfx.clipName = Helper.GetVfxClipNameByIndex(index);
             vfx.clipIndex = index;
         }
 

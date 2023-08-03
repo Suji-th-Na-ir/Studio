@@ -75,8 +75,8 @@ namespace Terra.Studio
             {
                 entities = entities.ToArray()
             };
-            var json = JsonConvert.SerializeObject(worldData);
-            // Debug.Log($"Generated scene data: {json}");
+            var json = JsonConvert.SerializeObject(worldData, Formatting.Indented);
+            Debug.Log($"Generated scene data: {json}");
             SaveScene(json);
             return json;
         }
@@ -94,7 +94,7 @@ namespace Terra.Studio
             {
                 string jsonData = File.ReadAllText(filePath);
 
-                Debug.Log(jsonData);
+                Debug.Log("Loading scene data "+jsonData);
                 
                 WorldData wData = JsonConvert.DeserializeObject<WorldData>(jsonData);
                 

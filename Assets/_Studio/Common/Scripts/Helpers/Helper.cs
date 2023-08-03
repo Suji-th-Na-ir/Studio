@@ -404,7 +404,7 @@ namespace PlayShifu.Terra
             if (_index < names.Length)
                 return names[_index];
             
-            return "";
+            return null;
         }
 
         public static string[] GetVfxClipNames()
@@ -421,8 +421,9 @@ namespace PlayShifu.Terra
         public static string GetVfxClipNameByIndex(int _index)
         {
             string[] names = GetVfxClipNames();
-            if (names.Length < _index) return names[_index];
-            return "";
+            if (_index < names.Length) 
+                return names[_index];
+            return null;
         }
     }
 }

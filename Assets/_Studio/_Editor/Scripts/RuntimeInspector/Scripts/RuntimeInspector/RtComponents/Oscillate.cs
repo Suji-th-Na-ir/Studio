@@ -21,7 +21,7 @@ namespace RuntimeInspectorNamespace
         public Vector3 fromPoint;
         public Vector3 toPoint;
         public OscillateEventType Start;
-        public string BroadcastListen = "";
+        public string BroadcastListen = null;
         public float Speed = 1f;
         public bool Loop = false;
         
@@ -38,8 +38,8 @@ namespace RuntimeInspectorNamespace
             Component.fromPoint = fromPoint;
             Component.toPoint = toPoint;
             Component.ConditionType = GetStartEvent();
-            Component.ConditionData = BroadcastListen;
-            Component.BroadcastListen = BroadcastListen;
+            Component.ConditionData = string.IsNullOrEmpty(BroadcastListen) ? null : BroadcastListen;
+            Component.BroadcastListen = string.IsNullOrEmpty(BroadcastListen) ? null : BroadcastListen;
             Component.loop = Loop;
             Component.speed = Speed;
             Component.IsConditionAvailable = GetStartEvent() != "";

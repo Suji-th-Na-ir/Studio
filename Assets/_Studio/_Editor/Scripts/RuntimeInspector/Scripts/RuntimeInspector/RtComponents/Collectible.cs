@@ -14,7 +14,7 @@ namespace RuntimeInspectorNamespace
         public bool ShowScoreUI = false;
         public bool CanUpdateScore = false;
         public float ScoreValue = 0;
-        public string Broadcast = "";
+        public string Broadcast = null;
         
         public (string type, string data) Export()
         {
@@ -29,8 +29,8 @@ namespace RuntimeInspectorNamespace
                 collectable.canPlaySFX = PlaySFX.canPlay;
                 collectable.canPlayVFX = PlayVFX.canPlay;
 
-                collectable.sfxName = PlaySFX.clipName;
-                collectable.vfxName = PlayVFX.clipName;
+                collectable.sfxName = string.IsNullOrEmpty(PlaySFX.clipName) ? null : PlaySFX.clipName;
+                collectable.vfxName = string.IsNullOrEmpty(PlayVFX.clipName) ? null : PlaySFX.clipName;
 
                 collectable.sfxIndex = PlaySFX.clipIndex;
                 collectable.vfxIndex = PlayVFX.clipIndex;

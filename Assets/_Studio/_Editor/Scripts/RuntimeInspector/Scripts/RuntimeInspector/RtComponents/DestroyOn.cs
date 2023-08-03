@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 using Terra.Studio;
 using Terra.Studio.RTEditor;
 using UnityEngine;
@@ -11,8 +12,8 @@ namespace RuntimeInspectorNamespace
         public GlobalEnums.StartOn Start = GlobalEnums.StartOn.None;
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
-        public string Broadcast = "";
-        public string BroadcastListen = "";
+        public string Broadcast = null;
+        public string BroadcastListen = null;
 
         public string GetStartEvent()
         {
@@ -51,13 +52,13 @@ namespace RuntimeInspectorNamespace
                 destroyOn.ConditionData = GetStartCondition();
                 destroyOn.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
                 destroyOn.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
-                destroyOn.BroadcastListen = BroadcastListen == "" ? null : BroadcastListen;
+                destroyOn.BroadcastListen = string.IsNullOrEmpty(BroadcastListen) ? null : BroadcastListen;
                 
                 destroyOn.canPlaySFX = PlaySFX.canPlay;
                 destroyOn.canPlayVFX = PlayVFX.canPlay;
-                
-                destroyOn.sfxName = PlaySFX.clipName;
-                destroyOn.vfxName = PlayVFX.clipName;
+
+                destroyOn.sfxName = Helper.GetSfxClipNameByIndex(PlaySFX.clipIndex);
+                destroyOn.vfxName = Helper.GetVfxClipNameByIndex(PlayVFX.clipIndex);
                 
                 destroyOn.sfxIndex = PlaySFX.clipIndex;
                 destroyOn.vfxIndex = PlayVFX.clipIndex;

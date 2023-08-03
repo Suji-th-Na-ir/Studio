@@ -23,5 +23,11 @@ namespace Terra.Studio.RTEditor
             [HideInInspector] public string clipName;
             [HideInInspector] public int clipIndex;
         }
+
+        [Serializable]
+        public class Rotate
+        {
+            [HideInInspector] public RotateField field;
+        }
     }
 }

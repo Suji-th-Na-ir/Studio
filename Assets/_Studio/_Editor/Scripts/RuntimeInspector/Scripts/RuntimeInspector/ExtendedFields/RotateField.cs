@@ -6,9 +6,9 @@ using Terra.Studio.RTEditor;
 
 namespace RuntimeInspectorNamespace
 {
-    public class PlaySFXField : InspectorField
+    public class RotateField : InspectorField
     {
-#pragma warning disable 0649
+        #pragma warning disable 0649
         [SerializeField]
         private Image toggleBackground;
 
@@ -24,40 +24,27 @@ namespace RuntimeInspectorNamespace
             base.Initialize();
             toggleInput.onValueChanged.AddListener( OnToggleValueChanged );
             optionsDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
-            LoadSfxClips();
             ShowHideOptionsDropdown();
         }
-
-        private void LoadSfxClips()
-        {
-            optionsDropdown.options.Clear();
-            foreach (string clipName in Helper.GetSfxClipNames())
-            {
-                optionsDropdown.options.Add(new Dropdown.OptionData()
-                {
-                    text = clipName
-                });
-            }
-        }
+        
 
         public override bool SupportsType( Type type )
         {
-            return type == typeof( Atom.PlaySfx );
+            return type == typeof( Atom.Rotate );
         }
 
         private void OnDropdownValueChanged(int index)
         {
-            Atom.PlaySfx sfx = (Atom.PlaySfx)Value;
-            sfx.clipName = Helper.GetSfxClipNameByIndex(index);
-            sfx.clipIndex = index;
+            Atom.Rotate sfx = (Atom.Rotate)Value;
+            // sfx.clipName = Helper.GetSfxClipNameByIndex(index);
+            // sfx.clipIndex = index;
         }
 
         private void OnToggleValueChanged( bool _input )
         {
-            LoadSfxClips();
             if(Inspector)  Inspector.RefreshDelayed();
-            Atom.PlaySfx sfx = (Atom.PlaySfx)Value;
-            sfx.canPlay = _input;
+            Atom.Rotate sfx = (Atom.Rotate)Value;
+            // sfx.canPlay = _input;
             ShowHideOptionsDropdown();
         }
 
@@ -89,11 +76,11 @@ namespace RuntimeInspectorNamespace
         
         private void LoadData()
         {
-            Atom.PlaySfx sfx = (Atom.PlaySfx)Value;
+            Atom.Rotate sfx = (Atom.Rotate)Value;
             if (sfx != null)
             {
-                toggleInput.isOn = sfx.canPlay;
-                optionsDropdown.value = sfx.clipIndex;
+                // toggleInput.isOn = sfx.canPlay;
+                // optionsDropdown.value = sfx.clipIndex;
             }
         }
     }
