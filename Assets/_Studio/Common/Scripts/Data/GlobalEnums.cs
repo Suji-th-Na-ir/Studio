@@ -10,9 +10,13 @@ namespace Terra.Studio
     public enum StartOn
     {
         None,
+        [EditorEnumField("Terra.Studio.GameStart", "Start")]
         GameStart,
+        [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
         OnPlayerCollide,
+        [EditorEnumField("Terra.Studio.MouseAction", "OnClick")]
         OnClick,
+        [EditorEnumField("Terra.Studio.Listener")]
         BroadcastListen
     }
 

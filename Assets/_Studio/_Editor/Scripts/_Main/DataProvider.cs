@@ -20,7 +20,7 @@ namespace Terra.Studio
             EnumTargets = JsonConvert.DeserializeObject<Dictionary<string, string>>(enumFileData);
         }
 
-        public string GetCovariance<T>(T instance)
+        public string GetCovariance<T>(T _)
         {
             foreach (var target in ComponentTargets)
             {
@@ -55,14 +55,18 @@ namespace Terra.Studio
             return default;
         }
 
-        public string GetEnum(string key)
+        public bool TryGetEnum(string key, Type type, out object result)
         {
+            result = null;
             if (EnumTargets.ContainsKey(key))
             {
                 var typeName = EnumTargets[key];
-                return typeName;
+                if (Enum.TryParse(type, typeName, out result))
+                {
+                    return true;
+                }
             }
-            return null;
+            return false;
         }
     }
 }

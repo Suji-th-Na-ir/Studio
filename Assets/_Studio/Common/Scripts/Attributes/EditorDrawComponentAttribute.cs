@@ -18,7 +18,15 @@ namespace Terra.Studio
     public class EditorEnumFieldAttribute : Attribute
     {
         private readonly string componentTarget;
+        private readonly string componentData;
         public string ComponentTarget { get { return componentTarget; } }
+        public string ComponentData { get { return componentData; } }
+
+        public EditorEnumFieldAttribute(string componentTarget, string componentData)
+        {
+            this.componentTarget = componentTarget;
+            this.componentData = componentData;
+        }
 
         public EditorEnumFieldAttribute(string componentTarget)
         {

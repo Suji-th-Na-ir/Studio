@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 using Terra.Studio;
 using Terra.Studio.RTEditor;
@@ -51,10 +52,10 @@ namespace RuntimeInspectorNamespace
             ShowScoreUI = cc.showScoreUI;
             ScoreValue = cc.scoreValue;
 
-            if (cc.ConditionType == "Terra.Studio.TriggerAction")
-                Start = StartOn.OnPlayerCollide;
-            else if (cc.ConditionType == "Terra.Studio.MouseAction")
-                Start = StartOn.OnClick;
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOn), out object result))
+            {
+                Start = (StartOn)result;
+            }
 
             Broadcast = cc.Broadcast;
 
@@ -68,13 +69,8 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartEvent()
         {
-            if (Start == StartOn.OnPlayerCollide)
-                return "Terra.Studio.TriggerAction";
-
-            if (Start == StartOn.OnClick)
-                return "Terra.Studio.MouseAction";
-
-            return "";
+            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(Start);
+            return eventName;
         }
 
         public string GetStartCondition()
