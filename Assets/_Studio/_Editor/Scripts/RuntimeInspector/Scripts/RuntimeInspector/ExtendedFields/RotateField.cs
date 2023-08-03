@@ -1,5 +1,5 @@
 using System;
-using PlayShifu.Terra;
+using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
 using Terra.Studio.RTEditor;
@@ -8,23 +8,22 @@ namespace RuntimeInspectorNamespace
 {
     public class RotateField : InspectorField
     {
-        #pragma warning disable 0649
-        [SerializeField]
-        private Image toggleBackground;
-
-        [SerializeField]
-        private Toggle toggleInput;
-
-        [SerializeField] 
-        private Dropdown optionsDropdown;
+#pragma warning disable 0649
+        [SerializeField] public Dropdown rotateTypesDD;
+        
+        public RTypeOnce rotateOnce;
+        public RTypeForever rotateForever;
+        public RTypeOscillate rotateOscillate;
+        public RTypeOscillateForever rotateOscillateForever;
+        public RTypeIncremental rotateIncremental;
+        public RTypeIncrementalForever rotateIncrementalForever;
 #pragma warning restore 0649
         
         public override void Initialize()
         {
             base.Initialize();
-            toggleInput.onValueChanged.AddListener( OnToggleValueChanged );
-            optionsDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
-            ShowHideOptionsDropdown();
+            rotateTypesDD.onValueChanged.AddListener(OnRotateTypesValueChanged);
+            rotateTypesDD.SetValueWithoutNotify(0);
         }
         
 
@@ -33,11 +32,50 @@ namespace RuntimeInspectorNamespace
             return type == typeof( Atom.Rotate );
         }
 
-        private void OnDropdownValueChanged(int index)
+        private void OnRotateTypesValueChanged(int _index)
         {
             Atom.Rotate sfx = (Atom.Rotate)Value;
+            ShowRotateOptionsMenu(_index);
             // sfx.clipName = Helper.GetSfxClipNameByIndex(index);
             // sfx.clipIndex = index;
+        }
+
+        private void HideAllRotateOptionsMenus()
+        {
+            rotateOnce.gameObject.SetActive(false);
+            rotateForever.gameObject.SetActive(false);
+            rotateOscillate.gameObject.SetActive(false);
+            rotateOscillateForever.gameObject.SetActive(false);
+            rotateIncremental.gameObject.SetActive(false);
+            rotateIncrementalForever.gameObject.SetActive(false);
+        }
+
+        private void ShowRotateOptionsMenu(int _index)
+        {
+            HideAllRotateOptionsMenus();
+            switch (_index)
+            {
+                case 0:
+                    rotateOnce.gameObject.SetActive(true);
+                    break;
+                case 1:
+                    rotateForever.gameObject.SetActive(true);
+                    break;
+                case 2:
+                    rotateOscillate.gameObject.SetActive(true);
+                    break;
+                case 3:
+                    rotateOscillateForever.gameObject.SetActive(true);
+                    break;
+                case 4:
+                    rotateIncremental.gameObject.SetActive(true);
+                    break;
+                case 5:
+                    rotateIncrementalForever.gameObject.SetActive(true);
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void OnToggleValueChanged( bool _input )
@@ -45,27 +83,14 @@ namespace RuntimeInspectorNamespace
             if(Inspector)  Inspector.RefreshDelayed();
             Atom.Rotate sfx = (Atom.Rotate)Value;
             // sfx.canPlay = _input;
-            ShowHideOptionsDropdown();
-        }
-
-        void ShowHideOptionsDropdown()
-        {
-            if(toggleInput.isOn)
-                optionsDropdown.gameObject.SetActive(true);
-            else 
-                optionsDropdown.gameObject.SetActive(false);
         }
 
         protected override void OnSkinChanged()
         {
             base.OnSkinChanged();
 
-            toggleBackground.color = Skin.InputFieldNormalBackgroundColor;
-            toggleInput.graphic.color = Skin.ToggleCheckmarkColor;
-
             Vector2 rightSideAnchorMin = new Vector2( Skin.LabelWidthPercentage, 0f );
             variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
-            ( (RectTransform) toggleInput.transform ).anchorMin = rightSideAnchorMin;
         }
 
         public override void Refresh()

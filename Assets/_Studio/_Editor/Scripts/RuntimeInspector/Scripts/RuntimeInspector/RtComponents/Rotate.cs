@@ -9,15 +9,8 @@ namespace RuntimeInspectorNamespace
     public class Rotate : MonoBehaviour, IComponent
     {
         public GlobalEnums.StartOn Start = GlobalEnums.StartOn.GameStart;
-        public GlobalEnums.RotationType Type = GlobalEnums.RotationType.RotateOnce;
-        public GlobalEnums.Axis Axis = GlobalEnums.Axis.X;
-        public GlobalEnums.Direction Direction = GlobalEnums.Direction.Clockwise;
-        public float Degrees = 0f;
-        public float Speed = 0f;
-        public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
-        public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
-        public string Broadcast = "";
-    
+        public Atom.Rotate Rtotate = new Atom.Rotate(); 
+        
         public (string type, string data) Export()
         {
             RotateComponent rotateComponent = new();

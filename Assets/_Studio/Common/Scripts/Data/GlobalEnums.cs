@@ -32,7 +32,6 @@ namespace Terra.Studio
             OscillateForever,
             IncrementallyRotate,
             IncrementallyRotateForever
-            // RotateMultipleTimes
         }
 
         public enum RepeatType
