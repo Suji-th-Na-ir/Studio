@@ -8,9 +8,9 @@ namespace RuntimeInspectorNamespace
 {
     public class Rotate : MonoBehaviour, IComponent
     {
-        public GlobalEnums.StartOn Start = GlobalEnums.StartOn.GameStart;
-        public Atom.Rotate Rtotate = new Atom.Rotate(); 
-        
+        public StartOn Start = StartOn.GameStart;
+        public Atom.Rotate Rtotate = new Atom.Rotate();
+
         public (string type, string data) Export()
         {
             RotateComponent rotateComponent = new();
@@ -22,7 +22,7 @@ namespace RuntimeInspectorNamespace
 
         public void Import(EntityBasedComponent data)
         {
-            
+
         }
     }
 }

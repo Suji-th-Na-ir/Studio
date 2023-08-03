@@ -5,8 +5,8 @@ namespace RuntimeInspectorNamespace
 {
     public class RTypeForever : MonoBehaviour
     {
-        public GlobalEnums.Axis Axis;
-        public GlobalEnums.Direction Direction;
+        public Axis Axis;
+        public Direction Direction;
         public float Speed = 0;
     }
 }

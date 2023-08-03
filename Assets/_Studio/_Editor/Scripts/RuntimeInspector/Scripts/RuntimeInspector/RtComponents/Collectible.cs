@@ -8,14 +8,14 @@ namespace RuntimeInspectorNamespace
     [EditorDrawComponent("Terra.Studio.Collectable")]
     public class Collectible : MonoBehaviour, IComponent
     {
-        public GlobalEnums.StartOn Start = GlobalEnums.StartOn.OnPlayerCollide;
+        public StartOn Start = StartOn.OnPlayerCollide;
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
         public bool ShowScoreUI = false;
         public bool CanUpdateScore = false;
         public float ScoreValue = 0;
         public string Broadcast = null;
-        
+
         public (string type, string data) Export()
         {
             CollectableComponent collectable = new();
@@ -52,9 +52,9 @@ namespace RuntimeInspectorNamespace
             ScoreValue = cc.scoreValue;
 
             if (cc.ConditionType == "Terra.Studio.TriggerAction")
-                Start = GlobalEnums.StartOn.OnPlayerCollide;
+                Start = StartOn.OnPlayerCollide;
             else if (cc.ConditionType == "Terra.Studio.MouseAction")
-                Start = GlobalEnums.StartOn.OnClick;
+                Start = StartOn.OnClick;
 
             Broadcast = cc.Broadcast;
 
@@ -68,10 +68,10 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartEvent()
         {
-            if (Start == GlobalEnums.StartOn.OnPlayerCollide)
+            if (Start == StartOn.OnPlayerCollide)
                 return "Terra.Studio.TriggerAction";
 
-            if (Start == GlobalEnums.StartOn.OnClick)
+            if (Start == StartOn.OnClick)
                 return "Terra.Studio.MouseAction";
 
             return "";
@@ -79,10 +79,10 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartCondition()
         {
-            if (Start == GlobalEnums.StartOn.OnPlayerCollide)
+            if (Start == StartOn.OnPlayerCollide)
                 return "Player";
 
-            if (Start == GlobalEnums.StartOn.OnClick)
+            if (Start == StartOn.OnClick)
                 return "OnClick";
 
             return "";

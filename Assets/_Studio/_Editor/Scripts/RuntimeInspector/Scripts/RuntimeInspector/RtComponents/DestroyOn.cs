@@ -9,7 +9,7 @@ namespace RuntimeInspectorNamespace
     [EditorDrawComponent("Terra.Studio.DestroyOn")]
     public class DestroyOn : MonoBehaviour, IComponent
     {
-        public GlobalEnums.StartOn Start = GlobalEnums.StartOn.None;
+        public StartOn Start = StartOn.None;
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
         public string Broadcast = null;
@@ -17,13 +17,13 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartEvent()
         {
-            if (Start == GlobalEnums.StartOn.OnPlayerCollide)
+            if (Start == StartOn.OnPlayerCollide)
                 return "Terra.Studio.TriggerAction";
 
-            if (Start == GlobalEnums.StartOn.OnClick)
+            if (Start == StartOn.OnClick)
                 return "Terra.Studio.MouseAction";
 
-            if (Start == GlobalEnums.StartOn.BroadcastListen)
+            if (Start == StartOn.BroadcastListen)
                 return "Terra.Studio.Listener";
 
             return "";
@@ -31,13 +31,13 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartCondition()
         {
-            if (Start == GlobalEnums.StartOn.OnPlayerCollide)
+            if (Start == StartOn.OnPlayerCollide)
                 return "Player";
 
-            if (Start == GlobalEnums.StartOn.OnClick)
+            if (Start == StartOn.OnClick)
                 return "OnClick";
 
-            if (Start == GlobalEnums.StartOn.BroadcastListen)
+            if (Start == StartOn.BroadcastListen)
                 return BroadcastListen.ToString();
 
             return "";
@@ -53,17 +53,17 @@ namespace RuntimeInspectorNamespace
                 destroyOn.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
                 destroyOn.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
                 destroyOn.BroadcastListen = string.IsNullOrEmpty(BroadcastListen) ? null : BroadcastListen;
-                
+
                 destroyOn.canPlaySFX = PlaySFX.canPlay;
                 destroyOn.canPlayVFX = PlayVFX.canPlay;
 
                 destroyOn.sfxName = Helper.GetSfxClipNameByIndex(PlaySFX.clipIndex);
                 destroyOn.vfxName = Helper.GetVfxClipNameByIndex(PlayVFX.clipIndex);
-                
+
                 destroyOn.sfxIndex = PlaySFX.clipIndex;
                 destroyOn.vfxIndex = PlayVFX.clipIndex;
             }
-            
+
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(destroyOn);
             return (type, data);
@@ -72,19 +72,19 @@ namespace RuntimeInspectorNamespace
         public void Import(EntityBasedComponent cdata)
         {
             DestroyOnComponent cc = JsonConvert.DeserializeObject<DestroyOnComponent>($"{cdata.data}");
-            
+
             if (cc.ConditionType == "Terra.Studio.TriggerAction")
-                Start = GlobalEnums.StartOn.OnPlayerCollide;
+                Start = StartOn.OnPlayerCollide;
             else if (cc.ConditionType == "Terra.Studio.MouseAction")
-                Start = GlobalEnums.StartOn.OnClick;
+                Start = StartOn.OnClick;
             else if (cc.ConditionType == "Terra.Studio.Listener")
-                Start = GlobalEnums.StartOn.BroadcastListen;
+                Start = StartOn.BroadcastListen;
             else
-                Start = GlobalEnums.StartOn.None;
-            
+                Start = StartOn.None;
+
             Broadcast = cc.Broadcast;
             BroadcastListen = cc.BroadcastListen;
-            
+
             PlaySFX.canPlay = cc.canPlaySFX;
             PlaySFX.clipIndex = cc.sfxIndex;
             PlaySFX.clipName = cc.sfxName;

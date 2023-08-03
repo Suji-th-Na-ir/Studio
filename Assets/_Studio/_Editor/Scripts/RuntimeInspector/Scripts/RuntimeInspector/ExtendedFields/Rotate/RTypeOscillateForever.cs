@@ -5,7 +5,7 @@ namespace RuntimeInspectorNamespace
 {
     public class RTypeOscillateForever : MonoBehaviour
     {
-        public GlobalEnums.Axis Axis;
+        public Axis Axis;
         public float Degrees = 0;
         public float Speed = 0;
     }

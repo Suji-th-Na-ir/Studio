@@ -1,8 +1,6 @@
 using System;
 using UnityEngine;
 using System.Collections;
-using static Terra.Studio.GlobalEnums;
-using static Terra.Studio.RuntimeWrappers;
 
 namespace Terra.Studio
 {

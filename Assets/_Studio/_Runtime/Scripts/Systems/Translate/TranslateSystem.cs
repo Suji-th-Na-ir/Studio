@@ -2,8 +2,6 @@ using System;
 using UnityEngine;
 using Leopotam.EcsLite;
 using System.Collections.Generic;
-using static Terra.Studio.GlobalEnums;
-using static Terra.Studio.RuntimeWrappers;
 
 namespace Terra.Studio
 {
@@ -56,14 +54,14 @@ namespace Terra.Studio
         {
             if (translatable.canPlaySFX)
             {
-                PlaySFX(translatable.sfxName);
+                RuntimeWrappers.PlaySFX(translatable.sfxName);
             }
             if (translatable.canPlayVFX)
             {
-                PlayVFX(translatable.vfxName, translatable.refObj.transform.position);
+                RuntimeWrappers.PlayVFX(translatable.vfxName, translatable.refObj.transform.position);
             }
             var translateParams = GetParams(translatable);
-            TranslateObject(translateParams);
+            RuntimeWrappers.TranslateObject(translateParams);
         }
 
         private TranslateParams GetParams(TranslateComponent translatable)

@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using Newtonsoft.Json;
-using static Terra.Studio.GlobalEnums;
 
 namespace Terra.Studio
 {

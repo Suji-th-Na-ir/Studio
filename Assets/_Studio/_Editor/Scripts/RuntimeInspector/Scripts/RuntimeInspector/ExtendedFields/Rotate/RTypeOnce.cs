@@ -26,19 +26,19 @@ namespace RuntimeInspectorNamespace
         {
             // types 
             typeDropDown.options.Clear();
-            List<string> data = Enum.GetNames(typeof(GlobalEnums.RotationType)).ToList();
+            List<string> data = Enum.GetNames(typeof(RotationType)).ToList();
             UpdateDropDown(typeDropDown, data);
-            
+
             // axis 
             axisDropDown.options.Clear();
             data.Clear();
-            data = Enum.GetNames(typeof(GlobalEnums.Axis)).ToList();
+            data = Enum.GetNames(typeof(Axis)).ToList();
             UpdateDropDown(axisDropDown, data);
-            
+
             // direction
             dirDropDown.options.Clear();
             data.Clear();
-            data = Enum.GetNames(typeof(GlobalEnums.Direction)).ToList();
+            data = Enum.GetNames(typeof(Direction)).ToList();
             UpdateDropDown(dirDropDown, data);
 
             speedInput.text = "";

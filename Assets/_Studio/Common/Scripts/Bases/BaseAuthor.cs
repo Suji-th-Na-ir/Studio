@@ -1,7 +1,4 @@
 using System;
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -31,11 +28,8 @@ namespace Terra.Studio
         {
             get
             {
-                if (_instance == null)
-                {
-                    _instance = Activator.CreateInstance<T>();
-                }
-                return _instance as IAuthor;
+                _instance ??= Activator.CreateInstance<T>();
+                return _instance;
             }
         }
 

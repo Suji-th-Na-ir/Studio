@@ -2,8 +2,6 @@ using System;
 using UnityEngine;
 using Leopotam.EcsLite;
 using System.Collections.Generic;
-using static Terra.Studio.GlobalEnums;
-using static Terra.Studio.RuntimeWrappers;
 
 namespace Terra.Studio
 {
@@ -55,14 +53,14 @@ namespace Terra.Studio
         {
             if (rotatable.canPlaySFX)
             {
-                PlaySFX(rotatable.sfxName);
+                RuntimeWrappers.PlaySFX(rotatable.sfxName);
             }
             if (rotatable.canPlayVFX)
             {
-                PlayVFX(rotatable.vfxName, rotatable.refObj.transform.position);
+                RuntimeWrappers.PlayVFX(rotatable.vfxName, rotatable.refObj.transform.position);
             }
             var rotateParams = GetParams(rotatable);
-            RotateObject(rotateParams);
+            RuntimeWrappers.RotateObject(rotateParams);
         }
 
         private RotateByParams GetParams(RotateComponent rotatable)

@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using static Terra.Studio.GlobalEnums;
 
 namespace Terra.Studio
 {
@@ -90,35 +89,35 @@ namespace Terra.Studio
             var translate = translateParams.targetObj.AddComponent<TranslateHelper>();
             translate.Translate(translateParams);
         }
+    }
 
-        public struct RotateByParams
-        {
-            public float rotateBy;
-            public float rotationSpeed;
-            public int rotationTimes;
-            public bool shouldPingPong;
-            public bool shouldPause;
-            public float pauseForTime;
-            public GameObject targetObj;
-            public Action onRotated;
-            public Axis axis;
-            public Direction direction;
-            public BroadcastAt broadcastAt;
-        }
+    public struct RotateByParams
+    {
+        public float rotateBy;
+        public float rotationSpeed;
+        public int rotationTimes;
+        public bool shouldPingPong;
+        public bool shouldPause;
+        public float pauseForTime;
+        public GameObject targetObj;
+        public Action onRotated;
+        public Axis axis;
+        public Direction direction;
+        public BroadcastAt broadcastAt;
+    }
 
-        public struct TranslateParams
-        {
-            public Vector3 translateFrom;
-            public Vector3 translateTo;
-            public float speed;
-            public int translateTimes;
-            public bool shouldPingPong;
-            public bool shouldPause;
-            public float pauseForTime;
-            public float pauseDistance;
-            public GameObject targetObj;
-            public Action onTranslated;
-            public BroadcastAt broadcastAt;
-        }
+    public struct TranslateParams
+    {
+        public Vector3 translateFrom;
+        public Vector3 translateTo;
+        public float speed;
+        public int translateTimes;
+        public bool shouldPingPong;
+        public bool shouldPause;
+        public float pauseForTime;
+        public float pauseDistance;
+        public GameObject targetObj;
+        public Action onTranslated;
+        public BroadcastAt broadcastAt;
     }
 }
