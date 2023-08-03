@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
 using Terra.Studio.RTEditor;
+using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
 {
@@ -10,7 +13,6 @@ namespace RuntimeInspectorNamespace
     {
 #pragma warning disable 0649
         [SerializeField] public Dropdown rotateTypesDD;
-        
         public RTypeOnce rotateOnce;
         public RTypeForever rotateForever;
         public RTypeOscillate rotateOscillate;
@@ -18,12 +20,18 @@ namespace RuntimeInspectorNamespace
         public RTypeIncremental rotateIncremental;
         public RTypeIncrementalForever rotateIncrementalForever;
 #pragma warning restore 0649
-        
+
         public override void Initialize()
         {
             base.Initialize();
             rotateTypesDD.onValueChanged.AddListener(OnRotateTypesValueChanged);
-            rotateTypesDD.SetValueWithoutNotify(0);
+            rotateTypesDD.value = 0;
+            
+            rotateTypesDD.options.Clear();
+            List<string> data = Enum.GetNames(typeof(RotationType)).ToList();
+            Helper.UpdateDropDown(rotateTypesDD, data);
+            base.layoutElement.minHeight = 220f;
+            ShowRotateOptionsMenu(rotateTypesDD.value);
         }
         
 
@@ -36,8 +44,6 @@ namespace RuntimeInspectorNamespace
         {
             Atom.Rotate sfx = (Atom.Rotate)Value;
             ShowRotateOptionsMenu(_index);
-            // sfx.clipName = Helper.GetSfxClipNameByIndex(index);
-            // sfx.clipIndex = index;
         }
 
         private void HideAllRotateOptionsMenus()
@@ -74,21 +80,14 @@ namespace RuntimeInspectorNamespace
                     rotateIncrementalForever.gameObject.SetActive(true);
                     break;
                 default:
+                    rotateOnce.gameObject.SetActive(true);
                     break;
             }
-        }
-
-        private void OnToggleValueChanged( bool _input )
-        {
-            if(Inspector)  Inspector.RefreshDelayed();
-            Atom.Rotate sfx = (Atom.Rotate)Value;
-            // sfx.canPlay = _input;
         }
 
         protected override void OnSkinChanged()
         {
             base.OnSkinChanged();
-
             Vector2 rightSideAnchorMin = new Vector2( Skin.LabelWidthPercentage, 0f );
             variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
         }
@@ -101,12 +100,7 @@ namespace RuntimeInspectorNamespace
         
         private void LoadData()
         {
-            Atom.Rotate sfx = (Atom.Rotate)Value;
-            if (sfx != null)
-            {
-                // toggleInput.isOn = sfx.canPlay;
-                // optionsDropdown.value = sfx.clipIndex;
-            }
+            
         }
     }
 }

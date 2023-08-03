@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Reflection;
+using UnityEngine.UI;
 
 namespace PlayShifu.Terra
 {
@@ -424,6 +425,18 @@ namespace PlayShifu.Terra
             if (_index < names.Length) 
                 return names[_index];
             return null;
+        }
+        
+        public static void UpdateDropDown(Dropdown _ddown, List<string> _data)
+        {
+            foreach (var name in _data)
+            {
+                Dropdown.OptionData od = new Dropdown.OptionData()
+                {
+                    text = name
+                };
+                _ddown.options.Add(od);
+            }
         }
     }
 }

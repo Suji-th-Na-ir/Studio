@@ -5,17 +5,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Terra.Studio;
+using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
 {
     public class RTypeOnce : MonoBehaviour
     {
-        public Dropdown typeDropDown;
         public Dropdown axisDropDown;
         public Dropdown dirDropDown;
+        public TMP_InputField degreesInput;
         public TMP_InputField speedInput;
-        public TMP_InputField incrementInput;
-        public TMP_InputField pauseBetweenInput;
 
         private void Start()
         {
@@ -24,38 +23,21 @@ namespace RuntimeInspectorNamespace
 
         private void UpdateFields()
         {
-            // types 
-            typeDropDown.options.Clear();
-            List<string> data = Enum.GetNames(typeof(RotationType)).ToList();
-            UpdateDropDown(typeDropDown, data);
-
+            List<string> data = new List<string>();
+            
             // axis 
             axisDropDown.options.Clear();
             data.Clear();
             data = Enum.GetNames(typeof(Axis)).ToList();
-            UpdateDropDown(axisDropDown, data);
-
+            Helper.UpdateDropDown(axisDropDown, data);
+            
             // direction
             dirDropDown.options.Clear();
             data.Clear();
             data = Enum.GetNames(typeof(Direction)).ToList();
-            UpdateDropDown(dirDropDown, data);
+            Helper.UpdateDropDown(dirDropDown, data);
 
             speedInput.text = "";
-            incrementInput.text = "";
-            pauseBetweenInput.text = "";
-        }
-
-        private void UpdateDropDown(Dropdown _ddown, List<string> _data)
-        {
-            foreach (var name in _data)
-            {
-                Dropdown.OptionData od = new Dropdown.OptionData()
-                {
-                    text = name
-                };
-                _ddown.options.Add(od);
-            }
         }
     }
 }
