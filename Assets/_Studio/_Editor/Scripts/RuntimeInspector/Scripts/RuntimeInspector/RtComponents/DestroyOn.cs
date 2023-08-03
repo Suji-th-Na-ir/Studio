@@ -17,16 +17,8 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartEvent()
         {
-            if (Start == StartOn.OnPlayerCollide)
-                return "Terra.Studio.TriggerAction";
-
-            if (Start == StartOn.OnClick)
-                return "Terra.Studio.MouseAction";
-
-            if (Start == StartOn.BroadcastListen)
-                return "Terra.Studio.Listener";
-
-            return "";
+            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(Start);
+            return eventName;
         }
 
         public string GetStartCondition()
@@ -73,14 +65,10 @@ namespace RuntimeInspectorNamespace
         {
             DestroyOnComponent cc = JsonConvert.DeserializeObject<DestroyOnComponent>($"{cdata.data}");
 
-            if (cc.ConditionType == "Terra.Studio.TriggerAction")
-                Start = StartOn.OnPlayerCollide;
-            else if (cc.ConditionType == "Terra.Studio.MouseAction")
-                Start = StartOn.OnClick;
-            else if (cc.ConditionType == "Terra.Studio.Listener")
-                Start = StartOn.BroadcastListen;
-            else
-                Start = StartOn.None;
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOn), out object result))
+            {
+                Start = (StartOn)result;
+            }
 
             Broadcast = cc.Broadcast;
             BroadcastListen = cc.BroadcastListen;

@@ -1,3 +1,6 @@
 {
-  "Something": "OnPlayerCollide"
+  "Terra.Studio.GameStart": "GameStart",
+  "Terra.Studio.TriggerAction": "OnPlayerCollide",
+  "Terra.Studio.MouseAction": "OnClick",
+  "Terra.Studio.Listener": "BroadcastListen"
 }
