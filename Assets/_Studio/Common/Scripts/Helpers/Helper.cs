@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Reflection;
+using TMPro;
 using UnityEngine.UI;
 
 namespace PlayShifu.Terra
@@ -437,6 +438,20 @@ namespace PlayShifu.Terra
                 };
                 _ddown.options.Add(od);
             }
+        }
+
+        public static float StringToFloat(string _value)
+        {
+            float result = 0f;
+            Single.TryParse(_value, out result);
+            return result;
+        }
+
+        public static int StringInInt(string _val)
+        {
+            int result = 0;
+            int.TryParse(_val, out result);
+            return result;
         }
     }
 }

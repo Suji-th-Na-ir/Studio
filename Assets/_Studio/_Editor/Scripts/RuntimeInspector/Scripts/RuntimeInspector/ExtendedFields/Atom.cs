@@ -28,7 +28,7 @@ namespace Terra.Studio.RTEditor
         public class Rotate
         {
             [HideInInspector] public RotateField field;
-            [HideInInspector] public RotateComponentData data;
+            [HideInInspector] public RotateComponentData rData = new RotateComponentData();
         }
     }
 }
