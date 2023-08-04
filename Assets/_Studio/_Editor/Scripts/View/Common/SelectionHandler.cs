@@ -209,7 +209,7 @@ public class SelectionHandler : View
         if (_targetObject != null) _workGizmo.Gizmo.SetEnabled(true);
     }
 
-    private void OnTargetObjectChanged(GameObject newTargetObject)
+    public void OnTargetObjectChanged(GameObject newTargetObject)
     {
         // Store the new target object
         _targetObject = newTargetObject;

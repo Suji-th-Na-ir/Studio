@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using PlayShifu.Terra;
 
+
 namespace Terra.Studio
 {
     public class ToolbarView : View
@@ -10,6 +11,9 @@ namespace Terra.Studio
         private const string PLAY_BUTTON_LOC = "PlayButton";
         private const string SAVE_BUTTON_LOC = "SaveButton";
         private const string LOAD_BUTTON_LOC = "LoadButton";
+        private const string CYLINDER_PRIMITIVE_BUTTON_LOC = "cylinder_button";
+        private const string SPHERE_PRIMITIVE_BUTTON_LOC = "sphere_button";
+        private const string CUBE_PRIMITIVE_BUTTON_LOC = "cube_button";
 
         private void Awake()
         {
@@ -21,6 +25,9 @@ namespace Terra.Studio
             var playButtonTr = Helper.FindDeepChild(transform, PLAY_BUTTON_LOC, true);
             var saveButtonTr = Helper.FindDeepChild(transform, SAVE_BUTTON_LOC, true);
             var loadButtonTr = Helper.FindDeepChild(transform, LOAD_BUTTON_LOC, true);
+            var cylinderPrimitiveTr = Helper.FindDeepChild(transform, CYLINDER_PRIMITIVE_BUTTON_LOC, true);
+            var spherePrimitiveTr = Helper.FindDeepChild(transform, SPHERE_PRIMITIVE_BUTTON_LOC, true);
+            var cubePrimitiveTr = Helper.FindDeepChild(transform, CUBE_PRIMITIVE_BUTTON_LOC, true);
 
             var playButton = playButtonTr.GetComponent<Button>();
             AddListenerEvent(playButton, () =>
@@ -35,6 +42,22 @@ namespace Terra.Studio
 
             var loadButton = loadButtonTr.GetComponent<Button>();
             AddListenerEvent(loadButton, EditorOp.Resolve<EditorSystem>().RequestLoadScene);
+
+            var cylinderButton = cylinderPrimitiveTr.GetComponent<Button>();
+            AddListenerEvent(cylinderButton, EditorOp.Resolve<EditorSystem>().CreatePrimitive,PrimitiveType.Cylinder );
+
+            var sphereButton = spherePrimitiveTr.GetComponent<Button>();
+            AddListenerEvent(sphereButton, EditorOp.Resolve<EditorSystem>().CreatePrimitive, PrimitiveType.Sphere);
+
+            var cubeButton = cubePrimitiveTr.GetComponent<Button>();
+            AddListenerEvent(cubeButton, EditorOp.Resolve<EditorSystem>().CreatePrimitive, PrimitiveType.Cube);
+
+        }
+
+        private void AddListenerEvent<T>(Button button, Action<T> callback,T type)
+        {
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() => { callback?.Invoke(type); });
         }
 
         public override void Draw()
