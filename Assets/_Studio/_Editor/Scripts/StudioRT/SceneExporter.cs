@@ -147,20 +147,9 @@ namespace Terra.Studio
         {
             foreach (EntityBasedComponent comp in _entity.components)
             {
-                IComponent ic = null;
-                if (comp.type == "Terra.Studio.Collectable")
-                {
-                    ic = _gameObject.AddComponent<Collectible>();
-                    ic.Import(comp);
-                } else if (comp.type == "Terra.Studio.DestroyOn")
-                {
-                    ic = _gameObject.AddComponent<DestroyOn>();
-                    ic.Import(comp);
-                } else if (comp.type == "Terra.Studio.Oscillate")
-                {
-                    ic = _gameObject.AddComponent<Oscillate>();
-                    ic.Import(comp);
-                }
+                Type type = EditorOp.Resolve<DataProvider>().GetVariance(comp.type);
+                var component = _gameObject.AddComponent(type) as IComponent;
+                component.Import(comp);
             }
         }
 

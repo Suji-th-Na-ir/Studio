@@ -14,12 +14,12 @@ namespace RuntimeInspectorNamespace
 {
     public class RotateTypes : MonoBehaviour
     {
+        public RotationType myRotateType = RotationType.RotateOnce;
         public Dropdown axisDropDown;
         public Dropdown dirDropDown;
         
         public TMP_InputField degreesInput = null;
         public TMP_InputField speedInput = null;
-        public TMP_InputField incrementInput = null;
         public TMP_InputField pauseInput = null;
         public TMP_InputField repeatInput = null;
 
@@ -28,7 +28,7 @@ namespace RuntimeInspectorNamespace
 
         private void Start()
         {
-            UpdateFields();
+            LoadDefaultValues();
 
             if (axisDropDown != null) axisDropDown.onValueChanged.AddListener((value) => { rdata.axis = axisDropDown.options[value].text; rotateField.UpdateData(rdata);});
             if (dirDropDown != null) dirDropDown.onValueChanged.AddListener((value) => { rdata.direction = dirDropDown.options[value].text; rotateField.UpdateData(rdata);});
@@ -39,15 +39,14 @@ namespace RuntimeInspectorNamespace
                     rotateField.UpdateData(rdata);
                 });
             if (speedInput != null) speedInput.onValueChanged.AddListener((value) => { rdata.speed = Helper.StringToFloat(value); rotateField.UpdateData(rdata);});
-            if (incrementInput != null) incrementInput.onValueChanged.AddListener((value) => { rdata.increment = Helper.StringToFloat(value); rotateField.UpdateData(rdata);});
             if (pauseInput != null) pauseInput.onValueChanged.AddListener((value) => { rdata.pauseBetween = Helper.StringToFloat(value); rotateField.UpdateData(rdata);});
             if (repeatInput != null) repeatInput.onValueChanged.AddListener((value) => { rdata.repeat = Helper.StringInInt(value); rotateField.UpdateData(rdata);});
         }
 
-        private void UpdateFields()
+        private void LoadDefaultValues()
         {
+            Debug.Log("loading default values");
             List<string> data = new List<string>();
-            
             // axis 
             if (axisDropDown != null)
             {
@@ -66,11 +65,45 @@ namespace RuntimeInspectorNamespace
                 Helper.UpdateDropDown(dirDropDown, data);
             }
 
-            if(speedInput != null) speedInput.text = null;
-            if(degreesInput != null) degreesInput.text = null;
-            if(incrementInput != null) incrementInput.text = null;
-            if(pauseInput != null) pauseInput.text = null;
-            if(repeatInput != null) repeatInput.text = null;
+            switch (myRotateType)
+            {
+                case RotationType.RotateOnce:
+                    if (speedInput != null) speedInput.text = "0";
+                    if (degreesInput != null) degreesInput.text = "0";
+                    if (pauseInput != null) pauseInput.text = "0";
+                    if (repeatInput != null) repeatInput.text = "0";
+                    break;
+                case RotationType.RotateForever:
+                    if (speedInput != null) speedInput.text = "0";
+                    if (degreesInput != null) degreesInput.text = "0";
+                    if (pauseInput != null) pauseInput.text = "0";
+                    if (repeatInput != null) repeatInput.text = "0";
+                    break;
+                case RotationType.Oscillate :
+                    if (speedInput != null) speedInput.text = "0";
+                    if (degreesInput != null) degreesInput.text = "0";
+                    if (pauseInput != null) pauseInput.text = "0";
+                    if (repeatInput != null) repeatInput.text = "0";
+                    break;
+                case RotationType.OscillateForever:
+                    if (speedInput != null) speedInput.text = "0";
+                    if (degreesInput != null) degreesInput.text = "0";
+                    if (pauseInput != null) pauseInput.text = "0";
+                    if (repeatInput != null) repeatInput.text = "0";
+                    break;
+                case RotationType.IncrementallyRotate:
+                    if (speedInput != null) speedInput.text = "0";
+                    if (degreesInput != null) degreesInput.text = "0";
+                    if (pauseInput != null) pauseInput.text = "0";
+                    if (repeatInput != null) repeatInput.text = "0";
+                    break;
+                case RotationType.IncrementallyRotateForever:
+                    if (speedInput != null) speedInput.text = "0";
+                    if (degreesInput != null) degreesInput.text = "0";
+                    if (pauseInput != null) pauseInput.text = "0";
+                    if (repeatInput != null) repeatInput.text = "0";
+                    break;
+            }
         }
     }
 }

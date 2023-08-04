@@ -19,7 +19,7 @@ namespace Terra.Studio.RTEditor
         [InitializeOnLoadMethod]
         private static void Generate()
         {
-            if (!EditorPrefs.GetBool("HasSetCodeChecker", false))
+            if (EditorPrefs.GetBool("HasSetCodeChecker", false))
             {
                 return;
             }
@@ -29,6 +29,7 @@ namespace Terra.Studio.RTEditor
 
         private static void AfterAssemblyReload()
         {
+            Debug.Log("Generating assembly reload");
             CheckIfFolderExists();
             GetAllAuthors();
             GetAllEvents();
@@ -82,6 +83,7 @@ namespace Terra.Studio.RTEditor
 
         private static void GetAllDrawerComponents()
         {
+            Debug.Log("Getting the drawer components");
             var dict = new Dictionary<string, string>();
             var assembly = Assembly.GetAssembly(typeof(BaseAuthor));
             var derivedTypes = assembly.GetTypes()
@@ -94,6 +96,7 @@ namespace Terra.Studio.RTEditor
                 {
                     if (!dict.ContainsKey(editorDrawAttribute.ComponentTarget))
                     {
+                        Debug.Log($"Getting: {derivedType.FullName}");
                         dict.Add(editorDrawAttribute.ComponentTarget, derivedType.FullName);
                     }
                 }

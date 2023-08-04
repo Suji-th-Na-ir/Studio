@@ -1,5 +1,6 @@
 {
   "Terra.Studio.Collectable": "RuntimeInspectorNamespace.Collectible",
   "Terra.Studio.DestroyOn": "RuntimeInspectorNamespace.DestroyOn",
-  "Terra.Studio.Oscillate": "RuntimeInspectorNamespace.Oscillate"
+  "Terra.Studio.Oscillate": "RuntimeInspectorNamespace.Oscillate",
+  "Terra.Studio.Rotate": "RuntimeInspectorNamespace.Rotate"
 }
