@@ -35,7 +35,7 @@ namespace RuntimeInspectorNamespace
             List<string> data = Enum.GetNames(typeof(RotationType)).ToList();
             Helper.UpdateDropDown(rotateTypesDD, data);
 
-            base.layoutElement.minHeight = 220f;
+            base.layoutElement.minHeight = 281.8f;
             Setup();
 
             LoadData();
@@ -78,9 +78,7 @@ namespace RuntimeInspectorNamespace
         {
             HideAllRotateOptionsMenus();
             Atom.Rotate rt = (Atom.Rotate)Value;
-
-            Debug.Log("atom rotate " + rt);
-
+            
             switch (_index)
             {
                 case 0:

@@ -76,7 +76,7 @@ namespace Terra.Studio
                 pauseForTime = rotatable.pauseFor,
                 targetObj = rotatable.refObj,
                 broadcastAt = rotatable.broadcastAt,
-                shouldPingPong = rotatable.rotationType == RotationType.Oscillate || rotatable.rotationType == RotationType.OscillateForever,
+                shouldPingPong = rotatable.rotationType is RotationType.Oscillate or RotationType.OscillateForever,
                 onRotated = () =>
                 {
                     if (rotatable.IsBroadcastable)

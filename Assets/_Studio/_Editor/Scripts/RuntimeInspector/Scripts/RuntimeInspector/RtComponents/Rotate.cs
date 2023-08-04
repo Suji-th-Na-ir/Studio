@@ -5,19 +5,20 @@ using Terra.Studio.RTEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-
 namespace RuntimeInspectorNamespace
 {
     [Serializable]
     public class RotateComponentData
     {
         public RotationType rotateType;
-        public string axis = null;
-        public string direction = null;
+        public Axis axis;
+        public Direction direction;
         public float degrees = 0f;
         public float speed = 0f;
         public int repeat = 0;
         public float pauseBetween = 0f;
+        public string broadcast = "";
+        public BroadcastAt broadcastAt;
     }
     
     [EditorDrawComponent("Terra.Studio.Rotate")]
@@ -27,8 +28,6 @@ namespace RuntimeInspectorNamespace
         public Atom.Rotate Type = new Atom.Rotate();
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
-        public BroadcastAt BroadcastAt = BroadcastAt.End;
-        public string Broadcast = null;
         private RotateComponent rComp;
 
         public void Update()
@@ -40,9 +39,8 @@ namespace RuntimeInspectorNamespace
         {
             RotateComponent rc = new RotateComponent
             {
-                IsBroadcastable = true,
-                axis = GetAxis(Type.rData.axis),
-                direction = GetDirection(Type.rData.direction),
+                axis = Type.rData.axis,
+                direction = Type.rData.direction,
                 
                 rotationType = Type.rData.rotateType,
                 repeatType = GetRepeatType(Type.rData.repeat),
@@ -51,20 +49,21 @@ namespace RuntimeInspectorNamespace
                 pauseFor = Type.rData.pauseBetween,
                 repeatFor = Type.rData.repeat,
                 
+                IsBroadcastable = true,
+                broadcastAt = Type.rData.broadcastAt,
+                Broadcast = Type.rData.broadcast,
+                
                 canPlaySFX = PlaySFX.canPlay,
                 canPlayVFX = PlayVFX.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.clipName) ? null : PlaySFX.clipName,
-                vfxName = string.IsNullOrEmpty(PlayVFX.clipName) ? null : PlaySFX.clipName,
+                vfxName = string.IsNullOrEmpty(PlayVFX.clipName) ? null : PlayVFX.clipName,
                 sfxIndex = PlaySFX.clipIndex,
                 vfxIndex = PlayVFX.clipIndex,
-                IsConditionAvailable = false,
-                ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(Start),
-                ConditionData = "Start"
+                
+                IsConditionAvailable = true,
+                ConditionType = GetStartEvent(),
+                ConditionData = GetStartCondition()
             };
-
-            rc.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
-            rc.broadcastAt = BroadcastAt;
-            rc.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
 
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(rc, Formatting.Indented);
@@ -80,36 +79,31 @@ namespace RuntimeInspectorNamespace
             else return RepeatType.XTimes;
         }
 
-        private Axis GetAxis(string _value)
+        public string GetStartEvent()
         {
-            if (_value == Axis.X.ToString()) return Axis.X;
-            else if (_value == Axis.Y.ToString()) return Axis.Y;
-            else if (_value == Axis.Z.ToString()) return Axis.Z;
-            return Axis.X;
+            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(Start);
+            return eventName;
         }
 
-        private Direction GetDirection(string _value)
+        public string GetStartCondition()
         {
-            if (_value == Direction.Clockwise.ToString()) return Direction.Clockwise;
-            else if (_value == Direction.AntiClockwise.ToString()) return Direction.AntiClockwise;
-            return Direction.Clockwise;
-        }
+            if (Start == StartOn.OnPlayerCollide)
+                return "Player";
 
-        private StartOn GetStartCondition(string _value)
-        {
-            if (string.IsNullOrEmpty(_value)) return StartOn.None;
-            else if (_value == StartOn.GameStart.ToString()) return StartOn.GameStart;
-            else if (_value == StartOn.BroadcastListen.ToString()) return StartOn.BroadcastListen;
-            else if (_value == StartOn.OnClick.ToString()) return StartOn.OnClick;
-            else if (_value == StartOn.OnPlayerCollide.ToString()) return StartOn.OnPlayerCollide;
-            else return StartOn.None;
+            if (Start == StartOn.OnClick)
+                return "OnClick";
+
+            if (Start == StartOn.GameStart)
+                return "Start";
+
+            return "";
         }
 
         public void Import(EntityBasedComponent cdata)
         {
             RotateComponent cc = JsonConvert.DeserializeObject<RotateComponent>($"{cdata.data}");
-            BroadcastAt = cc.broadcastAt;
-            Broadcast = cc.Broadcast;
+            // BroadcastAt = cc.broadcastAt;
+            // Broadcast = cc.Broadcast;
             PlaySFX.canPlay = cc.canPlaySFX;
             PlaySFX.clipIndex = cc.sfxIndex;
             PlaySFX.clipName = cc.sfxName;
@@ -117,14 +111,14 @@ namespace RuntimeInspectorNamespace
             PlayVFX.clipIndex = cc.vfxIndex;
             PlayVFX.clipName = cc.vfxName;
 
-            Type.rData.axis = cc.axis.ToString();
-            Type.rData.direction = cc.direction.ToString();
+            Type.rData.axis = cc.axis;
+            Type.rData.direction = cc.direction;
             Type.rData.rotateType = cc.rotationType;
             Type.rData.speed = cc.speed;
             Type.rData.degrees = cc.rotateBy;
             Type.rData.pauseBetween = cc.pauseFor;
             Type.rData.repeat = cc.repeatFor;
-            Start = GetStartCondition(cc.ConditionType);
+            // Start = cc.ConditionType
         }
     }
 }

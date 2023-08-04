@@ -63,10 +63,15 @@ namespace RuntimeInspectorNamespace
 
         void ShowHideOptionsDropdown()
         {
-            if(toggleInput.isOn)
+            if (toggleInput.isOn)
+            {
                 optionsDropdown.gameObject.SetActive(true);
-            else 
+                optionsDropdown.value = 0;
+            }
+            else
+            {
                 optionsDropdown.gameObject.SetActive(false);
+            }
         }
 
         protected override void OnSkinChanged()
