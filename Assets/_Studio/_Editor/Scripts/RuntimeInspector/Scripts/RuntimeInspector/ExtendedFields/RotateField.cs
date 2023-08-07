@@ -28,17 +28,8 @@ namespace RuntimeInspectorNamespace
         public override void Initialize()
         {
             base.Initialize();
-            rotateTypesDD.onValueChanged.AddListener(OnRotateTypesValueChanged);
-            rotateTypesDD.value = 0;
-
-            rotateTypesDD.options.Clear();
-            List<string> data = Enum.GetNames(typeof(RotationType)).ToList();
-            Helper.UpdateDropDown(rotateTypesDD, data);
-
             base.layoutElement.minHeight = 281.8f;
             Setup();
-
-            LoadData();
         }
 
         private void Setup()
@@ -49,6 +40,16 @@ namespace RuntimeInspectorNamespace
             rotateOscillateForever.rotateField = this;
             rotateIncremental.rotateField = this;
             rotateIncrementalForever.rotateField = this;
+            
+            rotateOnce.Setup();
+            rotateForever.Setup();
+            rotateOscillate.Setup();
+            rotateOscillateForever.Setup();
+            rotateIncremental.Setup();
+            rotateIncrementalForever.Setup();
+            
+            List<string> data = Enum.GetNames(typeof(RotationType)).ToList();
+            rotateTypesDD.AddOptions(data);
         }
 
         public override bool SupportsType(Type type)
@@ -69,52 +70,38 @@ namespace RuntimeInspectorNamespace
             rotateOscillateForever.gameObject.SetActive(false);
             rotateIncremental.gameObject.SetActive(false);
             rotateIncrementalForever.gameObject.SetActive(false);
-
-            Atom.Rotate rt = (Atom.Rotate)Value;
-            rt.rData = new RotateComponentData();
         }
 
         private void ShowRotateOptionsMenu(int _index)
         {
             HideAllRotateOptionsMenus();
             Atom.Rotate rt = (Atom.Rotate)Value;
-            
+            rt.rData.rotateType = _index;
             switch (_index)
             {
                 case 0:
                     rotateOnce.gameObject.SetActive(true);
                     selectedRotateType = rotateOnce;
-                    rt.rData.rotateType = RotationType.RotateOnce;
                     break;
                 case 1:
                     rotateForever.gameObject.SetActive(true);
                     selectedRotateType = rotateForever;
-                    rt.rData.rotateType = RotationType.RotateForever;
                     break;
                 case 2:
                     rotateOscillate.gameObject.SetActive(true);
                     selectedRotateType = rotateOscillate;
-                    rt.rData.rotateType = RotationType.Oscillate;
                     break;
                 case 3:
                     rotateOscillateForever.gameObject.SetActive(true);
                     selectedRotateType = rotateOscillateForever;
-                    rt.rData.rotateType = RotationType.OscillateForever;
                     break;
                 case 4:
                     rotateIncremental.gameObject.SetActive(true);
                     selectedRotateType = rotateIncremental;
-                    rt.rData.rotateType = RotationType.IncrementallyRotate;
                     break;
                 case 5:
                     rotateIncrementalForever.gameObject.SetActive(true);
                     selectedRotateType = rotateIncrementalForever;
-                    rt.rData.rotateType = RotationType.IncrementallyRotateForever;
-                    break;
-                default:
-                    rotateOnce.gameObject.SetActive(true);
-                    selectedRotateType = rotateOnce;
-                    rt.rData.rotateType = RotationType.RotateOnce;
                     break;
             }
         }
@@ -126,45 +113,23 @@ namespace RuntimeInspectorNamespace
             variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
         }
 
-        public override void Refresh()
-        {
-            base.Refresh();
-        }
-
-        private void LoadData()
-        {
-            if (selectedRotateType == null) selectedRotateType = rotateOnce;
-            Atom.Rotate rt = (Atom.Rotate)Value;
-            if (rt != null && rt.rData != null)
-            {
-                rotateTypesDD.SetValueWithoutNotify((int)Enum.Parse(typeof(RotationType), rt.rData.rotateType.ToString()));
-                if(selectedRotateType.axisDropDown != null) 
-                    selectedRotateType.axisDropDown.SetValueWithoutNotify((int)Enum.Parse(typeof(Axis), rt.rData.axis.ToString()));
-                
-                if(selectedRotateType.dirDropDown != null)
-                    selectedRotateType.dirDropDown.SetValueWithoutNotify((int)Enum.Parse(typeof(Direction), rt.rData.direction.ToString()));
-
-                if (selectedRotateType.degreesInput != null)
-                    selectedRotateType.degreesInput.text = rt.rData.degrees.ToString();
-                
-                if( selectedRotateType.speedInput != null)
-                    selectedRotateType.speedInput.text = rt.rData.speed.ToString();
-
-                if( selectedRotateType.pauseInput != null)
-                    selectedRotateType.pauseInput.text = rt.rData.pauseBetween.ToString();
-                
-                if( selectedRotateType.repeatInput != null)
-                    selectedRotateType.repeatInput.text = rt.rData.repeat.ToString();
-                Debug.Log("roortae");
-            }
-        }
-
-        
-
         public void UpdateData(RotateComponentData _rData)
         {
             Atom.Rotate rt = (Atom.Rotate)Value;
+            // rotate type should come from rotatefield
+            _rData.rotateType = rt.rData.rotateType;
             rt.rData = _rData;
+        }
+
+        protected override void OnBound(MemberInfo variable)
+        {
+            base.OnBound(variable);
+            Atom.Rotate rt = (Atom.Rotate)Value;
+            rotateTypesDD.onValueChanged.AddListener(OnRotateTypesValueChanged);
+            int rotationTypeIndex = (((int)Enum.Parse(typeof(RotationType), rt.rData.rotateType.ToString())));
+            rotateTypesDD.value = rotationTypeIndex;
+            ShowRotateOptionsMenu(rotationTypeIndex);
+            selectedRotateType.SetData(rt.rData);
         }
     }
 }

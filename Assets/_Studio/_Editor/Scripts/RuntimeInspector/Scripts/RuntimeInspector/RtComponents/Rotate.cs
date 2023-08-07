@@ -10,7 +10,7 @@ namespace RuntimeInspectorNamespace
     [Serializable]
     public class RotateComponentData
     {
-        public RotationType rotateType;
+        public int rotateType;
         public Axis axis;
         public Direction direction;
         public float degrees = 0f;
@@ -41,8 +41,7 @@ namespace RuntimeInspectorNamespace
             {
                 axis = Type.rData.axis,
                 direction = Type.rData.direction,
-                
-                rotationType = Type.rData.rotateType,
+                rotationType = (RotationType)Type.rData.rotateType,
                 repeatType = GetRepeatType(Type.rData.repeat),
                 speed = Type.rData.speed,
                 rotateBy = Type.rData.degrees,
@@ -67,11 +66,9 @@ namespace RuntimeInspectorNamespace
 
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(rc, Formatting.Indented);
-            
-            Debug.Log(data);
-            
             return (type, data);
         }
+        
 
         private RepeatType GetRepeatType(float _value)
         {
@@ -99,11 +96,17 @@ namespace RuntimeInspectorNamespace
             return "";
         }
 
+        private StartOn GetStartCondition(string _name)
+        {
+            if (_name == StartOn.GameStart.ToString()) return StartOn.GameStart;
+            else if (_name == StartOn.OnPlayerCollide.ToString()) return StartOn.OnPlayerCollide;
+            else if (_name == StartOn.OnClick.ToString()) return StartOn.OnClick;
+            return StartOn.GameStart;
+        }
+
         public void Import(EntityBasedComponent cdata)
         {
             RotateComponent cc = JsonConvert.DeserializeObject<RotateComponent>($"{cdata.data}");
-            // BroadcastAt = cc.broadcastAt;
-            // Broadcast = cc.Broadcast;
             PlaySFX.canPlay = cc.canPlaySFX;
             PlaySFX.clipIndex = cc.sfxIndex;
             PlaySFX.clipName = cc.sfxName;
@@ -113,12 +116,15 @@ namespace RuntimeInspectorNamespace
 
             Type.rData.axis = cc.axis;
             Type.rData.direction = cc.direction;
-            Type.rData.rotateType = cc.rotationType;
+            Type.rData.rotateType = (int)cc.rotationType;
             Type.rData.speed = cc.speed;
             Type.rData.degrees = cc.rotateBy;
             Type.rData.pauseBetween = cc.pauseFor;
             Type.rData.repeat = cc.repeatFor;
-            // Start = cc.ConditionType
+            Type.rData.broadcast = cc.Broadcast;
+            Type.rData.broadcastAt = cc.broadcastAt;
+            
+            Start = GetStartCondition(cc.ConditionType);
         }
     }
 }

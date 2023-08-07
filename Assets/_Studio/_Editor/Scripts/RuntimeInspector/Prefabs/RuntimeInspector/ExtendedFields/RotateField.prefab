@@ -348,7 +348,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 303.2332, y: -2}
+  m_AnchoredPosition: {x: 303.2332, y: 133.66666}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8344144795263197983
@@ -407,10 +407,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebc707b0389a415d860bed529fd7697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myRotateType: 0
   axisDropDown: {fileID: 4500175345541353927}
   dirDropDown: {fileID: 3411695741933287708}
-  degreesInput: {fileID: 0}
+  degreesInput: {fileID: 3652080800824238299}
   speedInput: {fileID: 1559723317030117158}
   pauseInput: {fileID: 6146670018437432925}
   repeatInput: {fileID: 9029918299237493247}
@@ -1202,15 +1201,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebc707b0389a415d860bed529fd7697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myRotateType: 0
   axisDropDown: {fileID: 1338505699128851523}
   dirDropDown: {fileID: 6380941138884671800}
   degreesInput: {fileID: 7380692707156069194}
   speedInput: {fileID: 558573795056917971}
   pauseInput: {fileID: 0}
-  repeatInput: {fileID: 5974809479141679647}
+  repeatInput: {fileID: 0}
   broadcastAt: {fileID: 0}
-  broadcastInput: {fileID: 0}
+  broadcastInput: {fileID: 5974809479141679647}
   rotateField: {fileID: 0}
 --- !u!1 &283548989951883932
 GameObject:
@@ -6037,14 +6035,14 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 4
+  m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 1
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
   m_CharacterLimit: 0
@@ -8397,7 +8395,7 @@ GameObject:
   - component: {fileID: 3652080800824238299}
   - component: {fileID: 7782871251427764092}
   m_Layer: 5
-  m_Name: increment_input
+  m_Name: degrees_input
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8949,7 +8947,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Increment
+  m_Text: Degrees
 --- !u!114 &9027628507889818783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15440,14 +15438,14 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 4
+  m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 1
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
   m_CharacterLimit: 0
@@ -16358,14 +16356,14 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 4
+  m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 1
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
   m_CharacterLimit: 0
@@ -18030,7 +18028,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebc707b0389a415d860bed529fd7697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myRotateType: 0
   axisDropDown: {fileID: 4517920230895316569}
   dirDropDown: {fileID: 0}
   degreesInput: {fileID: 1973065920572187551}
@@ -18900,7 +18897,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebc707b0389a415d860bed529fd7697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myRotateType: 0
   axisDropDown: {fileID: 7782939556095958961}
   dirDropDown: {fileID: 0}
   degreesInput: {fileID: 6049608683303234755}
@@ -19255,7 +19251,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebc707b0389a415d860bed529fd7697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myRotateType: 0
   axisDropDown: {fileID: 523307788535533290}
   dirDropDown: {fileID: 8445632752320678756}
   degreesInput: {fileID: 0}
@@ -27634,14 +27629,14 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 4
+  m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 1
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
   m_CharacterLimit: 0
@@ -28578,14 +28573,14 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 4
+  m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 1
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
   m_CharacterLimit: 0
@@ -29335,14 +29330,14 @@ MonoBehaviour:
   m_VerticalScrollbarEventHandler: {fileID: 0}
   m_LayoutGroup: {fileID: 0}
   m_ScrollSensitivity: 1
-  m_ContentType: 4
+  m_ContentType: 0
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 1
+  m_KeyboardType: 0
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
-  m_CharacterValidation: 4
+  m_CharacterValidation: 0
   m_RegexValue: 
   m_GlobalPointSize: 14
   m_CharacterLimit: 0
@@ -29981,7 +29976,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebc707b0389a415d860bed529fd7697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myRotateType: 0
   axisDropDown: {fileID: 1856773057552729079}
   dirDropDown: {fileID: 7880092709145533144}
   degreesInput: {fileID: 0}

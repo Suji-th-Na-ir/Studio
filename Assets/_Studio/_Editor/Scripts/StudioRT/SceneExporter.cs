@@ -89,12 +89,12 @@ namespace Terra.Studio
 
         private void LoadScene()
         {
-#if UNITY_EDITOR
-            if (!SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
-            {
-                return;  
-            }
-#endif
+// #if UNITY_EDITOR
+//             if (!SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
+//             {
+//                 return;  
+//             }
+// #endif
             string filePath = Application.persistentDataPath + "/scene_data.json";
             if (File.Exists(filePath))
             {

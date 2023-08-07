@@ -103,10 +103,6 @@ public class SelectionHandler : View
 
     private void SetGizmo()
     {
-        // ignore if user is working on inspector or hierarchy 
-        if (runtimeHierarchy.isActiveAndEnabled || runtimeInspector.isActiveAndEnabled)
-            return;
-        
         if (RTInput.WasKeyPressedThisFrame(KeyCode.W))
         {
             _workGizmoId = GizmoId.Move;

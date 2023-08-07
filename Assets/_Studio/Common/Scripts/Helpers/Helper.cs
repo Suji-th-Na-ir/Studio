@@ -428,17 +428,17 @@ namespace PlayShifu.Terra
             return null;
         }
         
-        public static void UpdateDropDown(Dropdown _ddown, List<string> _data)
-        {
-            foreach (var name in _data)
-            {
-                Dropdown.OptionData od = new Dropdown.OptionData()
-                {
-                    text = name
-                };
-                _ddown.options.Add(od);
-            }
-        }
+        // public static void UpdateDropDown(Dropdown _ddown, List<string> _data)
+        // {
+        //     for (int i =0; i<_data.Count;i++)
+        //     {
+        //         Dropdown.OptionData od = new Dropdown.OptionData()
+        //         {
+        //             text = _data[i]
+        //         };
+        //         _ddown.options[i] = od;
+        //     }
+        // }
 
         public static float StringToFloat(string _value)
         {
