@@ -9,7 +9,17 @@ namespace RuntimeInspectorNamespace
     [EditorDrawComponent("Terra.Studio.DestroyOn")]
     public class DestroyOn : MonoBehaviour, IComponent
     {
-        public StartOn Start = StartOn.None;
+        public enum DestroyOnEnum
+        {
+            [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
+            OnPlayerCollide,
+            [EditorEnumField("Terra.Studio.MouseAction", "OnClick")]
+            OnClick,
+            [EditorEnumField("Terra.Studio.Listener")]
+            BroadcastListen
+
+        }
+        public DestroyOnEnum Start = DestroyOnEnum.OnPlayerCollide;
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
         public string Broadcast = null;
@@ -23,13 +33,13 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartCondition()
         {
-            if (Start == StartOn.OnPlayerCollide)
+            if (Start == DestroyOnEnum.OnPlayerCollide)
                 return "Player";
 
-            if (Start == StartOn.OnClick)
+            if (Start == DestroyOnEnum.OnClick)
                 return "OnClick";
 
-            if (Start == StartOn.BroadcastListen)
+            if (Start == DestroyOnEnum.BroadcastListen)
                 return BroadcastListen.ToString();
 
             return "";
@@ -65,9 +75,9 @@ namespace RuntimeInspectorNamespace
         {
             DestroyOnComponent cc = JsonConvert.DeserializeObject<DestroyOnComponent>($"{cdata.data}");
 
-            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOn), out object result))
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(DestroyOnEnum), out object result))
             {
-                Start = (StartOn)result;
+                Start = (DestroyOnEnum)result;
             }
 
             Broadcast = cc.Broadcast;
