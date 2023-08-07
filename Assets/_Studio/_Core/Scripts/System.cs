@@ -12,6 +12,8 @@ namespace Terra.Studio
         private Scene currentActiveScene;
         private LoadSceneParameters sceneLoadParameters;
 
+        public SystemConfigurationSO ConfigSO { get { return configData; } }
+
         private void Awake()
         {
             SystemOp.Register(this);

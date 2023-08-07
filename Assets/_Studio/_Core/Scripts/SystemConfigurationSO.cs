@@ -8,6 +8,11 @@ namespace Terra.Studio
         [SerializeField] private StudioState defaultStudioState;
         [SerializeField] private string editorSceneName;
         [SerializeField] private string runtimeSceneName;
+#if UNITY_EDITOR
+        [Space(10), Header("Editor only")]
+        [SerializeField] private bool pickupSavedData;
+        public bool PickupSavedData { get { return pickupSavedData; } }
+#endif
 
         public StudioState DefaultStudioState { get { return defaultStudioState; } }
         public string EditorSceneName { get { return editorSceneName; } }
