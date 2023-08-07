@@ -8,8 +8,7 @@ namespace Terra.Studio
     }
 
     public enum StartOn
-    {
-        None,
+    { 
         [EditorEnumField("Terra.Studio.GameStart", "Start")]
         GameStart,
         [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
