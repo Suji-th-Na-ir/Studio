@@ -58,6 +58,10 @@ namespace RuntimeInspectorNamespace
             if(Inspector)  Inspector.RefreshDelayed();
             Atom.PlaySfx sfx = (Atom.PlaySfx)Value;
             sfx.canPlay = _input;
+            if (sfx.canPlay)
+            {
+                OnDropdownValueChanged(sfx.clipIndex);
+            }
             ShowHideOptionsDropdown();
         }
 

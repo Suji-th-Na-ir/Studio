@@ -22,13 +22,5 @@
   "RuntimeInspectorNamespace.Collectible+StartOnCollectible.OnClick": [
     "Terra.Studio.MouseAction",
     "OnClick"
-  ],
-  "RuntimeInspectorNamespace.Collectible+SFXPlay.OnPlayerCollided": [
-    "Terra.Studio.TriggerAction",
-    "Player"
-  ],
-  "RuntimeInspectorNamespace.Collectible+SFXPlay.OnNPCCollided": [
-    "Terra.Studio.TriggerAction",
-    "NPC"
   ]
 }

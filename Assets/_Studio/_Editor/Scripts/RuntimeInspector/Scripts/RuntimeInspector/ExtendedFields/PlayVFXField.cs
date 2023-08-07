@@ -60,6 +60,10 @@ namespace RuntimeInspectorNamespace
             Atom.PlayVfx vfx = (Atom.PlayVfx)Value;
             vfx.canPlay = input;
             
+            if (vfx.canPlay)
+            {
+                OnDropdownValueChanged(vfx.clipIndex);
+            }
             ShowHideOptionsDropdown();
         }
         
