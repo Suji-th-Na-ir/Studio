@@ -16,19 +16,6 @@ namespace RuntimeInspectorNamespace
             [EditorEnumField("Terra.Studio.MouseAction", "OnClick")]
             OnClick
         }
-        //Terra.Studio.TriggerAction: OnPlayerCollide (StartOnCollectible.OnPlayerCollide) ("Untagged")
-        //Terra.Studio.TriggerAction: OnCollider (StartOn.OnCollider) ("Player")
-        //Terra.Studio.TriggerAction:
-        //StartOnCollectible.OnPlayerCollider, ("Terra.Studio.TriggerAction", "Player") { type, params string[] }
-
-
-        public enum SFXPlay
-        {
-            [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
-            OnPlayerCollided,
-            [EditorEnumField("Terra.Studio.TriggerAction", "NPC")]
-            OnNPCCollided
-        }
 
         public StartOnCollectible Start = StartOnCollectible.OnPlayerCollide;
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
