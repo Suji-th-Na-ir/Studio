@@ -89,6 +89,11 @@ namespace Terra.Studio
             var translate = translateParams.targetObj.AddComponent<TranslateHelper>();
             translate.Translate(translateParams);
         }
+
+        public static void RespawnPlayer(Vector3 position)
+        {
+            RuntimeOp.Resolve<GameData>().PlayerRef.position = position;
+        }
     }
 
     public struct RotateByParams

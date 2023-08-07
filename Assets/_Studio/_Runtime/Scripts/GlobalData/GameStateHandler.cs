@@ -8,6 +8,7 @@ namespace Terra.Studio
         private State currentGameState = State.PreGame;
 
         private event Action<object> OnGameStarted;
+        private event Action<object> OnGameEnded;
 
         public void SwitchToNextState()
         {
@@ -15,7 +16,7 @@ namespace Terra.Studio
             var nextIndex = ++index;
             if (nextIndex == Enum.GetNames(typeof(State)).Length - 1)
             {
-                //End of game
+                OnGameEnded?.Invoke(null);
                 return;
             }
             var nextState = (State)index;

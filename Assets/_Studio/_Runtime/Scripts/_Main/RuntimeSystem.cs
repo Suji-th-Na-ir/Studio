@@ -26,11 +26,18 @@ namespace Terra.Studio
 
         public void Initialize()
         {
+            ResolveEssentials();
+            InitializeEcs();
+            RuntimeOp.Resolve<GameStateHandler>().SwitchToNextState();
+        }
+
+        private void ResolveEssentials()
+        {
             RuntimeOp.Register(new Broadcaster());
             RuntimeOp.Register(new ComponentsData());
             RuntimeOp.Register(new GameStateHandler());
-            InitializeEcs();
-            RuntimeOp.Resolve<GameStateHandler>().SwitchToNextState();
+            RuntimeOp.Register(new GameData());
+            RuntimeOp.Resolve<GameData>().PlayerRef = GameObject.FindGameObjectWithTag("Player").transform;
         }
 
         private void InitializeEcs()
@@ -149,6 +156,7 @@ namespace Terra.Studio
             RuntimeOp.Unregister<Broadcaster>();
             RuntimeOp.Unregister<ComponentsData>();
             RuntimeOp.Unregister<GameStateHandler>();
+            RuntimeOp.Unregister<GameData>();
             SystemOp.Unregister(this as ISubsystem);
             RuntimeOp.Unregister(this);
         }

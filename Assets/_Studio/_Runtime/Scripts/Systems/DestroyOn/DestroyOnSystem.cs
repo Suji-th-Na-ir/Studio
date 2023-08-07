@@ -11,7 +11,6 @@ namespace Terra.Studio
 
         public void Init(EcsWorld currentWorld, int entity)
         {
-            var filter = currentWorld.Filter<DestroyOnComponent>().End();
             var pool = currentWorld.GetPool<DestroyOnComponent>();
             ref var destroyable = ref pool.Get(entity);
             if (destroyable.isRegistered)

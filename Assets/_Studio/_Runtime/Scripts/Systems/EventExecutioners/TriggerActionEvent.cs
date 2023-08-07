@@ -22,13 +22,13 @@ namespace Terra.Studio
                 triggerAction.TagAgainst = tagCheck;
                 triggerAction.OnTriggered = () =>
                 {
-                    triggerAction.OnTriggered = null;
                     onConditionalCheck?.Invoke(null);
                 };
             }
-            else if (go.TryGetComponent(out OnTriggerAction triggerAction1))
+            else if (go.TryGetComponent(out OnTriggerAction triggerAction))
             {
-                UnityEngine.Object.Destroy(triggerAction1);
+                triggerAction.OnTriggered = null;
+                UnityEngine.Object.Destroy(triggerAction);
             }
         }
     }
