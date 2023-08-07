@@ -100,7 +100,6 @@ namespace Terra.Studio.RTEditor
                 {
                     if (!dict.ContainsKey(editorDrawAttribute.ComponentTarget))
                     {
-                        Debug.Log($"Getting: {derivedType.FullName}");
                         dict.Add(editorDrawAttribute.ComponentTarget, derivedType.FullName);
                     }
                 }
@@ -149,10 +148,7 @@ namespace Terra.Studio.RTEditor
 
         private static void CreateFile(string filePath, Dictionary<string, string> data = null)
         {
-            if (data == null)
-            {
-                data = new();
-            }
+            data ??= new();
             File.WriteAllText(filePath, JsonConvert.SerializeObject(data, Formatting.Indented));
         }
     }
