@@ -44,13 +44,13 @@ namespace Terra.Studio
             AddListenerEvent(loadButton, EditorOp.Resolve<EditorSystem>().RequestLoadScene);
 
             var cylinderButton = cylinderPrimitiveTr.GetComponent<Button>();
-            AddListenerEvent(cylinderButton, EditorOp.Resolve<EditorSystem>().CreatePrimitive,PrimitiveType.Cylinder );
+            AddListenerEvent(cylinderButton, CreatePrimitive,PrimitiveType.Cylinder );
 
             var sphereButton = spherePrimitiveTr.GetComponent<Button>();
-            AddListenerEvent(sphereButton, EditorOp.Resolve<EditorSystem>().CreatePrimitive, PrimitiveType.Sphere);
+            AddListenerEvent(sphereButton, CreatePrimitive, PrimitiveType.Sphere);
 
             var cubeButton = cubePrimitiveTr.GetComponent<Button>();
-            AddListenerEvent(cubeButton, EditorOp.Resolve<EditorSystem>().CreatePrimitive, PrimitiveType.Cube);
+            AddListenerEvent(cubeButton, CreatePrimitive, PrimitiveType.Cube);
 
         }
 
@@ -60,6 +60,18 @@ namespace Terra.Studio
             button.onClick.AddListener(() => { callback?.Invoke(type); });
         }
 
+        public void CreatePrimitive(PrimitiveType type)
+        {
+            Transform cameraTransform = Camera.main.transform;
+            Vector3 cameraPosition = cameraTransform.position;
+
+            // Calculate the spawn position by adding the forward direction scaled by spawnDistance
+            Vector3 spawnPosition = cameraPosition + cameraTransform.forward * 5;
+            var primitive = GameObject.CreatePrimitive(type);
+            primitive.transform.position = spawnPosition;
+            EditorOp.Resolve<SelectionHandler>().OnTargetObjectChanged(primitive);
+            EditorOp.Resolve<SelectionHandler>().SelectObjectInHierarchy(primitive);
+        }
         public override void Draw()
         {
             //Nothing to draw
