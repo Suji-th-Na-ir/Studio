@@ -5,8 +5,7 @@ using UnityEngine;
 
 namespace RuntimeInspectorNamespace
 {
-    namespace Terra.Studio
-    {
+    
         public class Kill : MonoBehaviour, IComponent
         {
             public (string type, string data) Export()
@@ -21,5 +20,5 @@ namespace RuntimeInspectorNamespace
 
            
         }
-    }
+    
 }
