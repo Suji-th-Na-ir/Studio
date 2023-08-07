@@ -1,6 +1,34 @@
 {
-  "Terra.Studio.GameStart": "GameStart",
-  "Terra.Studio.TriggerAction": "OnPlayerCollide",
-  "Terra.Studio.MouseAction": "OnClick",
-  "Terra.Studio.Listener": "BroadcastListen"
+  "Terra.Studio.StartOn.GameStart": [
+    "Terra.Studio.GameStart",
+    "Start"
+  ],
+  "Terra.Studio.StartOn.OnPlayerCollide": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "Terra.Studio.StartOn.OnClick": [
+    "Terra.Studio.MouseAction",
+    "OnClick"
+  ],
+  "Terra.Studio.StartOn.BroadcastListen": [
+    "Terra.Studio.Listener",
+    null
+  ],
+  "RuntimeInspectorNamespace.Collectible+StartOnCollectible.OnPlayerCollide": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "RuntimeInspectorNamespace.Collectible+StartOnCollectible.OnClick": [
+    "Terra.Studio.MouseAction",
+    "OnClick"
+  ],
+  "RuntimeInspectorNamespace.Collectible+SFXPlay.OnPlayerCollided": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "RuntimeInspectorNamespace.Collectible+SFXPlay.OnNPCCollided": [
+    "Terra.Studio.TriggerAction",
+    "NPC"
+  ]
 }

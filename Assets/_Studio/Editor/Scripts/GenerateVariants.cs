@@ -6,6 +6,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using System.Reflection;
 using System.Collections.Generic;
+using RuntimeInspectorNamespace;
 
 namespace Terra.Studio.RTEditor
 {
@@ -19,18 +20,7 @@ namespace Terra.Studio.RTEditor
         [InitializeOnLoadMethod]
         private static void Generate()
         {
-            if (SessionState.GetBool("HasSetCodeChecker", false))
-            {
-                return;
-            }
-            Application.quitting += OnAppQuitting;
-            AssemblyReloadEvents.afterAssemblyReload += AfterAssemblyReload;
-            SessionState.SetBool("HasSetCodeChecker", true);
-        }
-
-        private static void OnAppQuitting()
-        {
-            AssemblyReloadEvents.afterAssemblyReload -= AfterAssemblyReload;
+            AfterAssemblyReload();
         }
 
         private static void AfterAssemblyReload()
@@ -109,7 +99,8 @@ namespace Terra.Studio.RTEditor
 
         private static void GetAllEnumFieldComponents()
         {
-            var dict = new Dictionary<string, string>();
+           
+            var dict = new Dictionary<string, string[]>();
             var assembly = Assembly.GetAssembly(typeof(BaseAuthor));
             foreach (var type in assembly.GetTypes())
             {
@@ -119,13 +110,15 @@ namespace Terra.Studio.RTEditor
                     foreach (var enumValue in enumValues)
                     {
                         var name = enumValue.ToString();
+                        var enumType = enumValue.GetType();
                         var fieldInfo = type.GetField(name);
                         var attribute = fieldInfo.GetCustomAttribute<EditorEnumFieldAttribute>();
                         if (attribute != null)
-                        {
+                        { 
                             if (!dict.ContainsKey(attribute.ComponentTarget))
                             {
-                                dict.Add(attribute.ComponentTarget, enumValue.ToString());
+                                
+                                dict.Add(enumType + "." + name, new string[]{ attribute.ComponentTarget,attribute.ComponentData});
                             }
                         }
                     }
@@ -146,7 +139,13 @@ namespace Terra.Studio.RTEditor
             }
         }
 
-        private static void CreateFile(string filePath, Dictionary<string, string> data = null)
+        private static void CreateFile(string filePath, Dictionary<string, string> data)
+        {
+            data ??= new();
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(data, Formatting.Indented));
+        }
+
+        private static void CreateFile(string filePath, Dictionary<string, string[]> data)
         {
             data ??= new();
             File.WriteAllText(filePath, JsonConvert.SerializeObject(data, Formatting.Indented));

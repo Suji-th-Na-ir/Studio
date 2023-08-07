@@ -9,7 +9,28 @@ namespace RuntimeInspectorNamespace
     [EditorDrawComponent("Terra.Studio.Collectable")]
     public class Collectible : MonoBehaviour, IComponent
     {
-        public StartOn Start = StartOn.OnPlayerCollide;
+        public enum StartOnCollectible
+        {     
+            [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
+            OnPlayerCollide,
+            [EditorEnumField("Terra.Studio.MouseAction", "OnClick")]
+            OnClick
+        }
+        //Terra.Studio.TriggerAction: OnPlayerCollide (StartOnCollectible.OnPlayerCollide) ("Untagged")
+        //Terra.Studio.TriggerAction: OnCollider (StartOn.OnCollider) ("Player")
+        //Terra.Studio.TriggerAction:
+        //StartOnCollectible.OnPlayerCollider, ("Terra.Studio.TriggerAction", "Player") { type, params string[] }
+
+
+        public enum SFXPlay
+        {
+            [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
+            OnPlayerCollided,
+            [EditorEnumField("Terra.Studio.TriggerAction", "NPC")]
+            OnNPCCollided
+        }
+
+        public StartOnCollectible Start = StartOnCollectible.OnPlayerCollide;
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
         public bool ShowScoreUI = false;
@@ -31,7 +52,7 @@ namespace RuntimeInspectorNamespace
                 collectable.canPlayVFX = PlayVFX.canPlay;
 
                 collectable.sfxName = string.IsNullOrEmpty(PlaySFX.clipName) ? null : PlaySFX.clipName;
-                collectable.vfxName = string.IsNullOrEmpty(PlayVFX.clipName) ? null : PlaySFX.clipName;
+                collectable.vfxName = string.IsNullOrEmpty(PlayVFX.clipName) ? null : PlayVFX.clipName;
 
                 collectable.sfxIndex = PlaySFX.clipIndex;
                 collectable.vfxIndex = PlayVFX.clipIndex;
@@ -52,9 +73,10 @@ namespace RuntimeInspectorNamespace
             ShowScoreUI = cc.showScoreUI;
             ScoreValue = cc.scoreValue;
 
-            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOn), out object result))
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOnCollectible), out object result))
             {
-                Start = (StartOn)result;
+                Debug.Log(result);
+                Start = (StartOnCollectible)result;
             }
 
             Broadcast = cc.Broadcast;
@@ -75,10 +97,10 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartCondition()
         {
-            if (Start == StartOn.OnPlayerCollide)
+            if (Start == StartOnCollectible.OnPlayerCollide)
                 return "Player";
 
-            if (Start == StartOn.OnClick)
+            if (Start == StartOnCollectible.OnClick)
                 return "OnClick";
 
             return "";

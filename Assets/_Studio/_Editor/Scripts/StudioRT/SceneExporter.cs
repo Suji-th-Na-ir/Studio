@@ -92,7 +92,7 @@ namespace Terra.Studio
 #if UNITY_EDITOR
             if (!SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
             {
-                return;
+                return;  
             }
 #endif
             string filePath = Application.persistentDataPath + "/scene_data.json";

@@ -10,14 +10,14 @@ namespace Terra.Studio
         private const string EDITOR_DATA_FILE_PATH = "Editortime/ComponentDrawersVariants";
         private const string EDITOR_ENUM_FILE_PATH = "Editortime/EnumFieldsVariants";
         private readonly Dictionary<string, string> ComponentTargets;
-        private readonly Dictionary<string, string> EnumTargets;
+        private readonly Dictionary<string, string[]> EnumTargets;
 
         public DataProvider()
         {
             var compFileData = Resources.Load<TextAsset>(EDITOR_DATA_FILE_PATH).text;
             ComponentTargets = JsonConvert.DeserializeObject<Dictionary<string, string>>(compFileData);
             var enumFileData = Resources.Load<TextAsset>(EDITOR_ENUM_FILE_PATH).text;
-            EnumTargets = JsonConvert.DeserializeObject<Dictionary<string, string>>(enumFileData);
+            EnumTargets = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(enumFileData);
         }
 
         public string GetCovariance<T>(T _)
@@ -34,13 +34,16 @@ namespace Terra.Studio
 
         public string GetEnumValue<T>(T instance) where T : Enum
         {
-            foreach (var target in EnumTargets)
+            var actualKey = typeof(T).FullName + "." + instance.ToString();
+            if (EnumTargets.ContainsKey(actualKey))
             {
-                if (target.Value.Equals(instance.ToString()))
+                if (EnumTargets.TryGetValue(actualKey, out string[] value))
                 {
-                    return target.Key;
+                    if (!string.IsNullOrEmpty(value[0]))
+                        return value[0];
                 }
             }
+
             return null;
         }
 
@@ -58,12 +61,20 @@ namespace Terra.Studio
         public bool TryGetEnum(string key, Type type, out object result)
         {
             result = null;
-            if (EnumTargets.ContainsKey(key))
+
+            foreach (var e in EnumTargets)
             {
-                var typeName = EnumTargets[key];
-                if (Enum.TryParse(type, typeName, out result))
+
+                if (e.Key.Contains(type.ToString()) && EnumTargets.TryGetValue(e.Key, out string[] value))
                 {
-                    return true;
+                    if (!string.IsNullOrEmpty(value[0]))
+                    {
+                        if (value[0] == key)
+                        {
+                            Enum.TryParse(type, e.Key.Replace(type.ToString() + ".", ""), out result);
+                            return true;
+                        }
+                    }
                 }
             }
             return false;
