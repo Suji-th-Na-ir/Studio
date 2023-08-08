@@ -64,6 +64,7 @@ namespace RuntimeInspectorNamespace
                 ConditionData = GetStartCondition()
             };
 
+            ModifyDataAsPerSelected(ref rc);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(rc, Formatting.Indented);
             return (type, data);
@@ -125,6 +126,19 @@ namespace RuntimeInspectorNamespace
             Type.rData.broadcastAt = cc.broadcastAt;
             
             Start = GetStartCondition(cc.ConditionType);
+        }
+
+        private void ModifyDataAsPerSelected(ref RotateComponent component)
+        {
+            switch (component.rotationType)
+            {
+                case RotationType.RotateForever:
+                case RotationType.OscillateForever:
+                case RotationType.IncrementallyRotateForever:
+                    component.repeatFor = int.MaxValue;
+                    break;
+            }
+            if (component.rotationType == RotationType.RotateForever) component.rotateBy = 360f;
         }
     }
 }
