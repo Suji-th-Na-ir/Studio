@@ -17,6 +17,7 @@ namespace RuntimeInspectorNamespace
         public string broadcast = "";
         public BroadcastAt broadcastAt;
         public Vector3 targetPosition;
+        public string listenTo;
     }
     
     [EditorDrawComponent("Terra.Studio.Translate")]
@@ -46,8 +47,8 @@ namespace RuntimeInspectorNamespace
 
                 IsBroadcastable = true,
                 broadcastAt = Type.data.broadcastAt,
-                Broadcast = Type.data.broadcast,
-                
+
+
                 canPlaySFX = PlaySFX.canPlay,
                 canPlayVFX = PlayVFX.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.clipName) ? null : PlaySFX.clipName,
@@ -90,7 +91,7 @@ namespace RuntimeInspectorNamespace
             else if (start == StartOn.GameStart)
                 return "Start";
             else if (start == StartOn.BroadcastListen)
-                return Type.data.broadcast;
+                return Type.data.listenTo;
 
             return "";
         }
@@ -123,6 +124,7 @@ namespace RuntimeInspectorNamespace
             Type.data.repeat = cc.repeatFor;
             Type.data.broadcast = cc.Broadcast;
             Type.data.broadcastAt = cc.broadcastAt;
+            Type.data.listenTo = cc.ConditionData;
 
             start = GetStartCondition(cc.ConditionType);
         }

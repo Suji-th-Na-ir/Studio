@@ -14,7 +14,7 @@ namespace RuntimeInspectorNamespace
         public TMP_InputField speedInput = null;
         public TMP_InputField repeatInput = null;
         public TMP_InputField pauseForInput = null;
-        // public TMP_InputField pauseDistanceInput = null;
+        public TMP_InputField listenTo = null;
 
         public Dropdown broadcastAt;
         public TMP_InputField broadcastInput;
@@ -56,11 +56,11 @@ namespace RuntimeInspectorNamespace
                 data.pauseFor = Helper.StringToFloat(value);
                 translateField.UpdateData(data);
             });
-            // if (pauseDistanceInput != null) pauseDistanceInput.onValueChanged.AddListener((value) =>
-            // {
-            //     data.pauseAtDistance = Helper.StringToFloat(value);
-            //     translateField.UpdateData(data);
-            // });
+            if (listenTo != null) listenTo.onValueChanged.AddListener((value) =>
+            {
+                data.listenTo = value;
+                translateField.UpdateData(data);
+            });
             if (repeatInput != null) repeatInput.onValueChanged.AddListener((value) =>
             {
                 data.repeat = Helper.StringInInt(value);
@@ -109,6 +109,7 @@ namespace RuntimeInspectorNamespace
             if (moveToInput != null) moveToInput[0].text = _data.moveTo.x.ToString();
             if (moveToInput != null) moveToInput[1].text = _data.moveTo.y.ToString();
             if (moveToInput != null) moveToInput[2].text = _data.moveTo.z.ToString();
+            if (listenTo != null) listenTo.text = _data.listenTo;
 
         }
     }
