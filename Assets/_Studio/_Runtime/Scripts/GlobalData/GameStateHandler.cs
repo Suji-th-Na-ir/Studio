@@ -12,6 +12,10 @@ namespace Terra.Studio
 
         public void SwitchToNextState()
         {
+            if (currentGameState == State.PostGame)
+            {
+                return;
+            }
             var index = (int)currentGameState;
             var nextIndex = ++index;
             if (nextIndex == Enum.GetNames(typeof(State)).Length - 1)
@@ -28,7 +32,7 @@ namespace Terra.Studio
         {
             if (currentGameState == State.Game && subscribe)
             {
-                OnGameStarted?.Invoke(null);
+                callback?.Invoke(null);
                 return;
             }
             if (callback == null)
