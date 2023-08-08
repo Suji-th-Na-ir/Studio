@@ -15,6 +15,7 @@ namespace RuntimeInspectorNamespace
 
         public Dropdown translateTypesDD;
         public TranslateTypes[] allTranslateTypes;
+        public Vector3 targetPosition = Vector3.zero;
 
 #pragma warning restore 0649
 
@@ -23,7 +24,7 @@ namespace RuntimeInspectorNamespace
         public override void Initialize()
         {
             base.Initialize();
-            base.layoutElement.minHeight = 281.8f;
+            base.layoutElement.minHeight = 253.9f;
             Setup();
         }
 

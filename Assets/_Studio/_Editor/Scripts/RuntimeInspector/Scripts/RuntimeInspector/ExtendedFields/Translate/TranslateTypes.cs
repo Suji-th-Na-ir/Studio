@@ -10,11 +10,11 @@ namespace RuntimeInspectorNamespace
 {
     public class TranslateTypes : MonoBehaviour
     {
+        public InputField[] moveToInput;
         public TMP_InputField speedInput = null;
-        public TMP_InputField pauseDistanceInput = null;
-        public TMP_InputField pauseForInput = null;
         public TMP_InputField repeatInput = null;
-        public InputField[] targetPosition;
+        public TMP_InputField pauseForInput = null;
+        public TMP_InputField pauseDistanceInput = null;
 
         public Dropdown broadcastAt;
         public TMP_InputField broadcastInput;
@@ -26,11 +26,24 @@ namespace RuntimeInspectorNamespace
         public void Setup()
         {
             LoadDefaultValues();
-            if (pauseDistanceInput != null) pauseDistanceInput.onValueChanged.AddListener(
+            if (moveToInput != null) moveToInput[0].onValueChanged.AddListener(
                 (value) =>
                 {
-                    ;
-                    data.pauseAtDistance = Helper.StringToFloat(value);
+                    data.moveTo.x = Helper.StringToFloat(value);
+                    translateField.UpdateData(data);
+                });
+            
+            if (moveToInput != null) moveToInput[1].onValueChanged.AddListener(
+                (value) =>
+                {
+                    data.moveTo.y = Helper.StringToFloat(value);
+                    translateField.UpdateData(data);
+                });
+            
+            if (moveToInput != null) moveToInput[2].onValueChanged.AddListener(
+                (value) =>
+                {
+                    data.moveTo.z = Helper.StringToFloat(value);
                     translateField.UpdateData(data);
                 });
             if (speedInput != null) speedInput.onValueChanged.AddListener((value) =>
@@ -43,6 +56,11 @@ namespace RuntimeInspectorNamespace
                 data.pauseFor = Helper.StringToFloat(value);
                 translateField.UpdateData(data);
             });
+            if (pauseDistanceInput != null) pauseDistanceInput.onValueChanged.AddListener((value) =>
+            {
+                data.pauseAtDistance = Helper.StringToFloat(value);
+                translateField.UpdateData(data);
+            });
             if (repeatInput != null) repeatInput.onValueChanged.AddListener((value) =>
             {
                 data.repeat = Helper.StringInInt(value);
@@ -51,23 +69,13 @@ namespace RuntimeInspectorNamespace
             if (broadcastInput != null) broadcastInput.onValueChanged.AddListener((value) =>
             {
                 data.broadcast = value;
+                translateField.UpdateData(data);
             });
             if (broadcastAt != null) broadcastAt.onValueChanged.AddListener((value) =>
             {
                 data.broadcastAt = GetBroadcastAt(broadcastAt.options[value].text);
                 translateField.UpdateData(data);
             });
-            if (targetPosition != null && targetPosition.Length == 3)
-            {
-                for (int i = 0; i < targetPosition.Length; i++)
-                {
-                    targetPosition[i].onValueChanged.RemoveAllListeners();
-                    targetPosition[i].onValueChanged.AddListener((value) =>
-                    {
-                        SetTargetPosition(value, i);
-                    });
-                }
-            }
         }
 
         private BroadcastAt GetBroadcastAt(string _value)
@@ -77,26 +85,7 @@ namespace RuntimeInspectorNamespace
             else if (_value == BroadcastAt.AtEveryInterval.ToString()) return BroadcastAt.AtEveryInterval;
             return BroadcastAt.Never;
         }
-
-        private void SetTargetPosition(string newValue, int index)
-        {
-            var currentValue = data.targetPosition;
-            switch (index)
-            {
-                default:
-                case 0:
-                    currentValue.x = int.Parse(newValue);
-                    break;
-                case 1:
-                    currentValue.y = int.Parse(newValue);
-                    break;
-                case 2:
-                    currentValue.z = int.Parse(newValue);
-                    break;
-            }
-            data.targetPosition = currentValue;
-        }
-
+        
         public void LoadDefaultValues()
         {
             // broadcast at 
@@ -112,12 +101,14 @@ namespace RuntimeInspectorNamespace
         {
             if (broadcastAt != null) broadcastAt.value = ((int)Enum.Parse(typeof(BroadcastAt), _data.broadcastAt.ToString()));
 
-            if (pauseDistanceInput != null) pauseDistanceInput.text = _data.pauseAtDistance.ToString();
-            if (speedInput != null) speedInput.text = _data.speed.ToString();
             if (pauseForInput != null) pauseForInput.text = _data.pauseFor.ToString();
             if (pauseDistanceInput != null) pauseDistanceInput.text = _data.pauseAtDistance.ToString();
+            if (speedInput != null) speedInput.text = _data.speed.ToString();
             if (repeatInput != null) repeatInput.text = _data.repeat.ToString();
             if (broadcastInput != null) broadcastInput.text = _data.broadcast;
+            if (moveToInput != null) moveToInput[0].text = _data.moveTo.x.ToString();
+            if (moveToInput != null) moveToInput[1].text = _data.moveTo.y.ToString();
+            if (moveToInput != null) moveToInput[2].text = _data.moveTo.z.ToString();
 
         }
     }

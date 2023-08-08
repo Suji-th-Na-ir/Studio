@@ -4,6 +4,7 @@ using Terra.Studio;
 using Terra.Studio.RTEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace RuntimeInspectorNamespace
 {
@@ -11,8 +12,9 @@ namespace RuntimeInspectorNamespace
     public class TranslateComponentData
     {
         public int translateType;
-        public float pauseAtDistance = 0f;
+        public Vector3 moveTo = Vector3.zero;
         public float pauseFor = 0f;
+        public float pauseAtDistance = 0f;
         public float speed = 0f;
         public int repeat = 0;
         public string broadcast = "";
@@ -40,10 +42,12 @@ namespace RuntimeInspectorNamespace
             {
                 translateType = (TranslateType)Type.data.translateType,
                 speed = Type.data.speed,
-                pauseFor = Type.data.pauseFor,
                 pauseAtDistance = Type.data.pauseAtDistance,
+                pauseFor = Type.data.pauseFor,
                 repeatFor = Type.data.repeat,
-                
+                targetPosition = Type.data.moveTo,
+                startPosition = transform.position,
+
                 IsBroadcastable = true,
                 broadcastAt = Type.data.broadcastAt,
                 Broadcast = Type.data.broadcast,
@@ -115,11 +119,11 @@ namespace RuntimeInspectorNamespace
             PlayVFX.clipName = cc.vfxName;
 
             Type.data.translateType = (int)cc.translateType;
-
-
+            
             Type.data.speed = cc.speed;
             Type.data.pauseFor = cc.pauseFor;
             Type.data.pauseAtDistance = cc.pauseAtDistance;
+            Type.data.moveTo = cc.targetPosition;
             Type.data.repeat = cc.repeatFor;
             Type.data.broadcast = cc.Broadcast;
             Type.data.broadcastAt = cc.broadcastAt;
