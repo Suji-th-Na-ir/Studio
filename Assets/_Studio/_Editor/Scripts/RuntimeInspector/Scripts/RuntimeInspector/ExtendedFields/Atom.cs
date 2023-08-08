@@ -2,6 +2,7 @@ using System;
 using RuntimeInspectorNamespace;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 namespace Terra.Studio.RTEditor
 {
@@ -29,7 +30,14 @@ namespace Terra.Studio.RTEditor
         public class Rotate
         {
             [HideInInspector] public RotateField field;
-            [HideInInspector] public RotateComponentData rData = new RotateComponentData();
+            [HideInInspector] public RotateComponentData data = new RotateComponentData();
+        }
+        
+        [Serializable]
+        public class Translate
+        {
+            [HideInInspector] public RotateField field;
+            [HideInInspector] public TranslateComponentData data = new TranslateComponentData();
         }
     }
 }

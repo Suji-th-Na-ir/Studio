@@ -8,24 +8,22 @@ using UnityEngine.Serialization;
 namespace RuntimeInspectorNamespace
 {
     [Serializable]
-    public class RotateComponentData
+    public class TranslateComponentData
     {
-        public int rotateType;
-        public Axis axis;
-        public Direction direction;
-        public float degrees = 0f;
+        public int translateType;
+        public float pauseAtDistance = 0f;
+        public float pauseFor = 0f;
         public float speed = 0f;
         public int repeat = 0;
-        public float pauseBetween = 0f;
         public string broadcast = "";
         public BroadcastAt broadcastAt;
     }
     
-    [EditorDrawComponent("Terra.Studio.Rotate")]
-    public class Rotate : MonoBehaviour, IComponent
+    [EditorDrawComponent("Terra.Studio.Translate")]
+    public class Translate : MonoBehaviour, IComponent
     {
         public StartOn Start = StartOn.GameStart;
-        public Atom.Rotate Type = new Atom.Rotate();
+        public Atom.Translate Type = new Atom.Translate();
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
         private RotateComponent rComp;
@@ -37,15 +35,12 @@ namespace RuntimeInspectorNamespace
 
         public (string type, string data) Export()
         {
-            RotateComponent rc = new RotateComponent
+            TranslateComponent rc = new TranslateComponent
             {
-                axis = Type.data.axis,
-                direction = Type.data.direction,
-                rotationType = (RotationType)Type.data.rotateType,
-                repeatType = GetRepeatType(Type.data.repeat),
+                translateType = (TranslateType)Type.data.translateType,
                 speed = Type.data.speed,
-                rotateBy = Type.data.degrees,
-                pauseFor = Type.data.pauseBetween,
+                pauseFor = Type.data.pauseFor,
+                pauseAtDistance = Type.data.pauseAtDistance,
                 repeatFor = Type.data.repeat,
                 
                 IsBroadcastable = true,
@@ -64,9 +59,10 @@ namespace RuntimeInspectorNamespace
                 ConditionData = GetStartCondition()
             };
 
-            ModifyDataAsPerSelected(ref rc);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(rc, Formatting.Indented);
+            
+            Debug.Log(data);
             return (type, data);
         }
         
@@ -107,7 +103,7 @@ namespace RuntimeInspectorNamespace
 
         public void Import(EntityBasedComponent cdata)
         {
-            RotateComponent cc = JsonConvert.DeserializeObject<RotateComponent>($"{cdata.data}");
+            TranslateComponent cc = JsonConvert.DeserializeObject<TranslateComponent>($"{cdata.data}");
             PlaySFX.canPlay = cc.canPlaySFX;
             PlaySFX.clipIndex = cc.sfxIndex;
             PlaySFX.clipName = cc.sfxName;
@@ -115,30 +111,17 @@ namespace RuntimeInspectorNamespace
             PlayVFX.clipIndex = cc.vfxIndex;
             PlayVFX.clipName = cc.vfxName;
 
-            Type.data.axis = cc.axis;
-            Type.data.direction = cc.direction;
-            Type.data.rotateType = (int)cc.rotationType;
+            Type.data.translateType = (int)cc.translateType;
+
+
             Type.data.speed = cc.speed;
-            Type.data.degrees = cc.rotateBy;
-            Type.data.pauseBetween = cc.pauseFor;
+            Type.data.pauseFor = cc.pauseFor;
+            Type.data.pauseAtDistance = cc.pauseAtDistance;
             Type.data.repeat = cc.repeatFor;
             Type.data.broadcast = cc.Broadcast;
             Type.data.broadcastAt = cc.broadcastAt;
             
             Start = GetStartCondition(cc.ConditionType);
-        }
-
-        private void ModifyDataAsPerSelected(ref RotateComponent component)
-        {
-            switch (component.rotationType)
-            {
-                case RotationType.RotateForever:
-                case RotationType.OscillateForever:
-                case RotationType.IncrementallyRotateForever:
-                    component.repeatFor = int.MaxValue;
-                    break;
-            }
-            if (component.rotationType == RotationType.RotateForever) component.rotateBy = 360f;
         }
     }
 }

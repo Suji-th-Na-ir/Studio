@@ -15,3 +15,4 @@ MonoBehaviour:
   defaultStudioState: 0
   editorSceneName: Editor
   runtimeSceneName: Runtime
+  pickupSavedData: 1

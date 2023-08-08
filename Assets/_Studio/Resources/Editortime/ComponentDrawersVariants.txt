@@ -4,5 +4,6 @@
   "Terra.Studio.Oscillate": "RuntimeInspectorNamespace.Oscillate",
   "Terra.Studio.Respawn": "RuntimeInspectorNamespace.Respawn",
   "Terra.Studio.Rotate": "RuntimeInspectorNamespace.Rotate",
+  "Terra.Studio.Translate": "RuntimeInspectorNamespace.Translate",
   "Terra.Studio.Checkpoint": "Terra.Studio.Checkpoint"
 }

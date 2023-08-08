@@ -76,7 +76,7 @@ namespace RuntimeInspectorNamespace
         {
             HideAllRotateOptionsMenus();
             Atom.Rotate rt = (Atom.Rotate)Value;
-            rt.rData.rotateType = _index;
+            rt.data.rotateType = _index;
             switch (_index)
             {
                 case 0:
@@ -117,8 +117,8 @@ namespace RuntimeInspectorNamespace
         {
             Atom.Rotate rt = (Atom.Rotate)Value;
             // rotate type should come from rotatefield
-            _rData.rotateType = rt.rData.rotateType;
-            rt.rData = _rData;
+            _rData.rotateType = rt.data.rotateType;
+            rt.data = _rData;
         }
 
         protected override void OnBound(MemberInfo variable)
@@ -126,10 +126,10 @@ namespace RuntimeInspectorNamespace
             base.OnBound(variable);
             Atom.Rotate rt = (Atom.Rotate)Value;
             rotateTypesDD.onValueChanged.AddListener(OnRotateTypesValueChanged);
-            int rotationTypeIndex = (((int)Enum.Parse(typeof(RotationType), rt.rData.rotateType.ToString())));
+            int rotationTypeIndex = (((int)Enum.Parse(typeof(RotationType), rt.data.rotateType.ToString())));
             rotateTypesDD.value = rotationTypeIndex;
             ShowRotateOptionsMenu(rotationTypeIndex);
-            selectedRotateType.SetData(rt.rData);
+            selectedRotateType.SetData(rt.data);
         }
     }
 }
