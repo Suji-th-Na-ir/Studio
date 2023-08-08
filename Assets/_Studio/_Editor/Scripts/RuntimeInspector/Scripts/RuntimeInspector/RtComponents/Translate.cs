@@ -12,7 +12,6 @@ namespace RuntimeInspectorNamespace
         public int translateType;
         public Vector3 moveTo = Vector3.zero;
         public float pauseFor = 0f;
-        public float pauseAtDistance = 0f;
         public float speed = 0f;
         public int repeat = 0;
         public string broadcast = "";
