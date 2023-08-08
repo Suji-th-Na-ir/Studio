@@ -72,7 +72,7 @@ namespace Terra.Studio
                 translateTo = translatable.targetPosition,
                 speed = translatable.speed,
                 translateTimes = translatable.repeatFor,
-                shouldPingPong = translatable.translateType == TranslateType.PingPong || translatable.translateType == TranslateType.PingPongForever,
+                shouldPingPong = translatable.translateType is TranslateType.PingPong or TranslateType.PingPongForever,
                 shouldPause = translatable.pauseFor > 0f,
                 pauseDistance = Vector3.Distance(translatable.startPosition, translatable.targetPosition),
                 pauseForTime = translatable.pauseFor,
@@ -80,15 +80,15 @@ namespace Terra.Studio
                 broadcastAt = translatable.broadcastAt,
                 onTranslated = () =>
                 {
-                    OnTranslateDone(translatable.Broadcast);
+                    OnTranslateDone(translatable.Broadcast, translatable.broadcastAt == BroadcastAt.End);
                 }
             };
             return translateParams;
         }
 
-        private void OnTranslateDone(string broadcast)
+        private void OnTranslateDone(string broadcast, bool removeOnceBroadcasted)
         {
-            RuntimeOp.Resolve<Broadcaster>().Broadcast(broadcast, true);
+            RuntimeOp.Resolve<Broadcaster>().Broadcast(broadcast, removeOnceBroadcasted);
         }
     }
 }

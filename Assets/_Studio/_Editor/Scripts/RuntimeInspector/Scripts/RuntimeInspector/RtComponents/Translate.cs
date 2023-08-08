@@ -60,6 +60,7 @@ namespace RuntimeInspectorNamespace
                 ConditionData = GetStartCondition()
             };
 
+            ModifyDataAsPerGiven(ref rc);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(rc, Formatting.Indented);
             
@@ -83,17 +84,17 @@ namespace RuntimeInspectorNamespace
         public string GetStartCondition()
         {
             if (start == StartOn.OnPlayerCollide)
-                return "Terra.Studio.TriggerAction"; 
+                return "Player";
             else if (start == StartOn.OnClick)
-                return "Terra.Studio.MouseAction"; 
+                return "OnClick";
             else if (start == StartOn.GameStart)
-                return "Terra.Studio.GameStart";
+                return "Start";
             else if (start == StartOn.BroadcastListen)
-                return "Terra.Studio.Listener";
-            
+                return Type.data.broadcast;
+
             return "";
         }
-        
+
         private StartOn GetStartCondition(string _name)
         {
 
@@ -124,6 +125,21 @@ namespace RuntimeInspectorNamespace
             Type.data.broadcastAt = cc.broadcastAt;
 
             start = GetStartCondition(cc.ConditionType);
+        }
+
+        private void ModifyDataAsPerGiven(ref TranslateComponent component)
+        {
+            switch (component.translateType)
+            {
+                case TranslateType.MoveForever:
+                case TranslateType.MoveIncrementallyForever:
+                case TranslateType.PingPongForever:
+                    component.repeatFor = int.MaxValue;
+                    break;
+                default:
+                    component.repeatFor = Type.data.repeat;
+                    break;
+            }
         }
     }
 }

@@ -81,16 +81,16 @@ namespace Terra.Studio
                 {
                     if (rotatable.IsBroadcastable)
                     {
-                        OnRotationDone(rotatable.Broadcast);
+                        OnRotationDone(rotatable.Broadcast, rotatable.broadcastAt == BroadcastAt.End);
                     }
                 }
             };
             return rotateParams;
         }
 
-        private void OnRotationDone(string broadcast)
+        private void OnRotationDone(string broadcast, bool removeOnceBroadcasted)
         {
-            RuntimeOp.Resolve<Broadcaster>().Broadcast(broadcast, true);
+            RuntimeOp.Resolve<Broadcaster>().Broadcast(broadcast, removeOnceBroadcasted);
         }
     }
 }

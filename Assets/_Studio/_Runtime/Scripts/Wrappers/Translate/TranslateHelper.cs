@@ -14,7 +14,7 @@ namespace Terra.Studio
         private float pauseForTime;
         private float pauseDistance;
         private bool shouldPingPong;
-        private Action onTranslationDone;
+        private Action OnTranslationDone;
         private BroadcastAt broadcastAt;
 
         public void Translate(TranslateParams translateParams)
@@ -28,7 +28,7 @@ namespace Terra.Studio
             shouldPingPong = translateParams.shouldPingPong;
             pauseDistance = translateParams.pauseDistance;
             broadcastAt = translateParams.broadcastAt;
-
+            OnTranslationDone = translateParams.onTranslated;
             var direction = (translateTo - translateFrom).normalized;
             var distance = Vector3.Distance(translateFrom, translateTo);
 
@@ -67,13 +67,13 @@ namespace Terra.Studio
                 }
                 if (broadcastAt == BroadcastAt.AtEveryInterval)
                 {
-                    onTranslationDone?.Invoke();
+                    OnTranslationDone?.Invoke();
                 }
             }
             while (shouldTranslateForever || loopsFinished < translateTimes);
             if (broadcastAt == BroadcastAt.End)
             {
-                onTranslationDone?.Invoke();
+                OnTranslationDone?.Invoke();
             }
             yield return null;
             Destroy(this);
@@ -112,13 +112,13 @@ namespace Terra.Studio
                 currentLoop++;
                 if (broadcastAt == BroadcastAt.AtEveryInterval)
                 {
-                    onTranslationDone?.Invoke();
+                    OnTranslationDone?.Invoke();
                 }
             }
             while (shouldTranslateForever || loopsFinished < translateTimes * 2);
             if (broadcastAt == BroadcastAt.End)
             {
-                onTranslationDone?.Invoke();
+                OnTranslationDone?.Invoke();
             }
             yield return null;
             Destroy(this);
