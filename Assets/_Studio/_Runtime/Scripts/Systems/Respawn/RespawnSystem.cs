@@ -31,10 +31,7 @@ namespace Terra.Studio
 
         public void OnConditionalCheck(object data)
         {
-            var (entity, conditionType, conditionData, go) = ((int, string, string, GameObject))data;
-            var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (go, conditionData));
-            IdToConditionalCallback.Remove(entity);
+            var (entity, _, _, _) = ((int, string, string, GameObject))data;
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
             var pool = world.GetPool<RespawnComponent>();
             OnDemandRun(in pool.Get(entity));
