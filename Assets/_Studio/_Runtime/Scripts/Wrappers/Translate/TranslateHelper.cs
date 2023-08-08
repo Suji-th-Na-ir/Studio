@@ -81,7 +81,6 @@ namespace Terra.Studio
 
         private IEnumerator OscillateCoroutine()
         {
-            var coveredDistance = 0f;
             var shouldTranslateForever = translateTimes == int.MaxValue;
             var loopsFinished = 0f;
             long currentLoop = 0;
@@ -101,21 +100,19 @@ namespace Terra.Studio
                     var movement = direction * step;
                     transform.position += movement;
                     remainingDistance -= step;
-                    coveredDistance++;
-                    if (shouldPause && coveredDistance >= pauseDistance)
-                    {
-                        yield return new WaitForSeconds(pauseForTime);
-                        coveredDistance = 0f;
-                    }
                     yield return null;
                 }
                 currentLoop++;
+                if (shouldPause)
+                {
+                    yield return new WaitForSeconds(pauseForTime);
+                }
                 if (broadcastAt == BroadcastAt.AtEveryInterval)
                 {
                     OnTranslationDone?.Invoke();
                 }
             }
-            while (shouldTranslateForever || loopsFinished < translateTimes * 2);
+            while (shouldTranslateForever || loopsFinished < translateTimes);
             if (broadcastAt == BroadcastAt.End)
             {
                 OnTranslationDone?.Invoke();
