@@ -7,7 +7,7 @@ namespace Terra.Studio
 {
     public class Broadcaster
     {
-        private Dictionary<string, List<Action>> broadcastDict = new();
+        private Dictionary<string, List<Action<object>>> broadcastDict = new();
 
         public void SetBroadcastable(string broadcastData)
         {
@@ -15,10 +15,10 @@ namespace Terra.Studio
             {
                 return;
             }
-            broadcastDict.Add(broadcastData, new List<Action>());
+            broadcastDict.Add(broadcastData, new List<Action<object>>());
         }
 
-        public void ListenTo(string broadcastData, Action onBroadcastListened)
+        public void ListenTo(string broadcastData, Action<object> onBroadcastListened)
         {
             if (!broadcastDict.ContainsKey(broadcastData))
             {
@@ -27,7 +27,7 @@ namespace Terra.Studio
             broadcastDict[broadcastData].Add(onBroadcastListened);
         }
 
-        public void StopListenTo(string broadcastData, Action onBroadcastListened)
+        public void StopListenTo(string broadcastData, Action<object> onBroadcastListened)
         {
             if (broadcastDict.ContainsKey(broadcastData))
             {
@@ -43,9 +43,9 @@ namespace Terra.Studio
                 Debug.Log($"No one is listening to {broadcastData}");
                 return;
             }
-            foreach (var listener in listeners)
+            foreach (var listener in listeners.ToList())
             {
-                listener?.Invoke();
+                listener?.Invoke(null);
             }
             if (removeOnceBroadcasted)
             {
@@ -62,7 +62,7 @@ namespace Terra.Studio
             broadcastDict.Remove(broadcastData);
         }
 
-        private IEnumerable<Action> GetListeners(string broadcastData)
+        private IEnumerable<Action<object>> GetListeners(string broadcastData)
         {
             if (!broadcastDict.ContainsKey(broadcastData))
             {

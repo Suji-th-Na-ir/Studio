@@ -14,11 +14,11 @@ namespace Terra.Studio
             var (_, condition) = ((GameObject go, string condition))conditionalCheck;
             if (subscribe)
             {
-                broadcaster.ListenTo(condition, () => { onConditionalCheck?.Invoke(null); });
+                broadcaster.ListenTo(condition, onConditionalCheck);
             }
             else
             {
-                broadcaster.StopListenTo(condition, () => { onConditionalCheck?.Invoke(null); });
+                broadcaster.StopListenTo(condition, onConditionalCheck);
             }
         }
     }

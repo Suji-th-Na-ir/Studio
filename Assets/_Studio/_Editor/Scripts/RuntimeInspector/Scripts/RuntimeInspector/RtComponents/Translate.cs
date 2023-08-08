@@ -49,6 +49,7 @@ namespace RuntimeInspectorNamespace
                 broadcastAt = Type.data.broadcastAt,
 
 
+                Broadcast = Type.data.broadcast,
                 canPlaySFX = PlaySFX.canPlay,
                 canPlayVFX = PlayVFX.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.clipName) ? null : PlaySFX.clipName,
