@@ -31,13 +31,22 @@ namespace RuntimeInspectorNamespace
             return eventName;
         }
 
+        public string GetCondition()
+        {
+            if (Start == DestroyOnEnum.BroadcastListen)
+            {
+                return BroadcastListen;
+            }
+            return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(Start);
+        }
+
         public (string type, string data) Export()
         {
             DestroyOnComponent destroyOn = new();
             {
                 destroyOn.IsConditionAvailable = true;
                 destroyOn.ConditionType = GetStartEvent();
-                destroyOn.ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(Start);
+                destroyOn.ConditionData = GetCondition();
                 destroyOn.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
                 destroyOn.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
                 destroyOn.BroadcastListen = string.IsNullOrEmpty(BroadcastListen) ? null : BroadcastListen;

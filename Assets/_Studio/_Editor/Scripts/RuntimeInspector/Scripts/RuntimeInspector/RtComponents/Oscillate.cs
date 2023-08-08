@@ -24,6 +24,15 @@ namespace RuntimeInspectorNamespace
             Component.fromPoint = transform.position;
         }
 
+        public string GetCondition()
+        {
+            if (Start == StartOn.BroadcastListen)
+            {
+                return BroadcastListen;
+            }
+            return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(Start);
+        }
+
         public (string type, string data) Export()
         {
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -31,7 +40,7 @@ namespace RuntimeInspectorNamespace
             Component.fromPoint = fromPoint;
             Component.toPoint = toPoint;
             Component.ConditionType = GetStartEvent();
-            Component.ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(Start);
+            Component.ConditionData = GetCondition();
             Component.BroadcastListen = string.IsNullOrEmpty(BroadcastListen) ? null : BroadcastListen;
             Component.loop = Loop;
             Component.speed = Speed;
