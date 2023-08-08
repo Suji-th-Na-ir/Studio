@@ -112,7 +112,7 @@ namespace Terra.Studio
                     OnTranslationDone?.Invoke();
                 }
             }
-            while (shouldTranslateForever || loopsFinished < translateTimes * 2);
+            while (shouldTranslateForever || loopsFinished < translateTimes);
             if (broadcastAt == BroadcastAt.End)
             {
                 OnTranslationDone?.Invoke();
