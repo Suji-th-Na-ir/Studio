@@ -189,12 +189,13 @@ MonoBehaviour:
   variableNameMask: {fileID: 114850040097317468}
   visibleArea: {fileID: 0}
   rotateTypesDD: {fileID: 5402255416815306912}
-  rotateOnce: {fileID: 5392290015637673285}
-  rotateForever: {fileID: 2388844342198120732}
-  rotateOscillate: {fileID: 2902499565121754505}
-  rotateOscillateForever: {fileID: 7310519209266679967}
-  rotateIncremental: {fileID: 7327146661640708784}
-  rotateIncrementalForever: {fileID: 2633311705159540077}
+  allRotateTypes:
+  - {fileID: 5392290015637673285}
+  - {fileID: 2388844342198120732}
+  - {fileID: 2902499565121754505}
+  - {fileID: 7310519209266679967}
+  - {fileID: 7327146661640708784}
+  - {fileID: 2633311705159540077}
 --- !u!1 &1643231647150954
 GameObject:
   m_ObjectHideFlags: 0

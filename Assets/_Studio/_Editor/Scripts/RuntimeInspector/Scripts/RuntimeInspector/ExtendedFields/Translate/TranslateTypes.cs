@@ -99,10 +99,9 @@ namespace RuntimeInspectorNamespace
 
         public void SetData(TranslateComponentData _data)
         {
+            data = _data;
             if (broadcastAt != null) broadcastAt.value = ((int)Enum.Parse(typeof(BroadcastAt), _data.broadcastAt.ToString()));
-
             if (pauseForInput != null) pauseForInput.text = _data.pauseFor.ToString();
-            // if (pauseDistanceInput != null) pauseDistanceInput.text = _data.pauseAtDistance.ToString();
             if (speedInput != null) speedInput.text = _data.speed.ToString();
             if (repeatInput != null) repeatInput.text = _data.repeat.ToString();
             if (broadcastInput != null) broadcastInput.text = _data.broadcast;
@@ -110,7 +109,6 @@ namespace RuntimeInspectorNamespace
             if (moveToInput != null) moveToInput[1].text = _data.moveTo.y.ToString();
             if (moveToInput != null) moveToInput[2].text = _data.moveTo.z.ToString();
             if (listenTo != null) listenTo.text = _data.listenTo;
-
         }
     }
 }

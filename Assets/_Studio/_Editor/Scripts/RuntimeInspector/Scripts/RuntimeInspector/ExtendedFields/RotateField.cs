@@ -15,12 +15,13 @@ namespace RuntimeInspectorNamespace
     {
 #pragma warning disable 0649
         [SerializeField] public Dropdown rotateTypesDD;
-        public RotateTypes rotateOnce;
-        public RotateTypes rotateForever;
-        public RotateTypes rotateOscillate;
-        public RotateTypes rotateOscillateForever;
-        public RotateTypes rotateIncremental;
-        public RotateTypes rotateIncrementalForever;
+        public RotateTypes[] allRotateTypes;
+        // public RotateTypes rotateOnce;
+        // public RotateTypes rotateForever;
+        // public RotateTypes rotateOscillate;
+        // public RotateTypes rotateOscillateForever;
+        // public RotateTypes rotateIncremental;
+        // public RotateTypes rotateIncrementalForever;
 #pragma warning restore 0649
 
         private RotateTypes selectedRotateType;
@@ -34,19 +35,11 @@ namespace RuntimeInspectorNamespace
 
         private void Setup()
         {
-            rotateOnce.rotateField = this;
-            rotateForever.rotateField = this;
-            rotateOscillate.rotateField = this;
-            rotateOscillateForever.rotateField = this;
-            rotateIncremental.rotateField = this;
-            rotateIncrementalForever.rotateField = this;
-            
-            rotateOnce.Setup();
-            rotateForever.Setup();
-            rotateOscillate.Setup();
-            rotateOscillateForever.Setup();
-            rotateIncremental.Setup();
-            rotateIncrementalForever.Setup();
+            foreach (var type in allRotateTypes)
+            {
+                type.rotateField = this;
+                type.Setup();
+            }
             
             List<string> data = Enum.GetNames(typeof(RotationType)).ToList();
             rotateTypesDD.AddOptions(data);
@@ -64,12 +57,10 @@ namespace RuntimeInspectorNamespace
 
         private void HideAllRotateOptionsMenus()
         {
-            rotateOnce.gameObject.SetActive(false);
-            rotateForever.gameObject.SetActive(false);
-            rotateOscillate.gameObject.SetActive(false);
-            rotateOscillateForever.gameObject.SetActive(false);
-            rotateIncremental.gameObject.SetActive(false);
-            rotateIncrementalForever.gameObject.SetActive(false);
+            foreach (var type in allRotateTypes)
+            {
+                type.gameObject.SetActive(false);
+            }
         }
 
         private void ShowRotateOptionsMenu(int _index)
@@ -77,33 +68,8 @@ namespace RuntimeInspectorNamespace
             HideAllRotateOptionsMenus();
             Atom.Rotate rt = (Atom.Rotate)Value;
             rt.data.rotateType = _index;
-            switch (_index)
-            {
-                case 0:
-                    rotateOnce.gameObject.SetActive(true);
-                    selectedRotateType = rotateOnce;
-                    break;
-                case 1:
-                    rotateForever.gameObject.SetActive(true);
-                    selectedRotateType = rotateForever;
-                    break;
-                case 2:
-                    rotateOscillate.gameObject.SetActive(true);
-                    selectedRotateType = rotateOscillate;
-                    break;
-                case 3:
-                    rotateOscillateForever.gameObject.SetActive(true);
-                    selectedRotateType = rotateOscillateForever;
-                    break;
-                case 4:
-                    rotateIncremental.gameObject.SetActive(true);
-                    selectedRotateType = rotateIncremental;
-                    break;
-                case 5:
-                    rotateIncrementalForever.gameObject.SetActive(true);
-                    selectedRotateType = rotateIncrementalForever;
-                    break;
-            }
+            allRotateTypes[_index].gameObject.SetActive(true);
+            selectedRotateType = allRotateTypes[_index];
         }
 
         protected override void OnSkinChanged()
@@ -135,7 +101,17 @@ namespace RuntimeInspectorNamespace
         public override void Refresh()
         {
             base.Refresh();
-            
+            LoadData(); 
+        }
+
+        private void LoadData()
+        {
+            Atom.Rotate rt = (Atom.Rotate)Value;
+            rotateTypesDD.SetValueWithoutNotify((int)rt.data.rotateType);
+            foreach (RotateTypes type in allRotateTypes)
+            {
+                type.SetData(rt.data);
+            }
         }
     }
 }

@@ -24,56 +24,56 @@ namespace RuntimeInspectorNamespace
         public TMP_InputField listenInput;
 
         public RotateField rotateField = null;
-        private RotateComponentData rdata = new RotateComponentData();
+        private RotateComponentData data = new RotateComponentData();
         
         public void Setup()
         {
             LoadDefaultValues();
             if (axisDropDown != null) axisDropDown.onValueChanged.AddListener((value) =>
             {
-                rdata.axis = GetAxis(axisDropDown.options[value].text);
-                rotateField.UpdateData(rdata);
+                data.axis = GetAxis(axisDropDown.options[value].text);
+                rotateField.UpdateData(data);
             });
             if (dirDropDown != null) dirDropDown.onValueChanged.AddListener((value) =>
             {
-                rdata.direction = GetDirection(dirDropDown.options[value].text);
-                rotateField.UpdateData(rdata);
+                data.direction = GetDirection(dirDropDown.options[value].text);
+                rotateField.UpdateData(data);
             });
             if (broadcastAt != null) broadcastAt.onValueChanged.AddListener((value) =>
             {
-                rdata.broadcastAt = getBroadcastAt(broadcastAt.options[value].text);
-                rotateField.UpdateData(rdata);
+                data.broadcastAt = getBroadcastAt(broadcastAt.options[value].text);
+                rotateField.UpdateData(data);
             });
             
             if (degreesInput != null) degreesInput.onValueChanged.AddListener(
                 (value) => { ;
-                    rdata.degrees = Helper.StringToFloat(value);
-                    rotateField.UpdateData(rdata);
+                    data.degrees = Helper.StringToFloat(value);
+                    rotateField.UpdateData(data);
                 });
             if (speedInput != null) speedInput.onValueChanged.AddListener((value) =>
             {
-                rdata.speed = Helper.StringToFloat(value);
-                rotateField.UpdateData(rdata);
+                data.speed = Helper.StringToFloat(value);
+                rotateField.UpdateData(data);
             });
             if (pauseInput != null) pauseInput.onValueChanged.AddListener((value) =>
             {
-                rdata.pauseBetween = Helper.StringToFloat(value);
-                rotateField.UpdateData(rdata);
+                data.pauseBetween = Helper.StringToFloat(value);
+                rotateField.UpdateData(data);
             });
             if (repeatInput != null) repeatInput.onValueChanged.AddListener((value) =>
             {
-                rdata.repeat = Helper.StringInInt(value);
-                rotateField.UpdateData(rdata);
+                data.repeat = Helper.StringInInt(value);
+                rotateField.UpdateData(data);
             });
             if (broadcastInput != null) broadcastInput.onValueChanged.AddListener((value) =>
             {
-                rdata.broadcast = value;
-                rotateField.UpdateData(rdata);
+                data.broadcast = value;
+                rotateField.UpdateData(data);
             });
             if (listenInput != null) listenInput.onValueChanged.AddListener((value) =>
             {
-                rdata.listenTo = value;
-                rotateField.UpdateData(rdata);
+                data.listenTo = value;
+                rotateField.UpdateData(data);
             });
         }
 
@@ -114,21 +114,20 @@ namespace RuntimeInspectorNamespace
 
         public RotateComponentData GetData()
         {
-            return rdata;
+            return data;
         }
 
         public void SetData(RotateComponentData _data)
         {
+            data = _data;
             if (axisDropDown != null) axisDropDown.value = ((int)Enum.Parse(typeof(Axis), _data.axis.ToString()));
             if (dirDropDown != null) dirDropDown.value = ((int)Enum.Parse(typeof(Direction), _data.direction.ToString()));
             if(broadcastAt != null) broadcastAt.value = ((int)Enum.Parse(typeof(BroadcastAt), _data.broadcastAt.ToString()));
-
             if (degreesInput != null) degreesInput.text = _data.degrees.ToString();
             if (speedInput != null) speedInput.text = _data.speed.ToString();
             if (pauseInput != null) pauseInput.text = _data.pauseBetween.ToString();
             if (repeatInput != null) repeatInput.text = _data.repeat.ToString();
             if (broadcastInput != null) broadcastInput.text = _data.broadcast;
-            
             if (listenInput != null) listenInput.text = _data.listenTo;
         }
     }

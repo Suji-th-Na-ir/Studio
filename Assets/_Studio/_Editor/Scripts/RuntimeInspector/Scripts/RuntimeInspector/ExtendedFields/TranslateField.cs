@@ -90,5 +90,20 @@ namespace RuntimeInspectorNamespace
             ShowTranslateOptionsMenu(translationTypeIndex);
             selectedTranslateType.SetData(rt.data);
         }
+        public override void Refresh()
+        {
+            base.Refresh();
+            LoadData(); 
+        }
+
+        private void LoadData()
+        {
+            Atom.Translate rt = (Atom.Translate)Value;
+            translateTypesDD.SetValueWithoutNotify((int)rt.data.translateType);
+            foreach (TranslateTypes type in allTranslateTypes)
+            {
+                type.SetData(rt.data);
+            }
+        }
     }
 }
