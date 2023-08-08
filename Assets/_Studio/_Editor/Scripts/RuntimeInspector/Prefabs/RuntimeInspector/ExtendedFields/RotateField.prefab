@@ -5066,7 +5066,7 @@ GameObject:
   - component: {fileID: 7709458802663223619}
   - component: {fileID: 2276788489972514473}
   m_Layer: 5
-  m_Name: increment_name
+  m_Name: degrees_name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5133,7 +5133,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Increment
+  m_Text: Degrees
 --- !u!114 &2276788489972514473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19253,7 +19253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   axisDropDown: {fileID: 523307788535533290}
   dirDropDown: {fileID: 8445632752320678756}
-  degreesInput: {fileID: 0}
+  degreesInput: {fileID: 7798329381010471591}
   speedInput: {fileID: 4648104789162964213}
   pauseInput: {fileID: 1071056079589076546}
   repeatInput: {fileID: 0}
@@ -26669,7 +26669,7 @@ GameObject:
   - component: {fileID: 7798329381010471591}
   - component: {fileID: 5995915792875758950}
   m_Layer: 5
-  m_Name: increment_input
+  m_Name: degrees_input
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
