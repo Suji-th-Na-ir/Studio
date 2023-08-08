@@ -139,7 +139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IgnoreLayout: 0
   m_MinWidth: -1
-  m_MinHeight: 315.4
+  m_MinHeight: 316.9
   m_PreferredWidth: -1
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
@@ -163,7 +163,7 @@ MonoBehaviour:
     m_Top: 2
     m_Bottom: 0
   m_ChildAlignment: 2
-  m_Spacing: -277.6
+  m_Spacing: -280
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -17320,8 +17320,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 160.95, y: -141.9}
-  m_SizeDelta: {x: 284.58, y: 279.8}
+  m_AnchoredPosition: {x: 160.95, y: -159.44998}
+  m_SizeDelta: {x: 284.58, y: 314.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &330730327347662037
 CanvasRenderer:

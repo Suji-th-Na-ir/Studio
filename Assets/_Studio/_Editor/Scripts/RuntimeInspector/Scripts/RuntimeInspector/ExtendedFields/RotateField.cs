@@ -28,7 +28,7 @@ namespace RuntimeInspectorNamespace
         public override void Initialize()
         {
             base.Initialize();
-            base.layoutElement.minHeight = 281.8f;
+            base.layoutElement.minHeight = 316.9f;
             Setup();
         }
 
@@ -130,6 +130,12 @@ namespace RuntimeInspectorNamespace
             rotateTypesDD.value = rotationTypeIndex;
             ShowRotateOptionsMenu(rotationTypeIndex);
             selectedRotateType.SetData(rt.data);
+        }
+        
+        public override void Refresh()
+        {
+            base.Refresh();
+            
         }
     }
 }
