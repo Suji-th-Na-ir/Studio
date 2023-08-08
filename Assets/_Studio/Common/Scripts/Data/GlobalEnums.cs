@@ -8,7 +8,7 @@ namespace Terra.Studio
     }
 
     public enum StartOn
-    { 
+    {
         [EditorEnumField("Terra.Studio.GameStart", "Start")]
         GameStart,
         [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
@@ -37,8 +37,12 @@ namespace Terra.Studio
 
     public enum TranslateType
     {
-        TargetDirection,
-        Oscillate
+        Move,
+        MoveForever,
+        MoveIncrementally,
+        MoveIncrementallyForever,
+        PingPong,
+        PingPongForever
     }
 
     /// <summary>

@@ -1,23 +1,21 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
-using Terra.Studio.RTEditor;
-using PlayShifu.Terra;
 using System.Reflection;
-using System.Runtime.CompilerServices;
+using Terra.Studio.RTEditor;
+using System.Collections.Generic;
 
 namespace RuntimeInspectorNamespace
 {
     public class TranslateField : InspectorField
     {
 #pragma warning disable 0649
-        [SerializeField] public Dropdown translateTypesDD;
-        public TranslateTypes targetDirectionType;
-        public TranslateTypes oscillateType;
-   
+
+        public Dropdown translateTypesDD;
+        public TranslateTypes[] allTranslateTypes;
+
 #pragma warning restore 0649
 
         private TranslateTypes selectedTranslateType;
@@ -31,13 +29,11 @@ namespace RuntimeInspectorNamespace
 
         private void Setup()
         {
-            targetDirectionType.translateField = this;
-            oscillateType.translateField = this;
-      
-            
-            targetDirectionType.Setup();
-            oscillateType.Setup();
-
+            foreach (var type in allTranslateTypes)
+            {
+                type.translateField = this;
+                type.Setup();
+            }
             List<string> data = Enum.GetNames(typeof(TranslateType)).ToList();
             translateTypesDD.AddOptions(data);
         }
@@ -54,8 +50,10 @@ namespace RuntimeInspectorNamespace
 
         private void HideAllTranslateOptionsMenus()
         {
-            targetDirectionType.gameObject.SetActive(false);
-            oscillateType.gameObject.SetActive(false);
+            foreach (var type in allTranslateTypes)
+            {
+                type.gameObject.SetActive(false);
+            }
         }
 
         private void ShowTranslateOptionsMenu(int _index)
@@ -63,17 +61,8 @@ namespace RuntimeInspectorNamespace
             HideAllTranslateOptionsMenus();
             Atom.Translate rt = (Atom.Translate)Value;
             rt.data.translateType = _index;
-            switch (_index)
-            {
-                case 0:
-                    targetDirectionType.gameObject.SetActive(true);
-                    selectedTranslateType = targetDirectionType;
-                    break;
-                case 1:
-                    oscillateType.gameObject.SetActive(true);
-                    selectedTranslateType = oscillateType;
-                    break;
-            }
+            allTranslateTypes[_index].gameObject.SetActive(true);
+            selectedTranslateType = allTranslateTypes[_index];
         }
 
         protected override void OnSkinChanged()

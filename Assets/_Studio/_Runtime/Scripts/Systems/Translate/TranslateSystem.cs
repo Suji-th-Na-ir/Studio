@@ -72,7 +72,7 @@ namespace Terra.Studio
                 translateTo = translatable.targetPosition,
                 speed = translatable.speed,
                 translateTimes = translatable.repeatFor,
-                shouldPingPong = translatable.translateType == TranslateType.Oscillate,
+                shouldPingPong = translatable.translateType == TranslateType.PingPong || translatable.translateType == TranslateType.PingPongForever,
                 shouldPause = translatable.pauseFor > 0f,
                 pauseDistance = translatable.pauseAtDistance,
                 pauseForTime = translatable.pauseFor,

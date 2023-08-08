@@ -1,10 +1,9 @@
+using TMPro;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using Terra.Studio;
+using UnityEngine.UI;
 using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
@@ -15,6 +14,7 @@ namespace RuntimeInspectorNamespace
         public TMP_InputField pauseDistanceInput = null;
         public TMP_InputField pauseForInput = null;
         public TMP_InputField repeatInput = null;
+        public InputField[] targetPosition;
 
         public Dropdown broadcastAt;
         public TMP_InputField broadcastInput;
@@ -22,12 +22,14 @@ namespace RuntimeInspectorNamespace
         [HideInInspector]
         public TranslateField translateField = null;
         private TranslateComponentData data = new TranslateComponentData();
-        
+
         public void Setup()
         {
             LoadDefaultValues();
             if (pauseDistanceInput != null) pauseDistanceInput.onValueChanged.AddListener(
-                (value) => { ;
+                (value) =>
+                {
+                    ;
                     data.pauseAtDistance = Helper.StringToFloat(value);
                     translateField.UpdateData(data);
                 });
@@ -46,45 +48,59 @@ namespace RuntimeInspectorNamespace
                 data.repeat = Helper.StringInInt(value);
                 translateField.UpdateData(data);
             });
-            if(broadcastInput != null) broadcastInput.onValueChanged.AddListener((value) =>
+            if (broadcastInput != null) broadcastInput.onValueChanged.AddListener((value) =>
             {
                 data.broadcast = value;
             });
             if (broadcastAt != null) broadcastAt.onValueChanged.AddListener((value) =>
             {
-                data.broadcastAt = getBroadcastAt(broadcastAt.options[value].text);
+                data.broadcastAt = GetBroadcastAt(broadcastAt.options[value].text);
                 translateField.UpdateData(data);
             });
-
-        }
-        
-        private Axis GetAxis(string _value)
-        {
-            if (_value == Axis.X.ToString()) return Axis.X;
-            else if (_value == Axis.Y.ToString()) return Axis.Y;
-            else if (_value == Axis.Z.ToString()) return Axis.Z;
-            return Axis.X;
-        }
-        
-        private Direction GetDirection(string _value)
-        {
-            if (_value == Direction.Clockwise.ToString()) return Direction.Clockwise;
-            else if (_value == Direction.AntiClockwise.ToString()) return Direction.AntiClockwise;
-            return Direction.Clockwise;
+            if (targetPosition != null && targetPosition.Length == 3)
+            {
+                for (int i = 0; i < targetPosition.Length; i++)
+                {
+                    targetPosition[i].onValueChanged.RemoveAllListeners();
+                    targetPosition[i].onValueChanged.AddListener((value) =>
+                    {
+                        SetTargetPosition(value, i);
+                    });
+                }
+            }
         }
 
-        private BroadcastAt getBroadcastAt(string _value)
+        private BroadcastAt GetBroadcastAt(string _value)
         {
             if (_value == BroadcastAt.End.ToString()) return BroadcastAt.End;
             else if (_value == BroadcastAt.Never.ToString()) return BroadcastAt.Never;
             else if (_value == BroadcastAt.AtEveryInterval.ToString()) return BroadcastAt.AtEveryInterval;
             return BroadcastAt.Never;
         }
-        
+
+        private void SetTargetPosition(string newValue, int index)
+        {
+            var currentValue = data.targetPosition;
+            switch (index)
+            {
+                default:
+                case 0:
+                    currentValue.x = int.Parse(newValue);
+                    break;
+                case 1:
+                    currentValue.y = int.Parse(newValue);
+                    break;
+                case 2:
+                    currentValue.z = int.Parse(newValue);
+                    break;
+            }
+            data.targetPosition = currentValue;
+        }
+
         public void LoadDefaultValues()
         {
             // broadcast at 
-            if (broadcastAt != null){broadcastAt.AddOptions(Enum.GetNames(typeof(BroadcastAt)).ToList());}
+            if (broadcastAt != null) { broadcastAt.AddOptions(Enum.GetNames(typeof(BroadcastAt)).ToList()); }
         }
 
         public TranslateComponentData GetData()
@@ -94,7 +110,7 @@ namespace RuntimeInspectorNamespace
 
         public void SetData(TranslateComponentData _data)
         {
-            if(broadcastAt != null) broadcastAt.value = ((int)Enum.Parse(typeof(BroadcastAt), _data.broadcastAt.ToString()));
+            if (broadcastAt != null) broadcastAt.value = ((int)Enum.Parse(typeof(BroadcastAt), _data.broadcastAt.ToString()));
 
             if (pauseDistanceInput != null) pauseDistanceInput.text = _data.pauseAtDistance.ToString();
             if (speedInput != null) speedInput.text = _data.speed.ToString();
@@ -102,7 +118,7 @@ namespace RuntimeInspectorNamespace
             if (pauseDistanceInput != null) pauseDistanceInput.text = _data.pauseAtDistance.ToString();
             if (repeatInput != null) repeatInput.text = _data.repeat.ToString();
             if (broadcastInput != null) broadcastInput.text = _data.broadcast;
-            
+
         }
     }
 }

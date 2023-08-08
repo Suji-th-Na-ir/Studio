@@ -17,6 +17,7 @@ namespace RuntimeInspectorNamespace
         public int repeat = 0;
         public string broadcast = "";
         public BroadcastAt broadcastAt;
+        public Vector3 targetPosition;
     }
     
     [EditorDrawComponent("Terra.Studio.Translate")]
