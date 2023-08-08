@@ -49,7 +49,8 @@ namespace RuntimeInspectorNamespace
                 pauseFor = Type.data.pauseBetween,
                 repeatFor = Type.data.repeat,
                 
-                IsBroadcastable = true,
+
+                IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcast),
                 broadcastAt = Type.data.broadcastAt,
                 Broadcast = Type.data.broadcast,
                 
