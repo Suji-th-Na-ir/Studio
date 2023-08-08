@@ -1,0 +1,155 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4f9f22dd18554b009af21baddb5b4fb, type: 3}
+  m_Name: ResourceDB
+  m_EditorClassIdentifier: 
+  items:
+  - name: Fonts & Materials
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: Sprite Assets
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: Style Sheets
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: Shaders
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: Editortime
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: Prefabs
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: source
+    ext: 
+    path: Prefabs
+    type: 1
+    objectTypeName: 
+  - name: Jeep_done
+    ext: fbx
+    path: Prefabs/source
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Cube
+    ext: prefab
+    path: Prefabs
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Cylinder
+    ext: prefab
+    path: Prefabs
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Sphere
+    ext: prefab
+    path: Prefabs
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Runtime
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: sfx
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: vfx
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: vfx_ArrowBlue
+    ext: prefab
+    path: vfx
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: vfx_ArrowFire
+    ext: prefab
+    path: vfx
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: vfx_ArrowGreen
+    ext: prefab
+    path: vfx
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: vfx_ArrowPoisoned
+    ext: prefab
+    path: vfx
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Shaders
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: Textures
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: RuntimeInspector
+    ext: 
+    path: 
+    type: 1
+    objectTypeName: 
+  - name: ColorPicker
+    ext: prefab
+    path: RuntimeInspector
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: DraggedReferenceItem
+    ext: prefab
+    path: RuntimeInspector
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: ObjectReferencePicker
+    ext: prefab
+    path: RuntimeInspector
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Tooltip
+    ext: prefab
+    path: RuntimeInspector
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  m_FileCount: 12
+  m_FolderCount: 13
+  UpdateAutomatically: 1

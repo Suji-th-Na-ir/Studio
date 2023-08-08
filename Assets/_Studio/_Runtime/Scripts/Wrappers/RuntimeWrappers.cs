@@ -5,24 +5,13 @@ namespace Terra.Studio
 {
     public class RuntimeWrappers
     {
-        public static PrimitiveType GetPrimitiveType(string value)
+        public static GameObject SpawnGameObject(string path, params Vector3[] trs)
         {
-            if (Enum.TryParse(typeof(PrimitiveType), value, false, out object result))
-            {
-                return (PrimitiveType)result;
-            }
-            return default;
-        }
+            var go = Resources.Load<GameObject>(path);
+            if (go == null)
+                return go;
+            go = GameObject.Instantiate(go);
 
-        public static GameObject SpawnPrimitive(PrimitiveType type)
-        {
-            var gameObject = GameObject.CreatePrimitive(type);
-            return gameObject;
-        }
-
-        public static GameObject SpawnPrimitive(PrimitiveType type, params Vector3[] trs)
-        {
-            var go = SpawnPrimitive(type);
             if (trs == null || trs.Length == 0)
             {
                 return go;
@@ -42,13 +31,6 @@ namespace Terra.Studio
                         break;
                 }
             }
-            return go;
-        }
-
-        public static GameObject SpawnPrimitive(string primitiveType, params Vector3[] trs)
-        {
-            var primitive = GetPrimitiveType(primitiveType);
-            var go = SpawnPrimitive(primitive, trs);
             return go;
         }
 

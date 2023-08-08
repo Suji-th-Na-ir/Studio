@@ -96,15 +96,7 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        private StartOn GetStartCondition(string _name)
-        {
-
-            if (_name == "Terra.Studio.GameStart") return StartOn.GameStart;
-            else if (_name == "Terra.Studio.TriggerAction") return StartOn.OnPlayerCollide;
-            else if (_name == "Terra.Studio.MouseAction") return StartOn.OnClick;
-            else if (_name == "Terra.Studio.Listener") return StartOn.BroadcastListen;
-            return StartOn.GameStart;
-        }
+        
 
         public void Import(EntityBasedComponent cdata)
         {
@@ -127,7 +119,11 @@ namespace RuntimeInspectorNamespace
             Type.data.broadcastAt = cc.broadcastAt;
 
             Debug.Log("import state type " + cc.ConditionType.ToString());
-            start = GetStartCondition(cc.ConditionType);
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOn), out object result))
+            {
+                start = (StartOn)result;
+            }
+            
             if (start == StartOn.BroadcastListen)
             {
                 Type.data.listenTo = cc.ConditionData;

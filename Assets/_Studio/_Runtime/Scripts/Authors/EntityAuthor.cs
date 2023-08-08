@@ -32,7 +32,7 @@ namespace Terra.Studio
             public override void Generate(object data)
             {
                 var virtualEntity = (VirtualEntity)data;
-                var go = RuntimeWrappers.SpawnPrimitive(virtualEntity.primitiveType, virtualEntity.position, virtualEntity.rotation, virtualEntity.scale);
+                var go = RuntimeWrappers.SpawnGameObject(virtualEntity.assetPath, virtualEntity.position, virtualEntity.rotation, virtualEntity.scale);
                 if (virtualEntity.components == null || virtualEntity.components.Length == 0)
                 {
                     return;

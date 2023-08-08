@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayShifu.Terra;
-
+using System.IO;
 
 namespace Terra.Studio
 {
@@ -32,7 +32,7 @@ namespace Terra.Studio
             var playButton = playButtonTr.GetComponent<Button>();
             AddListenerEvent(playButton, () =>
             {
-                var scene = EditorOp.Resolve<SceneExporter>().ExportJson();
+                var scene = SceneExporter.ExportJson();
                 SystemOp.Resolve<CrossSceneDataHolder>().Set(scene);
                 EditorOp.Resolve<EditorSystem>().RequestSwitchState();
             });
@@ -67,7 +67,8 @@ namespace Terra.Studio
 
             // Calculate the spawn position by adding the forward direction scaled by spawnDistance
             Vector3 spawnPosition = cameraPosition + cameraTransform.forward * 5;
-            var primitive = GameObject.CreatePrimitive(type);
+            var path = Path.Combine(ResourceDB.GetAsset(type.ToString()).Path, type.ToString());
+            var primitive = RuntimeWrappers.SpawnGameObject(path);
             primitive.transform.position = spawnPosition;
             EditorOp.Resolve<SelectionHandler>().OnTargetObjectChanged(primitive);
             EditorOp.Resolve<SelectionHandler>().SelectObjectInHierarchy(primitive);

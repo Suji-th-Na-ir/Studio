@@ -14,8 +14,10 @@ namespace Terra.Studio
     public struct VirtualEntity
     {
         public int id;
-        public string primitiveType;
 
+        public string name;
+        
+        public string assetPath;
         [JsonConverter(typeof(Vector3Converter))] public Vector3 position;
         [JsonConverter(typeof(Vector3Converter))] public Vector3 rotation;
         [JsonConverter(typeof(Vector3Converter))] public Vector3 scale;
