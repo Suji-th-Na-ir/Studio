@@ -21,6 +21,7 @@ namespace RuntimeInspectorNamespace
 
         public Dropdown broadcastAt;
         public TMP_InputField broadcastInput;
+        public TMP_InputField listenInput;
 
         public RotateField rotateField = null;
         private RotateComponentData rdata = new RotateComponentData();
@@ -64,13 +65,18 @@ namespace RuntimeInspectorNamespace
                 rdata.repeat = Helper.StringInInt(value);
                 rotateField.UpdateData(rdata);
             });
-            if(broadcastInput != null) broadcastInput.onValueChanged.AddListener((value) =>
+            if (broadcastInput != null) broadcastInput.onValueChanged.AddListener((value) =>
             {
                 rdata.broadcast = value;
+                rotateField.UpdateData(rdata);
             });
-            
+            if (listenInput != null) listenInput.onValueChanged.AddListener((value) =>
+            {
+                rdata.listenTo = value;
+                rotateField.UpdateData(rdata);
+            });
         }
-        
+
         private Axis GetAxis(string _value)
         {
             if (_value == Axis.X.ToString()) return Axis.X;
@@ -123,6 +129,7 @@ namespace RuntimeInspectorNamespace
             if (repeatInput != null) repeatInput.text = _data.repeat.ToString();
             if (broadcastInput != null) broadcastInput.text = _data.broadcast;
             
+            if (listenInput != null) listenInput.text = _data.listenTo;
         }
     }
 }

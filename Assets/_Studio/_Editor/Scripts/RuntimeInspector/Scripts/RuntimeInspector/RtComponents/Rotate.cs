@@ -18,6 +18,7 @@ namespace RuntimeInspectorNamespace
         public int repeat = 0;
         public float pauseBetween = 0f;
         public string broadcast = "";
+        public string listenTo = "";
         public BroadcastAt broadcastAt;
     }
     
@@ -85,17 +86,16 @@ namespace RuntimeInspectorNamespace
         public string GetStartCondition()
         {
             if (start == StartOn.OnPlayerCollide)
-                return "Terra.Studio.TriggerAction"; 
+                return "Terra.Studio.TriggerAction";
             else if (start == StartOn.OnClick)
-                return "Terra.Studio.MouseAction"; 
+                return "Terra.Studio.MouseAction";
             else if (start == StartOn.GameStart)
                 return "Terra.Studio.GameStart";
             else if (start == StartOn.BroadcastListen)
-                return "Terra.Studio.Listener";
-            
+                return Type.data.listenTo;
             return "";
         }
-        
+
         private StartOn GetStartCondition(string _name)
         {
 
@@ -126,9 +126,12 @@ namespace RuntimeInspectorNamespace
             Type.data.broadcast = cc.Broadcast;
             Type.data.broadcastAt = cc.broadcastAt;
 
-            Debug.Log("import state type "+cc.ConditionType.ToString());
-            // Start = GetStartCondition(cc.ConditionType);
+            Debug.Log("import state type " + cc.ConditionType.ToString());
             start = GetStartCondition(cc.ConditionType);
+            if (start == StartOn.BroadcastListen)
+            {
+                Type.data.listenTo = cc.ConditionData;
+            }
         }
 
         private void ModifyDataAsPerSelected(ref RotateComponent component)
