@@ -78,9 +78,9 @@ namespace Terra.Studio
                 pauseForTime = translatable.pauseFor,
                 targetObj = translatable.refObj,
                 broadcastAt = translatable.broadcastAt,
-                onTranslated = () =>
+                onTranslated = (isDone) =>
                 {
-                    OnTranslateDone(translatable.Broadcast, translatable.broadcastAt == BroadcastAt.End);
+                    OnTranslateDone(translatable.Broadcast, translatable.broadcastAt == BroadcastAt.End || isDone);
                 }
             };
             return translateParams;

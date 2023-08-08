@@ -6,7 +6,7 @@ namespace Terra.Studio
 {
     public class RotateByHelper : MonoBehaviour
     {
-        private Action onRotated;
+        private Action<bool> onRotated;
         private int rotateCount = 0;
         private float rotateBy = 90f;
         private float rotationSpeed = 45f;
@@ -52,10 +52,9 @@ namespace Terra.Studio
                 }
                 float finalRotation = targetRotation - currentRotation;
                 transform.Rotate(GetVector3(finalRotation * directionFactor));
-                currentRotation = targetRotation;
                 if (broadcastAt == BroadcastAt.AtEveryInterval)
                 {
-                    onRotated?.Invoke();
+                    onRotated?.Invoke(false);
                 }
                 if (canPause)
                 {
@@ -73,7 +72,7 @@ namespace Terra.Studio
             while (rotateForever || currentRotateCount < rotateCount);
             if (broadcastAt == BroadcastAt.End)
             {
-                onRotated?.Invoke();
+                onRotated?.Invoke(true);
             }
             Destroy(this);
         }

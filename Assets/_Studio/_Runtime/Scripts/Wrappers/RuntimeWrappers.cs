@@ -105,7 +105,7 @@ namespace Terra.Studio
         public bool shouldPause;
         public float pauseForTime;
         public GameObject targetObj;
-        public Action onRotated;
+        public Action<bool> onRotated;
         public Axis axis;
         public Direction direction;
         public BroadcastAt broadcastAt;
@@ -122,7 +122,7 @@ namespace Terra.Studio
         public float pauseForTime;
         public float pauseDistance;
         public GameObject targetObj;
-        public Action onTranslated;
+        public Action<bool> onTranslated;
         public BroadcastAt broadcastAt;
     }
 }

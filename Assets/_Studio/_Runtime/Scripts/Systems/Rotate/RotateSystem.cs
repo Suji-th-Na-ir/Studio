@@ -77,11 +77,11 @@ namespace Terra.Studio
                 targetObj = rotatable.refObj,
                 broadcastAt = rotatable.broadcastAt,
                 shouldPingPong = rotatable.rotationType is RotationType.Oscillate or RotationType.OscillateForever,
-                onRotated = () =>
+                onRotated = (isDone) =>
                 {
                     if (rotatable.IsBroadcastable)
                     {
-                        OnRotationDone(rotatable.Broadcast, rotatable.broadcastAt == BroadcastAt.End);
+                        OnRotationDone(rotatable.Broadcast, rotatable.broadcastAt == BroadcastAt.End || isDone);
                     }
                 }
             };
