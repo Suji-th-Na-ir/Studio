@@ -58,10 +58,10 @@ namespace RuntimeInspectorNamespace
                 vfxName = string.IsNullOrEmpty(PlayVFX.clipName) ? null : PlayVFX.clipName,
                 sfxIndex = PlaySFX.clipIndex,
                 vfxIndex = PlayVFX.clipIndex,
-                
+
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
-                ConditionData = GetStartCondition()
+                ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(Start)
             };
 
             ModifyDataAsPerSelected(ref rc);
@@ -83,19 +83,7 @@ namespace RuntimeInspectorNamespace
             return eventName;
         }
 
-        public string GetStartCondition()
-        {
-            if (Start == StartOn.OnPlayerCollide)
-                return "Player";
-
-            if (Start == StartOn.OnClick)
-                return "OnClick";
-
-            if (Start == StartOn.GameStart)
-                return "Start";
-
-            return "";
-        }
+       
 
         private StartOn GetStartCondition(string _name)
         {

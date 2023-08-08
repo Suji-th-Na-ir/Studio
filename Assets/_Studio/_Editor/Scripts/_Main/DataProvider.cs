@@ -47,6 +47,21 @@ namespace Terra.Studio
             return null;
         }
 
+        public string GetEnumConditionDataValue<T>(T instance) where T : Enum
+        {
+            var actualKey = typeof(T).FullName + "." + instance.ToString();
+            if (EnumTargets.ContainsKey(actualKey))
+            {
+                if (EnumTargets.TryGetValue(actualKey, out string[] value))
+                {
+                    if (!string.IsNullOrEmpty(value[1]))
+                        return value[1];
+                }
+            }
+
+            return "";
+        }
+
         public Type GetVariance(string key)
         {
             if (ComponentTargets.ContainsKey(key))

@@ -31,7 +31,7 @@ namespace RuntimeInspectorNamespace
             {
                 collectable.IsConditionAvailable = true;
                 collectable.ConditionType = GetStartEvent();
-                collectable.ConditionData = GetStartCondition();
+                collectable.ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(Start);
                 collectable.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
                 collectable.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
 
@@ -82,15 +82,5 @@ namespace RuntimeInspectorNamespace
             return eventName;
         }
 
-        public string GetStartCondition()
-        {
-            if (Start == StartOnCollectible.OnPlayerCollide)
-                return "Player";
-
-            if (Start == StartOnCollectible.OnClick)
-                return "OnClick";
-
-            return "";
-        }
     }
 }
