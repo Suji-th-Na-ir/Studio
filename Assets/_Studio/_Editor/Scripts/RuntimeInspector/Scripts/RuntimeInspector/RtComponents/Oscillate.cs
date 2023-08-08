@@ -31,7 +31,7 @@ namespace RuntimeInspectorNamespace
             Component.fromPoint = fromPoint;
             Component.toPoint = toPoint;
             Component.ConditionType = GetStartEvent();
-            Component.ConditionData = GetStartCondition();
+            Component.ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(Start);
             Component.BroadcastListen = string.IsNullOrEmpty(BroadcastListen) ? null : BroadcastListen;
             Component.loop = Loop;
             Component.speed = Speed;
@@ -61,20 +61,6 @@ namespace RuntimeInspectorNamespace
         {
             var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(Start);
             return eventName;
-        }
-
-        public string GetStartCondition()
-        {
-            if (Start == StartOn.OnPlayerCollide)
-                return "Player";
-
-            if (Start == StartOn.OnClick)
-                return "OnClick";
-
-            if (Start == StartOn.BroadcastListen)
-                return BroadcastListen.ToString();
-
-            return "";
         }
     }
 }
