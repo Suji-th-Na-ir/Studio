@@ -49,7 +49,8 @@ namespace RuntimeInspectorNamespace
                 pauseFor = Type.data.pauseBetween,
                 repeatFor = Type.data.repeat,
                 
-                IsBroadcastable = true,
+
+                IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcast),
                 broadcastAt = Type.data.broadcastAt,
                 Broadcast = Type.data.broadcast,
                 
@@ -85,15 +86,14 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartCondition()
         {
-            if (start == StartOn.OnPlayerCollide)
-                return "Terra.Studio.TriggerAction";
-            else if (start == StartOn.OnClick)
-                return "Terra.Studio.MouseAction";
-            else if (start == StartOn.GameStart)
-                return "Terra.Studio.GameStart";
-            else if (start == StartOn.BroadcastListen)
+            if (start == StartOn.BroadcastListen)
+            {
                 return Type.data.listenTo;
-            return "";
+            }
+            else
+            {
+                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(start);
+            }
         }
 
         private StartOn GetStartCondition(string _name)

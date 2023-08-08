@@ -45,7 +45,7 @@ namespace RuntimeInspectorNamespace
                 targetPosition = Type.data.moveTo,
                 startPosition = transform.position,
 
-                IsBroadcastable = true,
+                IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcast),
                 broadcastAt = Type.data.broadcastAt,
 
 
