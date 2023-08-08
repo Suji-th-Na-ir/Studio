@@ -62,7 +62,6 @@ namespace RuntimeInspectorNamespace
 
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOnCollectible), out object result))
             {
-                Debug.Log(result);
                 Start = (StartOnCollectible)result;
             }
 

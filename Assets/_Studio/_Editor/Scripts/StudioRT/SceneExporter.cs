@@ -89,10 +89,14 @@ namespace Terra.Studio
 
         private void LoadScene()
         {
+
 #if UNITY_EDITOR
-            if (!SystemOp.Resolve<System>().ConfigSO.PickupSavedData && !EditorPrefs.GetBool("InPlayMode",false))
+            if (SystemOp.Resolve<System>().PreviousStudioState == StudioState.Bootstrap)
             {
-                return;
+                if (!SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
+                {
+                    return;
+                }
             }
 #endif
             string filePath = Application.persistentDataPath + "/scene_data.json";

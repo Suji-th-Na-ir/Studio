@@ -64,6 +64,7 @@ namespace Terra.Studio
 
     public enum StudioState
     {
+        Bootstrap,
         Editor,
         Runtime
     }

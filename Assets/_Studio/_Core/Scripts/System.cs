@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,11 +8,15 @@ namespace Terra.Studio
     {
         private const string RESOURCE_CONFIGURATION_PATH = "SystemSettings";
         private SystemConfigurationSO configData;
+        private StudioState previousStudioState;
         private StudioState currentStudioState;
         private Scene currentActiveScene;
         private LoadSceneParameters sceneLoadParameters;
 
         public SystemConfigurationSO ConfigSO { get { return configData; } }
+#if UNITY_EDITOR
+        public StudioState PreviousStudioState { get { return previousStudioState; } }
+#endif
 
         private void Awake()
         {
@@ -30,6 +33,7 @@ namespace Terra.Studio
             SceneManager.sceneLoaded += OnSceneLoaded;
             configData = Resources.Load<SystemConfigurationSO>(RESOURCE_CONFIGURATION_PATH);
             currentStudioState = configData.DefaultStudioState;
+            previousStudioState = StudioState.Bootstrap;
             sceneLoadParameters = new LoadSceneParameters()
             {
                 loadSceneMode = LoadSceneMode.Additive
@@ -53,7 +57,6 @@ namespace Terra.Studio
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
             SystemOp.Resolve<ISubsystem>().Initialize();
-            EditorPrefs.SetBool("InPlayMode", currentStudioState == StudioState.Runtime);
         }
 
         public void SwitchState()
@@ -62,6 +65,7 @@ namespace Terra.Studio
             // Debug.Log($"Switching state");
             DisposeCurrentSubSystem(LoadSubsystemScene);
             currentStudioState = GetNextState();
+            previousStudioState = GetOtherState();
         }
 
         private void DisposeCurrentSubSystem(Action onUnloadComplete)
@@ -78,8 +82,18 @@ namespace Terra.Studio
         private StudioState GetNextState()
         {
             var index = (int)currentStudioState;
-            var nextIndex = ++index % 2;
+            var nextIndex = ++index % 3;
+            if (nextIndex == 0) nextIndex++;
             return (StudioState)nextIndex;
+        }
+
+        private StudioState GetOtherState()
+        {
+            return currentStudioState switch
+            {
+                StudioState.Runtime => StudioState.Editor,
+                _ => StudioState.Runtime,
+            };
         }
 
         private void OnDestroy()
