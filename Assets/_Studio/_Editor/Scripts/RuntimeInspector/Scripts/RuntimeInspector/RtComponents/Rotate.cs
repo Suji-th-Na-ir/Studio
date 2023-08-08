@@ -24,7 +24,7 @@ namespace RuntimeInspectorNamespace
     [EditorDrawComponent("Terra.Studio.Rotate")]
     public class Rotate : MonoBehaviour, IComponent
     {
-        public StartOn Start = StartOn.GameStart;
+        public StartOn start = StartOn.GameStart;
         public Atom.Rotate Type = new Atom.Rotate();
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
@@ -58,10 +58,10 @@ namespace RuntimeInspectorNamespace
                 vfxName = string.IsNullOrEmpty(PlayVFX.clipName) ? null : PlayVFX.clipName,
                 sfxIndex = PlaySFX.clipIndex,
                 vfxIndex = PlayVFX.clipIndex,
-
+                
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
-                ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(Start)
+                ConditionData = GetStartCondition()
             };
 
             ModifyDataAsPerSelected(ref rc);
@@ -79,17 +79,30 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartEvent()
         {
-            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(Start);
-            return eventName;
+            return EditorOp.Resolve<DataProvider>().GetEnumValue(start);
         }
 
-       
-
+        public string GetStartCondition()
+        {
+            if (start == StartOn.OnPlayerCollide)
+                return "Terra.Studio.TriggerAction"; 
+            else if (start == StartOn.OnClick)
+                return "Terra.Studio.MouseAction"; 
+            else if (start == StartOn.GameStart)
+                return "Terra.Studio.GameStart";
+            else if (start == StartOn.BroadcastListen)
+                return "Terra.Studio.Listener";
+            
+            return "";
+        }
+        
         private StartOn GetStartCondition(string _name)
         {
-            if (_name == StartOn.GameStart.ToString()) return StartOn.GameStart;
-            else if (_name == StartOn.OnPlayerCollide.ToString()) return StartOn.OnPlayerCollide;
-            else if (_name == StartOn.OnClick.ToString()) return StartOn.OnClick;
+
+            if (_name == "Terra.Studio.GameStart") return StartOn.GameStart;
+            else if (_name == "Terra.Studio.TriggerAction") return StartOn.OnPlayerCollide;
+            else if (_name == "Terra.Studio.MouseAction") return StartOn.OnClick;
+            else if (_name == "Terra.Studio.Listener") return StartOn.BroadcastListen;
             return StartOn.GameStart;
         }
 
@@ -112,8 +125,10 @@ namespace RuntimeInspectorNamespace
             Type.data.repeat = cc.repeatFor;
             Type.data.broadcast = cc.Broadcast;
             Type.data.broadcastAt = cc.broadcastAt;
-            
-            Start = GetStartCondition(cc.ConditionType);
+
+            Debug.Log("import state type "+cc.ConditionType.ToString());
+            // Start = GetStartCondition(cc.ConditionType);
+            start = GetStartCondition(cc.ConditionType);
         }
 
         private void ModifyDataAsPerSelected(ref RotateComponent component)
@@ -130,3 +145,4 @@ namespace RuntimeInspectorNamespace
         }
     }
 }
+
