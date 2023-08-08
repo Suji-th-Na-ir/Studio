@@ -1,10 +1,8 @@
 using System;
-using Newtonsoft.Json;
-using Terra.Studio;
-using Terra.Studio.RTEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
+using Terra.Studio;
+using Newtonsoft.Json;
+using Terra.Studio.RTEditor;
 
 namespace RuntimeInspectorNamespace
 {
@@ -42,7 +40,6 @@ namespace RuntimeInspectorNamespace
             {
                 translateType = (TranslateType)Type.data.translateType,
                 speed = Type.data.speed,
-                pauseAtDistance = Type.data.pauseAtDistance,
                 pauseFor = Type.data.pauseFor,
                 repeatFor = Type.data.repeat,
                 targetPosition = Type.data.moveTo,
@@ -119,15 +116,14 @@ namespace RuntimeInspectorNamespace
             PlayVFX.clipName = cc.vfxName;
 
             Type.data.translateType = (int)cc.translateType;
-            
+
             Type.data.speed = cc.speed;
             Type.data.pauseFor = cc.pauseFor;
-            Type.data.pauseAtDistance = cc.pauseAtDistance;
             Type.data.moveTo = cc.targetPosition;
             Type.data.repeat = cc.repeatFor;
             Type.data.broadcast = cc.Broadcast;
             Type.data.broadcastAt = cc.broadcastAt;
-            
+
             start = GetStartCondition(cc.ConditionType);
         }
     }

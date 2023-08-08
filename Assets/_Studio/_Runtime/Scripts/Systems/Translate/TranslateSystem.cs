@@ -74,7 +74,7 @@ namespace Terra.Studio
                 translateTimes = translatable.repeatFor,
                 shouldPingPong = translatable.translateType == TranslateType.PingPong || translatable.translateType == TranslateType.PingPongForever,
                 shouldPause = translatable.pauseFor > 0f,
-                pauseDistance = translatable.pauseAtDistance,
+                pauseDistance = Vector3.Distance(translatable.startPosition, translatable.targetPosition),
                 pauseForTime = translatable.pauseFor,
                 targetObj = translatable.refObj,
                 broadcastAt = translatable.broadcastAt,

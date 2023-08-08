@@ -31,7 +31,6 @@ namespace Terra.Studio
         public TranslateType translateType;
         public BroadcastAt broadcastAt;
         public float speed;
-        public float pauseAtDistance;
         public float pauseFor;
         public int repeatFor;
     }
