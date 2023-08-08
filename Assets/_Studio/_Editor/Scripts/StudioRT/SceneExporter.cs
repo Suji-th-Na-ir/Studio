@@ -7,7 +7,7 @@ using RuntimeInspectorNamespace;
 using Terra.Studio.RTEditor;
 using UnityEngine.SceneManagement;
 using System.IO;
-
+using UnityEditor;
 namespace Terra.Studio
 {
     public class SceneExporter : MonoBehaviour
@@ -90,7 +90,7 @@ namespace Terra.Studio
         private void LoadScene()
         {
 #if UNITY_EDITOR
-            if (!SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
+            if (!SystemOp.Resolve<System>().ConfigSO.PickupSavedData && !EditorPrefs.GetBool("InPlayMode",false))
             {
                 return;
             }

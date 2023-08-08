@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -52,6 +53,7 @@ namespace Terra.Studio
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
             SystemOp.Resolve<ISubsystem>().Initialize();
+            EditorPrefs.SetBool("InPlayMode", currentStudioState == StudioState.Runtime);
         }
 
         public void SwitchState()
