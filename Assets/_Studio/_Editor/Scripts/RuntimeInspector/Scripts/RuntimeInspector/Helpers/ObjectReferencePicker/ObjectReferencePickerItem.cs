@@ -76,7 +76,10 @@ namespace RuntimeInspectorNamespace
 			Reference = reference;
 			// referenceNameText.text = displayName;
 			string[] splits = displayName.Split(".");
-			referenceNameText.text = splits[1];
+			if (splits.Length < 3)
+				referenceNameText.text = splits[1];
+			else if( splits.Length >= 3)
+				referenceNameText.text = splits[2];
 
 			Texture previewTex = ( reference as Object ).GetTexture();
 			if( previewTex != null )
