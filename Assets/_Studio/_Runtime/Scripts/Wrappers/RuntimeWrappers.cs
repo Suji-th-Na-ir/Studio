@@ -75,7 +75,7 @@ namespace Terra.Studio
 
         public static void RespawnPlayer(Vector3 position)
         {
-            RuntimeOp.Resolve<GameData>().PlayerRef.parent.position = position;
+            RuntimeOp.Resolve<GameData>().PlayerRef.position = position;
         }
     }
 
