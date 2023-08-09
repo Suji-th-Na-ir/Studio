@@ -67,7 +67,7 @@ namespace Terra.Studio
 
             // Calculate the spawn position by adding the forward direction scaled by spawnDistance
             Vector3 spawnPosition = cameraPosition + cameraTransform.forward * 5;
-            var path = Path.Combine(ResourceDB.GetAsset(type.ToString()).Path, type.ToString());
+            var path = ResourceDB.GetStudioAsset(type.ToString()).Path;
             var primitive = RuntimeWrappers.SpawnGameObject(path);
             primitive.transform.position = spawnPosition;
             EditorOp.Resolve<SelectionHandler>().OnTargetObjectChanged(primitive);

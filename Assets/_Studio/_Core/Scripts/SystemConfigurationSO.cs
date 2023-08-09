@@ -10,6 +10,8 @@ namespace Terra.Studio
         [SerializeField] private string runtimeSceneName;
 #if UNITY_EDITOR
         [Space(10), Header("Editor only")]
+        [SerializeField] private TextAsset SceneData;
+        public TextAsset SceneDataToLoad { get { return SceneData; } }
         [SerializeField] private bool pickupSavedData;
         public bool PickupSavedData { get { return pickupSavedData; } }
         [SerializeField] private bool loadDefaultSceneOnPlay;

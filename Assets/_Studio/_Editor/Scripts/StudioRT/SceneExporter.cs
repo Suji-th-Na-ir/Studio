@@ -8,10 +8,14 @@ using Terra.Studio.RTEditor;
 using UnityEngine.SceneManagement;
 using System.IO;
 using UnityEditor;
+using RuntimeCommon;
+using System.Text.RegularExpressions;
+
 namespace Terra.Studio
 {
     public static class SceneExporter 
     {
+       static string filePath;
         [MenuItem("Terra/Export Scene")]
         public static void ExportSceneFromHirearchy()
         {
@@ -52,6 +56,10 @@ namespace Terra.Studio
 
             foreach (var obj in objects)
             {
+                if (obj.GetComponentInParent<HideInHierarchy>())
+                {
+                    continue;
+                }
                 if (obj.activeInHierarchy && obj.activeSelf)
                 {
                     newList.Add(obj);
@@ -61,6 +69,13 @@ namespace Terra.Studio
             return newList;
         }
 
+        static string RemoveContentInParentheses(string input)
+        {
+            string pattern = @"\([^)]*\)";
+            string result = Regex.Replace(input, pattern, "");
+            result = result.Trim(); // Remove trailing spaces
+            return result;
+        }
 
         public static string ExportJson()
         {
@@ -79,14 +94,14 @@ namespace Terra.Studio
             {
                 //if (sceneObjects[i].GetComponent<MeshFilter>() == null)
                 //    continue;
-                var sceneObjectName = sceneObjects[i].name.Replace("(Clone)","");
-                if (ResourceDB.GetAsset(sceneObjectName) == null)
+                var sceneObjectName = RemoveContentInParentheses(sceneObjects[i].name); 
+                if (ResourceDB.GetStudioAsset(sceneObjectName) == null)
                     continue;
                 var virutalEntity = new VirtualEntity
                 {
                     id = i,
                     name = sceneObjectName,
-                    assetPath = Path.Combine(ResourceDB.GetAsset(sceneObjectName).Path, sceneObjectName),
+                    assetPath = ResourceDB.GetStudioAsset(sceneObjectName).Path,
                     
                     position = sceneObjects[i].transform.position,
                     rotation = sceneObjects[i].transform.eulerAngles,
@@ -118,8 +133,18 @@ namespace Terra.Studio
 
         private static void SaveScene(string data)
         {
-            string filePath = Application.persistentDataPath + "/scene_data.json";
+            if (!Application.isPlaying)
+            {
+                filePath = Application.dataPath + $"/Resources/" + DateTime.Now.ToString() + ".json";
+            }
+
+            string directory = Path.GetDirectoryName(filePath);
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
             File.WriteAllText(filePath, data);
+            AssetDatabase.Refresh();
         }
 
         private static void LoadScene()
@@ -132,9 +157,13 @@ namespace Terra.Studio
                 {
                     return;
                 }
+                else
+                {
+                    filePath = Application.dataPath + "/Resources" + ResourceDB.GetStudioAsset(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name).Path + ".json";
+                }
             }
 #endif
-            string filePath = Application.persistentDataPath + "/scene_data.json";
+            
             if (File.Exists(filePath))
             {
                 string jsonData = File.ReadAllText(filePath);
@@ -147,7 +176,7 @@ namespace Terra.Studio
             }
             else
             {
-                Debug.Log("save file do not exists.");
+                Debug.Log("save file do not exists."+filePath);
             }
         }
 
@@ -176,7 +205,7 @@ namespace Terra.Studio
                 }
                 else
                 {
-                    Debug.Log("primitive type not supported");
+                    Debug.Log("GameObject could not be spawned!!");
                 }
             }
         }
