@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Terra.Studio
 {
-    public class RotateByHelper : MonoBehaviour
+    public class RotateByHelper : BaseCoroutineRunner
     {
         private Action<bool> onRotated;
         private int rotateCount = 0;
@@ -87,8 +87,9 @@ namespace Terra.Studio
             };
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             StopAllCoroutines();
         }
     }

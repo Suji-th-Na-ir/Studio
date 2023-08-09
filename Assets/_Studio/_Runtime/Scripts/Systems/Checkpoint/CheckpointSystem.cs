@@ -56,5 +56,19 @@ namespace Terra.Studio
                 RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
             }
         }
+
+        public void OnHaltRequested(EcsWorld currentWorld)
+        {
+            var filter = currentWorld.Filter<CheckpointComponent>().End();
+            var checkPointPool = currentWorld.GetPool<CheckpointComponent>();
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
+            foreach (var entity in filter)
+            {
+                if (!IdToConditionalCallback.ContainsKey(entity)) continue;
+                var checkpoint = checkPointPool.Get(entity);
+                compsData.ProvideEventContext(checkpoint.ConditionType, IdToConditionalCallback[entity], false, (checkpoint.refObj, checkpoint.ConditionData));
+                IdToConditionalCallback.Remove(entity);
+            }
+        }
     }
 }

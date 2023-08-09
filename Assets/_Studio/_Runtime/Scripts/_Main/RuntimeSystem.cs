@@ -8,12 +8,14 @@ namespace Terra.Studio
 {
     public class RuntimeSystem : MonoBehaviour, ISubsystem, IMouseEvents
     {
+        private bool canRunSystems;
         private EcsWorld ecsWorld;
         private IEcsSystems globalUpdateSystems;
         private Dictionary<Type, object> typeToInstances;
         private Dictionary<Type, IEcsSystems> customUpdateSystems;
         private Dictionary<Type, IEcsSystems>.Enumerator? customUpdateEnumerator;
         private List<Type> customUpdateSystemToRemove;
+        private List<BaseCoroutineRunner> coroutineRunners;
 
         public EcsWorld World { get { return ecsWorld; } }
         public Action<GameObject> OnClicked { get; set; }
@@ -29,6 +31,8 @@ namespace Terra.Studio
             ResolveEssentials();
             InitializeEcs();
             RuntimeOp.Resolve<GameStateHandler>().SwitchToNextState();
+            RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameStart(true, (data) => { canRunSystems = true; });
+            RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameEnd(true, (data) => { DestroyEcsSystemsAndWorld(); });
         }
 
         private void ResolveEssentials()
@@ -50,6 +54,7 @@ namespace Terra.Studio
             customUpdateSystems = new();
             typeToInstances = new();
             customUpdateSystemToRemove = new();
+            coroutineRunners = new();
             globalUpdateSystems = new EcsSystems(ecsWorld)
                                     .Add(new ClickSystem());
             globalUpdateSystems.Init();
@@ -57,8 +62,11 @@ namespace Terra.Studio
 
         private void Update()
         {
-            globalUpdateSystems?.Run();
-            UpdateCustomSystems();
+            if (canRunSystems)
+            {
+                globalUpdateSystems?.Run();
+                UpdateCustomSystems();
+            }
         }
 
         private void UpdateCustomSystems()
@@ -94,7 +102,7 @@ namespace Terra.Studio
             }
             var instance = Activator.CreateInstance<T>();
             typeToInstances.Add(type, instance);
-            if (typeof(T).GetInterfaces().Contains(typeof(IEcsRunSystem)))
+            if (type.GetInterfaces().Contains(typeof(IEcsRunSystem)))
             {
                 var newSystem = new EcsSystems(World).Add((IEcsRunSystem)instance);
                 newSystem.Init();
@@ -123,9 +131,20 @@ namespace Terra.Studio
             }
         }
 
+        public void AddCoroutineRunner(bool add, BaseCoroutineRunner runner)
+        {
+            if (add)
+            {
+                coroutineRunners?.Add(runner);
+            }
+            else
+            {
+                coroutineRunners?.Remove(runner);
+            }
+        }
+
         public void RequestSwitchState()
         {
-            //Check for busy state of the system, if there is any switch state already in progress
             SystemOp.Resolve<System>().SwitchState();
         }
 
@@ -135,23 +154,43 @@ namespace Terra.Studio
             ComponentAuthorOp.Flush();
             EntityAuthorOp.Flush();
             RuntimeOp.Unregister<CoreGameManager>();
+            DestroyEcsSystemsAndWorld();
         }
 
-        private void DestroyAllUpdatableSystems()
+        private void DestroyEcsSystemsAndWorld()
         {
-            if (customUpdateSystems == null) return;
-            foreach (var customSystem in customUpdateSystems)
+            canRunSystems = false;
+            globalUpdateSystems?.Destroy();
+            if (customUpdateSystems != null && customUpdateSystems.Count != 0)
             {
-                customSystem.Value?.Destroy();
+                foreach (var customSystem in customUpdateSystems)
+                {
+                    customSystem.Value?.Destroy();
+                }
+                customUpdateSystems = null;
             }
-            customUpdateSystems = null;
+            if (typeToInstances != null && typeToInstances.Count != 0)
+            {
+                foreach (var type in typeToInstances)
+                {
+                    var instance = (IAbsRunsystem)type.Value;
+                    instance.OnHaltRequested(ecsWorld);
+                }
+                typeToInstances = null;
+            }
+            if (coroutineRunners != null && coroutineRunners.Count != 0)
+            {
+                for (int i = 0; i < coroutineRunners.ToArray().Length; i++)
+                {
+                    Destroy(coroutineRunners[i]);
+                }
+                coroutineRunners = null;
+            }
+            ecsWorld?.Destroy();
         }
 
         private void OnDestroy()
         {
-            DestroyAllUpdatableSystems();
-            globalUpdateSystems?.Destroy();
-            ecsWorld?.Destroy();
             RuntimeOp.Unregister<Broadcaster>();
             RuntimeOp.Unregister<ComponentsData>();
             SystemOp.Unregister(this as ISubsystem);

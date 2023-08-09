@@ -72,5 +72,19 @@ namespace Terra.Studio
             }
             EntityAuthorOp.Degenerate(entityID);
         }
+
+        public void OnHaltRequested(EcsWorld currentWorld)
+        {
+            var filter = currentWorld.Filter<DestroyOnComponent>().End();
+            var destroyPool = currentWorld.GetPool<DestroyOnComponent>();
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
+            foreach (var entity in filter)
+            {
+                if (!IdToConditionalCallback.ContainsKey(entity)) continue;
+                var destroyable = destroyPool.Get(entity);
+                compsData.ProvideEventContext(destroyable.ConditionType, IdToConditionalCallback[entity], false, (destroyable.refObj, destroyable.ConditionData));
+                IdToConditionalCallback.Remove(entity);
+            }
+        }
     }
 }

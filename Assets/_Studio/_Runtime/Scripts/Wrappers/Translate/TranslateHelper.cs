@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Terra.Studio
 {
-    public class TranslateHelper : MonoBehaviour
+    public class TranslateHelper : BaseCoroutineRunner
     {
         private Vector3 translateFrom;
         private Vector3 translateTo;
@@ -121,8 +121,9 @@ namespace Terra.Studio
             Destroy(this);
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             StopAllCoroutines();
         }
     }

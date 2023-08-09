@@ -90,5 +90,19 @@ namespace Terra.Studio
         {
             RuntimeOp.Resolve<Broadcaster>().Broadcast(broadcast, removeOnceBroadcasted);
         }
+
+        public void OnHaltRequested(EcsWorld currentWorld)
+        {
+            var filter = currentWorld.Filter<TranslateComponent>().End();
+            var translatePool = currentWorld.GetPool<TranslateComponent>();
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
+            foreach (var entity in filter)
+            {
+                if (!IdToConditionalCallback.ContainsKey(entity)) continue;
+                var translatable = translatePool.Get(entity);
+                compsData.ProvideEventContext(translatable.ConditionType, IdToConditionalCallback[entity], false, (translatable.refObj, translatable.ConditionData));
+                IdToConditionalCallback.Remove(entity);
+            }
+        }
     }
 }

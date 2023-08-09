@@ -55,8 +55,6 @@ namespace Terra.Studio
 
         public void OnDemandRun(int entityID, in CollectableComponent component)
         {
-            //Unsubscribe to all listeners
-            //Destroy gracefully
             if (component.canPlaySFX)
             {
                 RuntimeWrappers.PlaySFX(component.sfxName);
@@ -75,6 +73,20 @@ namespace Terra.Studio
             }
             UnityEngine.Object.Destroy(component.refObject);
             EntityAuthorOp.Degenerate(entityID);
+        }
+
+        public void OnHaltRequested(EcsWorld currentWorld)
+        {
+            var filter = currentWorld.Filter<CollectableComponent>().End();
+            var collectablePool = currentWorld.GetPool<CollectableComponent>();
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
+            foreach (var entity in filter)
+            {
+                if (!IdToConditionalCallback.ContainsKey(entity)) continue;
+                var collectable = collectablePool.Get(entity);
+                compsData.ProvideEventContext(collectable.ConditionType, IdToConditionalCallback[entity], false, (collectable.refObject, collectable.ConditionData));
+                IdToConditionalCallback.Remove(entity);
+            }
         }
     }
 }

@@ -55,8 +55,6 @@ namespace Terra.Studio
                     Debug.Log($"Entity {entityID} not found!");
                     return;
                 }
-                //Delete all backlogs
-                //Destroy gameobject by having a bank of gos
                 ecsWorld.DelEntity(entityID);
             }
         }

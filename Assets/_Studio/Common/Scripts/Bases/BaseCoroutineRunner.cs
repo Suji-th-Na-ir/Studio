@@ -1,21 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Terra.Studio
 {
     public class BaseCoroutineRunner : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        protected virtual void Start()
         {
-        
+            RuntimeOp.Resolve<RuntimeSystem>().AddCoroutineRunner(true, this);
         }
 
-        // Update is called once per frame
-        void Update()
+        protected virtual void OnDestroy()
         {
-        
+            if (RuntimeOp.Resolve<RuntimeSystem>())
+            {
+                RuntimeOp.Resolve<RuntimeSystem>().AddCoroutineRunner(false, this);
+            }
         }
     }
 }

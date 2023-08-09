@@ -79,8 +79,12 @@ namespace Terra.Studio
 
         private void PerformCoreAction(string data)
         {
-            RuntimeOp.Resolve<GameData>().SetEndState(data);
-            RuntimeOp.Resolve<GameStateHandler>().SwitchToNextState();
+            CoroutineService.RunCoroutine(() =>
+            {
+                RuntimeOp.Resolve<GameData>().SetEndState(data);
+                RuntimeOp.Resolve<GameStateHandler>().SwitchToNextState();
+            },
+            CoroutineService.DelayType.WaitForFrame);
         }
     }
 }

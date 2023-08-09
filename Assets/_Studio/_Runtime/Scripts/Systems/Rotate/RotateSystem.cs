@@ -92,5 +92,19 @@ namespace Terra.Studio
         {
             RuntimeOp.Resolve<Broadcaster>().Broadcast(broadcast, removeOnceBroadcasted);
         }
+
+        public void OnHaltRequested(EcsWorld currentWorld)
+        {
+            var filter = currentWorld.Filter<RotateComponent>().End();
+            var rotatePool = currentWorld.GetPool<RotateComponent>();
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
+            foreach (var entity in filter)
+            {
+                if (!IdToConditionalCallback.ContainsKey(entity)) continue;
+                var rotatable = rotatePool.Get(entity);
+                compsData.ProvideEventContext(rotatable.ConditionType, IdToConditionalCallback[entity], false, (rotatable.refObj, rotatable.ConditionData));
+                IdToConditionalCallback.Remove(entity);
+            }
+        }
     }
 }

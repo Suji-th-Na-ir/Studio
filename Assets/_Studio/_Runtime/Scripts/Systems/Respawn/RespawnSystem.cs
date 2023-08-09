@@ -54,5 +54,19 @@ namespace Terra.Studio
             var respawnPoint = RuntimeOp.Resolve<GameData>().RespawnPoint;
             RuntimeWrappers.RespawnPlayer(respawnPoint);
         }
+
+        public void OnHaltRequested(EcsWorld currentWorld)
+        {
+            var filter = currentWorld.Filter<RespawnComponent>().End();
+            var respawnPool = currentWorld.GetPool<RespawnComponent>();
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
+            foreach (var entity in filter)
+            {
+                if (!IdToConditionalCallback.ContainsKey(entity)) continue;
+                var respawn = respawnPool.Get(entity);
+                compsData.ProvideEventContext(respawn.ConditionType, IdToConditionalCallback[entity], false, (respawn.refObj, respawn.ConditionData));
+                IdToConditionalCallback.Remove(entity);
+            }
+        }
     }
 }

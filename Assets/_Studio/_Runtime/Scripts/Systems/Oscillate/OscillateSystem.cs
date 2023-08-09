@@ -11,7 +11,6 @@ namespace Terra.Studio
 
         public void Init(EcsWorld currentWorld, int entity)
         {
-            var filter = currentWorld.Filter<OscillateComponent>().End();
             var oscillatorPool = currentWorld.GetPool<OscillateComponent>();
             ref var oscillatable = ref oscillatorPool.Get(entity);
             if (oscillatable.IsExecuted || !oscillatable.IsConditionAvailable)
@@ -40,7 +39,6 @@ namespace Terra.Studio
         {
             var (id, reference, conditionType, conditionData) = ((int, GameObject, string, string))data;
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
-            var filter = world.Filter<OscillateComponent>().End();
             var oscillatorPool = world.GetPool<OscillateComponent>();
             ref var oscillatable = ref oscillatorPool.Get(id);
             if (conditionType.Equals("Terra.Studio.MouseAction"))
@@ -102,6 +100,20 @@ namespace Terra.Studio
             if (totalEntitiesFinishedJob == filter.GetEntitiesCount())
             {
                 RuntimeOp.Resolve<RuntimeSystem>().RemoveRunningInstance(this);
+            }
+        }
+
+        public void OnHaltRequested(EcsWorld currentWorld)
+        {
+            var filter = currentWorld.Filter<OscillateComponent>().End();
+            var oscillatorPool = currentWorld.GetPool<OscillateComponent>();
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
+            foreach (var entity in filter)
+            {
+                if (!IdToConditionalCallback.ContainsKey(entity)) continue;
+                var oscillatable = oscillatorPool.Get(entity);
+                compsData.ProvideEventContext(oscillatable.ConditionType, IdToConditionalCallback[entity], false, (oscillatable.oscillatableTr.gameObject, oscillatable.ConditionData));
+                IdToConditionalCallback.Remove(entity);
             }
         }
     }
