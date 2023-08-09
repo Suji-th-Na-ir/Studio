@@ -70,7 +70,7 @@ namespace Terra.Studio
             var path = ResourceDB.GetStudioAsset(type.ToString()).Path;
             var primitive = RuntimeWrappers.SpawnGameObject(path);
             primitive.transform.position = spawnPosition;
-            EditorOp.Resolve<SelectionHandler>().OnTargetObjectChanged(primitive);
+            EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);
             EditorOp.Resolve<SelectionHandler>().SelectObjectInHierarchy(primitive);
         }
         public override void Draw()

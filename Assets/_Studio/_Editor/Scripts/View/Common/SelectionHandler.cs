@@ -16,11 +16,8 @@ public class SelectionHandler : View
         Universal
     }
 
-    [SerializeField] private Camera mainCamera;
     [SerializeField] private RuntimeHierarchy runtimeHierarchy;
-    [SerializeField] private RuntimeInspector runtimeInspector;
-
-
+    
     private ObjectTransformGizmo objectMoveGizmo;
     private ObjectTransformGizmo objectRotationGizmo;
     private ObjectTransformGizmo objectScaleGizmo;
@@ -28,8 +25,7 @@ public class SelectionHandler : View
 
     private GizmoId _workGizmoId;
     private ObjectTransformGizmo _workGizmo;
-    private GameObject _targetObject;
-    private List<GameObject> _selectedObjects;
+    private List<GameObject> _selectedObjects = new List<GameObject>();
 
     private void Awake()
     {
@@ -47,11 +43,12 @@ public class SelectionHandler : View
     {
         if (_allTransform.Count > 0)
         {
-            if (_allTransform[0].gameObject != _targetObject)
+            _selectedObjects.Clear();
+            foreach (Transform tr in _allTransform)
             {
-                OnTargetObjectChanged(_allTransform[0].gameObject);
-                SelectObjectInHierarchy(_allTransform[0].gameObject);
+                _selectedObjects.Add(tr.gameObject);
             }
+            OnSelectionChanged();
         }
     }
 
@@ -63,6 +60,11 @@ public class SelectionHandler : View
         objectUniversalGizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
 
         ResetAllHandles();
+        
+        objectMoveGizmo.SetTargetObjects(_selectedObjects);
+        objectRotationGizmo.SetTargetObjects(_selectedObjects);
+        objectScaleGizmo.SetTargetObjects(_selectedObjects);
+        objectUniversalGizmo.SetTargetObjects(_selectedObjects);
 
         _workGizmo = objectMoveGizmo;
         _workGizmoId = GizmoId.Move;
@@ -86,56 +88,14 @@ public class SelectionHandler : View
     private void Update()
     {
         Scan();
-        SetGizmo();
     }
-
-
-    private void ResetAllHandles()
+    
+    bool CheckIfThereIsAnyPopups()
     {
-        objectMoveGizmo.Gizmo.SetEnabled(false);
-        objectRotationGizmo.Gizmo.SetEnabled(false);
-        objectScaleGizmo.Gizmo.SetEnabled(false);
-        objectUniversalGizmo.Gizmo.SetEnabled(false);
-    }
+        if (GameObject.FindObjectOfType<ObjectReferencePicker>() != null)
+            return true;
 
-    private void SetGizmo()
-    {
-        if (RTInput.WasKeyPressedThisFrame(KeyCode.W))
-        {
-            _workGizmoId = GizmoId.Move;
-            _workGizmo = objectMoveGizmo;
-            ResetAllHandles();
-            objectMoveGizmo.Gizmo.SetEnabled(true);
-            objectMoveGizmo.RefreshPosition();
-            objectMoveGizmo.RefreshRotation();
-        }
-        else if (RTInput.WasKeyPressedThisFrame(KeyCode.E))
-        {
-            _workGizmoId = GizmoId.Rotate;
-            _workGizmo = objectRotationGizmo;
-            ResetAllHandles();
-            objectRotationGizmo.Gizmo.SetEnabled(true);
-            objectRotationGizmo.RefreshPosition();
-            objectRotationGizmo.RefreshRotation();
-        }
-        else if (RTInput.WasKeyPressedThisFrame(KeyCode.R))
-        {
-            _workGizmoId = GizmoId.Scale;
-            _workGizmo = objectScaleGizmo;
-            ResetAllHandles();
-            objectScaleGizmo.Gizmo.SetEnabled(true);
-            objectScaleGizmo.RefreshPosition();
-            objectScaleGizmo.RefreshRotation();
-        }
-        else if (RTInput.WasKeyPressedThisFrame(KeyCode.T))
-        {
-            _workGizmoId = GizmoId.Universal;
-            _workGizmo = objectUniversalGizmo;
-            ResetAllHandles();
-            objectUniversalGizmo.Gizmo.SetEnabled(true);
-            objectUniversalGizmo.RefreshPosition();
-            objectUniversalGizmo.RefreshRotation();
-        }
+        return false;
     }
 
     private void Scan()
@@ -145,23 +105,47 @@ public class SelectionHandler : View
         {
             if (CheckIfThereIsAnyPopups()) return;
             
+            // Pick a game object
             GameObject pickedObject = PickGameObject();
-            if (pickedObject != null && pickedObject != _targetObject)
+
+            if (pickedObject != null)
             {
-                OnTargetObjectChanged(pickedObject);
-                SelectObjectInHierarchy(pickedObject);
+                if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
+                {
+                    if (_selectedObjects.Contains(pickedObject))
+                        _selectedObjects.Remove(pickedObject);
+                    else 
+                        _selectedObjects.Add(pickedObject);
+                    
+                    runtimeHierarchy.Select(pickedObject.transform, RuntimeHierarchy.SelectOptions.Additive);
+                    OnSelectionChanged();
+                }
+                else
+                {
+                    runtimeHierarchy.Select(pickedObject.transform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
+                    _selectedObjects.Clear();
+                    _selectedObjects.Add(pickedObject);
+                    OnSelectionChanged();
+                }
+            }
+            else
+            {
+                _selectedObjects.Clear();
+                OnSelectionChanged();
             }
         }
+        if (RTInput.WasKeyPressedThisFrame(KeyCode.W)) SetWorkGizmoId(GizmoId.Move);
+        else if (RTInput.WasKeyPressedThisFrame(KeyCode.E)) SetWorkGizmoId(GizmoId.Rotate);
+        else if (RTInput.WasKeyPressedThisFrame(KeyCode.R)) SetWorkGizmoId(GizmoId.Scale);
+        else if (RTInput.WasKeyPressedThisFrame(KeyCode.T)) SetWorkGizmoId(GizmoId.Universal);
     }
     
-    
-
-    bool CheckIfThereIsAnyPopups()
+    private void ResetAllHandles()
     {
-        if (GameObject.FindObjectOfType<ObjectReferencePicker>() != null)
-            return true;
-
-        return false;
+        objectMoveGizmo.Gizmo.SetEnabled(false);
+        objectRotationGizmo.Gizmo.SetEnabled(false);
+        objectScaleGizmo.Gizmo.SetEnabled(false);
+        objectUniversalGizmo.Gizmo.SetEnabled(false);
     }
 
     private GameObject PickGameObject()
@@ -169,10 +153,7 @@ public class SelectionHandler : View
         // Build a ray using the current mouse cursor position
         Ray ray = Camera.main.ScreenPointToRay(RTInput.MousePosition);
         Vector3 worldPoint = Camera.main.ScreenToWorldPoint(RTInput.MousePosition);
-        // in additive scene the normal raycast doesn't work
-        // if (Physics.Raycast(ray, out rayHit, float.MaxValue))
-        //     return rayHit.collider.gameObject;
-
+        
         PhysicsScene pScene = SceneManager.GetActiveScene().GetPhysicsScene();
         if (pScene.Raycast(worldPoint, ray.direction, out var hit, float.MaxValue))
             return hit.collider.gameObject;
@@ -184,41 +165,46 @@ public class SelectionHandler : View
     {
         runtimeHierarchy.Select(_obj.transform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
     }
-
+    
     private void SetWorkGizmoId(GizmoId gizmoId)
     {
         // If the specified gizmo id is the same as the current id, there is nothing left to do
         if (gizmoId == _workGizmoId) return;
-
+    
         // Start with a clean slate and disable all gizmos
         ResetAllHandles();
-
+    
         _workGizmoId = gizmoId;
         if (gizmoId == GizmoId.Move) _workGizmo = objectMoveGizmo;
         else if (gizmoId == GizmoId.Rotate) _workGizmo = objectRotationGizmo;
         else if (gizmoId == GizmoId.Scale) _workGizmo = objectScaleGizmo;
         else if (gizmoId == GizmoId.Universal) _workGizmo = objectUniversalGizmo;
-
-        if (_targetObject != null) _workGizmo.Gizmo.SetEnabled(true);
+        
+        if (_selectedObjects.Count != 0)
+        {
+            _workGizmo.Gizmo.SetEnabled(true);
+            _workGizmo.RefreshPositionAndRotation();
+        }
     }
 
-    public void OnTargetObjectChanged(GameObject newTargetObject)
+    public void OnSelectionChanged(GameObject sObject = null)
     {
-        // Store the new target object
-        _targetObject = newTargetObject;
-
-        // Is the target object valid?
-        if (_targetObject != null)
+        if (sObject != null)
         {
-            objectMoveGizmo.SetTargetObject(_targetObject);
-            objectRotationGizmo.SetTargetObject(_targetObject);
-            objectScaleGizmo.SetTargetObject(_targetObject);
-            objectUniversalGizmo.SetTargetObject(_targetObject);
+            if (_selectedObjects.Contains(sObject)) _selectedObjects.Remove(sObject);
+            else _selectedObjects.Add(sObject);
+        }
 
+        if (_selectedObjects.Count != 0)
+        {
+            // runtimeHierarchy.Select(GetSelectedTransform(), RuntimeHierarchy.SelectOptions.Additive);
             _workGizmo.Gizmo.SetEnabled(true);
+            _workGizmo.RefreshPositionAndRotation();
         }
         else
         {
+            runtimeHierarchy.Deselect();
+            _workGizmo.Gizmo.SetEnabled(false);
             objectMoveGizmo.Gizmo.SetEnabled(false);
             objectRotationGizmo.Gizmo.SetEnabled(false);
             objectScaleGizmo.Gizmo.SetEnabled(false);
@@ -226,8 +212,14 @@ public class SelectionHandler : View
         }
     }
 
-    public GameObject GetSelectedObject()
-    {
-        return _targetObject;
-    }
+    // private List<Transform> GetSelectedTransform()
+    // {
+    //     List<Transform> result = new List<Transform>();
+    //     foreach (var tr in _selectedObjects)
+    //     {
+    //         result.Add(tr.transform);
+    //     }
+    //
+    //     return result;
+    // }
 }
