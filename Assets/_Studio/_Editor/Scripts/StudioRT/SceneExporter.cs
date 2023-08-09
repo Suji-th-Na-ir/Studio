@@ -16,13 +16,14 @@ namespace Terra.Studio
     public static class SceneExporter 
     {
        static string filePath;
+#if UNITY_EDITOR
         [MenuItem("Terra/Export Scene")]
         public static void ExportSceneFromHirearchy()
         {
            //ResourceDB.TriggerUpdate();
             SceneExporter.ExportJson();
         }
-
+#endif
         public static void Init()
         {
             // Debug.Log("selection handler ");
@@ -94,14 +95,16 @@ namespace Terra.Studio
             {
                 //if (sceneObjects[i].GetComponent<MeshFilter>() == null)
                 //    continue;
-                string sceneObjectName;
+                string sceneObjectName="";
                 if (Application.isPlaying)
                 {
                     sceneObjectName = RemoveContentInParentheses(sceneObjects[i].name);
                 }
                 else
                 {
+#if UNITY_EDITOR
                     sceneObjectName = PrefabUtility.GetCorrespondingObjectFromSource(sceneObjects[i]).name;
+#endif
                 }
                 if (ResourceDB.GetStudioAsset(sceneObjectName) == null)
                     continue;
@@ -148,11 +151,13 @@ namespace Terra.Studio
             }
             else
             {
+#if UNITY_EDITOR
                 if (!SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
                 {
                     return;
                 }
                 filePath = Application.dataPath + "/Resources" + ResourceDB.GetStudioAsset(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name).Path + ".json";
+#endif
             }
            
             string directory = Path.GetDirectoryName(filePath);
@@ -161,7 +166,9 @@ namespace Terra.Studio
                 Directory.CreateDirectory(directory);
             }
             File.WriteAllText(filePath, data);
+#if UNITY_EDITOR
             AssetDatabase.Refresh();
+#endif
         }
 
         private static void LoadScene()
@@ -175,10 +182,10 @@ namespace Terra.Studio
                     return;
                 }
                 else
-#endif
                 {
                     jsonData = SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.text;
                 }
+#endif
             }
             else
             {
