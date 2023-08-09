@@ -12,6 +12,8 @@ namespace Terra.Studio
         [Space(10), Header("Editor only")]
         [SerializeField] private bool pickupSavedData;
         public bool PickupSavedData { get { return pickupSavedData; } }
+        [SerializeField] private bool loadDefaultSceneOnPlay;
+        public bool LoadDefaultSceneOnPlay { get { return loadDefaultSceneOnPlay; } }
 #endif
 
         public StudioState DefaultStudioState { get { return defaultStudioState; } }

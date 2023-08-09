@@ -16,3 +16,4 @@ MonoBehaviour:
   editorSceneName: Editor
   runtimeSceneName: Runtime
   pickupSavedData: 1
+  loadDefaultSceneOnPlay: 1

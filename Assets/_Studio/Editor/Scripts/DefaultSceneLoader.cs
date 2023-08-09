@@ -1,8 +1,9 @@
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEditor;
+using Terra.Studio;
+using UnityEditor.SceneManagement;
 
-[InitializeOnLoadAttribute]
+[InitializeOnLoad]
 public static class DefaultSceneLoader
 {
     private static bool loadedDefaultScene = false;
@@ -21,8 +22,12 @@ public static class DefaultSceneLoader
 
         if (state == PlayModeStateChange.EnteredPlayMode && !loadedDefaultScene)
         {
-            EditorSceneManager.LoadScene(0);
-            loadedDefaultScene = true;
+            var system = Resources.Load<SystemConfigurationSO>("SystemSettings");
+            if (system.LoadDefaultSceneOnPlay)
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+                loadedDefaultScene = true;
+            }
         }
 
         if (state == PlayModeStateChange.EnteredEditMode)
