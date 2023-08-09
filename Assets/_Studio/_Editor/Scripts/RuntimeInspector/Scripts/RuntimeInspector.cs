@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using Terra.Studio.RTEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -474,7 +472,6 @@ namespace RuntimeInspectorNamespace
 				//}
 
 				InspectorField inspectedObjectDrawer = CreateDrawerForType( obj.GetType(), drawArea, 0, false );
-				
 				if( inspectedObjectDrawer != null )
 				{
 					inspectedObjectDrawer.BindTo( obj.GetType(), string.Empty, () => m_inspectedObject, ( value ) => m_inspectedObject = value );
@@ -541,37 +538,13 @@ namespace RuntimeInspectorNamespace
 						drawer.Inspector = this;
 						drawer.Skin = Skin;
 						drawer.Depth = depth;
-						
-						UpdateMemberInstances(drawer, type);
-						
+
 						return drawer;
 					}
 				}
 			}
 
 			return null;
-		}
-
-		private void UpdateMemberInstances(InspectorField _inspectorField, Type _type)
-		{
-			// if (_type.GetInterfaces().Contains(typeof(IComponent)))
-			// {
-			// 	_inspectorField.gameObject.AddComponent<InspectorStateManager>();
-			// }
-
-			// if (_type == typeof(Collectible))
-			// {
-			// 	GameObject insp = (GameObject)m_inspectedObject;
-			// 	Debug.Log("gameobject name "+insp.name); 
-			// 	Debug.Log("creating drawer for collectable " + _type.Name);
-			// }
-			//
-			// if (_type == typeof(Atom.PlaySFX))
-			// {
-			// 	GameObject insp = (GameObject)m_inspectedObject;
-			// 	Debug.Log("gameobject name "+insp.name); 
-			// 	Debug.Log("creating drawer for sfx " + _type.Name);
-			// }
 		}
 
 		private InspectorField InstantiateDrawer( InspectorField drawer, Transform drawerParent )
@@ -601,14 +574,12 @@ namespace RuntimeInspectorNamespace
 
 		private InspectorField[] GetDrawersForType( Type type, bool drawObjectsAsFields )
 		{
-			// Debug.Log("xx getting drawer type  for "+type);
 			bool searchReferenceFields = drawObjectsAsFields && typeof( Object ).IsAssignableFrom( type );
 
 			InspectorField[] cachedResult;
-			if ((searchReferenceFields && typeToReferenceDrawers.TryGetValue(type, out cachedResult)) ||
-			    (!searchReferenceFields && typeToDrawers.TryGetValue(type, out cachedResult)))
+			if( ( searchReferenceFields && typeToReferenceDrawers.TryGetValue( type, out cachedResult ) ) ||
+				( !searchReferenceFields && typeToDrawers.TryGetValue( type, out cachedResult ) ) )
 				return cachedResult;
-			
 
 			Dictionary<Type, InspectorField[]> drawersDict = searchReferenceFields ? typeToReferenceDrawers : typeToDrawers;
 

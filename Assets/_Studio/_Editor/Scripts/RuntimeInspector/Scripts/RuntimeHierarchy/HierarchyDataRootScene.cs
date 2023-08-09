@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Terra.Studio;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Terra.Studio;
 
 namespace RuntimeInspectorNamespace
 {
@@ -12,8 +12,9 @@ namespace RuntimeInspectorNamespace
 
 		public Scene Scene { get; private set; }
 
-		private List<GameObject> rootObjects = new List<GameObject>();
+		private readonly List<GameObject> rootObjects = new List<GameObject>();
 		private List<GameObject> filteredObjects = new List<GameObject>();
+
 
 		public HierarchyDataRootScene( RuntimeHierarchy hierarchy, Scene target ) : base( hierarchy )
 		{
@@ -23,6 +24,7 @@ namespace RuntimeInspectorNamespace
 		public override void RefreshContent()
 		{
 			rootObjects.Clear();
+			filteredObjects.Clear();
 
 			if (Scene.isLoaded)
 			{

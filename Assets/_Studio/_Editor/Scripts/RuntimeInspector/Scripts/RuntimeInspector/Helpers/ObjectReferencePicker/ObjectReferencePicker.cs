@@ -3,7 +3,6 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using Terra.Studio.RTEditor;
 
 namespace RuntimeInspectorNamespace
 {
@@ -217,16 +216,15 @@ namespace RuntimeInspectorNamespace
 			for( int i = 0; i < references.Length; i++ )
 			{
 				Object unityReference = references[i] as Object;
-
 				if( unityReference )
 				{
 					if( unityReference.hideFlags != HideFlags.None && unityReference.hideFlags != HideFlags.NotEditable &&
-					    unityReference.hideFlags != HideFlags.HideInHierarchy && unityReference.hideFlags != HideFlags.HideInInspector )
+						unityReference.hideFlags != HideFlags.HideInHierarchy && unityReference.hideFlags != HideFlags.HideInInspector )
 						continue;
-					
+
 					if( ( unityReference is Texture || unityReference is Sprite ) && unityReference.name.StartsWith( SPRITE_ATLAS_PREFIX ) )
 						continue;
-					
+
 					this.references.Add( unityReference );
 				}
 				else if( references[i] != null )

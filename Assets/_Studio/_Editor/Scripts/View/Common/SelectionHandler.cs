@@ -1,14 +1,10 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using RTG;
 using RuntimeInspectorNamespace;
 using RuntimeCommon;
 using Terra.Studio;
-using Terra.Studio.RTEditor;
-using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
-using Object = System.Object;
 
 public class SelectionHandler : View
 {
@@ -33,6 +29,7 @@ public class SelectionHandler : View
     private GizmoId _workGizmoId;
     private ObjectTransformGizmo _workGizmo;
     private GameObject _targetObject;
+    private List<GameObject> _selectedObjects;
 
     private void Awake()
     {

@@ -1479,8 +1479,6 @@ namespace RuntimeInspectorNamespace
 
 		private void OnSceneLoaded( Scene arg0, LoadSceneMode arg1 )
 		{
-			if (arg0.name == "Bootstrap") return;
-			
 			if( !ExposeUnityScenes || ( arg0.buildIndex >= 0 && exposedUnityScenesSubset != null && exposedUnityScenesSubset.Length > 0 && System.Array.IndexOf( exposedUnityScenesSubset, arg0.name ) == -1 ) )
 				return;
 
@@ -1674,13 +1672,10 @@ namespace RuntimeInspectorNamespace
 
 		RecycledListItem IListViewAdapter.CreateItem( Transform parent )
 		{
-			// Text textC = parent.gameObject.transform.GetComponentInChildren<Text>();
-			// if(textC != null)
-			// 	Debug.Log("creating item "+textC.text);
-
 			HierarchyField result = (HierarchyField) Instantiate( drawerPrefab, parent, false );
 			result.Initialize( this );
 			result.Skin = Skin;
+
 			drawers.Add( result );
 			return result;
 		}
