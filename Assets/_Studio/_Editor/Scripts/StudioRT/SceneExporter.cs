@@ -94,7 +94,15 @@ namespace Terra.Studio
             {
                 //if (sceneObjects[i].GetComponent<MeshFilter>() == null)
                 //    continue;
-                var sceneObjectName = RemoveContentInParentheses(sceneObjects[i].name); 
+                string sceneObjectName;
+                if (Application.isPlaying)
+                {
+                    sceneObjectName = RemoveContentInParentheses(sceneObjects[i].name);
+                }
+                else
+                {
+                    sceneObjectName = PrefabUtility.GetCorrespondingObjectFromSource(sceneObjects[i]).name;
+                }
                 if (ResourceDB.GetStudioAsset(sceneObjectName) == null)
                     continue;
                 var virutalEntity = new VirtualEntity
