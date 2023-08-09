@@ -1,5 +1,6 @@
-using System.Collections;
+using TMPro;
 using UnityEngine;
+using System.Collections;
 
 namespace Terra.Studio
 {
@@ -10,6 +11,7 @@ namespace Terra.Studio
         [SerializeField] private Animator animator;
         [SerializeField] private GameObject tryAgainGO;
         [SerializeField] private GameObject winGO;
+        [SerializeField] private TextMeshProUGUI[] scoreTexts;
 
         private bool hasWon;
 
@@ -31,6 +33,17 @@ namespace Terra.Studio
         {
             tryAgainGO.SetActive(!hasWon);
             winGO.SetActive(hasWon);
+            var score = RuntimeOp.Resolve<ScoreHandler>().CurrentScore;
+            if (scoreTexts != null && scoreTexts.Length != 0)
+            {
+                foreach (var scoreText in scoreTexts)
+                {
+                    if (scoreText)
+                    {
+                        scoreText.text = $"Score: {score}";
+                    }
+                }
+            }
         }
 
         public override void Flush()
