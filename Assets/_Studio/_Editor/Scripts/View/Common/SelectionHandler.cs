@@ -90,6 +90,45 @@ public class SelectionHandler : View
     private void Update()
     {
         Scan();
+        DuplicateObjects();
+        DeleteObjects();
+    }
+
+    private void DeleteObjects()
+    {
+        if (_selectedObjects.Count > 0)
+        {
+            if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
+            {
+                if (RTInput.WasKeyPressedThisFrame(KeyCode.X))
+                {
+                    runtimeHierarchy.Deselect();
+                    foreach (GameObject obj in _selectedObjects)
+                    {
+                        Destroy(obj);
+                    }
+                    _selectedObjects.Clear();
+                    OnSelectionChanged();
+                }
+            }
+        }
+    }
+
+    private void DuplicateObjects()
+    {
+        if (_selectedObjects.Count > 0)
+        {
+            if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
+            {
+                if (RTInput.WasKeyPressedThisFrame(KeyCode.D))
+                {
+                    foreach (GameObject obj in _selectedObjects)
+                    {
+                        Instantiate(obj, obj.transform.position, obj.transform.rotation);
+                    }
+                }
+            }
+        }
     }
     
     bool CheckIfThereIsAnyPopups()
