@@ -68,4 +68,10 @@ namespace Terra.Studio
         Editor,
         Runtime
     }
+
+    public enum GameEndState
+    {
+        Win,
+        Lose
+    }
 }

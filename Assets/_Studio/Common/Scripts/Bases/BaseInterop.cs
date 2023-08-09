@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Terra.Studio
@@ -14,11 +15,13 @@ namespace Terra.Studio
 
         public virtual void Unregister<T>(T instance)
         {
+            UnstageIfDisposableType<T>();
             _instanceDict.Remove(typeof(T));
         }
 
         public virtual void Unregister<T>()
         {
+            UnstageIfDisposableType<T>();
             _instanceDict.Remove(typeof(T));
         }
 
@@ -29,6 +32,17 @@ namespace Terra.Studio
                 return default;
             }
             return (T)_instanceDict[typeof(T)];
+        }
+
+        private void UnstageIfDisposableType<T>()
+        {
+            var type = typeof(T);
+            if (!type.GetInterfaces().Contains(typeof(IDisposable)))
+            {
+                return;
+            }
+            var disposable = (IDisposable)(T)_instanceDict[type];
+            disposable.Dispose();
         }
     }
 

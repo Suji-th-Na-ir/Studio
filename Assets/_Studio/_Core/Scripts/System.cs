@@ -51,7 +51,6 @@ namespace Terra.Studio
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
         {
-            // Debug.Log($"Loaded scene: {scene.name}");
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
             SystemOp.Resolve<ISubsystem>().Initialize();
@@ -60,7 +59,6 @@ namespace Terra.Studio
         public void SwitchState()
         {
             //Get the state of objects and save them under a common parent with no editor references
-            // Debug.Log($"Switching state");
             DisposeCurrentSubSystem(LoadSubsystemScene);
             currentStudioState = GetNextState();
             previousStudioState = GetOtherState();
@@ -73,6 +71,7 @@ namespace Terra.Studio
             var operation = SceneManager.UnloadSceneAsync(currentActiveScene, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
             operation.completed += (result) =>
             {
+                GC.Collect(0, GCCollectionMode.Forced);
                 onUnloadComplete?.Invoke();
             };
         }
@@ -98,8 +97,8 @@ namespace Terra.Studio
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SystemOp.Resolve<ISubsystem>()?.Dispose();
-            SystemOp.Unregister(this);
             SystemOp.Unregister<CrossSceneDataHolder>();
+            SystemOp.Unregister(this);
             SystemOp.Flush();
             EditorOp.Flush();
             RuntimeOp.Flush();

@@ -35,9 +35,7 @@ namespace Terra.Studio
         {
             RuntimeOp.Register(new Broadcaster());
             RuntimeOp.Register(new ComponentsData());
-            RuntimeOp.Register(new GameStateHandler());
-            RuntimeOp.Register(new GameData());
-            RuntimeOp.Resolve<GameData>().PlayerRef = GameObject.FindGameObjectWithTag("Player").transform;
+            RuntimeOp.Register(new CoreGameManager());
         }
 
         private void InitializeEcs()
@@ -136,6 +134,7 @@ namespace Terra.Studio
             WorldAuthorOp.Flush();
             ComponentAuthorOp.Flush();
             EntityAuthorOp.Flush();
+            RuntimeOp.Unregister<CoreGameManager>();
         }
 
         private void DestroyAllUpdatableSystems()
@@ -155,8 +154,6 @@ namespace Terra.Studio
             ecsWorld?.Destroy();
             RuntimeOp.Unregister<Broadcaster>();
             RuntimeOp.Unregister<ComponentsData>();
-            RuntimeOp.Unregister<GameStateHandler>();
-            RuntimeOp.Unregister<GameData>();
             SystemOp.Unregister(this as ISubsystem);
             RuntimeOp.Unregister(this);
         }

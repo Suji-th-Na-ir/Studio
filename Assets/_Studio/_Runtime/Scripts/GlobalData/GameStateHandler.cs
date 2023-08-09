@@ -1,14 +1,17 @@
 using System;
+using UnityEngine;
 
 namespace Terra.Studio
 {
     public class GameStateHandler
     {
-        private enum State { PreGame, Game, PostGame }
+        public enum State { PreGame, Game, PostGame }
         private State currentGameState = State.PreGame;
+        public State CurrentGameState { get { return currentGameState; } }
 
         private event Action<object> OnGameStarted;
         private event Action<object> OnGameEnded;
+        private event Action OnStateChanged;
 
         public void SwitchToNextState()
         {
@@ -20,12 +23,17 @@ namespace Terra.Studio
             var nextIndex = ++index;
             if (nextIndex == Enum.GetNames(typeof(State)).Length - 1)
             {
+                Debug.Log("Game ended");
+                currentGameState = (State)index;
                 OnGameEnded?.Invoke(null);
-                return;
             }
-            var nextState = (State)index;
-            currentGameState = nextState;
-            OnGameStarted?.Invoke(null);
+            else
+            {
+                var nextState = (State)index;
+                currentGameState = nextState;
+                OnGameStarted?.Invoke(null);
+            }
+            OnStateChanged?.Invoke();
         }
 
         public void SubscribeToGameStart(bool subscribe, Action<object> callback)
@@ -46,6 +54,43 @@ namespace Terra.Studio
             else
             {
                 OnGameStarted -= callback;
+            }
+        }
+
+        public void SubscribeToGameEnd(bool subscribe, Action<object> callback)
+        {
+            if (currentGameState == State.PostGame && subscribe)
+            {
+                callback?.Invoke(null);
+                return;
+            }
+            if (callback == null)
+            {
+                return;
+            }
+            if (subscribe)
+            {
+                OnGameEnded += callback;
+            }
+            else
+            {
+                OnGameEnded -= callback;
+            }
+        }
+
+        public void SubscribeToStateChanged(bool subscribe, Action callback)
+        {
+            if (callback == null)
+            {
+                return;
+            }
+            if (subscribe)
+            {
+                OnStateChanged += callback;
+            }
+            else
+            {
+                OnStateChanged -= callback;
             }
         }
     }

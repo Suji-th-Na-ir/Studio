@@ -79,9 +79,9 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 09-08-2023 13:08:37
+  - name: 09-08-2023 15:47:01
     ext: json
-    path: /09-08-2023 13:08:37
+    path: /09-08-2023 15:47:01
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -204,6 +204,36 @@ MonoBehaviour:
     path: Runtime/EventsVariants
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: GameViewCanvas
+    ext: prefab
+    path: Runtime/GameViewCanvas
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: InGameUI
+    ext: prefab
+    path: Runtime/InGameUI
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Player
+    ext: prefab
+    path: Runtime/Player
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: PostGameUI
+    ext: prefab
+    path: Runtime/PostGameUI
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: PreGameUI
+    ext: prefab
+    path: Runtime/PreGameUI
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: bell_1
     ext: mp3
@@ -367,6 +397,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_FileCount: 59
+  m_FileCount: 64
   m_FolderCount: 0
   UpdateAutomatically: 1

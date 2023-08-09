@@ -7,6 +7,7 @@ namespace Terra.Studio
 {
     public class Broadcaster
     {
+        private readonly string[] CORE_BROADCAST_KEYS = new[] { "Game Win", "Game Lose" };
         private Dictionary<string, List<Action<object>>> broadcastDict = new();
 
         public void SetBroadcastable(string broadcastData)
@@ -37,6 +38,11 @@ namespace Terra.Studio
 
         public void Broadcast(string broadcastData, bool removeOnceBroadcasted = false)
         {
+            if (CORE_BROADCAST_KEYS.Any(x => x.Equals(broadcastData)))
+            {
+                PerformCoreAction(broadcastData);
+                return;
+            }
             var listeners = GetListeners(broadcastData);
             if (listeners == null || listeners.Count() == 0)
             {
@@ -69,6 +75,12 @@ namespace Terra.Studio
                 return null;
             }
             return broadcastDict[broadcastData];
+        }
+
+        private void PerformCoreAction(string data)
+        {
+            RuntimeOp.Resolve<GameData>().SetEndState(data);
+            RuntimeOp.Resolve<GameStateHandler>().SwitchToNextState();
         }
     }
 }

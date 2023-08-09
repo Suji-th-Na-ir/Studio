@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Terra.Studio
 {
@@ -10,7 +11,7 @@ namespace Terra.Studio
             var go = Resources.Load<GameObject>(path);
             if (go == null)
                 return go;
-            go = GameObject.Instantiate(go);
+            go = Object.Instantiate(go);
 
             if (trs == null || trs.Length == 0)
             {
@@ -49,7 +50,7 @@ namespace Terra.Studio
         public static void PlayVFX(string vfxName, Vector3 position)
         {
             var vfxObj = Resources.Load<GameObject>($"vfx/{vfxName}");
-            var vfx = UnityEngine.Object.Instantiate(vfxObj);
+            var vfx = Object.Instantiate(vfxObj);
             vfx.transform.position = position;
             var destroyAfter = vfx.AddComponent<DestroyAfter>();
             destroyAfter.seconds = 2f;
