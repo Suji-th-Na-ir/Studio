@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
@@ -74,12 +75,7 @@ namespace RuntimeInspectorNamespace
 		public void SetContent( object reference, string displayName )
 		{
 			Reference = reference;
-			// referenceNameText.text = displayName;
-			string[] splits = displayName.Split(".");
-			if (splits.Length < 3)
-				referenceNameText.text = splits[1];
-			else if( splits.Length >= 3)
-				referenceNameText.text = splits[2];
+			referenceNameText.text = displayName.Split(".").Last();
 
 			Texture previewTex = ( reference as Object ).GetTexture();
 			if( previewTex != null )
