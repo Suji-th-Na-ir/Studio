@@ -14,9 +14,7 @@ namespace Terra.Studio
         private LoadSceneParameters sceneLoadParameters;
 
         public SystemConfigurationSO ConfigSO { get { return configData; } }
-#if UNITY_EDITOR
         public StudioState PreviousStudioState { get { return previousStudioState; } }
-#endif
 
         private void Awake()
         {

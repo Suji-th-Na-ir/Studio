@@ -133,11 +133,20 @@ namespace Terra.Studio
 
         private static void SaveScene(string data)
         {
+            Debug.Log("Saving data to file");
             if (!Application.isPlaying)
             {
-                filePath = Application.dataPath + $"/Resources/" + DateTime.Now.ToString() + ".json";
+                filePath = Application.dataPath + $"/Resources/{DateTime.Now}.json";
             }
-
+            else
+            {
+                if (!SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
+                {
+                    return;
+                }
+                filePath = Application.dataPath + "/Resources" + ResourceDB.GetStudioAsset(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name).Path + ".json";
+            }
+           
             string directory = Path.GetDirectoryName(filePath);
             if (!Directory.Exists(directory))
             {
@@ -149,34 +158,29 @@ namespace Terra.Studio
 
         private static void LoadScene()
         {
-
-#if UNITY_EDITOR
+            string jsonData = null;
             if (SystemOp.Resolve<System>().PreviousStudioState == StudioState.Bootstrap)
             {
+#if UNITY_EDITOR
                 if (!SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
                 {
                     return;
                 }
                 else
-                {
-                    filePath = Application.dataPath + "/Resources" + ResourceDB.GetStudioAsset(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name).Path + ".json";
-                }
-            }
 #endif
-            
-            if (File.Exists(filePath))
-            {
-                string jsonData = File.ReadAllText(filePath);
-
-                Debug.Log("Loading scene data "+jsonData);
-                
-                WorldData wData = JsonConvert.DeserializeObject<WorldData>(jsonData);
-                
-                ReCreateScene(wData);
+                {
+                    jsonData = SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.text;
+                }
             }
             else
             {
-                Debug.Log("save file do not exists."+filePath);
+                jsonData = SystemOp.Resolve<CrossSceneDataHolder>().Get();
+            }
+            if (!string.IsNullOrEmpty(jsonData))
+            {
+                Debug.Log("Loading scene data " + jsonData);
+                WorldData wData = JsonConvert.DeserializeObject<WorldData>(jsonData);
+                ReCreateScene(wData);
             }
         }
 
