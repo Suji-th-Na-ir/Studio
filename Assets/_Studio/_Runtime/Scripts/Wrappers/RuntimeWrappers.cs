@@ -58,7 +58,7 @@ namespace Terra.Studio
 
         public static void AddScore(float addBy)
         {
-            Debug.Log($"Adding score by: {addBy}");
+            RuntimeOp.Resolve<ScoreHandler>().AddScore((int)addBy);
         }
 
         public static void RotateObject(RotateByParams rotateParams)

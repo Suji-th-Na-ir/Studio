@@ -18,6 +18,7 @@ namespace Terra.Studio
         {
             RuntimeOp.Register(new GameData());
             RuntimeOp.Register(new GameStateHandler());
+            RuntimeOp.Register(new ScoreHandler());
             SpawnPlayer();
             SpawnGameUI();
         }
@@ -40,6 +41,26 @@ namespace Terra.Studio
         {
             RuntimeOp.Unregister<GameData>();
             RuntimeOp.Unregister<GameStateHandler>();
+            RuntimeOp.Unregister<ScoreHandler>();
+        }
+    }
+
+    public class ScoreHandler
+    {
+        public int currentScore;
+        public int CurrentScore { get { return currentScore; } }
+        public event Action<int> OnScoreModified;
+
+        public void AddScore(int addBy)
+        {
+            currentScore += addBy;
+            OnScoreModified?.Invoke(currentScore);
+        }
+
+        public void RemoveScore(int removeBy)
+        {
+            currentScore -= removeBy;
+            OnScoreModified?.Invoke(currentScore);
         }
     }
 }
