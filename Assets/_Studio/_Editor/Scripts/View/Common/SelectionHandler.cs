@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using RTG;
 using RuntimeInspectorNamespace;
@@ -26,6 +27,7 @@ public class SelectionHandler : View
     private GizmoId _workGizmoId;
     private ObjectTransformGizmo _workGizmo;
     private List<GameObject> _selectedObjects = new List<GameObject>();
+    private List<GameObject> prevSelectedObjects = new List<GameObject>();
 
     private void Awake()
     {
@@ -189,6 +191,9 @@ public class SelectionHandler : View
 
     public void OnSelectionChanged(GameObject sObject = null)
     {
+        if(_selectedObjects.Count > 0)
+            prevSelectedObjects = _selectedObjects.ToList();
+        
         if (sObject != null)
         {
             if (_selectedObjects.Contains(sObject)) _selectedObjects.Remove(sObject);
@@ -197,7 +202,6 @@ public class SelectionHandler : View
 
         if (_selectedObjects.Count != 0)
         {
-            // runtimeHierarchy.Select(GetSelectedTransform(), RuntimeHierarchy.SelectOptions.Additive);
             _workGizmo.Gizmo.SetEnabled(true);
             _workGizmo.RefreshPositionAndRotation();
         }
@@ -212,14 +216,8 @@ public class SelectionHandler : View
         }
     }
 
-    // private List<Transform> GetSelectedTransform()
-    // {
-    //     List<Transform> result = new List<Transform>();
-    //     foreach (var tr in _selectedObjects)
-    //     {
-    //         result.Add(tr.transform);
-    //     }
-    //
-    //     return result;
-    // }
+    public List<GameObject> GetSelectedObjects()
+    {
+        return prevSelectedObjects;
+    }
 }

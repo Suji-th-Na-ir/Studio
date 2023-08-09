@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using Terra.Studio;
+
 namespace RuntimeInspectorNamespace
 {
 	public class GameObjectField : ExpandableInspectorField
@@ -210,7 +212,12 @@ namespace RuntimeInspectorNamespace
 					// Make sure that RuntimeInspector is still inspecting this GameObject
 					if( type != null && target && Inspector && ( Inspector.InspectedObject as GameObject ) == target )
 					{
-						target.AddComponent( (Type) type );
+						// xcx instead add comp to all selected objects 
+						//target.AddComponent( (Type) type );
+						foreach (GameObject tObject in EditorOp.Resolve<SelectionHandler>().GetSelectedObjects())
+						{
+							tObject.AddComponent((Type) type);
+						}
 						Inspector.Refresh();
 					}
 				},
