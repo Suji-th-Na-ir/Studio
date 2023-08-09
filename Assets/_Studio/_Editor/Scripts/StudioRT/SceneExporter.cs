@@ -144,6 +144,7 @@ namespace Terra.Studio
 
         private static void SaveScene(string data)
         {
+#if UNITY_EDITOR
             Debug.Log("Saving data to file");
             if (!Application.isPlaying)
             {
@@ -151,13 +152,13 @@ namespace Terra.Studio
             }
             else
             {
-#if UNITY_EDITOR
+
                 if (!SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
                 {
                     return;
                 }
                 filePath = Application.dataPath + "/Resources" + ResourceDB.GetStudioAsset(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name).Path + ".json";
-#endif
+
             }
            
             string directory = Path.GetDirectoryName(filePath);
@@ -166,7 +167,7 @@ namespace Terra.Studio
                 Directory.CreateDirectory(directory);
             }
             File.WriteAllText(filePath, data);
-#if UNITY_EDITOR
+
             AssetDatabase.Refresh();
 #endif
         }
