@@ -5,9 +5,7 @@ using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
 using Terra.Studio.RTEditor;
-using PlayShifu.Terra;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace RuntimeInspectorNamespace
 {
@@ -16,12 +14,6 @@ namespace RuntimeInspectorNamespace
 #pragma warning disable 0649
         [SerializeField] public Dropdown rotateTypesDD;
         public RotateTypes[] allRotateTypes;
-        // public RotateTypes rotateOnce;
-        // public RotateTypes rotateForever;
-        // public RotateTypes rotateOscillate;
-        // public RotateTypes rotateOscillateForever;
-        // public RotateTypes rotateIncremental;
-        // public RotateTypes rotateIncrementalForever;
 #pragma warning restore 0649
 
         private RotateTypes selectedRotateType;
@@ -82,6 +74,7 @@ namespace RuntimeInspectorNamespace
         public void UpdateData(RotateComponentData _rData)
         {
             Atom.Rotate rt = (Atom.Rotate)Value;
+            
             // rotate type should come from rotatefield
             _rData.rotateType = rt.data.rotateType;
             rt.data = _rData;

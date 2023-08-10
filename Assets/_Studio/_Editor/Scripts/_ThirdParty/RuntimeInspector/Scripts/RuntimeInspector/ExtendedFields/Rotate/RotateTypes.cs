@@ -32,49 +32,70 @@ namespace RuntimeInspectorNamespace
             if (axisDropDown != null) axisDropDown.onValueChanged.AddListener((value) =>
             {
                 data.axis = GetAxis(axisDropDown.options[value].text);
-                rotateField.UpdateData(data);
+                UpdateData(data);
             });
             if (dirDropDown != null) dirDropDown.onValueChanged.AddListener((value) =>
             {
                 data.direction = GetDirection(dirDropDown.options[value].text);
-                rotateField.UpdateData(data);
+                UpdateData(data);
             });
             if (broadcastAt != null) broadcastAt.onValueChanged.AddListener((value) =>
             {
                 data.broadcastAt = getBroadcastAt(broadcastAt.options[value].text);
-                rotateField.UpdateData(data);
+                UpdateData(data);
             });
             
             if (degreesInput != null) degreesInput.onValueChanged.AddListener(
                 (value) => { ;
                     data.degrees = Helper.StringToFloat(value);
-                    rotateField.UpdateData(data);
+                    UpdateData(data);
                 });
             if (speedInput != null) speedInput.onValueChanged.AddListener((value) =>
             {
                 data.speed = Helper.StringToFloat(value);
-                rotateField.UpdateData(data);
+                UpdateData(data);
             });
             if (pauseInput != null) pauseInput.onValueChanged.AddListener((value) =>
             {
                 data.pauseBetween = Helper.StringToFloat(value);
-                rotateField.UpdateData(data);
+                UpdateData(data);
             });
             if (repeatInput != null) repeatInput.onValueChanged.AddListener((value) =>
             {
                 data.repeat = Helper.StringInInt(value);
-                rotateField.UpdateData(data);
+                UpdateData(data);
             });
             if (broadcastInput != null) broadcastInput.onValueChanged.AddListener((value) =>
             {
                 data.broadcast = value;
-                rotateField.UpdateData(data);
+                UpdateData(data);
             });
             if (listenInput != null) listenInput.onValueChanged.AddListener((value) =>
             {
                 data.listenTo = value;
-                rotateField.UpdateData(data);
+                UpdateData(data);
             });
+        }
+
+        private void UpdateData(RotateComponentData _data)
+        {
+            rotateField.UpdateData(_data);
+            // ComponentMessenger.UpdateCompData(_data);
+            UpdateOtherSelectedObjects(_data);
+        }
+
+        private void UpdateOtherSelectedObjects(RotateComponentData _data)
+        {
+            List<GameObject> selectedObjecs = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+
+            foreach (var obj in selectedObjecs)
+            {
+                if (obj.GetComponent<Rotate>() != null)
+                {
+                    Rotate rotate = obj.GetComponent<Rotate>();
+                    rotate.Type.data = _data;
+                }
+            }
         }
 
         private Axis GetAxis(string _value)
