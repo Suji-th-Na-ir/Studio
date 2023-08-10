@@ -4,11 +4,7 @@ using System;
 using System.Linq;
 using UnityEngine.EventSystems;
 using System.Collections;
-using System.IO;
 using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
-using TMPro;
-using UnityEngine.UI;
 
 namespace PlayShifu.Terra
 {
@@ -430,18 +426,6 @@ namespace PlayShifu.Terra
             return null;
         }
         
-        // public static void UpdateDropDown(Dropdown _ddown, List<string> _data)
-        // {
-        //     for (int i =0; i<_data.Count;i++)
-        //     {
-        //         Dropdown.OptionData od = new Dropdown.OptionData()
-        //         {
-        //             text = _data[i]
-        //         };
-        //         _ddown.options[i] = od;
-        //     }
-        // }
-
         public static float StringToFloat(string _value)
         {
             float result = 0f;
@@ -457,13 +441,8 @@ namespace PlayShifu.Terra
         }
         public static T DeepCopy<T>(T other)
         {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                BinaryFormatter formatter = new BinaryFormatter();
-                formatter.Serialize(ms, other);
-                ms.Position = 0;
-                return (T)formatter.Deserialize(ms);
-            }
+            var serializedData = JsonUtility.ToJson(other);
+            return JsonUtility.FromJson<T>(serializedData);
         }
     }
 }

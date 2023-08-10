@@ -1,10 +1,12 @@
 using TMPro;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Terra.Studio;
 using UnityEngine.UI;
 using PlayShifu.Terra;
+using Terra.Studio.RTEditor;
 
 namespace RuntimeInspectorNamespace
 {
@@ -30,52 +32,75 @@ namespace RuntimeInspectorNamespace
                 (value) =>
                 {
                     data.moveTo.x = Helper.StringToFloat(value);
-                    translateField.UpdateData(data);
+                    UpdateData(data);
                 });
             
             if (moveToInput != null) moveToInput[1].onValueChanged.AddListener(
                 (value) =>
                 {
                     data.moveTo.y = Helper.StringToFloat(value);
-                    translateField.UpdateData(data);
+                    UpdateData(data);
                 });
             
             if (moveToInput != null) moveToInput[2].onValueChanged.AddListener(
                 (value) =>
                 {
                     data.moveTo.z = Helper.StringToFloat(value);
-                    translateField.UpdateData(data);
+                    UpdateData(data);
                 });
             if (speedInput != null) speedInput.onValueChanged.AddListener((value) =>
             {
                 data.speed = Helper.StringToFloat(value);
-                translateField.UpdateData(data);
+                UpdateData(data);
             });
             if (pauseForInput != null) pauseForInput.onValueChanged.AddListener((value) =>
             {
                 data.pauseFor = Helper.StringToFloat(value);
-                translateField.UpdateData(data);
+                UpdateData(data);
             });
             if (listenTo != null) listenTo.onValueChanged.AddListener((value) =>
             {
                 data.listenTo = value;
-                translateField.UpdateData(data);
+                UpdateData(data);
             });
             if (repeatInput != null) repeatInput.onValueChanged.AddListener((value) =>
             {
                 data.repeat = Helper.StringInInt(value);
-                translateField.UpdateData(data);
+                UpdateData(data);
             });
             if (broadcastInput != null) broadcastInput.onValueChanged.AddListener((value) =>
             {
                 data.broadcast = value;
-                translateField.UpdateData(data);
+                UpdateData(data);
             });
             if (broadcastAt != null) broadcastAt.onValueChanged.AddListener((value) =>
             {
                 data.broadcastAt = GetBroadcastAt(broadcastAt.options[value].text);
-                translateField.UpdateData(data);
+                UpdateData(data);
             });
+        }
+        
+        private void UpdateData(TranslateComponentData _data)
+        {
+            translateField.UpdateData(_data);
+            UpdateOtherSelectedObjects(_data);
+        }
+
+        private void UpdateOtherSelectedObjects(TranslateComponentData _data)
+        {
+            List<GameObject> selectedObjecs = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+
+            if (selectedObjecs.Count > 1)
+            {
+                foreach (var obj in selectedObjecs)
+                {
+                    if (obj.GetComponent<Translate>() != null)
+                    {
+                        Translate translate = obj.GetComponent<Translate>();
+                        translate.Type.data = Helper.DeepCopy(_data);
+                    }
+                }
+            }
         }
 
         private BroadcastAt GetBroadcastAt(string _value)
