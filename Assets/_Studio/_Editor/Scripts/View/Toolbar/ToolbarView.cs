@@ -14,6 +14,7 @@ namespace Terra.Studio
         private const string CYLINDER_PRIMITIVE_BUTTON_LOC = "cylinder_button";
         private const string SPHERE_PRIMITIVE_BUTTON_LOC = "sphere_button";
         private const string CUBE_PRIMITIVE_BUTTON_LOC = "cube_button";
+        private const string PLANE_PRIMITIVE_BUTTON_LOC = "plane_button";
 
         private void Awake()
         {
@@ -28,6 +29,7 @@ namespace Terra.Studio
             var cylinderPrimitiveTr = Helper.FindDeepChild(transform, CYLINDER_PRIMITIVE_BUTTON_LOC, true);
             var spherePrimitiveTr = Helper.FindDeepChild(transform, SPHERE_PRIMITIVE_BUTTON_LOC, true);
             var cubePrimitiveTr = Helper.FindDeepChild(transform, CUBE_PRIMITIVE_BUTTON_LOC, true);
+            var planePrimitiveTr = Helper.FindDeepChild(transform, PLANE_PRIMITIVE_BUTTON_LOC, true);
 
             var playButton = playButtonTr.GetComponent<Button>();
             AddListenerEvent(playButton, () =>
@@ -51,6 +53,9 @@ namespace Terra.Studio
 
             var cubeButton = cubePrimitiveTr.GetComponent<Button>();
             AddListenerEvent(cubeButton, CreatePrimitive, PrimitiveType.Cube);
+
+            var planeButton = planePrimitiveTr.GetComponent<Button>();
+            AddListenerEvent(planeButton, CreatePrimitive, PrimitiveType.Plane);
 
         }
 
