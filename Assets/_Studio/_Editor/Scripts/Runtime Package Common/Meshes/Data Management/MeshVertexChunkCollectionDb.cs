@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public class MeshVertexChunkCollectionDb : Singleton<MeshVertexChunkCollectionDb>
     {

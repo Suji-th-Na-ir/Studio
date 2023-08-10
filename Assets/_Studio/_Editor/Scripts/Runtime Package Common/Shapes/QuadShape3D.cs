@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public class QuadShape3D : Shape3D
     {

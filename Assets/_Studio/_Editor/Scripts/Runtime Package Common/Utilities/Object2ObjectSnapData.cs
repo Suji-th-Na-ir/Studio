@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public class Object2ObjectSnapData
     {

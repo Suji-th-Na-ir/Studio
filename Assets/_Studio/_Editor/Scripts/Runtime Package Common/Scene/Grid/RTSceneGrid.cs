@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace RuntimeCommon
+namespace RTG
 {
     [Serializable]
     public class RTSceneGrid : MonoSingleton<RTSceneGrid>, IXZGrid

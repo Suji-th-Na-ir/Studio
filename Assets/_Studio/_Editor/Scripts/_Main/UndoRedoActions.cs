@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using RTG;
-using RuntimeCommon;
 
-namespace UndoRedo
+namespace RTG
 {
     public class PostObjectSpawnAction : IUndoRedoAction
     {

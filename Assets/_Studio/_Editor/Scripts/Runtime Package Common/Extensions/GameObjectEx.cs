@@ -4,7 +4,7 @@ using UnityEditor;
 #endif
 using System.Collections.Generic;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public static class GameObjectEx
     {
@@ -234,6 +234,32 @@ namespace RuntimeCommon
 
             rootHash.Clear();
             return roots;
+        }
+
+        public static void FilterParentsOnly(IEnumerable<GameObject> gameObjects, List<GameObject> parents)
+        {
+            if (gameObjects == null) return;
+
+            parents.Clear();
+            foreach (var gameObject in gameObjects)
+            {
+                bool foundParent = false;
+                Transform objectTransform = gameObject.transform;
+
+                foreach (var possibleParent in gameObjects)
+                {
+                    if (possibleParent != gameObject)
+                    {
+                        if (objectTransform.IsChildOf(possibleParent.transform))
+                        {
+                            foundParent = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!foundParent) parents.Add(gameObject);
+            }
         }
 
         public static List<GameObject> FilterParentsOnly(IEnumerable<GameObject> gameObjects)

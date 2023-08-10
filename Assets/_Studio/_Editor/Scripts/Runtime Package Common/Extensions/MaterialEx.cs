@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public static class MaterialEx
     {

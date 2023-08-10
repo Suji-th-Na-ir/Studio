@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public abstract class Singleton<T> where T : class, new()
     {

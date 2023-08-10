@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public static class TorusMesh
     {
@@ -152,10 +152,10 @@ namespace RuntimeCommon
                     vPos.x += sinTube * sinOuter * tubeRadius;
                     vPos.y += cosOuter * tubeRadius;
                     vPos.z += cosTube * sinOuter * tubeRadius;
+                    normals[vertexPtr] = (vPos - tubeSliceCenter).normalized;
 
                     vPos += center;
                     positions[vertexPtr] = vPos;
-                    normals[vertexPtr] = (vPos - center).normalized;
 
                     ++vertexPtr;
                 }

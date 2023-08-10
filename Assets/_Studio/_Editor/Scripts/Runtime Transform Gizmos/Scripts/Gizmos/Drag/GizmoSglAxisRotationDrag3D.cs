@@ -1,6 +1,6 @@
 ﻿using System;
+using System.ComponentModel.Design;
 using UnityEngine;
-using RuntimeCommon;
 
 namespace RTG
 {
@@ -111,6 +111,16 @@ namespace RTG
                     Vector2 screenTangentBegin = focusCamera.WorldToScreenPoint(intersectPoint);
                     Vector2 screenTangentEnd = focusCamera.WorldToScreenPoint(intersectPoint + circleTangent3D);
                     _screenDragCircleTangent = (screenTangentEnd - screenTangentBegin).normalized;
+                }
+                else
+                {
+                    Vector2 pt0 = focusCamera.WorldToScreenPoint(_workData.RotationPlanePos);
+                    Vector2 pt1 = focusCamera.WorldToScreenPoint(_workData.RotationPlanePos + _workData.Axis);
+                    _screenDragCircleTangent = (pt1 - pt0).normalized;
+                    _screenDragCircleTangent = new Vector2(-_screenDragCircleTangent.y, _screenDragCircleTangent.x);
+
+                    if (Vector2.Dot(_screenDragCircleTangent, Vector2.right) < -1e-5f) _screenDragCircleTangent = -_screenDragCircleTangent;
+                    else if (Vector2.Dot(_screenDragCircleTangent, Vector2.up) < -1e-5f) _screenDragCircleTangent = -_screenDragCircleTangent;
                 }
             }
             else

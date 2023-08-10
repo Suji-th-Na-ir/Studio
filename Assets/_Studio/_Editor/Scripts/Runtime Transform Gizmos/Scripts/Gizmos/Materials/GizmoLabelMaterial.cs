@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.Rendering;
-using RuntimeCommon;
 
 namespace RTG
 {

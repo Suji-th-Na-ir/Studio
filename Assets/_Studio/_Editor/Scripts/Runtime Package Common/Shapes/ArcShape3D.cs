@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public class ArcShape3D : Shape3D
     {

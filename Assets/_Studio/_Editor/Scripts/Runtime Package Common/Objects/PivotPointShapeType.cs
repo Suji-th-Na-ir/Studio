@@ -1,4 +1,4 @@
-﻿namespace RuntimeCommon
+﻿namespace RTG
 {
     public enum PivotPointShapeType
     {

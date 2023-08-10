@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public class PolygonShape2D : Shape2D
     {

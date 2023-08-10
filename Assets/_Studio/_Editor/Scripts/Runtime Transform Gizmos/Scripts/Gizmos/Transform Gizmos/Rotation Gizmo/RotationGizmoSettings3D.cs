@@ -3,7 +3,6 @@ using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using RuntimeCommon;
 
 namespace RTG
 {

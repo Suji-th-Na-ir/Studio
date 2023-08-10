@@ -1,7 +1,7 @@
 ﻿//#define INPUT_DEVICE_VR_CONTROLLER
 using UnityEngine;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public class RTInputDevice : MonoSingleton<RTInputDevice>
     {

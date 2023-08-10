@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
-namespace RuntimeCommon
+namespace RTG
 {
     // TODO: Manual vs Automatic object management;
     public class RTScene : MonoSingleton<RTScene>

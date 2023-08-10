@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
-using RuntimeCommon;
 
 namespace RTG
 {
@@ -332,10 +331,8 @@ namespace RTG
             if (SceneGizmo == null && isSceneGizmoCamera) return;
             else if (SceneGizmo != null && !isSceneGizmoCamera) return;
 
-            foreach (var behaviour in _behaviours)
-            {
-                if (behaviour.IsEnabled) behaviour.OnGizmoRender(camera);
-            }
+            foreach (var behaviour in _behaviours) 
+                if(behaviour.IsEnabled) behaviour.OnGizmoRender(camera);
         }
 
         public void HandleInputDeviceEvents_SystemCall()

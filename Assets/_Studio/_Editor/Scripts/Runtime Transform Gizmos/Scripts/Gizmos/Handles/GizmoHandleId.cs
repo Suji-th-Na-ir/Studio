@@ -79,6 +79,20 @@
         public static int ExtrudeCapBottom { get { return 505; } }
 
         public static int MirrorPlane { get { return 600; } }
+
+        public static int DirectionSnapCap { get { return 700; } }
+        public static int SpotAngleCapBottom { get { return 701; } }
+        public static int SpotAngleCapTop { get { return 702; } }
+        public static int SpotAngleCapLeft { get { return 703; } }
+        public static int SpotAngleCapRight { get { return 704; } }
+        public static int RangeTick { get { return 705; } }
+
+        public static int AxisSlider { get { return 800; } }
+        public static int AxisSliderCap { get { return 801; } }
+        public static int LeftRadiusTick { get { return 802; } }
+        public static int RightRadiusTick { get { return 803; } }
+        public static int BackRadiusTick { get { return 804; } }
+        public static int ForwardRadiusTick { get { return 805; } }
         #endregion
 
         public static int SafeClientId { get { return 10000; } }

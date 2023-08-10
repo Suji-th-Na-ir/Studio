@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public delegate void CameraCanProcessInputHandler(YesNoAnswer answer);
     public delegate void CameraCanUseScrollWheelHandler(YesNoAnswer answer);
@@ -282,7 +282,7 @@ namespace RuntimeCommon
 
         private void Start()
         {
-            _lastFocusPoint = Vector3.zero;
+            _lastFocusPoint = _targetTransform.position + _targetTransform.forward * _focusPointOffset;
             SetFocusPoint(_lastFocusPoint);
             AdjustOrthoSizeForFocusPt(); 
         }

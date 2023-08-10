@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public class TriangPrismShape3D : Shape3D
     {

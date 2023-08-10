@@ -4,7 +4,7 @@ using UnityEditor;
 #endif
 using System;
 
-namespace RuntimeCommon
+namespace RTG
 {
     [Serializable]
     public class CameraHotkeys : Settings

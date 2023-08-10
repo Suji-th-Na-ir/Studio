@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace RuntimeCommon
+namespace RTG
 {
     [Serializable]
     public class SerializableDictionary<SerializedKeyType, SerializedValueType>

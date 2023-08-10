@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public abstract class InputDeviceBase : IInputDevice
     {

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 using System;
-using RuntimeCommon;
 
 namespace RTG
 {

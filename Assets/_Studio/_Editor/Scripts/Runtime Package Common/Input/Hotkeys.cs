@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 
-namespace RuntimeCommon
+namespace RTG
 {
     [Serializable]
     public struct HotkeysStaticData

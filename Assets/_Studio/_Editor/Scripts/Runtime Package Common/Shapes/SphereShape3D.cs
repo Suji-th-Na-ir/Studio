@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public class SphereShape3D : Shape3D
     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public class QuadShape2D : Shape2D
     {

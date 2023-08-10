@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RuntimeCommon
+namespace RTG
 {
     [Serializable]
     public class EditorToolbarTab

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace RuntimeCommon
+namespace RTG
 {
     [CustomEditor(typeof(RTScene))]
     public class RTSceneInspector : Editor

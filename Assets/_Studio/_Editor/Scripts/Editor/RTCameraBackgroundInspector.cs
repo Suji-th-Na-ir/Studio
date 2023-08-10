@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace RuntimeCommon
+namespace RTG
 {
     [CustomEditor(typeof(RTCameraBackground))]
     public class RTCameraBackgroundInspector : Editor

@@ -1,4 +1,4 @@
-﻿namespace RuntimeCommon
+﻿namespace RTG
 {
     /// <summary>
     /// Identifies different quadrants in which a plane can exist. The quadrants 

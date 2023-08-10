@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public static class RayEx
     {

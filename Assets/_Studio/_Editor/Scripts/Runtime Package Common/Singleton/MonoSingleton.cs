@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {

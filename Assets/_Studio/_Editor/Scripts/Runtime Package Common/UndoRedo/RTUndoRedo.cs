@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public enum UndoRedoOpType
     {
@@ -87,17 +87,17 @@ namespace RuntimeCommon
 
             if (!Application.isEditor)
             {
-                if (RTInput.WasKeyPressedThisFrame(KeyCode.Z) && RTInput.IsKeyPressed(KeyCode.LeftCommand)) Undo();
+                if (RTInput.WasKeyPressedThisFrame(KeyCode.Z) && RTInput.IsKeyPressed(KeyCode.LeftControl)) Undo();
                 else
-                if (RTInput.WasKeyPressedThisFrame(KeyCode.Y) && RTInput.IsKeyPressed(KeyCode.LeftCommand)) Redo();
+                if (RTInput.WasKeyPressedThisFrame(KeyCode.Y) && RTInput.IsKeyPressed(KeyCode.LeftControl)) Redo();
             }
             else
             {
                 // Note: When running inside the editor, it seems that we need to add the LSHIFT key into
                 //       the mix. Otherwise, Undo/Redo does not work.
-                if (RTInput.WasKeyPressedThisFrame(KeyCode.Z) && RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.IsKeyPressed(KeyCode.LeftShift)) Undo();
+                if (RTInput.WasKeyPressedThisFrame(KeyCode.Z) && RTInput.IsKeyPressed(KeyCode.LeftControl) && RTInput.IsKeyPressed(KeyCode.LeftShift)) Undo();
                 else
-                if (RTInput.WasKeyPressedThisFrame(KeyCode.Y) && RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.IsKeyPressed(KeyCode.LeftShift)) Redo();
+                if (RTInput.WasKeyPressedThisFrame(KeyCode.Y) && RTInput.IsKeyPressed(KeyCode.LeftControl) && RTInput.IsKeyPressed(KeyCode.LeftShift)) Redo();
             }
         }
 

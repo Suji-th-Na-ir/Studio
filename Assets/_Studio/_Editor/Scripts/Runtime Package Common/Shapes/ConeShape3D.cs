@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public class ConeShape3D : Shape3D
     {

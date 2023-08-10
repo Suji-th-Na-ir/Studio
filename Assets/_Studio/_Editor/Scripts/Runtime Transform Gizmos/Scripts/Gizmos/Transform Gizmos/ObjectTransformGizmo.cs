@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
-using RuntimeCommon;
-using UndoRedo;
 
 namespace RTG
 {
@@ -375,7 +373,6 @@ namespace RTG
             }
 
             RefreshPositionAndRotation();
-            // Debug.Log("on gizmo drag end");
         }
 
         private List<GameObject> GetTransformableParentObjects()
@@ -396,7 +393,6 @@ namespace RTG
 
         private void OnUndoRedoEnd(IUndoRedoAction action)
         {
-            Debug.Log("undo redo end");
             if (action is PostObjectTransformsChangedAction)
                 RefreshPositionAndRotation();
         }

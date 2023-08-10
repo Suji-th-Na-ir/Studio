@@ -3,7 +3,7 @@
 using UnityEngine.InputSystem;
 #endif
 
-namespace RuntimeCommon
+namespace RTG
 {
     public static class RTInput
     {

@@ -4,7 +4,7 @@ using UnityEditor;
 using System.IO;
 using System.Collections.Generic;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public static class FileSystem
     {

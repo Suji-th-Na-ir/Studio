@@ -4,7 +4,7 @@ using System;
 using UnityEditor;
 #endif
 
-namespace RuntimeCommon
+namespace RTG
 {
     [Serializable]
     public class XZGridLookAndFeel : Settings

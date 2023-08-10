@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public delegate void CameraProjectionSwitchBeginHandler(CameraPrjSwitchTransition.Type transitionType);
     public delegate void CameraProjectionSwitchUpdateHandler(CameraPrjSwitchTransition.Type transitionType);

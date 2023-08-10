@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace RuntimeCommon
+namespace RTG
 {
     public static class EditorUndoEx
     {
