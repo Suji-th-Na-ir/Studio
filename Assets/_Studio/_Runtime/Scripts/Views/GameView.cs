@@ -5,9 +5,9 @@ namespace Terra.Studio
 {
     public class GameView : View
     {
-        private const string PRE_GAME_UI_PATH = "Runtime/PreGameUI";
-        private const string IN_GAME_UI_PATH = "Runtime/InGameUI";
-        private const string POST_GAME_UI_PATH = "Runtime/PostGameUI";
+        private const string PRE_GAME_UI_PATH = "PreGameUI";
+        private const string IN_GAME_UI_PATH = "InGameUI";
+        private const string POST_GAME_UI_PATH = "PostGameUI";
 
         private View spawnedView;
 
@@ -24,7 +24,7 @@ namespace Terra.Studio
         {
             var currentState = RuntimeOp.Resolve<GameStateHandler>().CurrentGameState;
             var uiToSpawn = GetUIPathFromState(currentState);
-            var uiObj = Resources.Load<GameObject>(uiToSpawn);
+            var uiObj = RuntimeOp.Load<GameObject>(uiToSpawn);
             if (uiObj == null)
             {
                 return;

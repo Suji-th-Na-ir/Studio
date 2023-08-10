@@ -8,11 +8,12 @@ namespace Terra.Studio
     {
         public static GameObject SpawnGameObject(string path, params Vector3[] trs)
         {
-            var go = Resources.Load<GameObject>(path);
+            var go = RuntimeOp.Load<GameObject>(path);
             if (go == null)
+            {
                 return go;
+            }
             go = Object.Instantiate(go);
-
             if (trs == null || trs.Length == 0)
             {
                 return go;
@@ -39,7 +40,7 @@ namespace Terra.Studio
         {
             var go = new GameObject("SFX_Holder");
             var audioSource = go.AddComponent<AudioSource>();
-            var sfx = Resources.Load<AudioClip>($"sfx/{sfxName}");
+            var sfx = RuntimeOp.Load<AudioClip>($"sfx/{sfxName}");
             audioSource.clip = sfx;
             audioSource.loop = false;
             audioSource.Play();
@@ -49,7 +50,7 @@ namespace Terra.Studio
 
         public static void PlayVFX(string vfxName, Vector3 position)
         {
-            var vfxObj = Resources.Load<GameObject>($"vfx/{vfxName}");
+            var vfxObj = RuntimeOp.Load<GameObject>($"vfx/{vfxName}");
             var vfx = Object.Instantiate(vfxObj);
             vfx.transform.position = position;
             var destroyAfter = vfx.AddComponent<DestroyAfter>();

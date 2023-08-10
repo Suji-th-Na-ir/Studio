@@ -22,7 +22,7 @@ public static class DefaultSceneLoader
 
         if (state == PlayModeStateChange.EnteredPlayMode && !loadedDefaultScene)
         {
-            var system = Resources.Load<SystemConfigurationSO>("SystemSettings");
+            var system = Resources.Load<SystemConfigurationSO>("System/SystemSettings");
             if (system.LoadDefaultSceneOnPlay)
             {
                 UnityEngine.SceneManagement.SceneManager.LoadScene(0);

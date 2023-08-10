@@ -7,16 +7,13 @@ namespace Terra.Studio
 {
     public class ComponentsData
     {
-        private const string AUTHORS_RES_PATH = "Runtime/AuthorsVariants";
-        private const string EVENT_RES_PATH = "Runtime/EventsVariants";
-
         private Dictionary<string, Type> authorMap;
         private Dictionary<string, Type> eventMap;
 
         private void GetAllAuthors()
         {
             authorMap = new();
-            var authorRes = Resources.Load<TextAsset>(AUTHORS_RES_PATH).text;
+            var authorRes = RuntimeOp.Load<TextAsset>("AuthorsVariants").text;
             var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(authorRes);
             foreach (var item in data)
             {
@@ -44,7 +41,7 @@ namespace Terra.Studio
         private void GetAllEvents()
         {
             eventMap = new();
-            var authorRes = Resources.Load<TextAsset>(EVENT_RES_PATH).text;
+            var authorRes = RuntimeOp.Load<TextAsset>("EventsVariants").text;
             var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(authorRes);
             foreach (var item in data)
             {

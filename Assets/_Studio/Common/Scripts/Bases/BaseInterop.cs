@@ -44,6 +44,9 @@ namespace Terra.Studio
             var disposable = (IDisposable)(T)_instanceDict[type];
             disposable.Dispose();
         }
+
+        public abstract T Load<T>(string path) where T : UnityEngine.Object;
+        public abstract UnityEngine.Object Load(ResourceTag tag);
     }
 
     internal class Interop<T> : BaseInterop where T : IInterop
@@ -62,6 +65,16 @@ namespace Terra.Studio
         internal static void Flush()
         {
             _instance = default;
+        }
+
+        public override T1 Load<T1>(string path)
+        {
+            return default;
+        }
+
+        public override UnityEngine.Object Load(ResourceTag tag)
+        {
+            return default;
         }
     }
 }

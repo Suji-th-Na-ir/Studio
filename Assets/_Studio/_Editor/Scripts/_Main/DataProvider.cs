@@ -7,16 +7,14 @@ namespace Terra.Studio
 {
     public class DataProvider
     {
-        private const string EDITOR_DATA_FILE_PATH = "Editortime/ComponentDrawersVariants";
-        private const string EDITOR_ENUM_FILE_PATH = "Editortime/EnumFieldsVariants";
         private readonly Dictionary<string, string> ComponentTargets;
         private readonly Dictionary<string, string[]> EnumTargets;
 
         public DataProvider()
         {
-            var compFileData = Resources.Load<TextAsset>(EDITOR_DATA_FILE_PATH).text;
+            var compFileData = EditorOp.Load<TextAsset>("ComponentDrawersVariants").text;
             ComponentTargets = JsonConvert.DeserializeObject<Dictionary<string, string>>(compFileData);
-            var enumFileData = Resources.Load<TextAsset>(EDITOR_ENUM_FILE_PATH).text;
+            var enumFileData = EditorOp.Load<TextAsset>("EnumFieldsVariants").text;
             EnumTargets = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(enumFileData);
         }
 

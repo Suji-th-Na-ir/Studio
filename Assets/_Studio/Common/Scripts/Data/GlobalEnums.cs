@@ -74,4 +74,24 @@ namespace Terra.Studio
         Win,
         Lose
     }
+
+    public enum LoadFor
+    {
+        [StringValue("System/")]
+        System,
+        [StringValue("Editortime/")]
+        Editortime,
+        [StringValue("Runtime/")]
+        Runtime,
+        [StringValue("Common/")]
+        Common
+    }
+
+    public enum ResourceTag
+    {
+        [StringValue("SystemSettings", typeof(SystemConfigurationSO))]
+        SystemConfig,
+        [StringValue("Player", typeof(UnityEngine.GameObject))]
+        Player
+    }
 }

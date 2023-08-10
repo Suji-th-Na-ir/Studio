@@ -10,14 +10,14 @@ using System.Text.RegularExpressions;
 
 namespace Terra.Studio
 {
-    public static class SceneExporter 
+    public static class SceneExporter
     {
-       static string filePath;
+        static string filePath;
 #if UNITY_EDITOR
         [MenuItem("Terra/Export Scene")]
         public static void ExportSceneFromHirearchy()
         {
-           //ResourceDB.TriggerUpdate();
+            //ResourceDB.TriggerUpdate();
             SceneExporter.ExportJson();
         }
 #endif
@@ -86,13 +86,13 @@ namespace Terra.Studio
             {
                 sceneObjects = GetAllGameObjectsInHirearchy();
             }
-            
+
             var entities = new List<VirtualEntity>();
             for (int i = 0; i < sceneObjects.Count; i++)
             {
                 //if (sceneObjects[i].GetComponent<MeshFilter>() == null)
                 //    continue;
-                string sceneObjectName="";
+                string sceneObjectName = "";
                 if (Application.isPlaying)
                 {
                     sceneObjectName = RemoveContentInParentheses(sceneObjects[i].name);
@@ -109,8 +109,8 @@ namespace Terra.Studio
                 {
                     id = i,
                     name = sceneObjectName,
-                    assetPath = ResourceDB.GetStudioAsset(sceneObjectName).Path,
-                    
+                    assetPath = ResourceDB.GetStudioAsset(sceneObjectName).ShortPath,
+
                     position = sceneObjects[i].transform.position,
                     rotation = sceneObjects[i].transform.eulerAngles,
                     scale = sceneObjects[i].transform.localScale
@@ -157,7 +157,7 @@ namespace Terra.Studio
                 filePath = Application.dataPath + "/Resources" + ResourceDB.GetStudioAsset(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name).Path + ".json";
 
             }
-           
+
             string directory = Path.GetDirectoryName(filePath);
             if (!Directory.Exists(directory))
             {
@@ -205,14 +205,14 @@ namespace Terra.Studio
                 UnityEngine.Object.Destroy(gObject);
             }
 
-            for (int i =0; i< _data.entities.Length; i++)
+            for (int i = 0; i < _data.entities.Length; i++)
             {
                 var entity = _data.entities[i];
                 Vector3[] trs = new Vector3[3];
                 trs[0] = entity.position;
                 trs[1] = entity.rotation;
                 trs[2] = entity.scale;
-                GameObject genObject = RuntimeWrappers.SpawnGameObject(entity.assetPath,trs);
+                GameObject genObject = RuntimeWrappers.SpawnGameObject(entity.assetPath, trs);
 
                 if (genObject != null)
                 {

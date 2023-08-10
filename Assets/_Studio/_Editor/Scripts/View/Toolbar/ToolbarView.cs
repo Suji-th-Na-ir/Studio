@@ -44,7 +44,7 @@ namespace Terra.Studio
             AddListenerEvent(loadButton, EditorOp.Resolve<EditorSystem>().RequestLoadScene);
 
             var cylinderButton = cylinderPrimitiveTr.GetComponent<Button>();
-            AddListenerEvent(cylinderButton, CreatePrimitive,PrimitiveType.Cylinder );
+            AddListenerEvent(cylinderButton, CreatePrimitive, PrimitiveType.Cylinder);
 
             var sphereButton = spherePrimitiveTr.GetComponent<Button>();
             AddListenerEvent(sphereButton, CreatePrimitive, PrimitiveType.Sphere);
@@ -54,7 +54,7 @@ namespace Terra.Studio
 
         }
 
-        private void AddListenerEvent<T>(Button button, Action<T> callback,T type)
+        private void AddListenerEvent<T>(Button button, Action<T> callback, T type)
         {
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => { callback?.Invoke(type); });
@@ -67,7 +67,7 @@ namespace Terra.Studio
 
             // Calculate the spawn position by adding the forward direction scaled by spawnDistance
             Vector3 spawnPosition = cameraPosition + cameraTransform.forward * 5;
-            var path = ResourceDB.GetStudioAsset(type.ToString()).Path;
+            var path = ResourceDB.GetStudioAsset(type.ToString()).ShortPath;
             var primitive = RuntimeWrappers.SpawnGameObject(path);
             primitive.transform.position = spawnPosition;
             EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);

@@ -6,9 +6,6 @@ namespace Terra.Studio
 {
     public class CoreGameManager : IDisposable
     {
-        private const string PLAYER_RESOURCE_PATH = "Runtime/Player";
-        private const string GAME_VIEW_UI_PATH = "Runtime/GameViewCanvas";
-
         public CoreGameManager()
         {
             Initialize();
@@ -25,14 +22,14 @@ namespace Terra.Studio
 
         private void SpawnPlayer()
         {
-            var playerObj = Resources.Load<GameObject>(PLAYER_RESOURCE_PATH);
+            var playerObj = (GameObject)RuntimeOp.Load(ResourceTag.Player);
             var reference = Object.Instantiate(playerObj);
             RuntimeOp.Resolve<GameData>().PlayerRef = reference.transform;
         }
 
         private void SpawnGameUI()
         {
-            var gameUI = Resources.Load<GameObject>(GAME_VIEW_UI_PATH);
+            var gameUI = RuntimeOp.Load<GameObject>("GameViewCanvas");
             var reference = Object.Instantiate(gameUI);
             if (reference.TryGetComponent(out GameView view)) view.Init();
         }

@@ -6,7 +6,6 @@ namespace Terra.Studio
 {
     public class System : MonoBehaviour
     {
-        private const string RESOURCE_CONFIGURATION_PATH = "SystemSettings";
         private SystemConfigurationSO configData;
         private StudioState previousStudioState;
         private StudioState currentStudioState;
@@ -29,7 +28,7 @@ namespace Terra.Studio
         private void Initialize()
         {
             SceneManager.sceneLoaded += OnSceneLoaded;
-            configData = Resources.Load<SystemConfigurationSO>(RESOURCE_CONFIGURATION_PATH);
+            configData = (SystemConfigurationSO)SystemOp.Load(ResourceTag.SystemConfig);
             currentStudioState = configData.DefaultStudioState;
             previousStudioState = StudioState.Bootstrap;
             sceneLoadParameters = new LoadSceneParameters()

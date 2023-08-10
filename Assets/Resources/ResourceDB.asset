@@ -16,384 +16,448 @@ MonoBehaviour:
   - name: LiberationSans SDF - Drop Shadow
     ext: mat
     path: Fonts & Materials/LiberationSans SDF - Drop Shadow
+    shortPath: LiberationSans SDF - Drop Shadow
     type: 2
     objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: LiberationSans SDF - Fallback
     ext: asset
     path: Fonts & Materials/LiberationSans SDF - Fallback
+    shortPath: LiberationSans SDF - Fallback
     type: 2
     objectTypeName: TMPro.TMP_FontAsset, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   - name: LiberationSans SDF - Outline
     ext: mat
     path: Fonts & Materials/LiberationSans SDF - Outline
+    shortPath: LiberationSans SDF - Outline
     type: 2
     objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: LiberationSans SDF
     ext: asset
     path: Fonts & Materials/LiberationSans SDF
+    shortPath: LiberationSans SDF
     type: 2
     objectTypeName: TMPro.TMP_FontAsset, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   - name: EmojiOne
     ext: asset
     path: Sprite Assets/EmojiOne
+    shortPath: EmojiOne
     type: 2
     objectTypeName: TMPro.TMP_SpriteAsset, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   - name: Default Style Sheet
     ext: asset
     path: Style Sheets/Default Style Sheet
+    shortPath: Default Style Sheet
     type: 2
     objectTypeName: TMPro.TMP_StyleSheet, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   - name: LineBreaking Following Characters
     ext: txt
     path: /LineBreaking Following Characters
+    shortPath: LineBreaking Following Characters
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: LineBreaking Leading Characters
     ext: txt
     path: /LineBreaking Leading Characters
+    shortPath: LineBreaking Leading Characters
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: TMP Settings
     ext: asset
     path: /TMP Settings
+    shortPath: TMP Settings
     type: 2
     objectTypeName: TMPro.TMP_Settings, Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
   - name: ProceduralImageRuntime
     ext: shader
     path: Shaders/ProceduralImageRuntime
+    shortPath: ProceduralImageRuntime
     type: 2
     objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: procedural_ui_image_default_sprite
     ext: png
     path: /procedural_ui_image_default_sprite
+    shortPath: procedural_ui_image_default_sprite
     type: 2
     objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: 09-08-2023 15:47:01
     ext: json
     path: /09-08-2023 15:47:01
+    shortPath: 09-08-2023 15:47:01
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: ResourceDB
     ext: asset
     path: /ResourceDB
+    shortPath: ResourceDB
     type: 2
     objectTypeName: ResourceDB, com.terra.studio, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  - name: Black
+    ext: mat
+    path: Common/Prefabs/source/Black
+    shortPath: Prefabs/source/Black
+    type: 2
+    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Brown
+    ext: mat
+    path: Common/Prefabs/source/Brown
+    shortPath: Prefabs/source/Brown
+    type: 2
+    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Dark_brown
+    ext: mat
+    path: Common/Prefabs/source/Dark_brown
+    shortPath: Prefabs/source/Dark_brown
+    type: 2
+    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Dark_brown_handle
+    ext: mat
+    path: Common/Prefabs/source/Dark_brown_handle
+    shortPath: Prefabs/source/Dark_brown_handle
+    type: 2
+    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Glass
+    ext: mat
+    path: Common/Prefabs/source/Glass
+    shortPath: Prefabs/source/Glass
+    type: 2
+    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Glass_trailer
+    ext: mat
+    path: Common/Prefabs/source/Glass_trailer
+    shortPath: Prefabs/source/Glass_trailer
+    type: 2
+    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Jeep_done
+    ext: fbx
+    path: Common/Prefabs/source/Jeep_done
+    shortPath: Prefabs/source/Jeep_done
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Light
+    ext: mat
+    path: Common/Prefabs/source/Light
+    shortPath: Prefabs/source/Light
+    type: 2
+    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Light_black
+    ext: mat
+    path: Common/Prefabs/source/Light_black
+    shortPath: Prefabs/source/Light_black
+    type: 2
+    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Light_red
+    ext: mat
+    path: Common/Prefabs/source/Light_red
+    shortPath: Prefabs/source/Light_red
+    type: 2
+    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Orange
+    ext: mat
+    path: Common/Prefabs/source/Orange
+    shortPath: Prefabs/source/Orange
+    type: 2
+    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Smoke
+    ext: mat
+    path: Common/Prefabs/source/Smoke
+    shortPath: Prefabs/source/Smoke
+    type: 2
+    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Cube
+    ext: prefab
+    path: Common/Prefabs/Cube
+    shortPath: Prefabs/Cube
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Cylinder
+    ext: prefab
+    path: Common/Prefabs/Cylinder
+    shortPath: Prefabs/Cylinder
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Sphere
+    ext: prefab
+    path: Common/Prefabs/Sphere
+    shortPath: Prefabs/Sphere
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: bell_1
+    ext: mp3
+    path: Common/sfx/bell_1
+    shortPath: sfx/bell_1
+    type: 2
+    objectTypeName: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: bell_2
+    ext: mp3
+    path: Common/sfx/bell_2
+    shortPath: sfx/bell_2
+    type: 2
+    objectTypeName: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: collect_1
+    ext: mp3
+    path: Common/sfx/collect_1
+    shortPath: sfx/collect_1
+    type: 2
+    objectTypeName: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: success_1
+    ext: mp3
+    path: Common/sfx/success_1
+    shortPath: sfx/success_1
+    type: 2
+    objectTypeName: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: vfx_ArrowBlue
+    ext: prefab
+    path: Common/vfx/vfx_ArrowBlue
+    shortPath: vfx/vfx_ArrowBlue
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: vfx_ArrowFire
+    ext: prefab
+    path: Common/vfx/vfx_ArrowFire
+    shortPath: vfx/vfx_ArrowFire
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: vfx_ArrowGreen
+    ext: prefab
+    path: Common/vfx/vfx_ArrowGreen
+    shortPath: vfx/vfx_ArrowGreen
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: vfx_ArrowPoisoned
+    ext: prefab
+    path: Common/vfx/vfx_ArrowPoisoned
+    shortPath: vfx/vfx_ArrowPoisoned
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   - name: ComponentDrawersVariants
     ext: txt
     path: Editortime/ComponentDrawersVariants
+    shortPath: ComponentDrawersVariants
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: EnumFieldsVariants
     ext: txt
     path: Editortime/EnumFieldsVariants
+    shortPath: EnumFieldsVariants
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Black
-    ext: mat
-    path: Prefabs/source/Black
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Brown
-    ext: mat
-    path: Prefabs/source/Brown
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Dark_brown
-    ext: mat
-    path: Prefabs/source/Dark_brown
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Dark_brown_handle
-    ext: mat
-    path: Prefabs/source/Dark_brown_handle
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Glass
-    ext: mat
-    path: Prefabs/source/Glass
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Glass_trailer
-    ext: mat
-    path: Prefabs/source/Glass_trailer
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Jeep_done
-    ext: fbx
-    path: Prefabs/source/Jeep_done
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Light
-    ext: mat
-    path: Prefabs/source/Light
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Light_black
-    ext: mat
-    path: Prefabs/source/Light_black
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Light_red
-    ext: mat
-    path: Prefabs/source/Light_red
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Orange
-    ext: mat
-    path: Prefabs/source/Orange
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Smoke
-    ext: mat
-    path: Prefabs/source/Smoke
-    type: 2
-    objectTypeName: UnityEngine.Material, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Cube
-    ext: prefab
-    path: Prefabs/Cube
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Cylinder
-    ext: prefab
-    path: Prefabs/Cylinder
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: Sphere
-    ext: prefab
-    path: Prefabs/Sphere
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: AuthorsVariants
     ext: txt
     path: Runtime/AuthorsVariants
+    shortPath: AuthorsVariants
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: EventsVariants
     ext: txt
     path: Runtime/EventsVariants
+    shortPath: EventsVariants
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: GameViewCanvas
     ext: prefab
     path: Runtime/GameViewCanvas
+    shortPath: GameViewCanvas
     type: 2
     objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: InGameUI
     ext: prefab
     path: Runtime/InGameUI
+    shortPath: InGameUI
     type: 2
     objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: Player
     ext: prefab
     path: Runtime/Player
+    shortPath: Player
     type: 2
     objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: PostGameUI
     ext: prefab
     path: Runtime/PostGameUI
+    shortPath: PostGameUI
     type: 2
     objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: PreGameUI
     ext: prefab
     path: Runtime/PreGameUI
+    shortPath: PreGameUI
     type: 2
     objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: bell_1
-    ext: mp3
-    path: sfx/bell_1
-    type: 2
-    objectTypeName: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: bell_2
-    ext: mp3
-    path: sfx/bell_2
-    type: 2
-    objectTypeName: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: collect_1
-    ext: mp3
-    path: sfx/collect_1
-    type: 2
-    objectTypeName: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: success_1
-    ext: mp3
-    path: sfx/success_1
-    type: 2
-    objectTypeName: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: vfx_ArrowBlue
-    ext: prefab
-    path: vfx/vfx_ArrowBlue
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: vfx_ArrowFire
-    ext: prefab
-    path: vfx/vfx_ArrowFire
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: vfx_ArrowGreen
-    ext: prefab
-    path: vfx/vfx_ArrowGreen
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: vfx_ArrowPoisoned
-    ext: prefab
-    path: vfx/vfx_ArrowPoisoned
-    type: 2
-    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: OscillationLogic
-    ext: json
-    path: /OscillationLogic
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: SystemSettings
     ext: asset
-    path: /SystemSettings
+    path: System/SystemSettings
+    shortPath: SystemSettings
     type: 2
     objectTypeName: Terra.Studio.SystemConfigurationSO, com.terra.studio, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: OscillationLogic
+    ext: json
+    path: Test/OscillationLogic
+    shortPath: OscillationLogic
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: RTApp_CircleCull
     ext: shader
     path: Shaders/RTApp_CircleCull
+    shortPath: RTApp_CircleCull
     type: 2
     objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: RTApp_CylindricalTorusCull
     ext: shader
     path: Shaders/RTApp_CylindricalTorusCull
+    shortPath: RTApp_CylindricalTorusCull
     type: 2
     objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: RTApp_GizmoSolidHandle
     ext: shader
     path: Shaders/RTApp_GizmoSolidHandle
+    shortPath: RTApp_GizmoSolidHandle
     type: 2
     objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: RTApp_LinearGradientCameraBk
     ext: shader
     path: Shaders/RTApp_LinearGradientCameraBk
+    shortPath: RTApp_LinearGradientCameraBk
     type: 2
     objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: RTApp_SimpleColor
     ext: shader
     path: Shaders/RTApp_SimpleColor
+    shortPath: RTApp_SimpleColor
     type: 2
     objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: RTApp_TintedTexture
     ext: shader
     path: Shaders/RTApp_TintedTexture
+    shortPath: RTApp_TintedTexture
     type: 2
     objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: RTApp_TorusCull
     ext: shader
     path: Shaders/RTApp_TorusCull
+    shortPath: RTApp_TorusCull
     type: 2
     objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: RTApp_XZGrid_Plane
     ext: shader
     path: Shaders/RTApp_XZGrid_Plane
+    shortPath: RTApp_XZGrid_Plane
     type: 2
     objectTypeName: UnityEngine.Shader, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: CamOrthoMode
     ext: png
     path: Textures/CamOrthoMode
+    shortPath: CamOrthoMode
     type: 2
     objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: CamPerspMode
     ext: png
     path: Textures/CamPerspMode
+    shortPath: CamPerspMode
     type: 2
     objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: XAxisLabel
     ext: png
     path: Textures/XAxisLabel
+    shortPath: XAxisLabel
     type: 2
     objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: YAxisLabel
     ext: png
     path: Textures/YAxisLabel
+    shortPath: YAxisLabel
     type: 2
     objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: ZAxisLabel
     ext: png
     path: Textures/ZAxisLabel
+    shortPath: ZAxisLabel
     type: 2
     objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: ColorPicker
     ext: prefab
     path: RuntimeInspector/ColorPicker
+    shortPath: ColorPicker
     type: 2
     objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: DraggedReferenceItem
     ext: prefab
     path: RuntimeInspector/DraggedReferenceItem
+    shortPath: DraggedReferenceItem
     type: 2
     objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: ObjectReferencePicker
     ext: prefab
     path: RuntimeInspector/ObjectReferencePicker
+    shortPath: ObjectReferencePicker
     type: 2
     objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
   - name: Tooltip
     ext: prefab
     path: RuntimeInspector/Tooltip
+    shortPath: Tooltip
     type: 2
     objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null

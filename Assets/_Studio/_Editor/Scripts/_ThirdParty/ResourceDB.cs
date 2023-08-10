@@ -21,16 +21,19 @@ public class ResourceItem
     [SerializeField]
     private string path;
     [SerializeField]
+    private string shortPath;
+    [SerializeField]
     private Type type = Type.Unknown;
     [SerializeField]
     private string objectTypeName;
     private System.Type objectType;
     private ResourceItem parent = null;
-    [SerializeField]internal Dictionary<string, ResourceItem> childs = null;
+    [SerializeField] internal Dictionary<string, ResourceItem> childs = null;
 
     public string Name { get { return name; } }
     public string Ext { get { return ext; } }
     public string Path { get { return path; } }
+    public string ShortPath { get { return shortPath; } }
     public string ResourcesPath { get { return string.IsNullOrEmpty(path) ? name : path + "/" + name; } }
     public Type ResourcesType { get { return type; } }
     public ResourceItem Parent { get { return parent; } }
@@ -55,6 +58,15 @@ public class ResourceItem
             ext = "";
         }
         path = aPath;
+        var splitPath = path.Split('/');
+        for (int i = 1; i < splitPath.Length; i++)
+        {
+            shortPath = string.Concat(shortPath, splitPath[i]);
+            if (i != splitPath.Length - 1)
+            {
+                shortPath = string.Concat(shortPath, "/");
+            }
+        }
         type = aType;
         objectTypeName = aObjectType;
         objectType = System.Type.GetType(objectTypeName);
@@ -120,7 +132,7 @@ public class ResourceDB : ScriptableObject, ISerializationCallbackReceiver
     private int m_FolderCount = 0;
     [SerializeField, HideInInspector]
     public bool UpdateAutomatically = false;
- 
+
     public int FileCount { get { return m_FileCount; } }
     public int FolderCount { get { return m_FolderCount; } }
 
@@ -188,7 +200,7 @@ public class ResourceDB : ScriptableObject, ISerializationCallbackReceiver
                 continue;
             }
             string type = obj.GetType().AssemblyQualifiedName;
-            items.Add(new ResourceItem(file.Name, relFolder+"/"+ Path.GetFileNameWithoutExtension(file.Name), ResourceItem.Type.Asset, type));
+            items.Add(new ResourceItem(file.Name, relFolder + "/" + Path.GetFileNameWithoutExtension(file.Name), ResourceItem.Type.Asset, type));
         }
         Resources.UnloadUnusedAssets();
     }
@@ -227,10 +239,10 @@ public class ResourceDB : ScriptableObject, ISerializationCallbackReceiver
     {
         bool checkName = !string.IsNullOrEmpty(aName);
         foreach (var item in items)
-        {      
+        {
             if (checkName && aName != item.Name)
                 continue;
-           return item;
+            return item;
         }
         return null;
     }
