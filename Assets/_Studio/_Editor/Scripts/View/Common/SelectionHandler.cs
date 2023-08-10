@@ -5,6 +5,7 @@ using RTG;
 using RuntimeInspectorNamespace;
 using Terra.Studio;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class SelectionHandler : View
 {
@@ -144,7 +145,11 @@ public class SelectionHandler : View
             RTGizmosEngine.Get.HoveredGizmo == null)
         {
             if (CheckIfThereIsAnyPopups()) return;
-            
+
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return; // Return early if the mouse is over UI
+            }
             // Pick a game object
             GameObject pickedObject = PickGameObject();
 
