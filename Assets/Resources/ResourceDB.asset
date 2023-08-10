@@ -90,13 +90,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 09-08-2023 15:47:01
-    ext: json
-    path: /09-08-2023 15:47:01
-    shortPath: 09-08-2023 15:47:01
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: ResourceDB
     ext: asset
     path: /ResourceDB
@@ -199,6 +192,13 @@ MonoBehaviour:
     ext: prefab
     path: Common/Prefabs/Cylinder
     shortPath: Prefabs/Cylinder
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Plane
+    ext: prefab
+    path: Common/Prefabs/Plane
+    shortPath: Prefabs/Plane
     type: 2
     objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null

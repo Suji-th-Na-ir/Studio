@@ -391,7 +391,7 @@ namespace PlayShifu.Terra
 
         public static string[] GetSfxClipNames()
         {
-            var sfxClips = Resources.LoadAll("sfx", typeof(AudioClip)).Cast<AudioClip>().ToArray();
+            var sfxClips = ResourceDB.LoadAllStudioAssetWithStringInPath<AudioClip>("sfx").ToArray();
             string[] names = new String[sfxClips.Length];
             for (int i = 0; i < sfxClips.Length; i++)
             {
@@ -411,7 +411,7 @@ namespace PlayShifu.Terra
 
         public static string[] GetVfxClipNames()
         {
-            var vfxClips = Resources.LoadAll("vfx", typeof(GameObject)).Cast<GameObject>().ToArray();
+            var vfxClips = ResourceDB.LoadAllStudioAssetWithStringInPath<GameObject>("vfx").ToArray();
             string[] names = new string[vfxClips.Length];
             for (int i = 0; i < vfxClips.Length; i++)
             {

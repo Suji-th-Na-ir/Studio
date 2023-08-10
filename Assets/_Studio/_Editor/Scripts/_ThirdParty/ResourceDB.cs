@@ -34,7 +34,6 @@ public class ResourceItem
     public string Ext { get { return ext; } }
     public string Path { get { return path; } }
     public string ShortPath { get { return shortPath; } }
-    public string ResourcesPath { get { return string.IsNullOrEmpty(path) ? name : path + "/" + name; } }
     public Type ResourcesType { get { return type; } }
     public ResourceItem Parent { get { return parent; } }
 
@@ -76,8 +75,8 @@ public class ResourceItem
 
     public T Load<T>() where T : UnityEngine.Object
     {
-        //Debug.Log("Load: " + ResourcesPath + " / " + typeof(T).Name);
-        return Resources.Load<T>(ResourcesPath);
+        T r = Resources.Load<T>(Path);
+        return r;
     }
 
 }
@@ -139,6 +138,11 @@ public class ResourceDB : ScriptableObject, ISerializationCallbackReceiver
     public static ResourceItem GetStudioAsset(string aName)
     {
         return Instance.GetItem(aName);
+    }
+
+    public static List<T>LoadAllStudioAssetWithStringInPath<T>(string aName) where T : UnityEngine.Object
+    {
+        return Instance.LoadAllWithContainStringInPath<T>(aName);
     }
 
     public static string ConvertPath(string aPath)
@@ -235,7 +239,7 @@ public class ResourceDB : ScriptableObject, ISerializationCallbackReceiver
     }
 #endif
 
-    public ResourceItem GetItem(string aName)
+    private ResourceItem GetItem(string aName)
     {
         bool checkName = !string.IsNullOrEmpty(aName);
         foreach (var item in items)
@@ -245,6 +249,22 @@ public class ResourceDB : ScriptableObject, ISerializationCallbackReceiver
             return item;
         }
         return null;
+    }
+
+    private List<T> LoadAllWithContainStringInPath<T>(string str) where T : UnityEngine.Object
+    {
+        List <T> resources= new List<T>();
+
+        foreach (var item in items)
+        {
+            if(item.Path.Contains(str))
+            {
+                T it = item.Load<T>();
+                if(it!=null)
+                resources.Add(it);
+            }
+        }
+        return resources;
     }
 
     public void OnBeforeSerialize()
