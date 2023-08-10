@@ -214,7 +214,7 @@ namespace RuntimeInspectorNamespace
 					{
 						// xcx instead add comp to all selected objects 
 						//target.AddComponent( (Type) type );
-						foreach (GameObject tObject in EditorOp.Resolve<SelectionHandler>().GetSelectedObjects())
+						foreach (GameObject tObject in EditorOp.Resolve<SelectionHandler>().GetPrevSelectedObjects())
 						{
 							tObject.AddComponent((Type) type);
 						}
@@ -235,6 +235,9 @@ namespace RuntimeInspectorNamespace
 			Component component = componentDrawer.Value as Component;
 			if( component && !( component is Transform ) )
 				componentDrawer.StartCoroutine( RemoveComponentCoroutine( component, componentDrawer.Inspector ) );
+			
+			// xnx
+			// Debug.Log("remove component button clicked");
 		}
 
 		private static IEnumerator RemoveComponentCoroutine( Component component, RuntimeInspector inspector )

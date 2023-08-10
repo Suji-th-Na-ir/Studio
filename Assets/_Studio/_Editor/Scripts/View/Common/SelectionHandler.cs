@@ -167,6 +167,7 @@ public class SelectionHandler : View
                 }
                 else
                 {
+                    Debug.Log("single object selected");
                     runtimeHierarchy.Select(pickedObject.transform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
                     _selectedObjects.Clear();
                     _selectedObjects.Add(pickedObject);
@@ -259,8 +260,12 @@ public class SelectionHandler : View
         }
     }
 
-    public List<GameObject> GetSelectedObjects()
+    public List<GameObject> GetPrevSelectedObjects()
     {
         return prevSelectedObjects;
+    }
+    public List<GameObject> GetSelectedObjects()
+    {
+        return _selectedObjects;
     }
 }

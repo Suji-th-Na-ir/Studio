@@ -4,7 +4,9 @@ using System;
 using System.Linq;
 using UnityEngine.EventSystems;
 using System.Collections;
+using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 using TMPro;
 using UnityEngine.UI;
 
@@ -452,6 +454,16 @@ namespace PlayShifu.Terra
             int result = 0;
             int.TryParse(_val, out result);
             return result;
+        }
+        public static T DeepCopy<T>(T other)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(ms, other);
+                ms.Position = 0;
+                return (T)formatter.Deserialize(ms);
+            }
         }
     }
 }

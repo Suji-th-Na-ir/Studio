@@ -80,7 +80,6 @@ namespace RuntimeInspectorNamespace
         private void UpdateData(RotateComponentData _data)
         {
             rotateField.UpdateData(_data);
-            // ComponentMessenger.UpdateCompData(_data);
             UpdateOtherSelectedObjects(_data);
         }
 
@@ -88,12 +87,15 @@ namespace RuntimeInspectorNamespace
         {
             List<GameObject> selectedObjecs = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
 
-            foreach (var obj in selectedObjecs)
+            if (selectedObjecs.Count > 1)
             {
-                if (obj.GetComponent<Rotate>() != null)
+                foreach (var obj in selectedObjecs)
                 {
-                    Rotate rotate = obj.GetComponent<Rotate>();
-                    rotate.Type.data = _data;
+                    if (obj.GetComponent<Rotate>() != null)
+                    {
+                        Rotate rotate = obj.GetComponent<Rotate>();
+                        rotate.Type.data = Helper.DeepCopy(_data);
+                    }
                 }
             }
         }
