@@ -88,11 +88,11 @@ namespace RuntimeInspectorNamespace
 
         private void UpdateOtherSelectedObjects(TranslateComponentData _data)
         {
-            List<GameObject> selectedObjecs = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
 
-            if (selectedObjecs.Count > 1)
+            if (selectedObjects.Count > 1)
             {
-                foreach (var obj in selectedObjecs)
+                foreach (var obj in selectedObjects)
                 {
                     if (obj.GetComponent<Translate>() != null)
                     {

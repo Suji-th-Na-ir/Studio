@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Terra.Studio;
+using UnityEngine.UI;
 
 namespace RuntimeInspectorNamespace
 {
@@ -236,8 +237,12 @@ namespace RuntimeInspectorNamespace
 			if( component && !( component is Transform ) )
 				componentDrawer.StartCoroutine( RemoveComponentCoroutine( component, componentDrawer.Inspector ) );
 			
-			// xnx
-			// Debug.Log("remove component button clicked");
+			// surendran - destroy same component on other selected objects.
+			List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+			foreach (var obj in selectedObjects)
+			{
+				Destroy(obj.GetComponent(componentDrawer.Value.GetType()));
+			}
 		}
 
 		private static IEnumerator RemoveComponentCoroutine( Component component, RuntimeInspector inspector )
