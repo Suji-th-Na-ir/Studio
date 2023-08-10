@@ -49,7 +49,7 @@ namespace Terra.Studio
         private static List<GameObject> GetAllGameObjectsInHirearchy()
         {
             List<GameObject> newList = new List<GameObject>();
-            GameObject[] objects = GameObject.FindObjectsOfType<GameObject>();
+            GameObject[] objects = SceneManager.GetActiveScene().GetRootGameObjects();
 
 
             foreach (var obj in objects)
