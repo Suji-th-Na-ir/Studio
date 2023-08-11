@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using PlasticGui.WorkspaceWindow.Items.LockRules;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -11,6 +13,7 @@ namespace RuntimeInspectorNamespace
 {
     public class RotateTypes : MonoBehaviour
     {
+        public RotationType myType;
         public Dropdown axisDropDown;
         public Dropdown dirDropDown;
         
@@ -133,6 +136,30 @@ namespace RuntimeInspectorNamespace
             
             // broadcast at 
             if (broadcastAt != null){broadcastAt.AddOptions(Enum.GetNames(typeof(BroadcastAt)).ToList());}
+
+            if (myType == RotationType.OscillateForever || myType == RotationType.IncrementallyRotateForever)
+            {
+                broadcastAt.ClearOptions();
+                broadcastAt.AddOptions(new List<string>()
+                {
+                    BroadcastAt.Never.ToString(),
+                    BroadcastAt.AtEveryInterval.ToString()
+                });
+            }
+        }
+
+        public void ResetValues()
+        {
+            RotateComponentData rd = rotateField.GetAtomRtoateData();
+            rd.axis = Axis.X;
+            rd.direction = Direction.Clockwise;
+            rd.degrees = 0f;
+            rd.speed = 0f;
+            rd.repeat = 0;
+            rd.pauseBetween = 0f;
+            rd.broadcast = "";
+            rd.listenTo = "";
+            rd.broadcastAt = BroadcastAt.Never;
         }
 
         public RotateComponentData GetData()

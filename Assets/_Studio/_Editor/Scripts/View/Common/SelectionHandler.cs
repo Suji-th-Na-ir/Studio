@@ -167,7 +167,6 @@ public class SelectionHandler : View
                 }
                 else
                 {
-                    Debug.Log("single object selected");
                     runtimeHierarchy.Select(pickedObject.transform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
                     _selectedObjects.Clear();
                     _selectedObjects.Add(pickedObject);

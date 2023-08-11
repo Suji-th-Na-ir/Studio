@@ -410,6 +410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebc707b0389a415d860bed529fd7697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myType: 4
   axisDropDown: {fileID: 4500175345541353927}
   dirDropDown: {fileID: 3411695741933287708}
   degreesInput: {fileID: 3652080800824238299}
@@ -1207,6 +1208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebc707b0389a415d860bed529fd7697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myType: 0
   axisDropDown: {fileID: 1338505699128851523}
   dirDropDown: {fileID: 6380941138884671800}
   degreesInput: {fileID: 7380692707156069194}
@@ -20169,6 +20171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebc707b0389a415d860bed529fd7697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myType: 2
   axisDropDown: {fileID: 4517920230895316569}
   dirDropDown: {fileID: 0}
   degreesInput: {fileID: 1973065920572187551}
@@ -21041,6 +21044,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebc707b0389a415d860bed529fd7697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myType: 3
   axisDropDown: {fileID: 7782939556095958961}
   dirDropDown: {fileID: 0}
   degreesInput: {fileID: 6049608683303234755}
@@ -21696,6 +21700,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebc707b0389a415d860bed529fd7697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myType: 5
   axisDropDown: {fileID: 523307788535533290}
   dirDropDown: {fileID: 8445632752320678756}
   degreesInput: {fileID: 7798329381010471591}
@@ -33442,6 +33447,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ebc707b0389a415d860bed529fd7697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myType: 1
   axisDropDown: {fileID: 1856773057552729079}
   dirDropDown: {fileID: 7880092709145533144}
   degreesInput: {fileID: 0}

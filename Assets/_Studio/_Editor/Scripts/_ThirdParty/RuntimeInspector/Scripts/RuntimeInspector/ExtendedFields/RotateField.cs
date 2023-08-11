@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Terra.Studio.RTEditor;
 using System.Reflection;
-using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
 {
@@ -45,7 +44,7 @@ namespace RuntimeInspectorNamespace
 
         private void OnRotateTypesValueChanged(int _index)
         {
-            ShowRotateOptionsMenu(_index);
+            ShowRotateOptionsMenu(_index, true);
         }
 
         private void HideAllRotateOptionsMenus()
@@ -56,13 +55,17 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        private void ShowRotateOptionsMenu(int _index)
+        private void ShowRotateOptionsMenu(int _index, bool _dontReset = false)
         {
             HideAllRotateOptionsMenus();
             Atom.Rotate rt = (Atom.Rotate)Value;
             rt.data.rotateType = _index;
             allRotateTypes[_index].gameObject.SetActive(true);
             selectedRotateType = allRotateTypes[_index];
+            if (_dontReset)
+            {
+                selectedRotateType.ResetValues();
+            }
         }
 
         protected override void OnSkinChanged()
@@ -84,11 +87,14 @@ namespace RuntimeInspectorNamespace
         protected override void OnBound(MemberInfo variable)
         {
             base.OnBound(variable);
+            
             Atom.Rotate rt = (Atom.Rotate)Value;
             rotateTypesDD.onValueChanged.AddListener(OnRotateTypesValueChanged);
+            
             int rotationTypeIndex = (((int)Enum.Parse(typeof(RotationType), rt.data.rotateType.ToString())));
-            rotateTypesDD.value = rotationTypeIndex;
+            rotateTypesDD.SetValueWithoutNotify(rotationTypeIndex);
             ShowRotateOptionsMenu(rotationTypeIndex);
+            
             selectedRotateType.SetData(rt.data);
         }
         
@@ -101,11 +107,14 @@ namespace RuntimeInspectorNamespace
         private void LoadData()
         {
             Atom.Rotate rt = (Atom.Rotate)Value;
-            rotateTypesDD.SetValueWithoutNotify((int)rt.data.rotateType);
-            foreach (RotateTypes type in allRotateTypes)
-            {
-                type.SetData(rt.data);
-            }
+            rotateTypesDD.SetValueWithoutNotify(((int)rt.data.rotateType));
+            selectedRotateType.SetData(rt.data);
+        }
+
+        public RotateComponentData GetAtomRtoateData()
+        {
+            Atom.Rotate rt = (Atom.Rotate)Value;
+            return rt.data;
         }
     }
 }

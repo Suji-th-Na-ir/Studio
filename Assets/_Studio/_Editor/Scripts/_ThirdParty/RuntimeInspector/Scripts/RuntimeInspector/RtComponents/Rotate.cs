@@ -118,7 +118,6 @@ namespace RuntimeInspectorNamespace
             Type.data.broadcast = cc.Broadcast;
             Type.data.broadcastAt = cc.broadcastAt;
 
-            Debug.Log("import state type " + cc.ConditionType.ToString());
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOn), out object result))
             {
                 start = (StartOn)result;

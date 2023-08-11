@@ -46,7 +46,7 @@ namespace RuntimeInspectorNamespace
 
         private void OnTranslateTypesValueChanged(int _index)
         {
-            ShowTranslateOptionsMenu(_index);
+            ShowTranslateOptionsMenu(_index, true);
         }
 
         private void HideAllTranslateOptionsMenus()
@@ -57,13 +57,17 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        private void ShowTranslateOptionsMenu(int _index)
+        private void ShowTranslateOptionsMenu(int _index, bool _dontReset = false)
         {
             HideAllTranslateOptionsMenus();
             Atom.Translate rt = (Atom.Translate)Value;
             rt.data.translateType = _index;
             allTranslateTypes[_index].gameObject.SetActive(true);
             selectedTranslateType = allTranslateTypes[_index];
+            if (_dontReset)
+            {
+                selectedTranslateType.ResetValues();
+            }
         }
 
         protected override void OnSkinChanged()
@@ -86,7 +90,7 @@ namespace RuntimeInspectorNamespace
             Atom.Translate rt = (Atom.Translate)Value;
             translateTypesDD.onValueChanged.AddListener(OnTranslateTypesValueChanged);
             int translationTypeIndex = (((int)Enum.Parse(typeof(TranslateType), rt.data.translateType.ToString())));
-            translateTypesDD.value = translationTypeIndex;
+            translateTypesDD.SetValueWithoutNotify(translationTypeIndex);
             ShowTranslateOptionsMenu(translationTypeIndex);
             selectedTranslateType.SetData(rt.data);
         }
@@ -100,10 +104,13 @@ namespace RuntimeInspectorNamespace
         {
             Atom.Translate rt = (Atom.Translate)Value;
             translateTypesDD.SetValueWithoutNotify((int)rt.data.translateType);
-            foreach (TranslateTypes type in allTranslateTypes)
-            {
-                type.SetData(rt.data);
-            }
+            selectedTranslateType.SetData(rt.data);
+        }
+        
+        public TranslateComponentData GetAtomTranslateData()
+        {
+            Atom.Translate rt = (Atom.Translate)Value;
+            return rt.data;
         }
     }
 }

@@ -134,7 +134,7 @@ namespace Terra.Studio
                 entities = entities.ToArray()
             };
             var json = JsonConvert.SerializeObject(worldData, Formatting.Indented);
-            Debug.Log($"Generated scene data: {json}");
+            // Debug.Log($"Generated scene data: {json}");
             SaveScene(json);
             return json;
         }
@@ -142,7 +142,6 @@ namespace Terra.Studio
         private static void SaveScene(string data)
         {
 #if UNITY_EDITOR
-            Debug.Log("Saving data to file");
             if (!Application.isPlaying)
             {
                 filePath = Application.dataPath + $"/Resources/{DateTime.Now}.json";
@@ -191,7 +190,7 @@ namespace Terra.Studio
             }
             if (!string.IsNullOrEmpty(jsonData))
             {
-                Debug.Log("Loading scene data " + jsonData);
+                // Debug.Log("Loading scene data " + jsonData);
                 WorldData wData = JsonConvert.DeserializeObject<WorldData>(jsonData);
                 ReCreateScene(wData);
             }
