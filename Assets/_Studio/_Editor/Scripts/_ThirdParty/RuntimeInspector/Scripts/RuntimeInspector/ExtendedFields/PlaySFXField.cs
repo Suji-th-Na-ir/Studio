@@ -95,8 +95,17 @@ namespace RuntimeInspectorNamespace
         
         private void UpdateData(Atom.PlaySfx _sfx)
         {
-            // ComponentMessenger.UpdateCompData(_sfx);
-            // List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            foreach (var obj in selectedObjects)
+            {
+                foreach (Atom.PlaySfx sfx in Atom.PlaySfx.AllInstances)
+                {
+                    if (obj.GetInstanceID() == sfx.target.GetInstanceID())
+                    {
+                        sfx.data = Helper.DeepCopy(_sfx.data);
+                    }
+                }
+            }
         }
 
         public override void Refresh()

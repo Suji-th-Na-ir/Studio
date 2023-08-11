@@ -11,6 +11,13 @@ namespace Terra.Studio
         public Atom.PlayVfx PlayVFX = new();
         public string Broadcast = null;
 
+        
+        public void Start()
+        {
+            PlaySFX.Setup(gameObject);
+            PlayVFX.Setup(gameObject);
+        }
+        
         public (string type, string data) Export()
         {
             var component = new CheckpointComponent()

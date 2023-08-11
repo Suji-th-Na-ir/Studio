@@ -13,6 +13,13 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
         public string Broadcast = null;
+        
+        public void Start()
+        {
+            PlaySFX.Setup(gameObject);
+            PlayVFX.Setup(gameObject);
+        }
+        
 
         public (string type, string data) Export()
         {

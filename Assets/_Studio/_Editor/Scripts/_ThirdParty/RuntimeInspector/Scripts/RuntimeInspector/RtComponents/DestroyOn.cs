@@ -25,9 +25,10 @@ namespace RuntimeInspectorNamespace
         public string Broadcast = null;
         public string BroadcastListen = null;
         
-        
         public void Start()
         {
+            PlaySFX.Setup(gameObject);
+            PlayVFX.Setup(gameObject);
         }
 
         public string GetStartEvent()

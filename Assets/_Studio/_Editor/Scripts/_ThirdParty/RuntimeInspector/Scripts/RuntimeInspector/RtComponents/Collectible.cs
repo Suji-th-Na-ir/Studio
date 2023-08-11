@@ -1,8 +1,6 @@
-using System;
 using Newtonsoft.Json;
 using Terra.Studio;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace RuntimeInspectorNamespace
 {
@@ -27,7 +25,8 @@ namespace RuntimeInspectorNamespace
         
         public void Start()
         {
-
+            PlaySFX.Setup(gameObject);
+            PlayVFX.Setup(gameObject);
         }
 
         public (string type, string data) Export()

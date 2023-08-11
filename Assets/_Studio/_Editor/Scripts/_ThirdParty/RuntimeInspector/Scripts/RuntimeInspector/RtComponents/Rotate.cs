@@ -14,16 +14,12 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySfx PlaySFX = new ();
         public Atom.PlayVfx PlayVFX = new ();
         private RotateComponent rComp;
-
+        
         public void Start()
         {
-            
+            PlaySFX.Setup(gameObject);
+            PlayVFX.Setup(gameObject);
         }
-        
-        // public void Update()
-        // {
-        //     if (Input.GetKeyDown(KeyCode.H)) Export();
-        // }
 
         public (string type, string data) Export()
         {

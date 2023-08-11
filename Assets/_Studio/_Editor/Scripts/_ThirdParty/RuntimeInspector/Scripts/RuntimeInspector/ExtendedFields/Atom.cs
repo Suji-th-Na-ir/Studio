@@ -11,15 +11,33 @@ namespace Terra.Studio
         [Serializable]
         public class PlaySfx
         {
+            [HideInInspector] public static List<PlaySfx> AllInstances = new ();
             [HideInInspector] public PlaySFXField field;
             [HideInInspector] public PlaySFXData data;
+            [HideInInspector] public GameObject target;
+
+            public void Setup(GameObject _target)
+            {
+                target = _target;
+                if(!AllInstances.Contains(this))
+                    AllInstances.Add(this);
+            }
         }
         
         [Serializable]
         public class PlayVfx
         {
+            [HideInInspector] public static List<PlayVfx> AllInstances = new ();
             [HideInInspector] public PlayVFXField field;
             [HideInInspector] public PlayVFXData data;
+            [HideInInspector] public GameObject target;
+            
+            public void Setup(GameObject _target)
+            {
+                target = _target;
+                if(!AllInstances.Contains(this))
+                    AllInstances.Add(this);
+            }
         }
 
         [Serializable]

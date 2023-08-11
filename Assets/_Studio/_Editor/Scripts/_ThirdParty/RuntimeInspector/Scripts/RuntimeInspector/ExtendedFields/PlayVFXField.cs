@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using PlayShifu.Terra;
 using UnityEngine;
 using UnityEngine.UI;
@@ -101,7 +102,17 @@ namespace RuntimeInspectorNamespace
 
         private void UpdateData(Atom.PlayVfx _vfx)
         {
-            ComponentMessenger.UpdateCompData(_vfx);
+            List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            foreach (var obj in selectedObjects)
+            {
+                foreach (Atom.PlayVfx vfx in Atom.PlayVfx.AllInstances)
+                {
+                    if (obj.GetInstanceID() == vfx.target.GetInstanceID())
+                    {
+                        vfx.data = Helper.DeepCopy(_vfx.data);
+                    }
+                }
+            }
         }
 
         public override void Refresh()

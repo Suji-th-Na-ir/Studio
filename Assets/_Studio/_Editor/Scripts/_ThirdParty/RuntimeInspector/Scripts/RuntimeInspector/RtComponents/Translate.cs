@@ -16,14 +16,9 @@ namespace RuntimeInspectorNamespace
         
         public void Start()
         {
-     
+            PlaySFX.Setup(gameObject);
+            PlayVFX.Setup(gameObject);
         }
-
-
-        // public void Update()
-        // {
-        //     if (Input.GetKeyDown(KeyCode.H)) Export();
-        // }
 
         public (string type, string data) Export()
         {
