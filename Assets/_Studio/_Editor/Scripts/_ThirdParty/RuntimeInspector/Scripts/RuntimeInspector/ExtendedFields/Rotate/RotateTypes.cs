@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using PlasticGui.WorkspaceWindow.Items.LockRules;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
