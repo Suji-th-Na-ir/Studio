@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using PlayShifu.Terra;
 using UnityEngine;
 using UnityEngine.UI;
@@ -48,8 +49,9 @@ namespace RuntimeInspectorNamespace
         private void OnDropdownValueChanged(int index)
         {
             Atom.PlaySfx sfx = (Atom.PlaySfx)Value;
-            sfx.clipName = Helper.GetSfxClipNameByIndex(index);
-            sfx.clipIndex = index;
+            sfx.data.clipName = Helper.GetSfxClipNameByIndex(index);
+            sfx.data.clipIndex = index;
+            UpdateData(sfx);
         }
 
         private void OnToggleValueChanged( bool _input )
@@ -57,12 +59,13 @@ namespace RuntimeInspectorNamespace
             LoadSfxClips();
             if(Inspector)  Inspector.RefreshDelayed();
             Atom.PlaySfx sfx = (Atom.PlaySfx)Value;
-            sfx.canPlay = _input;
-            if (sfx.canPlay)
+            sfx.data.canPlay = _input;
+            if (sfx.data.canPlay)
             {
-                OnDropdownValueChanged(sfx.clipIndex);
+                OnDropdownValueChanged(sfx.data.clipIndex);
             }
             ShowHideOptionsDropdown();
+            UpdateData(sfx);
         }
 
         void ShowHideOptionsDropdown()
@@ -89,6 +92,12 @@ namespace RuntimeInspectorNamespace
             variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
             ( (RectTransform) toggleInput.transform ).anchorMin = rightSideAnchorMin;
         }
+        
+        private void UpdateData(Atom.PlaySfx _sfx)
+        {
+            // ComponentMessenger.UpdateCompData(_sfx);
+            // List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+        }
 
         public override void Refresh()
         {
@@ -101,8 +110,8 @@ namespace RuntimeInspectorNamespace
             Atom.PlaySfx sfx = (Atom.PlaySfx)Value;
             if (sfx != null)
             {
-                toggleInput.isOn = sfx.canPlay;
-                optionsDropdown.value = sfx.clipIndex;
+                toggleInput.isOn = sfx.data.canPlay;
+                optionsDropdown.value = sfx.data.clipIndex;
             }
         }
     }

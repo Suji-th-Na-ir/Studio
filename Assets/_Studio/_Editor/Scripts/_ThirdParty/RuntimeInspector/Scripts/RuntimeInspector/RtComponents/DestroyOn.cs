@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using PlayShifu.Terra;
 using Terra.Studio;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace RuntimeInspectorNamespace
 {
@@ -18,25 +19,30 @@ namespace RuntimeInspectorNamespace
             BroadcastListen
 
         }
-        public DestroyOnEnum Start = DestroyOnEnum.OnPlayerCollide;
+        public DestroyOnEnum start = DestroyOnEnum.OnPlayerCollide;
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
         public string Broadcast = null;
         public string BroadcastListen = null;
+        
+        
+        public void Start()
+        {
+        }
 
         public string GetStartEvent()
         {
-            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(Start);
+            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(start);
             return eventName;
         }
 
         public string GetCondition()
         {
-            if (Start == DestroyOnEnum.BroadcastListen)
+            if (start == DestroyOnEnum.BroadcastListen)
             {
                 return BroadcastListen;
             }
-            return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(Start);
+            return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(start);
         }
 
         public (string type, string data) Export()
@@ -50,14 +56,14 @@ namespace RuntimeInspectorNamespace
                 destroyOn.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
                 destroyOn.BroadcastListen = string.IsNullOrEmpty(BroadcastListen) ? null : BroadcastListen;
 
-                destroyOn.canPlaySFX = PlaySFX.canPlay;
-                destroyOn.canPlayVFX = PlayVFX.canPlay;
+                destroyOn.canPlaySFX = PlaySFX.data.canPlay;
+                destroyOn.canPlayVFX = PlayVFX.data.canPlay;
 
-                destroyOn.sfxName = Helper.GetSfxClipNameByIndex(PlaySFX.clipIndex);
-                destroyOn.vfxName = Helper.GetVfxClipNameByIndex(PlayVFX.clipIndex);
+                destroyOn.sfxName = Helper.GetSfxClipNameByIndex(PlaySFX.data.clipIndex);
+                destroyOn.vfxName = Helper.GetVfxClipNameByIndex(PlayVFX.data.clipIndex);
 
-                destroyOn.sfxIndex = PlaySFX.clipIndex;
-                destroyOn.vfxIndex = PlayVFX.clipIndex;
+                destroyOn.sfxIndex = PlaySFX.data.clipIndex;
+                destroyOn.vfxIndex = PlayVFX.data.clipIndex;
             }
 
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -71,18 +77,18 @@ namespace RuntimeInspectorNamespace
 
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(DestroyOnEnum), out object result))
             {
-                Start = (DestroyOnEnum)result;
+                start = (DestroyOnEnum)result;
             }
 
             Broadcast = cc.Broadcast;
             BroadcastListen = cc.BroadcastListen;
 
-            PlaySFX.canPlay = cc.canPlaySFX;
-            PlaySFX.clipIndex = cc.sfxIndex;
-            PlaySFX.clipName = cc.sfxName;
-            PlayVFX.canPlay = cc.canPlayVFX;
-            PlayVFX.clipIndex = cc.vfxIndex;
-            PlayVFX.clipName = cc.vfxName;
+            PlaySFX.data.canPlay = cc.canPlaySFX;
+            PlaySFX.data.clipIndex = cc.sfxIndex;
+            PlaySFX.data.clipName = cc.sfxName;
+            PlayVFX.data.canPlay = cc.canPlayVFX;
+            PlayVFX.data.clipIndex = cc.vfxIndex;
+            PlayVFX.data.clipName = cc.vfxName;
         }
     }
 }

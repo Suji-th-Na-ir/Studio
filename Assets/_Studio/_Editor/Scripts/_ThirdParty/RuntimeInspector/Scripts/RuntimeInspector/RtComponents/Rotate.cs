@@ -15,10 +15,15 @@ namespace RuntimeInspectorNamespace
         public Atom.PlayVfx PlayVFX = new ();
         private RotateComponent rComp;
 
-        public void Update()
+        public void Start()
         {
-            if (Input.GetKeyDown(KeyCode.H)) Export();
+            
         }
+        
+        // public void Update()
+        // {
+        //     if (Input.GetKeyDown(KeyCode.H)) Export();
+        // }
 
         public (string type, string data) Export()
         {
@@ -38,12 +43,12 @@ namespace RuntimeInspectorNamespace
                 broadcastAt = Type.data.broadcastAt,
                 Broadcast = Type.data.broadcast,
                 
-                canPlaySFX = PlaySFX.canPlay,
-                canPlayVFX = PlayVFX.canPlay,
-                sfxName = string.IsNullOrEmpty(PlaySFX.clipName) ? null : PlaySFX.clipName,
-                vfxName = string.IsNullOrEmpty(PlayVFX.clipName) ? null : PlayVFX.clipName,
-                sfxIndex = PlaySFX.clipIndex,
-                vfxIndex = PlayVFX.clipIndex,
+                canPlaySFX = PlaySFX.data.canPlay,
+                canPlayVFX = PlayVFX.data.canPlay,
+                sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
+                vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName,
+                sfxIndex = PlaySFX.data.clipIndex,
+                vfxIndex = PlayVFX.data.clipIndex,
                 
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
@@ -85,12 +90,12 @@ namespace RuntimeInspectorNamespace
         public void Import(EntityBasedComponent cdata)
         {
             RotateComponent cc = JsonConvert.DeserializeObject<RotateComponent>($"{cdata.data}");
-            PlaySFX.canPlay = cc.canPlaySFX;
-            PlaySFX.clipIndex = cc.sfxIndex;
-            PlaySFX.clipName = cc.sfxName;
-            PlayVFX.canPlay = cc.canPlayVFX;
-            PlayVFX.clipIndex = cc.vfxIndex;
-            PlayVFX.clipName = cc.vfxName;
+            PlaySFX.data.canPlay = cc.canPlaySFX;
+            PlaySFX.data.clipIndex = cc.sfxIndex;
+            PlaySFX.data.clipName = cc.sfxName;
+            PlayVFX.data.canPlay = cc.canPlayVFX;
+            PlayVFX.data.clipIndex = cc.vfxIndex;
+            PlayVFX.data.clipName = cc.vfxName;
 
             Type.data.axis = cc.axis;
             Type.data.direction = cc.direction;

@@ -49,8 +49,9 @@ namespace RuntimeInspectorNamespace
         private void OnDropdownValueChanged(int index)
         {
             Atom.PlayVfx vfx = (Atom.PlayVfx)Value;
-            vfx.clipName = Helper.GetVfxClipNameByIndex(index);
-            vfx.clipIndex = index;
+            vfx.data.clipName = Helper.GetVfxClipNameByIndex(index);
+            vfx.data.clipIndex = index;
+            UpdateData(vfx);
         }
 
         private void OnToggleValueChanged(bool input)
@@ -58,13 +59,14 @@ namespace RuntimeInspectorNamespace
             LoadVfxClips();
             if(Inspector) Inspector.RefreshDelayed();
             Atom.PlayVfx vfx = (Atom.PlayVfx)Value;
-            vfx.canPlay = input;
+            vfx.data.canPlay = input;
             
-            if (vfx.canPlay)
+            if (vfx.data.canPlay)
             {
-                OnDropdownValueChanged(vfx.clipIndex);
+                OnDropdownValueChanged(vfx.data.clipIndex);
             }
             ShowHideOptionsDropdown();
+            UpdateData(vfx);
         }
         
         void ShowHideOptionsDropdown()
@@ -97,6 +99,11 @@ namespace RuntimeInspectorNamespace
             ((RectTransform)toggleInput.transform).anchorMin = rightSideAnchorMin;
         }
 
+        private void UpdateData(Atom.PlayVfx _vfx)
+        {
+            ComponentMessenger.UpdateCompData(_vfx);
+        }
+
         public override void Refresh()
         {
             base.Refresh();
@@ -108,8 +115,8 @@ namespace RuntimeInspectorNamespace
             Atom.PlayVfx vfx = (Atom.PlayVfx)Value;
             if (vfx != null)
             {
-                toggleInput.isOn = vfx.canPlay;
-                optionsDropdown.value = vfx.clipIndex;
+                toggleInput.isOn = vfx.data.canPlay;
+                optionsDropdown.value = vfx.data.clipIndex;
             }
         }
     }

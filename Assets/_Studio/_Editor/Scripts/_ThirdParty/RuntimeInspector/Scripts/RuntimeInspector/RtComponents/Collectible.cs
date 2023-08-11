@@ -2,6 +2,7 @@ using System;
 using Newtonsoft.Json;
 using Terra.Studio;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace RuntimeInspectorNamespace
 {
@@ -16,13 +17,18 @@ namespace RuntimeInspectorNamespace
             OnClick
         }
 
-        public StartOnCollectible Start = StartOnCollectible.OnPlayerCollide;
+        public StartOnCollectible start = StartOnCollectible.OnPlayerCollide;
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
         public bool ShowScoreUI = false;
         public bool CanUpdateScore = false;
         public float ScoreValue = 0;
         public string Broadcast = null;
+        
+        public void Start()
+        {
+
+        }
 
         public (string type, string data) Export()
         {
@@ -30,18 +36,18 @@ namespace RuntimeInspectorNamespace
             {
                 collectable.IsConditionAvailable = true;
                 collectable.ConditionType = GetStartEvent();
-                collectable.ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(Start);
+                collectable.ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(start);
                 collectable.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
                 collectable.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
 
-                collectable.canPlaySFX = PlaySFX.canPlay;
-                collectable.canPlayVFX = PlayVFX.canPlay;
+                collectable.canPlaySFX = PlaySFX.data.canPlay;
+                collectable.canPlayVFX = PlayVFX.data.canPlay;
 
-                collectable.sfxName = string.IsNullOrEmpty(PlaySFX.clipName) ? null : PlaySFX.clipName;
-                collectable.vfxName = string.IsNullOrEmpty(PlayVFX.clipName) ? null : PlayVFX.clipName;
+                collectable.sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName;
+                collectable.vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName;
 
-                collectable.sfxIndex = PlaySFX.clipIndex;
-                collectable.vfxIndex = PlayVFX.clipIndex;
+                collectable.sfxIndex = PlaySFX.data.clipIndex;
+                collectable.vfxIndex = PlayVFX.data.clipIndex;
 
                 collectable.canUpdateScore = CanUpdateScore;
                 collectable.scoreValue = ScoreValue;
@@ -61,22 +67,22 @@ namespace RuntimeInspectorNamespace
 
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOnCollectible), out object result))
             {
-                Start = (StartOnCollectible)result;
+                start = (StartOnCollectible)result;
             }
 
             Broadcast = cc.Broadcast;
 
-            PlaySFX.canPlay = cc.canPlaySFX;
-            PlaySFX.clipIndex = cc.sfxIndex;
-            PlaySFX.clipName = cc.sfxName;
-            PlayVFX.canPlay = cc.canPlayVFX;
-            PlayVFX.clipIndex = cc.vfxIndex;
-            PlayVFX.clipName = cc.vfxName;
+            PlaySFX.data.canPlay = cc.canPlaySFX;
+            PlaySFX.data.clipIndex = cc.sfxIndex;
+            PlaySFX.data.clipName = cc.sfxName;
+            PlayVFX.data.canPlay = cc.canPlayVFX;
+            PlayVFX.data.clipIndex = cc.vfxIndex;
+            PlayVFX.data.clipName = cc.vfxName;
         }
 
         public string GetStartEvent()
         {
-            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(Start);
+            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(start);
             return eventName;
         }
 

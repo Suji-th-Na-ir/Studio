@@ -25,14 +25,14 @@ namespace RuntimeInspectorNamespace
                 respawnComp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
                 respawnComp.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
 
-                respawnComp.canPlaySFX = PlaySFX.canPlay;
-                respawnComp.canPlayVFX = PlayVFX.canPlay;
+                respawnComp.canPlaySFX = PlaySFX.data.canPlay;
+                respawnComp.canPlayVFX = PlayVFX.data.canPlay;
 
-                respawnComp.sfxName = string.IsNullOrEmpty(PlaySFX.clipName) ? null : PlaySFX.clipName;
-                respawnComp.vfxName = string.IsNullOrEmpty(PlayVFX.clipName) ? null : PlayVFX.clipName;
+                respawnComp.sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName;
+                respawnComp.vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName;
 
-                respawnComp.sfxIndex = PlaySFX.clipIndex;
-                respawnComp.vfxIndex = PlayVFX.clipIndex;
+                respawnComp.sfxIndex = PlaySFX.data.clipIndex;
+                respawnComp.vfxIndex = PlayVFX.data.clipIndex;
 
             }
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -45,12 +45,12 @@ namespace RuntimeInspectorNamespace
             RespawnComponent cc = JsonConvert.DeserializeObject<RespawnComponent>($"{data.data}");
             Broadcast = cc.Broadcast;
 
-            PlaySFX.canPlay = cc.canPlaySFX;
-            PlaySFX.clipIndex = cc.sfxIndex;
-            PlaySFX.clipName = cc.sfxName;
-            PlayVFX.canPlay = cc.canPlayVFX;
-            PlayVFX.clipIndex = cc.vfxIndex;
-            PlayVFX.clipName = cc.vfxName;
+            PlaySFX.data.canPlay = cc.canPlaySFX;
+            PlaySFX.data.clipIndex = cc.sfxIndex;
+            PlaySFX.data.clipName = cc.sfxName;
+            PlayVFX.data.canPlay = cc.canPlayVFX;
+            PlayVFX.data.clipIndex = cc.vfxIndex;
+            PlayVFX.data.clipName = cc.vfxName;
         }
 
       

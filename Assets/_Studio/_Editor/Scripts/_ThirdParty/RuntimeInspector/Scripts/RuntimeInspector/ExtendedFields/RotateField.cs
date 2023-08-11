@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
@@ -110,7 +111,7 @@ namespace RuntimeInspectorNamespace
             selectedRotateType.SetData(rt.data);
         }
 
-        public RotateComponentData GetAtomRtoateData()
+        public RotateComponentData GetAtomRotateData()
         {
             Atom.Rotate rt = (Atom.Rotate)Value;
             return rt.data;
