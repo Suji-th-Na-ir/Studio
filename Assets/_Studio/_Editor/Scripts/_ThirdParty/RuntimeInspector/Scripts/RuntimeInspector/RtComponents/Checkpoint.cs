@@ -1,6 +1,5 @@
 using UnityEngine;
 using Newtonsoft.Json;
-using Terra.Studio.RTEditor;
 using RuntimeInspectorNamespace;
 
 namespace Terra.Studio

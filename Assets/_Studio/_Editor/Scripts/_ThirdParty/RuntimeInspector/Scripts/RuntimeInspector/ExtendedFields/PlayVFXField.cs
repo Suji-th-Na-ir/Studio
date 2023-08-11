@@ -2,7 +2,7 @@ using System;
 using PlayShifu.Terra;
 using UnityEngine;
 using UnityEngine.UI;
-using Terra.Studio.RTEditor;
+using Terra.Studio;
 
 namespace RuntimeInspectorNamespace
 {

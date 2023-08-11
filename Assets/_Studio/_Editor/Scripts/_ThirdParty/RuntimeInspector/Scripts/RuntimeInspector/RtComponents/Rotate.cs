@@ -1,34 +1,18 @@
 using System;
 using Newtonsoft.Json;
 using Terra.Studio;
-using Terra.Studio.RTEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace RuntimeInspectorNamespace
 {
-    [Serializable]
-    public class RotateComponentData
-    {
-        public int rotateType;
-        public Axis axis;
-        public Direction direction;
-        public float degrees = 0f;
-        public float speed = 0f;
-        public int repeat = 0;
-        public float pauseBetween = 0f;
-        public string broadcast = "";
-        public string listenTo = "";
-        public BroadcastAt broadcastAt;
-    }
-    
     [EditorDrawComponent("Terra.Studio.Rotate")]
     public class Rotate : MonoBehaviour, IComponent
     {
         public StartOn start = StartOn.GameStart;
-        public Atom.Rotate Type = new Atom.Rotate();
-        public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
-        public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
+        public Atom.Rotate Type = new ();
+        public Atom.PlaySfx PlaySFX = new ();
+        public Atom.PlayVfx PlayVFX = new ();
         private RotateComponent rComp;
 
         public void Update()
@@ -48,7 +32,7 @@ namespace RuntimeInspectorNamespace
                 rotateBy = Type.data.degrees,
                 pauseFor = Type.data.pauseBetween,
                 repeatFor = Type.data.repeat,
-                
+
 
                 IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcast),
                 broadcastAt = Type.data.broadcastAt,

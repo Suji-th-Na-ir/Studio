@@ -6,7 +6,6 @@ using UnityEngine;
 using Terra.Studio;
 using UnityEngine.UI;
 using PlayShifu.Terra;
-using Terra.Studio.RTEditor;
 
 namespace RuntimeInspectorNamespace
 {

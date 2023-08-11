@@ -1,7 +1,6 @@
 using System;
 using Newtonsoft.Json;
 using Terra.Studio;
-using Terra.Studio.RTEditor;
 using UnityEngine;
 
 namespace RuntimeInspectorNamespace

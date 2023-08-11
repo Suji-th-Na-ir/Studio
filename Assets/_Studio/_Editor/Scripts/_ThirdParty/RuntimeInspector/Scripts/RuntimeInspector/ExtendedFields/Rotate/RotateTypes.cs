@@ -84,6 +84,7 @@ namespace RuntimeInspectorNamespace
         {
             rotateField.UpdateData(_data);
             UpdateOtherSelectedObjects(_data);
+            // ComponentMessenger.UpdateCompData(_data);
         }
 
         private void UpdateOtherSelectedObjects(RotateComponentData _data)

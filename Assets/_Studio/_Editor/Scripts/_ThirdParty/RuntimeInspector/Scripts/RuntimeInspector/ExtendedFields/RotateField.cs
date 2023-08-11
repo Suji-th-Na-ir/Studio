@@ -4,7 +4,6 @@ using System.Linq;
 using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
-using Terra.Studio.RTEditor;
 using System.Reflection;
 
 namespace RuntimeInspectorNamespace

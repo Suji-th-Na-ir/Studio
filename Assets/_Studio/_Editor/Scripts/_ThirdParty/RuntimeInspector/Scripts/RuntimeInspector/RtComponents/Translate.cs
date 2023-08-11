@@ -2,31 +2,16 @@ using System;
 using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
-using Terra.Studio.RTEditor;
 
 namespace RuntimeInspectorNamespace
 {
-    [Serializable]
-    public class TranslateComponentData
-    {
-        public int translateType;
-        public Vector3 moveTo = Vector3.zero;
-        public float pauseFor = 0f;
-        public float speed = 0f;
-        public int repeat = 0;
-        public string broadcast = "";
-        public BroadcastAt broadcastAt;
-        public Vector3 targetPosition;
-        public string listenTo;
-    }
-    
     [EditorDrawComponent("Terra.Studio.Translate")]
     public class Translate : MonoBehaviour, IComponent
     {
         public StartOn start = StartOn.GameStart;
-        public Atom.Translate Type = new Atom.Translate();
-        public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
-        public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
+        public Atom.Translate Type = new ();
+        public Atom.PlaySfx PlaySFX = new ();
+        public Atom.PlayVfx PlayVFX = new ();
         private RotateComponent rComp;
 
         public void Update()
