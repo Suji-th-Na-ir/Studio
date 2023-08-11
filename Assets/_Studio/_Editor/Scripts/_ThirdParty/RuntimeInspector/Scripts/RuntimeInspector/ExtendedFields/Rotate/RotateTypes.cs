@@ -151,16 +151,17 @@ namespace RuntimeInspectorNamespace
 
         public void ResetValues()
         {
-            RotateComponentData rd = rotateField.GetAtomRotateData();
-            rd.axis = Axis.X;
-            rd.direction = Direction.Clockwise;
-            rd.degrees = 0f;
-            rd.speed = 0f;
-            rd.repeat = 0;
-            rd.pauseBetween = 0f;
-            rd.broadcast = "";
-            rd.listenTo = "";
-            rd.broadcastAt = BroadcastAt.Never;
+            RotateComponentData rt = rotateField.GetAtomRotateData();
+            rt.axis = Axis.X;
+            rt.direction = Direction.Clockwise;
+            rt.degrees = 0f;
+            rt.speed = 0f;
+            rt.repeat = 0;
+            rt.pauseBetween = 0f;
+            rt.broadcast = "";
+            rt.listenTo = "";
+            rt.broadcastAt = BroadcastAt.Never;
+            SetData(rt);
         }
 
         public RotateComponentData GetData()

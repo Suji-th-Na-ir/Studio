@@ -127,6 +127,7 @@ namespace RuntimeInspectorNamespace
             td.broadcastAt = BroadcastAt.Never;
             td.listenTo = "";
             td.targetPosition = Vector3.zero;
+            SetData(td);
         }
 
         public TranslateComponentData GetData()
