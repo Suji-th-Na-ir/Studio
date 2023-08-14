@@ -421,11 +421,13 @@ public class SUPERCharacterAIO : MonoBehaviour{
     }
     void Update(){
         if(!controllerPaused){
-        #region Input
-        #if ENABLE_INPUT_SYSTEM
-            MouseXY.x = Mouse.current.delta.y.ReadValue()/50;
-            MouseXY.y = Mouse.current.delta.x.ReadValue()/50;
-            
+                #region Input
+#if ENABLE_INPUT_SYSTEM
+                if (Mouse.current.rightButton.value == 1.0f)
+                {
+                    MouseXY.x = Mouse.current.delta.y.ReadValue() / 50;
+                    MouseXY.y = Mouse.current.delta.x.ReadValue() / 50;
+                }
             mouseScrollWheel = Mouse.current.scroll.y.ReadValue()/1000;
             if(perspectiveSwitchingKey!=Key.None)perspecTog = Keyboard.current[perspectiveSwitchingKey].wasPressedThisFrame;
             if(interactKey!=Key.None)interactInput = Keyboard.current[interactKey].wasPressedThisFrame;
@@ -810,12 +812,12 @@ public class SUPERCharacterAIO : MonoBehaviour{
 
         //Camera Obstacle Check
         cameraObstCheck= new Ray(headPos+(quatHeadRot*(Vector3.forward*capsule.radius)), quatHeadRot*-Vector3.forward); 
-        if(Physics.SphereCast(cameraObstCheck, 0.5f, out cameraObstResult,maxCameraDistInternal, cameraObstructionIgnore,QueryTriggerInteraction.Ignore)){
-            currentCameraZ = -(Vector3.Distance(headPos,cameraObstResult.point)*0.9f);
+        //if(Physics.SphereCast(cameraObstCheck, 0.5f, out cameraObstResult,maxCameraDistInternal, cameraObstructionIgnore,QueryTriggerInteraction.Ignore)){
+        //    currentCameraZ = -(Vector3.Distance(headPos,cameraObstResult.point)*0.9f);
 
-        }else{
-            currentCameraZ = Mathf.SmoothDamp(currentCameraZ, -(maxCameraDistInternal*0.85f), ref cameraZRef ,Time.deltaTime,10,Time.fixedDeltaTime);
-        }
+        //}else{
+        //    currentCameraZ = Mathf.SmoothDamp(currentCameraZ, -(maxCameraDistInternal*0.85f), ref cameraZRef ,Time.deltaTime,10,Time.fixedDeltaTime);
+        //}
 
         //Debugging
         if(enableMouseAndCameraDebugging){
