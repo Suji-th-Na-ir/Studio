@@ -808,27 +808,36 @@ public class SUPERCharacterAIO : MonoBehaviour{
             if(StepCycle>(headbobCyclePosition*3)){StepCycle = headbobCyclePosition+0.5f;}
         }
     }
-    void UpdateCameraPosition_3rdPerson(){
 
-        //Camera Obstacle Check
-        cameraObstCheck= new Ray(headPos+(quatHeadRot*(Vector3.forward*capsule.radius)), quatHeadRot*-Vector3.forward); 
-        //if(Physics.SphereCast(cameraObstCheck, 0.5f, out cameraObstResult,maxCameraDistInternal, cameraObstructionIgnore,QueryTriggerInteraction.Ignore)){
-        //    currentCameraZ = -(Vector3.Distance(headPos,cameraObstResult.point)*0.9f);
+        public float normalCameraZ = 5f;
+        public float sprintCameraZ = 7f;
+        void UpdateCameraPosition_3rdPerson()
+        {
 
-        //}else{
-        //    currentCameraZ = Mathf.SmoothDamp(currentCameraZ, -(maxCameraDistInternal*0.85f), ref cameraZRef ,Time.deltaTime,10,Time.fixedDeltaTime);
-        //}
+            //Camera Obstacle Check
+            cameraObstCheck = new Ray(headPos + (quatHeadRot * (Vector3.forward * capsule.radius)), quatHeadRot * -Vector3.forward);
+            //if(Physics.SphereCast(cameraObstCheck, 0.5f, out cameraObstResult,maxCameraDistInternal, cameraObstructionIgnore,QueryTriggerInteraction.Ignore)){
+            //    currentCameraZ = -(Vector3.Distance(headPos,cameraObstResult.point)*0.9f);
 
-        //Debugging
-        if(enableMouseAndCameraDebugging){
-            Debug.Log(headRot);
-            Debug.DrawRay(cameraObstCheck.origin,cameraObstCheck.direction*maxCameraDistance,Color.red);
-            Debug.DrawRay(cameraObstCheck.origin,cameraObstCheck.direction*-currentCameraZ,Color.green);
-        }   
-        currentCameraPos = headPos + (quatHeadRot *( Vector3.forward * currentCameraZ));
+            //}else{
+            //    currentCameraZ = Mathf.SmoothDamp(currentCameraZ, -(maxCameraDistInternal*0.85f), ref cameraZRef ,Time.deltaTime,10,Time.fixedDeltaTime);
+            //}
+
+            //Debugging
+            if (enableMouseAndCameraDebugging)
+            {
+                Debug.Log(headRot);
+                Debug.DrawRay(cameraObstCheck.origin, cameraObstCheck.direction * maxCameraDistance, Color.red);
+                Debug.DrawRay(cameraObstCheck.origin, cameraObstCheck.direction * -currentCameraZ, Color.green);
+            }
+            float targetCameraZ = currentCameraZ;
+            if (currentGroundMovementSpeed == GroundSpeedProfiles.Sprinting)
+                targetCameraZ = Mathf.Lerp(currentCameraZ, currentCameraZ - 5, p_Rigidbody.velocity.magnitude / 30);
+
+            currentCameraPos = headPos + (quatHeadRot * (Vector3.forward * targetCameraZ));
             playerCamera.transform.position = currentCameraPos;
-        playerCamera.transform.rotation = quatHeadRot;
-    }
+            playerCamera.transform.rotation = quatHeadRot;
+        }
 
     void UpdateBodyRotation_3rdPerson(){
          //if is moving, rotate capsule to match camera forward   //change button down to bool of isFiring or isTargeting
