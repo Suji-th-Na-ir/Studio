@@ -10,13 +10,13 @@ namespace Terra.Studio
 
         public override void Init()
         {
-            RuntimeOp.Resolve<ScoreHandler>().OnScoreModified += (_) => { Draw(); };
+            RuntimeOp.Resolve<ScoreHandler>().OnScoreModified += SetScore;
         }
 
         public override void Draw()
         {
             var score = RuntimeOp.Resolve<ScoreHandler>().CurrentScore;
-            text.text = score.ToString();
+            SetScore(score);
         }
 
         public override void Flush()
@@ -27,6 +27,11 @@ namespace Terra.Studio
         public override void Repaint()
         {
 
+        }
+
+        private void SetScore(int currentScore)
+        {
+            text.text = currentScore.ToString();
         }
     }
 }

@@ -41,7 +41,6 @@ namespace Terra.Studio
 
         private void LoadSubsystemScene()
         {
-            //Show a loading screen may be
             var sceneToLoad = currentStudioState == StudioState.Editor
                 ? configData.EditorSceneName
                 : configData.RuntimeSceneName;
@@ -57,7 +56,6 @@ namespace Terra.Studio
 
         public void SwitchState()
         {
-            //Get the state of objects and save them under a common parent with no editor references
             DisposeCurrentSubSystem(LoadSubsystemScene);
             currentStudioState = GetNextState();
             previousStudioState = GetOtherState();
