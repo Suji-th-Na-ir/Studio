@@ -51,8 +51,6 @@ namespace RuntimeInspectorNamespace
             ModifyDataAsPerGiven(ref rc);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(rc, Formatting.Indented);
-            
-            Debug.Log(data);
             return (type, data);
         }
         

@@ -11,10 +11,13 @@ namespace Terra.Studio
             var obj = Resources.Load<T>(finalPath);
             if (obj == null && loadFor != LoadFor.Common)
             {
-                return Load<T>(LoadFor.Common, path);
+                var newObj = Load<T>(LoadFor.Common, path);
+                Rulesets.ApplyRuleset(newObj);
+                return newObj;
             }
             else
             {
+                Rulesets.ApplyRuleset(obj);
                 return obj;
             }
         }
@@ -27,10 +30,13 @@ namespace Terra.Studio
             var obj = Resources.Load(finalPath, type);
             if (obj == null && loadFor != LoadFor.Common)
             {
-                return Load(LoadFor.Common, tag);
+                var newObj = Load(LoadFor.Common, tag);
+                Rulesets.ApplyRuleset(newObj);
+                return newObj;
             }
             else
             {
+                Rulesets.ApplyRuleset(obj);
                 return obj;
             }
         }
