@@ -45,6 +45,10 @@ namespace Terra.Studio
         {
             [HideInInspector] public RotateField field;
             [HideInInspector] public RotateComponentData data = new RotateComponentData();
+            public Rotate()
+            {
+                data.broadcastAt = BroadcastAt.End;
+            }
         }
         
         [Serializable]
@@ -52,6 +56,10 @@ namespace Terra.Studio
         {
             [HideInInspector] public RotateField field;
             [HideInInspector] public TranslateComponentData data = new TranslateComponentData();
+            public Translate()
+            {
+                data.broadcastAt = BroadcastAt.End;
+            }
         }
     }
 

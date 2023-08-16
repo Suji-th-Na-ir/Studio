@@ -158,7 +158,7 @@ namespace RuntimeInspectorNamespace
             rt.pauseBetween = 0f;
             rt.broadcast = "";
             rt.listenTo = "";
-            rt.broadcastAt = BroadcastAt.Never;
+            rt.broadcastAt = BroadcastAt.End;
             SetData(rt);
         }
 

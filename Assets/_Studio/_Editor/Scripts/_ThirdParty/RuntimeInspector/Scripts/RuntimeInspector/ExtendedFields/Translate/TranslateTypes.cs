@@ -124,7 +124,7 @@ namespace RuntimeInspectorNamespace
             td.speed = 0f;
             td.repeat = 0;
             td.broadcast = "";
-            td.broadcastAt = BroadcastAt.Never;
+            td.broadcastAt = BroadcastAt.End;
             td.listenTo = "";
             td.targetPosition = Vector3.zero;
             SetData(td);
