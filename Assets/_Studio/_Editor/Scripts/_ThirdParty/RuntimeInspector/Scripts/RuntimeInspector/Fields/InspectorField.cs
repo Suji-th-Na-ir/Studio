@@ -69,12 +69,24 @@ namespace RuntimeInspectorNamespace
 			get { return m_value; }
 			protected set
 			{
-				try { setter( value ); m_value = value; }
+				try { setter( value ); m_value = value; UpdateDataForMultiSelect(); }
 				catch { }
 			}
 		}
 
-		private int m_depth = -1;
+        private Type m_Component;
+        public Type ComponentType
+        {
+            get { return m_Component; }
+            protected set
+            {
+				if(m_Component!=value)
+                 m_Component = value; 
+             
+            }
+        }
+
+        private int m_depth = -1;
 		public int Depth
 		{
 			get { return m_depth; }
@@ -103,7 +115,14 @@ namespace RuntimeInspectorNamespace
 			set { if( variableNameText ) variableNameText.text = value; }
 		}
 
-		bool ITooltipContent.IsActive { get { return this && gameObject.activeSelf; } }
+		private string m_ReflectedName;
+        public string ReflectedName
+        {
+            get {return m_ReflectedName; }
+            set {if(m_ReflectedName!=value) m_ReflectedName = value; }
+        }
+
+        bool ITooltipContent.IsActive { get { return this && gameObject.activeSelf; } }
 		string ITooltipContent.TooltipText { get { return NameRaw; } }
 
 		public virtual bool ShouldRefresh { get { return m_isVisible; } }
@@ -128,6 +147,7 @@ namespace RuntimeInspectorNamespace
 
 		public void BindTo( InspectorField parent, MemberInfo variable, string variableName = null )
 		{
+			m_Component =variable.DeclaringType;
 			if( variable is FieldInfo )
 			{
 				FieldInfo field = (FieldInfo) variable;
@@ -174,6 +194,7 @@ namespace RuntimeInspectorNamespace
 		{
 			m_boundVariableType = variableType;
 			Name = variableName;
+			ReflectedName = variableName;
 
 			this.getter = getter;
 			this.setter = setter;
@@ -268,7 +289,26 @@ namespace RuntimeInspectorNamespace
 					m_value = null;
 			}
 		}
-	}
+
+        protected void UpdateDataForMultiSelect()
+        {
+            List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selectedObjects.Count > 1)
+            {
+
+                foreach (var obj in selectedObjects)
+                {
+                    var component = obj.GetComponent(ComponentType);
+                    if (component != null)
+                    {
+                        var mInfo = component.GetType().GetField(ReflectedName, BindingFlags.Public | BindingFlags.Instance);
+						if(mInfo!=null)
+						mInfo.SetValue(component, Value);
+                    }
+                }
+            }
+        }
+    }
 
 	public abstract class ExpandableInspectorField : InspectorField
 	{

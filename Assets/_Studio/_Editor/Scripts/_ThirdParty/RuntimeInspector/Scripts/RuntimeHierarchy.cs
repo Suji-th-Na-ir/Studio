@@ -906,7 +906,7 @@ namespace RuntimeInspectorNamespace
 #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
 					if( m_allowMultiSelection && ( m_multiSelectionToggleSelectionMode || ( Keyboard.current != null && Keyboard.current.ctrlKey.isPressed ) ) )
 #else
-					if( m_allowMultiSelection && ( m_multiSelectionToggleSelectionMode || Input.GetKey( KeyCode.LeftControl ) || Input.GetKey( KeyCode.RightControl ) ) )
+					if( m_allowMultiSelection && ( m_multiSelectionToggleSelectionMode || (Input.GetKey( KeyCode.LeftControl ) || Input.GetKey( KeyCode.RightControl )|| Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand))) )
 #endif
 #else
 					if( m_allowMultiSelection && m_multiSelectionToggleSelectionMode )
