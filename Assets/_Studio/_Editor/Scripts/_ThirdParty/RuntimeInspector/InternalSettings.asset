@@ -87,3 +87,4 @@ MonoBehaviour:
   - RuntimeInspectorNamespace.Respawn
   - RuntimeInspectorNamespace.Rotate
   - RuntimeInspectorNamespace.Translate
+  - RuntimeInspectorNamespace.InGameTimer
