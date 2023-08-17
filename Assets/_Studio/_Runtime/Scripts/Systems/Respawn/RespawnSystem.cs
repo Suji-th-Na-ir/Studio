@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace Terra.Studio
 {
-    public class RespawnSystem : BaseSystem, IAbsRunsystem, IConditionalOp
+    public class RespawnSystem : BaseSystem
     {
         public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
 
-        public void Init(EcsWorld currentWorld, int entity)
+        public override void Init(EcsWorld currentWorld, int entity)
         {
             var pool = currentWorld.GetPool<RespawnComponent>();
             ref var entityRef = ref pool.Get(entity);
@@ -29,7 +29,7 @@ namespace Terra.Studio
             }
         }
 
-        public void OnConditionalCheck(object data)
+        public override void OnConditionalCheck(object data)
         {
             var (entity, _, _, _) = ((int, string, string, GameObject))data;
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
@@ -55,7 +55,7 @@ namespace Terra.Studio
             RuntimeWrappers.RespawnPlayer(respawnPoint);
         }
 
-        public void OnHaltRequested(EcsWorld currentWorld)
+        public override void OnHaltRequested(EcsWorld currentWorld)
         {
             var filter = currentWorld.Filter<RespawnComponent>().End();
             var respawnPool = currentWorld.GetPool<RespawnComponent>();

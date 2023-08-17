@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace Terra.Studio
 {
-    public class CheckpointSystem : BaseSystem, IAbsRunsystem, IConditionalOp
+    public class CheckpointSystem : BaseSystem
     {
         public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
 
-        public void Init(EcsWorld currentWorld, int entity)
+        public override void Init(EcsWorld currentWorld, int entity)
         {
             var pool = currentWorld.GetPool<CheckpointComponent>();
             ref var entityRef = ref pool.Get(entity);
@@ -29,7 +29,7 @@ namespace Terra.Studio
             }
         }
 
-        public void OnConditionalCheck(object data)
+        public override void OnConditionalCheck(object data)
         {
             var (entity, conditionType, conditionData, go) = ((int, string, string, GameObject))data;
             var compsData = RuntimeOp.Resolve<ComponentsData>();
@@ -57,7 +57,7 @@ namespace Terra.Studio
             }
         }
 
-        public void OnHaltRequested(EcsWorld currentWorld)
+        public override void OnHaltRequested(EcsWorld currentWorld)
         {
             var filter = currentWorld.Filter<CheckpointComponent>().End();
             var checkPointPool = currentWorld.GetPool<CheckpointComponent>();

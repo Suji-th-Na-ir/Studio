@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace Terra.Studio
 {
-    public class RotateSystem : BaseSystem, IAbsRunsystem, IConditionalOp
+    public class RotateSystem : BaseSystem
     {
         public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
 
-        public void Init(EcsWorld currentWorld, int entity)
+        public override void Init(EcsWorld currentWorld, int entity)
         {
             var pool = currentWorld.GetPool<RotateComponent>();
             ref var entityRef = ref pool.Get(entity);
@@ -29,7 +29,7 @@ namespace Terra.Studio
             RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (goRef, conditionData));
         }
 
-        public void OnConditionalCheck(object data)
+        public override void OnConditionalCheck(object data)
         {
             var (entity, conditionType, go, conditionData, selection) = ((int, string, GameObject, string, object))data;
             if (conditionType.Equals("Terra.Studio.MouseAction"))
@@ -93,7 +93,7 @@ namespace Terra.Studio
             RuntimeOp.Resolve<Broadcaster>().Broadcast(broadcast, removeOnceBroadcasted);
         }
 
-        public void OnHaltRequested(EcsWorld currentWorld)
+        public override void OnHaltRequested(EcsWorld currentWorld)
         {
             var filter = currentWorld.Filter<RotateComponent>().End();
             var rotatePool = currentWorld.GetPool<RotateComponent>();

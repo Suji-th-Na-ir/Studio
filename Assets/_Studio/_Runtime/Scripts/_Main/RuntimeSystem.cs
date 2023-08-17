@@ -93,12 +93,12 @@ namespace Terra.Studio
             }
         }
 
-        public IAbsRunsystem AddRunningInstance<T>() where T : IAbsRunsystem
+        public BaseSystem AddRunningInstance<T>() where T : BaseSystem
         {
             var type = typeof(T);
             if (typeToInstances.ContainsKey(type))
             {
-                return (IAbsRunsystem)typeToInstances[type];
+                return (BaseSystem)typeToInstances[type];
             }
             var instance = Activator.CreateInstance<T>();
             typeToInstances.Add(type, instance);
@@ -112,7 +112,7 @@ namespace Terra.Studio
             return instance;
         }
 
-        public void RemoveRunningInstance<T>(T _) where T : IAbsRunsystem
+        public void RemoveRunningInstance<T>(T _) where T : BaseSystem
         {
             var type = typeof(T);
             if (!typeToInstances.ContainsKey(type))
@@ -173,7 +173,7 @@ namespace Terra.Studio
             {
                 foreach (var type in typeToInstances)
                 {
-                    var instance = (IAbsRunsystem)type.Value;
+                    var instance = (BaseSystem)type.Value;
                     instance.OnHaltRequested(ecsWorld);
                 }
                 typeToInstances = null;

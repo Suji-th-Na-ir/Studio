@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace Terra.Studio
 {
-    public class DestroyOnSystem : BaseSystem, IAbsRunsystem, IConditionalOp
+    public class DestroyOnSystem : BaseSystem
     {
         public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
 
-        public void Init(EcsWorld currentWorld, int entity)
+        public override void Init(EcsWorld currentWorld, int entity)
         {
             var pool = currentWorld.GetPool<DestroyOnComponent>();
             ref var destroyable = ref pool.Get(entity);
@@ -35,7 +35,7 @@ namespace Terra.Studio
             }
         }
 
-        public void OnConditionalCheck(object data)
+        public override void OnConditionalCheck(object data)
         {
             var (entity, conditionType, conditionData, go, selection) = ((int, string, string, GameObject, GameObject))data;
             if (conditionType.Equals("Terra.Studio.MouseAction"))
@@ -73,7 +73,7 @@ namespace Terra.Studio
             EntityAuthorOp.Degenerate(entityID);
         }
 
-        public void OnHaltRequested(EcsWorld currentWorld)
+        public override void OnHaltRequested(EcsWorld currentWorld)
         {
             var filter = currentWorld.Filter<DestroyOnComponent>().End();
             var destroyPool = currentWorld.GetPool<DestroyOnComponent>();
