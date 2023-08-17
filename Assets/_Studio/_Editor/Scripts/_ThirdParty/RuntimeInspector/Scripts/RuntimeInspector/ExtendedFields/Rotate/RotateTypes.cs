@@ -1,11 +1,11 @@
+using TMPro;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using Terra.Studio;
+using UnityEngine.UI;
 using PlayShifu.Terra;
+using System.Collections.Generic;
 
 namespace RuntimeInspectorNamespace
 {
@@ -25,8 +25,8 @@ namespace RuntimeInspectorNamespace
         public TMP_InputField listenInput;
 
         public RotateField rotateField = null;
-        private RotateComponentData data = new RotateComponentData();
-        
+        private RotateComponentData data = new();
+
         public void Setup()
         {
             LoadDefaultValues();
@@ -42,15 +42,15 @@ namespace RuntimeInspectorNamespace
             });
             if (broadcastAt != null) broadcastAt.onValueChanged.AddListener((value) =>
             {
-                data.broadcastAt = getBroadcastAt(broadcastAt.options[value].text);
+                data.broadcastAt = GetBroadcastAt(broadcastAt.options[value].text);
                 UpdateData(data);
             });
-            
-            if (degreesInput != null) degreesInput.onValueChanged.AddListener(
-                (value) => { ;
-                    data.degrees = Helper.StringToFloat(value);
-                    UpdateData(data);
-                });
+
+            if (degreesInput != null) degreesInput.onValueChanged.AddListener((value) =>
+            {
+                data.degrees = Helper.StringToFloat(value);
+                UpdateData(data);
+            });
             if (speedInput != null) speedInput.onValueChanged.AddListener((value) =>
             {
                 data.speed = Helper.StringToFloat(value);
@@ -147,38 +147,18 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        public void ResetValues()
-        {
-            RotateComponentData rt = rotateField.GetAtomRotateData();
-            rt.axis = Axis.X;
-            rt.direction = Direction.Clockwise;
-            rt.degrees = 0f;
-            rt.speed = 0f;
-            rt.repeat = 0;
-            rt.pauseBetween = 0f;
-            rt.broadcast = "";
-            rt.listenTo = "";
-            rt.broadcastAt = BroadcastAt.End;
-            SetData(rt);
-        }
-
-        public RotateComponentData GetData()
-        {
-            return data;
-        }
-
         public void SetData(RotateComponentData _data)
         {
             data = _data;
-            if (axisDropDown != null) axisDropDown.value = ((int)Enum.Parse(typeof(Axis), _data.axis.ToString()));
-            if (dirDropDown != null) dirDropDown.value = ((int)Enum.Parse(typeof(Direction), _data.direction.ToString()));
-            if(broadcastAt != null) broadcastAt.value = ((int)Enum.Parse(typeof(BroadcastAt), _data.broadcastAt.ToString()));
-            if (degreesInput != null) degreesInput.text = _data.degrees.ToString();
-            if (speedInput != null) speedInput.text = _data.speed.ToString();
-            if (pauseInput != null) pauseInput.text = _data.pauseBetween.ToString();
-            if (repeatInput != null) repeatInput.text = _data.repeat.ToString();
-            if (broadcastInput != null) broadcastInput.text = _data.broadcast;
-            if (listenInput != null) listenInput.text = _data.listenTo;
+            if (axisDropDown) axisDropDown.SetValueWithoutNotify((int)Enum.Parse(typeof(Axis), _data.axis.ToString()));
+            if (dirDropDown) dirDropDown.SetValueWithoutNotify((int)Enum.Parse(typeof(Direction), _data.direction.ToString()));
+            if (broadcastAt) broadcastAt.SetValueWithoutNotify((int)Enum.Parse(typeof(BroadcastAt), _data.broadcastAt.ToString()));
+            if (degreesInput) degreesInput.SetTextWithoutNotify(_data.degrees.ToString());
+            if (speedInput) speedInput.SetTextWithoutNotify(_data.speed.ToString());
+            if (pauseInput) pauseInput.SetTextWithoutNotify(_data.pauseBetween.ToString());
+            if (repeatInput) repeatInput.SetTextWithoutNotify(_data.repeat.ToString());
+            if (broadcastInput) broadcastInput.SetTextWithoutNotify(_data.broadcast);
+            if (listenInput) listenInput.SetTextWithoutNotify(_data.listenTo);
         }
     }
 }

@@ -92,6 +92,8 @@ namespace Terra.Studio
         [StringValue("SystemSettings", typeof(SystemConfigurationSO))]
         SystemConfig,
         [StringValue("Player", typeof(UnityEngine.GameObject))]
-        Player
+        Player,
+        [StringValue("SOs/Presets/", typeof(UnityEngine.Object))]
+        ComponentPresets
     }
 }

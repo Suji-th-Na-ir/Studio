@@ -112,27 +112,7 @@ namespace RuntimeInspectorNamespace
         
         public void LoadDefaultValues()
         {
-            // broadcast at 
             if (broadcastAt != null) { broadcastAt.AddOptions(Enum.GetNames(typeof(BroadcastAt)).ToList()); }
-        }
-        
-        public void ResetValues()
-        {
-            TranslateComponentData td = translateField.GetAtomTranslateData();
-            td.moveTo = Vector3.zero;
-            td.pauseFor = 0f;
-            td.speed = 0f;
-            td.repeat = 0;
-            td.broadcast = "";
-            td.broadcastAt = BroadcastAt.End;
-            td.listenTo = "";
-            td.targetPosition = Vector3.zero;
-            SetData(td);
-        }
-
-        public TranslateComponentData GetData()
-        {
-            return data;
         }
 
         public void SetData(TranslateComponentData _data)

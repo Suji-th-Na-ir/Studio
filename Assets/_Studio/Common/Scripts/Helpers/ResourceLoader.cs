@@ -11,34 +11,28 @@ namespace Terra.Studio
             var obj = Resources.Load<T>(finalPath);
             if (obj == null && loadFor != LoadFor.Common)
             {
-                var newObj = Load<T>(LoadFor.Common, path);
-                Rulesets.ApplyRuleset(newObj);
-                return newObj;
+                obj = Load<T>(LoadFor.Common, path);
             }
-            else
-            {
-                Rulesets.ApplyRuleset(obj);
-                return obj;
-            }
+            Rulesets.ApplyRuleset(obj);
+            return obj;
         }
 
-        public static Object Load(LoadFor loadFor, ResourceTag tag)
+        public static Object Load(LoadFor loadFor, ResourceTag tag, string appendPath = null)
         {
             var prefix = loadFor.GetStringValue();
             var finalPath = string.Concat(prefix, tag.GetStringValue());
+            if (!string.IsNullOrEmpty(appendPath))
+            {
+                finalPath = string.Concat(finalPath, appendPath);
+            }
             var type = tag.GetStoredType();
             var obj = Resources.Load(finalPath, type);
             if (obj == null && loadFor != LoadFor.Common)
             {
-                var newObj = Load(LoadFor.Common, tag);
-                Rulesets.ApplyRuleset(newObj);
-                return newObj;
+                obj = Load(LoadFor.Common, tag, appendPath);
             }
-            else
-            {
-                Rulesets.ApplyRuleset(obj);
-                return obj;
-            }
+            Rulesets.ApplyRuleset(obj);
+            return obj;
         }
     }
 }

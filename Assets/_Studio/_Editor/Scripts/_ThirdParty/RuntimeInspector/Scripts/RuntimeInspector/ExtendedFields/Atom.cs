@@ -3,6 +3,7 @@ using RuntimeInspectorNamespace;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Serialization;
+using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
@@ -44,22 +45,14 @@ namespace Terra.Studio
         public class Rotate
         {
             [HideInInspector] public RotateField field;
-            [HideInInspector] public RotateComponentData data = new RotateComponentData();
-            public Rotate()
-            {
-                data.broadcastAt = BroadcastAt.End;
-            }
+            [HideInInspector] public RotateComponentData data = new();
         }
-        
+
         [Serializable]
         public class Translate
         {
             [HideInInspector] public RotateField field;
-            [HideInInspector] public TranslateComponentData data = new TranslateComponentData();
-            public Translate()
-            {
-                data.broadcastAt = BroadcastAt.End;
-            }
+            [HideInInspector] public TranslateComponentData data = new();
         }
     }
 
@@ -105,7 +98,6 @@ namespace Terra.Studio
         public int repeat;
         public string broadcast;
         public BroadcastAt broadcastAt;
-        public Vector3 targetPosition;
         public string listenTo;
     }
 

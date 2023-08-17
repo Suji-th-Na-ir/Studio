@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Terra.Studio
 {
-    [CreateAssetMenu(fileName = "SystemSettings", menuName = "Terra/Studio/SystemSettings")]
+    [CreateAssetMenu(fileName = "SystemSettings", menuName = "Terra/SystemSettings")]
     public class SystemConfigurationSO : ScriptableObject
     {
         [SerializeField] private StudioState defaultStudioState;

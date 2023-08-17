@@ -46,7 +46,7 @@ namespace Terra.Studio
         }
 
         public abstract T Load<T>(string path) where T : UnityEngine.Object;
-        public abstract UnityEngine.Object Load(ResourceTag tag);
+        public abstract UnityEngine.Object Load(ResourceTag tag, string appendPath = null);
     }
 
     internal class Interop<T> : BaseInterop where T : IInterop
@@ -72,7 +72,7 @@ namespace Terra.Studio
             return default;
         }
 
-        public override UnityEngine.Object Load(ResourceTag tag)
+        public override UnityEngine.Object Load(ResourceTag tag, string appendPath = null)
         {
             return default;
         }

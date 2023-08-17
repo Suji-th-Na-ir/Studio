@@ -17,7 +17,7 @@ namespace Terra.Studio
 
         [JsonIgnore] public bool CanExecute { get; set; }
         [JsonIgnore] public bool IsExecuted { get; set; }
-        [JsonIgnore] public GameObject refObj;
+        [JsonIgnore, HideInInspector] public GameObject refObj;
 
         public Axis axis; // default 
         public Direction direction;

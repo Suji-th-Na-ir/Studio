@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Reflection;
 using System.Collections.Generic;
+using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
 {
@@ -56,17 +57,25 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        private void ShowTranslateOptionsMenu(int _index, bool _dontReset = false)
+        private void ShowTranslateOptionsMenu(int _index, bool reset = false)
         {
             HideAllTranslateOptionsMenus();
             Atom.Translate rt = (Atom.Translate)Value;
             rt.data.translateType = _index;
             allTranslateTypes[_index].gameObject.SetActive(true);
             selectedTranslateType = allTranslateTypes[_index];
-            if (_dontReset)
+            if (reset)
             {
-                selectedTranslateType.ResetValues();
+                ResetValues();
             }
+        }
+
+        private void ResetValues()
+        {
+            var translateType = (TranslateType)((Atom.Translate)Value).data.translateType;
+            var finalPath = translateType.GetPresetName("Translate");
+            var preset = ((TranslatePreset)EditorOp.Load(ResourceTag.ComponentPresets, finalPath)).Value;
+            LoadData(preset);
         }
 
         protected override void OnSkinChanged()
@@ -96,16 +105,24 @@ namespace RuntimeInspectorNamespace
         public override void Refresh()
         {
             base.Refresh();
-            LoadData(); 
+            LoadData();
         }
 
-        private void LoadData()
+        private void LoadData(TranslateComponentData? componentData = null)
         {
             Atom.Translate rt = (Atom.Translate)Value;
-            translateTypesDD.SetValueWithoutNotify((int)rt.data.translateType);
-            selectedTranslateType.SetData(rt.data);
+            translateTypesDD.SetValueWithoutNotify(rt.data.translateType);
+            if (componentData != null && componentData.HasValue)
+            {
+                selectedTranslateType.SetData(componentData.Value);
+                rt.data = componentData.Value;
+            }
+            else
+            {
+                selectedTranslateType.SetData(rt.data);
+            }
         }
-        
+
         public TranslateComponentData GetAtomTranslateData()
         {
             Atom.Translate rt = (Atom.Translate)Value;

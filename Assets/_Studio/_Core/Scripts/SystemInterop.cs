@@ -34,9 +34,9 @@ namespace Terra.Studio
             return Op.Load<T>(path);
         }
 
-        internal static UnityEngine.Object Load(ResourceTag tag)
+        internal static UnityEngine.Object Load(ResourceTag tag, string appendPath = null)
         {
-            return Op.Load(tag);
+            return Op.Load(tag, appendPath);
         }
 
         private class SystemInterop : BaseInterop
@@ -46,9 +46,9 @@ namespace Terra.Studio
                 return ResourceLoader.Load<T>(LoadFor.System, path);
             }
 
-            public override UnityEngine.Object Load(ResourceTag tag)
+            public override UnityEngine.Object Load(ResourceTag tag, string appendPath = null)
             {
-                return ResourceLoader.Load(LoadFor.System, tag);
+                return ResourceLoader.Load(LoadFor.System, tag, appendPath);
             }
         }
     }

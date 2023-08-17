@@ -421,28 +421,31 @@ namespace PlayShifu.Terra
         public static string GetVfxClipNameByIndex(int _index)
         {
             string[] names = GetVfxClipNames();
-            if (_index < names.Length) 
+            if (_index < names.Length)
                 return names[_index];
             return null;
         }
-        
+
         public static float StringToFloat(string _value)
         {
-            float result = 0f;
-            Single.TryParse(_value, out result);
+            float.TryParse(_value, out float result);
             return result;
         }
 
         public static int StringInInt(string _val)
         {
-            int result = 0;
-            int.TryParse(_val, out result);
+            int.TryParse(_val, out int result);
             return result;
         }
         public static T DeepCopy<T>(T other)
         {
             var serializedData = JsonUtility.ToJson(other);
             return JsonUtility.FromJson<T>(serializedData);
+        }
+
+        public static string GetPresetName(this Enum value, string moduleName)
+        {
+            return string.Concat(moduleName, "/", moduleName, "_", value.ToString(), "_PresetSO");
         }
     }
 }

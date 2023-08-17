@@ -1,6 +1,6 @@
-using Newtonsoft.Json;
-using Terra.Studio;
 using UnityEngine;
+using Terra.Studio;
+using Newtonsoft.Json;
 
 namespace RuntimeInspectorNamespace
 {
@@ -8,11 +8,10 @@ namespace RuntimeInspectorNamespace
     public class Rotate : MonoBehaviour, IComponent
     {
         public StartOn start = StartOn.GameStart;
-        public Atom.Rotate Type = new ();
-        public Atom.PlaySfx PlaySFX = new ();
-        public Atom.PlayVfx PlayVFX = new ();
-        private RotateComponent rComp;
-        
+        public Atom.Rotate Type = new();
+        public Atom.PlaySfx PlaySFX = new();
+        public Atom.PlayVfx PlayVFX = new();
+
         public void Start()
         {
             PlaySFX.Setup(gameObject);
@@ -21,7 +20,7 @@ namespace RuntimeInspectorNamespace
 
         public (string type, string data) Export()
         {
-            RotateComponent rc = new RotateComponent
+            var rc = new RotateComponent
             {
                 axis = Type.data.axis,
                 direction = Type.data.direction,

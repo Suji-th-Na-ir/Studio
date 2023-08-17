@@ -134,7 +134,7 @@ namespace Terra.Studio
                 entities = entities.ToArray()
             };
             var json = JsonConvert.SerializeObject(worldData, Formatting.Indented);
-            // Debug.Log($"Generated scene data: {json}");
+            Debug.Log($"Generated scene data: {json}");
             SaveScene(json);
             return json;
         }
