@@ -33,14 +33,27 @@ namespace Terra.Studio
         {
             tryAgainGO.SetActive(!hasWon);
             winGO.SetActive(hasWon);
-            var score = RuntimeOp.Resolve<ScoreHandler>().CurrentScore;
-            if (scoreTexts != null && scoreTexts.Length != 0)
+            if (RuntimeOp.Resolve<ScoreHandler>() == null)
             {
-                foreach (var scoreText in scoreTexts)
+                if (scoreTexts != null && scoreTexts.Length != 0)
                 {
-                    if (scoreText)
+                    foreach (var scoreText in scoreTexts)
                     {
-                        scoreText.text = $"Score: {score}";
+                        scoreText.gameObject.SetActive(false);
+                    }
+                }
+            }
+            else
+            {
+                var score = RuntimeOp.Resolve<ScoreHandler>().CurrentScore;
+                if (scoreTexts != null && scoreTexts.Length != 0)
+                {
+                    foreach (var scoreText in scoreTexts)
+                    {
+                        if (scoreText)
+                        {
+                            scoreText.text = $"Score: {score}";
+                        }
                     }
                 }
             }

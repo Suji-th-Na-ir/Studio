@@ -1,11 +1,15 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 using Object = UnityEngine.Object;
 
 namespace Terra.Studio
 {
     public class CoreGameManager : IDisposable
     {
+        private Dictionary<Type, List<Action>> callbackOnModuleActivation = new();
+        private Action onDisposeInvoked;
+
         public CoreGameManager()
         {
             Initialize();
@@ -15,7 +19,6 @@ namespace Terra.Studio
         {
             RuntimeOp.Register(new GameData());
             RuntimeOp.Register(new GameStateHandler());
-            RuntimeOp.Register(new ScoreHandler());
             SpawnPlayer();
             SpawnGameUI();
         }
@@ -36,9 +39,56 @@ namespace Terra.Studio
 
         public void Dispose()
         {
+            onDisposeInvoked?.Invoke();
             RuntimeOp.Unregister<GameData>();
             RuntimeOp.Unregister<GameStateHandler>();
-            RuntimeOp.Unregister<ScoreHandler>();
+        }
+
+        public void EnableModule<T>()
+        {
+            if (RuntimeOp.Resolve<T>() != null) return;
+            var type = typeof(T);
+            switch (type.Name)
+            {
+                case nameof(ScoreHandler):
+                    RuntimeOp.Register(new ScoreHandler());
+                    InvokeModuleActivationCall(type);
+                    onDisposeInvoked += () => { RuntimeOp.Unregister<ScoreHandler>(); };
+                    break;
+                case nameof(InGameTimeHandler):
+                    RuntimeOp.Register(new InGameTimeHandler());
+                    InvokeModuleActivationCall(type);
+                    onDisposeInvoked += () => { RuntimeOp.Unregister<InGameTimeHandler>(); };
+                    break;
+            }
+        }
+
+        public void GetCallbackOnModuleActivation<T>(Action callback)
+        {
+            var type = typeof(T);
+            if (RuntimeOp.Resolve<T>() != null)
+            {
+                callback?.Invoke();
+                return;
+            }
+            if (!callbackOnModuleActivation.ContainsKey(type))
+            {
+                callbackOnModuleActivation.Add(type, new List<Action>());
+            }
+            callbackOnModuleActivation[type].Add(callback);
+        }
+
+        private void InvokeModuleActivationCall(Type type)
+        {
+            if (!callbackOnModuleActivation.ContainsKey(type))
+            {
+                return;
+            }
+            foreach (var callback in callbackOnModuleActivation[type])
+            {
+                callback?.Invoke();
+            }
+            callbackOnModuleActivation.Remove(type);
         }
     }
 
@@ -58,6 +108,19 @@ namespace Terra.Studio
         {
             currentScore -= removeBy;
             OnScoreModified?.Invoke(currentScore);
+        }
+    }
+
+    public class InGameTimeHandler
+    {
+        private float currentTime;
+        public float CurrentTime { get { return currentTime; } }
+        public event Action<float> OnTimeModified;
+
+        public void UpdateTime(float newTime)
+        {
+            currentTime = newTime;
+            OnTimeModified?.Invoke(newTime);
         }
     }
 }

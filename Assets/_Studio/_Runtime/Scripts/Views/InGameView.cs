@@ -5,12 +5,23 @@ namespace Terra.Studio
 {
     public class InGameView : View
     {
-        [SerializeField]
-        private TextMeshProUGUI text;
+        [SerializeField] private GameObject scoreGo;
+        [SerializeField] private TextMeshProUGUI scoreText;
+        [SerializeField] private GameObject timerGo;
+        [SerializeField] private TextMeshProUGUI timerText;
 
         public override void Init()
         {
-            RuntimeOp.Resolve<ScoreHandler>().OnScoreModified += SetScore;
+            RuntimeOp.Resolve<CoreGameManager>().GetCallbackOnModuleActivation<ScoreHandler>(() =>
+            {
+                scoreGo.SetActive(true);
+                RuntimeOp.Resolve<ScoreHandler>().OnScoreModified += SetScore;
+            });
+            RuntimeOp.Resolve<CoreGameManager>().GetCallbackOnModuleActivation<InGameTimeHandler>(() =>
+            {
+                timerGo.SetActive(true);
+                RuntimeOp.Resolve<InGameTimeHandler>().OnTimeModified += SetTime;
+            });
         }
 
         public override void Draw()
@@ -31,7 +42,14 @@ namespace Terra.Studio
 
         private void SetScore(int currentScore)
         {
-            text.text = currentScore.ToString();
+            scoreText.text = currentScore.ToString();
+        }
+
+        private void SetTime(float currentTime)
+        {
+            var minutes = Mathf.FloorToInt(currentTime / 60);
+            var seconds = Mathf.FloorToInt(currentTime % 60);
+            timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         }
     }
 }

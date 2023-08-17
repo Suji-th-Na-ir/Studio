@@ -23,16 +23,20 @@ namespace Terra.Studio
             var goRef = collectable.refObject;
             var conditionData = collectable.ConditionData;
             var compsData = RuntimeOp.Resolve<ComponentsData>();
+            if (collectable.IsBroadcastable)
+            {
+                RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(collectable.Broadcast);
+            }
+            if (collectable.canUpdateScore)
+            {
+                RuntimeOp.Resolve<CoreGameManager>().EnableModule<ScoreHandler>();
+            }
             IdToConditionalCallback ??= new();
             IdToConditionalCallback.Add(entity, (obj) =>
             {
                 OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
             });
             compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (goRef, conditionData));
-            if (collectable.IsBroadcastable)
-            {
-                RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(collectable.Broadcast);
-            }
         }
 
         public override void OnConditionalCheck(object data)
