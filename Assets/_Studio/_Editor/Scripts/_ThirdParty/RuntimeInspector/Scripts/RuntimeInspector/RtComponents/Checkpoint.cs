@@ -1,8 +1,8 @@
 using UnityEngine;
+using Terra.Studio;
 using Newtonsoft.Json;
-using RuntimeInspectorNamespace;
 
-namespace Terra.Studio
+namespace RuntimeInspectorNamespace
 {
     [EditorDrawComponent("Terra.Studio.Checkpoint")]
     public class Checkpoint : MonoBehaviour, IComponent
@@ -11,13 +11,13 @@ namespace Terra.Studio
         public Atom.PlayVfx PlayVFX = new();
         public string Broadcast = null;
 
-        
+
         public void Start()
         {
             PlaySFX.Setup(gameObject);
             PlayVFX.Setup(gameObject);
         }
-        
+
         public (string type, string data) Export()
         {
             var component = new CheckpointComponent()

@@ -79,3 +79,11 @@ MonoBehaviour:
     - localPosition
     - localEulerAngles
     - localScale
+  m_autoexpandableDrawers:
+  - RuntimeInspectorNamespace.Collectible
+  - RuntimeInspectorNamespace.Checkpoint
+  - RuntimeInspectorNamespace.DestroyOn
+  - RuntimeInspectorNamespace.Oscillate
+  - RuntimeInspectorNamespace.Respawn
+  - RuntimeInspectorNamespace.Rotate
+  - RuntimeInspectorNamespace.Translate
