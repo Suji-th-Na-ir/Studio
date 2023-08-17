@@ -90,52 +90,10 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 10-08-2023 18:59:12
+  - name: 09-08-2023 15:47:01
     ext: json
-    path: /10-08-2023 18:59:12
-    shortPath: 10-08-2023 18:59:12
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 10-08-2023 19:02:02
-    ext: json
-    path: /10-08-2023 19:02:02
-    shortPath: 10-08-2023 19:02:02
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 10-08-2023 19:06:11
-    ext: json
-    path: /10-08-2023 19:06:11
-    shortPath: 10-08-2023 19:06:11
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 10-08-2023 19:06:59
-    ext: json
-    path: /10-08-2023 19:06:59
-    shortPath: 10-08-2023 19:06:59
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 10-08-2023 19:18:55
-    ext: json
-    path: /10-08-2023 19:18:55
-    shortPath: 10-08-2023 19:18:55
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 12-08-2023 13:06:08
-    ext: json
-    path: /12-08-2023 13:06:08
-    shortPath: 12-08-2023 13:06:08
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: 12-08-2023 13:06:44
-    ext: json
-    path: /12-08-2023 13:06:44
-    shortPath: 12-08-2023 13:06:44
+    path: /09-08-2023 15:47:01
+    shortPath: 09-08-2023 15:47:01
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -146,6 +104,20 @@ MonoBehaviour:
     type: 2
     objectTypeName: ResourceDB, com.terra.studio, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+  - name: jays-backup
+    ext: json
+    path: /jays-backup
+    shortPath: jays-backup
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: jays-scene
+    ext: json
+    path: /jays-scene
+    shortPath: jays-scene
+    type: 2
+    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   - name: Black
     ext: mat
     path: Common/Prefabs/source/Black
@@ -258,6 +230,90 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  - name: Rotate_IncrementallyRotateForever_PresetSO
+    ext: asset
+    path: Common/SOs/Presets/Rotate/Rotate_IncrementallyRotateForever_PresetSO
+    shortPath: SOs/Presets/Rotate/Rotate_IncrementallyRotateForever_PresetSO
+    type: 2
+    objectTypeName: Terra.Studio.RotatePreset, com.terra.studio, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Rotate_IncrementallyRotate_PresetSO
+    ext: asset
+    path: Common/SOs/Presets/Rotate/Rotate_IncrementallyRotate_PresetSO
+    shortPath: SOs/Presets/Rotate/Rotate_IncrementallyRotate_PresetSO
+    type: 2
+    objectTypeName: Terra.Studio.RotatePreset, com.terra.studio, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Rotate_OscillateForever_PresetSO
+    ext: asset
+    path: Common/SOs/Presets/Rotate/Rotate_OscillateForever_PresetSO
+    shortPath: SOs/Presets/Rotate/Rotate_OscillateForever_PresetSO
+    type: 2
+    objectTypeName: Terra.Studio.RotatePreset, com.terra.studio, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Rotate_Oscillate_PresetSO
+    ext: asset
+    path: Common/SOs/Presets/Rotate/Rotate_Oscillate_PresetSO
+    shortPath: SOs/Presets/Rotate/Rotate_Oscillate_PresetSO
+    type: 2
+    objectTypeName: Terra.Studio.RotatePreset, com.terra.studio, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Rotate_RotateForever_PresetSO
+    ext: asset
+    path: Common/SOs/Presets/Rotate/Rotate_RotateForever_PresetSO
+    shortPath: SOs/Presets/Rotate/Rotate_RotateForever_PresetSO
+    type: 2
+    objectTypeName: Terra.Studio.RotatePreset, com.terra.studio, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Rotate_RotateOnce_PresetSO
+    ext: asset
+    path: Common/SOs/Presets/Rotate/Rotate_RotateOnce_PresetSO
+    shortPath: SOs/Presets/Rotate/Rotate_RotateOnce_PresetSO
+    type: 2
+    objectTypeName: Terra.Studio.RotatePreset, com.terra.studio, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Translate_MoveForever_PresetSO
+    ext: asset
+    path: Common/SOs/Presets/Translate/Translate_MoveForever_PresetSO
+    shortPath: SOs/Presets/Translate/Translate_MoveForever_PresetSO
+    type: 2
+    objectTypeName: Terra.Studio.TranslatePreset, com.terra.studio, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Translate_MoveIncrementallyForever_PresetSO
+    ext: asset
+    path: Common/SOs/Presets/Translate/Translate_MoveIncrementallyForever_PresetSO
+    shortPath: SOs/Presets/Translate/Translate_MoveIncrementallyForever_PresetSO
+    type: 2
+    objectTypeName: Terra.Studio.TranslatePreset, com.terra.studio, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Translate_MoveIncrementally_PresetSO
+    ext: asset
+    path: Common/SOs/Presets/Translate/Translate_MoveIncrementally_PresetSO
+    shortPath: SOs/Presets/Translate/Translate_MoveIncrementally_PresetSO
+    type: 2
+    objectTypeName: Terra.Studio.TranslatePreset, com.terra.studio, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Translate_Move_PresetSO
+    ext: asset
+    path: Common/SOs/Presets/Translate/Translate_Move_PresetSO
+    shortPath: SOs/Presets/Translate/Translate_Move_PresetSO
+    type: 2
+    objectTypeName: Terra.Studio.TranslatePreset, com.terra.studio, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Translate_PingPongForever_PresetSO
+    ext: asset
+    path: Common/SOs/Presets/Translate/Translate_PingPongForever_PresetSO
+    shortPath: SOs/Presets/Translate/Translate_PingPongForever_PresetSO
+    type: 2
+    objectTypeName: Terra.Studio.TranslatePreset, com.terra.studio, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: Translate_PingPong_PresetSO
+    ext: asset
+    path: Common/SOs/Presets/Translate/Translate_PingPong_PresetSO
+    shortPath: SOs/Presets/Translate/Translate_PingPong_PresetSO
+    type: 2
+    objectTypeName: Terra.Studio.TranslatePreset, com.terra.studio, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   - name: SpaceshipA
     ext: prefab
     path: Common/SpaceRaceAssets/Assets/AlienSpaceship/SpaceshipA
@@ -339,6 +395,48 @@ MonoBehaviour:
     ext: prefab
     path: Common/SpaceRaceAssets/Assets/cable/Cable_Stright
     shortPath: SpaceRaceAssets/Assets/cable/Cable_Stright
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: ButtonWrongA
+    ext: prefab
+    path: Common/SpaceRaceAssets/Assets/ButtonWrongA
+    shortPath: SpaceRaceAssets/Assets/ButtonWrongA
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: ButtonWrongB
+    ext: prefab
+    path: Common/SpaceRaceAssets/Assets/ButtonWrongB
+    shortPath: SpaceRaceAssets/Assets/ButtonWrongB
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: CorrectButtonA
+    ext: prefab
+    path: Common/SpaceRaceAssets/Assets/CorrectButtonA
+    shortPath: SpaceRaceAssets/Assets/CorrectButtonA
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: CorrectTubePrefab1
+    ext: prefab
+    path: Common/SpaceRaceAssets/Assets/CorrectTubePrefab1
+    shortPath: SpaceRaceAssets/Assets/CorrectTubePrefab1
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: WrongTubePrefab1
+    ext: prefab
+    path: Common/SpaceRaceAssets/Assets/WrongTubePrefab1
+    shortPath: SpaceRaceAssets/Assets/WrongTubePrefab1
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: WrongTubePrefab2
+    ext: prefab
+    path: Common/SpaceRaceAssets/Assets/WrongTubePrefab2
+    shortPath: SpaceRaceAssets/Assets/WrongTubePrefab2
     type: 2
     objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -736,6 +834,20 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  - name: Cube_NoMesh
+    ext: prefab
+    path: Common/SpaceRaceAssets/Cube_NoMesh
+    shortPath: SpaceRaceAssets/Cube_NoMesh
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - name: UFO (6)
+    ext: prefab
+    path: Common/SpaceRaceAssets/UFO (6)
+    shortPath: SpaceRaceAssets/UFO (6)
+    type: 2
+    objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   - name: bell_1
     ext: mp3
     path: Common/sfx/bell_1
@@ -988,6 +1100,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_FileCount: 139
+  m_FileCount: 155
   m_FolderCount: 0
   UpdateAutomatically: 1

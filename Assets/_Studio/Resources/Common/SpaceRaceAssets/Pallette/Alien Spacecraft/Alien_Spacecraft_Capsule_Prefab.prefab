@@ -41,6 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4673965092017564803}
+  - component: {fileID: 4911247444482315135}
   m_Layer: 0
   m_Name: Alien_Spacecraft_Capsule_Prefab
   m_TagString: Untagged
@@ -57,13 +58,26 @@ Transform:
   m_GameObject: {fileID: 1916315867128631518}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.044799, y: 0.044799, z: 0.044799}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6868332676247743280}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4911247444482315135
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916315867128631518}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 55.039806, y: 62.003464, z: 49.2693}
+  m_Center: {x: 0, y: 26.001743, z: 0}
 --- !u!1 &6832099963492167893
 GameObject:
   m_ObjectHideFlags: 0
@@ -75,7 +89,6 @@ GameObject:
   - component: {fileID: 6318040746481315003}
   - component: {fileID: 9191534523293555343}
   - component: {fileID: 2245730194057386844}
-  - component: {fileID: 4997250692320673818}
   m_Layer: 0
   m_Name: tra_veh_alienspacecraftCapsule
   m_TagString: Untagged
@@ -148,17 +161,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &4997250692320673818
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6832099963492167893}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 24.456718
-  m_Height: 54.794865
-  m_Direction: 1
-  m_Center: {x: 0, y: 27.251669, z: 0.000002861023}
