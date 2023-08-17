@@ -292,8 +292,14 @@ namespace Terra.Studio
             foreach (EntityBasedComponent comp in _entity.components)
             {
                 Type type = EditorOp.Resolve<DataProvider>().GetVariance(comp.type);
-                var component = _gameObject.AddComponent(type) as IComponent;
-                component.Import(comp);
+                if (type != null)
+                {
+                    var component = _gameObject.AddComponent(type) as IComponent;
+                    if (component != null)
+                    {
+                        component.Import(comp);
+                    }
+                }
             }
         }
 

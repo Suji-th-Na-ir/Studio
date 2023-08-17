@@ -2,11 +2,12 @@
     "entities": [
         {
             "id": 0,
-            "primitiveType": "Cube",
+            "name": "Cube",
+            "assetPath": "Prefabs/Cube",
             "position": {
-                "x": -15.55,
+                "x": 0,
                 "y": 0,
-                "z": 6.46
+                "z": 0
             },
             "rotation": {
                 "x": 0,
@@ -20,58 +21,8 @@
             },
             "components": [
                 {
-                    "type": "Terra.Studio.Translate",
-                    "data": "{\"canPlaySFX\":true,\"sfxName\":\"bell_1\",\"sfxIndex\":0,\"canPlayVFX\":true,\"vfxName\":\"vfx_ArrowGreen\",\"vfxIndex\":0,\"startPosition\":{\"x\":-15.55,\"y\":0.0,\"z\":6.46},\"targetPosition\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"translateType\":0,\"broadcastAt\":2,\"speed\":30,\"pauseAtDistance\":10.0,\"pauseFor\":1,\"repeatFor\":2,\"IsConditionAvailable\":true,\"ConditionType\":\"Terra.Studio.MouseAction\",\"ConditionData\":\"OnClick\",\"IsBroadcastable\":true,\"Broadcast\":\"I translated!\",\"IsTargeted\":false,\"TargetId\":0}"
-                }
-            ]
-        },
-        {
-            "id": 1,
-            "primitiveType": "Sphere",
-            "position": {
-                "x": -11.55,
-                "y": 0,
-                "z": 1.46
-            },
-            "rotation": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-            },
-            "scale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-            },
-            "components": [
-                {
-                    "type": "Terra.Studio.Collectable",
-                    "data": "{\"canPlaySFX\":false,\"sfxName\":null,\"sfxIndex\":0,\"canPlayVFX\":false,\"vfxName\":null,\"vfxIndex\":0,\"canUpdateScore\":false,\"scoreValue\":0.0,\"showScoreUI\":false,\"IsConditionAvailable\":true,\"ConditionType\":\"Terra.Studio.MouseAction\",\"ConditionData\":\"OnClick\",\"IsBroadcastable\":true,\"Broadcast\":\"Hello\",\"IsTargeted\":false,\"TargetId\":0}"
-                }
-            ]
-        },
-        {
-            "id": 2,
-            "primitiveType": "Cylinder",
-            "position": {
-                "x": -15.55,
-                "y": 0,
-                "z": 1.46
-            },
-            "rotation": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-            },
-            "scale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-            },
-            "components": [
-                {
-                    "type": "Terra.Studio.Collectable",
-                    "data": "{\"canPlaySFX\":false,\"sfxName\":null,\"sfxIndex\":0,\"canPlayVFX\":false,\"vfxName\":null,\"vfxIndex\":0,\"canUpdateScore\":false,\"scoreValue\":0.0,\"showScoreUI\":false,\"IsConditionAvailable\":true,\"ConditionType\":\"Terra.Studio.MouseAction\",\"ConditionData\":\"OnClick\",\"IsBroadcastable\":true,\"Broadcast\":\"Hello\",\"IsTargeted\":false,\"TargetId\":0}"
+                    "type": "Terra.Studio.GameTimer",
+                    "data": "{\"totalTime\":10,\"IsConditionAvailable\":true,\"ConditionType\":\"Terra.Studio.GameStart\",\"ConditionData\":\"OnStart\",\"IsBroadcastable\":true,\"Broadcast\":\"Game Win\",\"IsTargeted\":false,\"TargetId\":0}"
                 }
             ]
         }

@@ -14,6 +14,13 @@ namespace Terra.Studio
             {
                 collider = gameObject.AddComponent<BoxCollider>();
             }
+            else
+            {
+                if (TryGetComponent(out MeshCollider meshCollider))
+                {
+                    meshCollider.convex = true;
+                }
+            }
             collider.isTrigger = true;
             if (!TryGetComponent(out Rigidbody rb))
             {

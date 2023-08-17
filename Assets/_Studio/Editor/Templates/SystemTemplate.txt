@@ -4,19 +4,24 @@ using System.Collections.Generic;
 
 namespace Terra.Studio
 {
-    public class REPLACEMESystem : BaseSystem, IAbsRunsystem, IConditionalOp
+    public class REPLACEMESystem : BaseSystem
     {
         public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
 
-        public void Init(EcsWorld currentWorld, int entity)
+        public override void Init(EcsWorld currentWorld, int entity)
         {
             var pool = currentWorld.GetPool<REPLACEMEComponent>();
             ref var entityRef = ref pool.Get(entity);
         }
 
-        public void OnConditionalCheck(object data)
+        public override void OnConditionalCheck(object data)
         {
             
+        }
+
+        public override void OnHaltRequested(EcsWorld currentWorld)
+        {
+
         }
     }
 }

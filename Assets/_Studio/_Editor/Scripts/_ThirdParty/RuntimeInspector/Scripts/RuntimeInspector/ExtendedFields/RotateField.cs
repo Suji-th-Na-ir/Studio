@@ -15,13 +15,12 @@ namespace RuntimeInspectorNamespace
         [SerializeField] public Dropdown rotateTypesDD;
         public RotateTypes[] allRotateTypes;
 #pragma warning restore 0649
-
         private RotateTypes selectedRotateType;
 
         public override void Initialize()
         {
             base.Initialize();
-            base.layoutElement.minHeight = 316.9f;
+            layoutElement.minHeight = 316.9f;
             Setup();
         }
 
@@ -62,6 +61,7 @@ namespace RuntimeInspectorNamespace
             rt.data.rotateType = _index;
             allRotateTypes[_index].gameObject.SetActive(true);
             selectedRotateType = allRotateTypes[_index];
+            reset = reset || IsDataDefault();
             if (reset)
             {
                 ResetValues();
@@ -74,6 +74,16 @@ namespace RuntimeInspectorNamespace
             var finalPath = rotationType.GetPresetName("Rotate");
             var preset = ((RotatePreset)EditorOp.Load(ResourceTag.ComponentPresets, finalPath)).Value;
             LoadData(preset);
+        }
+
+        private bool IsDataDefault()
+        {
+            var data = ((Atom.Rotate)Value).data;
+            if (data.Equals(default(RotateComponentData)))
+            {
+                return true;
+            }
+            return false;
         }
 
         protected override void OnSkinChanged()

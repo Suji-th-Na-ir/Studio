@@ -1,9 +1,10 @@
 {
+  "Terra.Studio.Checkpoint": "RuntimeInspectorNamespace.Checkpoint",
   "Terra.Studio.Collectable": "RuntimeInspectorNamespace.Collectible",
   "Terra.Studio.DestroyOn": "RuntimeInspectorNamespace.DestroyOn",
+  "Terra.Studio.InGameTimer": "RuntimeInspectorNamespace.InGameTimer",
   "Terra.Studio.Oscillate": "RuntimeInspectorNamespace.Oscillate",
   "Terra.Studio.Respawn": "RuntimeInspectorNamespace.Respawn",
   "Terra.Studio.Rotate": "RuntimeInspectorNamespace.Rotate",
-  "Terra.Studio.Translate": "RuntimeInspectorNamespace.Translate",
-  "Terra.Studio.Checkpoint": "Terra.Studio.Checkpoint"
+  "Terra.Studio.Translate": "RuntimeInspectorNamespace.Translate"
 }

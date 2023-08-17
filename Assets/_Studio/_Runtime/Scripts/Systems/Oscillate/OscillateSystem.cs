@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace Terra.Studio
 {
-    public class OscillateSystem : BaseSystem, IAbsRunsystem, IEcsRunSystem, IConditionalOp
+    public class OscillateSystem : BaseSystem, IEcsRunSystem
     {
         public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
 
-        public void Init(EcsWorld currentWorld, int entity)
+        public override void Init(EcsWorld currentWorld, int entity)
         {
             var oscillatorPool = currentWorld.GetPool<OscillateComponent>();
             ref var oscillatable = ref oscillatorPool.Get(entity);
@@ -35,7 +35,7 @@ namespace Terra.Studio
             compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (oscillatable.oscillatableTr.gameObject, conditionData));
         }
 
-        public void OnConditionalCheck(object data)
+        public override void OnConditionalCheck(object data)
         {
             var (id, reference, conditionType, conditionData) = ((int, GameObject, string, string))data;
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
@@ -103,7 +103,7 @@ namespace Terra.Studio
             }
         }
 
-        public void OnHaltRequested(EcsWorld currentWorld)
+        public override void OnHaltRequested(EcsWorld currentWorld)
         {
             var filter = currentWorld.Filter<OscillateComponent>().End();
             var oscillatorPool = currentWorld.GetPool<OscillateComponent>();

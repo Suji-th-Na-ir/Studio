@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace Terra.Studio
 {
-    public class CollectableSystem : BaseSystem, IAbsRunsystem, IConditionalOp
+    public class CollectableSystem : BaseSystem
     {
         public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
 
-        public void Init(EcsWorld currentWorld, int entity)
+        public override void Init(EcsWorld currentWorld, int entity)
         {
             var filter = currentWorld.Filter<CollectableComponent>().End();
             var collectablePool = currentWorld.GetPool<CollectableComponent>();
@@ -23,19 +23,23 @@ namespace Terra.Studio
             var goRef = collectable.refObject;
             var conditionData = collectable.ConditionData;
             var compsData = RuntimeOp.Resolve<ComponentsData>();
+            if (collectable.IsBroadcastable)
+            {
+                RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(collectable.Broadcast);
+            }
+            if (collectable.canUpdateScore)
+            {
+                RuntimeOp.Resolve<CoreGameManager>().EnableModule<ScoreHandler>();
+            }
             IdToConditionalCallback ??= new();
             IdToConditionalCallback.Add(entity, (obj) =>
             {
                 OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
             });
             compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (goRef, conditionData));
-            if (collectable.IsBroadcastable)
-            {
-                RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(collectable.Broadcast);
-            }
         }
 
-        public void OnConditionalCheck(object data)
+        public override void OnConditionalCheck(object data)
         {
             var (entity, conditionType, go, conditionData, selection) = ((int, string, GameObject, string, object))data;
             if (conditionType.Equals("Terra.Studio.MouseAction"))
@@ -75,7 +79,7 @@ namespace Terra.Studio
             EntityAuthorOp.Degenerate(entityID);
         }
 
-        public void OnHaltRequested(EcsWorld currentWorld)
+        public override void OnHaltRequested(EcsWorld currentWorld)
         {
             var filter = currentWorld.Filter<CollectableComponent>().End();
             var collectablePool = currentWorld.GetPool<CollectableComponent>();

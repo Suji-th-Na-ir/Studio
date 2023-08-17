@@ -64,6 +64,7 @@ namespace RuntimeInspectorNamespace
             rt.data.translateType = _index;
             allTranslateTypes[_index].gameObject.SetActive(true);
             selectedTranslateType = allTranslateTypes[_index];
+            reset = reset || IsDataDefault();
             if (reset)
             {
                 ResetValues();
@@ -76,6 +77,16 @@ namespace RuntimeInspectorNamespace
             var finalPath = translateType.GetPresetName("Translate");
             var preset = ((TranslatePreset)EditorOp.Load(ResourceTag.ComponentPresets, finalPath)).Value;
             LoadData(preset);
+        }
+
+        private bool IsDataDefault()
+        {
+            var data = ((Atom.Translate)Value).data;
+            if (data.Equals(default(TranslateComponentData)))
+            {
+                return true;
+            }
+            return false;
         }
 
         protected override void OnSkinChanged()
