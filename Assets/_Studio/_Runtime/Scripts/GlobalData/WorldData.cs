@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Newtonsoft.Json;
-
+using System.Collections.Generic;
 namespace Terra.Studio
 {
     [Serializable]
@@ -23,6 +23,7 @@ namespace Terra.Studio
         [JsonConverter(typeof(Vector3Converter))] public Vector3 scale;
 
         public EntityBasedComponent[] components;
+        public Dictionary<int, EntityBasedComponent[]> childCompenentDictionary;
     }
 
     [Serializable]

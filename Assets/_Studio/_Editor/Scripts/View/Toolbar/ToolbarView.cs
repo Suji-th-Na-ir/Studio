@@ -40,10 +40,10 @@ namespace Terra.Studio
             });
 
             var saveButton = saveButtonTr.GetComponent<Button>();
-            AddListenerEvent(saveButton, SceneExporter.ExportSceneFromHirearchy);
+            AddListenerEvent(saveButton, SceneExporter.ExportDataToPersistantPath);
 
-            var loadButton = loadButtonTr.GetComponent<Button>();
-           // AddListenerEvent(loadButton, SceneExporter.ExportSceneFromHirearchy);
+            //var loadButton = loadButtonTr.GetComponent<Button>();
+            //AddListenerEvent(loadButton, SceneExporter.ExportSceneFromHirearchy);
 
             var cylinderButton = cylinderPrimitiveTr.GetComponent<Button>();
             AddListenerEvent(cylinderButton, CreatePrimitive, PrimitiveType.Cylinder);

@@ -447,5 +447,24 @@ namespace PlayShifu.Terra
         {
             return string.Concat(moduleName, "/", moduleName, "_", value.ToString(), "_PresetSO");
         }
+
+        public static List<Transform> GetChildren(Transform parent, bool recursive)
+        {
+            /** Get a list of children from a given parent, either the direct
+                descendants or all recursively. **/
+
+            List<Transform> children = new List<Transform>();
+
+            foreach (Transform child in parent)
+            {
+                children.Add(child);
+                if (recursive)
+                {
+                    children.AddRange(GetChildren(child, true));
+                }
+            }
+
+            return children;
+        }
     }
 }

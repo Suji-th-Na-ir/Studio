@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using System.IO;
 using UnityEditor;
 using System.Text.RegularExpressions;
+using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
@@ -75,6 +76,10 @@ namespace Terra.Studio
             return result;
         }
 
+        public static void ExportDataToPersistantPath()
+        {
+            ExportJson();
+        }
         public static string ExportJson()
         {
             List<GameObject> sceneObjects;
@@ -127,6 +132,8 @@ namespace Terra.Studio
                     });
                 }
                 virutalEntity.components = components.ToArray();
+                int index = 0;
+                virutalEntity.childCompenentDictionary = GetNestedChildrenComponentsWithRelativeIds(sceneObjects[i].transform, ref index);
                 entities.Add(virutalEntity);
             }
             var worldData = new WorldData()
@@ -156,16 +163,24 @@ namespace Terra.Studio
                 filePath = Application.dataPath + "/Resources" + ResourceDB.GetStudioAsset(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name).Path + ".json";
 
             }
+            UpdateJsonFile(data);
+            AssetDatabase.Refresh();
+#else
 
+            filePath = Helper.GetCoreDataSavePath() + $"/{DateTime.Now}.json";
+            UpdateJsonFile(data);
+#endif
+
+        }
+
+        private static void UpdateJsonFile(string data)
+        {
             string directory = Path.GetDirectoryName(filePath);
             if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
             }
             File.WriteAllText(filePath, data);
-
-            AssetDatabase.Refresh();
-#endif
         }
 
         private static void LoadScene()
@@ -173,7 +188,7 @@ namespace Terra.Studio
             string jsonData = null;
             if (SystemOp.Resolve<System>().PreviousStudioState == StudioState.Bootstrap)
             {
-#if UNITY_EDITOR
+
                 if (!SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
                 {
                     return;
@@ -182,7 +197,7 @@ namespace Terra.Studio
                 {
                     jsonData = SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.text;
                 }
-#endif
+
             }
             else
             {
@@ -216,8 +231,17 @@ namespace Terra.Studio
                 if (genObject != null)
                 {
                     genObject.name = _data.entities[i].name;
+                  
                     if (entity.components.Length > 0)
                         AddComponents(entity, genObject);
+                    var children =Helper.GetChildren(genObject.transform, true);
+                    for (int j = 0; j < children.Count; j++)
+                    {
+                        if(entity.childCompenentDictionary.TryGetValue(j, out EntityBasedComponent[] components))
+                        {
+                            AddComponents(components, children[j].gameObject);
+                        }
+                    }
                 }
                 else
                 {
@@ -226,9 +250,56 @@ namespace Terra.Studio
             }
         }
 
+        private static Dictionary<int, EntityBasedComponent[]> GetNestedChildrenComponentsWithRelativeIds(Transform parent,ref int index)
+        {
+            /** Get a dictionary hierarchy of all children under a given parent. **/
+
+            Dictionary<int, EntityBasedComponent[]> children = new Dictionary<int, EntityBasedComponent[]>();
+
+            foreach (Transform child in parent)
+            {
+                var components = new List<EntityBasedComponent>();
+                var attachedComps = child.GetComponents<IComponent>();
+                foreach (var component in attachedComps)
+                {
+                    var data = component.Export();
+                    components.Add(new EntityBasedComponent()
+                    {
+                        type = data.type,
+                        data = data.data
+                    });
+                }
+                if(components.Count>0)
+                children.Add(index, components.ToArray());
+
+                int childIndex = index + 1;
+                var childChildren = GetNestedChildrenComponentsWithRelativeIds(child, ref childIndex);
+                foreach (var kvp in childChildren)
+                {
+                    if(kvp.Value.Length>0)
+                    children.Add(kvp.Key, kvp.Value);
+                }
+
+                index = childIndex;
+            }
+
+            return children;
+        }
+
+
         private static void AddComponents(VirtualEntity _entity, GameObject _gameObject)
         {
             foreach (EntityBasedComponent comp in _entity.components)
+            {
+                Type type = EditorOp.Resolve<DataProvider>().GetVariance(comp.type);
+                var component = _gameObject.AddComponent(type) as IComponent;
+                component.Import(comp);
+            }
+        }
+
+        private static void AddComponents(EntityBasedComponent[] components, GameObject _gameObject)
+        {
+            foreach (EntityBasedComponent comp in components)
             {
                 Type type = EditorOp.Resolve<DataProvider>().GetVariance(comp.type);
                 var component = _gameObject.AddComponent(type) as IComponent;
