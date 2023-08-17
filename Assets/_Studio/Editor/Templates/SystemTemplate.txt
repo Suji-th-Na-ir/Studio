@@ -18,5 +18,10 @@ namespace Terra.Studio
         {
             
         }
+
+        public void OnHaltRequested(EcsWorld currentWorld)
+        {
+            
+        }
     }
 }

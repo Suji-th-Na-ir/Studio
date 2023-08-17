@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using UnityEngine;
 using UnityEditor;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Terra.Studio.RTEditor
@@ -86,17 +85,19 @@ namespace Terra.Studio.RTEditor
             }
             var componentTemplateData = AssetDatabase.LoadAssetAtPath<TextAsset>(COMPONENT_TEMPLATE_PATH).text;
             componentTemplateData = componentTemplateData.Replace(REPLACABLE_ID, systemName);
-            var componentSavePath = string.Concat(COMPONENT_SAVE_PATH, $"{systemName}{SUFFIX_COMPONENT_FILE}.cs");
+            var componentDirPath = Path.Combine(COMPONENT_SAVE_PATH, systemName);
+            Directory.CreateDirectory(componentDirPath);
+            var componentSavePath = string.Concat($"{componentDirPath}/", $"{systemName}{SUFFIX_COMPONENT_FILE}.cs");
             File.WriteAllText(componentSavePath, componentTemplateData);
-            var folderDirName = string.Concat(AUTHOR_SAVE_PATH, $"{systemName}{Path.DirectorySeparatorChar}");
-            Directory.CreateDirectory(folderDirName);
+            var authorDirPath = string.Concat(AUTHOR_SAVE_PATH, $"{systemName}{Path.DirectorySeparatorChar}");
+            Directory.CreateDirectory(authorDirPath);
             var authorTemplateData = AssetDatabase.LoadAssetAtPath<TextAsset>(AUTHOR_TEMPLATE_PATH).text;
             authorTemplateData = authorTemplateData.Replace(REPLACABLE_ID, systemName);
-            var authorSavePath = string.Concat(folderDirName, $"{systemName}{SUFFIX_AUTHOR_FILE}.cs");
+            var authorSavePath = string.Concat(authorDirPath, $"{systemName}{SUFFIX_AUTHOR_FILE}.cs");
             File.WriteAllText(authorSavePath, authorTemplateData);
             var systemTemplateData = AssetDatabase.LoadAssetAtPath<TextAsset>(SYSTEM_TEMPLATE_PATH).text;
             systemTemplateData = systemTemplateData.Replace(REPLACABLE_ID, systemName);
-            var systemSavePath = string.Concat(folderDirName, $"{systemName}{SUFFIX_SYSTEM_FILE}.cs");
+            var systemSavePath = string.Concat(authorDirPath, $"{systemName}{SUFFIX_SYSTEM_FILE}.cs");
             File.WriteAllText(systemSavePath, systemTemplateData);
             AssetDatabase.Refresh();
         }
