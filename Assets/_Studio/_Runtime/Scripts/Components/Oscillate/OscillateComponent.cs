@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Terra.Studio
 {
     [Serializable]
-    public struct OscillateComponent : IBaseComponent, IConditional, IBroadcastData
+    public struct OscillateComponent : IBaseComponent
     {
         public float speed;
         [JsonConverter(typeof(Vector3Converter))] public Vector3 fromPoint;

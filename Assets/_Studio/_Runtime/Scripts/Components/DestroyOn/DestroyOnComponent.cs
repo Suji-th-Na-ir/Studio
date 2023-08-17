@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Terra.Studio
 {
     [Serializable]
-    public struct DestroyOnComponent : IBaseComponent, IConditional, IBroadcastData
+    public struct DestroyOnComponent : IBaseComponent
     {
         public bool IsConditionAvailable { get; set; }
         public string ConditionType { get; set; }

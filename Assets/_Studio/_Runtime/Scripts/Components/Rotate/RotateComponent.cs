@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Terra.Studio
 {
     [Serializable]
-    public struct RotateComponent : IBaseComponent, IConditional, IBroadcastData
+    public struct RotateComponent : IBaseComponent
     {
         public bool IsConditionAvailable { get; set; }
         public string ConditionType { get; set; }
@@ -19,7 +19,7 @@ namespace Terra.Studio
         [JsonIgnore] public bool IsExecuted { get; set; }
         [JsonIgnore, HideInInspector] public GameObject refObj;
 
-        public Axis axis; // default 
+        public Axis axis;
         public Direction direction;
         public RotationType rotationType;
         public RepeatType repeatType;
