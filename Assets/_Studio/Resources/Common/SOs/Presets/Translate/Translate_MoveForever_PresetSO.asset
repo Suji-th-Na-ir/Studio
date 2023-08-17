@@ -13,12 +13,11 @@ MonoBehaviour:
   m_Name: Translate_MoveForever_PresetSO
   m_EditorClassIdentifier: 
   value:
-    translateType: 0
+    translateType: 1
     moveTo: {x: 0, y: 0, z: 0}
     pauseFor: 0
-    speed: 0
+    speed: 5
     repeat: 0
     broadcast: 
     broadcastAt: 0
-    targetPosition: {x: 0, y: 0, z: 0}
     listenTo: 
