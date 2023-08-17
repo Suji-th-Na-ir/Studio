@@ -117,7 +117,7 @@ namespace RuntimeInspectorNamespace
             return Direction.Clockwise;
         }
 
-        private BroadcastAt getBroadcastAt(string _value)
+        private BroadcastAt GetBroadcastAt(string _value)
         {
             if (_value == BroadcastAt.End.ToString()) return BroadcastAt.End;
             else if (_value == BroadcastAt.Never.ToString()) return BroadcastAt.Never;
