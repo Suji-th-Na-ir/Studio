@@ -100,7 +100,7 @@ public class SelectionHandler : View
         {
             if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
             {
-                if (RTInput.WasKeyPressedThisFrame(KeyCode.X))
+                if (RTInput.WasKeyPressedThisFrame(KeyCode.Backspace))
                 {
                     runtimeHierarchy.Deselect();
                     foreach (GameObject obj in _selectedObjects)
