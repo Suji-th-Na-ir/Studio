@@ -5,13 +5,13 @@ using System.Collections.Generic;
 
 namespace Terra.Studio
 {
-    public class GameTimerSystem : BaseSystem, IEcsRunSystem
+    public class InGameTimerSystem : BaseSystem, IEcsRunSystem
     {
         public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
 
         public override void Init(EcsWorld currentWorld, int entity)
         {
-            var pool = currentWorld.GetPool<GameTimerComponent>();
+            var pool = currentWorld.GetPool<InGameTimerComponent>();
             ref var entityRef = ref pool.Get(entity);
             entityRef.CanExecute = false;
             var conditionData = entityRef.ConditionData;
@@ -38,7 +38,7 @@ namespace Terra.Studio
             compData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (temp, conditionData));
             IdToConditionalCallback.Remove(entity);
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
-            var pool = world.GetPool<GameTimerComponent>();
+            var pool = world.GetPool<InGameTimerComponent>();
             ref var timer = ref pool.Get(entity);
             timer.CanExecute = true;
             RuntimeOp.Resolve<InGameTimeHandler>().UpdateTime(timer.totalTime);
@@ -46,8 +46,8 @@ namespace Terra.Studio
 
         public void Run(IEcsSystems systems)
         {
-            var filter = systems.GetWorld().Filter<GameTimerComponent>().End();
-            var timerPool = systems.GetWorld().GetPool<GameTimerComponent>();
+            var filter = systems.GetWorld().Filter<InGameTimerComponent>().End();
+            var timerPool = systems.GetWorld().GetPool<InGameTimerComponent>();
             var totalEntitiesFinishedJob = 0;
             foreach (var entity in filter)
             {

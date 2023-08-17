@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Terra.Studio
 {
     [Serializable]
-    public struct GameTimerComponent : IBaseComponent
+    public struct InGameTimerComponent : IBaseComponent
     {
         public bool IsConditionAvailable { get; set; }
         public string ConditionType { get; set; }

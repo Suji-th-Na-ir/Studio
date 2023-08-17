@@ -4,15 +4,15 @@ using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
-    [Author("Terra.Studio.GameTimer")]
-    public class GameTimerAuthor : BaseAuthor
+    [Author("Terra.Studio.InGameTimer")]
+    public class InGameTimerAuthor : BaseAuthor
     {
         public override void Generate(object data)
         {
             var tuple = ((int id, string type, string compData, GameObject obj))data;
-            var compData = JsonConvert.DeserializeObject<GameTimerComponent>(tuple.compData);
+            var compData = JsonConvert.DeserializeObject<InGameTimerComponent>(tuple.compData);
             var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
-            var compPool = ecsWorld.GetPool<GameTimerComponent>();
+            var compPool = ecsWorld.GetPool<InGameTimerComponent>();
             compPool.Add(tuple.id);
             ref var compRef = ref compPool.Get(tuple.id);
             Helper.CopyStructFieldValues(compData, ref compRef);
@@ -23,7 +23,7 @@ namespace Terra.Studio
             compRef.Broadcast = compData.Broadcast;
             compRef.IsTargeted = compData.IsTargeted;
             compRef.TargetId = compData.TargetId;
-            var instance = RuntimeOp.Resolve<RuntimeSystem>().AddRunningInstance<GameTimerSystem>();
+            var instance = RuntimeOp.Resolve<RuntimeSystem>().AddRunningInstance<InGameTimerSystem>();
             instance.Init(ecsWorld, tuple.id);
         }
     }

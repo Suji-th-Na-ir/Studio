@@ -2,7 +2,7 @@
   "Terra.Studio.Checkpoint": "RuntimeInspectorNamespace.Checkpoint",
   "Terra.Studio.Collectable": "RuntimeInspectorNamespace.Collectible",
   "Terra.Studio.DestroyOn": "RuntimeInspectorNamespace.DestroyOn",
-  "Terra.Studio.GameTimer": "RuntimeInspectorNamespace.InGameTimer",
+  "Terra.Studio.InGameTimer": "RuntimeInspectorNamespace.InGameTimer",
   "Terra.Studio.Oscillate": "RuntimeInspectorNamespace.Oscillate",
   "Terra.Studio.Respawn": "RuntimeInspectorNamespace.Respawn",
   "Terra.Studio.Rotate": "RuntimeInspectorNamespace.Rotate",

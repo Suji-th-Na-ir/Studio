@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace RuntimeInspectorNamespace
 {
-    [EditorDrawComponent("Terra.Studio.GameTimer")]
+    [EditorDrawComponent("Terra.Studio.InGameTimer")]
     public class InGameTimer : MonoBehaviour, IComponent
     {
         public uint Time;
@@ -12,7 +12,7 @@ namespace RuntimeInspectorNamespace
 
         public (string type, string data) Export()
         {
-            GameTimerComponent component = new()
+            InGameTimerComponent component = new()
             {
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.GameStart",
@@ -28,7 +28,7 @@ namespace RuntimeInspectorNamespace
 
         public void Import(EntityBasedComponent data)
         {
-            var comp = JsonConvert.DeserializeObject<GameTimerComponent>($"{data.data}");
+            var comp = JsonConvert.DeserializeObject<InGameTimerComponent>($"{data.data}");
             Time = comp.totalTime;
             Broadcast = comp.Broadcast;
         }
