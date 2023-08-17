@@ -13,19 +13,13 @@ MonoBehaviour:
   m_Name: Rotate_RotateOnce_PresetSO
   m_EditorClassIdentifier: 
   value:
-    refObj: {fileID: 0}
+    rotateType: 0
     axis: 0
     direction: 0
-    rotationType: 0
-    repeatType: 0
-    broadcastAt: 0
-    speed: 0
-    rotateBy: 0
-    pauseFor: 0
-    repeatFor: 0
-    canPlaySFX: 0
-    sfxName: 
-    sfxIndex: 0
-    canPlayVFX: 0
-    vfxName: 
-    vfxIndex: 0
+    degrees: 15
+    speed: 20
+    repeat: 1
+    pauseBetween: 0
+    broadcast: 
+    listenTo: 
+    broadcastAt: 2

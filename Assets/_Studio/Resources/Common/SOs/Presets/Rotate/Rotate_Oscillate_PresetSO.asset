@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   value:
     rotateType: 2
-    axis: 2
-    direction: 1
-    degrees: 359
-    speed: 1000
-    repeat: 1000
-    pauseBetween: 50
-    broadcast: Hi World
-    listenTo: Listening Right Now
+    axis: 0
+    direction: 0
+    degrees: 15
+    speed: 20
+    repeat: 2
+    pauseBetween: 1
+    broadcast: 
+    listenTo: 
     broadcastAt: 2

@@ -13,19 +13,13 @@ MonoBehaviour:
   m_Name: Rotate_IncrementallyRotateForever_PresetSO
   m_EditorClassIdentifier: 
   value:
-    refObj: {fileID: 0}
+    rotateType: 5
     axis: 0
     direction: 0
-    rotationType: 0
-    repeatType: 0
+    degrees: 10
+    speed: 20
+    repeat: 2147483647
+    pauseBetween: 1
+    broadcast: 
+    listenTo: 
     broadcastAt: 0
-    speed: 0
-    rotateBy: 0
-    pauseFor: 0
-    repeatFor: 0
-    canPlaySFX: 0
-    sfxName: 
-    sfxIndex: 0
-    canPlayVFX: 0
-    vfxName: 
-    vfxIndex: 0
