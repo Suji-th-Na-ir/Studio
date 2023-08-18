@@ -24,6 +24,8 @@ namespace Terra.Studio
             }
             var conditionType = oscillatable.ConditionType;
             var conditionData = oscillatable.ConditionData;
+            oscillatable.fromPoint = oscillatable.oscillatableTr.TransformPoint(oscillatable.fromPoint);
+            oscillatable.toPoint = oscillatable.oscillatableTr.TransformPoint(oscillatable.toPoint);
             oscillatable.isRegistered = true;
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             IdToConditionalCallback ??= new();

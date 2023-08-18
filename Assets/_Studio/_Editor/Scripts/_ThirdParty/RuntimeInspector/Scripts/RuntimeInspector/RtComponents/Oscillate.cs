@@ -20,8 +20,8 @@ namespace RuntimeInspectorNamespace
 
         private void Awake()
         {
-            fromPoint = transform.position;
-            Component.fromPoint = transform.position;
+            fromPoint = transform.localPosition;
+            Component.fromPoint = fromPoint;
         }
 
         public string GetCondition()
