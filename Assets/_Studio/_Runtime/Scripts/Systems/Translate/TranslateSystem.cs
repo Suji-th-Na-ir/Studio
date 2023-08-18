@@ -69,7 +69,7 @@ namespace Terra.Studio
             var translateParams = new TranslateParams()
             {
                 translateFrom = translatable.startPosition,
-                translateTo = translatable.targetPosition,
+                translateTo = translatable.refObj.transform.TransformPoint(translatable.targetPosition),
                 speed = translatable.speed,
                 translateTimes = translatable.repeatFor,
                 shouldPingPong = translatable.translateType is TranslateType.PingPong or TranslateType.PingPongForever,
