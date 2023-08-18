@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 1006593096233109062}
   - component: {fileID: 8272635959343739348}
   - component: {fileID: 7809811613289388660}
+  - component: {fileID: 1000523684938866196}
   m_Layer: 0
   m_Name: nat_ter_mainGroundUneven
   m_TagString: Untagged
@@ -115,6 +116,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1000523684938866196
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4023799206216567677}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -135321576992578653, guid: 979423b599ec1491ba43bee1c22006f7, type: 3}
 --- !u!1 &7733308750058590201
 GameObject:
   m_ObjectHideFlags: 0
@@ -157,7 +172,7 @@ BoxCollider:
   m_GameObject: {fileID: 7733308750058590201}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 251.64261, y: 13.751047, z: 251.64246}
   m_Center: {x: 0, y: -4.9241285, z: 0}
