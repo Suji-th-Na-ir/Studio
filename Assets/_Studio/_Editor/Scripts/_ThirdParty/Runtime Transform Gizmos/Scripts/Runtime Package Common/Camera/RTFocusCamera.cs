@@ -2,6 +2,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Terra.Studio;
+using PlayShifu.Terra;
 
 namespace RTG
 {
@@ -217,15 +219,53 @@ namespace RTG
             else PerformInstantProjectionSwitch();
         }
 
+        GameObject lastFocusedObject=null;
+        bool focusPivotViewSwitch;
         public void Focus(List<GameObject> gameObjects)
         {
+
             var boundsQConfig = new ObjectBounds.QueryConfig();
             boundsQConfig.NoVolumeSize = Vector3.one * 0.01f;
-            boundsQConfig.ObjectTypes = GameObjectType.Mesh | GameObjectType.Sprite | GameObjectType.Terrain;
+            boundsQConfig.ObjectTypes = GameObjectType.Mesh | GameObjectType.Sprite | GameObjectType.Terrain|GameObjectType.Empty;
 
-            AABB focusAABB = ObjectBounds.CalcObjectCollectionWorldAABB(gameObjects, boundsQConfig);
-            if (focusAABB.IsValid) Focus(focusAABB);
 
+
+            if (gameObjects.Count == 1 && gameObjects[0].GetGameObjectType() == GameObjectType.Empty)
+            {
+                var children = Helper.GetChildren(gameObjects[0].transform, true);
+                List<GameObject> objectsToFocus = new List<GameObject>
+                {
+                    gameObjects[0]
+                };
+                if (lastFocusedObject == gameObjects[0])
+                    focusPivotViewSwitch = !focusPivotViewSwitch;
+                else
+                {
+                    focusPivotViewSwitch = true;
+                }
+
+                lastFocusedObject = gameObjects[0];
+                if (focusPivotViewSwitch)
+                {
+
+                    for (int i = 0; i < children.Count; i++)
+                    {
+
+                        objectsToFocus.Add(children[i].gameObject);
+
+                    }
+                }
+                AABB focusAABB = ObjectBounds.CalcObjectCollectionWorldAABB(objectsToFocus, boundsQConfig);
+                if (focusAABB.IsValid) Focus(focusAABB);
+
+
+            }
+            else
+            {
+                AABB focusAABB = ObjectBounds.CalcObjectCollectionWorldAABB(gameObjects, boundsQConfig);
+                if (focusAABB.IsValid) Focus(focusAABB);
+            }
+            
 //             var parents = GameObjectEx.FilterParentsOnly(gameObjects);
 //             if (parents.Count != 0)
 //             {
@@ -236,8 +276,12 @@ namespace RTG
 
         public void Focus(AABB focusAABB)
         {
-            if (_isDoingFocus || IsDoingProjectionSwitch || IsDoingRotationSwitch) return;
-
+            if ( IsDoingProjectionSwitch || IsDoingRotationSwitch) return;
+            if (_focusCrtn != null)
+            {
+                StopCoroutine(_focusCrtn);
+                _isDoingFocus =false;
+            }
             if (focusAABB.IsValid)
             {
                 StopCamTransform();
@@ -251,6 +295,10 @@ namespace RTG
 
         public void Update_SystemCall()
         {
+            if (RTInput.WasKeyPressedThisFrame(KeyCode.F))
+            {
+                Focus(EditorOp.Resolve<SelectionHandler>().GetSelectedObjects());
+            }
             if (CanCameraProcessInput())
             {
                 if (RTInputDevice.Get.DeviceType == InputDeviceType.Mouse) HandleMouseAndKeyboardInput();
@@ -288,7 +336,7 @@ namespace RTG
         }
 
         private void HandleMouseAndKeyboardInput()
-        {
+        {    
             float moveAmount = (_moveSettings.MoveSpeed + _currentAcceleration) * Time.deltaTime;
 
             Vector3 moveVector = Vector3.zero;
@@ -321,7 +369,7 @@ namespace RTG
             // Get the mouse axes values. We need these for panning and rotation.
             float mouseX = RTInput.MouseAxisX();
             float mouseY = RTInput.MouseAxisY();
-
+           
             // Only proceed if at least one mouse axis value is != 0
             if (mouseX != 0.0f || mouseY != 0.0f)
             {

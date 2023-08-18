@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -613,7 +614,10 @@ namespace RuntimeInspectorNamespace
 				EnsureScrollViewIsWithinBounds();
 			}
 
-			if( m_pointerLongPressAction != LongPressAction.None && currentlyPressedDrawer && time > pressedDrawerDraggedReferenceCreateTime )
+
+			MoveUpAndDownInHirearchyDrawers();
+
+            if ( m_pointerLongPressAction != LongPressAction.None && currentlyPressedDrawer && time > pressedDrawerDraggedReferenceCreateTime )
 			{
 				if( currentlyPressedDrawer.gameObject.activeSelf && currentlyPressedDrawer.Data.BoundTransform )
 				{
@@ -639,7 +643,8 @@ namespace RuntimeInspectorNamespace
 					}
 					else if( m_allowMultiSelection && !m_multiSelectionToggleSelectionMode )
 					{
-						if( currentSelectionSet.Add( currentlyPressedDrawer.Data.BoundTransform.GetHashCode() ) )
+                        Debug.Log(currentlyPressedDrawer);
+                        if ( currentSelectionSet.Add( currentlyPressedDrawer.Data.BoundTransform.GetHashCode() ) )
 						{
 							m_currentSelection.Add( currentlyPressedDrawer.Data.BoundTransform );
 							currentlyPressedDrawer.IsSelected = true;
@@ -663,6 +668,58 @@ namespace RuntimeInspectorNamespace
 			if( m_autoScrollSpeed != 0f )
 				scrollView.verticalNormalizedPosition = Mathf.Clamp01( scrollView.verticalNormalizedPosition + m_autoScrollSpeed * Time.unscaledDeltaTime / totalItemCount );
 		}
+
+		private void MoveUpAndDownInHirearchyDrawers()
+		{
+			if (lastClickedDrawer==null)
+				return;       
+			
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+			{
+				int index=drawers.IndexOf(lastClickedDrawer);
+				float leastDistance=float.MaxValue;
+				for (int i = 0; i < drawers.Count; i++)
+				{
+					var dis = drawers[i].transform.position.y - lastClickedDrawer.transform.position.y;
+
+                    if (dis<leastDistance &&dis>0)
+					{
+						leastDistance = dis;
+						index = i;
+					}
+				}
+                Select(drawers[index].Data.BoundTransform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
+                lastClickedDrawer = drawers[index];
+                RefreshListView();
+            }
+			else if (Input.GetKeyDown(KeyCode.DownArrow))
+			{
+                int index = drawers.IndexOf(lastClickedDrawer);
+                float leastDistance = float.MaxValue;
+                for (int i = 0; i < drawers.Count; i++)
+                {
+                    var dis =  lastClickedDrawer.transform.position.y- drawers[i].transform.position.y ;
+
+					if (dis < leastDistance && dis > 0)
+					{
+                        leastDistance = dis;
+                        index = i;
+					}
+                }
+                Select(drawers[index].Data.BoundTransform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
+				lastClickedDrawer = drawers[index];
+				RefreshListView();
+            }
+
+			if(Input.GetKeyDown(KeyCode.LeftArrow))
+			{
+				lastClickedDrawer.Data.IsExpanded=true;
+			}
+           else if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                lastClickedDrawer.Data.IsExpanded = false;
+            }
+        }
 
 		public void Refresh()
 		{
