@@ -73,49 +73,49 @@ namespace Terra.Studio
 
         private void SpawnObjects(VirtualEntity entity)
         {
-            GameObject generatedObj = null;
+            GameObject generatedObj;
             var trs = new Vector3[] { entity.position, entity.rotation, entity.scale };
-            switch (entity.assetType)
-            {
-                case AssetType.Empty:
-                    generatedObj = RuntimeWrappers.SpawnEmpty(null, trs);
-                    break;
-                case AssetType.Primitive:
-                    generatedObj = RuntimeWrappers.SpawnPrimitive(entity.primitiveType, ResourceDB.GetDummyItemData(entity.primitiveType), trs);
-                    break;
-                case AssetType.Prefab:
-                    generatedObj = RuntimeWrappers.SpawnGameObject(entity.assetPath, ResourceDB.GetItemData(entity.assetPath), trs);
-                    break;
-            }
+            generatedObj = RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, trs);
             if (generatedObj == null)
             {
                 return;
             }
             generatedObj.name = entity.name;
-            AttachComponents(generatedObj, entity.components);
+            AttachComponents(generatedObj, entity);
             HandleChildren(generatedObj, entity.children);
         }
 
-        private void AttachComponents(GameObject gameObject, EntityBasedComponent[] components)
+        private void AttachComponents(GameObject gameObject, VirtualEntity entity, Action<GameObject, VirtualEntity> onComponentDependencyFound = null)
         {
-            if (EditorOp.Resolve<DataProvider>() == null)
+            if (!Helper.IsInRTEditModeInUnityEditor())
             {
                 return;
             }
-            for (int i = 0; i < components.Length; i++)
+            for (int i = 0; i < entity.components.Length; i++)
             {
-                var type = EditorOp.Resolve<DataProvider>().GetVariance(components[i].type);
-                if (type == null)
+                if (EditorOp.Resolve<DataProvider>() != null)
                 {
-                    continue;
+                    var type = EditorOp.Resolve<DataProvider>().GetVariance(entity.components[i].type);
+                    if (type == null)
+                    {
+                        continue;
+                    }
+                    var component = gameObject.AddComponent(type) as IComponent;
+                    component?.Import(entity.components[i]);
                 }
-                var component = gameObject.AddComponent(type) as IComponent;
-                component?.Import(components[i]);
+                else
+                {
+                    onComponentDependencyFound?.Invoke(gameObject, entity);
+                }
             }
         }
 
-        private void HandleChildren(GameObject gameObject, VirtualEntity[] children)
+        public void HandleChildren(GameObject gameObject, VirtualEntity[] children, Action<GameObject, VirtualEntity> onComponentDependencyFound = null)
         {
+            if (children == null || children.Length == 0)
+            {
+                return;
+            }
             var tr = gameObject.transform;
             for (int i = 0; i < children.Length; i++)
             {
@@ -123,20 +123,9 @@ namespace Terra.Studio
                 Transform child;
                 if (tr.childCount < i + 1)
                 {
-                    GameObject generatedObj = null;
+                    GameObject generatedObj;
                     var trs = new Vector3[] { childEntity.position, childEntity.rotation, childEntity.scale };
-                    switch (childEntity.assetType)
-                    {
-                        case AssetType.Empty:
-                            generatedObj = RuntimeWrappers.SpawnEmpty(null, trs);
-                            break;
-                        case AssetType.Primitive:
-                            generatedObj = RuntimeWrappers.SpawnPrimitive(childEntity.primitiveType, ResourceDB.GetDummyItemData(childEntity.primitiveType), trs);
-                            break;
-                        case AssetType.Prefab:
-                            generatedObj = RuntimeWrappers.SpawnGameObject(childEntity.assetPath, ResourceDB.GetItemData(childEntity.assetPath), trs);
-                            break;
-                    }
+                    generatedObj = RuntimeWrappers.SpawnObject(childEntity.assetType, childEntity.assetPath, childEntity.primitiveType, trs);
                     child = generatedObj.transform;
                     child.SetParent(tr);
                 }
@@ -148,19 +137,8 @@ namespace Terra.Studio
                     child.localScale = childEntity.scale;
                 }
                 child.name = childEntity.name;
-                AttachComponents(child.gameObject, childEntity.components);
-                HandleChildren(child.gameObject, childEntity.children);
-            }
-
-            for (int i = 0; i < gameObject.transform.childCount; i++)
-            {
-                var child = children[i];
-                var childTrs = gameObject.transform.GetChild(i);
-                childTrs.SetPositionAndRotation(child.position, Quaternion.Euler(child.rotation));
-                childTrs.localScale = child.scale;
-                childTrs.name = child.name;
-                AttachComponents(childTrs.gameObject, child.components);
-                HandleChildren(childTrs.gameObject, child.children);
+                AttachComponents(child.gameObject, childEntity, onComponentDependencyFound);
+                HandleChildren(child.gameObject, childEntity.children, onComponentDependencyFound);
             }
         }
 

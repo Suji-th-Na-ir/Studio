@@ -40,6 +40,7 @@ namespace Terra.Studio
             RuntimeOp.Register(new Broadcaster());
             RuntimeOp.Register(new ComponentsData());
             RuntimeOp.Register(new CoreGameManager());
+            RuntimeOp.Register(new SceneDataHandler());
         }
 
         private void InitializeEcs()
@@ -193,6 +194,7 @@ namespace Terra.Studio
         {
             RuntimeOp.Unregister<Broadcaster>();
             RuntimeOp.Unregister<ComponentsData>();
+            RuntimeOp.Unregister<SceneDataHandler>();
             SystemOp.Unregister(this as ISubsystem);
             RuntimeOp.Unregister(this);
         }

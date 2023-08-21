@@ -32,17 +32,29 @@ namespace Terra.Studio
             public override void Generate(object data)
             {
                 var virtualEntity = (VirtualEntity)data;
-                //var go = RuntimeWrappers.SpawnGameObject(virtualEntity.assetPath, virtualEntity.position, virtualEntity.rotation, virtualEntity.scale);
+                var go = CreateVisualRepresentation(virtualEntity);
+                HandleEntityAndComponentGeneration(go, virtualEntity);
+            }
+
+            private GameObject CreateVisualRepresentation(VirtualEntity entity)
+            {
+                var trs = new Vector3[] { entity.position, entity.rotation, entity.scale };
+                GameObject generatedObj = RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, trs);
+                return generatedObj;
+            }
+
+            private void HandleEntityAndComponentGeneration(GameObject go, VirtualEntity virtualEntity)
+            {
                 var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
-                if (virtualEntity.components == null || virtualEntity.components.Length == 0)
+                if (virtualEntity.components != null && virtualEntity.components.Length > 0)
                 {
-                    return;
+                    var entity = ecsWorld.NewEntity();
+                    foreach (var component in virtualEntity.components)
+                    {
+                        ComponentAuthorOp.Generate((entity, component, go));
+                    }
                 }
-                var entity = ecsWorld.NewEntity();
-                foreach (var component in virtualEntity.components)
-                {
-                    //ComponentAuthorOp.Generate((entity, component, go));
-                }
+                RuntimeOp.Resolve<SceneDataHandler>().HandleChildren(go, virtualEntity.children, HandleEntityAndComponentGeneration);
             }
 
             public override void Degenerate(int entityID)

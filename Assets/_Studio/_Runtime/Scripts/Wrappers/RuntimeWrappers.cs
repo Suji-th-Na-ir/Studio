@@ -6,6 +6,23 @@ namespace Terra.Studio
 {
     public class RuntimeWrappers
     {
+        public static GameObject SpawnObject(AssetType assetType, string assetPath, PrimitiveType primitiveType, params Vector3[] trs)
+        {
+            GameObject go = null;
+            switch (assetType)
+            {
+                case AssetType.Empty:
+                    go = SpawnEmpty(null, trs);
+                    break;
+                case AssetType.Prefab:
+                    go = SpawnGameObject(assetPath, ResourceDB.GetItemData(assetPath), trs);
+                    break;
+                case AssetType.Primitive:
+                    go = SpawnPrimitive(primitiveType, ResourceDB.GetDummyItemData(primitiveType), trs);
+                    break;
+            }
+            return go;
+        }
         public static GameObject SpawnGameObject(string path, ResourceDB.ResourceItemData itemData, params Vector3[] trs)
         {
             var go = RuntimeOp.Load<GameObject>(path);
