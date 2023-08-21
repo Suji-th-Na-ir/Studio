@@ -713,11 +713,11 @@ namespace RuntimeInspectorNamespace
 
 			if(Input.GetKeyDown(KeyCode.LeftArrow))
 			{
-				lastClickedDrawer.Data.IsExpanded=true;
+				lastClickedDrawer.Data.IsExpanded=false;
 			}
            else if (Input.GetKeyDown(KeyCode.RightArrow))
             {
-                lastClickedDrawer.Data.IsExpanded = false;
+                lastClickedDrawer.Data.IsExpanded = true;
             }
         }
 
