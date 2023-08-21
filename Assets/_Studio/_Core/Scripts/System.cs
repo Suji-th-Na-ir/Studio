@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using PlayShifu.Terra;
 using UnityEngine.SceneManagement;
 
 namespace Terra.Studio
@@ -14,6 +15,7 @@ namespace Terra.Studio
 
         public SystemConfigurationSO ConfigSO { get { return configData; } }
         public StudioState PreviousStudioState { get { return previousStudioState; } }
+        public StudioState CurrentStudioState { get { return currentStudioState; } }
 
         private void Awake()
         {
@@ -35,8 +37,21 @@ namespace Terra.Studio
             {
                 loadSceneMode = LoadSceneMode.Additive
             };
+            LoadSilentServices();
             LoadSubsystemScene();
+        }
+
+        private void LoadSilentServices()
+        {
             SystemOp.Register(new CrossSceneDataHolder());
+            SystemOp.Register(new FileService());
+            if (configData.PickupSavedData)
+            {
+                SystemOp.Resolve<FileService>().WriteFile(
+                    configData.SceneDataToLoad.text,
+                    FileService.GetSavedFilePath(),
+                    !Helper.IsInRTEditModeInUnityEditor());
+            }
         }
 
         private void LoadSubsystemScene()
@@ -95,6 +110,7 @@ namespace Terra.Studio
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SystemOp.Resolve<ISubsystem>()?.Dispose();
             SystemOp.Unregister<CrossSceneDataHolder>();
+            SystemOp.Unregister<FileService>();
             SystemOp.Unregister(this);
             SystemOp.Flush();
             EditorOp.Flush();

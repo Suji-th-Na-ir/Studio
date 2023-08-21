@@ -94,6 +94,8 @@ namespace Terra.Studio
         [StringValue("Player", typeof(UnityEngine.GameObject))]
         Player,
         [StringValue("SOs/Presets/", typeof(UnityEngine.Object))]
-        ComponentPresets
+        ComponentPresets,
+        [StringValue("ResourceDB", typeof(ResourceDB))]
+        ResourceDB
     }
 }

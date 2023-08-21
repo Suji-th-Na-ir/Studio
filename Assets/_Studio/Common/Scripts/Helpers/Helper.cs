@@ -389,8 +389,8 @@ namespace PlayShifu.Terra
 
         public static string[] GetSfxClipNames()
         {
-            var sfxClips = ResourceDB.LoadAllStudioAssetWithStringInPath<AudioClip>("sfx").ToArray();
-            string[] names = new String[sfxClips.Length];
+            var sfxClips = Resources.LoadAll<AudioClip>("sfx").ToArray();
+            string[] names = new string[sfxClips.Length];
             for (int i = 0; i < sfxClips.Length; i++)
             {
                 names[i] = sfxClips[i].name;
@@ -403,13 +403,13 @@ namespace PlayShifu.Terra
             string[] names = GetSfxClipNames();
             if (_index < names.Length)
                 return names[_index];
-            
+
             return null;
         }
 
         public static string[] GetVfxClipNames()
         {
-            var vfxClips = ResourceDB.LoadAllStudioAssetWithStringInPath<GameObject>("vfx").ToArray();
+            var vfxClips = Resources.LoadAll<GameObject>("vfx").ToArray();
             string[] names = new string[vfxClips.Length];
             for (int i = 0; i < vfxClips.Length; i++)
             {
@@ -465,6 +465,50 @@ namespace PlayShifu.Terra
             }
 
             return children;
+        }
+
+        public static bool IsInRTEditModeInUnityEditor()
+        {
+#if UNITY_EDITOR
+            return Application.isPlaying;
+#else
+            return false;
+#endif
+        }
+
+        public static bool IsPrimitive(this GameObject go, out PrimitiveType type)
+        {
+            type = default;
+            if (go.TryGetComponent(out MeshFilter mesh))
+            {
+                var isFound = true;
+                switch (mesh.name)
+                {
+                    default:
+                        isFound = false;
+                        break;
+                    case nameof(PrimitiveType.Cube):
+                        type = PrimitiveType.Cube;
+                        break;
+                    case nameof(PrimitiveType.Capsule):
+                        type = PrimitiveType.Capsule;
+                        break;
+                    case nameof(PrimitiveType.Sphere):
+                        type = PrimitiveType.Sphere;
+                        break;
+                    case nameof(PrimitiveType.Plane):
+                        type = PrimitiveType.Plane;
+                        break;
+                    case nameof(PrimitiveType.Quad):
+                        type = PrimitiveType.Quad;
+                        break;
+                    case nameof(PrimitiveType.Cylinder):
+                        type = PrimitiveType.Cylinder;
+                        break;
+                }
+                return isFound;
+            }
+            return false;
         }
     }
 }

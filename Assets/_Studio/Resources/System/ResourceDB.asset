@@ -1,0 +1,488 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0f1d14d318644d54b3ec5035bcee927, type: 3}
+  m_Name: ResourceDB
+  m_EditorClassIdentifier: 
+  itemsData:
+  - name: Cube
+    absolutePath: Assets/_Studio/Resources/Common/Prefabs/Cube.prefab
+    resourcePath: Common/Prefabs/Cube
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Cylinder
+    absolutePath: Assets/_Studio/Resources/Common/Prefabs/Cylinder.prefab
+    resourcePath: Common/Prefabs/Cylinder
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Plane
+    absolutePath: Assets/_Studio/Resources/Common/Prefabs/Plane.prefab
+    resourcePath: Common/Prefabs/Plane
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Jeep_done
+    absolutePath: Assets/_Studio/Resources/Common/Prefabs/source/Jeep_done.fbx
+    resourcePath: Common/Prefabs/source/Jeep_done
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Sphere
+    absolutePath: Assets/_Studio/Resources/Common/Prefabs/Sphere.prefab
+    resourcePath: Common/Prefabs/Sphere
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: SpaceshipA
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/AlienSpaceship/SpaceshipA.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/AlienSpaceship/SpaceshipA
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: SpaceshipB
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/AlienSpaceship/SpaceshipB.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/AlienSpaceship/SpaceshipB
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: ButtonWrongA
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/ButtonWrongA.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/ButtonWrongA
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: ButtonWrongB
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/ButtonWrongB.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/ButtonWrongB
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Cable_Stright
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/cable/Cable_Stright.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/cable/Cable_Stright
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: CorrectButtonA
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/CorrectButtonA.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/CorrectButtonA
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: CorrectTubePrefab1
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/CorrectTubePrefab1.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/CorrectTubePrefab1
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: DomeRoom2
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/DomeRoom/DomeRoom2.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/DomeRoom/DomeRoom2
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: LaunchPad
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/LaunchPad/LaunchPad.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/LaunchPad/LaunchPad
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Pipe_side_long
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/Pipes/Pipe_side_long.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/Pipes/Pipe_side_long
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Pipe_stright
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/Pipes/Pipe_stright.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/Pipes/Pipe_stright
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: pIPE_STRIGHT_SMALL
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/Pipes/pIPE_STRIGHT_SMALL.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/Pipes/pIPE_STRIGHT_SMALL
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: RingPlanet
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/Planet/RingPlanet.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/Planet/RingPlanet
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Cliffwall 1
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/RockPillars/Cliffwall
+      1.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/RockPillars/Cliffwall 1
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: SpaceStation
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/SpaceStation/SpaceStation.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/SpaceStation/SpaceStation
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: UFO
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/UFO/UFO.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/UFO/UFO
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: WrongTubePrefab1
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/WrongTubePrefab1.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/WrongTubePrefab1
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: WrongTubePrefab2
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/WrongTubePrefab2.prefab
+    resourcePath: Common/SpaceRaceAssets/Assets/WrongTubePrefab2
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: CheckPoint
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/CheckPoint.prefab
+    resourcePath: Common/SpaceRaceAssets/CheckPoint
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Alien_Spacecraft_A_Tail_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Alien
+      Spacecraft/Alien_Spacecraft_A_Tail_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Alien Spacecraft/Alien_Spacecraft_A_Tail_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Alien_Spacecraft_A_Wing_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Alien
+      Spacecraft/Alien_Spacecraft_A_Wing_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Alien Spacecraft/Alien_Spacecraft_A_Wing_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Alien_Spacecraft_B_Wing_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Alien
+      Spacecraft/Alien_Spacecraft_B_Wing_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Alien Spacecraft/Alien_Spacecraft_B_Wing_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Alien_Spacecraft_B_Wing_Support _Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Alien
+      Spacecraft/Alien_Spacecraft_B_Wing_Support _Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Alien Spacecraft/Alien_Spacecraft_B_Wing_Support
+      _Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Alien_Spacecraft_Capsule_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Alien
+      Spacecraft/Alien_Spacecraft_Capsule_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Alien Spacecraft/Alien_Spacecraft_Capsule_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Cable_Straight_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Cables/Cable_Straight_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Cables/Cable_Straight_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Coin_prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/COINS/Coin_prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/COINS/Coin_prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Domehouse_Dome_A_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Domehouse/Domehouse_Dome_A_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Domehouse/Domehouse_Dome_A_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Domehouse_Dome_B_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Domehouse/Domehouse_Dome_B_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Domehouse/Domehouse_Dome_B_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Domehouse_Junction_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Domehouse/Domehouse_Junction_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Domehouse/Domehouse_Junction_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Domehouse_Tube_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Domehouse/Domehouse_Tube_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Domehouse/Domehouse_Tube_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Launchpad_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Launchpad/Launchpad_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Launchpad/Launchpad_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Pipe_Angular _Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Pipe/Pipe_Angular
+      _Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Pipe/Pipe_Angular _Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Pipe_Connector_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Pipe/Pipe_Connector_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Pipe/Pipe_Connector_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Pipe_Straight_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Pipe/Pipe_Straight_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Pipe/Pipe_Straight_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Planet _2
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Planet/Planet
+      _2.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Planet/Planet _2
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Planet _Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Planet/Planet
+      _Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Planet/Planet _Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Planet_Ring_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Planet/Planet_Ring_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Planet/Planet_Ring_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Beacon
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Solar
+      Environment/Beacon.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Solar Environment/Beacon
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: HOStation
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Solar
+      Environment/HOStation.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Solar Environment/HOStation
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: SpacePod
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Solar
+      Environment/SpacePod.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Solar Environment/SpacePod
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Space_Shuttle_Body_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Space
+      Shuttle/Space_Shuttle_Body_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Space Shuttle/Space_Shuttle_Body_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Space_Shuttle_Ladder_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Space
+      Shuttle/Space_Shuttle_Ladder_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Space Shuttle/Space_Shuttle_Ladder_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Space_Station_Antenna_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Space
+      Station/Space_Station_Antenna_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Space Station/Space_Station_Antenna_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Space_Station_Centre_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Space
+      Station/Space_Station_Centre_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Space Station/Space_Station_Centre_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Space_Station_MainSection_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Space
+      Station/Space_Station_MainSection_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Space Station/Space_Station_MainSection_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Space_Station_O2Tank_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Space
+      Station/Space_Station_O2Tank_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Space Station/Space_Station_O2Tank_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Space_Station_RIngPillar_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Space
+      Station/Space_Station_RIngPillar_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Space Station/Space_Station_RIngPillar_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Space_Station_SolarPanel_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Space
+      Station/Space_Station_SolarPanel_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Space Station/Space_Station_SolarPanel_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: TallTower_FloatingSlab1_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab1_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab1_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: TallTower_FloatingSlab4_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab4_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab4_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: TallTower_FloatingSlab6_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab6_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab6_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: TallTower_FloatingSlab7_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab7_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab7_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: TallTower_FloatingSlab8_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab8_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab8_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: TallTower_FloatingSlab9_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab9_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab9_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: alian_tree1
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/alian_tree1.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/alian_tree1
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Alian_tree2
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/Alian_tree2.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/Alian_tree2
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: CliffwallRockExtraLarge_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/CliffwallRockExtraLarge_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/CliffwallRockExtraLarge_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: cliffwallRockLarge_prefabs
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/cliffwallRockLarge_prefabs.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/cliffwallRockLarge_prefabs
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: cliffwallRockMedium_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/cliffwallRockMedium_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/cliffwallRockMedium_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: cliffwallRockSmall_prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/cliffwallRockSmall_prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/cliffwallRockSmall_prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: concaveRamp_prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/concaveRamp_prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/concaveRamp_prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: crater_prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/crater_prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/crater_prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: mainGroundUneven_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/mainGroundUneven_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/mainGroundUneven_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Mountain01_prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/Mountain01_prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/Mountain01_prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: mountain02_prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/mountain02_prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/mountain02_prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: mountain03_prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/mountain03_prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/mountain03_prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: mountain04_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/mountain04_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/mountain04_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: mountain05_pefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/mountain05_pefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/mountain05_pefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: mountain_prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/mountain_prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/mountain_prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: mountainRange02_prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/mountainRange02_prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/mountainRange02_prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: Plateau_Large_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/Plateau_Large_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/Plateau_Large_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: straightRamp_prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/straightRamp_prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/straightRamp_prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: UFO_Ladder_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/UFO/UFO_Ladder_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/UFO/UFO_Ladder_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: UFO_MainBody_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/UFO/UFO_MainBody_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/UFO/UFO_MainBody_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: UFO_OpeningHatch_Prefab
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/UFO/UFO_OpeningHatch_Prefab.prefab
+    resourcePath: Common/SpaceRaceAssets/Pallette/UFO/UFO_OpeningHatch_Prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: UFO (6)
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/UFO (6).prefab
+    resourcePath: Common/SpaceRaceAssets/UFO (6)
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: vfx_ArrowBlue
+    absolutePath: Assets/_Studio/Resources/Common/vfx/vfx_ArrowBlue.prefab
+    resourcePath: Common/vfx/vfx_ArrowBlue
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: vfx_ArrowFire
+    absolutePath: Assets/_Studio/Resources/Common/vfx/vfx_ArrowFire.prefab
+    resourcePath: Common/vfx/vfx_ArrowFire
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: vfx_ArrowGreen
+    absolutePath: Assets/_Studio/Resources/Common/vfx/vfx_ArrowGreen.prefab
+    resourcePath: Common/vfx/vfx_ArrowGreen
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: vfx_ArrowPoisoned
+    absolutePath: Assets/_Studio/Resources/Common/vfx/vfx_ArrowPoisoned.prefab
+    resourcePath: Common/vfx/vfx_ArrowPoisoned
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: bell_1
+    absolutePath: Assets/_Studio/Resources/Common/sfx/bell_1.mp3
+    resourcePath: Common/sfx/bell_1
+    type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: bell_2
+    absolutePath: Assets/_Studio/Resources/Common/sfx/bell_2.mp3
+    resourcePath: Common/sfx/bell_2
+    type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: collect_1
+    absolutePath: Assets/_Studio/Resources/Common/sfx/collect_1.mp3
+    resourcePath: Common/sfx/collect_1
+    type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - name: success_1
+    absolutePath: Assets/_Studio/Resources/Common/sfx/success_1.mp3
+    resourcePath: Common/sfx/success_1
+    type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  data:
+    name: 
+    absolutePath: 
+    resourcePath: 
+    type: 
+  watchFolders:
+  - Assets/_Studio/Resources/Common

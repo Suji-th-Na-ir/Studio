@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEditor;
 using Terra.Studio;
@@ -7,6 +8,7 @@ using UnityEditor.SceneManagement;
 public static class DefaultSceneLoader
 {
     private static bool loadedDefaultScene = false;
+    public static Action<bool> IsEnteringPlayerMode;
 
     static DefaultSceneLoader()
     {
@@ -27,12 +29,14 @@ public static class DefaultSceneLoader
             {
                 UnityEngine.SceneManagement.SceneManager.LoadScene(0);
                 loadedDefaultScene = true;
+                IsEnteringPlayerMode?.Invoke(loadedDefaultScene);
             }
         }
 
         if (state == PlayModeStateChange.EnteredEditMode)
         {
             loadedDefaultScene = false;
+            IsEnteringPlayerMode?.Invoke(loadedDefaultScene);
         }
     }
 }
