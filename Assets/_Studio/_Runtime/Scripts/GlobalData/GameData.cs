@@ -6,6 +6,7 @@ namespace Terra.Studio
     {
         public Vector3 RespawnPoint;
         public Transform PlayerRef;
+        public GameObject SpawnPoint;
         public GameEndState EndState;
 
         public void SetEndState(string state)

@@ -74,8 +74,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6817638361354391145, guid: 486cca3eb6a1b544cb46ebc4cdac8b6b,
         type: 3}
+      propertyPath: holdJump
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6817638361354391145, guid: 486cca3eb6a1b544cb46ebc4cdac8b6b,
+        type: 3}
       propertyPath: jumpPower
-      value: 67
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 6817638361354391145, guid: 486cca3eb6a1b544cb46ebc4cdac8b6b,
         type: 3}
@@ -120,7 +125,12 @@ PrefabInstance:
     - target: {fileID: 6817638361354391145, guid: 486cca3eb6a1b544cb46ebc4cdac8b6b,
         type: 3}
       propertyPath: decentMultiplier
-      value: 3
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6817638361354391145, guid: 486cca3eb6a1b544cb46ebc4cdac8b6b,
+        type: 3}
+      propertyPath: jumpEnhancements
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6817638361354391145, guid: 486cca3eb6a1b544cb46ebc4cdac8b6b,
         type: 3}
@@ -135,11 +145,16 @@ PrefabInstance:
     - target: {fileID: 6817638361354391145, guid: 486cca3eb6a1b544cb46ebc4cdac8b6b,
         type: 3}
       propertyPath: tapJumpMultiplier
-      value: 2
+      value: 3.71
       objectReference: {fileID: 0}
     - target: {fileID: 6817638361354391145, guid: 486cca3eb6a1b544cb46ebc4cdac8b6b,
         type: 3}
       propertyPath: enableStaminaSystem
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6817638361354391145, guid: 486cca3eb6a1b544cb46ebc4cdac8b6b,
+        type: 3}
+      propertyPath: enableFootstepSounds
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6817638361354391145, guid: 486cca3eb6a1b544cb46ebc4cdac8b6b,
@@ -170,7 +185,7 @@ PrefabInstance:
     - target: {fileID: 6817638361354391145, guid: 486cca3eb6a1b544cb46ebc4cdac8b6b,
         type: 3}
       propertyPath: footstepSoundSet.Array.size
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6817638361354391145, guid: 486cca3eb6a1b544cb46ebc4cdac8b6b,
         type: 3}
