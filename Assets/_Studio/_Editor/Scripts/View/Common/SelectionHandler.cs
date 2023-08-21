@@ -6,6 +6,7 @@ using RuntimeInspectorNamespace;
 using Terra.Studio;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 public class SelectionHandler : View
 {
@@ -90,6 +91,8 @@ public class SelectionHandler : View
     private void Update()
     {
         Scan();
+        if (EventSystem.current.currentSelectedGameObject!=null)
+            return;
         DuplicateObjects();
         DeleteObjects();
     }
