@@ -227,7 +227,7 @@ namespace Terra.Studio
         {
             if (Helper.IsInRTEditModeInUnityEditor())
             {
-                if (go.TryGetComponent(out StudioGameObject component))
+                if (go.TryGetComponent(out StudioGameObject component) && component.itemData != null)
                 {
                     return component.itemData.ResourcePath;
                 }
