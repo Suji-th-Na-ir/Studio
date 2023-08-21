@@ -98,6 +98,10 @@ namespace Terra.Studio
 
         private void AttachComponents(GameObject gameObject, EntityBasedComponent[] components)
         {
+            if (EditorOp.Resolve<DataProvider>() == null)
+            {
+                return;
+            }
             for (int i = 0; i < components.Length; i++)
             {
                 var type = EditorOp.Resolve<DataProvider>().GetVariance(components[i].type);
