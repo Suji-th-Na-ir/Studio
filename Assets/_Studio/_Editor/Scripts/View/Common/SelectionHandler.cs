@@ -90,9 +90,9 @@ public class SelectionHandler : View
 
     private void Update()
     {
-        Scan();
-        if (EventSystem.current.currentSelectedGameObject!=null)
+        if (EventSystem.current.currentSelectedGameObject != null)
             return;
+        Scan();
         DuplicateObjects();
         DeleteObjects();
     }
