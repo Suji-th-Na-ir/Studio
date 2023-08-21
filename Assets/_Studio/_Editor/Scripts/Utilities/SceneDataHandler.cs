@@ -156,7 +156,6 @@ namespace Terra.Studio
                 {
                     continue;
                 }
-                Debug.Log($"Appending: {allGos[i]}");
                 var entity = GetVirtualEntity(allGos[i], i, true);
                 virtualEntities.Add(entity);
             }
