@@ -246,7 +246,7 @@ namespace Terra.Studio
             {
                 if (go.TryGetComponent(out StudioGameObject component))
                 {
-                    if (!string.IsNullOrEmpty(component.itemData.ResourcePath))
+                    if (component.itemData != null && !string.IsNullOrEmpty(component.itemData.ResourcePath))
                     {
                         return AssetType.Prefab;
                     }
@@ -276,7 +276,7 @@ namespace Terra.Studio
         {
             if (Helper.IsInRTEditModeInUnityEditor())
             {
-                if (go.TryGetComponent(out StudioGameObject component))
+                if (go.TryGetComponent(out StudioGameObject component) && component.itemData != null)
                 {
                     if (component.itemData.IsPrimitive && go.IsPrimitive(out var type))
                     {
