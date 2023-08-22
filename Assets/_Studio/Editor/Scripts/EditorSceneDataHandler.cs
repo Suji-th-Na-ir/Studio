@@ -30,6 +30,7 @@ namespace Terra.Studio.RTEditor
             else
             {
                 new FileService().CopyFile(persistentPath, filePath);
+                AssetDatabase.Refresh();
             }
         }
 
