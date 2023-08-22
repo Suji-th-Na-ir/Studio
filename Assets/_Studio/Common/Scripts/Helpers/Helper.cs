@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Reflection;
+using Terra.Studio;
 
 namespace PlayShifu.Terra
 {
@@ -389,7 +390,7 @@ namespace PlayShifu.Terra
 
         public static string[] GetSfxClipNames()
         {
-            var sfxClips = Resources.LoadAll<AudioClip>("Common/sfx").ToArray();
+            var sfxClips = ResourceDB.GetAll<AudioClip>("sfx");
             string[] names = new string[sfxClips.Length];
             for (int i = 0; i < sfxClips.Length; i++)
             {
@@ -409,7 +410,7 @@ namespace PlayShifu.Terra
 
         public static string[] GetVfxClipNames()
         {
-            var vfxClips = Resources.LoadAll<GameObject>("Common/vfx").ToArray();
+            var vfxClips = ResourceDB.GetAll<GameObject>("vfx");
             string[] names = new string[vfxClips.Length];
             for (int i = 0; i < vfxClips.Length; i++)
             {

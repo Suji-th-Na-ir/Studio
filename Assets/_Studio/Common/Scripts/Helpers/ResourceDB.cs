@@ -54,6 +54,30 @@ namespace Terra.Studio
             return data;
         }
 
+        public T[] GetAllTypes<T>(string path) where T : UnityEngine.Object
+        {
+            var typeName = typeof(T).AssemblyQualifiedName;
+            var filters = itemsData.
+                Where(x => x.Type.Equals(typeName) && x.ResourcePath.Contains(path)).
+                Select(y => y.ResourcePath);
+            var loadedAssets = new List<T>();
+            foreach (var filter in filters)
+            {
+                var asset = SystemOp.Load<T>(filter);
+                if (asset)
+                {
+                    loadedAssets.Add(asset);
+                }
+            }
+            return loadedAssets.ToArray();
+        }
+
+        public static T[] GetAll<T>(string path) where T : UnityEngine.Object
+        {
+            var instance = (ResourceDB)SystemOp.Load(ResourceTag.ResourceDB);
+            return instance.GetAllTypes<T>(path);
+        }
+
         public static ResourceItemData GetItemData(string assetPath)
         {
             var instance = (ResourceDB)SystemOp.Load(ResourceTag.ResourceDB);
