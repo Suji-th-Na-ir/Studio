@@ -516,5 +516,32 @@ namespace PlayShifu.Terra
             }
             return false;
         }
+
+        public static void TrySetTrigger(this GameObject gameObject, bool isTrigger)
+        {
+            if (!gameObject.TryGetComponent(out Collider collider))
+            {
+                collider = gameObject.AddComponent<BoxCollider>();
+            }
+            SetTrigger(collider, isTrigger);
+        }
+
+        public static void SetTrigger(this Collider collider, bool isTrigger)
+        {
+            var type = collider.GetType();
+            switch (type.Name)
+            {
+                case nameof(BoxCollider):
+                case nameof(SphereCollider):
+                case nameof(CapsuleCollider):
+                    collider.isTrigger = true;
+                    break;
+                case nameof(MeshCollider):
+                    var mc = (MeshCollider)collider;
+                    mc.convex = isTrigger;
+                    mc.isTrigger = isTrigger;
+                    break;
+            }
+        }
     }
 }

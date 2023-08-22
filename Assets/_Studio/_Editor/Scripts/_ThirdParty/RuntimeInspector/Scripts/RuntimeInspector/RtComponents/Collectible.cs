@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 using Terra.Studio;
 using UnityEngine;
 
@@ -52,6 +53,7 @@ namespace RuntimeInspectorNamespace
                 collectable.scoreValue = ScoreValue;
                 collectable.showScoreUI = ShowScoreUI;
             }
+            gameObject.TrySetTrigger(false);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(collectable);
             return (type, data);

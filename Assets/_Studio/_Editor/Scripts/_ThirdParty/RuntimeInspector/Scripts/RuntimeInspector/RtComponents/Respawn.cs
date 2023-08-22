@@ -1,5 +1,6 @@
 using System;
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 using Terra.Studio;
 using UnityEngine;
 
@@ -42,6 +43,7 @@ namespace RuntimeInspectorNamespace
                 respawnComp.vfxIndex = PlayVFX.data.clipIndex;
 
             }
+            gameObject.TrySetTrigger(false);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(respawnComp);
             return (type, data);

@@ -8,25 +8,18 @@ namespace Terra.Studio
         public Action OnTriggered { get; set; }
         public string TagAgainst { get; set; }
 
-        private void Start()
-        {
-            if (!TryGetComponent(out Collider collider))
-            {
-                collider = gameObject.AddComponent<BoxCollider>();
-            }
-            else
-            {
-                if (TryGetComponent(out MeshCollider meshCollider))
-                {
-                    meshCollider.convex = true;
-                }
-            }
-            collider.isTrigger = true;
-        }
-
         private void OnTriggerEnter(Collider other)
         {
             if (!other.CompareTag(TagAgainst))
+            {
+                return;
+            }
+            OnTriggered?.Invoke();
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (!collision.transform.CompareTag(TagAgainst))
             {
                 return;
             }

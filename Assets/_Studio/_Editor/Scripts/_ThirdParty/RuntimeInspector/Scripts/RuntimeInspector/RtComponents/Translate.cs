@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
 {
@@ -49,6 +50,7 @@ namespace RuntimeInspectorNamespace
             };
 
             ModifyDataAsPerGiven(ref rc);
+            gameObject.TrySetTrigger(false);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(rc, Formatting.Indented);
             return (type, data);
