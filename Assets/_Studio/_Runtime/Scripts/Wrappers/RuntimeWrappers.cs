@@ -30,7 +30,17 @@ namespace Terra.Studio
             {
                 return go;
             }
-            go = Object.Instantiate(go);
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                go = UnityEditor.PrefabUtility.InstantiatePrefab(go) as GameObject;
+            }
+            else
+#endif
+
+            {
+                go = Object.Instantiate(go);
+            }
             return ResolveTRS(go, itemData, trs);
         }
 
