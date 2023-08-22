@@ -15,7 +15,12 @@ namespace RuntimeInspectorNamespace
 
 		protected List<HierarchyDataTransform> children;
 		protected HierarchyData parent;
-		public HierarchyDataRoot Root
+
+		public HierarchyData Parent
+		{
+			get { return parent; }
+		}
+        public HierarchyDataRoot Root
 		{
 			get
 			{

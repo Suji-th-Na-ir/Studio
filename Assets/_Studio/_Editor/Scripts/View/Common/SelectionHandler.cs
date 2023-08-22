@@ -6,6 +6,7 @@ using RuntimeInspectorNamespace;
 using Terra.Studio;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 public class SelectionHandler : View
 {
@@ -28,7 +29,7 @@ public class SelectionHandler : View
     private ObjectTransformGizmo _workGizmo;
     private List<GameObject> _selectedObjects = new List<GameObject>();
     private List<GameObject> prevSelectedObjects = new List<GameObject>();
-
+    private GameObject lastPickedGameObject;
     private void Awake()
     {
         EditorOp.Register(this);
@@ -89,6 +90,8 @@ public class SelectionHandler : View
 
     private void Update()
     {
+        if (EventSystem.current.currentSelectedGameObject != null)
+            return;
         Scan();
         DuplicateObjects();
         DeleteObjects();
@@ -201,7 +204,18 @@ public class SelectionHandler : View
         
         PhysicsScene pScene = SceneManager.GetActiveScene().GetPhysicsScene();
         if (pScene.Raycast(worldPoint, ray.direction, out var hit, float.MaxValue))
-            return hit.collider.gameObject;
+        {
+            var hitObject = hit.collider.gameObject;
+            var pickedObject = hitObject;
+            if (lastPickedGameObject != hitObject)
+            {
+                if (hitObject.transform.root != null && lastPickedGameObject!= hitObject.transform.root.gameObject)
+                    pickedObject = hitObject.transform.root.gameObject;
+
+            }
+            lastPickedGameObject = pickedObject;
+            return pickedObject;
+        }
 
         return null;
     }
