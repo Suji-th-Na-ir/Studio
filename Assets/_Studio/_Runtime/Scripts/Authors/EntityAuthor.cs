@@ -45,6 +45,12 @@ namespace Terra.Studio
 
             private void HandleEntityAndComponentGeneration(GameObject go, VirtualEntity virtualEntity)
             {
+                if (go == null)
+                {
+                    return;
+                }
+                go.name = virtualEntity.name;
+                RuntimeOp.Resolve<SceneDataHandler>().SetColliderData(go, virtualEntity.metaData);
                 var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
                 if (virtualEntity.components != null && virtualEntity.components.Length > 0)
                 {

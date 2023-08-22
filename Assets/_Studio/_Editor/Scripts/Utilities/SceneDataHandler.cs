@@ -81,6 +81,7 @@ namespace Terra.Studio
                 return;
             }
             generatedObj.name = entity.name;
+            SetColliderData(generatedObj, entity.metaData);
             AttachComponents(generatedObj, entity);
             HandleChildren(generatedObj, entity.children);
         }
@@ -141,6 +142,7 @@ namespace Terra.Studio
                     child.localScale = childEntity.scale;
                 }
                 child.name = childEntity.name;
+                SetColliderData(child.gameObject, childEntity.metaData);
                 AttachComponents(child.gameObject, childEntity, onComponentDependencyFound);
                 HandleChildren(child.gameObject, childEntity.children, onComponentDependencyFound);
             }
@@ -218,6 +220,7 @@ namespace Terra.Studio
                 childrenEntities[k] = GetVirtualEntity(go.transform.GetChild(k).gameObject, k, true);
             }
             newEntity.children = childrenEntities;
+            GetColliderData(go, ref newEntity.metaData);
             return newEntity;
         }
 
@@ -294,6 +297,80 @@ namespace Terra.Studio
                 {
                     return default;
                 }
+            }
+        }
+
+        private void GetColliderData(GameObject go, ref MetaData metaData)
+        {
+            if (go.TryGetComponent(out Collider collider))
+            {
+                metaData.colliderData = new ColliderData()
+                {
+                    doesHaveCollider = true,
+                    isTrigger = collider.isTrigger,
+                    type = collider.GetType().AssemblyQualifiedName
+                };
+                switch (collider.GetType().Name)
+                {
+                    case nameof(BoxCollider):
+                        var bx = (BoxCollider)collider;
+                        metaData.colliderData.size = bx.size;
+                        metaData.colliderData.center = bx.center;
+                        break;
+                    case nameof(SphereCollider):
+                        var sc = (SphereCollider)collider;
+                        metaData.colliderData.center = sc.center;
+                        metaData.colliderData.radius = sc.radius;
+                        break;
+                    case nameof(CapsuleCollider):
+                        var cc = (CapsuleCollider)collider;
+                        metaData.colliderData.center = cc.center;
+                        metaData.colliderData.radius = cc.radius;
+                        metaData.colliderData.height = cc.height;
+                        break;
+                }
+            }
+        }
+
+        public void SetColliderData(GameObject go, MetaData metaData)
+        {
+            var colliderData = metaData.colliderData;
+            var doesColliderExist = colliderData.doesHaveCollider;
+            if (!doesColliderExist)
+            {
+                return;
+            }
+            var type = Type.GetType(colliderData.type);
+            if (!go.TryGetComponent(out Collider collider))
+            {
+                collider = (Collider)go.AddComponent(type);
+            }
+            switch (type.Name)
+            {
+                case nameof(BoxCollider):
+                    var bx = (BoxCollider)collider;
+                    bx.size = colliderData.size;
+                    bx.center = colliderData.center;
+                    break;
+                case nameof(SphereCollider):
+                    var sc = (SphereCollider)collider;
+                    sc.center = colliderData.center;
+                    sc.radius = colliderData.radius;
+                    break;
+                case nameof(CapsuleCollider):
+                    var cc = (CapsuleCollider)collider;
+                    cc.center = colliderData.center;
+                    cc.radius = colliderData.radius;
+                    cc.height = colliderData.height;
+                    break;
+            }
+            if (colliderData.isTrigger)
+            {
+                if (type.Equals(typeof(MeshCollider)))
+                {
+                    ((MeshCollider)collider).convex = true;
+                }
+                collider.isTrigger = true;
             }
         }
 

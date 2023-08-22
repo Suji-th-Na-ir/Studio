@@ -23,6 +23,7 @@ namespace Terra.Studio
         [JsonConverter(typeof(Vector3Converter))] public Vector3 scale;
         public EntityBasedComponent[] components;
         public VirtualEntity[] children;
+        public MetaData metaData;
     }
 
     [Serializable]
@@ -30,6 +31,24 @@ namespace Terra.Studio
     {
         public string type;
         public object data;
+    }
+
+    [Serializable]
+    public struct MetaData
+    {
+        public ColliderData colliderData;
+    }
+
+    [Serializable]
+    public struct ColliderData
+    {
+        public bool doesHaveCollider;
+        public bool isTrigger;
+        public string type;
+        public float radius;
+        public float height;
+        [JsonConverter(typeof(Vector3Converter))] public Vector3 size;
+        [JsonConverter(typeof(Vector3Converter))] public Vector3 center;
     }
 
     public enum AssetType
