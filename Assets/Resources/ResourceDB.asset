@@ -97,13 +97,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  - name: 17-08-2023 16:33:47
-    ext: json
-    path: /17-08-2023 16:33:47
-    shortPath: 17-08-2023 16:33:47
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   - name: ResourceDB
     ext: asset
     path: /ResourceDB
@@ -122,13 +115,6 @@ MonoBehaviour:
     ext: json
     path: /jays-scene
     shortPath: jays-scene
-    type: 2
-    objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  - name: shriya-scene
-    ext: json
-    path: /shriya-scene
-    shortPath: shriya-scene
     type: 2
     objectTypeName: UnityEngine.TextAsset, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -1114,6 +1100,6 @@ MonoBehaviour:
     type: 2
     objectTypeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
-  m_FileCount: 157
+  m_FileCount: 155
   m_FolderCount: 0
   UpdateAutomatically: 1
