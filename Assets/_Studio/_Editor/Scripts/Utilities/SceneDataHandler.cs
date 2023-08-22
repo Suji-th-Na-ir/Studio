@@ -87,25 +87,29 @@ namespace Terra.Studio
 
         private void AttachComponents(GameObject gameObject, VirtualEntity entity, Action<GameObject, VirtualEntity> onComponentDependencyFound = null)
         {
-            if (!Helper.IsInRTEditModeInUnityEditor())
-            {
-                return;
-            }
             for (int i = 0; i < entity.components.Length; i++)
             {
-                if (EditorOp.Resolve<DataProvider>() != null)
+                if (!Helper.IsInRTEditModeInUnityEditor())
                 {
-                    var type = EditorOp.Resolve<DataProvider>().GetVariance(entity.components[i].type);
-                    if (type == null)
-                    {
-                        continue;
-                    }
-                    var component = gameObject.AddComponent(type) as IComponent;
-                    component?.Import(entity.components[i]);
+                    var metaData = gameObject.AddComponent<EditorMetaData>();
+                    metaData.componentData = entity.components[i];
                 }
                 else
                 {
-                    onComponentDependencyFound?.Invoke(gameObject, entity);
+                    if (EditorOp.Resolve<DataProvider>() != null)
+                    {
+                        var type = EditorOp.Resolve<DataProvider>().GetVariance(entity.components[i].type);
+                        if (type == null)
+                        {
+                            continue;
+                        }
+                        var component = gameObject.AddComponent(type) as IComponent;
+                        component?.Import(entity.components[i]);
+                    }
+                    else
+                    {
+                        onComponentDependencyFound?.Invoke(gameObject, entity);
+                    }
                 }
             }
         }
@@ -183,16 +187,29 @@ namespace Terra.Studio
             {
                 newEntity.primitiveType = GetPrimitiveType(go);
             }
-            var editorComponents = go.GetComponents<IComponent>();
-            var entityComponents = new EntityBasedComponent[editorComponents.Length];
-            for (int j = 0; j < editorComponents.Length; j++)
+            EntityBasedComponent[] entityComponents;
+            if (!Helper.IsInRTEditModeInUnityEditor())
             {
-                var (type, data) = editorComponents[j].Export();
-                entityComponents[j] = new EntityBasedComponent()
+                var metaComponents = go.GetComponents<EditorMetaData>();
+                entityComponents = new EntityBasedComponent[metaComponents.Length];
+                for (int j = 0; j < metaComponents.Length; j++)
                 {
-                    type = type,
-                    data = data
-                };
+                    entityComponents[j] = metaComponents[j].componentData;
+                }
+            }
+            else
+            {
+                var editorComponents = go.GetComponents<IComponent>();
+                entityComponents = new EntityBasedComponent[editorComponents.Length];
+                for (int j = 0; j < editorComponents.Length; j++)
+                {
+                    var (type, data) = editorComponents[j].Export();
+                    entityComponents[j] = new EntityBasedComponent()
+                    {
+                        type = type,
+                        data = data
+                    };
+                }
             }
             newEntity.components = entityComponents;
             var childrenEntities = new VirtualEntity[go.transform.childCount];
