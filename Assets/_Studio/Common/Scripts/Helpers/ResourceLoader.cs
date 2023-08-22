@@ -17,7 +17,6 @@ namespace Terra.Studio
             {
                 obj = Load<T>(LoadFor.Common, path);
             }
-            Rulesets.ApplyRuleset(obj);
             return obj;
         }
 
@@ -35,7 +34,6 @@ namespace Terra.Studio
             {
                 obj = Load(LoadFor.Common, tag, appendPath);
             }
-            Rulesets.ApplyRuleset(obj);
             return obj;
         }
     }

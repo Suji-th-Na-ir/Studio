@@ -10,11 +10,11 @@ namespace RuntimeInspectorNamespace
     public class Translate : MonoBehaviour, IComponent
     {
         public StartOn start = StartOn.GameStart;
-        public Atom.Translate Type = new ();
-        public Atom.PlaySfx PlaySFX = new ();
-        public Atom.PlayVfx PlayVFX = new ();
+        public Atom.Translate Type = new();
+        public Atom.PlaySfx PlaySFX = new();
+        public Atom.PlayVfx PlayVFX = new();
         private RotateComponent rComp;
-        
+
         public void Start()
         {
             PlaySFX.Setup(gameObject);
@@ -43,8 +43,9 @@ namespace RuntimeInspectorNamespace
                 vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName,
                 sfxIndex = PlaySFX.data.clipIndex,
                 vfxIndex = PlayVFX.data.clipIndex,
-                
+
                 IsConditionAvailable = true,
+                listen = Type.data.listen,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition()
             };
@@ -55,7 +56,7 @@ namespace RuntimeInspectorNamespace
             var data = JsonConvert.SerializeObject(rc, Formatting.Indented);
             return (type, data);
         }
-        
+
 
         private RepeatType GetRepeatType(float _value)
         {
@@ -112,6 +113,7 @@ namespace RuntimeInspectorNamespace
             Type.data.broadcast = cc.Broadcast;
             Type.data.broadcastAt = cc.broadcastAt;
             Type.data.listenTo = cc.ConditionData;
+            Type.data.listen = cc.listen;
 
             start = GetStartCondition(cc.ConditionType);
         }

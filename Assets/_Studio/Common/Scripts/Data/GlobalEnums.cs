@@ -62,6 +62,12 @@ namespace Terra.Studio
         End
     }
 
+    public enum Listen
+    {
+        Once,
+        Always
+    }
+
     public enum StudioState
     {
         Bootstrap,
