@@ -26,18 +26,8 @@ namespace Terra.Studio
         private void SpawnPlayer()
         {
             var playerObj = (GameObject)RuntimeOp.Load(ResourceTag.Player);
-            var spawnPoint = RuntimeOp.Resolve<GameData>().SpawnPoint;
-
-            if (spawnPoint != null)
-            {
-                var reference = Object.Instantiate(playerObj, spawnPoint.transform.position+new Vector3(0,2,0),spawnPoint.transform.rotation);
-                RuntimeOp.Resolve<GameData>().PlayerRef = reference.transform;
-            }
-            else
-            {
-                var reference = Object.Instantiate(playerObj);
-                RuntimeOp.Resolve<GameData>().PlayerRef = reference.transform;
-            }
+            var reference = Object.Instantiate(playerObj);
+            RuntimeOp.Resolve<GameData>().PlayerRef = reference.transform;
         }
 
         private void SpawnGameUI()
