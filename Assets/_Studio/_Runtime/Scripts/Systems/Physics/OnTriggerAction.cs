@@ -22,11 +22,6 @@ namespace Terra.Studio
                 }
             }
             collider.isTrigger = true;
-            if (!TryGetComponent(out Rigidbody rb))
-            {
-                rb = gameObject.AddComponent<Rigidbody>();
-            }
-            rb.useGravity = false;
         }
 
         private void OnTriggerEnter(Collider other)
