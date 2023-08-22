@@ -482,8 +482,13 @@ namespace PlayShifu.Terra
             type = default;
             if (go.TryGetComponent(out MeshFilter mesh))
             {
+                var name = mesh.sharedMesh.name;
+                if (name.Contains(" "))
+                {
+                    name = name.Split()[0];
+                }
                 var isFound = true;
-                switch (mesh.name)
+                switch (name)
                 {
                     default:
                         isFound = false;
