@@ -580,7 +580,7 @@ namespace PlayShifu.Terra
                 case nameof(BoxCollider):
                 case nameof(SphereCollider):
                 case nameof(CapsuleCollider):
-                    collider.isTrigger = true;
+                    collider.isTrigger = isTrigger;
                     break;
                 case nameof(MeshCollider):
                     var mc = (MeshCollider)collider;
