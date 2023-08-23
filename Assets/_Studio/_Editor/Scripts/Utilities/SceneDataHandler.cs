@@ -69,9 +69,12 @@ namespace Terra.Studio
                 var entity = worldData.entities[i];
                 SpawnObjects(entity);
             }
-            var metaData = worldData.metaData;
-            if (metaData.Equals(default(WorldMetaData))) return;
-            EditorOp.Resolve<EditorSystem>().PlayerSpawnPoint = metaData.playerSpawnPoint;
+            if (Helper.IsInRTEditModeInUnityEditor())
+            {
+                var metaData = worldData.metaData;
+                if (metaData.Equals(default(WorldMetaData))) return;
+                EditorOp.Resolve<EditorSystem>().PlayerSpawnPoint = metaData.playerSpawnPoint;
+            }
         }
 
         private void SpawnObjects(VirtualEntity entity)

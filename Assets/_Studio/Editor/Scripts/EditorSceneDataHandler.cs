@@ -1,5 +1,7 @@
+using System.IO;
 using UnityEditor;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace Terra.Studio.RTEditor
 {
@@ -34,6 +36,17 @@ namespace Terra.Studio.RTEditor
             }
         }
 
+        private static void SyncMetaData(string actualFilePath, string targetFilePath)
+        {
+            var actualFileData = File.ReadAllText(actualFilePath);
+            var actualObj = JsonConvert.DeserializeObject<WorldData>(actualFileData);
+            var targetFileData = File.ReadAllText(targetFilePath);
+            var targetObj = JsonConvert.DeserializeObject<WorldData>(targetFileData);
+            targetObj.metaData = actualObj.metaData;
+            var newTargetFileData = JsonConvert.SerializeObject(targetObj);
+            File.WriteAllText(targetFilePath, newTargetFileData);
+        }
+
         [MenuItem("Terra/Export Scene Data")]
         public static void ExportSceneData()
         {
@@ -46,6 +59,7 @@ namespace Terra.Studio.RTEditor
             var newPath = EditorUtility.SaveFilePanelInProject("Select Save Path", "SaveFile.json", "json", "Please enter a file name to save it in the project");
             if (!string.IsNullOrEmpty(newPath))
             {
+                SyncMetaData(newPath, persistentPath);
                 new FileService().CopyFile(persistentPath, newPath);
                 AssetDatabase.Refresh();
             }
