@@ -519,6 +519,8 @@ namespace PlayShifu.Terra
 
         public static void TrySetTrigger(this GameObject gameObject, bool isTrigger, bool fitChildrenSize = false)
         {
+            //Commented until further notice
+            return;
             if (!gameObject.TryGetComponent(out Collider collider))
             {
                 collider = gameObject.AddComponent<BoxCollider>();
