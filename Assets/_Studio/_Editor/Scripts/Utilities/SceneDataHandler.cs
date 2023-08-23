@@ -69,6 +69,9 @@ namespace Terra.Studio
                 var entity = worldData.entities[i];
                 SpawnObjects(entity);
             }
+            var metaData = worldData.metaData;
+            if (metaData.Equals(default(WorldMetaData))) return;
+            EditorOp.Resolve<EditorSystem>().PlayerSpawnPoint = metaData.playerSpawnPoint;
         }
 
         private void SpawnObjects(VirtualEntity entity)
@@ -154,6 +157,7 @@ namespace Terra.Studio
 
         private string ExportSceneData()
         {
+            var worldMetaData = new WorldMetaData();
             var allGos = SceneManager.GetActiveScene().GetRootGameObjects();
             var virtualEntities = new List<VirtualEntity>();
             for (int i = 0; i < allGos.Length; i++)
@@ -162,14 +166,21 @@ namespace Terra.Studio
                 {
                     continue;
                 }
+                if (allGos[i].TryGetComponent(out IgnoreToPackObject _))
+                {
+                    TryHandleUnpackableGameObjectData(allGos[i], ref worldMetaData);
+                    continue;
+                }
                 var entity = GetVirtualEntity(allGos[i], i, true);
                 virtualEntities.Add(entity);
             }
             var worldData = new WorldData()
             {
-                entities = virtualEntities.ToArray()
+                entities = virtualEntities.ToArray(),
+                metaData = worldMetaData
             };
             var json = JsonConvert.SerializeObject(worldData);
+            Debug.Log($"Generated json: {json}");
             return json;
         }
 
@@ -300,7 +311,7 @@ namespace Terra.Studio
             }
         }
 
-        private void GetColliderData(GameObject go, ref MetaData metaData)
+        private void GetColliderData(GameObject go, ref EnitityMetaData metaData)
         {
             if (go.TryGetComponent(out Collider collider))
             {
@@ -332,7 +343,7 @@ namespace Terra.Studio
             }
         }
 
-        public void SetColliderData(GameObject go, MetaData metaData)
+        public void SetColliderData(GameObject go, EnitityMetaData metaData)
         {
             var colliderData = metaData.colliderData;
             var doesColliderExist = colliderData.doesHaveCollider;
@@ -371,6 +382,17 @@ namespace Terra.Studio
                     ((MeshCollider)collider).convex = true;
                 }
                 collider.isTrigger = true;
+            }
+        }
+
+        private void TryHandleUnpackableGameObjectData(GameObject go, ref WorldMetaData metaData)
+        {
+            if (go.TryGetComponent(out StudioGameObject studioGameObject))
+            {
+                if (studioGameObject.type == EditorObjectType.SpawnPoint)
+                {
+                    metaData.playerSpawnPoint = go.transform.position;
+                }
             }
         }
 

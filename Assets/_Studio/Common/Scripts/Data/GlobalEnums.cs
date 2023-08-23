@@ -104,4 +104,12 @@ namespace Terra.Studio
         [StringValue("ResourceDB", typeof(ResourceDB))]
         ResourceDB
     }
+
+    public enum EditorObjectType
+    {
+        Default,
+        SpawnPoint,
+        Timer,
+        Score
+    }
 }

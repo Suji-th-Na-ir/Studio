@@ -3,6 +3,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using System.Linq;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using Object = UnityEngine.Object;
 
@@ -95,6 +96,11 @@ namespace Terra.Studio.RTEditor
                             var type = Type.GetType(typeData);
                             var asset = AssetDatabase.LoadAssetAtPath(resourceDB.ItemsData[j].AbsolutePath, type);
                             EditorGUIUtility.PingObject(asset);
+                        }
+                        if (GUILayout.Button("Copy Data"))
+                        {
+                            var json = JsonConvert.SerializeObject(resourceDB.ItemsData[j]);
+                            GUIUtility.systemCopyBuffer = json;
                         }
                         EditorGUILayout.EndHorizontal();
                         if (validate)

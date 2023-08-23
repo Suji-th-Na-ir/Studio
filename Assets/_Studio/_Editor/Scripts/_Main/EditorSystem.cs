@@ -6,6 +6,8 @@ namespace Terra.Studio
     public class EditorSystem : MonoBehaviour, ISubsystem
     {
         private SaveSystem _saveSystem;
+        public Vector3 PlayerSpawnPoint;
+
         private void Awake()
         {
             SystemOp.Register(this as ISubsystem);
@@ -23,6 +25,7 @@ namespace Terra.Studio
             EditorOp.Resolve<SceneView>().Init();
             EditorOp.Resolve<SelectionHandler>().Init();
             EditorOp.Resolve<SceneDataHandler>().LoadScene();
+            new EditorEssentialsLoader().LoadEssentials();
         }
 
         public void Dispose()
