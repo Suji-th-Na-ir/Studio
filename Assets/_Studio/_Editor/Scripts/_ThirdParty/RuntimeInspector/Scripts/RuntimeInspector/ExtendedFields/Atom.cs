@@ -54,6 +54,7 @@ namespace Terra.Studio
         {
             [HideInInspector] public RotateField field;
             [HideInInspector] public TranslateComponentData data = new();
+            [HideInInspector] public GameObject referenceGO;
         }
     }
 

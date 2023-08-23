@@ -59,6 +59,7 @@ namespace RuntimeInspectorNamespace
             });
             if (listenTo != null) listenTo.onValueChanged.AddListener((value) =>
             {
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(value, data.broadcast, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)translateField.Value).referenceGO, componentType = typeof(Atom.Translate).Name });
                 data.listenTo = value;
                 UpdateData(data);
             });
@@ -69,6 +70,7 @@ namespace RuntimeInspectorNamespace
             });
             if (broadcastInput != null) broadcastInput.onValueChanged.AddListener((value) =>
             {
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value, data.broadcast, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)translateField.Value).referenceGO, componentType = typeof(Atom.Translate).Name });
                 data.broadcast = value;
                 UpdateData(data);
             });
