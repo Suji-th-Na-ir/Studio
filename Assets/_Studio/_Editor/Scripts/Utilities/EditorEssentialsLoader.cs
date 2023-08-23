@@ -13,6 +13,7 @@ namespace Terra.Studio
             {
                 var resourceObj = EditorOp.Load<GameObject>(essential.itemData.ResourcePath);
                 var spawnedObj = Object.Instantiate(resourceObj);
+                Rulesets.ApplyRuleset(spawnedObj);
                 spawnedObj.transform.position = essential.spawnPosition;
                 spawnedObj.AddComponent<IgnoreToPackObject>();
                 var studioGO = spawnedObj.AddComponent<StudioGameObject>();
