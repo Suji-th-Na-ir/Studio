@@ -12,6 +12,10 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
 
+        private void Awake()
+        {
+            Type.referenceGO = gameObject;
+        }
         public void Start()
         {
             PlaySFX.Setup(gameObject);

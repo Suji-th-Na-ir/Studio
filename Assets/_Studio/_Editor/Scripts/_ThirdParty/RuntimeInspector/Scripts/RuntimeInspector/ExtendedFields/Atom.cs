@@ -46,6 +46,7 @@ namespace Terra.Studio
         {
             [HideInInspector] public RotateField field;
             [HideInInspector] public RotateComponentData data = new();
+            [HideInInspector] public GameObject referenceGO;
         }
 
         [Serializable]

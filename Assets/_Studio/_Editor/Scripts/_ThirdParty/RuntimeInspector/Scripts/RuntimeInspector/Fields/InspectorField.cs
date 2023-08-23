@@ -129,6 +129,9 @@ namespace RuntimeInspectorNamespace
 
         protected virtual float HeightMultiplier { get { return 1f; } }
 
+        protected object virutalObject;
+        protected object VirtualObject { get { return virutalObject; } }
+
         private Getter getter;
         private Setter setter;
 
@@ -153,7 +156,6 @@ namespace RuntimeInspectorNamespace
                 FieldInfo field = (FieldInfo)variable;
                 if (variableName == null)
                     variableName = field.Name;
-
 #if UNITY_EDITOR || !NETFX_CORE
                 if (!parent.BoundVariableType.IsValueType)
 #else
@@ -166,6 +168,7 @@ namespace RuntimeInspectorNamespace
                         field.SetValue(parent.Value, value);
                         parent.Value = parent.Value;
                     }, variable);
+                virutalObject = parent.Value;
             }
             else if (variable is PropertyInfo)
             {
@@ -295,15 +298,13 @@ namespace RuntimeInspectorNamespace
             List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
             if (selectedObjects.Count > 1)
             {
-
                 foreach (var obj in selectedObjects)
                 {
                     var component = obj.GetComponent(ComponentType);
                     if (component != null)
                     {
                         var mInfo = component.GetType().GetField(ReflectedName, BindingFlags.Public | BindingFlags.Instance);
-                        if (mInfo != null)
-                            mInfo.SetValue(component, Value);
+                        mInfo?.SetValue(component, Value);
                     }
                 }
             }
