@@ -73,10 +73,11 @@ namespace Terra.Studio
 
         private TranslateParams GetParams(TranslateComponent translatable)
         {
+            var targetPos = translatable.refObj.transform.parent == null ? translatable.targetPosition : translatable.refObj.transform.TransformPoint(translatable.targetPosition);
             var translateParams = new TranslateParams()
             {
                 translateFrom = translatable.startPosition,
-                translateTo = translatable.refObj.transform.TransformPoint(translatable.targetPosition),
+                translateTo = targetPos,
                 speed = translatable.speed,
                 translateTimes = translatable.repeatFor,
                 shouldPingPong = translatable.translateType is TranslateType.PingPong or TranslateType.PingPongForever,
