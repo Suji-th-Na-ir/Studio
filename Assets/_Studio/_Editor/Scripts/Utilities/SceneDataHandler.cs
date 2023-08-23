@@ -106,7 +106,7 @@ namespace Terra.Studio
                     if (EditorOp.Resolve<DataProvider>() != null)
                     {
                         var type = EditorOp.Resolve<DataProvider>().GetVariance(entity.components[i].type);
-                        if (type == null)
+                        if (type == null || string.IsNullOrEmpty((string)entity.components[i].data))
                         {
                             continue;
                         }
@@ -139,13 +139,14 @@ namespace Terra.Studio
                     generatedObj = RuntimeWrappers.SpawnObject(childEntity.assetType, childEntity.assetPath, childEntity.primitiveType, trs);
                     child = generatedObj.transform;
                     child.SetParent(tr);
+                    child.localScale = childEntity.scale.WorldToLocalScale(tr);
                 }
                 else
                 {
                     child = gameObject.transform.GetChild(i);
                     RuntimeWrappers.AttachPrerequisities(child.gameObject, ResourceDB.GetItemData(childEntity.assetPath));
                     child.SetPositionAndRotation(childEntity.position, Quaternion.Euler(childEntity.rotation));
-                    child.localScale = childEntity.scale;
+                    child.localScale = childEntity.scale.WorldToLocalScale(child.parent);
                 }
                 child.name = childEntity.name;
                 SetColliderData(child.gameObject, childEntity.metaData);
@@ -196,7 +197,7 @@ namespace Terra.Studio
                 assetPath = shouldCheckForAssetPath ? GetAssetPath(go) : null,
                 position = go.transform.position,
                 rotation = go.transform.eulerAngles,
-                scale = go.transform.localScale,
+                scale = go.transform.parent != null ? go.transform.localScale.LocalToWorldScale(go.transform.parent) : go.transform.localScale,
                 assetType = !string.IsNullOrEmpty(GetAssetPath(go)) ? AssetType.Prefab : GetAssetType(go)
             };
             if (newEntity.assetType == AssetType.Primitive)

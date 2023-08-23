@@ -51,7 +51,7 @@ namespace RuntimeInspectorNamespace
             };
 
             ModifyDataAsPerSelected(ref rc);
-            gameObject.TrySetTrigger(false);
+            gameObject.TrySetTrigger(false, true);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(rc, Formatting.Indented);
             return (type, data);
@@ -126,6 +126,14 @@ namespace RuntimeInspectorNamespace
                     break;
             }
             if (component.rotationType == RotationType.RotateForever) component.rotateBy = 360f;
+        }
+
+        private void OnDestroy()
+        {
+            if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))
+            {
+                Destroy(collider);
+            }
         }
     }
 }

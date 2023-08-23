@@ -66,7 +66,7 @@ namespace RuntimeInspectorNamespace
                 destroyOn.sfxIndex = PlaySFX.data.clipIndex;
                 destroyOn.vfxIndex = PlayVFX.data.clipIndex;
             }
-            gameObject.TrySetTrigger(false);
+            gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(destroyOn);
             return (type, data);
@@ -90,6 +90,14 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.canPlay = cc.canPlayVFX;
             PlayVFX.data.clipIndex = cc.vfxIndex;
             PlayVFX.data.clipName = cc.vfxName;
+        }
+
+        private void OnDestroy()
+        {
+            if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))
+            {
+                Destroy(collider);
+            }
         }
     }
 }

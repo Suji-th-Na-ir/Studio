@@ -53,7 +53,7 @@ namespace RuntimeInspectorNamespace
                 collectable.scoreValue = ScoreValue;
                 collectable.showScoreUI = ShowScoreUI;
             }
-            gameObject.TrySetTrigger(false);
+            gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(collectable);
             return (type, data);
@@ -87,5 +87,12 @@ namespace RuntimeInspectorNamespace
             return eventName;
         }
 
+        private void OnDestroy()
+        {
+            if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))
+            {
+                Destroy(collider);
+            }
+        }
     }
 }
