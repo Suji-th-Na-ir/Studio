@@ -45,13 +45,13 @@ namespace Terra.Studio
             entityRef.CanExecute = true;
             entityRef.IsExecuted = true;
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            if (conditionType.Equals("Terra.Studio.Listener") && entityRef.listen == Listen.Always)
+            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (go, conditionData));
+            if (entityRef.listen == Listen.Always && !conditionType.Equals("Terra.Studio.GameStart"))
             {
                 compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (go, conditionData));
             }
             else
             {
-                compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (go, conditionData));
                 IdToConditionalCallback.Remove(entity);
             }
             OnDemandRun(in entityRef);
