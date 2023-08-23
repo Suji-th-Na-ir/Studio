@@ -165,8 +165,9 @@ namespace Terra.Studio
             GameObject iconGameObject = new GameObject($"Icon{componentDisplay.componentGameObject.name}_{componentDisplay.componentType}");
          
             var iconSprite = iconPresets.GetIcon(componentDisplay.componentType);
+            var broadcastSprite = iconPresets.GetIcon("Broadcast");
             var compIcon = iconGameObject.AddComponent<ComponentIconNode>();
-            compIcon.Setup(iconSprite, componentDisplay);
+            compIcon.Setup(iconSprite,broadcastSprite, componentDisplay);
             if (!m_icons.TryGetValue(componentDisplay.componentGameObject, out List<ComponentIconNode> value))
             {
                 if (m_icons.ContainsKey(componentDisplay.componentGameObject))

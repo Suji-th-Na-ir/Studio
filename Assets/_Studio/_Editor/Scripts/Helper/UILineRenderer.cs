@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class UILineRenderer : Graphic
 {
     public Color lineColor = Color.white;
-    public float lineWidth = 2f;
+    public float lineWidth = 5f;
 
     private List<Vector3> linePoints = new List<Vector3>();
 
