@@ -34,5 +34,7 @@ namespace Terra.Studio
         public float speed;
         public float pauseFor;
         public int repeatFor;
+        [JsonIgnore] public float pauseDistance;
+        [JsonIgnore] public Vector3 direction;
     }
 }

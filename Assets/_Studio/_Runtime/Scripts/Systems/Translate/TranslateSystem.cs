@@ -37,10 +37,10 @@ namespace Terra.Studio
             entityRef.CanExecute = true;
             entityRef.IsExecuted = true;
             InjectCondition(false, entity, entityRef);
-            OnDemandRun(in entityRef, entity);
+            OnDemandRun(ref entityRef, entity);
         }
 
-        public void OnDemandRun(in TranslateComponent translatable, int entity)
+        public void OnDemandRun(ref TranslateComponent translatable, int entity)
         {
             if (translatable.canPlaySFX)
             {
@@ -50,7 +50,7 @@ namespace Terra.Studio
             {
                 RuntimeWrappers.PlayVFX(translatable.vfxName, translatable.refObj.transform.position);
             }
-            var translateParams = GetParams(translatable, entity);
+            var translateParams = GetParams(ref translatable, entity);
             RuntimeWrappers.TranslateObject(translateParams);
         }
 
@@ -66,34 +66,47 @@ namespace Terra.Studio
                 {
                     OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
                 });
-                Debug.Log($"For entity {entity}, adding condition: {conditionType}");
                 RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (goRef, conditionData));
             }
             else if (IdToConditionalCallback.ContainsKey(entity))
             {
-                Debug.Log($"For entity {entity}, removing condition: {conditionType}");
                 RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (goRef, conditionData));
                 IdToConditionalCallback.Remove(entity);
             }
         }
 
-        private TranslateParams GetParams(TranslateComponent translatable, int entity)
+        private TranslateParams GetParams(ref TranslateComponent translatable, int entity)
         {
-            var targetPos = translatable.refObj.transform.parent == null ? translatable.targetPosition : translatable.refObj.transform.TransformPoint(translatable.targetPosition);
+            var copy = translatable;
+            var tr = translatable.refObj.transform;
+            var targetPos = tr.parent == null ? translatable.targetPosition : tr.TransformPoint(translatable.targetPosition);
+            var pauseDistance = Vector3.Distance(tr.position, targetPos);
+            if (translatable.pauseFor != 0f && translatable.pauseDistance == 0)
+            {
+                var direction = targetPos - translatable.startPosition;
+                translatable.direction = direction;
+                var distance = Vector3.Distance(translatable.startPosition, targetPos);
+                translatable.pauseDistance = pauseDistance = distance;
+                var newPos = tr.position;
+                if (translatable.startPosition != newPos)
+                {
+                    targetPos = newPos + direction * distance;
+                }
+            }
             var translateParams = new TranslateParams()
             {
-                translateFrom = translatable.startPosition,
+                translateFrom = translatable.refObj.transform.position,
                 translateTo = targetPos,
                 speed = translatable.speed,
                 translateTimes = translatable.repeatFor,
                 shouldPingPong = translatable.translateType is TranslateType.PingPong or TranslateType.PingPongForever,
                 shouldPause = translatable.pauseFor > 0f,
-                pauseDistance = Vector3.Distance(translatable.startPosition, targetPos),
+                pauseDistance = pauseDistance,
                 pauseForTime = translatable.pauseFor,
                 targetObj = translatable.refObj,
                 onTranslated = (isDone) =>
                 {
-                    OnTranslateDone(translatable, isDone, entity);
+                    OnTranslateDone(copy, isDone, entity);
                 }
             };
             return translateParams;
