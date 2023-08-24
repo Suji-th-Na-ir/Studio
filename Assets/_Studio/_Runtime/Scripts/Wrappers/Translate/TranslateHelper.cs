@@ -82,7 +82,7 @@ namespace Terra.Studio
         private IEnumerator OscillateCoroutine()
         {
             var shouldTranslateForever = translateTimes == int.MaxValue;
-            var loopsFinished = 0f;
+            var loopsFinished = 0;
             long currentLoop = 0;
             do
             {
