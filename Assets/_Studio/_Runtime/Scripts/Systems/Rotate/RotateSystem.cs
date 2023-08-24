@@ -14,24 +14,16 @@ namespace Terra.Studio
             var pool = currentWorld.GetPool<RotateComponent>();
             ref var entityRef = ref pool.Get(entity);
             entityRef.CanExecute = false;
-            var conditionType = entityRef.ConditionType;
-            var conditionData = entityRef.ConditionData;
-            var goRef = entityRef.refObj;
             if (entityRef.IsBroadcastable)
             {
                 RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(entityRef.Broadcast);
             }
-            IdToConditionalCallback ??= new();
-            IdToConditionalCallback.Add(entity, (obj) =>
-            {
-                OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
-            });
-            RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (goRef, conditionData));
+            InjectCondition(true, entity, entityRef);
         }
 
         public override void OnConditionalCheck(object data)
         {
-            var (entity, conditionType, go, conditionData, selection) = ((int, string, GameObject, string, object))data;
+            var (entity, conditionType, go, _, selection) = ((int, string, GameObject, string, object))data;
             if (conditionType.Equals("Terra.Studio.MouseAction"))
             {
                 if (selection == null || selection as GameObject != go)
@@ -43,20 +35,11 @@ namespace Terra.Studio
             var pool = world.GetPool<RotateComponent>();
             ref var entityRef = ref pool.Get(entity);
             entityRef.CanExecute = true;
-            var compsData = RuntimeOp.Resolve<ComponentsData>();
-            if (conditionType.Equals("Terra.Studio.Listener") && entityRef.listen == Listen.Always)
-            {
-                compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (go, conditionData));
-            }
-            else
-            {
-                compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (go, conditionData));
-                IdToConditionalCallback.Remove(entity);
-            }
-            OnDemandRun(in entityRef);
+            InjectCondition(false, entity, entityRef);
+            OnDemandRun(in entityRef, entity);
         }
 
-        public void OnDemandRun(in RotateComponent rotatable)
+        public void OnDemandRun(in RotateComponent rotatable, int entity)
         {
             if (rotatable.canPlaySFX)
             {
@@ -66,11 +49,32 @@ namespace Terra.Studio
             {
                 RuntimeWrappers.PlayVFX(rotatable.vfxName, rotatable.refObj.transform.position);
             }
-            var rotateParams = GetParams(rotatable);
+            var rotateParams = GetParams(rotatable, entity);
             RuntimeWrappers.RotateObject(rotateParams);
         }
 
-        private RotateByParams GetParams(RotateComponent rotatable)
+        private void InjectCondition(bool inject, int entity, RotateComponent entityRef)
+        {
+            var conditionType = entityRef.ConditionType;
+            var conditionData = entityRef.ConditionData;
+            var goRef = entityRef.refObj;
+            if (inject)
+            {
+                IdToConditionalCallback ??= new();
+                IdToConditionalCallback.Add(entity, (obj) =>
+                {
+                    OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
+                });
+                RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (goRef, conditionData));
+            }
+            else if (IdToConditionalCallback.ContainsKey(entity))
+            {
+                RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (goRef, conditionData));
+                IdToConditionalCallback.Remove(entity);
+            }
+        }
+
+        private RotateByParams GetParams(RotateComponent rotatable, int entity)
         {
             var rotateParams = new RotateByParams()
             {
@@ -86,31 +90,33 @@ namespace Terra.Studio
                 shouldPingPong = rotatable.rotationType is RotationType.Oscillate or RotationType.OscillateForever,
                 onRotated = (isDone) =>
                 {
-                    if (rotatable.IsBroadcastable)
-                    {
-                        OnRotationDone(rotatable.Broadcast, rotatable.broadcastAt == BroadcastAt.End || isDone);
-                    }
+                    OnRotationDone(rotatable, isDone, entity);
                 }
             };
             return rotateParams;
         }
 
-        private void OnRotationDone(string broadcast, bool removeOnceBroadcasted)
+        private void OnRotationDone(RotateComponent rotatable, bool isDone, int entity)
         {
-            RuntimeOp.Resolve<Broadcaster>().Broadcast(broadcast, removeOnceBroadcasted);
+            if (rotatable.IsBroadcastable)
+            {
+                var removeOnceBroadcasted = rotatable.broadcastAt == BroadcastAt.End || isDone;
+                RuntimeOp.Resolve<Broadcaster>().Broadcast(rotatable.Broadcast, removeOnceBroadcasted);
+            }
+            if (rotatable.listen == Listen.Always && !rotatable.ConditionType.Equals("Terra.Studio.GameStart"))
+            {
+                InjectCondition(true, entity, rotatable);
+            }
         }
 
         public override void OnHaltRequested(EcsWorld currentWorld)
         {
             var filter = currentWorld.Filter<RotateComponent>().End();
             var rotatePool = currentWorld.GetPool<RotateComponent>();
-            var compsData = RuntimeOp.Resolve<ComponentsData>();
             foreach (var entity in filter)
             {
-                if (!IdToConditionalCallback.ContainsKey(entity)) continue;
                 var rotatable = rotatePool.Get(entity);
-                compsData.ProvideEventContext(rotatable.ConditionType, IdToConditionalCallback[entity], false, (rotatable.refObj, rotatable.ConditionData));
-                IdToConditionalCallback.Remove(entity);
+                InjectCondition(false, entity, rotatable);
             }
         }
     }

@@ -19,14 +19,14 @@ namespace Terra.Studio
         {
             RuntimeOp.Register(new GameData());
             RuntimeOp.Register(new GameStateHandler());
-            SpawnPlayer();
             SpawnGameUI();
         }
 
-        private void SpawnPlayer()
+        public void SpawnPlayer()
         {
             var playerObj = (GameObject)RuntimeOp.Load(ResourceTag.Player);
             var reference = Object.Instantiate(playerObj);
+            reference.transform.position = RuntimeOp.Resolve<GameData>().RespawnPoint;
             RuntimeOp.Resolve<GameData>().PlayerRef = reference.transform;
         }
 

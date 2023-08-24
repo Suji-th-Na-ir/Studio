@@ -8,6 +8,7 @@ namespace Terra.Studio
     public struct WorldData
     {
         public VirtualEntity[] entities;
+        public WorldMetaData metaData;
     }
 
     [Serializable]
@@ -23,7 +24,7 @@ namespace Terra.Studio
         [JsonConverter(typeof(Vector3Converter))] public Vector3 scale;
         public EntityBasedComponent[] components;
         public VirtualEntity[] children;
-        public MetaData metaData;
+        public EnitityMetaData metaData;
     }
 
     [Serializable]
@@ -34,7 +35,13 @@ namespace Terra.Studio
     }
 
     [Serializable]
-    public struct MetaData
+    public struct WorldMetaData
+    {
+        [JsonConverter(typeof(Vector3Converter))] public Vector3 playerSpawnPoint;
+    }
+
+    [Serializable]
+    public struct EnitityMetaData
     {
         public ColliderData colliderData;
     }

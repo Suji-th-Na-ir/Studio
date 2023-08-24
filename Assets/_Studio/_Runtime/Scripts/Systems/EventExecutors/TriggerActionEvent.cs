@@ -25,7 +25,7 @@ namespace Terra.Studio
                     onConditionalCheck?.Invoke(null);
                 };
             }
-            else if (go.TryGetComponent(out OnTriggerAction triggerAction))
+            else if (go && go.TryGetComponent(out OnTriggerAction triggerAction))
             {
                 triggerAction.OnTriggered = null;
                 UnityEngine.Object.Destroy(triggerAction);

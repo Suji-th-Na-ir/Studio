@@ -24,7 +24,6 @@ namespace RuntimeInspectorNamespace
         public override void Initialize()
         {
             base.Initialize();
-            base.layoutElement.minHeight = 253.9f;
             Setup();
         }
 

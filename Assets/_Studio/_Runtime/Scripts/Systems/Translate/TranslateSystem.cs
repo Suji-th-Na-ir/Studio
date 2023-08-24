@@ -14,24 +14,16 @@ namespace Terra.Studio
             var pool = currentWorld.GetPool<TranslateComponent>();
             ref var entityRef = ref pool.Get(entity);
             entityRef.CanExecute = false;
-            var conditionType = entityRef.ConditionType;
-            var conditionData = entityRef.ConditionData;
-            var goRef = entityRef.refObj;
             if (entityRef.IsBroadcastable)
             {
                 RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(entityRef.Broadcast);
             }
-            IdToConditionalCallback ??= new();
-            IdToConditionalCallback.Add(entity, (obj) =>
-            {
-                OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
-            });
-            RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (goRef, conditionData));
+            InjectCondition(true, entity, entityRef);
         }
 
         public override void OnConditionalCheck(object data)
         {
-            var (entity, conditionType, go, conditionData, selection) = ((int, string, GameObject, string, object))data;
+            var (entity, conditionType, go, _, selection) = ((int, string, GameObject, string, object))data;
             if (conditionType.Equals("Terra.Studio.MouseAction"))
             {
                 if (selection == null || selection as GameObject != go)
@@ -44,20 +36,11 @@ namespace Terra.Studio
             ref var entityRef = ref pool.Get(entity);
             entityRef.CanExecute = true;
             entityRef.IsExecuted = true;
-            var compsData = RuntimeOp.Resolve<ComponentsData>();
-            if (conditionType.Equals("Terra.Studio.Listener") && entityRef.listen == Listen.Always)
-            {
-                compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (go, conditionData));
-            }
-            else
-            {
-                compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (go, conditionData));
-                IdToConditionalCallback.Remove(entity);
-            }
-            OnDemandRun(in entityRef);
+            InjectCondition(false, entity, entityRef);
+            OnDemandRun(in entityRef, entity);
         }
 
-        public void OnDemandRun(in TranslateComponent translatable)
+        public void OnDemandRun(in TranslateComponent translatable, int entity)
         {
             if (translatable.canPlaySFX)
             {
@@ -67,16 +50,38 @@ namespace Terra.Studio
             {
                 RuntimeWrappers.PlayVFX(translatable.vfxName, translatable.refObj.transform.position);
             }
-            var translateParams = GetParams(translatable);
+            var translateParams = GetParams(translatable, entity);
             RuntimeWrappers.TranslateObject(translateParams);
         }
 
-        private TranslateParams GetParams(TranslateComponent translatable)
+        private void InjectCondition(bool inject, int entity, TranslateComponent entityRef)
         {
+            var conditionType = entityRef.ConditionType;
+            var conditionData = entityRef.ConditionData;
+            var goRef = entityRef.refObj;
+            if (inject)
+            {
+                IdToConditionalCallback ??= new();
+                IdToConditionalCallback.Add(entity, (obj) =>
+                {
+                    OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
+                });
+                RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (goRef, conditionData));
+            }
+            else if (IdToConditionalCallback.ContainsKey(entity))
+            {
+                RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (goRef, conditionData));
+                IdToConditionalCallback.Remove(entity);
+            }
+        }
+
+        private TranslateParams GetParams(TranslateComponent translatable, int entity)
+        {
+            var targetPos = translatable.refObj.transform.parent == null ? translatable.targetPosition : translatable.refObj.transform.TransformPoint(translatable.targetPosition);
             var translateParams = new TranslateParams()
             {
                 translateFrom = translatable.startPosition,
-                translateTo = translatable.refObj.transform.TransformPoint(translatable.targetPosition),
+                translateTo = targetPos,
                 speed = translatable.speed,
                 translateTimes = translatable.repeatFor,
                 shouldPingPong = translatable.translateType is TranslateType.PingPong or TranslateType.PingPongForever,
@@ -87,28 +92,33 @@ namespace Terra.Studio
                 broadcastAt = translatable.broadcastAt,
                 onTranslated = (isDone) =>
                 {
-                    OnTranslateDone(translatable.Broadcast, translatable.broadcastAt == BroadcastAt.End || isDone);
+                    OnTranslateDone(translatable, isDone, entity);
                 }
             };
             return translateParams;
         }
 
-        private void OnTranslateDone(string broadcast, bool removeOnceBroadcasted)
+        private void OnTranslateDone(TranslateComponent translatable, bool isDone, int entity)
         {
-            RuntimeOp.Resolve<Broadcaster>().Broadcast(broadcast, removeOnceBroadcasted);
+            if (translatable.IsBroadcastable)
+            {
+                var removeOnceBroadcasted = translatable.broadcastAt == BroadcastAt.End || isDone;
+                RuntimeOp.Resolve<Broadcaster>().Broadcast(translatable.Broadcast, removeOnceBroadcasted);
+            }
+            if (translatable.listen == Listen.Always && !translatable.ConditionType.Equals("Terra.Studio.GameStart"))
+            {
+                InjectCondition(true, entity, translatable);
+            }
         }
 
         public override void OnHaltRequested(EcsWorld currentWorld)
         {
             var filter = currentWorld.Filter<TranslateComponent>().End();
             var translatePool = currentWorld.GetPool<TranslateComponent>();
-            var compsData = RuntimeOp.Resolve<ComponentsData>();
             foreach (var entity in filter)
             {
-                if (!IdToConditionalCallback.ContainsKey(entity)) continue;
                 var translatable = translatePool.Get(entity);
-                compsData.ProvideEventContext(translatable.ConditionType, IdToConditionalCallback[entity], false, (translatable.refObj, translatable.ConditionData));
-                IdToConditionalCallback.Remove(entity);
+                InjectCondition(false, entity, translatable);
             }
         }
     }

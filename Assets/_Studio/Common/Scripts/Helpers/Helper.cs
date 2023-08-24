@@ -517,13 +517,61 @@ namespace PlayShifu.Terra
             return false;
         }
 
-        public static void TrySetTrigger(this GameObject gameObject, bool isTrigger)
+        public static void TrySetTrigger(this GameObject gameObject, bool isTrigger, bool fitChildrenSize = false)
         {
+            //Commented until further notice
+            return;
             if (!gameObject.TryGetComponent(out Collider collider))
             {
                 collider = gameObject.AddComponent<BoxCollider>();
             }
             SetTrigger(collider, isTrigger);
+            if (fitChildrenSize)
+            {
+                collider.SetBoundsValue(1.1f);
+            }
+        }
+
+        private static void SetBoundsValue(this Collider collider, float multiplySizeBy = 0f)
+        {
+            if (collider.GetType() != typeof(BoxCollider)) return;
+            var bx = (BoxCollider)collider;
+            var tr = collider.gameObject.transform;
+            var renderers = collider.gameObject.GetComponentsInChildren<Renderer>();
+            var bounds = new Bounds(Vector3.zero, Vector3.zero);
+            foreach (var renderer in renderers)
+            {
+                var childBounds = renderer.bounds;
+                childBounds.center = tr.InverseTransformPoint(childBounds.center);
+                childBounds.size = Vector3.Scale(childBounds.size, renderer.transform.localScale);
+                bounds.Encapsulate(childBounds);
+            }
+            if (multiplySizeBy != 0)
+            {
+                bounds.size *= multiplySizeBy;
+            }
+            bx.size = bounds.size;
+            bx.center = bounds.center;
+        }
+
+        public static Vector3 LocalToWorldScale(this Vector3 localScale, Transform parentTransform)
+        {
+            var worldScale = new Vector3(
+                localScale.x * parentTransform.lossyScale.x,
+                localScale.y * parentTransform.lossyScale.y,
+                localScale.z * parentTransform.lossyScale.z
+            );
+            return worldScale;
+        }
+
+        public static Vector3 WorldToLocalScale(this Vector3 worldScale, Transform parentTransform)
+        {
+            var localScale = new Vector3(
+                worldScale.x / parentTransform.lossyScale.x,
+                worldScale.y / parentTransform.lossyScale.y,
+                worldScale.z / parentTransform.lossyScale.z
+            );
+            return localScale;
         }
 
         public static void SetTrigger(this Collider collider, bool isTrigger)
@@ -534,7 +582,7 @@ namespace PlayShifu.Terra
                 case nameof(BoxCollider):
                 case nameof(SphereCollider):
                 case nameof(CapsuleCollider):
-                    collider.isTrigger = true;
+                    collider.isTrigger = isTrigger;
                     break;
                 case nameof(MeshCollider):
                     var mc = (MeshCollider)collider;
