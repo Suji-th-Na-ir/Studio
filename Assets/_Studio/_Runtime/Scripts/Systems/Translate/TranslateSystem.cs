@@ -66,10 +66,12 @@ namespace Terra.Studio
                 {
                     OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
                 });
+                Debug.Log($"For entity {entity}, adding condition: {conditionType}");
                 RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (goRef, conditionData));
             }
             else if (IdToConditionalCallback.ContainsKey(entity))
             {
+                Debug.Log($"For entity {entity}, removing condition: {conditionType}");
                 RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (goRef, conditionData));
                 IdToConditionalCallback.Remove(entity);
             }
@@ -86,10 +88,9 @@ namespace Terra.Studio
                 translateTimes = translatable.repeatFor,
                 shouldPingPong = translatable.translateType is TranslateType.PingPong or TranslateType.PingPongForever,
                 shouldPause = translatable.pauseFor > 0f,
-                pauseDistance = Vector3.Distance(translatable.startPosition, translatable.targetPosition),
+                pauseDistance = Vector3.Distance(translatable.startPosition, targetPos),
                 pauseForTime = translatable.pauseFor,
                 targetObj = translatable.refObj,
-                broadcastAt = translatable.broadcastAt,
                 onTranslated = (isDone) =>
                 {
                     OnTranslateDone(translatable, isDone, entity);
@@ -102,10 +103,16 @@ namespace Terra.Studio
         {
             if (translatable.IsBroadcastable)
             {
-                var removeOnceBroadcasted = translatable.broadcastAt == BroadcastAt.End || isDone;
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(translatable.Broadcast, removeOnceBroadcasted);
+                if (translatable.broadcastAt == BroadcastAt.AtEveryInterval && !isDone)
+                {
+                    RuntimeOp.Resolve<Broadcaster>().Broadcast(translatable.Broadcast, false);
+                }
+                if (translatable.broadcastAt == BroadcastAt.End && isDone)
+                {
+                    RuntimeOp.Resolve<Broadcaster>().Broadcast(translatable.Broadcast, true);
+                }
             }
-            if (translatable.listen == Listen.Always && !translatable.ConditionType.Equals("Terra.Studio.GameStart"))
+            if (translatable.listen == Listen.Always && !translatable.ConditionType.Equals("Terra.Studio.GameStart") && isDone)
             {
                 InjectCondition(true, entity, translatable);
             }

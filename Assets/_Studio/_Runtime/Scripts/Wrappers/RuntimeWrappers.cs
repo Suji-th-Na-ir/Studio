@@ -150,7 +150,6 @@ namespace Terra.Studio
         public Action<bool> onRotated;
         public Axis axis;
         public Direction direction;
-        public BroadcastAt broadcastAt;
     }
 
     public struct TranslateParams
@@ -165,6 +164,5 @@ namespace Terra.Studio
         public float pauseDistance;
         public GameObject targetObj;
         public Action<bool> onTranslated;
-        public BroadcastAt broadcastAt;
     }
 }

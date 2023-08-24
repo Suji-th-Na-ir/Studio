@@ -15,7 +15,6 @@ namespace Terra.Studio
         private float pauseDistance;
         private bool shouldPingPong;
         private Action<bool> OnTranslationDone;
-        private BroadcastAt broadcastAt;
 
         public void Translate(TranslateParams translateParams)
         {
@@ -27,7 +26,6 @@ namespace Terra.Studio
             pauseForTime = translateParams.pauseForTime;
             shouldPingPong = translateParams.shouldPingPong;
             pauseDistance = translateParams.pauseDistance;
-            broadcastAt = translateParams.broadcastAt;
             OnTranslationDone = translateParams.onTranslated;
             var direction = (translateTo - translateFrom).normalized;
             var distance = Vector3.Distance(translateFrom, translateTo);
@@ -65,16 +63,10 @@ namespace Terra.Studio
                     }
                     yield return null;
                 }
-                if (broadcastAt == BroadcastAt.AtEveryInterval)
-                {
-                    OnTranslationDone?.Invoke(false);
-                }
+                OnTranslationDone?.Invoke(false);
             }
             while (shouldTranslateForever || loopsFinished < translateTimes);
-            if (broadcastAt == BroadcastAt.End)
-            {
-                OnTranslationDone?.Invoke(true);
-            }
+            OnTranslationDone?.Invoke(true);
             yield return null;
             Destroy(this);
         }
@@ -107,16 +99,10 @@ namespace Terra.Studio
                 {
                     yield return new WaitForSeconds(pauseForTime);
                 }
-                if (broadcastAt == BroadcastAt.AtEveryInterval)
-                {
-                    OnTranslationDone?.Invoke(false);
-                }
+                OnTranslationDone?.Invoke(false);
             }
             while (shouldTranslateForever || loopsFinished < translateTimes);
-            if (broadcastAt == BroadcastAt.End)
-            {
-                OnTranslationDone?.Invoke(true);
-            }
+            OnTranslationDone?.Invoke(true);
             yield return null;
             Destroy(this);
         }

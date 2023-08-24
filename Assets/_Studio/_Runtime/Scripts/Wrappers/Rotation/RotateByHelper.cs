@@ -16,7 +16,6 @@ namespace Terra.Studio
         private bool shouldPingPong = false;
         private Axis axis = Axis.Y;
         private Direction direction = Direction.Clockwise;
-        private BroadcastAt broadcastAt = BroadcastAt.Never;
 
         public void Rotate(RotateByParams rotateParams)
         {
@@ -29,7 +28,6 @@ namespace Terra.Studio
             rotateForever = rotateCount == int.MaxValue;
             canPause = rotateParams.shouldPause;
             pauseForSeconds = rotateParams.pauseForTime;
-            broadcastAt = rotateParams.broadcastAt;
             shouldPingPong = rotateParams.shouldPingPong;
             StartCoroutine(RotateCoroutine());
         }
@@ -52,10 +50,7 @@ namespace Terra.Studio
                 }
                 float finalRotation = targetRotation - currentRotation;
                 transform.Rotate(GetVector3(finalRotation * directionFactor));
-                if (broadcastAt == BroadcastAt.AtEveryInterval)
-                {
-                    onRotated?.Invoke(false);
-                }
+                onRotated?.Invoke(false);
                 if (canPause)
                 {
                     yield return new WaitForSeconds(pauseForSeconds);
@@ -70,10 +65,7 @@ namespace Terra.Studio
                 }
             }
             while (rotateForever || currentRotateCount < rotateCount);
-            if (broadcastAt == BroadcastAt.End)
-            {
-                onRotated?.Invoke(true);
-            }
+            onRotated?.Invoke(true);
             Destroy(this);
         }
 

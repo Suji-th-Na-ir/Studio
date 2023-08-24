@@ -86,7 +86,6 @@ namespace Terra.Studio
                 shouldPause = rotatable.pauseFor > 0f,
                 pauseForTime = rotatable.pauseFor,
                 targetObj = rotatable.refObj,
-                broadcastAt = rotatable.broadcastAt,
                 shouldPingPong = rotatable.rotationType is RotationType.Oscillate or RotationType.OscillateForever,
                 onRotated = (isDone) =>
                 {
@@ -100,10 +99,16 @@ namespace Terra.Studio
         {
             if (rotatable.IsBroadcastable)
             {
-                var removeOnceBroadcasted = rotatable.broadcastAt == BroadcastAt.End || isDone;
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(rotatable.Broadcast, removeOnceBroadcasted);
+                if (rotatable.broadcastAt == BroadcastAt.AtEveryInterval && !isDone)
+                {
+                    RuntimeOp.Resolve<Broadcaster>().Broadcast(rotatable.Broadcast, false);
+                }
+                if (rotatable.broadcastAt == BroadcastAt.End && isDone)
+                {
+                    RuntimeOp.Resolve<Broadcaster>().Broadcast(rotatable.Broadcast, true);
+                }
             }
-            if (rotatable.listen == Listen.Always && !rotatable.ConditionType.Equals("Terra.Studio.GameStart"))
+            if (rotatable.listen == Listen.Always && !rotatable.ConditionType.Equals("Terra.Studio.GameStart") && isDone)
             {
                 InjectCondition(true, entity, rotatable);
             }
