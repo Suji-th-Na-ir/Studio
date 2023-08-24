@@ -38,6 +38,10 @@ namespace Terra.Studio.RTEditor
 
         private static void SyncMetaData(string actualFilePath, string targetFilePath)
         {
+            if (!File.Exists(actualFilePath) || !File.Exists(targetFilePath))
+            {
+                return;
+            }
             var actualFileData = File.ReadAllText(actualFilePath);
             var actualObj = JsonConvert.DeserializeObject<WorldData>(actualFileData);
             var targetFileData = File.ReadAllText(targetFilePath);
