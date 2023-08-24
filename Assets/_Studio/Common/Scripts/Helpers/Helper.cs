@@ -468,10 +468,10 @@ namespace PlayShifu.Terra
             return children;
         }
 
-        public static bool IsInRTEditModeInUnityEditor()
+        public static bool IsInUnityEditorMode()
         {
 #if UNITY_EDITOR
-            return Application.isPlaying;
+            return !Application.isPlaying;
 #else
             return false;
 #endif

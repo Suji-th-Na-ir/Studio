@@ -15,7 +15,7 @@ namespace Terra.Studio
         public void Save()
         {
             var sceneData = ExportSceneData();
-            if (Helper.IsInRTEditModeInUnityEditor())
+            if (!Helper.IsInUnityEditorMode())
             {
                 SystemOp.Resolve<FileService>().WriteFile(sceneData, FileService.GetSavedFilePath());
             }
@@ -69,7 +69,7 @@ namespace Terra.Studio
                 var entity = worldData.entities[i];
                 SpawnObjects(entity);
             }
-            if (Helper.IsInRTEditModeInUnityEditor())
+            if (!Helper.IsInUnityEditorMode())
             {
                 var metaData = worldData.metaData;
                 if (metaData.Equals(default(WorldMetaData))) return;
@@ -96,7 +96,7 @@ namespace Terra.Studio
         {
             for (int i = 0; i < entity.components.Length; i++)
             {
-                if (!Helper.IsInRTEditModeInUnityEditor())
+                if (Helper.IsInUnityEditorMode())
                 {
                     var metaData = gameObject.AddComponent<EditorMetaData>();
                     metaData.componentData = entity.components[i];
@@ -205,7 +205,7 @@ namespace Terra.Studio
                 newEntity.primitiveType = GetPrimitiveType(go);
             }
             EntityBasedComponent[] entityComponents;
-            if (!Helper.IsInRTEditModeInUnityEditor())
+            if (Helper.IsInUnityEditorMode())
             {
                 var metaComponents = go.GetComponents<EditorMetaData>();
                 entityComponents = new EntityBasedComponent[metaComponents.Length];
@@ -241,7 +241,7 @@ namespace Terra.Studio
 
         private string GetAssetPath(GameObject go)
         {
-            if (Helper.IsInRTEditModeInUnityEditor())
+            if (!Helper.IsInUnityEditorMode())
             {
                 if (go.TryGetComponent(out StudioGameObject component) && component.itemData != null)
                 {
@@ -258,7 +258,7 @@ namespace Terra.Studio
 
         private AssetType GetAssetType(GameObject go)
         {
-            if (Helper.IsInRTEditModeInUnityEditor())
+            if (!Helper.IsInUnityEditorMode())
             {
                 if (go.TryGetComponent(out StudioGameObject component))
                 {
@@ -290,7 +290,7 @@ namespace Terra.Studio
 
         private PrimitiveType GetPrimitiveType(GameObject go)
         {
-            if (Helper.IsInRTEditModeInUnityEditor())
+            if (!Helper.IsInUnityEditorMode())
             {
                 if (go.TryGetComponent(out StudioGameObject component) && component.itemData != null)
                 {
