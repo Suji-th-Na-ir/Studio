@@ -50,7 +50,7 @@ namespace Terra.Studio
                 SystemOp.Resolve<FileService>().WriteFile(
                     configData.SceneDataToLoad.text,
                     FileService.GetSavedFilePath(),
-                    Helper.IsInRTEditModeInUnityEditor());
+                    Helper.IsInUnityEditorMode());
             }
         }
 
