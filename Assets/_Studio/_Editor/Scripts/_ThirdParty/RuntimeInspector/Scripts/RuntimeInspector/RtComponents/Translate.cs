@@ -15,6 +15,14 @@ namespace RuntimeInspectorNamespace
         public Atom.PlayVfx PlayVFX = new();
         private RotateComponent rComp;
 
+<<<<<<< HEAD
+        private void Awake()
+        {
+            Type.referenceGO = gameObject;
+        }
+
+=======
+>>>>>>> main
         public void Start()
         {
             PlaySFX.Setup(gameObject);
@@ -51,7 +59,7 @@ namespace RuntimeInspectorNamespace
             };
 
             ModifyDataAsPerGiven(ref rc);
-            gameObject.TrySetTrigger(false, true);
+            gameObject.TrySetTrigger(false);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(rc, Formatting.Indented);
             return (type, data);
@@ -130,14 +138,6 @@ namespace RuntimeInspectorNamespace
                 default:
                     component.repeatFor = Type.data.repeat;
                     break;
-            }
-        }
-
-        private void OnDestroy()
-        {
-            if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))
-            {
-                Destroy(collider);
             }
         }
     }

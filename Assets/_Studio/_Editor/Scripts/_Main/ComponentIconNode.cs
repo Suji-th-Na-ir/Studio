@@ -187,7 +187,7 @@ namespace Terra.Studio
                 return;
             }
 
-            var resolution = 30;
+            var resolution = 13;
 
             for (int j = 0; j < m_ListnerTargetNodes.Count; j++)
             {
