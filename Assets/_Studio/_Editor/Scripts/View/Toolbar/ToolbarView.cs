@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayShifu.Terra;
-using System.IO;
 
 namespace Terra.Studio
 {
@@ -34,16 +33,12 @@ namespace Terra.Studio
             var playButton = playButtonTr.GetComponent<Button>();
             AddListenerEvent(playButton, () =>
             {
-                var scene = SceneExporter.ExportJson();
-                SystemOp.Resolve<CrossSceneDataHolder>().Set(scene);
+                EditorOp.Resolve<SceneDataHandler>().PrepareSceneDataToRuntime();
                 EditorOp.Resolve<EditorSystem>().RequestSwitchState();
             });
 
             var saveButton = saveButtonTr.GetComponent<Button>();
-            AddListenerEvent(saveButton, SceneExporter.ExportDataToPersistantPath);
-
-            //var loadButton = loadButtonTr.GetComponent<Button>();
-            //AddListenerEvent(loadButton, SceneExporter.ExportSceneFromHirearchy);
+            AddListenerEvent(saveButton, EditorOp.Resolve<SceneDataHandler>().Save);
 
             var cylinderButton = cylinderPrimitiveTr.GetComponent<Button>();
             AddListenerEvent(cylinderButton, CreatePrimitive, PrimitiveType.Cylinder);
@@ -69,11 +64,9 @@ namespace Terra.Studio
         {
             Transform cameraTransform = Camera.main.transform;
             Vector3 cameraPosition = cameraTransform.position;
-
-            // Calculate the spawn position by adding the forward direction scaled by spawnDistance
             Vector3 spawnPosition = cameraPosition + cameraTransform.forward * 5;
-            var path = ResourceDB.GetStudioAsset(type.ToString()).ShortPath;
-            var primitive = RuntimeWrappers.SpawnGameObject(path);
+            var itemData = ((ResourceDB)SystemOp.Load(ResourceTag.ResourceDB)).GetItemDataForNearestName(type.ToString());
+            var primitive = RuntimeWrappers.SpawnGameObject(itemData.ResourcePath, itemData);
             primitive.transform.position = spawnPosition;
             EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);
             EditorOp.Resolve<SelectionHandler>().SelectObjectInHierarchy(primitive);
@@ -103,7 +96,5 @@ namespace Terra.Studio
         {
             EditorOp.Unregister(this);
         }
-
-
     }
 }

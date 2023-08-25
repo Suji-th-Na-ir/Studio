@@ -15,6 +15,6 @@ MonoBehaviour:
   defaultStudioState: 1
   editorSceneName: Editor
   runtimeSceneName: Runtime
-  SceneData: {fileID: 4900000, guid: 315dc7cba4dcd49faa47789b93be24c9, type: 3}
-  pickupSavedData: 0
+  pickupSavedData: 1
+  SceneData: {fileID: 4900000, guid: 8cf406f9595444e7699b426acd1be651, type: 3}
   loadDefaultSceneOnPlay: 1

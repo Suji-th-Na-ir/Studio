@@ -20,7 +20,6 @@ namespace RuntimeInspectorNamespace
         public override void Initialize()
         {
             base.Initialize();
-            layoutElement.minHeight = 316.9f;
             Setup();
         }
 
@@ -31,7 +30,7 @@ namespace RuntimeInspectorNamespace
                 type.rotateField = this;
                 type.Setup();
             }
-            
+
             List<string> data = Enum.GetNames(typeof(RotationType)).ToList();
             rotateTypesDD.AddOptions(data);
         }
@@ -90,13 +89,13 @@ namespace RuntimeInspectorNamespace
         {
             base.OnSkinChanged();
             Vector2 rightSideAnchorMin = new Vector2(Skin.LabelWidthPercentage, 0f);
-            variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
+            if (variableNameMask != null) variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
         }
 
         public void UpdateData(RotateComponentData _rData)
         {
             Atom.Rotate rt = (Atom.Rotate)Value;
-            
+
             // rotate type should come from rotatefield
             _rData.rotateType = rt.data.rotateType;
             rt.data = _rData;

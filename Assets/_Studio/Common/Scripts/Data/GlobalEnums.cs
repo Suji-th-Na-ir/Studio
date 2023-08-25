@@ -62,6 +62,12 @@ namespace Terra.Studio
         End
     }
 
+    public enum Listen
+    {
+        Once,
+        Always
+    }
+
     public enum StudioState
     {
         Bootstrap,
@@ -94,6 +100,16 @@ namespace Terra.Studio
         [StringValue("Player", typeof(UnityEngine.GameObject))]
         Player,
         [StringValue("SOs/Presets/", typeof(UnityEngine.Object))]
-        ComponentPresets
+        ComponentPresets,
+        [StringValue("ResourceDB", typeof(ResourceDB))]
+        ResourceDB
+    }
+
+    public enum EditorObjectType
+    {
+        Default,
+        SpawnPoint,
+        Timer,
+        Score
     }
 }

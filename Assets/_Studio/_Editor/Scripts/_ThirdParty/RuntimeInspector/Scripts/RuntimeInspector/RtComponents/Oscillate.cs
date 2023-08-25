@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 using Terra.Studio;
 using UnityEngine;
 
@@ -45,7 +46,7 @@ namespace RuntimeInspectorNamespace
             Component.loop = Loop;
             Component.speed = Speed;
             Component.IsConditionAvailable = GetStartEvent() != "";
-
+            gameObject.TrySetTrigger(false, true);
             var data = JsonConvert.SerializeObject(Component);
             return (type, data);
         }
@@ -70,6 +71,14 @@ namespace RuntimeInspectorNamespace
         {
             var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(Start);
             return eventName;
+        }
+
+        private void OnDestroy()
+        {
+            if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))
+            {
+                Destroy(collider);
+            }
         }
     }
 }

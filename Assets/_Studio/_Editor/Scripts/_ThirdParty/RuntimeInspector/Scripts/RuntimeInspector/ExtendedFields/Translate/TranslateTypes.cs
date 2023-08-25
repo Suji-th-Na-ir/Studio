@@ -1,11 +1,11 @@
 using TMPro;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Terra.Studio;
 using UnityEngine.UI;
 using PlayShifu.Terra;
+using System.Collections.Generic;
 
 namespace RuntimeInspectorNamespace
 {
@@ -19,6 +19,7 @@ namespace RuntimeInspectorNamespace
 
         public Dropdown broadcastAt;
         public TMP_InputField broadcastInput;
+        public Toggle canListenMultipleTimesToggle;
 
         [HideInInspector]
         public TranslateField translateField = null;
@@ -33,14 +34,14 @@ namespace RuntimeInspectorNamespace
                     data.moveTo.x = Helper.StringToFloat(value);
                     UpdateData(data);
                 });
-            
+
             if (moveToInput != null) moveToInput[1].onValueChanged.AddListener(
                 (value) =>
                 {
                     data.moveTo.y = Helper.StringToFloat(value);
                     UpdateData(data);
                 });
-            
+
             if (moveToInput != null) moveToInput[2].onValueChanged.AddListener(
                 (value) =>
                 {
@@ -79,8 +80,13 @@ namespace RuntimeInspectorNamespace
                 data.broadcastAt = GetBroadcastAt(broadcastAt.options[value].text);
                 UpdateData(data);
             });
+            if (canListenMultipleTimesToggle != null) canListenMultipleTimesToggle.onValueChanged.AddListener((value) =>
+            {
+                data.listen = value ? Listen.Always : Listen.Once;
+                UpdateData(data);
+            });
         }
-        
+
         private void UpdateData(TranslateComponentData _data)
         {
             translateField.UpdateData(_data);
@@ -111,7 +117,7 @@ namespace RuntimeInspectorNamespace
             else if (_value == BroadcastAt.AtEveryInterval.ToString()) return BroadcastAt.AtEveryInterval;
             return BroadcastAt.Never;
         }
-        
+
         public void LoadDefaultValues()
         {
             if (broadcastAt != null) { broadcastAt.AddOptions(Enum.GetNames(typeof(BroadcastAt)).ToList()); }
@@ -129,6 +135,7 @@ namespace RuntimeInspectorNamespace
             if (moveToInput != null) moveToInput[1].text = _data.moveTo.y.ToString();
             if (moveToInput != null) moveToInput[2].text = _data.moveTo.z.ToString();
             if (listenTo != null) listenTo.text = _data.listenTo;
+            if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
     }
 }

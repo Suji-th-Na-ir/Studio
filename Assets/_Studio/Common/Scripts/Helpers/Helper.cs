@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.Reflection;
+using Terra.Studio;
 
 namespace PlayShifu.Terra
 {
@@ -389,8 +390,8 @@ namespace PlayShifu.Terra
 
         public static string[] GetSfxClipNames()
         {
-            var sfxClips = ResourceDB.LoadAllStudioAssetWithStringInPath<AudioClip>("sfx").ToArray();
-            string[] names = new String[sfxClips.Length];
+            var sfxClips = ResourceDB.GetAll<AudioClip>("sfx");
+            string[] names = new string[sfxClips.Length];
             for (int i = 0; i < sfxClips.Length; i++)
             {
                 names[i] = sfxClips[i].name;
@@ -403,13 +404,13 @@ namespace PlayShifu.Terra
             string[] names = GetSfxClipNames();
             if (_index < names.Length)
                 return names[_index];
-            
+
             return null;
         }
 
         public static string[] GetVfxClipNames()
         {
-            var vfxClips = ResourceDB.LoadAllStudioAssetWithStringInPath<GameObject>("vfx").ToArray();
+            var vfxClips = ResourceDB.GetAll<GameObject>("vfx");
             string[] names = new string[vfxClips.Length];
             for (int i = 0; i < vfxClips.Length; i++)
             {
@@ -465,6 +466,130 @@ namespace PlayShifu.Terra
             }
 
             return children;
+        }
+
+        public static bool IsInUnityEditorMode()
+        {
+#if UNITY_EDITOR
+            return !Application.isPlaying;
+#else
+            return false;
+#endif
+        }
+
+        public static bool IsPrimitive(this GameObject go, out PrimitiveType type)
+        {
+            type = default;
+            if (go.TryGetComponent(out MeshFilter mesh))
+            {
+                var name = mesh.sharedMesh.name;
+                if (name.Contains(" "))
+                {
+                    name = name.Split()[0];
+                }
+                var isFound = true;
+                switch (name)
+                {
+                    default:
+                        isFound = false;
+                        break;
+                    case nameof(PrimitiveType.Cube):
+                        type = PrimitiveType.Cube;
+                        break;
+                    case nameof(PrimitiveType.Capsule):
+                        type = PrimitiveType.Capsule;
+                        break;
+                    case nameof(PrimitiveType.Sphere):
+                        type = PrimitiveType.Sphere;
+                        break;
+                    case nameof(PrimitiveType.Plane):
+                        type = PrimitiveType.Plane;
+                        break;
+                    case nameof(PrimitiveType.Quad):
+                        type = PrimitiveType.Quad;
+                        break;
+                    case nameof(PrimitiveType.Cylinder):
+                        type = PrimitiveType.Cylinder;
+                        break;
+                }
+                return isFound;
+            }
+            return false;
+        }
+
+        public static void TrySetTrigger(this GameObject gameObject, bool isTrigger, bool fitChildrenSize = false)
+        {
+            //Commented until further notice
+            return;
+            if (!gameObject.TryGetComponent(out Collider collider))
+            {
+                collider = gameObject.AddComponent<BoxCollider>();
+            }
+            SetTrigger(collider, isTrigger);
+            if (fitChildrenSize)
+            {
+                collider.SetBoundsValue(1.1f);
+            }
+        }
+
+        private static void SetBoundsValue(this Collider collider, float multiplySizeBy = 0f)
+        {
+            if (collider.GetType() != typeof(BoxCollider)) return;
+            var bx = (BoxCollider)collider;
+            var tr = collider.gameObject.transform;
+            var renderers = collider.gameObject.GetComponentsInChildren<Renderer>();
+            var bounds = new Bounds(Vector3.zero, Vector3.zero);
+            foreach (var renderer in renderers)
+            {
+                var childBounds = renderer.bounds;
+                childBounds.center = tr.InverseTransformPoint(childBounds.center);
+                childBounds.size = Vector3.Scale(childBounds.size, renderer.transform.localScale);
+                bounds.Encapsulate(childBounds);
+            }
+            if (multiplySizeBy != 0)
+            {
+                bounds.size *= multiplySizeBy;
+            }
+            bx.size = bounds.size;
+            bx.center = bounds.center;
+        }
+
+        public static Vector3 LocalToWorldScale(this Vector3 localScale, Transform parentTransform)
+        {
+            var worldScale = new Vector3(
+                localScale.x * parentTransform.lossyScale.x,
+                localScale.y * parentTransform.lossyScale.y,
+                localScale.z * parentTransform.lossyScale.z
+            );
+            return worldScale;
+        }
+
+        public static Vector3 WorldToLocalScale(this Vector3 worldScale, Transform parentTransform)
+        {
+            var localScale = new Vector3(
+                worldScale.x / parentTransform.lossyScale.x,
+                worldScale.y / parentTransform.lossyScale.y,
+                worldScale.z / parentTransform.lossyScale.z
+            );
+            return localScale;
+        }
+
+        public static void SetTrigger(this Collider collider, bool isTrigger)
+        {
+            var type = collider.GetType();
+            switch (type.Name)
+            {
+                case nameof(BoxCollider):
+                case nameof(SphereCollider):
+                case nameof(CapsuleCollider):
+                    collider.isTrigger = isTrigger;
+                    break;
+                case nameof(MeshCollider):
+                    var mc = (MeshCollider)collider;
+                    mc.convex = isTrigger;
+                    mc.isTrigger = isTrigger;
+                    break;
+            }
         }
     }
 }

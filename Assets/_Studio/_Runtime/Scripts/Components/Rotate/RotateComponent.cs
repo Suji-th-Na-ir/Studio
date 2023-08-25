@@ -24,6 +24,7 @@ namespace Terra.Studio
         public RotationType rotationType;
         public RepeatType repeatType;
         public BroadcastAt broadcastAt;
+        public Listen listen;
         public float speed;
         public float rotateBy;
         public float pauseFor;

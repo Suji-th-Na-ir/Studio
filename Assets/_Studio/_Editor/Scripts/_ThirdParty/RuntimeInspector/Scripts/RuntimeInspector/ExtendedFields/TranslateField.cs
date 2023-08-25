@@ -24,7 +24,6 @@ namespace RuntimeInspectorNamespace
         public override void Initialize()
         {
             base.Initialize();
-            base.layoutElement.minHeight = 253.9f;
             Setup();
         }
 
@@ -93,7 +92,7 @@ namespace RuntimeInspectorNamespace
         {
             base.OnSkinChanged();
             Vector2 rightSideAnchorMin = new Vector2(Skin.LabelWidthPercentage, 0f);
-            variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
+            if (variableNameMask != null) variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
         }
 
         public void UpdateData(TranslateComponentData _rData)

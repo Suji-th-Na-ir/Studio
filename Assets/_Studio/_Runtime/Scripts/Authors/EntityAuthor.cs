@@ -1,6 +1,5 @@
 using System.Linq;
 using UnityEngine;
-using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
@@ -33,32 +32,35 @@ namespace Terra.Studio
             public override void Generate(object data)
             {
                 var virtualEntity = (VirtualEntity)data;
-                var go = RuntimeWrappers.SpawnGameObject(virtualEntity.assetPath, virtualEntity.position, virtualEntity.rotation, virtualEntity.scale);
-                var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
+                var go = CreateVisualRepresentation(virtualEntity);
+                HandleEntityAndComponentGeneration(go, virtualEntity);
+            }
 
-                var nestedChildren = Helper.GetChildren(go.transform, true);
+            private GameObject CreateVisualRepresentation(VirtualEntity entity)
+            {
+                var trs = new Vector3[] { entity.position, entity.rotation, entity.scale };
+                GameObject generatedObj = RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, trs);
+                return generatedObj;
+            }
 
-                for (int i = 0; i < nestedChildren.Count; i++)
-                {
-                    if(virtualEntity.childCompenentDictionary.TryGetValue(i, out EntityBasedComponent[] components))
-                    {
-                        var childEntity = ecsWorld.NewEntity();
-                        foreach (var component in components)
-                        {
-                            ComponentAuthorOp.Generate((childEntity, component, nestedChildren[i].gameObject));
-                        }
-                    }
-                }
-
-                if (virtualEntity.components == null || virtualEntity.components.Length == 0)
+            private void HandleEntityAndComponentGeneration(GameObject go, VirtualEntity virtualEntity)
+            {
+                if (go == null)
                 {
                     return;
                 }
-                var entity = ecsWorld.NewEntity();
-                foreach (var component in virtualEntity.components)
+                go.name = virtualEntity.name;
+                RuntimeOp.Resolve<SceneDataHandler>().SetColliderData(go, virtualEntity.metaData);
+                var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
+                if (virtualEntity.components != null && virtualEntity.components.Length > 0)
                 {
-                    ComponentAuthorOp.Generate((entity, component, go));
+                    var entity = ecsWorld.NewEntity();
+                    foreach (var component in virtualEntity.components)
+                    {
+                        ComponentAuthorOp.Generate((entity, component, go));
+                    }
                 }
+                RuntimeOp.Resolve<SceneDataHandler>().HandleChildren(go, virtualEntity.children, HandleEntityAndComponentGeneration);
             }
 
             public override void Degenerate(int entityID)

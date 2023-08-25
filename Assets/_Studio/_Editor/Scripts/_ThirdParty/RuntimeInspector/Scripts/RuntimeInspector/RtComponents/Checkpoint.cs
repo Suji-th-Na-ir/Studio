@@ -1,6 +1,7 @@
 using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
 {
@@ -35,6 +36,7 @@ namespace RuntimeInspectorNamespace
                 ConditionType = "Terra.Studio.TriggerAction",
                 ConditionData = "Player"
             };
+            gameObject.TrySetTrigger(true, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(component);
             return (type, data);
@@ -51,6 +53,14 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.clipName = component.vfxName;
             PlayVFX.data.clipIndex = component.vfxIndex;
             Broadcast = component.Broadcast;
+        }
+
+        private void OnDestroy()
+        {
+            if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))
+            {
+                Destroy(collider);
+            }
         }
     }
 }

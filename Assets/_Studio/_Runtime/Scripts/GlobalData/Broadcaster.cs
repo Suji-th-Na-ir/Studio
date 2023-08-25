@@ -49,13 +49,14 @@ namespace Terra.Studio
                 Debug.Log($"No one is listening to {broadcastData}");
                 return;
             }
-            foreach (var listener in listeners.ToList())
-            {
-                listener?.Invoke(null);
-            }
+            var filteredListeners = listeners.ToList();
             if (removeOnceBroadcasted)
             {
                 RemoveBroadcastable(broadcastData);
+            }
+            foreach (var listener in filteredListeners)
+            {
+                listener?.Invoke(null);
             }
         }
 

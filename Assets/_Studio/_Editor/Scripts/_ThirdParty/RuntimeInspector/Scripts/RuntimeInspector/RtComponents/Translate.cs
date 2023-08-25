@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
 {
@@ -9,15 +10,10 @@ namespace RuntimeInspectorNamespace
     public class Translate : MonoBehaviour, IComponent
     {
         public StartOn start = StartOn.GameStart;
-        public Atom.Translate Type = new ();
-        public Atom.PlaySfx PlaySFX = new ();
-        public Atom.PlayVfx PlayVFX = new ();
+        public Atom.Translate Type = new();
+        public Atom.PlaySfx PlaySFX = new();
+        public Atom.PlayVfx PlayVFX = new();
         private RotateComponent rComp;
-
-        private void Awake()
-        {
-            Type.referenceGO = gameObject;
-        }
 
         public void Start()
         {
@@ -47,18 +43,20 @@ namespace RuntimeInspectorNamespace
                 vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName,
                 sfxIndex = PlaySFX.data.clipIndex,
                 vfxIndex = PlayVFX.data.clipIndex,
-                
+
                 IsConditionAvailable = true,
+                listen = Type.data.listen,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition()
             };
 
             ModifyDataAsPerGiven(ref rc);
+            gameObject.TrySetTrigger(false, true);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(rc, Formatting.Indented);
             return (type, data);
         }
-        
+
 
         private RepeatType GetRepeatType(float _value)
         {
@@ -115,6 +113,7 @@ namespace RuntimeInspectorNamespace
             Type.data.broadcast = cc.Broadcast;
             Type.data.broadcastAt = cc.broadcastAt;
             Type.data.listenTo = cc.ConditionData;
+            Type.data.listen = cc.listen;
 
             start = GetStartCondition(cc.ConditionType);
         }
@@ -131,6 +130,14 @@ namespace RuntimeInspectorNamespace
                 default:
                     component.repeatFor = Type.data.repeat;
                     break;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))
+            {
+                Destroy(collider);
             }
         }
     }
