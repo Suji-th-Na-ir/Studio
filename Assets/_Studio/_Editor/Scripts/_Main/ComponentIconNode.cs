@@ -21,6 +21,10 @@ namespace Terra.Studio
         private float initialWidth;
         private float initialHeight;
 
+        private Sprite m_broadcastSprite;
+        private Sprite m_broadcastNoListnerSprite;
+
+        public bool m_isBroadcating = false;
 
         List<UILineRenderer> m_LineConnectors;
 
@@ -51,7 +55,7 @@ namespace Terra.Studio
             m_ListnerTargetNodes.Remove(toRemove);
         }
 
-        public void Setup(Sprite icon, Sprite broadcastIcon, ComponentDisplayDock displayDock)
+        public void Setup(Sprite icon, Sprite broadcastIcon,Sprite broadcast_noListners,  ComponentDisplayDock displayDock)
         {
             m_ObjectTarget = displayDock;
             if (!m_MainCamera)
@@ -73,11 +77,13 @@ namespace Terra.Studio
             var rectTransform1 = gm.AddComponent<RectTransform>();
             var pointImage1 = gm.AddComponent<Image>();
             pointImage1.rectTransform.sizeDelta = new Vector2(50, 50);
-            pointImage1.sprite = broadcastIcon;
             pointImage1.raycastTarget = false;
-            rectTransform1.SetParent(this.transform, false);
-            rectTransform1.anchoredPosition = m_RectTransform.anchoredPosition + new Vector2(30, 30);
             m_BroadcastIcon = pointImage1;
+            rectTransform1.SetParent(this.transform, false);
+            rectTransform1.anchoredPosition = m_RectTransform.anchoredPosition + new Vector2(40, 40);
+
+            m_broadcastSprite = broadcastIcon;
+            m_broadcastNoListnerSprite = broadcast_noListners;
         }
 
 
@@ -117,11 +123,25 @@ namespace Terra.Studio
             float scalingFactor = CalculateScalingFactor(distanceToTarget);
             m_RectTransform.sizeDelta = new Vector2(initialWidth * scalingFactor, initialHeight * scalingFactor);
 
-            if (m_ListnerTargetNodes == null)
+            if (m_isBroadcating)
+            {
+                m_BroadcastIcon.gameObject.SetActive(true);
+                if(m_LineConnectors!=null && m_ListnerTargetNodes.Count>0)
+                {
+                    m_BroadcastIcon.sprite = m_broadcastSprite;
+                }
+                else
+                {
+                    m_BroadcastIcon.sprite = m_broadcastNoListnerSprite;
+                }
+            }
+            else
             {
                 m_BroadcastIcon.gameObject.SetActive(false);
-                return;
             }
+
+            if (m_ListnerTargetNodes == null)
+                return;
 
             if (m_LineConnectors == null)
                 m_LineConnectors = new List<UILineRenderer>();
@@ -168,7 +188,6 @@ namespace Terra.Studio
 
             for (int j = 0; j < m_ListnerTargetNodes.Count; j++)
             {
-                m_BroadcastIcon.gameObject.SetActive(true);
                 if (m_ListnerTargetNodes[j] == this)
                     continue;
                 if (!CheckIfInsideScreen(m_ListnerTargetNodes[j].RectTransform) || m_ListnerTargetNodes[j].RectTransform.sizeDelta == Vector2.zero)

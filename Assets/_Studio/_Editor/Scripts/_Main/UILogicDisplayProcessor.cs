@@ -78,7 +78,18 @@ namespace Terra.Studio
                 }
                 else
                 {
+                    if (m_icons.TryGetValue(obj.componentGameObject, out var compIcons))
+                    {
+                        for (int j = 0; j < compIcons.Count; j++)
+                        {
+                            if (compIcons[j].GetComponentDisplayDockTarget().Equals(obj))
+                            {
+                                compIcons[j].m_isBroadcating = false;
+                            }
+                        }
+                    }
                     value.Remove(obj);
+
                 }
 
                 if (value.Count == 0)
@@ -135,6 +146,7 @@ namespace Terra.Studio
                             if (compIcons[j].GetComponentDisplayDockTarget().Equals(allbroadCastObject[i]))
                             {
                                 compIcons[j].ListnerTargets = GetTargetIconsForDisplayDock(listners);
+                                compIcons[j].m_isBroadcating = true;
                             }
                         }
                     }
@@ -166,8 +178,9 @@ namespace Terra.Studio
          
             var iconSprite = iconPresets.GetIcon(componentDisplay.componentType);
             var broadcastSprite = iconPresets.GetIcon("Broadcast");
+            var broadcastNoListnerSprite = iconPresets.GetIcon("BroadcastNoListner");
             var compIcon = iconGameObject.AddComponent<ComponentIconNode>();
-            compIcon.Setup(iconSprite,broadcastSprite, componentDisplay);
+            compIcon.Setup(iconSprite,broadcastSprite,broadcastNoListnerSprite, componentDisplay);
             if (!m_icons.TryGetValue(componentDisplay.componentGameObject, out List<ComponentIconNode> value))
             {
                 if (m_icons.ContainsKey(componentDisplay.componentGameObject))
