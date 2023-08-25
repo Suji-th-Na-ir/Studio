@@ -25,6 +25,7 @@ namespace Terra.Studio
         private Sprite m_broadcastNoListnerSprite;
 
         public bool m_isBroadcating = false;
+        public int m_componentIndex = 0;
 
         List<UILineRenderer> m_LineConnectors;
 
@@ -119,7 +120,7 @@ namespace Terra.Studio
 
 
 
-            Vector3 screenPoint = m_MainCamera.WorldToScreenPoint(m_ObjectTarget.componentGameObject.transform.position + Vector3.up*0.3f);
+            Vector3 screenPoint = CalculateCircularPositionAtIndex( m_ObjectTarget.componentGameObject.transform.position + Vector3.up*0.3f,0.2f,10,m_componentIndex);
             float distanceToTarget = Vector3.Distance(m_ObjectTarget.componentGameObject.transform.position, m_MainCamera.transform.position);
             float scalingFactor = CalculateScalingFactor(distanceToTarget);
            
@@ -228,6 +229,19 @@ namespace Terra.Studio
 
         }
 
+        Vector3 CalculateCircularPositionAtIndex(Vector3 targetPosition, float radius, int numPositions, int index)
+        {
+            float angleIncrement = 360f / numPositions;
+            float angle = index * angleIncrement;
+
+            float x = targetPosition.x + radius * Mathf.Cos(Mathf.Deg2Rad * angle);
+            float z = targetPosition.z + radius * Mathf.Sin(Mathf.Deg2Rad * angle);
+            Vector3 position = new Vector3(x, targetPosition.y, z);
+
+            Vector3 screenPosition = m_MainCamera.WorldToScreenPoint(position);
+            return screenPosition;
+        }
+
         private bool CheckIfInsideScreen(RectTransform rect)
         {
             Vector2 anchoredPosition = rect.anchoredPosition;
@@ -267,7 +281,7 @@ namespace Terra.Studio
             else
             {
                 // Linear interpolation between scaling factors
-                return Mathf.Lerp(0.5f, 2.0f, (distance - m_MinScalingDistance) / (m_MaxScalingDistance - m_MinScalingDistance));
+                return Mathf.Lerp(0.2f, 1.2f, (distance - m_MinScalingDistance) / (m_MaxScalingDistance - m_MinScalingDistance));
             }
         }
     }

@@ -189,11 +189,19 @@ namespace Terra.Studio
                 {
                     List<ComponentIconNode> componentIconNodes = new List<ComponentIconNode>() { compIcon, };
                     m_icons.Add(componentDisplay.componentGameObject, componentIconNodes);
+                   
                 }
             }
             else
             {
                 m_icons[componentDisplay.componentGameObject].Add(compIcon);
+               
+
+            }
+
+            for (int i = 0; i < m_icons[componentDisplay.componentGameObject].Count; i++)
+            {
+                m_icons[componentDisplay.componentGameObject][i].m_componentIndex = i;
             }
         }
 
