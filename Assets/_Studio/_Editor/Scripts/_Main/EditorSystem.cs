@@ -22,12 +22,9 @@ namespace Terra.Studio
             EditorOp.Resolve<ToolbarView>().Init();
             EditorOp.Resolve<SceneView>().Init();
             EditorOp.Resolve<SelectionHandler>().Init();
-<<<<<<< HEAD
-            EditorOp.Resolve<UILogicDisplayProcessor>().Init();
-            SceneExporter.Init();
-=======
             EditorOp.Resolve<SceneDataHandler>().LoadScene();
->>>>>>> main
+            new EditorEssentialsLoader().LoadEssentials();
+            EditorOp.Resolve<UILogicDisplayProcessor>().Init();
         }
 
         public void Dispose()
