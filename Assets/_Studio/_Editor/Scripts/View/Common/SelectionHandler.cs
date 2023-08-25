@@ -109,6 +109,12 @@ public class SelectionHandler : View
                     runtimeHierarchy.Deselect();
                     foreach (GameObject obj in _selectedObjects)
                     {
+                        
+                        var comps = obj.GetComponents<IComponent>();
+                        foreach (var comp in comps)
+                        {
+                            EditorOp.Resolve<UILogicDisplayProcessor>().RemoveComponentIcon(new ComponentDisplayDock() { componentGameObject = obj, componentType = comp.GetType().Name });
+                        }
                         Destroy(obj);
                     }
                     _selectedObjects.Clear();

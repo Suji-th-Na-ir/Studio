@@ -203,7 +203,7 @@ namespace Terra.Studio
             {
                 if (m_ListnerTargetNodes[j] == this)
                     continue;
-                if (!CheckIfInsideScreen(m_ListnerTargetNodes[j].RectTransform) || (Vector2)m_ListnerTargetNodes[j].RectTransform.localScale == Vector2.zero )
+                if (m_ListnerTargetNodes[j] == null ||!CheckIfInsideScreen(m_ListnerTargetNodes[j].RectTransform) || (Vector2)m_ListnerTargetNodes[j].RectTransform.localScale == Vector2.zero )
                 {
                     m_LineConnectors[j].gameObject.SetActive(false);
                     continue;
