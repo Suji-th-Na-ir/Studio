@@ -119,7 +119,7 @@ namespace Terra.Studio
                         if (mInfo != null)
                         {
                             var oldValue = mInfo?.GetValue(component);
-                            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(oldValue.ToString(), ""
+                            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(oldValue?.ToString(), ""
                                 , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = type.Name });
                         }
 
@@ -127,7 +127,7 @@ namespace Terra.Studio
                         if (mInfo1 != null)
                         {
                             var oldValue1 = mInfo1?.GetValue(component);
-                            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(oldValue1.ToString(), "",
+                            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(oldValue1?.ToString(), "",
                              new ComponentDisplayDock() { componentGameObject = gameObject, componentType = type.Name });
                         }
                     }
