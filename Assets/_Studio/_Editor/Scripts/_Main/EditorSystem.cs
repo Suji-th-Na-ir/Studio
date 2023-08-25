@@ -6,6 +6,7 @@ namespace Terra.Studio
     public class EditorSystem : MonoBehaviour, ISubsystem
     {
         private SaveSystem _saveSystem;
+        public Vector3 PlayerSpawnPoint;
         private void Awake()
         {
             SystemOp.Register(this as ISubsystem);
