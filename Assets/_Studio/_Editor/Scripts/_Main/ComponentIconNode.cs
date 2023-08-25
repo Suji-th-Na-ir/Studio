@@ -129,12 +129,12 @@ namespace Terra.Studio
     screenPoint.y > 0 && screenPoint.y <= Screen.height)
             {
                 m_RectTransform.localScale = new Vector2(initialWidth * scalingFactor, initialHeight * scalingFactor);
-                transform.position = screenPoint;
             }
             else
             {
                 transform.localScale = Vector2.zero;
             }
+            transform.position = screenPoint;
 
             if (m_isBroadcating)
             {
