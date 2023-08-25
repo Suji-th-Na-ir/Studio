@@ -304,7 +304,22 @@ namespace RuntimeInspectorNamespace
                     if (component != null)
                     {
                         var mInfo = component.GetType().GetField(ReflectedName, BindingFlags.Public | BindingFlags.Instance);
+                        var oldValue = mInfo?.GetValue(component);
                         mInfo?.SetValue(component, Value);
+
+                        if (mInfo!=null)
+                        {
+                            if (NameRaw == "Broadcast")
+                            {
+                                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Value.ToString(), oldValue == null ? "" : oldValue.ToString()
+                                    , new ComponentDisplayDock() { componentGameObject = obj, componentType = ComponentType.Name });
+                            }
+                            else if (NameRaw == "Broadcast Listen")
+                            {
+                                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(Value.ToString(), oldValue == null ? "" : oldValue.ToString(),
+                                 new ComponentDisplayDock() { componentGameObject = obj, componentType = ComponentType.Name });
+                            }
+                        }
                     }
                 }
             }

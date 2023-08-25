@@ -104,11 +104,14 @@ namespace Terra.Studio
 
             if (IsTargetDestroyed())
             {
-                foreach (var line in m_LineConnectors)
+                if (m_LineConnectors != null)
                 {
-                    Destroy(line.gameObject);
+                    foreach (var line in m_LineConnectors)
+                    {
+                        Destroy(line.gameObject);
+                    }
+                    m_LineConnectors.Clear();
                 }
-                m_LineConnectors.Clear();
                 Destroy(this.gameObject);
 
                 return;
