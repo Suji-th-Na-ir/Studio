@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using RuntimeInspectorNamespace;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System.Reflection;
 
 namespace Terra.Studio
 {
@@ -112,6 +113,23 @@ namespace Terra.Studio
                         }
                         var component = gameObject.AddComponent(type) as IComponent;
                         component?.Import(entity.components[i]);
+                        EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock() { componentGameObject = gameObject, componentType = type.Name });
+
+                        var mInfo = type.GetField("Broadcast", BindingFlags.Public | BindingFlags.Instance);
+                        if (mInfo != null)
+                        {
+                            var oldValue = mInfo?.GetValue(component);
+                            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(oldValue.ToString(), ""
+                                , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = type.Name });
+                        }
+
+                        var mInfo1 = type.GetField("BroadcastListen", BindingFlags.Public | BindingFlags.Instance);
+                        if (mInfo1 != null)
+                        {
+                            var oldValue1 = mInfo1?.GetValue(component);
+                            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(oldValue1.ToString(), "",
+                             new ComponentDisplayDock() { componentGameObject = gameObject, componentType = type.Name });
+                        }
                     }
                     else
                     {

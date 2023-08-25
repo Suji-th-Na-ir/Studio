@@ -16,8 +16,8 @@ namespace Terra.Studio
 
         private Image m_PointImage;
         private Image m_BroadcastIcon;
-        private const float m_MinScalingDistance = 50.0f; // Minimum distance for scaling up
-        private const float m_MaxScalingDistance = 1.0f; // Maximum distance for scaling down
+        private const float m_MinScalingDistance = 40.0f; // Minimum distance for scaling up
+        private const float m_MaxScalingDistance = 0.0f; // Maximum distance for scaling down
         private float initialWidth;
         private float initialHeight;
 
@@ -67,8 +67,8 @@ namespace Terra.Studio
             m_PointImage.rectTransform.sizeDelta = new Vector2(50, 50);
             m_PointImage.sprite = icon;
             m_PointImage.raycastTarget = false;
-            initialWidth = m_RectTransform.sizeDelta.x;
-            initialHeight = m_RectTransform.sizeDelta.y;
+            initialWidth = 1.5f;
+            initialHeight =1.5f;
             var canvas = FindAnyObjectByType<SceneView>();
             m_RectTransform.SetParent(canvas.transform, false);
 
@@ -80,8 +80,8 @@ namespace Terra.Studio
             pointImage1.raycastTarget = false;
             m_BroadcastIcon = pointImage1;
             rectTransform1.SetParent(this.transform, false);
-            rectTransform1.anchoredPosition = m_RectTransform.anchoredPosition + new Vector2(40, 40);
-
+            rectTransform1.anchoredPosition = m_RectTransform.anchoredPosition + new Vector2(20, 20);
+            rectTransform1.localScale = new Vector2(initialWidth*0.5f,  initialHeight * 0.5f);
             m_broadcastSprite = broadcastIcon;
             m_broadcastNoListnerSprite = broadcast_noListners;
         }
@@ -119,12 +119,21 @@ namespace Terra.Studio
 
 
 
-            Vector3 targetPosition = m_MainCamera.WorldToScreenPoint(m_ObjectTarget.componentGameObject.transform.position + Vector3.up);
-            transform.position = targetPosition;
-
-            float distanceToTarget = Vector3.Distance(m_ObjectTarget.componentGameObject.transform.position, Camera.main.transform.position);
+            Vector3 screenPoint = m_MainCamera.WorldToScreenPoint(m_ObjectTarget.componentGameObject.transform.position + Vector3.up);
+            float distanceToTarget = Vector3.Distance(m_ObjectTarget.componentGameObject.transform.position, m_MainCamera.transform.position);
             float scalingFactor = CalculateScalingFactor(distanceToTarget);
-            m_RectTransform.sizeDelta = new Vector2(initialWidth * scalingFactor, initialHeight * scalingFactor);
+           
+            if (screenPoint.z > 0 &&
+    screenPoint.x > 0 && screenPoint.x <= Screen.width &&
+    screenPoint.y > 0 && screenPoint.y <= Screen.height)
+            {
+                m_RectTransform.localScale = new Vector2(initialWidth * scalingFactor, initialHeight * scalingFactor);
+                transform.position = screenPoint;
+            }
+            else
+            {
+                transform.localScale = Vector2.zero;
+            }
 
             if (m_isBroadcating)
             {
