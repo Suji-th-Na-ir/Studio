@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Newtonsoft.Json;
-using System.Collections.Generic;
+
 namespace Terra.Studio
 {
     [Serializable]
@@ -14,16 +14,16 @@ namespace Terra.Studio
     public struct VirtualEntity
     {
         public int id;
-
         public string name;
-        
         public string assetPath;
+        public AssetType assetType;
+        public PrimitiveType primitiveType;
         [JsonConverter(typeof(Vector3Converter))] public Vector3 position;
         [JsonConverter(typeof(Vector3Converter))] public Vector3 rotation;
         [JsonConverter(typeof(Vector3Converter))] public Vector3 scale;
-
         public EntityBasedComponent[] components;
-        public Dictionary<int, EntityBasedComponent[]> childCompenentDictionary;
+        public VirtualEntity[] children;
+        public MetaData metaData;
     }
 
     [Serializable]
@@ -31,5 +31,30 @@ namespace Terra.Studio
     {
         public string type;
         public object data;
+    }
+
+    [Serializable]
+    public struct MetaData
+    {
+        public ColliderData colliderData;
+    }
+
+    [Serializable]
+    public struct ColliderData
+    {
+        public bool doesHaveCollider;
+        public bool isTrigger;
+        public string type;
+        public float radius;
+        public float height;
+        [JsonConverter(typeof(Vector3Converter))] public Vector3 size;
+        [JsonConverter(typeof(Vector3Converter))] public Vector3 center;
+    }
+
+    public enum AssetType
+    {
+        Empty,
+        Primitive,
+        Prefab
     }
 }

@@ -39,14 +39,21 @@ namespace Terra.Studio
                     return;
                 }
             }
-            var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (go, conditionData));
-            IdToConditionalCallback.Remove(entity);
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
             var pool = world.GetPool<TranslateComponent>();
             ref var entityRef = ref pool.Get(entity);
             entityRef.CanExecute = true;
             entityRef.IsExecuted = true;
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
+            if (conditionType.Equals("Terra.Studio.Listener") && entityRef.listen == Listen.Always)
+            {
+                compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (go, conditionData));
+            }
+            else
+            {
+                compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (go, conditionData));
+                IdToConditionalCallback.Remove(entity);
+            }
             OnDemandRun(in entityRef);
         }
 

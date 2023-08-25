@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using RTG;
 using UnityEngine;
 
 namespace Terra.Studio
 {
-    public class Rulesets 
+    public class Rulesets
     {
         public static void ApplyRuleset(Object obj)
         {
@@ -13,7 +10,7 @@ namespace Terra.Studio
                 return;
 
             var type = obj.GetType();
-            if(type==typeof( GameObject))
+            if (type == typeof(GameObject))
             {
                 new GameObjectRulesets().Apply(obj as GameObject);
             }

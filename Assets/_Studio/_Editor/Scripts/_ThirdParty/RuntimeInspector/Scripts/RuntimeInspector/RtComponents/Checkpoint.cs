@@ -1,6 +1,7 @@
 using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
 {
@@ -35,6 +36,7 @@ namespace RuntimeInspectorNamespace
                 ConditionType = "Terra.Studio.TriggerAction",
                 ConditionData = "Player"
             };
+            gameObject.TrySetTrigger(true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(component);
             return (type, data);

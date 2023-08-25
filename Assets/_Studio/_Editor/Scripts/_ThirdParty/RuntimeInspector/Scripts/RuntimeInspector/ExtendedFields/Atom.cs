@@ -12,7 +12,7 @@ namespace Terra.Studio
         [Serializable]
         public class PlaySfx
         {
-            [HideInInspector] public static List<PlaySfx> AllInstances = new ();
+            [HideInInspector] public static List<PlaySfx> AllInstances = new();
             [HideInInspector] public PlaySFXField field;
             [HideInInspector] public PlaySFXData data;
             [HideInInspector] public GameObject target;
@@ -20,23 +20,23 @@ namespace Terra.Studio
             public void Setup(GameObject _target)
             {
                 target = _target;
-                if(!AllInstances.Contains(this))
+                if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
             }
         }
-        
+
         [Serializable]
         public class PlayVfx
         {
-            [HideInInspector] public static List<PlayVfx> AllInstances = new ();
+            [HideInInspector] public static List<PlayVfx> AllInstances = new();
             [HideInInspector] public PlayVFXField field;
             [HideInInspector] public PlayVFXData data;
             [HideInInspector] public GameObject target;
-            
+
             public void Setup(GameObject _target)
             {
                 target = _target;
-                if(!AllInstances.Contains(this))
+                if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
             }
         }
@@ -66,7 +66,7 @@ namespace Terra.Studio
         public string clipName;
         public int clipIndex;
     }
-    
+
     [Serializable]
     public struct PlayVFXData
     {
@@ -74,7 +74,7 @@ namespace Terra.Studio
         public string clipName;
         public int clipIndex;
     }
-    
+
     [Serializable]
     public struct RotateComponentData
     {
@@ -88,8 +88,9 @@ namespace Terra.Studio
         public string broadcast;
         public string listenTo;
         public BroadcastAt broadcastAt;
+        public Listen listen;
     }
-    
+
     [Serializable]
     public struct TranslateComponentData
     {
@@ -101,6 +102,7 @@ namespace Terra.Studio
         public string broadcast;
         public BroadcastAt broadcastAt;
         public string listenTo;
+        public Listen listen;
     }
 
 }

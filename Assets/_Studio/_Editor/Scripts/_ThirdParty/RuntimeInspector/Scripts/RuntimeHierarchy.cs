@@ -674,8 +674,10 @@ namespace RuntimeInspectorNamespace
 		{
 			if (lastClickedDrawer == null)
 				return;
+            if (EventSystem.current.currentSelectedGameObject != null)
+                return;
 
-			if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (Input.GetKeyDown(KeyCode.UpArrow))
 			{
 				int index = drawers.IndexOf(lastClickedDrawer);
 				float leastDistance = float.MaxValue;

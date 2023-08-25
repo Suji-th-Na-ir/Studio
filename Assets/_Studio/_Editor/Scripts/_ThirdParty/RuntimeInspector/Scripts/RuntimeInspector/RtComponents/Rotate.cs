@@ -1,6 +1,7 @@
 using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
 {
@@ -39,25 +40,27 @@ namespace RuntimeInspectorNamespace
                 IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcast),
                 broadcastAt = Type.data.broadcastAt,
                 Broadcast = Type.data.broadcast,
-                
+
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
                 vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName,
                 sfxIndex = PlaySFX.data.clipIndex,
                 vfxIndex = PlayVFX.data.clipIndex,
-                
+
                 IsConditionAvailable = true,
+                listen = Type.data.listen,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition()
             };
 
             ModifyDataAsPerSelected(ref rc);
+            gameObject.TrySetTrigger(false);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(rc, Formatting.Indented);
             return (type, data);
         }
-        
+
 
         private RepeatType GetRepeatType(float _value)
         {
@@ -82,7 +85,7 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        
+
 
         public void Import(EntityBasedComponent cdata)
         {
@@ -103,12 +106,13 @@ namespace RuntimeInspectorNamespace
             Type.data.repeat = cc.repeatFor;
             Type.data.broadcast = cc.Broadcast;
             Type.data.broadcastAt = cc.broadcastAt;
+            Type.data.listen = cc.listen;
 
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOn), out object result))
             {
                 start = (StartOn)result;
             }
-            
+
             if (start == StartOn.BroadcastListen)
             {
                 Type.data.listenTo = cc.ConditionData;

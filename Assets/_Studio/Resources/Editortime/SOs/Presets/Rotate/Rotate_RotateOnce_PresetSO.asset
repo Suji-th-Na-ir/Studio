@@ -9,15 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f44d069429b464317abcd3edfd2ff681, type: 3}
-  m_Name: Translate_PingPong_PresetSO
+  m_Script: {fileID: 11500000, guid: b1240720c393e46b1acef9ca8867d795, type: 3}
+  m_Name: Rotate_RotateOnce_PresetSO
   m_EditorClassIdentifier: 
   value:
-    translateType: 4
-    moveTo: {x: 0, y: 0, z: 0}
-    pauseFor: 1
-    speed: 5
-    repeat: 0
+    rotateType: 0
+    axis: 0
+    direction: 0
+    degrees: 15
+    speed: 20
+    repeat: 1
+    pauseBetween: 0
     broadcast: 
-    broadcastAt: 2
     listenTo: 
+    broadcastAt: 2
+    listen: 1

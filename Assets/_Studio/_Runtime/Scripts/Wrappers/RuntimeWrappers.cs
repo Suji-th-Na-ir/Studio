@@ -6,14 +6,60 @@ namespace Terra.Studio
 {
     public class RuntimeWrappers
     {
-        public static GameObject SpawnGameObject(string path, params Vector3[] trs)
+        public static GameObject SpawnObject(AssetType assetType, string assetPath, PrimitiveType primitiveType, params Vector3[] trs)
+        {
+            GameObject go = null;
+            switch (assetType)
+            {
+                case AssetType.Empty:
+                    go = SpawnEmpty(null, trs);
+                    break;
+                case AssetType.Prefab:
+                    go = SpawnGameObject(assetPath, ResourceDB.GetItemData(assetPath), trs);
+                    break;
+                case AssetType.Primitive:
+                    go = SpawnPrimitive(primitiveType, ResourceDB.GetDummyItemData(primitiveType), trs);
+                    break;
+            }
+            return go;
+        }
+        public static GameObject SpawnGameObject(string path, ResourceDB.ResourceItemData itemData, params Vector3[] trs)
         {
             var go = RuntimeOp.Load<GameObject>(path);
             if (go == null)
             {
                 return go;
             }
-            go = Object.Instantiate(go);
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                go = UnityEditor.PrefabUtility.InstantiatePrefab(go) as GameObject;
+            }
+            else
+#endif
+
+            {
+                go = Object.Instantiate(go);
+                Rulesets.ApplyRuleset(go);
+            }
+            return ResolveTRS(go, itemData, trs);
+        }
+
+        public static GameObject SpawnPrimitive(PrimitiveType type, ResourceDB.ResourceItemData itemData, params Vector3[] trs)
+        {
+            var go = GameObject.CreatePrimitive(type);
+            return ResolveTRS(go, itemData, trs);
+        }
+
+        public static GameObject SpawnEmpty(ResourceDB.ResourceItemData itemData, params Vector3[] trs)
+        {
+            var go = new GameObject();
+            return ResolveTRS(go, itemData, trs);
+        }
+
+        private static GameObject ResolveTRS(GameObject go, ResourceDB.ResourceItemData itemData, params Vector3[] trs)
+        {
+            AttachPrerequisities(go, itemData);
             if (trs == null || trs.Length == 0)
             {
                 return go;
@@ -34,6 +80,18 @@ namespace Terra.Studio
                 }
             }
             return go;
+        }
+
+        public static void AttachPrerequisities(GameObject go, ResourceDB.ResourceItemData itemData)
+        {
+            if (SystemOp.Resolve<System>() && SystemOp.Resolve<System>().CurrentStudioState == StudioState.Editor)
+            {
+                if (!go.TryGetComponent(out StudioGameObject studioGO))
+                {
+                    studioGO = go.AddComponent<StudioGameObject>();
+                    studioGO.itemData = itemData;
+                }
+            }
         }
 
         public static void PlaySFX(string sfxName)

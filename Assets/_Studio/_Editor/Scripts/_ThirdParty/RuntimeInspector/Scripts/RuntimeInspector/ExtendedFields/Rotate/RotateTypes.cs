@@ -14,7 +14,7 @@ namespace RuntimeInspectorNamespace
         public RotationType myType;
         public Dropdown axisDropDown;
         public Dropdown dirDropDown;
-        
+
         public TMP_InputField degreesInput = null;
         public TMP_InputField speedInput = null;
         public TMP_InputField pauseInput = null;
@@ -23,7 +23,9 @@ namespace RuntimeInspectorNamespace
         public Dropdown broadcastAt;
         public TMP_InputField broadcastInput;
         public TMP_InputField listenInput;
+        public Toggle canListenMultipleTimesToggle;
 
+        [HideInInspector]
         public RotateField rotateField = null;
         private RotateComponentData data = new();
 
@@ -45,7 +47,6 @@ namespace RuntimeInspectorNamespace
                 data.broadcastAt = GetBroadcastAt(broadcastAt.options[value].text);
                 UpdateData(data);
             });
-
             if (degreesInput != null) degreesInput.onValueChanged.AddListener((value) =>
             {
                 data.degrees = Helper.StringToFloat(value);
@@ -76,6 +77,11 @@ namespace RuntimeInspectorNamespace
             {
                 EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(value, data.broadcast, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)rotateField.Value).referenceGO, componentType = typeof(Atom.Rotate).Name });
                 data.listenTo = value;
+                UpdateData(data);
+            });
+            if (canListenMultipleTimesToggle != null) canListenMultipleTimesToggle.onValueChanged.AddListener((value) =>
+            {
+                data.listen = value ? Listen.Always : Listen.Once;
                 UpdateData(data);
             });
         }
@@ -111,7 +117,7 @@ namespace RuntimeInspectorNamespace
             else if (_value == Axis.Z.ToString()) return Axis.Z;
             return Axis.X;
         }
-        
+
         private Direction GetDirection(string _value)
         {
             if (_value == Direction.Clockwise.ToString()) return Direction.Clockwise;
@@ -126,17 +132,17 @@ namespace RuntimeInspectorNamespace
             else if (_value == BroadcastAt.AtEveryInterval.ToString()) return BroadcastAt.AtEveryInterval;
             return BroadcastAt.Never;
         }
-        
+
         public void LoadDefaultValues()
         {
             // axis 
             if (axisDropDown != null) { axisDropDown.AddOptions(Enum.GetNames(typeof(Axis)).ToList()); }
 
             // direction
-            if (dirDropDown != null){ dirDropDown.AddOptions(Enum.GetNames(typeof(Direction)).ToList());}
-            
+            if (dirDropDown != null) { dirDropDown.AddOptions(Enum.GetNames(typeof(Direction)).ToList()); }
+
             // broadcast at 
-            if (broadcastAt != null){broadcastAt.AddOptions(Enum.GetNames(typeof(BroadcastAt)).ToList());}
+            if (broadcastAt != null) { broadcastAt.AddOptions(Enum.GetNames(typeof(BroadcastAt)).ToList()); }
 
             if (myType == RotationType.OscillateForever || myType == RotationType.IncrementallyRotateForever)
             {
@@ -161,6 +167,7 @@ namespace RuntimeInspectorNamespace
             if (repeatInput) repeatInput.SetTextWithoutNotify(_data.repeat.ToString());
             if (broadcastInput) broadcastInput.SetTextWithoutNotify(_data.broadcast);
             if (listenInput) listenInput.SetTextWithoutNotify(_data.listenTo);
+            if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
     }
 }

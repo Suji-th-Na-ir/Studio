@@ -7,13 +7,16 @@ namespace Terra.Studio
         public static T Load<T>(LoadFor loadFor, string path) where T : Object
         {
             var prefix = loadFor.GetStringValue();
+            if (path.Contains(prefix))
+            {
+                path = path.Replace(prefix, string.Empty);
+            }
             var finalPath = string.Concat(prefix, path);
             var obj = Resources.Load<T>(finalPath);
             if (obj == null && loadFor != LoadFor.Common)
             {
                 obj = Load<T>(LoadFor.Common, path);
             }
-            Rulesets.ApplyRuleset(obj);
             return obj;
         }
 
@@ -31,7 +34,6 @@ namespace Terra.Studio
             {
                 obj = Load(LoadFor.Common, tag, appendPath);
             }
-            Rulesets.ApplyRuleset(obj);
             return obj;
         }
     }

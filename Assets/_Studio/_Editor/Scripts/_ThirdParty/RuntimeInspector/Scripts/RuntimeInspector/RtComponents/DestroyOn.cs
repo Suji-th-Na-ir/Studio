@@ -66,7 +66,7 @@ namespace RuntimeInspectorNamespace
                 destroyOn.sfxIndex = PlaySFX.data.clipIndex;
                 destroyOn.vfxIndex = PlayVFX.data.clipIndex;
             }
-
+            gameObject.TrySetTrigger(false);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(destroyOn);
             return (type, data);

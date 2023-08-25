@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1240720c393e46b1acef9ca8867d795, type: 3}
-  m_Name: Rotate_Oscillate_PresetSO
+  m_Name: Rotate_IncrementallyRotate_PresetSO
   m_EditorClassIdentifier: 
   value:
-    rotateType: 2
+    rotateType: 4
     axis: 0
     direction: 0
     degrees: 15
@@ -23,3 +23,4 @@ MonoBehaviour:
     broadcast: 
     listenTo: 
     broadcastAt: 2
+    listen: 1

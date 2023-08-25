@@ -1,7 +1,5 @@
-using System;
 using UnityEngine;
 using PlayShifu.Terra;
-using UnityEngine.UIElements;
 
 namespace Terra.Studio
 {
@@ -12,21 +10,24 @@ namespace Terra.Studio
         {
             SystemOp.Register(this as ISubsystem);
             EditorOp.Register(this);
-            _saveSystem = gameObject.GetComponent<SaveSystem>();
-            if (_saveSystem == null) Debug.LogError("save system not attached.");
-
+            if (!gameObject.TryGetComponent(out _saveSystem)) Debug.LogError("save system not attached.");
         }
 
         public void Initialize()
         {
             EditorOp.Register(new DataProvider());
+            EditorOp.Register(new SceneDataHandler());
             EditorOp.Resolve<HierarchyView>().Init();
             EditorOp.Resolve<InspectorView>().Init();
             EditorOp.Resolve<ToolbarView>().Init();
             EditorOp.Resolve<SceneView>().Init();
             EditorOp.Resolve<SelectionHandler>().Init();
+<<<<<<< HEAD
             EditorOp.Resolve<UILogicDisplayProcessor>().Init();
             SceneExporter.Init();
+=======
+            EditorOp.Resolve<SceneDataHandler>().LoadScene();
+>>>>>>> main
         }
 
         public void Dispose()
@@ -41,13 +42,13 @@ namespace Terra.Studio
         private void OnDestroy()
         {
             EditorOp.Unregister<DataProvider>();
+            EditorOp.Unregister<SceneDataHandler>();
             SystemOp.Unregister(this as ISubsystem);
             EditorOp.Unregister(this);
         }
 
         public void RequestSwitchState()
         {
-            //Check for busy state of the system, if there is any switch state already in progress
             SystemOp.Resolve<System>().SwitchState();
         }
 

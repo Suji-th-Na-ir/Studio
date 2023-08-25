@@ -9,17 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1240720c393e46b1acef9ca8867d795, type: 3}
-  m_Name: Rotate_RotateOnce_PresetSO
+  m_Script: {fileID: 11500000, guid: f44d069429b464317abcd3edfd2ff681, type: 3}
+  m_Name: Translate_Move_PresetSO
   m_EditorClassIdentifier: 
   value:
-    rotateType: 0
-    axis: 0
-    direction: 0
-    degrees: 15
-    speed: 20
-    repeat: 1
-    pauseBetween: 0
+    translateType: 0
+    moveTo: {x: 0, y: 0, z: 0}
+    pauseFor: 0
+    speed: 5
+    repeat: 0
     broadcast: 
-    listenTo: 
     broadcastAt: 2
+    listenTo: 
+    listen: 1

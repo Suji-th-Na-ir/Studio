@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 using Terra.Studio;
 using UnityEngine;
 
@@ -45,7 +46,7 @@ namespace RuntimeInspectorNamespace
             Component.loop = Loop;
             Component.speed = Speed;
             Component.IsConditionAvailable = GetStartEvent() != "";
-
+            gameObject.TrySetTrigger(false);
             var data = JsonConvert.SerializeObject(Component);
             return (type, data);
         }
