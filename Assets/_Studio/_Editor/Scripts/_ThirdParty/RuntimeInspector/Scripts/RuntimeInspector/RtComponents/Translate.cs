@@ -15,14 +15,6 @@ namespace RuntimeInspectorNamespace
         public Atom.PlayVfx PlayVFX = new();
         private RotateComponent rComp;
 
-<<<<<<< HEAD
-        private void Awake()
-        {
-            Type.referenceGO = gameObject;
-        }
-
-=======
->>>>>>> main
         public void Start()
         {
             PlaySFX.Setup(gameObject);
