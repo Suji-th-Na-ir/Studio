@@ -64,11 +64,11 @@ namespace Terra.Studio
                 m_RectTransform = gameObject.AddComponent<RectTransform>();
             if (GetComponent<Image>() == null)
                 m_PointImage = gameObject.AddComponent<Image>();
-            m_PointImage.rectTransform.sizeDelta = new Vector2(50, 50);
+            m_PointImage.rectTransform.sizeDelta = new Vector2(30, 30);
             m_PointImage.sprite = icon;
             m_PointImage.raycastTarget = false;
-            initialWidth = 1.5f;
-            initialHeight =1.5f;
+            initialWidth = 1f;
+            initialHeight =1f;
             var canvas = FindAnyObjectByType<SceneView>();
             m_RectTransform.SetParent(canvas.transform, false);
 
@@ -76,11 +76,11 @@ namespace Terra.Studio
             GameObject gm = new GameObject("Broadcast_Icon");
             var rectTransform1 = gm.AddComponent<RectTransform>();
             var pointImage1 = gm.AddComponent<Image>();
-            pointImage1.rectTransform.sizeDelta = new Vector2(50, 50);
+            pointImage1.rectTransform.sizeDelta = new Vector2(30, 30);
             pointImage1.raycastTarget = false;
             m_BroadcastIcon = pointImage1;
             rectTransform1.SetParent(this.transform, false);
-            rectTransform1.anchoredPosition = m_RectTransform.anchoredPosition + new Vector2(20, 20);
+            rectTransform1.anchoredPosition = m_RectTransform.anchoredPosition + new Vector2(10, 10);
             rectTransform1.localScale = new Vector2(initialWidth*0.5f,  initialHeight * 0.5f);
             m_broadcastSprite = broadcastIcon;
             m_broadcastNoListnerSprite = broadcast_noListners;
@@ -119,7 +119,7 @@ namespace Terra.Studio
 
 
 
-            Vector3 screenPoint = m_MainCamera.WorldToScreenPoint(m_ObjectTarget.componentGameObject.transform.position + Vector3.up);
+            Vector3 screenPoint = m_MainCamera.WorldToScreenPoint(m_ObjectTarget.componentGameObject.transform.position + Vector3.up*0.3f);
             float distanceToTarget = Vector3.Distance(m_ObjectTarget.componentGameObject.transform.position, m_MainCamera.transform.position);
             float scalingFactor = CalculateScalingFactor(distanceToTarget);
            
