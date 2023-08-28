@@ -11,6 +11,44 @@ namespace PlayShifu.Terra
 {
     public static class Helper
     {
+        private static List<string> ListenToTypes = new List<string>()
+        {
+            "Game Win",
+            "Game Lose"
+        };
+
+        public static List<string> GetListenToTypes()
+        {
+            string[] allTypes = PlayerPrefs.GetString("editor_listen_types", "").Split(",");
+            foreach (string tt in allTypes)
+            {
+                if(!ListenToTypes.Contains(tt))
+                    ListenToTypes.Add(tt);
+            }
+
+            return ListenToTypes;
+        }
+
+        public static void UpdateListenToTypes(string _type)
+        {
+            if (!string.IsNullOrEmpty(_type))
+            {
+                string types = PlayerPrefs.GetString("editor_listen_types", "");
+                types += ("," + _type);
+                PlayerPrefs.SetString("editor_listen_types", types);
+            }
+        }
+        
+        public static int GetListenIndex(string _name)
+        {
+            List<string> listenTypes = GetListenToTypes(); 
+            for (int i = 0; i< listenTypes.Count; i++)
+            {
+                if (listenTypes[i] == _name) return i;
+            }
+            return 0;
+        }
+        
         public static string GetCurrentAppPlatform()
         {
             string platform = "ios";
@@ -589,6 +627,35 @@ namespace PlayShifu.Terra
                     mc.convex = isTrigger;
                     mc.isTrigger = isTrigger;
                     break;
+            }
+        }
+
+        public static T GetEnumValueByIndex<T>(int index) where T : Enum
+        {
+            if (!typeof(T).IsEnum)
+            {
+                throw new ArgumentException("Type T must be an Enum");
+            }
+
+            T[] enumValues = (T[])Enum.GetValues(typeof(T));
+
+            if (index >= 0 && index < enumValues.Length)
+            {
+                return enumValues[index];
+            }
+
+            throw new ArgumentOutOfRangeException("Index is out of range");
+        }
+        
+        public static int GetEnumIndexByString<TEnum>(string value) where TEnum : struct, Enum
+        {
+            if (Enum.TryParse<TEnum>(value, out TEnum enumValue))
+            {
+                return Convert.ToInt32(enumValue);
+            }
+            else
+            {
+                return 0;
             }
         }
     }

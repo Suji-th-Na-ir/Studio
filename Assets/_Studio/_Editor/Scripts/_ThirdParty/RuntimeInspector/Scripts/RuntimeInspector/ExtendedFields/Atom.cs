@@ -10,6 +10,22 @@ namespace Terra.Studio
     public class Atom
     {
         [Serializable]
+        public class StartOn
+        {
+            [HideInInspector] public static List<StartOn> AllInstances = new();
+            [HideInInspector] public StartOnField field;
+            [HideInInspector] public StartOnData data;
+            [HideInInspector] public GameObject target;
+            
+            public void Setup(GameObject _target)
+            {
+                target = _target;
+                if (!AllInstances.Contains(this))
+                    AllInstances.Add(this);
+            }
+        }
+        
+        [Serializable]
         public class PlaySfx
         {
             [HideInInspector] public static List<PlaySfx> AllInstances = new();
@@ -57,6 +73,16 @@ namespace Terra.Studio
     }
 
     // define component data classes here
+    [Serializable]
+    public struct StartOnData
+    {
+        public string startName;
+        public int startIndex;
+        public string listenName;
+        public int listenIndex;
+    }
+    
+    
     [Serializable]
     public struct PlaySFXData
     {
