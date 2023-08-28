@@ -147,6 +147,10 @@ namespace Terra.Studio
                             {
                                 compIcons[j].ListnerTargets = GetTargetIconsForDisplayDock(listners);
                                 compIcons[j].m_isBroadcating = true;
+                                if (broadcast.Key == "Game Win")
+                                    compIcons[j].m_isBroadcatingGameWon = true;
+                                else
+                                    compIcons[j].m_isBroadcatingGameWon = false;
                             }
                         }
                     }
@@ -186,8 +190,9 @@ namespace Terra.Studio
             var iconSprite = iconPresets.GetIcon(componentDisplay.componentType);
             var broadcastSprite = iconPresets.GetIcon("Broadcast");
             var broadcastNoListnerSprite = iconPresets.GetIcon("BroadcastNoListner");
+            var gameWonBroadcastSprite = iconPresets.GetIcon("GameWon");
             var compIcon = iconGameObject.AddComponent<ComponentIconNode>();
-            compIcon.Setup(iconSprite,broadcastSprite,broadcastNoListnerSprite, componentDisplay);
+            compIcon.Setup(iconSprite,broadcastSprite,broadcastNoListnerSprite,gameWonBroadcastSprite, componentDisplay);
             if (!m_icons.TryGetValue(componentDisplay.componentGameObject, out List<ComponentIconNode> value))
             {
                 if (m_icons.ContainsKey(componentDisplay.componentGameObject))

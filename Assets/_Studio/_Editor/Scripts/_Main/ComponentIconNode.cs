@@ -23,8 +23,10 @@ namespace Terra.Studio
 
         private Sprite m_broadcastSprite;
         private Sprite m_broadcastNoListnerSprite;
+        private Sprite m_GameWonBroadcastSprite;
 
         public bool m_isBroadcating = false;
+        public bool m_isBroadcatingGameWon = false;
         public int m_componentIndex = 0;
 
         List<UILineRenderer> m_LineConnectors;
@@ -56,8 +58,8 @@ namespace Terra.Studio
             m_ListnerTargetNodes.Remove(toRemove);
         }
 
-        public void Setup(Sprite icon, Sprite broadcastIcon,Sprite broadcast_noListners,  ComponentDisplayDock displayDock)
-        {
+        public void Setup(Sprite icon, Sprite broadcastIcon,Sprite broadcast_noListners,Sprite gameWonIcon,  ComponentDisplayDock displayDock)
+        { 
             m_ObjectTarget = displayDock;
             if (!m_MainCamera)
                 m_MainCamera = Camera.main;
@@ -85,6 +87,7 @@ namespace Terra.Studio
             rectTransform1.localScale = new Vector2(initialWidth*0.5f,  initialHeight * 0.5f);
             m_broadcastSprite = broadcastIcon;
             m_broadcastNoListnerSprite = broadcast_noListners;
+            m_GameWonBroadcastSprite = gameWonIcon;
         }
 
 
@@ -142,7 +145,11 @@ namespace Terra.Studio
             if (m_isBroadcating)
             {
                 m_BroadcastIcon.gameObject.SetActive(true);
-                if(m_LineConnectors!=null && m_ListnerTargetNodes.Count>0)
+                if(m_isBroadcatingGameWon)
+                {
+                    m_BroadcastIcon.sprite = m_GameWonBroadcastSprite;
+                }
+                else if(m_LineConnectors!=null && m_ListnerTargetNodes.Count>0)
                 {
                     m_BroadcastIcon.sprite = m_broadcastSprite;
                 }

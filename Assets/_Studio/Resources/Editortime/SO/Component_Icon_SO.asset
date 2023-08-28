@@ -29,5 +29,7 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: 3384cdada8e2241e28d67d223f46f4d4, type: 3}
   - type: Oscillate
     icon: {fileID: 21300000, guid: 8ba28e9b131ac48a6b46ffa3033ac518, type: 3}
+  - type: GameWon
+    icon: {fileID: 21300000, guid: eb1230361432d4be2a622cfe2a394556, type: 3}
   - type: BroadcastNoListner
     icon: {fileID: 21300000, guid: 0760b20396aab4047b7d12b2eef2c6f1, type: 3}
