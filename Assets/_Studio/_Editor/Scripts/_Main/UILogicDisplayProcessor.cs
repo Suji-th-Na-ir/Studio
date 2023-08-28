@@ -163,9 +163,16 @@ namespace Terra.Studio
             {
                 if (m_icons.ContainsKey(docks[i].componentGameObject))
                 {
-                    if (m_icons[docks[i].componentGameObject]!=null)
+                    if (m_icons[docks[i].componentGameObject]!=null )
                     {
-                        result.AddRange(m_icons[docks[i].componentGameObject]);
+                        var icons=m_icons[docks[i].componentGameObject];
+                        for (int j = 0; j < icons.Count; j++)
+                        {
+                            if (icons[j].GetComponentDisplayDockTarget().Equals(docks[i]))
+                            {
+                                result.Add(icons[j]);
+                            }
+                        }
                     }
                 }
             }
@@ -216,7 +223,7 @@ namespace Terra.Studio
             {
                 if (value[i].GetComponentDisplayDockTarget().Equals(componentDisplay))
                 {
-                    Destroy(value[i].gameObject);
+                    value[i].DestroyThisIcon();
                     toRemove.Add(value[i]); 
                 }
             }

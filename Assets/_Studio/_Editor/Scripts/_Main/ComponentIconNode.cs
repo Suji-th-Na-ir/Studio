@@ -68,8 +68,8 @@ namespace Terra.Studio
             m_PointImage.rectTransform.sizeDelta = new Vector2(30, 30);
             m_PointImage.sprite = icon;
             m_PointImage.raycastTarget = false;
-            initialWidth = 1f;
-            initialHeight =1f;
+            initialWidth = 1.5f;
+            initialHeight =1.5f;
             var canvas = FindAnyObjectByType<SceneView>();
             m_RectTransform.SetParent(canvas.transform, false);
 
@@ -88,6 +88,20 @@ namespace Terra.Studio
         }
 
 
+        public void DestroyThisIcon()
+        {
+
+            if (m_LineConnectors != null)
+            {
+                foreach (var line in m_LineConnectors)
+                {
+                    Destroy(line.gameObject);
+                }
+                m_LineConnectors.Clear();
+            }
+            Destroy(this.gameObject);
+        }
+
         private void Update()
         {
             //if(!EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Contains(currentTarget.componentGameObject))
@@ -102,25 +116,14 @@ namespace Terra.Studio
             //    }
             //    return;
             //}
-
             if (IsTargetDestroyed())
             {
-                if (m_LineConnectors != null)
-                {
-                    foreach (var line in m_LineConnectors)
-                    {
-                        Destroy(line.gameObject);
-                    }
-                    m_LineConnectors.Clear();
-                }
-                Destroy(this.gameObject);
-
                 return;
             }
 
-
-
-            Vector3 screenPoint = CalculateCircularPositionAtIndex( m_ObjectTarget.componentGameObject.transform.position + Vector3.up*0.3f,0.2f,10,m_componentIndex);
+            var objectScreenPos = m_MainCamera.WorldToScreenPoint(m_ObjectTarget.componentGameObject.transform.position + Vector3.up * 0.3f);
+            var radius = (m_MainCamera.WorldToScreenPoint(m_ObjectTarget.componentGameObject.transform.position + Vector3.up * 0.3f) -m_MainCamera.WorldToScreenPoint( m_ObjectTarget.componentGameObject.transform.position + Vector3.up * 0.5f)).magnitude;
+            Vector3 screenPoint = CalculateCircularPositionAtIndex(objectScreenPos, radius, 3, m_componentIndex);
             float distanceToTarget = Vector3.Distance(m_ObjectTarget.componentGameObject.transform.position, m_MainCamera.transform.position);
             float scalingFactor = CalculateScalingFactor(distanceToTarget);
            
@@ -234,12 +237,11 @@ namespace Terra.Studio
             float angleIncrement = 360f / numPositions;
             float angle = index * angleIncrement;
 
-            float x = targetPosition.x + radius * Mathf.Cos(Mathf.Deg2Rad * angle);
-            float z = targetPosition.z + radius * Mathf.Sin(Mathf.Deg2Rad * angle);
-            Vector3 position = new Vector3(x, targetPosition.y, z);
+            float xOffset = radius * Mathf.Cos(Mathf.Deg2Rad * angle);
+            float yOffset = radius * Mathf.Sin(Mathf.Deg2Rad * angle);
 
-            Vector3 screenPosition = m_MainCamera.WorldToScreenPoint(position);
-            return screenPosition;
+            Vector3 offsetPosition = targetPosition + new Vector3(xOffset, yOffset, 0f);
+            return offsetPosition;
         }
 
         private bool CheckIfInsideScreen(RectTransform rect)

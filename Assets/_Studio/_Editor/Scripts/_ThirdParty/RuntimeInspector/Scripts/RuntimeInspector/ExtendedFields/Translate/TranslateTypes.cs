@@ -60,7 +60,7 @@ namespace RuntimeInspectorNamespace
             });
             if (listenTo != null) listenTo.onValueChanged.AddListener((value) =>
             {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(value, data.broadcast, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)translateField.Value).referenceGO, componentType = typeof(Atom.Translate).Name });
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(value, data.listenTo, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)translateField.Value).referenceGO, componentType = typeof(Atom.Translate).Name });
                 data.listenTo = value;
                 UpdateData(data);
             });
