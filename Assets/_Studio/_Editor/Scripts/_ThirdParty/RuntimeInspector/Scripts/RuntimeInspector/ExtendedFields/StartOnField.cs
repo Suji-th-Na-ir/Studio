@@ -25,12 +25,12 @@ namespace RuntimeInspectorNamespace
             LoadStartOnOptions();
             ListenOn.onValueChanged.AddListener(OnListenValueChanged);
             LoadListenTo();
-            
             ShowHideListenDD();
         }
 
         private void LoadListenTo()
         {
+            ListenOn.options.Clear();
             foreach (string _name in Helper.GetListenToTypes())
             {
                 ListenOn.options.Add(new Dropdown.OptionData()
@@ -64,6 +64,7 @@ namespace RuntimeInspectorNamespace
             {
                 if (!ListenOn.gameObject.activeSelf)
                 {
+                    LoadListenTo();
                     ListenOn.gameObject.SetActive(true);
                 }
             }

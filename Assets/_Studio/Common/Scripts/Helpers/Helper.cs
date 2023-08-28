@@ -17,26 +17,45 @@ namespace PlayShifu.Terra
             "Game Lose"
         };
 
+        private static Dictionary<int, string> listenDictionary = new Dictionary<int, string>();
+        private static string prevListenType = "";
+
         public static List<string> GetListenToTypes()
         {
-            string[] allTypes = PlayerPrefs.GetString("editor_listen_types", "").Split(",");
-            foreach (string tt in allTypes)
+            string savedTypes = PlayerPrefs.GetString("editor_listen_types", "");
+          
+            if (!string.IsNullOrEmpty(savedTypes))
             {
-                if(!ListenToTypes.Contains(tt))
-                    ListenToTypes.Add(tt);
+                string[] allTypes = savedTypes.Split(",");
+                foreach (string tt in allTypes)
+                {
+                    if (!ListenToTypes.Contains(tt))
+                        ListenToTypes.Add(tt);
+                }
+            }
+            foreach (var item in listenDictionary)
+            {
+                // Debug.Log($"ld {item.Key} : {item.Value}");
+                if(!ListenToTypes.Contains(item.Value))
+                    ListenToTypes.Add(item.Value);
             }
 
             return ListenToTypes;
         }
 
-        public static void UpdateListenToTypes(string _type)
+        public static void UpdateListenToTypes(int _id, string _type)
         {
-            if (!string.IsNullOrEmpty(_type))
+            if (prevListenType != _type)
             {
-                string types = PlayerPrefs.GetString("editor_listen_types", "");
-                types += ("," + _type);
-                PlayerPrefs.SetString("editor_listen_types", types);
+                listenDictionary[_id] =  _type;
+                prevListenType = _type;
             }
+            // if (!string.IsNullOrEmpty(_type))
+            // {
+            //     string types = PlayerPrefs.GetString("editor_listen_types", "");
+            //     types += ("," + _type);
+            //     PlayerPrefs.SetString("editor_listen_types", types);
+            // }
         }
         
         public static int GetListenIndex(string _name)

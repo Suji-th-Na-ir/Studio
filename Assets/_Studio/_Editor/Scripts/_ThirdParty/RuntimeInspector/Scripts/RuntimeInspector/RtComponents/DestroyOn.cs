@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
@@ -30,6 +31,14 @@ namespace RuntimeInspectorNamespace
             startOn.Setup(gameObject);
             PlaySFX.Setup(gameObject);
             PlayVFX.Setup(gameObject);
+        }
+
+        public void Update()
+        {
+            if (!String.IsNullOrEmpty(Broadcast))
+            {
+                Helper.UpdateListenToTypes(this.GetInstanceID(), Broadcast);
+            }
         }
 
         public (string type, string data) Export()
