@@ -2,8 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="19655a8e-b3ed-4fee-944c-7b9d3a6d1a07" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/HideInHierarchy.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/HideInHierarchy.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Studio/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Studio/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Studio/_Editor/Scripts/_ThirdParty/RuntimeInspector/Scripts/RuntimeInspector/Fields/InspectorField.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/_Editor/Scripts/_ThirdParty/RuntimeInspector/Scripts/RuntimeInspector/Fields/InspectorField.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scenes/Bootstrap.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scenes/Bootstrap.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scenes/Editor.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scenes/Editor.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/RuntimeInspector/RuntimeHierarchy.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/RuntimeInspector/RuntimeHierarchy.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/RuntimeInspector/Scripts/RuntimeHierarchy.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/RuntimeInspector/Scripts/RuntimeHierarchy.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/RuntimeInspector/Scripts/RuntimeHierarchy/HierarchyDataRootScene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/RuntimeInspector/Scripts/RuntimeHierarchy/HierarchyDataRootScene.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -11,6 +17,10 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/HideInHierarchy.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/Scripts/StudioRT/OscillateComponent.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Hierarchy/HierarchyView.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/_Studio/Scripts/_Editor/View/Inspector/InspectorView.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.burst@1.8.2/Tests/Editor/SeparateAssembly/BurstReflectionTestsSeparateAssembly.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.burst@1.8.2/Tests/Editor/SeparateAssembly/TypeHashWrapper.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.core@12.1.10/Editor/Lighting/ProbeVolume/ProbeGIBaking.cs" root0="SKIP_HIGHLIGHTING" />
@@ -141,7 +151,6 @@
       <updated>1689688693747</updated>
       <workItem from="1689688696054" duration="3770000" />
       <workItem from="1689762703471" duration="3096000" />
-      <workItem from="1693199467382" duration="1306000" />
     </task>
     <servers />
   </component>
