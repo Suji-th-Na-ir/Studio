@@ -56,7 +56,7 @@ namespace RuntimeInspectorNamespace
             };
 
             ModifyDataAsPerGiven(ref rc);
-            gameObject.TrySetTrigger(false);
+            gameObject.TrySetTrigger(false, true);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(rc, Formatting.Indented);
             return (type, data);
@@ -135,6 +135,14 @@ namespace RuntimeInspectorNamespace
                 default:
                     component.repeatFor = Type.data.repeat;
                     break;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))
+            {
+                Destroy(collider);
             }
         }
     }

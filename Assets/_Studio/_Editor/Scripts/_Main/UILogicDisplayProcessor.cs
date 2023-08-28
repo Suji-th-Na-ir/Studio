@@ -57,6 +57,8 @@ namespace Terra.Studio
 
         private void UpdateDictionaryWithNewStringKey(Dictionary<string, List<ComponentDisplayDock>> list, string lastKey, string newKey, ComponentDisplayDock obj)
         {
+            if (lastKey == null)
+                lastKey = "";
             if (list.TryGetValue(lastKey, out List<ComponentDisplayDock> value))
             {
                 if (!string.IsNullOrEmpty(newKey))

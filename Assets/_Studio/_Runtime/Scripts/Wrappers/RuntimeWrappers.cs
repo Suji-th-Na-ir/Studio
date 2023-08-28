@@ -148,7 +148,7 @@ namespace Terra.Studio
         public float pauseForTime;
         public GameObject targetObj;
         public Action<bool> onRotated;
-        public Axis axis;
+        public Axis[] axis;
         public Direction direction;
     }
 

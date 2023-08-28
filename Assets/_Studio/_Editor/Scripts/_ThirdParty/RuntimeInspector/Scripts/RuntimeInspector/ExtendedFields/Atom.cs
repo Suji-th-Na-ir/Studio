@@ -79,7 +79,9 @@ namespace Terra.Studio
     public struct RotateComponentData
     {
         public int rotateType;
-        public Axis axis;
+        public bool Xaxis;
+        public bool Yaxis;
+        public bool Zaxis;
         public Direction direction;
         public float degrees;
         public float speed;

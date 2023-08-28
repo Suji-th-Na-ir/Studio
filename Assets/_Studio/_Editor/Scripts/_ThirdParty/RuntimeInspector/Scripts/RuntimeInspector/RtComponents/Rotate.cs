@@ -2,6 +2,7 @@ using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
+using System.Collections.Generic;
 
 namespace RuntimeInspectorNamespace
 {
@@ -27,7 +28,6 @@ namespace RuntimeInspectorNamespace
         {
             var rc = new RotateComponent
             {
-                axis = Type.data.axis,
                 direction = Type.data.direction,
                 rotationType = (RotationType)Type.data.rotateType,
                 repeatType = GetRepeatType(Type.data.repeat),
@@ -53,6 +53,16 @@ namespace RuntimeInspectorNamespace
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition()
             };
+
+            List<Axis> axes = new List<Axis>();
+            if (Type.data.Xaxis)
+                axes.Add(Axis.X);
+            if (Type.data.Yaxis)
+                axes.Add(Axis.Y);
+            if (Type.data.Zaxis)
+                axes.Add(Axis.Z);
+
+            rc.axis = axes.ToArray();
 
             ModifyDataAsPerSelected(ref rc);
             gameObject.TrySetTrigger(false, true);
@@ -97,7 +107,15 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.clipIndex = cc.vfxIndex;
             PlayVFX.data.clipName = cc.vfxName;
 
-            Type.data.axis = cc.axis;
+            for (int i = 0; i < cc.axis.Length; i++)
+            {
+                if (cc.axis[i] == Axis.X)
+                    Type.data.Xaxis = true;
+                if (cc.axis[i] == Axis.Y)
+                    Type.data.Yaxis = true;
+                if (cc.axis[i] == Axis.Z)
+                    Type.data.Zaxis = true;
+            }
             Type.data.direction = cc.direction;
             Type.data.rotateType = (int)cc.rotationType;
             Type.data.speed = cc.speed;
