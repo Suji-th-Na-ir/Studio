@@ -23,7 +23,7 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
         public string Broadcast = null;
-        public string BroadcastListen = null;
+        public string ListenTo = null;
         
         public void Start()
         {
@@ -41,7 +41,7 @@ namespace RuntimeInspectorNamespace
         {
             if (start == DestroyOnEnum.BroadcastListen)
             {
-                return BroadcastListen;
+                return ListenTo;
             }
             return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(start);
         }
@@ -55,7 +55,7 @@ namespace RuntimeInspectorNamespace
                 destroyOn.ConditionData = GetCondition();
                 destroyOn.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
                 destroyOn.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
-                destroyOn.BroadcastListen = string.IsNullOrEmpty(BroadcastListen) ? null : BroadcastListen;
+                destroyOn.BroadcastListen = string.IsNullOrEmpty(ListenTo) ? null : ListenTo;
 
                 destroyOn.canPlaySFX = PlaySFX.data.canPlay;
                 destroyOn.canPlayVFX = PlayVFX.data.canPlay;
@@ -82,7 +82,7 @@ namespace RuntimeInspectorNamespace
             }
 
             Broadcast = cc.Broadcast;
-            BroadcastListen = cc.BroadcastListen;
+            ListenTo = cc.BroadcastListen;
 
             PlaySFX.data.canPlay = cc.canPlaySFX;
             PlaySFX.data.clipIndex = cc.sfxIndex;
