@@ -8,13 +8,14 @@ namespace RuntimeInspectorNamespace
     [EditorDrawComponent("Terra.Studio.Rotate")]
     public class Rotate : MonoBehaviour, IComponent
     {
-        public StartOn start = StartOn.GameStart;
+        public Atom.StartOn startOn = new Atom.StartOn();
         public Atom.Rotate Type = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
 
         public void Start()
         {
+            startOn.Setup(gameObject);
             PlaySFX.Setup(gameObject);
             PlayVFX.Setup(gameObject);
         }
@@ -46,8 +47,8 @@ namespace RuntimeInspectorNamespace
 
                 IsConditionAvailable = true,
                 listen = Type.data.listen,
-                ConditionType = GetStartEvent(),
-                ConditionData = GetStartCondition()
+                ConditionType = startOn.data.startName,
+                ConditionData = startOn.data.listenName
             };
 
             ModifyDataAsPerSelected(ref rc);
@@ -63,23 +64,18 @@ namespace RuntimeInspectorNamespace
             if (_value == 0) return RepeatType.Forever;
             else return RepeatType.XTimes;
         }
-
-        public string GetStartEvent()
-        {
-            return EditorOp.Resolve<DataProvider>().GetEnumValue(start);
-        }
-
-        public string GetStartCondition()
-        {
-            if (start == StartOn.BroadcastListen)
-            {
-                return Type.data.listenTo;
-            }
-            else
-            {
-                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(start);
-            }
-        }
+        
+        // public string GetStartCondition()
+        // {
+        //     if (start == StartOn.BroadcastListen)
+        //     {
+        //         return Type.data.listenTo;
+        //     }
+        //     else
+        //     {
+        //         return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(start);
+        //     }
+        // }
 
 
 
@@ -103,16 +99,9 @@ namespace RuntimeInspectorNamespace
             Type.data.broadcast = cc.Broadcast;
             Type.data.broadcastAt = cc.broadcastAt;
             Type.data.listen = cc.listen;
-
-            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOn), out object result))
-            {
-                start = (StartOn)result;
-            }
-
-            if (start == StartOn.BroadcastListen)
-            {
-                Type.data.listenTo = cc.ConditionData;
-            }
+            
+            startOn.data.startIndex = Helper.GetEnumIndexByString<StartOn>(cc.ConditionType) ;
+            startOn.data.listenIndex = Helper.GetListenIndex(cc.ConditionData);
         }
 
         private void ModifyDataAsPerSelected(ref RotateComponent component)

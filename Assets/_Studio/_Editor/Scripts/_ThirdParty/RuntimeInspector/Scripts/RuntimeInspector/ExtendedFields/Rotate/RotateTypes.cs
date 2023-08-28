@@ -22,7 +22,6 @@ namespace RuntimeInspectorNamespace
 
         public Dropdown broadcastAt;
         public TMP_InputField broadcastInput;
-        public TMP_InputField listenInput;
         public Toggle canListenMultipleTimesToggle;
 
         [HideInInspector]
@@ -70,11 +69,6 @@ namespace RuntimeInspectorNamespace
             if (broadcastInput != null) broadcastInput.onValueChanged.AddListener((value) =>
             {
                 data.broadcast = value;
-                UpdateData(data);
-            });
-            if (listenInput != null) listenInput.onValueChanged.AddListener((value) =>
-            {
-                data.listenTo = value;
                 UpdateData(data);
             });
             if (canListenMultipleTimesToggle != null) canListenMultipleTimesToggle.onValueChanged.AddListener((value) =>
@@ -164,7 +158,6 @@ namespace RuntimeInspectorNamespace
             if (pauseInput) pauseInput.SetTextWithoutNotify(_data.pauseBetween.ToString());
             if (repeatInput) repeatInput.SetTextWithoutNotify(_data.repeat.ToString());
             if (broadcastInput) broadcastInput.SetTextWithoutNotify(_data.broadcast);
-            if (listenInput) listenInput.SetTextWithoutNotify(_data.listenTo);
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
     }

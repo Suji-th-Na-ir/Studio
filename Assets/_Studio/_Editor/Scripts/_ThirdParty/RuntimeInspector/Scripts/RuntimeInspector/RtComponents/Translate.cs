@@ -9,7 +9,7 @@ namespace RuntimeInspectorNamespace
     [EditorDrawComponent("Terra.Studio.Translate")]
     public class Translate : MonoBehaviour, IComponent
     {
-        public StartOn start = StartOn.GameStart;
+        public Atom.StartOn startOn = new Atom.StartOn();
         public Atom.Translate Type = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
@@ -22,6 +22,7 @@ namespace RuntimeInspectorNamespace
         
         public void Start()
         {
+            startOn.Setup(gameObject);
             PlaySFX.Setup(gameObject);
             PlayVFX.Setup(gameObject);
         }
@@ -51,8 +52,9 @@ namespace RuntimeInspectorNamespace
 
                 IsConditionAvailable = true,
                 listen = Type.data.listen,
-                ConditionType = GetStartEvent(),
-                ConditionData = GetStartCondition()
+                
+                ConditionType = startOn.data.startName,
+                ConditionData = startOn.data.listenName
             };
 
             ModifyDataAsPerGiven(ref rc);
@@ -67,36 +69,6 @@ namespace RuntimeInspectorNamespace
         {
             if (_value == 0) return RepeatType.Forever;
             else return RepeatType.XTimes;
-        }
-
-        public string GetStartEvent()
-        {
-            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(start);
-            return eventName;
-        }
-
-        public string GetStartCondition()
-        {
-            if (start == StartOn.OnPlayerCollide)
-                return "Player";
-            else if (start == StartOn.OnClick)
-                return "OnClick";
-            else if (start == StartOn.GameStart)
-                return "Start";
-            else if (start == StartOn.BroadcastListen)
-                return Type.data.listenTo;
-
-            return "";
-        }
-
-        private StartOn GetStartCondition(string _name)
-        {
-
-            if (_name == "Terra.Studio.GameStart") return StartOn.GameStart;
-            else if (_name == "Terra.Studio.TriggerAction") return StartOn.OnPlayerCollide;
-            else if (_name == "Terra.Studio.MouseAction") return StartOn.OnClick;
-            else if (_name == "Terra.Studio.Listener") return StartOn.BroadcastListen;
-            return StartOn.GameStart;
         }
 
         public void Import(EntityBasedComponent cdata)
@@ -120,7 +92,8 @@ namespace RuntimeInspectorNamespace
             Type.data.listenTo = cc.ConditionData;
             Type.data.listen = cc.listen;
 
-            start = GetStartCondition(cc.ConditionType);
+            startOn.data.startIndex = Helper.GetEnumIndexByString<StartOn>(cc.ConditionType) ;
+            startOn.data.listenIndex = Helper.GetListenIndex(cc.ConditionData);
         }
 
         private void ModifyDataAsPerGiven(ref TranslateComponent component)
