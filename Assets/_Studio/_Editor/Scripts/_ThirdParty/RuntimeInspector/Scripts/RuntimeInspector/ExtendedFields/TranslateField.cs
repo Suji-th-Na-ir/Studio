@@ -77,7 +77,7 @@ namespace RuntimeInspectorNamespace
             var preset = ((TranslatePreset)EditorOp.Load(ResourceTag.ComponentPresets, finalPath)).Value;
             LoadData(preset);
             Atom.Translate rt = (Atom.Translate)Value;
-            rt.data.moveTo = rt.referenceGO.transform.position;
+            rt.data.moveTo = rt.referenceGO.transform.localPosition;
         }
 
         private bool IsDataDefault()
