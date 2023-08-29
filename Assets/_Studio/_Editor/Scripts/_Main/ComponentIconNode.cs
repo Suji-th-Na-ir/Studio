@@ -25,7 +25,20 @@ namespace Terra.Studio
         private Sprite m_broadcastNoListnerSprite;
         private Sprite m_GameWonBroadcastSprite;
 
-        public bool m_isBroadcating = false;
+        private bool m_isBroadcating = false;
+        public bool ISBroadcasting
+        {
+            get { return m_isBroadcating; }
+            set
+            {
+                m_isBroadcating = value;
+                if (!m_isBroadcating)
+                {
+                    ClearAllLineRenderers();
+                }
+            }
+        }
+        
         public bool m_isBroadcatingGameWon = false;
         public int m_componentIndex = 0;
 
@@ -93,15 +106,7 @@ namespace Terra.Studio
 
         public void DestroyThisIcon()
         {
-
-            if (m_LineConnectors != null)
-            {
-                foreach (var line in m_LineConnectors)
-                {
-                    Destroy(line.gameObject);
-                }
-                m_LineConnectors.Clear();
-            }
+            ClearAllLineRenderers();
             Destroy(this.gameObject);
         }
 
@@ -161,6 +166,7 @@ namespace Terra.Studio
             else
             {
                 m_BroadcastIcon.gameObject.SetActive(false);
+                return;
             }
 
             if (m_ListnerTargetNodes == null)
@@ -236,6 +242,19 @@ namespace Terra.Studio
             }
 
 
+
+        }
+
+        private void ClearAllLineRenderers()
+        {
+            if (m_LineConnectors != null)
+            {
+                foreach (var line in m_LineConnectors)
+                {
+                    Destroy(line.gameObject);
+                }
+                m_LineConnectors.Clear();
+            }
 
         }
 

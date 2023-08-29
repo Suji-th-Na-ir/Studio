@@ -86,7 +86,7 @@ namespace Terra.Studio
                         {
                             if (compIcons[j].GetComponentDisplayDockTarget().Equals(obj))
                             {
-                                compIcons[j].m_isBroadcating = false;
+                                compIcons[j].ISBroadcasting = false;
                             }
                         }
                     }
@@ -148,7 +148,7 @@ namespace Terra.Studio
                             if (compIcons[j].GetComponentDisplayDockTarget().Equals(allbroadCastObject[i]))
                             {
                                 compIcons[j].ListnerTargets = GetTargetIconsForDisplayDock(listners);
-                                compIcons[j].m_isBroadcating = true;
+                                compIcons[j].ISBroadcasting = true;
                                 if (broadcast.Key == "Game Win")
                                     compIcons[j].m_isBroadcatingGameWon = true;
                                 else
