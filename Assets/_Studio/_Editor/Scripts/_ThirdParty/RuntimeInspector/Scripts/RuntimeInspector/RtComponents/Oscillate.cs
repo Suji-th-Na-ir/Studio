@@ -21,13 +21,9 @@ namespace RuntimeInspectorNamespace
 
         private void Awake()
         {
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>());
             fromPoint = transform.localPosition;
             Component.fromPoint = fromPoint;
-        }
-        
-        public void Start()
-        {
-            startOn.Setup(gameObject);
         }
 
         public (string type, string data) Export()

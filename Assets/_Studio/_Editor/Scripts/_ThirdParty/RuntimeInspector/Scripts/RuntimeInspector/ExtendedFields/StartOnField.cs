@@ -4,6 +4,7 @@ using PlayShifu.Terra;
 using UnityEngine;
 using UnityEngine.UI;
 using Terra.Studio;
+using System.Reflection;
 
 namespace RuntimeInspectorNamespace
 {
@@ -14,12 +15,11 @@ namespace RuntimeInspectorNamespace
 
         [SerializeField] private Dropdown listenOn;
 #pragma warning restore 0649
-        
+
         public override void Initialize()
         {
             base.Initialize();
             startOn.onValueChanged.AddListener(OnStartValueChanged);
-            LoadStartOnOptions();
             listenOn.onValueChanged.AddListener(OnListenValueChanged);
             LoadListenTo();
             ShowHideListenDD();
@@ -37,16 +37,25 @@ namespace RuntimeInspectorNamespace
             }
         }
 
+        protected override void OnBound(MemberInfo variable)
+        {
+            base.OnBound(variable);
+            LoadStartOnOptions();
+        }
+
         private void LoadStartOnOptions()
         {
-            startOn.options.Clear();
-            int enumSize = System.Enum.GetValues(typeof(StartOn)).Length;
-            for (int i = 0; i < enumSize; i++)
+            Atom.StartOn atom = (Atom.StartOn)Value;
+            if (atom.StartList.Count > 0)
             {
-                startOn.options.Add(new Dropdown.OptionData()
+                startOn.options.Clear();
+                foreach (string item in atom.StartList)
                 {
-                    text = ((StartOn)i).ToString()
-                });
+                    startOn.options.Add(new Dropdown.OptionData()
+                    {
+                        text = item
+                    });
+                }
             }
         }
 
@@ -77,7 +86,7 @@ namespace RuntimeInspectorNamespace
             ShowHideListenDD();
             Atom.StartOn atom = (Atom.StartOn)Value;
             atom.data.startIndex = _index;
-            atom.data.startName = Enum.ToObject(typeof(StartOn), _index).ToString();
+            atom.data.startName = atom.StartList[_index];
             // rest the listen field
             atom.data.listenIndex = 0;
             UpdateData(atom);
@@ -132,7 +141,6 @@ namespace RuntimeInspectorNamespace
             {
                 startOn.value = atom.data.startIndex;
                 listenOn.value = atom.data.listenIndex;
-                // ShowHideListenDD();
             }
         }
     }

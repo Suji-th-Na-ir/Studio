@@ -678,5 +678,10 @@ namespace PlayShifu.Terra
                 return 0;
             }
         }
+        
+        public static List<string> GetEnumValuesAsStrings<TEnum>() where TEnum : Enum
+        {
+            return new List<string>(Enum.GetNames(typeof(TEnum)));
+        }
     }
 }

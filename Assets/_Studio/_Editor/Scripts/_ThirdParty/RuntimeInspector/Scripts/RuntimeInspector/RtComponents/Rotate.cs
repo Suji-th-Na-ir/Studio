@@ -13,9 +13,9 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
 
-        public void Start()
+        public void Awake()
         {
-            startOn.Setup(gameObject);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>());
             PlaySFX.Setup(gameObject);
             PlayVFX.Setup(gameObject);
         }

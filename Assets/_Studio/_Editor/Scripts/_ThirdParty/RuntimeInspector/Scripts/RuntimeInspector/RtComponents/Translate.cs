@@ -17,11 +17,7 @@ namespace RuntimeInspectorNamespace
         private void Awake()
         {
             Type.data.moveTo = transform.localPosition;
-        }
-        
-        public void Start()
-        {
-            startOn.Setup(gameObject);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>());
             PlaySFX.Setup(gameObject);
             PlayVFX.Setup(gameObject);
         }

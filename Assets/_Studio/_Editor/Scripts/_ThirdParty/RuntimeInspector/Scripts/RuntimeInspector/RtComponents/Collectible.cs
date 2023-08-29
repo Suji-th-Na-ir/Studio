@@ -25,9 +25,9 @@ namespace RuntimeInspectorNamespace
         public float ScoreValue = 0;
         public string Broadcast = null;
         
-        public void Start()
+        public void Awake()
         {
-            startOn.Setup(gameObject);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>());
             PlaySFX.Setup(gameObject);
             PlayVFX.Setup(gameObject);
         }

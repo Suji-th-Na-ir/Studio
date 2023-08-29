@@ -14,9 +14,11 @@ namespace Terra.Studio
             [HideInInspector] public StartOnField field;
             [HideInInspector] public StartOnData data;
             [HideInInspector] public GameObject target;
-            
-            public void Setup(GameObject _target)
+            [HideInInspector] public List<string> StartList = new List<string>();
+                        
+            public void Setup(GameObject _target, List<string> _list)
             {
+                StartList = _list;
                 target = _target;
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
