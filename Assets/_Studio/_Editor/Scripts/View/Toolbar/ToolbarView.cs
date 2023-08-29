@@ -30,7 +30,7 @@ namespace Terra.Studio
             var spherePrimitiveTr = Helper.FindDeepChild(transform, SPHERE_PRIMITIVE_BUTTON_LOC, true);
             var cubePrimitiveTr = Helper.FindDeepChild(transform, CUBE_PRIMITIVE_BUTTON_LOC, true);
             var planePrimitiveTr = Helper.FindDeepChild(transform, PLANE_PRIMITIVE_BUTTON_LOC, true);
-            var checkpointTr = Helper.FindDeepChild (transform, CHECKPOINT_PRIMITIVE_BUTTON_LOC, true);
+            var checkpointTr = Helper.FindDeepChild(transform, CHECKPOINT_PRIMITIVE_BUTTON_LOC, true);
 
             var playButton = playButtonTr.GetComponent<Button>();
             AddListenerEvent(playButton, () =>
@@ -43,19 +43,19 @@ namespace Terra.Studio
             AddListenerEvent(saveButton, EditorOp.Resolve<SceneDataHandler>().Save);
 
             var cylinderButton = cylinderPrimitiveTr.GetComponent<Button>();
-            AddListenerEvent(cylinderButton, CreatePrimitive, PrimitiveType.Cylinder);
+            AddListenerEvent(cylinderButton, CreateObject, PrimitiveType.Cylinder.ToString());
 
             var sphereButton = spherePrimitiveTr.GetComponent<Button>();
-            AddListenerEvent(sphereButton, CreatePrimitive, PrimitiveType.Sphere);
+            AddListenerEvent(sphereButton, CreateObject, PrimitiveType.Sphere.ToString());
 
             var cubeButton = cubePrimitiveTr.GetComponent<Button>();
-            AddListenerEvent(cubeButton, CreatePrimitive, PrimitiveType.Cube);
+            AddListenerEvent(cubeButton, CreateObject, PrimitiveType.Cube.ToString());
 
             var planeButton = planePrimitiveTr.GetComponent<Button>();
-            AddListenerEvent(planeButton, CreatePrimitive, PrimitiveType.Plane);
+            AddListenerEvent(planeButton, CreateObject, PrimitiveType.Plane.ToString());
 
-            var checkpointButton = checkpointTr.GetComponent<Button> ();
-            AddListenerEvent (checkpointButton, CreateCheckPoint, "CheckPoint");
+            var checkpointButton = checkpointTr.GetComponent<Button>();
+            AddListenerEvent(checkpointButton, CreateObject, "CheckPoint");
 
         }
 
@@ -65,29 +65,20 @@ namespace Terra.Studio
             button.onClick.AddListener(() => { callback?.Invoke(type); });
         }
 
-        public void CreateCheckPoint (string a_strPrefabName) {
-            Transform cameraTransform = Camera.main.transform;
-            Vector3 cameraPosition = cameraTransform.position;
-            Vector3 spawnPosition = cameraPosition + cameraTransform.forward * 5;
-            var itemData = ((ResourceDB)SystemOp.Load (ResourceTag.ResourceDB)).GetItemDataForNearestName (a_strPrefabName);
-            var primitive = RuntimeWrappers.SpawnGameObject (itemData.ResourcePath, itemData);
-            primitive.transform.position = spawnPosition;
-            EditorOp.Resolve<SelectionHandler> ().OnSelectionChanged (primitive);
-            EditorOp.Resolve<SelectionHandler> ().SelectObjectInHierarchy (primitive);
-            primitive.AddComponent<RuntimeInspectorNamespace.Checkpoint> ();
-        }
 
-        public void CreatePrimitive(PrimitiveType type)
+
+        public void CreateObject(string type)
         {
             Transform cameraTransform = Camera.main.transform;
             Vector3 cameraPosition = cameraTransform.position;
             Vector3 spawnPosition = cameraPosition + cameraTransform.forward * 5;
-            var itemData = ((ResourceDB)SystemOp.Load(ResourceTag.ResourceDB)).GetItemDataForNearestName(type.ToString());
+            var itemData = ((ResourceDB)SystemOp.Load(ResourceTag.ResourceDB)).GetItemDataForNearestName(type);
             var primitive = RuntimeWrappers.SpawnGameObject(itemData.ResourcePath, itemData);
             primitive.transform.position = spawnPosition;
             EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);
             EditorOp.Resolve<SelectionHandler>().SelectObjectInHierarchy(primitive);
         }
+
         public override void Draw()
         {
             //Nothing to draw
