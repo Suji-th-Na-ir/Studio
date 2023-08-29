@@ -22,7 +22,6 @@ namespace RuntimeInspectorNamespace
             startOn.onValueChanged.AddListener(OnStartValueChanged);
             listenOn.onValueChanged.AddListener(OnListenValueChanged);
             LoadListenTo();
-            ShowHideListenDD();
         }
 
         private void LoadListenTo()
@@ -66,24 +65,28 @@ namespace RuntimeInspectorNamespace
 
         public void ShowHideListenDD()
         {
-            if (startOn.value == (int) StartOn.BroadcastListen )
+            Atom.StartOn atom = (Atom.StartOn)Value;
+            if (atom.StartList.Count > 0)
             {
-                if (!listenOn.gameObject.activeSelf)
+                string startValue = (atom.StartList[startOn.value]).ToLower();
+                if (startValue.Contains("listen"))
                 {
-                    LoadListenTo();
-                    listenOn.gameObject.SetActive(true);
+                    if (!listenOn.gameObject.activeSelf)
+                    {
+                        LoadListenTo();
+                        listenOn.gameObject.SetActive(true);
+                    }
                 }
-            }
-            else if(listenOn.gameObject.activeSelf)
-            {
-                listenOn.gameObject.SetActive(false);
+                else if (listenOn.gameObject.activeSelf)
+                {
+                    listenOn.gameObject.SetActive(false);
+                }
             }
         }
         
         private void OnStartValueChanged(int _index)
         {
             if(Inspector)  Inspector.RefreshDelayed();
-            ShowHideListenDD();
             Atom.StartOn atom = (Atom.StartOn)Value;
             atom.data.startIndex = _index;
             atom.data.startName = atom.StartList[_index];
@@ -139,8 +142,9 @@ namespace RuntimeInspectorNamespace
             Atom.StartOn atom = (Atom.StartOn)Value;
             if (atom != null)
             {
-                startOn.value = atom.data.startIndex;
                 listenOn.value = atom.data.listenIndex;
+                startOn.value = atom.data.startIndex;
+                ShowHideListenDD();
             }
         }
     }
