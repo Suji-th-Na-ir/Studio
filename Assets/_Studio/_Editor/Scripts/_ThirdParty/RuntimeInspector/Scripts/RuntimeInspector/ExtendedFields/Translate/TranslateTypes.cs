@@ -17,13 +17,21 @@ namespace RuntimeInspectorNamespace
         public TMP_InputField pauseForInput = null;
 
         public Dropdown broadcastAt;
-        public TMP_InputField broadcastInput;
+        public TMP_InputField broadcastInput = null;
         public Toggle canListenMultipleTimesToggle;
 
         [HideInInspector]
         public TranslateField translateField = null;
         private TranslateComponentData data = new TranslateComponentData();
 
+        public void Update()
+        {
+            if (!String.IsNullOrEmpty(broadcastInput.text))
+            {
+                Helper.UpdateListenToTypes(this.GetInstanceID() + "_respawn", broadcastInput.text);
+            }
+        }
+        
         public void Setup()
         {
             LoadDefaultValues();

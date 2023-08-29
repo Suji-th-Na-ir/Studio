@@ -21,12 +21,20 @@ namespace RuntimeInspectorNamespace
         public TMP_InputField repeatInput = null;
 
         public Dropdown broadcastAt;
-        public TMP_InputField broadcastInput;
+        public TMP_InputField broadcastInput = null;
         public Toggle canListenMultipleTimesToggle;
 
         [HideInInspector]
         public RotateField rotateField = null;
         private RotateComponentData data = new();
+        
+        public void Update()
+        {
+            if (!String.IsNullOrEmpty(broadcastInput.text))
+            {
+                Helper.UpdateListenToTypes(this.GetInstanceID() + "_respawn", broadcastInput.text);
+            }
+        }
 
         public void Setup()
         {

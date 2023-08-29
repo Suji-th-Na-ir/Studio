@@ -10,13 +10,13 @@ namespace RuntimeInspectorNamespace
     public class InGameTimer : MonoBehaviour, IComponent
     {
         public uint Time;
-        public string Broadcast;
+        public string Broadcast = null;
         
         public void Update()
         {
             if (!String.IsNullOrEmpty(Broadcast))
             {
-                Helper.UpdateListenToTypes(this.GetInstanceID()+"_timer", Broadcast);
+                Helper.UpdateListenToTypes(this.GetInstanceID() + "_timer", Broadcast);
             }
         }
 
