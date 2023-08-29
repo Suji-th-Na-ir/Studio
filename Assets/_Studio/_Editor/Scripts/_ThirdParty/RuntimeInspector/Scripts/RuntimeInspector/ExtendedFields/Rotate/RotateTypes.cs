@@ -30,7 +30,7 @@ namespace RuntimeInspectorNamespace
         
         public void Update()
         {
-            if (!String.IsNullOrEmpty(broadcastInput.text))
+            if (broadcastInput != null && !String.IsNullOrEmpty(broadcastInput.text))
             {
                 Helper.UpdateListenToTypes(this.GetInstanceID() + "_respawn", broadcastInput.text);
             }
