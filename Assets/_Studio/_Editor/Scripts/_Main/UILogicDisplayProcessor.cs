@@ -219,6 +219,13 @@ namespace Terra.Studio
             }
         }
 
+        public void ImportVisualisation(GameObject gameObj, string component, string broadcast, string broadcastListen)
+        {
+            AddComponentIcon(new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
+            UpdateBroadcastString(broadcast, "", new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
+            UpdateListnerString(broadcastListen, "", new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
+        }
+
         private void RemoveIcon(ComponentDisplayDock componentDisplay)
         {
             List<ComponentIconNode> value;

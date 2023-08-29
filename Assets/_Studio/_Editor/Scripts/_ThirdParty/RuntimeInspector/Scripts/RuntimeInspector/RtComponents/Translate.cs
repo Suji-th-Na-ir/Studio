@@ -121,6 +121,7 @@ namespace RuntimeInspectorNamespace
             Type.data.listen = cc.listen;
 
             start = GetStartCondition(cc.ConditionType);
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
         }
 
         private void ModifyDataAsPerGiven(ref TranslateComponent component)

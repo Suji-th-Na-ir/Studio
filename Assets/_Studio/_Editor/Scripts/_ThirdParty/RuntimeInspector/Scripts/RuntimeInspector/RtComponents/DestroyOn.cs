@@ -90,6 +90,7 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.canPlay = cc.canPlayVFX;
             PlayVFX.data.clipIndex = cc.vfxIndex;
             PlayVFX.data.clipName = cc.vfxName;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, BroadcastListen);
         }
 
         private void OnDestroy()

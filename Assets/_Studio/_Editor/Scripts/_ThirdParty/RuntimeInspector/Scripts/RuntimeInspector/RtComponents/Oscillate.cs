@@ -65,6 +65,7 @@ namespace RuntimeInspectorNamespace
             }
 
             BroadcastListen = cc.BroadcastListen;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, null, BroadcastListen);
         }
 
         public string GetStartEvent()

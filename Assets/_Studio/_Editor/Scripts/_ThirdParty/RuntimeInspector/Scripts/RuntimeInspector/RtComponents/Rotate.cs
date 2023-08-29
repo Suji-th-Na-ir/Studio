@@ -135,6 +135,7 @@ namespace RuntimeInspectorNamespace
             {
                 Type.data.listenTo = cc.ConditionData;
             }
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
         }
 
         private void ModifyDataAsPerSelected(ref RotateComponent component)
