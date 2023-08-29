@@ -11,6 +11,12 @@ namespace PlayShifu.Terra
 {
     public static class Helper
     {
+        public static List<string> componentsToFilterOut = new List<string>()
+        {
+            "Checkpoint"
+        };
+        
+        
         private static List<string> ListenToTypes = new List<string>()
         {
             "None",
@@ -51,12 +57,6 @@ namespace PlayShifu.Terra
                 listenDictionary[_id] =  _type;
                 prevListenType = _type;
             }
-            // if (!string.IsNullOrEmpty(_type))
-            // {
-            //     string types = PlayerPrefs.GetString("editor_listen_types", "");
-            //     types += ("," + _type);
-            //     PlayerPrefs.SetString("editor_listen_types", types);
-            // }
         }
         
         public static int GetListenIndex(string _name)
