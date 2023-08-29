@@ -78,8 +78,8 @@ MonoBehaviour:
   variableNameText: {fileID: 0}
   variableNameMask: {fileID: 0}
   visibleArea: {fileID: 0}
-  StartOn: {fileID: 5402255416815306912}
-  ListenOn: {fileID: 8180246698536180066}
+  startOn: {fileID: 5402255416815306912}
+  listenOn: {fileID: 8180246698536180066}
 --- !u!114 &2885853469568540334
 MonoBehaviour:
   m_ObjectHideFlags: 0

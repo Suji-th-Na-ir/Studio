@@ -12,10 +12,10 @@ namespace RuntimeInspectorNamespace
         [HideInInspector]
         public OscillateComponent Component;
 
+        public Atom.StartOn startOn = new Atom.StartOn();
         public Vector3 fromPoint;
         public Vector3 toPoint;
-        public StartOn Start;
-        public string BroadcastListen = null;
+        public StartOn start;
         public float Speed = 1f;
         public bool Loop = false;
 
@@ -24,14 +24,10 @@ namespace RuntimeInspectorNamespace
             fromPoint = transform.localPosition;
             Component.fromPoint = fromPoint;
         }
-
-        public string GetCondition()
+        
+        public void Start()
         {
-            if (Start == StartOn.BroadcastListen)
-            {
-                return BroadcastListen;
-            }
-            return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(Start);
+            startOn.Setup(gameObject);
         }
 
         public (string type, string data) Export()
@@ -40,15 +36,22 @@ namespace RuntimeInspectorNamespace
 
             Component.fromPoint = fromPoint;
             Component.toPoint = toPoint;
-            Component.ConditionType = GetStartEvent();
-            Component.ConditionData = GetCondition();
-            Component.BroadcastListen = string.IsNullOrEmpty(BroadcastListen) ? null : BroadcastListen;
+            Component.ConditionType = startOn.data.startName;
+            Component.ConditionData = startOn.data.listenName;
+            Component.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? null : startOn.data.listenName;
+            
             Component.loop = Loop;
             Component.speed = Speed;
             Component.IsConditionAvailable = GetStartEvent() != "";
             gameObject.TrySetTrigger(false, true);
             var data = JsonConvert.SerializeObject(Component);
             return (type, data);
+        }
+
+        public string GetStartEvent()
+        {
+            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(start);
+            return eventName;
         }
 
         public void Import(EntityBasedComponent cdata)
@@ -61,16 +64,8 @@ namespace RuntimeInspectorNamespace
 
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOn), out object result))
             {
-                Start = (StartOn)result;
+                start = (StartOn)result;
             }
-
-            BroadcastListen = cc.BroadcastListen;
-        }
-
-        public string GetStartEvent()
-        {
-            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(Start);
-            return eventName;
         }
 
         private void OnDestroy()

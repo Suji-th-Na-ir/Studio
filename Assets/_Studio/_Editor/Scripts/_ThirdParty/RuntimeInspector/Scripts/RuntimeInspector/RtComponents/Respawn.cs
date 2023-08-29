@@ -10,7 +10,6 @@ namespace RuntimeInspectorNamespace
     [EditorDrawComponent("Terra.Studio.Respawn")]
     public class Respawn : MonoBehaviour, IComponent
     {
-       
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
         public string Broadcast = null;
@@ -21,7 +20,14 @@ namespace RuntimeInspectorNamespace
             PlayVFX.Setup(gameObject);
         }
         
-
+        public void Update()
+        {
+            if (!String.IsNullOrEmpty(Broadcast))
+            {
+                Helper.UpdateListenToTypes(this.GetInstanceID() + "_respawn", Broadcast);
+            }
+        }
+        
         public (string type, string data) Export()
         {
             RespawnComponent respawnComp = new();

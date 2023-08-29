@@ -4,35 +4,33 @@ using PlayShifu.Terra;
 using UnityEngine;
 using UnityEngine.UI;
 using Terra.Studio;
-using Unity.Plastic.Newtonsoft.Json.Converters;
-using UnityEngine.Serialization;
 
 namespace RuntimeInspectorNamespace
 {
     public class StartOnField : InspectorField
     {
 #pragma warning disable 0649
-        [SerializeField] private Dropdown StartOn;
+        [SerializeField] private Dropdown startOn;
 
-        [SerializeField] private Dropdown ListenOn;
+        [SerializeField] private Dropdown listenOn;
 #pragma warning restore 0649
         
         public override void Initialize()
         {
             base.Initialize();
-            StartOn.onValueChanged.AddListener(OnStartValueChanged);
+            startOn.onValueChanged.AddListener(OnStartValueChanged);
             LoadStartOnOptions();
-            ListenOn.onValueChanged.AddListener(OnListenValueChanged);
+            listenOn.onValueChanged.AddListener(OnListenValueChanged);
             LoadListenTo();
             ShowHideListenDD();
         }
 
         private void LoadListenTo()
         {
-            ListenOn.options.Clear();
+            listenOn.options.Clear();
             foreach (string _name in Helper.GetListenToTypes())
             {
-                ListenOn.options.Add(new Dropdown.OptionData()
+                listenOn.options.Add(new Dropdown.OptionData()
                 {
                     text = _name
                 });
@@ -41,13 +39,13 @@ namespace RuntimeInspectorNamespace
 
         private void LoadStartOnOptions()
         {
-            StartOn.options.Clear();
-            int enumSize = System.Enum.GetValues(typeof(DestroyOnEnum)).Length;
+            startOn.options.Clear();
+            int enumSize = System.Enum.GetValues(typeof(StartOn)).Length;
             for (int i = 0; i < enumSize; i++)
             {
-                StartOn.options.Add(new Dropdown.OptionData()
+                startOn.options.Add(new Dropdown.OptionData()
                 {
-                    text = ((DestroyOnEnum)i).ToString()
+                    text = ((StartOn)i).ToString()
                 });
             }
         }
@@ -59,17 +57,17 @@ namespace RuntimeInspectorNamespace
 
         public void ShowHideListenDD()
         {
-            if (StartOn.value == (int) DestroyOnEnum.BroadcastListen )
+            if (startOn.value == (int) StartOn.BroadcastListen )
             {
-                if (!ListenOn.gameObject.activeSelf)
+                if (!listenOn.gameObject.activeSelf)
                 {
                     LoadListenTo();
-                    ListenOn.gameObject.SetActive(true);
+                    listenOn.gameObject.SetActive(true);
                 }
             }
-            else if(ListenOn.gameObject.activeSelf)
+            else if(listenOn.gameObject.activeSelf)
             {
-                ListenOn.gameObject.SetActive(false);
+                listenOn.gameObject.SetActive(false);
             }
         }
         
@@ -79,7 +77,7 @@ namespace RuntimeInspectorNamespace
             ShowHideListenDD();
             Atom.StartOn atom = (Atom.StartOn)Value;
             atom.data.startIndex = _index;
-            atom.data.startName = Enum.ToObject(typeof(DestroyOnEnum), _index).ToString();
+            atom.data.startName = Enum.ToObject(typeof(StartOn), _index).ToString();
             // rest the listen field
             atom.data.listenIndex = 0;
             UpdateData(atom);
@@ -132,8 +130,8 @@ namespace RuntimeInspectorNamespace
             Atom.StartOn atom = (Atom.StartOn)Value;
             if (atom != null)
             {
-                StartOn.value = atom.data.startIndex;
-                ListenOn.value = atom.data.listenIndex;
+                startOn.value = atom.data.startIndex;
+                listenOn.value = atom.data.listenIndex;
                 // ShowHideListenDD();
             }
         }

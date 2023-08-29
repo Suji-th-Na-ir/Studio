@@ -24,7 +24,7 @@ namespace PlayShifu.Terra
             "Game Lose"
         };
 
-        private static Dictionary<int, string> listenDictionary = new Dictionary<int, string>();
+        private static Dictionary<string, string> listenDictionary = new Dictionary<string, string>();
         private static string prevListenType = "";
 
         public static List<string> GetListenToTypes()
@@ -50,7 +50,7 @@ namespace PlayShifu.Terra
             return ListenToTypes;
         }
 
-        public static void UpdateListenToTypes(int _id, string _type)
+        public static void UpdateListenToTypes(string _id, string _type)
         {
             if (prevListenType != _type)
             {

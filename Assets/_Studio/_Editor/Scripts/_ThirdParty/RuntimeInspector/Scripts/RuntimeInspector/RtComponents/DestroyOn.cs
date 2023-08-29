@@ -37,7 +37,7 @@ namespace RuntimeInspectorNamespace
         {
             if (!String.IsNullOrEmpty(Broadcast))
             {
-                Helper.UpdateListenToTypes(this.GetInstanceID(), Broadcast);
+                Helper.UpdateListenToTypes(this.GetInstanceID()+"_destroy", Broadcast);
             }
         }
 

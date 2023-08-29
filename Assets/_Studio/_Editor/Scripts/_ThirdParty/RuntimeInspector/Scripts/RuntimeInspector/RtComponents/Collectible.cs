@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using PlayShifu.Terra;
 using Terra.Studio;
 using UnityEngine;
+using System;
 
 namespace RuntimeInspectorNamespace
 {
@@ -16,7 +17,7 @@ namespace RuntimeInspectorNamespace
             OnClick
         }
 
-        public StartOnCollectible start = StartOnCollectible.OnPlayerCollide;
+        public Atom.StartOn startOn = new Atom.StartOn();
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
         public bool ShowScoreUI = false;
@@ -26,8 +27,17 @@ namespace RuntimeInspectorNamespace
         
         public void Start()
         {
+            startOn.Setup(gameObject);
             PlaySFX.Setup(gameObject);
             PlayVFX.Setup(gameObject);
+        }
+        
+        public void Update()
+        {
+            if (!String.IsNullOrEmpty(Broadcast))
+            {
+                Helper.UpdateListenToTypes(this.GetInstanceID()+"_collectible", Broadcast);
+            }
         }
 
         public (string type, string data) Export()
@@ -35,8 +45,8 @@ namespace RuntimeInspectorNamespace
             CollectableComponent collectable = new();
             {
                 collectable.IsConditionAvailable = true;
-                collectable.ConditionType = GetStartEvent();
-                collectable.ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(start);
+                collectable.ConditionType = startOn.data.startName;
+                collectable.ConditionData = startOn.data.listenName;
                 collectable.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
                 collectable.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
 
@@ -66,11 +76,9 @@ namespace RuntimeInspectorNamespace
             ShowScoreUI = cc.showScoreUI;
             ScoreValue = cc.scoreValue;
 
-            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOnCollectible), out object result))
-            {
-                start = (StartOnCollectible)result;
-            }
-
+            startOn.data.startIndex = Helper.GetEnumIndexByString<StartOnCollectible>(cc.ConditionType) ;
+            startOn.data.listenIndex = Helper.GetListenIndex(cc.ConditionData);
+         
             Broadcast = cc.Broadcast;
 
             PlaySFX.data.canPlay = cc.canPlaySFX;
@@ -80,13 +88,7 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.clipIndex = cc.vfxIndex;
             PlayVFX.data.clipName = cc.vfxName;
         }
-
-        public string GetStartEvent()
-        {
-            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(start);
-            return eventName;
-        }
-
+        
         private void OnDestroy()
         {
             if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))

@@ -2,8 +2,6 @@ using System;
 using RuntimeInspectorNamespace;
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.Serialization;
-using PlayShifu.Terra;
 
 namespace Terra.Studio
 {

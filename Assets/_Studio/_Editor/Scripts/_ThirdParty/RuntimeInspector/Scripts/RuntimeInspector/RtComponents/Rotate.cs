@@ -64,19 +64,6 @@ namespace RuntimeInspectorNamespace
             if (_value == 0) return RepeatType.Forever;
             else return RepeatType.XTimes;
         }
-        
-        // public string GetStartCondition()
-        // {
-        //     if (start == StartOn.BroadcastListen)
-        //     {
-        //         return Type.data.listenTo;
-        //     }
-        //     else
-        //     {
-        //         return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(start);
-        //     }
-        // }
-
 
 
         public void Import(EntityBasedComponent cdata)

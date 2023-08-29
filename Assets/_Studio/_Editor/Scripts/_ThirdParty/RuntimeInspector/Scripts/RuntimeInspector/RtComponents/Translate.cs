@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;

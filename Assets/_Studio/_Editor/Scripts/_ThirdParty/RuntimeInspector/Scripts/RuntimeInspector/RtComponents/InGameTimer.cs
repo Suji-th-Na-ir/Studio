@@ -1,6 +1,8 @@
 using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
+using System;
+using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
 {
@@ -9,6 +11,14 @@ namespace RuntimeInspectorNamespace
     {
         public uint Time;
         public string Broadcast;
+        
+        public void Update()
+        {
+            if (!String.IsNullOrEmpty(Broadcast))
+            {
+                Helper.UpdateListenToTypes(this.GetInstanceID()+"_timer", Broadcast);
+            }
+        }
 
         public (string type, string data) Export()
         {
