@@ -20,7 +20,6 @@ namespace RuntimeInspectorNamespace
         public override void Initialize()
         {
             base.Initialize();
-            
             StartOn.onValueChanged.AddListener(OnStartValueChanged);
             LoadStartOnOptions();
             ListenOn.onValueChanged.AddListener(OnListenValueChanged);
@@ -81,6 +80,8 @@ namespace RuntimeInspectorNamespace
             Atom.StartOn atom = (Atom.StartOn)Value;
             atom.data.startIndex = _index;
             atom.data.startName = Enum.ToObject(typeof(DestroyOnEnum), _index).ToString();
+            // rest the listen field
+            atom.data.listenIndex = 0;
             UpdateData(atom);
         }
 

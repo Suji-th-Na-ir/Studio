@@ -13,6 +13,7 @@ namespace PlayShifu.Terra
     {
         private static List<string> ListenToTypes = new List<string>()
         {
+            "None",
             "Game Win",
             "Game Lose"
         };
