@@ -120,9 +120,9 @@ Material:
     - _impactRippleSpeed: 0
     - _intersectionMultiplier: 1
     - _intersectionOffset: 0.9
-    - _rimGlowNoiseDensity: 500
-    - _rimGlowNoiseSpeed: 1
-    - _rimPulseSpeed: 5
+    - _rimGlowNoiseDensity: 2
+    - _rimGlowNoiseSpeed: 10
+    - _rimPulseSpeed: 3
     - _scanSize: 1
     - _scanSpeed: 1
     m_Colors:
@@ -150,7 +150,7 @@ Material:
     - _impactPoint: {r: 0, g: 0, b: 0, a: 0}
     - _impactRippleDirection: {r: 0, g: 0, b: 1, a: 0}
     - _rimColor: {r: 0.256984, g: 2, b: 0.052356005, a: 1}
-    - _rimPower: {r: 0, g: 10, b: 0, a: 0}
+    - _rimPower: {r: 0.2, g: 10, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &8800161469616260776
 MonoBehaviour:
