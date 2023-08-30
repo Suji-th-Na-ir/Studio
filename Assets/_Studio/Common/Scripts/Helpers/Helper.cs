@@ -19,7 +19,6 @@ namespace PlayShifu.Terra
         
         private static List<string> ListenToTypes = new List<string>()
         {
-            "None",
             "Game Win",
             "Game Lose"
         };
@@ -50,14 +49,27 @@ namespace PlayShifu.Terra
             return ListenToTypes;
         }
 
+        public static void AddToListenList(string _type)
+        {
+            if (string.IsNullOrEmpty(_type))
+                return;
+            
+            if(!ListenToTypes.Contains(_type))
+                ListenToTypes.Add(_type);
+        }
+
         public static void UpdateListenToTypes(string _id, string _type)
         {
+            if (string.IsNullOrEmpty(_type))
+                return;
+            
             if (prevListenType != _type)
             {
                 listenDictionary[_id] =  _type;
                 prevListenType = _type;
             }
         }
+        
         
         public static int GetListenIndex(string _name)
         {
@@ -67,6 +79,16 @@ namespace PlayShifu.Terra
                 if (listenTypes[i] == _name) return i;
             }
             return 0;
+        }
+        
+        public static string GetListenString(int _index)
+        {
+            if (_index < ListenToTypes.Count)
+            {
+                return ListenToTypes[_index];
+            }
+
+            return ListenToTypes[0];
         }
         
         public static string GetCurrentAppPlatform()

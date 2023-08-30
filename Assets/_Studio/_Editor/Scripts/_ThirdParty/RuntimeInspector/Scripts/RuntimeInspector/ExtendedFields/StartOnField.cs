@@ -83,7 +83,8 @@ namespace RuntimeInspectorNamespace
                 }
             }
         }
-        
+
+        private bool resetListenIndex = false;
         private void OnStartValueChanged(int _index)
         {
             if(Inspector)  Inspector.RefreshDelayed();
@@ -91,7 +92,11 @@ namespace RuntimeInspectorNamespace
             atom.data.startIndex = _index;
             atom.data.startName = atom.StartList[_index];
             // rest the listen field
-            atom.data.listenIndex = 0;
+            if (resetListenIndex) {
+                atom.data.listenIndex = 0;
+            }
+            resetListenIndex = true;
+
             UpdateData(atom);
         }
 
@@ -100,6 +105,7 @@ namespace RuntimeInspectorNamespace
             if(Inspector)  Inspector.RefreshDelayed();
             Atom.StartOn atom = (Atom.StartOn)Value;
             atom.data.listenName = Helper.GetListenToTypes()[_index];
+            Debug.Log("listen value setting to "+atom.data.listenName);
             atom.data.listenIndex = _index;
             UpdateData(atom);
         }
@@ -142,8 +148,8 @@ namespace RuntimeInspectorNamespace
             Atom.StartOn atom = (Atom.StartOn)Value;
             if (atom != null)
             {
-                listenOn.value = atom.data.listenIndex;
                 startOn.value = atom.data.startIndex;
+                listenOn.value = atom.data.listenIndex;
                 ShowHideListenDD();
             }
         }

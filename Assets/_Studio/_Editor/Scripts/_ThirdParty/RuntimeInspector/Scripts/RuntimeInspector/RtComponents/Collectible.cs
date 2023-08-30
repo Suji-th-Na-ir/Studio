@@ -45,8 +45,9 @@ namespace RuntimeInspectorNamespace
             CollectableComponent collectable = new();
             {
                 collectable.IsConditionAvailable = true;
-                collectable.ConditionType = startOn.data.startName;
-                collectable.ConditionData = startOn.data.listenName;
+                collectable.ConditionType = GetStartEvent();
+                collectable.ConditionData = GetStartCondition();
+                collectable.listenIndex = startOn.data.listenIndex;
                 collectable.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
                 collectable.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
 
@@ -63,10 +64,46 @@ namespace RuntimeInspectorNamespace
                 collectable.scoreValue = ScoreValue;
                 collectable.showScoreUI = ShowScoreUI;
             }
+            
             gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(collectable);
             return (type, data);
+        }
+        
+        public string GetStartEvent(string _input = null)
+        {
+            string inputString = startOn.data.startName;
+            if (!string.IsNullOrEmpty(_input))
+                inputString = _input;
+            
+            if (Enum.TryParse(inputString, out StartOnCollectible enumValue))
+            {
+                var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(enumValue);
+                return eventName;
+            }
+            return EditorOp.Resolve<DataProvider>().GetEnumValue(StartOnCollectible.OnClick);
+        }
+
+
+        public string GetStartCondition(string _input = null)
+        {
+            string inputString = startOn.data.startName;
+            if (!string.IsNullOrEmpty(_input))
+                inputString = _input;
+            
+            if (inputString.ToLower().Contains("listen"))
+            {
+                return Helper.GetListenString(startOn.data.listenIndex);
+            }
+            else
+            {
+                if (Enum.TryParse(inputString, out StartOnCollectible enumValue))
+                {
+                    return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(enumValue);
+                }
+                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOnCollectible.OnClick);
+            }
         }
 
         public void Import(EntityBasedComponent cdata)
@@ -75,10 +112,6 @@ namespace RuntimeInspectorNamespace
             CanUpdateScore = cc.canUpdateScore;
             ShowScoreUI = cc.showScoreUI;
             ScoreValue = cc.scoreValue;
-
-            startOn.data.startIndex = Helper.GetEnumIndexByString<StartOnCollectible>(cc.ConditionType) ;
-            startOn.data.listenIndex = Helper.GetListenIndex(cc.ConditionData);
-         
             Broadcast = cc.Broadcast;
 
             PlaySFX.data.canPlay = cc.canPlaySFX;
@@ -87,6 +120,17 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.canPlay = cc.canPlayVFX;
             PlayVFX.data.clipIndex = cc.vfxIndex;
             PlayVFX.data.clipName = cc.vfxName;
+            
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOnCollectible), out object result))
+            {
+                startOn.data.startIndex = (int)(StartOnCollectible)result;
+            }
+
+            if (cc.ConditionType.ToLower().Contains("listen"))
+            {
+                Helper.AddToListenList(cc.ConditionData);
+            }
+            startOn.data.listenIndex = cc.listenIndex;
         }
         
         private void OnDestroy()

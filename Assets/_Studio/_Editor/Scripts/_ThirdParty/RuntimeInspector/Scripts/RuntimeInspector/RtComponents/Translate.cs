@@ -2,13 +2,14 @@ using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
+using System;
 
 namespace RuntimeInspectorNamespace
 {
     [EditorDrawComponent("Terra.Studio.Translate")]
     public class Translate : MonoBehaviour, IComponent
     {
-        public Atom.StartOn startOn = new Atom.StartOn();
+        public Atom.StartOn startOn = new();
         public Atom.Translate Type = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
@@ -48,8 +49,9 @@ namespace RuntimeInspectorNamespace
                 IsConditionAvailable = true,
                 listen = Type.data.listen,
                 
-                ConditionType = startOn.data.startName,
-                ConditionData = startOn.data.listenName
+                ConditionType = GetStartEvent(),
+                ConditionData = GetStartCondition(),
+                listenIndex = startOn.data.listenIndex
             };
 
             ModifyDataAsPerGiven(ref rc);
@@ -57,6 +59,41 @@ namespace RuntimeInspectorNamespace
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(rc, Formatting.Indented);
             return (type, data);
+        }
+        
+        public string GetStartEvent(string _input = null)
+        {
+            string inputString = startOn.data.startName;
+            if (!string.IsNullOrEmpty(_input))
+                inputString = _input;
+            
+            if (Enum.TryParse(inputString, out StartOn enumValue))
+            {
+                var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(enumValue);
+                return eventName;
+            }
+            return EditorOp.Resolve<DataProvider>().GetEnumValue(StartOn.OnClick);
+        }
+
+
+        public string GetStartCondition(string _input = null)
+        {
+            string inputString = startOn.data.startName;
+            if (!string.IsNullOrEmpty(_input))
+                inputString = _input;
+            
+            if (inputString.ToLower().Contains("listen"))
+            {
+                return Helper.GetListenString(startOn.data.listenIndex);
+            }
+            else
+            {
+                if (Enum.TryParse(inputString, out StartOn enumValue))
+                {
+                    return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(enumValue);
+                }
+                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOn.GameStart);
+            }
         }
 
 
@@ -87,8 +124,16 @@ namespace RuntimeInspectorNamespace
             Type.data.listenTo = cc.ConditionData;
             Type.data.listen = cc.listen;
 
-            startOn.data.startIndex = Helper.GetEnumIndexByString<StartOn>(cc.ConditionType) ;
-            startOn.data.listenIndex = Helper.GetListenIndex(cc.ConditionData);
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOn), out object result))
+            {
+                startOn.data.startIndex = (int)(StartOn)result;
+            }
+
+            if (cc.ConditionType.ToLower().Contains("listen"))
+            {
+                Helper.AddToListenList(cc.ConditionData);
+            }
+            startOn.data.listenIndex = cc.listenIndex;
         }
 
         private void ModifyDataAsPerGiven(ref TranslateComponent component)
