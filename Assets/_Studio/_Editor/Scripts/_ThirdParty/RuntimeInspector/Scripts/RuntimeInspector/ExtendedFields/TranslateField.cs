@@ -78,10 +78,10 @@ namespace RuntimeInspectorNamespace
             LoadData(preset);
             Atom.Translate rt = (Atom.Translate)Value;
             rt.data.moveTo = rt.referenceGO.transform.localPosition;
-            UpdateTypeForMultiselect(translateType);
+            UpdateTypeForMultiselect(translateType,preset);
         }
 
-        private void UpdateTypeForMultiselect(TranslateType _data)
+        private void UpdateTypeForMultiselect(TranslateType _data, TranslateComponentData? componentData = null)
         {
             List<GameObject> selectedObjecs = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
 
@@ -91,8 +91,10 @@ namespace RuntimeInspectorNamespace
                 {
                     if (obj.GetComponent<Translate>() != null)
                     {
-                        Translate rotate = obj.GetComponent<Translate>();
-                        rotate.Type.data.translateType = (int)_data;
+                        Translate translate = obj.GetComponent<Translate>();
+                        translate.Type.data.translateType = (int)_data;
+                        translate.Type.data = componentData.Value;
+                        translate.Type.data.moveTo = translate.Type.referenceGO.transform.localPosition;
                     }
                 }
             }
