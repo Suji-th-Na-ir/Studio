@@ -37,7 +37,7 @@ namespace RuntimeInspectorNamespace
         {
             if (!String.IsNullOrEmpty(Broadcast))
             {
-                Helper.UpdateListenToTypes(this.GetInstanceID()+"_destroy", Broadcast);
+                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(this.GetInstanceID()+"_destroy", Broadcast);
             }
 
             if (Input.GetKeyDown(KeyCode.H)) Export();
@@ -101,7 +101,7 @@ namespace RuntimeInspectorNamespace
             
             if (inputString.ToLower().Contains("listen"))
             {
-                return Helper.GetListenString(startOn.data.listenIndex);
+                return EditorOp.Resolve<DataProvider>().GetListenString(startOn.data.listenIndex);
             }
             else
             {
@@ -125,7 +125,7 @@ namespace RuntimeInspectorNamespace
 
             if (cc.ConditionType.ToLower().Contains("listen"))
             {
-                Helper.AddToListenList(cc.ConditionData);
+                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_destroy",cc.ConditionData);
             }
             startOn.data.listenIndex = cc.listenIndex;
             

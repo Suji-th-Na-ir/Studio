@@ -28,7 +28,7 @@ namespace RuntimeInspectorNamespace
         {
             if (broadcastInput != null && !String.IsNullOrEmpty(broadcastInput.text))
             {
-                Helper.UpdateListenToTypes(this.GetInstanceID() + "_respawn", broadcastInput.text);
+                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(this.GetInstanceID() + "_respawn", broadcastInput.text);
             }
         }
         

@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Terra.Studio
 {
@@ -92,5 +93,62 @@ namespace Terra.Studio
             }
             return false;
         }
+        
+        #region Listen Types Dict
+
+        public List<string> ListenToTypes
+        {
+            get
+            {
+                var newList = new List<string>() {  "None", "Game Win", "Game Lose" };
+                if (listenDictionary.Count > 0)
+                {
+                    newList.AddRange(listenDictionary.Where(x => newList.Contains(x.Value) == false).Select(y => y.Value));   
+                }
+                return newList;
+            }
+        }
+
+        private Dictionary<string, string> listenDictionary = new Dictionary<string, string>();
+        private string prevListenType = "";
+
+        public void AddToListenList(string _id, string _type)
+        {
+            if (string.IsNullOrEmpty(_type))
+                return;
+            if (!listenDictionary.ContainsKey(_id))
+            {
+                listenDictionary.Add(_id, _type);
+            }
+            else
+            {
+                listenDictionary[_id] = _type;
+            }
+        }
+
+        public void UpdateListenToTypes(string _id, string _type)
+        {
+            if (string.IsNullOrEmpty(_type))
+                return;
+            
+            if (prevListenType != _type)
+            {
+                listenDictionary[_id] =  _type;
+                prevListenType = _type;
+            }
+        }
+        
+        public string GetListenString(int _index)
+        {
+            if (_index < ListenToTypes.Count)
+            {
+                return ListenToTypes[_index];
+            }
+
+            return ListenToTypes[0];
+        }
+        
+        #endregion
+        
     }
 }

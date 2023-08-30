@@ -27,7 +27,7 @@ namespace RuntimeInspectorNamespace
         private void LoadListenTo()
         {
             listenOn.options.Clear();
-            foreach (string _name in Helper.GetListenToTypes())
+            foreach (string _name in EditorOp.Resolve<DataProvider>().ListenToTypes)
             {
                 listenOn.options.Add(new Dropdown.OptionData()
                 {
@@ -97,16 +97,16 @@ namespace RuntimeInspectorNamespace
             // }
             // resetListenIndex = true;
 
-            // UpdateData(atom);
+            UpdateData(atom);
         }
 
         private void OnListenValueChanged(int _index)
         {
             if(Inspector)  Inspector.RefreshDelayed();
             Atom.StartOn atom = (Atom.StartOn)Value;
-            atom.data.listenName = Helper.GetListenToTypes()[_index];
+            atom.data.listenName = EditorOp.Resolve<DataProvider>().ListenToTypes[_index];
             atom.data.listenIndex = _index;
-            // UpdateData(atom);
+            UpdateData(atom);
         }
 
         protected override void OnSkinChanged()
@@ -123,17 +123,22 @@ namespace RuntimeInspectorNamespace
         
         private void UpdateData(Atom.StartOn _atom)
         {
-            List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
-            foreach (var obj in selectedObjects)
-            {
-                foreach (Atom.StartOn atom in Atom.StartOn.AllInstances)
-                {
-                    if (obj.GetInstanceID() == atom.target.GetInstanceID())
-                    {
-                        atom.data = Helper.DeepCopy(_atom.data);
-                    }
-                }
-            }
+            return; // brokem now, have to fix.
+            // List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            // Debug.Log("selected objects count "+selectedObjects.Count);
+            // if (selectedObjects.Count > 1) // if there are multiple objects selected then update
+            // {
+            //     foreach (var obj in selectedObjects)
+            //     {
+            //         foreach (Atom.StartOn atom in Atom.StartOn.AllInstances)
+            //         {
+            //             if (obj.GetInstanceID() == atom.target.GetInstanceID())
+            //             {
+            //                 atom.data = Helper.DeepCopy(_atom.data);
+            //             }
+            //         }
+            //     }
+            // }
         }
 
         public override void Refresh()

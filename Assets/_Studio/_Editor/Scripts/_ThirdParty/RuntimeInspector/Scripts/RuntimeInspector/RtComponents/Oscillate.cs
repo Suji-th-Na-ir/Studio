@@ -70,7 +70,7 @@ namespace RuntimeInspectorNamespace
             
             if (inputString.ToLower().Contains("listen"))
             {
-                return Helper.GetListenString(startOn.data.listenIndex);
+                return EditorOp.Resolve<DataProvider>().GetListenString(startOn.data.listenIndex);
             }
             else
             {
@@ -98,7 +98,7 @@ namespace RuntimeInspectorNamespace
 
             if (cc.ConditionType.ToLower().Contains("listen"))
             {
-                Helper.AddToListenList(cc.ConditionData);
+                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_oscillate", cc.ConditionData);
             }
             startOn.data.listenIndex = cc.listenIndex;
         }
