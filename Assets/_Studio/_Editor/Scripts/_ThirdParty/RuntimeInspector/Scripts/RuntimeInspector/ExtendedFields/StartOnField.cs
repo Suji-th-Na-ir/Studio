@@ -92,12 +92,12 @@ namespace RuntimeInspectorNamespace
             atom.data.startIndex = _index;
             atom.data.startName = atom.StartList[_index];
             // rest the listen field
-            if (resetListenIndex) {
-                atom.data.listenIndex = 0;
-            }
-            resetListenIndex = true;
+            // if (resetListenIndex) {
+            //     atom.data.listenIndex = 0;
+            // }
+            // resetListenIndex = true;
 
-            UpdateData(atom);
+            // UpdateData(atom);
         }
 
         private void OnListenValueChanged(int _index)
@@ -105,9 +105,8 @@ namespace RuntimeInspectorNamespace
             if(Inspector)  Inspector.RefreshDelayed();
             Atom.StartOn atom = (Atom.StartOn)Value;
             atom.data.listenName = Helper.GetListenToTypes()[_index];
-            Debug.Log("listen value setting to "+atom.data.listenName);
             atom.data.listenIndex = _index;
-            UpdateData(atom);
+            // UpdateData(atom);
         }
 
         protected override void OnSkinChanged()

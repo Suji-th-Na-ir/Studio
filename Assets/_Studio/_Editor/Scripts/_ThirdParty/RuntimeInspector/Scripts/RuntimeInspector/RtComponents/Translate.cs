@@ -63,7 +63,8 @@ namespace RuntimeInspectorNamespace
         
         public string GetStartEvent(string _input = null)
         {
-            string inputString = startOn.data.startName;
+            int index = startOn.data.startIndex;
+            string inputString = ((StartOn)index).ToString();
             if (!string.IsNullOrEmpty(_input))
                 inputString = _input;
             
@@ -78,7 +79,8 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartCondition(string _input = null)
         {
-            string inputString = startOn.data.startName;
+            int index = startOn.data.startIndex;
+            string inputString = ((StartOn)index).ToString();
             if (!string.IsNullOrEmpty(_input))
                 inputString = _input;
             

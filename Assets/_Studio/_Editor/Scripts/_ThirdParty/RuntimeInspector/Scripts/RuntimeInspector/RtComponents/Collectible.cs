@@ -20,7 +20,7 @@ namespace RuntimeInspectorNamespace
         public Atom.StartOn startOn = new Atom.StartOn();
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
-        public bool ShowScoreUI = false;
+        // public bool ShowScoreUI = false;
         public bool CanUpdateScore = false;
         public float ScoreValue = 0;
         public string Broadcast = null;
@@ -62,7 +62,7 @@ namespace RuntimeInspectorNamespace
 
                 collectable.canUpdateScore = CanUpdateScore;
                 collectable.scoreValue = ScoreValue;
-                collectable.showScoreUI = ShowScoreUI;
+                collectable.showScoreUI = true;
             }
             
             gameObject.TrySetTrigger(false, true);
@@ -73,7 +73,8 @@ namespace RuntimeInspectorNamespace
         
         public string GetStartEvent(string _input = null)
         {
-            string inputString = startOn.data.startName;
+            int index = startOn.data.startIndex;
+            string inputString = ((StartOnCollectible)index).ToString();
             if (!string.IsNullOrEmpty(_input))
                 inputString = _input;
             
@@ -88,7 +89,8 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartCondition(string _input = null)
         {
-            string inputString = startOn.data.startName;
+            int index = startOn.data.startIndex;
+            string inputString = ((StartOnCollectible)index).ToString();
             if (!string.IsNullOrEmpty(_input))
                 inputString = _input;
             
@@ -110,7 +112,7 @@ namespace RuntimeInspectorNamespace
         {
             CollectableComponent cc = JsonConvert.DeserializeObject<CollectableComponent>($"{cdata.data}");
             CanUpdateScore = cc.canUpdateScore;
-            ShowScoreUI = cc.showScoreUI;
+            // ShowScoreUI = cc.showScoreUI;
             ScoreValue = cc.scoreValue;
             Broadcast = cc.Broadcast;
 

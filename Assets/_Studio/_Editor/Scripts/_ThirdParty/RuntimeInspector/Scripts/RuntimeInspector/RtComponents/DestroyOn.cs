@@ -39,6 +39,8 @@ namespace RuntimeInspectorNamespace
             {
                 Helper.UpdateListenToTypes(this.GetInstanceID()+"_destroy", Broadcast);
             }
+
+            if (Input.GetKeyDown(KeyCode.H)) Export();
         }
 
         public (string type, string data) Export()
@@ -66,13 +68,16 @@ namespace RuntimeInspectorNamespace
             gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(destroyOn, Formatting.Indented);
-            
+            Debug.Log(data);
             return (type, data);
         }
         
         public string GetStartEvent(string _input = null)
         {
-            string inputString = startOn.data.startName;
+            int index = startOn.data.startIndex;
+            string inputString = ((DestroyOnEnum)index).ToString();
+            
+            Debug.Log("input string "+inputString);
             if (!string.IsNullOrEmpty(_input))
                 inputString = _input;
             
@@ -88,7 +93,9 @@ namespace RuntimeInspectorNamespace
         
         public string GetStartCondition(string _input = null)
         {
-            string inputString = startOn.data.startName;
+            Debug.Log("stgart index "+startOn.data.startIndex);
+            int index = startOn.data.startIndex;
+            string inputString = ((DestroyOnEnum)index).ToString();
             if (!string.IsNullOrEmpty(_input))
                 inputString = _input;
             
@@ -113,6 +120,8 @@ namespace RuntimeInspectorNamespace
             {
                 startOn.data.startIndex = (int)(DestroyOnEnum)result;
             }
+            
+            Debug.Log("import s i "+startOn.data.startIndex);
 
             if (cc.ConditionType.ToLower().Contains("listen"))
             {
