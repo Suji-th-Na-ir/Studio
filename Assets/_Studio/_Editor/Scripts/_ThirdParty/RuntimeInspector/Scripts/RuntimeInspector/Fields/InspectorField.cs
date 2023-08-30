@@ -335,6 +335,7 @@ namespace RuntimeInspectorNamespace
         [SerializeField]
         private PointerEventListener expandToggle;
         private RectTransform expandToggleTransform;
+        [SerializeField] bool isExpandable = false;
 
         [SerializeField]
         private LayoutGroup layoutGroup;
@@ -421,11 +422,18 @@ namespace RuntimeInspectorNamespace
             base.Initialize();
 
             expandToggleTransform = (RectTransform)expandToggle.transform;
-            expandArrow.gameObject.SetActive(false);
-            //expandToggle.PointerClick += (_) =>
-            //{
-            //    CheckAndExpand();
-            //};
+            if (isExpandable)
+            {
+                expandArrow.gameObject.SetActive(true);
+                expandToggle.PointerClick += (_) =>
+                {
+                    CheckAndExpand();
+                };
+            }
+            else
+            {
+                expandArrow.gameObject.SetActive(false);
+            }
 
             IsExpanded = m_isExpanded;
         }

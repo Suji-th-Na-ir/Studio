@@ -45,7 +45,7 @@ namespace RuntimeInspectorNamespace
 				NameRaw = Value.GetNameWithType();
 
 				RuntimeHierarchy hierarchy = Inspector.ConnectedHierarchy;
-                Inspector.currentPageChanged += this.Refresh;
+               // Inspector.currentPageChanged += this.Refresh;
                 if ( hierarchy )
 					hierarchy.RefreshNameOf( ( (GameObject) Value ).transform );
 			};
@@ -91,9 +91,10 @@ namespace RuntimeInspectorNamespace
 				if( elements[i] is ExpandableInspectorField && ( elements[i].Value as Object ) )
 					componentsExpandedStates.Add( ( (ExpandableInspectorField) elements[i] ).IsExpanded );
 			}
-			Length = 4;
+		
 			base.ClearElements();
-		}
+            Length = 4;
+        }
 
 		protected override void GenerateElements()
 		{
@@ -112,12 +113,7 @@ namespace RuntimeInspectorNamespace
 
 				if (tagField)
 					tagField.SetterMode = StringField.Mode.OnSubmit;
-				Length = components.Count + 4;
             }
-			else
-			{
-				Length=components.Count;
-			}
 
             for (int i = 0, j = 0; i < components.Count; i++)
 			{
@@ -151,13 +147,21 @@ namespace RuntimeInspectorNamespace
 						components[i].GetType().Namespace != "Terra.Studio"))
 						|| !Inspector.ShownComponents.Contains(components[i].GetType().Name))
 					{
-
-						components.RemoveAt(i);
+						if (components[i] as Transform == null)
+							components.RemoveAt(i);
 					}
 
 				}
+                if (Inspector.currentPageIndex == 0)
+                {
+                    Length = components.Count + 4;
+                }
+                else
+                {
+						Length = components.Count;
+                }
 
-				if (Inspector.ComponentFilter != null)
+                if (Inspector.ComponentFilter != null)
 					Inspector.ComponentFilter(go, components);
 			}
 

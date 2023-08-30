@@ -43,7 +43,7 @@ namespace RuntimeInspectorNamespace
             if (!didCheckForExpand && Value != null)
             {
                 didCheckForExpand = true;
-                CheckAndExpand();
+                IsExpanded = true;
 
             }
             base.Refresh();
