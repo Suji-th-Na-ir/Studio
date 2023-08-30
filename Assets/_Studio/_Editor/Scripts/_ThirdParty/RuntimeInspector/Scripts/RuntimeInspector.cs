@@ -234,6 +234,10 @@ namespace RuntimeInspectorNamespace
 
         public InspectedObjectChangingDelegate OnInspectedObjectChanging;
 
+        public int currentPageIndex = 0;
+        public delegate void OnCurrentPageChanged();
+        public OnCurrentPageChanged currentPageChanged;
+
         private ComponentFilterDelegate m_componentFilter;
         public ComponentFilterDelegate ComponentFilter
         {
@@ -245,6 +249,15 @@ namespace RuntimeInspectorNamespace
             }
         }
 
+        public String[] ShownComponents
+        {
+            get
+            {
+                if (settings[0] != null)
+                    return settings[0].ShowComponents;
+                return null;
+            }
+        }
         protected override void Awake()
         {
             base.Awake();
@@ -345,6 +358,15 @@ namespace RuntimeInspectorNamespace
 
         protected override void Update()
         {
+            for (int keyCode = 49; keyCode <= 50; keyCode++)
+            {
+                if (Input.GetKeyDown((KeyCode)keyCode))
+                {
+                    currentPageIndex = keyCode - 49;
+                    currentPageChanged?.Invoke();
+                    isDirty = true;
+                }
+            }
             base.Update();
 
             if (IsBound)

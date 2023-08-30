@@ -88,3 +88,14 @@ MonoBehaviour:
   - RuntimeInspectorNamespace.Rotate
   - RuntimeInspectorNamespace.Translate
   - RuntimeInspectorNamespace.InGameTimer
+  - RuntimeInspectorNamespace.InGameTimer
+  m_ShowComponents:
+  - Collectible
+  - Checkpoint
+  - DestroyOn
+  - Oscillate
+  - Respawn
+  - Rotate
+  - Translate
+  - InGameTimer
+  - Transform

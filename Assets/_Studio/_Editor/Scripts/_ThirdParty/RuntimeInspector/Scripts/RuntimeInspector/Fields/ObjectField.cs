@@ -101,10 +101,9 @@ namespace RuntimeInspectorNamespace
             if (!didCheckForExpand && Value != null)
             {
                 didCheckForExpand = true;
-                if (Inspector.CanAutoExpand(Value))
-                {
+              
                     CheckAndExpand();
-                }
+                
             }
         }
 

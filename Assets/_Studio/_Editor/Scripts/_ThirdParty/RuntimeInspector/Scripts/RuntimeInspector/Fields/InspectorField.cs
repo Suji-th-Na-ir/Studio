@@ -346,7 +346,7 @@ namespace RuntimeInspectorNamespace
         protected readonly List<InspectorField> elements = new List<InspectorField>(8);
         protected readonly List<ExposedMethodField> exposedMethods = new List<ExposedMethodField>();
 
-        protected virtual int Length { get { return elements.Count; } }
+        protected virtual int Length { get { return elements.Count; } set{}}
 
         public override bool ShouldRefresh { get { return true; } }
 
@@ -421,10 +421,11 @@ namespace RuntimeInspectorNamespace
             base.Initialize();
 
             expandToggleTransform = (RectTransform)expandToggle.transform;
-            expandToggle.PointerClick += (_) =>
-            {
-                CheckAndExpand();
-            };
+            expandArrow.gameObject.SetActive(false);
+            //expandToggle.PointerClick += (_) =>
+            //{
+            //    CheckAndExpand();
+            //};
 
             IsExpanded = m_isExpanded;
         }
@@ -511,7 +512,7 @@ namespace RuntimeInspectorNamespace
 
         private void GenerateExposedMethodButtons()
         {
-            if (Inspector.ShowRemoveComponentButton && typeof(Component).IsAssignableFrom(BoundVariableType) && !typeof(Transform).IsAssignableFrom(BoundVariableType))
+            if (Inspector.ShowRemoveComponentButton && typeof(Component).IsAssignableFrom(BoundVariableType) && !typeof(Transform).IsAssignableFrom(BoundVariableType) &&Inspector.currentPageIndex==1)
                 CreateExposedMethodButton(GameObjectField.removeComponentMethod, () => this, (value) => { });
 
             ExposedMethod[] methods = BoundVariableType.GetExposedMethods();
