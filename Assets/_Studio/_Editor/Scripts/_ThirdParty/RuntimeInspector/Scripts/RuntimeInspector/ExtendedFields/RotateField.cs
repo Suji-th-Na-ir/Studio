@@ -111,13 +111,18 @@ namespace RuntimeInspectorNamespace
             if (variableNameMask != null) variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
         }
 
-        public void UpdateData(RotateComponentData _rData)
-        {
-            Atom.Rotate rt = (Atom.Rotate)Value;
+        // public void UpdateData(RotateComponentData _rData)
+        // {
+        //     Atom.Rotate rt = (Atom.Rotate)Value;
+        //
+        //     // rotate type should come from rotatefield
+        //     _rData.rotateType = rt.data.rotateType;
+        //     rt.data = _rData;
+        // }
 
-            // rotate type should come from rotatefield
-            _rData.rotateType = rt.data.rotateType;
-            rt.data = _rData;
+        public Atom.Rotate GetRotateAtom()
+        {
+            return (Atom.Rotate)Value;
         }
 
         protected override void OnBound(MemberInfo variable)
