@@ -1,4 +1,16 @@
 {
+  "RuntimeInspectorNamespace.DestroyOnEnum.OnPlayerCollide": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "RuntimeInspectorNamespace.DestroyOnEnum.OnClick": [
+    "Terra.Studio.MouseAction",
+    "OnClick"
+  ],
+  "RuntimeInspectorNamespace.DestroyOnEnum.BroadcastListen": [
+    "Terra.Studio.Listener",
+    null
+  ],
   "Terra.Studio.StartOn.GameStart": [
     "Terra.Studio.GameStart",
     "Start"
@@ -22,17 +34,5 @@
   "RuntimeInspectorNamespace.Collectible+StartOnCollectible.OnClick": [
     "Terra.Studio.MouseAction",
     "OnClick"
-  ],
-  "RuntimeInspectorNamespace.DestroyOn+DestroyOnEnum.OnPlayerCollide": [
-    "Terra.Studio.TriggerAction",
-    "Player"
-  ],
-  "RuntimeInspectorNamespace.DestroyOn+DestroyOnEnum.OnClick": [
-    "Terra.Studio.MouseAction",
-    "OnClick"
-  ],
-  "RuntimeInspectorNamespace.DestroyOn+DestroyOnEnum.BroadcastListen": [
-    "Terra.Studio.Listener",
-    null
   ]
 }

@@ -2,13 +2,31 @@ using System;
 using RuntimeInspectorNamespace;
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.Serialization;
-using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
     public class Atom
     {
+        [Serializable]
+        public class StartOn
+        {
+            [HideInInspector] public static List<StartOn> AllInstances = new();
+            [HideInInspector] public StartOnField field;
+            [HideInInspector] public StartOnData data;
+            [HideInInspector] public GameObject target;
+            [HideInInspector] public List<string> StartList = new List<string>();
+            [HideInInspector] public string componentType = null;
+
+            public void Setup(GameObject _target, List<string> _list, string _componentType)
+            {
+                StartList = _list;
+                target = _target;
+                if (!AllInstances.Contains(this))
+                    AllInstances.Add(this);
+                componentType = _componentType;
+            }
+        }
+        
         [Serializable]
         public class PlaySfx
         {
@@ -59,6 +77,16 @@ namespace Terra.Studio
     }
 
     // define component data classes here
+    [Serializable]
+    public struct StartOnData
+    {
+        public string startName;
+        public int startIndex;
+        public string listenName;
+        public int listenIndex;
+    }
+    
+    
     [Serializable]
     public struct PlaySFXData
     {

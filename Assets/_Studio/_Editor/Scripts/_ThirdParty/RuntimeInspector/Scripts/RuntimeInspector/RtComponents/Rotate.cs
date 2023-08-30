@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
@@ -9,7 +10,7 @@ namespace RuntimeInspectorNamespace
     [EditorDrawComponent("Terra.Studio.Rotate")]
     public class Rotate : MonoBehaviour, IComponent
     {
-        public StartOn start = StartOn.GameStart;
+        public Atom.StartOn startOn = new();
         public Atom.Rotate Type = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
@@ -17,9 +18,7 @@ namespace RuntimeInspectorNamespace
         private void Awake()
         {
             Type.referenceGO = gameObject;
-        }
-        public void Start()
-        {
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             PlaySFX.Setup(gameObject);
             PlayVFX.Setup(gameObject);
         }
@@ -49,11 +48,12 @@ namespace RuntimeInspectorNamespace
                 vfxIndex = PlayVFX.data.clipIndex,
 
                 IsConditionAvailable = true,
-                listen = Type.data.listen,
-                ConditionType = GetStartEvent(),
-                ConditionData = GetStartCondition()
+                listen = Type.data.listen
             };
 
+            rc.ConditionType = GetStartEvent();
+            rc.ConditionData = GetStartCondition();
+            rc.listenIndex = startOn.data.listenIndex;
             List<Axis> axes = new List<Axis>();
             if (Type.data.Xaxis)
                 axes.Add(Axis.X);
@@ -70,31 +70,49 @@ namespace RuntimeInspectorNamespace
             var data = JsonConvert.SerializeObject(rc, Formatting.Indented);
             return (type, data);
         }
+        
+        public string GetStartEvent(string _input = null)
+        {
+            int index = startOn.data.startIndex;
+            string inputString = ((StartOn)index).ToString();
+            if (!string.IsNullOrEmpty(_input))
+                inputString = _input;
+            
+            if (Enum.TryParse(inputString, out StartOn enumValue))
+            {
+                var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(enumValue);
+                return eventName;
+            }
+            return EditorOp.Resolve<DataProvider>().GetEnumValue(StartOn.OnClick);
+        }
 
+
+        public string GetStartCondition(string _input = null)
+        {
+            int index = startOn.data.startIndex;
+            string inputString = ((StartOn)index).ToString();
+            if (!string.IsNullOrEmpty(_input))
+                inputString = _input;
+            
+            if (inputString.ToLower().Contains("listen"))
+            {
+                return EditorOp.Resolve<DataProvider>().GetListenString(startOn.data.listenIndex);
+            }
+            else
+            {
+                if (Enum.TryParse(inputString, out StartOn enumValue))
+                {
+                    return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(enumValue);
+                }
+                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOn.GameStart);
+            }
+        }
 
         private RepeatType GetRepeatType(float _value)
         {
             if (_value == 0) return RepeatType.Forever;
             else return RepeatType.XTimes;
         }
-
-        public string GetStartEvent()
-        {
-            return EditorOp.Resolve<DataProvider>().GetEnumValue(start);
-        }
-
-        public string GetStartCondition()
-        {
-            if (start == StartOn.BroadcastListen)
-            {
-                return Type.data.listenTo;
-            }
-            else
-            {
-                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(start);
-            }
-        }
-
 
 
         public void Import(EntityBasedComponent cdata)
@@ -128,13 +146,14 @@ namespace RuntimeInspectorNamespace
 
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOn), out object result))
             {
-                start = (StartOn)result;
+                startOn.data.startIndex = (int)(StartOn)result;
             }
 
-            if (start == StartOn.BroadcastListen)
+            if (cc.ConditionType.ToLower().Contains("listen"))
             {
-                Type.data.listenTo = cc.ConditionData;
+                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_rotate",cc.ConditionData);
             }
+            startOn.data.listenIndex = cc.listenIndex;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
         }
 

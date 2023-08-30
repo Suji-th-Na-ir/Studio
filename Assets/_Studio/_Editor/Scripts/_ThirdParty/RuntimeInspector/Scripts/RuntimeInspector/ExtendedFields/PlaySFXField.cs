@@ -96,6 +96,7 @@ namespace RuntimeInspectorNamespace
         private void UpdateData(Atom.PlaySfx _sfx)
         {
             List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selectedObjects.Count <= 1) return;
             foreach (var obj in selectedObjects)
             {
                 foreach (Atom.PlaySfx sfx in Atom.PlaySfx.AllInstances)

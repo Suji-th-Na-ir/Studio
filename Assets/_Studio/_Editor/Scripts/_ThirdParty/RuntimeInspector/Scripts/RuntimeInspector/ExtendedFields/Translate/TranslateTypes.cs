@@ -15,16 +15,29 @@ namespace RuntimeInspectorNamespace
         public TMP_InputField speedInput = null;
         public TMP_InputField repeatInput = null;
         public TMP_InputField pauseForInput = null;
-        public TMP_InputField listenTo = null;
 
         public Dropdown broadcastAt;
-        public TMP_InputField broadcastInput;
+        public TMP_InputField broadcastInput = null;
         public Toggle canListenMultipleTimesToggle;
 
         [HideInInspector]
         public TranslateField translateField = null;
         private TranslateComponentData data = new TranslateComponentData();
+        private string guid;
 
+        private void Awake()
+        {
+            guid = Guid.NewGuid().ToString("N");
+        }
+
+        public void Update()
+        {
+            if (broadcastInput != null && !String.IsNullOrEmpty(broadcastInput.text))
+            {
+                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, broadcastInput.text);
+            }
+        }
+        
         public void Setup()
         {
             LoadDefaultValues();
@@ -58,12 +71,12 @@ namespace RuntimeInspectorNamespace
                 data.pauseFor = Helper.StringToFloat(value);
                 UpdateData(data);
             });
-            if (listenTo != null) listenTo.onValueChanged.AddListener((value) =>
-            {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(value, data.listenTo, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)translateField.Value).referenceGO, componentType = typeof(Atom.Translate).Name });
-                data.listenTo = value;
-                UpdateData(data);
-            });
+            // if (listenTo != null) listenTo.onValueChanged.AddListener((value) =>
+            // {
+            //     EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(value, data.listenTo, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)translateField.Value).referenceGO, componentType = typeof(Atom.Translate).Name });
+            //     data.listenTo = value;
+            //     UpdateData(data);
+            // });
             if (repeatInput != null) repeatInput.onValueChanged.AddListener((value) =>
             {
                 data.repeat = Helper.StringInInt(value);
@@ -89,6 +102,7 @@ namespace RuntimeInspectorNamespace
 
         private void UpdateData(TranslateComponentData _data)
         {
+            return;
             translateField.UpdateData(_data);
             UpdateOtherSelectedObjects(_data);
         }
@@ -134,7 +148,6 @@ namespace RuntimeInspectorNamespace
             if (moveToInput != null) moveToInput[0].text = _data.moveTo.x.ToString();
             if (moveToInput != null) moveToInput[1].text = _data.moveTo.y.ToString();
             if (moveToInput != null) moveToInput[2].text = _data.moveTo.z.ToString();
-            if (listenTo != null) listenTo.text = _data.listenTo;
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
     }
