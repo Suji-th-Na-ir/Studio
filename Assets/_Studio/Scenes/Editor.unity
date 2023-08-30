@@ -3777,7 +3777,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ed34ec237af45bb9d3e94c29d671a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerSpawnPoint: {x: 0, y: 0, z: 0}
 --- !u!4 &792619809
 Transform:
   m_ObjectHideFlags: 0

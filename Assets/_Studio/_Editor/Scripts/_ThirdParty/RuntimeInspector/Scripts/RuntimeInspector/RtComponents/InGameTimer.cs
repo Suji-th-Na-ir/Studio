@@ -7,8 +7,8 @@ namespace RuntimeInspectorNamespace
     [EditorDrawComponent("Terra.Studio.InGameTimer")]
     public class InGameTimer : MonoBehaviour, IComponent
     {
-        public uint Time;
-        public string Broadcast;
+        public uint Time = 180;
+        public string Broadcast = "Game Lose";
 
         public (string type, string data) Export()
         {

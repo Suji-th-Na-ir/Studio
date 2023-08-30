@@ -16,6 +16,7 @@ namespace Terra.Studio
         private const string CUBE_PRIMITIVE_BUTTON_LOC = "cube_button";
         private const string PLANE_PRIMITIVE_BUTTON_LOC = "plane_button";
         private const string CHECKPOINT_PRIMITIVE_BUTTON_LOC = "checkpoint_button";
+        private const string TIMER_BUTTON_LOC = "timer_button";
 
         private void Awake()
         {
@@ -32,6 +33,7 @@ namespace Terra.Studio
             var cubePrimitiveTr = Helper.FindDeepChild(transform, CUBE_PRIMITIVE_BUTTON_LOC, true);
             var planePrimitiveTr = Helper.FindDeepChild(transform, PLANE_PRIMITIVE_BUTTON_LOC, true);
             var checkpointTr = Helper.FindDeepChild(transform, CHECKPOINT_PRIMITIVE_BUTTON_LOC, true);
+            var timerTr = Helper.FindDeepChild(transform, TIMER_BUTTON_LOC, true);
 
             var playButton = playButtonTr.GetComponent<Button>();
             AddListenerEvent(playButton, () =>
@@ -58,6 +60,8 @@ namespace Terra.Studio
             var checkpointButton = checkpointTr.GetComponent<Button>();
             AddListenerEvent(checkpointButton, CreateObject, "CheckPoint");
 
+            var timerButton = timerTr.GetComponent<Button>();
+            AddListenerEvent(timerButton, CreateObject, "InGameTimer");
         }
 
         private void AddListenerEvent<T>(Button button, Action<T> callback, T type)
@@ -66,21 +70,23 @@ namespace Terra.Studio
             button.onClick.AddListener(() => { callback?.Invoke(type); });
         }
 
-
-
-        public void CreateObject(string type)
+        public void CreateObject(string name)
         {
             Transform cameraTransform = Camera.main.transform;
             Vector3 cameraPosition = cameraTransform.position;
             Vector3 spawnPosition = cameraPosition + cameraTransform.forward * 5;
-            var itemData = ((ResourceDB)SystemOp.Load(ResourceTag.ResourceDB)).GetItemDataForNearestName(type);
+            var itemData = ((ResourceDB)SystemOp.Load(ResourceTag.ResourceDB)).GetItemDataForNearestName(name);
             var primitive = RuntimeWrappers.SpawnGameObject(itemData.ResourcePath, itemData);
             primitive.transform.position = spawnPosition;
             EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);
             EditorOp.Resolve<SelectionHandler>().SelectObjectInHierarchy(primitive);
-            if (type.Equals("CheckPoint"))
+            if (name.Equals("CheckPoint"))
             {
                 primitive.AddComponent<Checkpoint>();
+            }
+            if (name.Equals("InGameTimer"))
+            {
+                primitive.AddComponent<InGameTimer>();
             }
         }
 

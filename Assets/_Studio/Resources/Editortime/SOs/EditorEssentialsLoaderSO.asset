@@ -24,14 +24,3 @@ MonoBehaviour:
       primitiveType: 0
     type: 1
     spawnPosition: {x: 0, y: 0, z: 0}
-  - itemData:
-      name: InGameTimer
-      absolutePath: Assets/_Studio/Resources/Common/Prefabs/InGameTimer.prefab
-      resourcePath: Common/Prefabs/InGameTimer
-      type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-      guid: b99761ac560514439aa04b0465ceeb26
-      isPrimitive: 0
-      primitiveType: 0
-    type: 2
-    spawnPosition: {x: 0, y: 0, z: 0}

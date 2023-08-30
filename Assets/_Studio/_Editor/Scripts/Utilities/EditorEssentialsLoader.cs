@@ -20,6 +20,7 @@ namespace Terra.Studio
                 studioGO.itemData = essential.itemData;
                 studioGO.type = essential.type;
                 HandleLoadedObj(spawnedObj, essential.type);
+                spawnedObj.name = spawnedObj.name.Replace("(Clone)", null);
             }
         }
 
