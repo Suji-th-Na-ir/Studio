@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3353281798414747919}
   - component: {fileID: 5456944260211834081}
   - component: {fileID: 7320802164743218204}
+  - component: {fileID: 3151807281041762823}
   m_Layer: 0
   m_Name: CorrectButtonA
   m_TagString: Untagged
@@ -84,3 +85,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3151807281041762823
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6374241024228851138}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10.260529, y: 6.133809, z: 10.260529}
+  m_Center: {x: -0.00033283234, y: 3.0749469, z: 0.000019073486}

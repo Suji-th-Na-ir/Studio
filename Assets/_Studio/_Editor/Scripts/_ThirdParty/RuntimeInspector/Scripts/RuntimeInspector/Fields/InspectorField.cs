@@ -575,6 +575,11 @@ namespace RuntimeInspectorNamespace
 
         public InspectorField CreateDrawerForVariable(MemberInfo variable, string variableName = null)
         {
+            // xnx 
+            if (variable.Name.ToLower() == "enabled")
+                return null;
+            // xnx
+            
             Type variableType = variable is FieldInfo ? ((FieldInfo)variable).FieldType : ((PropertyInfo)variable).PropertyType;
             InspectorField variableDrawer = Inspector.CreateDrawerForType(variableType, drawArea, Depth + 1, true, variable);
             if (variableDrawer != null)

@@ -25,13 +25,27 @@ namespace RuntimeInspectorNamespace
         public TMP_InputField repeatInput = null;
 
         public Dropdown broadcastAt;
-        public TMP_InputField broadcastInput;
-        public TMP_InputField listenInput;
+        public TMP_InputField broadcastInput = null;
         public Toggle canListenMultipleTimesToggle;
 
         [HideInInspector]
         public RotateField rotateField = null;
         private RotateComponentData data = new();
+
+        private string guid;
+
+        private void Awake()
+        {
+            guid = Guid.NewGuid().ToString("N");
+        }
+
+        public void Update()
+        {
+            if (broadcastInput != null && !String.IsNullOrEmpty(broadcastInput.text))
+            {
+                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, broadcastInput.text);
+            }
+        }
 
         public void Setup()
         {
@@ -93,12 +107,12 @@ namespace RuntimeInspectorNamespace
                 data.broadcast = value;
                 UpdateData(data);
             });
-            if (listenInput != null) listenInput.onValueChanged.AddListener((value) =>
-            {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(value, data.listenTo, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)rotateField.Value).referenceGO, componentType = typeof(Atom.Rotate).Name });
-                data.listenTo = value;
-                UpdateData(data);
-            });
+            // if (listenInput != null) listenInput.onValueChanged.AddListener((value) =>
+            // {
+            //     EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(value, data.listenTo, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)rotateField.Value).referenceGO, componentType = typeof(Atom.Rotate).Name });
+            //     data.listenTo = value;
+            //     UpdateData(data);
+            // });
             if (canListenMultipleTimesToggle != null) canListenMultipleTimesToggle.onValueChanged.AddListener((value) =>
             {
                 data.listen = value ? Listen.Always : Listen.Once;
@@ -109,8 +123,8 @@ namespace RuntimeInspectorNamespace
         private void UpdateData(RotateComponentData _data)
         {
             rotateField.UpdateData(_data);
+            return;
             UpdateOtherSelectedObjects(_data);
-            // ComponentMessenger.UpdateCompData(_data);
         }
 
         private void UpdateOtherSelectedObjects(RotateComponentData _data)
@@ -189,7 +203,6 @@ namespace RuntimeInspectorNamespace
             if (pauseInput) pauseInput.SetTextWithoutNotify(_data.pauseBetween.ToString());
             if (repeatInput) repeatInput.SetTextWithoutNotify(_data.repeat.ToString());
             if (broadcastInput) broadcastInput.SetTextWithoutNotify(_data.broadcast);
-            if (listenInput) listenInput.SetTextWithoutNotify(_data.listenTo);
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
     }

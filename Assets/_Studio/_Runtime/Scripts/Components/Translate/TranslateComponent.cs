@@ -25,6 +25,7 @@ namespace Terra.Studio
         public bool canPlayVFX;
         public string vfxName;
         public int vfxIndex;
+        public int listenIndex;
 
         [JsonConverter(typeof(Vector3Converter))] public Vector3 startPosition;
         [JsonConverter(typeof(Vector3Converter))] public Vector3 targetPosition;
