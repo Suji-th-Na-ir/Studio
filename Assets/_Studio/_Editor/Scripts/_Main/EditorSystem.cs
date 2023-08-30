@@ -1,20 +1,17 @@
 using UnityEngine;
-using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
     public class EditorSystem : MonoBehaviour, ISubsystem
     {
-        [HideInInspector]
-        public Vector3 PlayerSpawnPoint;
-        private SaveSystem _saveSystem;
+        [HideInInspector] public Vector3 PlayerSpawnPoint;
+
         private Camera editorCamera;
 
         private void Awake()
         {
             SystemOp.Register(this as ISubsystem);
             EditorOp.Register(this);
-            if (!gameObject.TryGetComponent(out _saveSystem)) Debug.LogError("save system not attached.");
         }
 
         public void Initialize()
@@ -53,16 +50,6 @@ namespace Terra.Studio
         public void RequestSwitchState()
         {
             SystemOp.Resolve<System>().SwitchState();
-        }
-
-        public void RequestSaveScene()
-        {
-            _saveSystem.Save(Helper.GetCoreDataSavePath(), "core_data", ".data");
-        }
-
-        public void RequestLoadScene()
-        {
-            _saveSystem.Load(Helper.GetCoreDataSavePath(), "core_data", ".data");
         }
 
         private void SetupScene()
