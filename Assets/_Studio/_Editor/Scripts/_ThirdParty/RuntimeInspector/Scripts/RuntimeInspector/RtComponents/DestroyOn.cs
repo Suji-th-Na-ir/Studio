@@ -30,7 +30,7 @@ namespace RuntimeInspectorNamespace
 
         public void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>());
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), this.GetType().Name);
             PlaySFX.Setup(gameObject);
             PlayVFX.Setup(gameObject);
             guid = Guid.NewGuid().ToString("N");
@@ -139,7 +139,7 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.canPlay = cc.canPlayVFX;
             PlayVFX.data.clipIndex = cc.vfxIndex;
             PlayVFX.data.clipName = cc.vfxName;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, BroadcastListen);
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, startOn.data.listenName);
         }
 
         private void OnDestroy()

@@ -20,7 +20,7 @@ namespace RuntimeInspectorNamespace
 
         private void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>());
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             fromPoint = transform.localPosition;
             Component.fromPoint = fromPoint;
         }
@@ -101,14 +101,8 @@ namespace RuntimeInspectorNamespace
                 EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_oscillate", cc.ConditionData);
             }
             startOn.data.listenIndex = cc.listenIndex;
-            BroadcastListen = cc.BroadcastListen;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, null, BroadcastListen);
-        }
-
-        public string GetStartEvent()
-        {
-            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(Start);
-            return eventName;
+            startOn.data.listenName = cc.BroadcastListen;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, null, startOn.data.listenName);
         }
 
         private void OnDestroy()

@@ -28,7 +28,7 @@ namespace RuntimeInspectorNamespace
         
         public void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>());
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>(), this.GetType().Name);
             PlaySFX.Setup(gameObject);
             PlayVFX.Setup(gameObject);
             guid = Guid.NewGuid().ToString("N");
@@ -130,8 +130,7 @@ namespace RuntimeInspectorNamespace
                 startOn.data.startIndex = (int)(StartOnCollectible)result;
             }
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, null);
-        }
-
+        
             if (cc.ConditionType.ToLower().Contains("listen"))
             {
                 EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_collectible",cc.ConditionData);

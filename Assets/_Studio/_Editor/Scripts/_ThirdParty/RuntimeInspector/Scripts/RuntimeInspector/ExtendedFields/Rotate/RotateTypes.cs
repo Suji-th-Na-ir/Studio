@@ -107,12 +107,12 @@ namespace RuntimeInspectorNamespace
                 data.broadcast = value;
                 UpdateData(data);
             });
-            if (listenInput != null) listenInput.onValueChanged.AddListener((value) =>
-            {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(value, data.listenTo, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)rotateField.Value).referenceGO, componentType = typeof(Atom.Rotate).Name });
-                data.listenTo = value;
-                UpdateData(data);
-            });
+            // if (listenInput != null) listenInput.onValueChanged.AddListener((value) =>
+            // {
+            //     EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(value, data.listenTo, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)rotateField.Value).referenceGO, componentType = typeof(Atom.Rotate).Name });
+            //     data.listenTo = value;
+            //     UpdateData(data);
+            // });
             if (canListenMultipleTimesToggle != null) canListenMultipleTimesToggle.onValueChanged.AddListener((value) =>
             {
                 data.listen = value ? Listen.Always : Listen.Once;
@@ -122,8 +122,8 @@ namespace RuntimeInspectorNamespace
 
         private void UpdateData(RotateComponentData _data)
         {
-            return;
             rotateField.UpdateData(_data);
+            return;
             UpdateOtherSelectedObjects(_data);
         }
 

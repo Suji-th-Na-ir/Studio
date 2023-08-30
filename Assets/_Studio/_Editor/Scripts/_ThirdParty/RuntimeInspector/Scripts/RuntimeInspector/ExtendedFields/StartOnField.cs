@@ -103,9 +103,14 @@ namespace RuntimeInspectorNamespace
 
         private void OnListenValueChanged(int _index)
         {
-            if(Inspector)  Inspector.RefreshDelayed();
             Atom.StartOn atom = (Atom.StartOn)Value;
-            atom.data.listenName = EditorOp.Resolve<DataProvider>().ListenToTypes[_index];
+            // visual changes 
+            string newString = EditorOp.Resolve<DataProvider>().ListenToTypes[_index];
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(newString, atom.data.listenName, 
+                new ComponentDisplayDock() { componentGameObject = atom.target, componentType = typeof(Atom.Translate).Name });
+
+            if(Inspector)  Inspector.RefreshDelayed();
+            atom.data.listenName = newString;
             atom.data.listenIndex = _index;
             UpdateData(atom);
         }

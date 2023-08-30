@@ -18,10 +18,7 @@ namespace RuntimeInspectorNamespace
         private void Awake()
         {
             Type.referenceGO = gameObject;
-        }
-        public void Start()
-        {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>());
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             PlaySFX.Setup(gameObject);
             PlayVFX.Setup(gameObject);
         }

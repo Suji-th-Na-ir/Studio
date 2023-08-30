@@ -18,12 +18,8 @@ namespace RuntimeInspectorNamespace
         private void Awake()
         {
             Type.referenceGO = gameObject;
-        }
-
-        public void Start()
-        {
             Type.data.moveTo = transform.localPosition;
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>());
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             PlaySFX.Setup(gameObject);
             PlayVFX.Setup(gameObject);
         }
@@ -141,7 +137,6 @@ namespace RuntimeInspectorNamespace
                 EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_translate",cc.ConditionData);
             }
             startOn.data.listenIndex = cc.listenIndex;
-            start = GetStartCondition(cc.ConditionType);
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
         }
 

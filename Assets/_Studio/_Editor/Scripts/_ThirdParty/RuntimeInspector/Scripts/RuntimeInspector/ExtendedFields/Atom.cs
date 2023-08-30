@@ -15,13 +15,15 @@ namespace Terra.Studio
             [HideInInspector] public StartOnData data;
             [HideInInspector] public GameObject target;
             [HideInInspector] public List<string> StartList = new List<string>();
-                        
-            public void Setup(GameObject _target, List<string> _list)
+            [HideInInspector] public string componentType = null;
+
+            public void Setup(GameObject _target, List<string> _list, string _componentType)
             {
                 StartList = _list;
                 target = _target;
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
+                componentType = _componentType;
             }
         }
         

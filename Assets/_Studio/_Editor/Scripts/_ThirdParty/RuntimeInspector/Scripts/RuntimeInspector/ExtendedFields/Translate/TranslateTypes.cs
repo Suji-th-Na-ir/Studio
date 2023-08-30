@@ -71,12 +71,12 @@ namespace RuntimeInspectorNamespace
                 data.pauseFor = Helper.StringToFloat(value);
                 UpdateData(data);
             });
-            if (listenTo != null) listenTo.onValueChanged.AddListener((value) =>
-            {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(value, data.listenTo, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)translateField.Value).referenceGO, componentType = typeof(Atom.Translate).Name });
-                data.listenTo = value;
-                UpdateData(data);
-            });
+            // if (listenTo != null) listenTo.onValueChanged.AddListener((value) =>
+            // {
+            //     EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(value, data.listenTo, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)translateField.Value).referenceGO, componentType = typeof(Atom.Translate).Name });
+            //     data.listenTo = value;
+            //     UpdateData(data);
+            // });
             if (repeatInput != null) repeatInput.onValueChanged.AddListener((value) =>
             {
                 data.repeat = Helper.StringInInt(value);
