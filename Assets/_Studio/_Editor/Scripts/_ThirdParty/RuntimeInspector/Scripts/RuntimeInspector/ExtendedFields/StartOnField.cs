@@ -21,15 +21,14 @@ namespace RuntimeInspectorNamespace
             base.Initialize();
             startOn.onValueChanged.AddListener(OnStartValueChanged);
             listenOn.onValueChanged.AddListener(OnListenValueChanged);
+            LoadListenTo();
         }
 
         private void LoadListenTo()
         {
-            // Debug.Log("listen to loaded");
             listenOn.options.Clear();
             foreach (string _name in EditorOp.Resolve<DataProvider>().ListenToTypes)
             {
-                // Debug.Log($"name {_name}");
                 listenOn.options.Add(new Dropdown.OptionData()
                 {
                     text = _name
@@ -125,7 +124,6 @@ namespace RuntimeInspectorNamespace
         
         private void UpdateData(Atom.StartOn _atom)
         {
-            return;
             List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
             if (selectedObjects.Count <= 1) return;
          

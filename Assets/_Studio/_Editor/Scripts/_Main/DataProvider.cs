@@ -124,21 +124,12 @@ namespace Terra.Studio
             {
                 listenDictionary[_id] = _type;
             }
-
-            foreach (var dict in listenDictionary)
-            {
-                // Debug.Log($"Adding to listen list: {dict.Value} | by: {dict.Key}");
-            }
         }
 
         public void UpdateListenToTypes(string _id, string _type, GameObject go = null)
         {
             if (prevListenType == _type) return;
-            
-            
-            Debug.Log("=======================================");
-            Debug.Log($"Received data: {_id} | {_type}", go);
-            
+
             if (!string.IsNullOrEmpty(_type))
             {
                 prevListenType = _type;
@@ -159,11 +150,6 @@ namespace Terra.Studio
             if (string.IsNullOrEmpty(listenDictionary[_id]))
             {
                 listenDictionary.Remove(_id);
-            }
-            
-            foreach (var dict in listenDictionary)
-            {
-                Debug.Log($"Updating Listen To Types: {dict.Value} | by: {dict.Key}");
             }
         }
         
