@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayShifu.Terra;
+using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
@@ -77,6 +78,10 @@ namespace Terra.Studio
             primitive.transform.position = spawnPosition;
             EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);
             EditorOp.Resolve<SelectionHandler>().SelectObjectInHierarchy(primitive);
+            if (type.Equals("CheckPoint"))
+            {
+                primitive.AddComponent<Checkpoint>();
+            }
         }
 
         public override void Draw()
