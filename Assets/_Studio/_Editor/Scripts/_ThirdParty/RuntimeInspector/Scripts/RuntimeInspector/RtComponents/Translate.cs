@@ -13,15 +13,21 @@ namespace RuntimeInspectorNamespace
         public Atom.Translate Type = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
-        private RotateComponent rComp;
 
         private void Awake()
         {
             Type.referenceGO = gameObject;
-            Type.data.moveTo = transform.localPosition;
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             PlaySFX.Setup(gameObject);
             PlayVFX.Setup(gameObject);
+        }
+
+        private void Start()
+        {
+            if (Type.data.moveTo == default)
+            {
+                Type.data.moveTo = transform.localPosition;
+            }
         }
 
         public (string type, string data) Export()
