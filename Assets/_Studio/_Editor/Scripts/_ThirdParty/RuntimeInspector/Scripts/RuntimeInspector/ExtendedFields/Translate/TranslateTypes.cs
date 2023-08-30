@@ -103,7 +103,6 @@ namespace RuntimeInspectorNamespace
         private void UpdateData(TranslateComponentData _data)
         {
             translateField.UpdateData(_data);
-            return;
             UpdateOtherSelectedObjects(_data);
         }
 

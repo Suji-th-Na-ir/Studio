@@ -73,6 +73,24 @@ namespace RuntimeInspectorNamespace
             var finalPath = rotationType.GetPresetName("Rotate");
             var preset = ((RotatePreset)EditorOp.Load(ResourceTag.ComponentPresets, finalPath)).Value;
             LoadData(preset);
+            UpdateTypeForMultiselect(rotationType);
+        }
+
+        private void UpdateTypeForMultiselect(RotationType _data)
+        {
+            List<GameObject> selectedObjecs = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+
+            if (selectedObjecs.Count > 1)
+            {
+                foreach (var obj in selectedObjecs)
+                {
+                    if (obj.GetComponent<Rotate>() != null)
+                    {
+                        Rotate rotate = obj.GetComponent<Rotate>();
+                        rotate.Type.data.rotateType = (int)_data;
+                    }
+                }
+            }
         }
 
         private bool IsDataDefault()

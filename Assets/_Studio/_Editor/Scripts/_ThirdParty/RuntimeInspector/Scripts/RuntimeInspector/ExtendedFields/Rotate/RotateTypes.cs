@@ -123,7 +123,6 @@ namespace RuntimeInspectorNamespace
         private void UpdateData(RotateComponentData _data)
         {
             rotateField.UpdateData(_data);
-            return;
             UpdateOtherSelectedObjects(_data);
         }
 
