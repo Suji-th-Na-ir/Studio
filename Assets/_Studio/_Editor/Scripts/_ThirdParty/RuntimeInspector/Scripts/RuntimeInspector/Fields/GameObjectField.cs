@@ -230,7 +230,9 @@ namespace RuntimeInspectorNamespace
 						//target.AddComponent( (Type) type );
 						foreach (GameObject tObject in EditorOp.Resolve<SelectionHandler>().GetPrevSelectedObjects())
 						{
-							tObject.AddComponent((Type) type);
+							tObject.AddComponent((Type)type);
+							EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock()
+							{ componentGameObject = tObject, componentType = ((Type)type).Name });
 						}
 						Inspector.Refresh();
 					}
@@ -254,7 +256,10 @@ namespace RuntimeInspectorNamespace
 			List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
 			foreach (var obj in selectedObjects)
 			{
-				Destroy(obj.GetComponent(componentDrawer.Value.GetType()));
+				EditorOp.Resolve<UILogicDisplayProcessor>().RemoveComponentIcon(new ComponentDisplayDock()
+				{ componentGameObject = obj, componentType = componentDrawer.Value.GetType().Name });
+
+                Destroy(obj.GetComponent(componentDrawer.Value.GetType()));
 			}
 		}
 

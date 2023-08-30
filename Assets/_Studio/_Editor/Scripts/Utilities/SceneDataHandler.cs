@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using RuntimeInspectorNamespace;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System.Reflection;
 
 namespace Terra.Studio
 {

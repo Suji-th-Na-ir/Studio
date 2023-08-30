@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -78,10 +79,22 @@ namespace RuntimeInspectorNamespace
 
 		private bool OnValueChanged( BoundInputField source, string input )
 		{
+			var oldValue = Value;
 			if( m_setterMode == Mode.OnValueChange )
 				Value = input;
 
-			return true;
+			if (NameRaw == "Broadcast")
+			{
+				EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Value.ToString(), oldValue == null ? "" : oldValue.ToString()
+					, new ComponentDisplayDock() { componentGameObject = ((MonoBehaviour)virutalObject).gameObject, componentType = ComponentType.Name });
+			}
+			else if (NameRaw == "Broadcast Listen")	
+			{
+				EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(Value.ToString(), oldValue == null ? "" : oldValue.ToString(),
+				 new ComponentDisplayDock() { componentGameObject = ((MonoBehaviour)virutalObject).gameObject, componentType = ComponentType.Name });
+			}
+
+            return true;
 		}
 
 		private bool OnValueSubmitted( BoundInputField source, string input )

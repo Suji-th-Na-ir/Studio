@@ -6,7 +6,8 @@ using RuntimeInspectorNamespace;
 using Terra.Studio;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
+using System.Reflection;
+
 
 public class SelectionHandler : View
 {
@@ -108,6 +109,12 @@ public class SelectionHandler : View
                     runtimeHierarchy.Deselect();
                     foreach (GameObject obj in _selectedObjects)
                     {
+                        
+                        var comps = obj.GetComponents<IComponent>();
+                        foreach (var comp in comps)
+                        {
+                            EditorOp.Resolve<UILogicDisplayProcessor>().RemoveComponentIcon(new ComponentDisplayDock() { componentGameObject = obj, componentType = comp.GetType().Name });
+                        }
                         Destroy(obj);
                     }
                     _selectedObjects.Clear();
@@ -121,15 +128,39 @@ public class SelectionHandler : View
     {
         if (_selectedObjects.Count > 0)
         {
-            if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
+            if (RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.WasKeyPressedThisFrame(KeyCode.D))
             {
-                if (RTInput.WasKeyPressedThisFrame(KeyCode.D))
+
+                foreach (GameObject obj in _selectedObjects)
                 {
-                    foreach (GameObject obj in _selectedObjects)
+                    var iObj = Instantiate(obj, obj.transform.position, obj.transform.rotation);
+                    var components = iObj.GetComponents<IComponent>();
+
+                    for (int i = 0; i < components.Length; i++)
                     {
-                        Instantiate(obj, obj.transform.position, obj.transform.rotation);
+                        var componentType = components[i].GetType();
+                        EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock
+                        { componentGameObject = iObj, componentType = componentType.Name });
+
+                        var mInfo = componentType.GetField("Broadcast", BindingFlags.Public | BindingFlags.Instance);             
+                        if (mInfo != null)
+                        {
+                            var oldValue = mInfo?.GetValue(components[i]);
+                            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(oldValue.ToString(), ""
+                                , new ComponentDisplayDock() { componentGameObject = iObj, componentType = componentType.Name });
+                        }
+                        
+                        var mInfo1 = componentType.GetField("BroadcastListen", BindingFlags.Public | BindingFlags.Instance);                    
+                        if (mInfo1 != null)
+                        {
+                            var oldValue1 = mInfo1?.GetValue(components[i]);
+                            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(oldValue1.ToString(), "",
+                             new ComponentDisplayDock() { componentGameObject = iObj, componentType = componentType.Name });
+                        }
+
                     }
                 }
+
             }
         }
     }

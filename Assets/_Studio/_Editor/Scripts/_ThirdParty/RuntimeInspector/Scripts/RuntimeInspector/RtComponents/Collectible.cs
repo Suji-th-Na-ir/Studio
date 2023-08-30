@@ -129,6 +129,8 @@ namespace RuntimeInspectorNamespace
             {
                 startOn.data.startIndex = (int)(StartOnCollectible)result;
             }
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, null);
+        }
 
             if (cc.ConditionType.ToLower().Contains("listen"))
             {

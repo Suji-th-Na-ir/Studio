@@ -14,7 +14,7 @@ namespace Terra.Studio
         private bool canPause = false;
         private float pauseForSeconds = 0f;
         private bool shouldPingPong = false;
-        private Axis axis = Axis.Y;
+        private Axis[] axis;
         private Direction direction = Direction.Clockwise;
 
         public void Rotate(RotateByParams rotateParams)
@@ -45,11 +45,18 @@ namespace Terra.Studio
                 {
                     var rotationThisFrame = rotationSpeed * Time.deltaTime;
                     currentRotation += rotationThisFrame * directionFactor;
-                    transform.Rotate(GetVector3(rotationThisFrame * directionFactor));
+                    for (int i = 0; i < axis.Length; i++)
+                    {
+                        transform.Rotate(GetVector3(rotationThisFrame * directionFactor, axis[i]));
+                    }
                     yield return null;
                 }
                 float finalRotation = targetRotation - currentRotation;
-                transform.Rotate(GetVector3(finalRotation * directionFactor));
+
+                for (int i = 0; i < axis.Length; i++)
+                {
+                    transform.Rotate(GetVector3(finalRotation * directionFactor, axis[i]));
+                }
                 onRotated?.Invoke(false);
                 if (canPause)
                 {
@@ -69,7 +76,7 @@ namespace Terra.Studio
             Destroy(this);
         }
 
-        private Vector3 GetVector3(float newRotation)
+        private Vector3 GetVector3(float newRotation , Axis axis)
         {
             return axis switch
             {

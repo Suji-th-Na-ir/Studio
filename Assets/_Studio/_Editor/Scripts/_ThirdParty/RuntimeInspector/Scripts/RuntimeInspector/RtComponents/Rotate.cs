@@ -3,6 +3,7 @@ using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
+using System.Collections.Generic;
 
 namespace RuntimeInspectorNamespace
 {
@@ -14,7 +15,11 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
 
-        public void Awake()
+        private void Awake()
+        {
+            Type.referenceGO = gameObject;
+        }
+        public void Start()
         {
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>());
             PlaySFX.Setup(gameObject);
@@ -25,7 +30,6 @@ namespace RuntimeInspectorNamespace
         {
             var rc = new RotateComponent
             {
-                axis = Type.data.axis,
                 direction = Type.data.direction,
                 rotationType = (RotationType)Type.data.rotateType,
                 repeatType = GetRepeatType(Type.data.repeat),
@@ -53,6 +57,15 @@ namespace RuntimeInspectorNamespace
             rc.ConditionType = GetStartEvent();
             rc.ConditionData = GetStartCondition();
             rc.listenIndex = startOn.data.listenIndex;
+            List<Axis> axes = new List<Axis>();
+            if (Type.data.Xaxis)
+                axes.Add(Axis.X);
+            if (Type.data.Yaxis)
+                axes.Add(Axis.Y);
+            if (Type.data.Zaxis)
+                axes.Add(Axis.Z);
+
+            rc.axis = axes.ToArray();
 
             ModifyDataAsPerSelected(ref rc);
             gameObject.TrySetTrigger(false, true);
@@ -115,7 +128,15 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.clipIndex = cc.vfxIndex;
             PlayVFX.data.clipName = cc.vfxName;
 
-            Type.data.axis = cc.axis;
+            for (int i = 0; i < cc.axis.Length; i++)
+            {
+                if (cc.axis[i] == Axis.X)
+                    Type.data.Xaxis = true;
+                if (cc.axis[i] == Axis.Y)
+                    Type.data.Yaxis = true;
+                if (cc.axis[i] == Axis.Z)
+                    Type.data.Zaxis = true;
+            }
             Type.data.direction = cc.direction;
             Type.data.rotateType = (int)cc.rotationType;
             Type.data.speed = cc.speed;
@@ -136,6 +157,7 @@ namespace RuntimeInspectorNamespace
                 EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_rotate",cc.ConditionData);
             }
             startOn.data.listenIndex = cc.listenIndex;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
         }
 
         private void ModifyDataAsPerSelected(ref RotateComponent component)

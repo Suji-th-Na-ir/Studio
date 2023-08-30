@@ -101,6 +101,14 @@ namespace RuntimeInspectorNamespace
                 EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_oscillate", cc.ConditionData);
             }
             startOn.data.listenIndex = cc.listenIndex;
+            BroadcastListen = cc.BroadcastListen;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, null, BroadcastListen);
+        }
+
+        public string GetStartEvent()
+        {
+            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(Start);
+            return eventName;
         }
 
         private void OnDestroy()

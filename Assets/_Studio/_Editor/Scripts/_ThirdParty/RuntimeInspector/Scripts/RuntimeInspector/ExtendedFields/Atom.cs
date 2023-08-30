@@ -62,6 +62,7 @@ namespace Terra.Studio
         {
             [HideInInspector] public RotateField field;
             [HideInInspector] public RotateComponentData data = new();
+            [HideInInspector] public GameObject referenceGO;
         }
 
         [Serializable]
@@ -69,6 +70,7 @@ namespace Terra.Studio
         {
             [HideInInspector] public RotateField field;
             [HideInInspector] public TranslateComponentData data = new();
+            [HideInInspector] public GameObject referenceGO;
         }
     }
 
@@ -103,7 +105,9 @@ namespace Terra.Studio
     public struct RotateComponentData
     {
         public int rotateType;
-        public Axis axis;
+        public bool Xaxis;
+        public bool Yaxis;
+        public bool Zaxis;
         public Direction direction;
         public float degrees;
         public float speed;

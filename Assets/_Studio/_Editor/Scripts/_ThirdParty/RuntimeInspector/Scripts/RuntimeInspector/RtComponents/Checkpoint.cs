@@ -53,6 +53,7 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.clipName = component.vfxName;
             PlayVFX.data.clipIndex = component.vfxIndex;
             Broadcast = component.Broadcast;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, null);
         }
 
         private void OnDestroy()

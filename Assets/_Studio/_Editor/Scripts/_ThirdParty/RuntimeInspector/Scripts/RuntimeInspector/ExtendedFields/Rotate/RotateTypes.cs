@@ -12,8 +12,12 @@ namespace RuntimeInspectorNamespace
     public class RotateTypes : MonoBehaviour
     {
         public RotationType myType;
-        public Dropdown axisDropDown;
+       // public Dropdown axisDropDown;
         public Dropdown dirDropDown;
+
+        public Toggle xAxis;
+        public Toggle yAxis;
+        public Toggle zAxis;
 
         public TMP_InputField degreesInput = null;
         public TMP_InputField speedInput = null;
@@ -46,11 +50,27 @@ namespace RuntimeInspectorNamespace
         public void Setup()
         {
             LoadDefaultValues();
-            if (axisDropDown != null) axisDropDown.onValueChanged.AddListener((value) =>
+            if (xAxis != null) xAxis.onValueChanged.AddListener((value) =>
             {
-                data.axis = GetAxis(axisDropDown.options[value].text);
+                data.Xaxis= value;
                 UpdateData(data);
             });
+            if (yAxis != null) yAxis.onValueChanged.AddListener((value) =>
+            {
+                data.Yaxis = value;
+                UpdateData(data);
+            });
+
+            if (zAxis != null) zAxis.onValueChanged.AddListener((value) =>
+            {
+                data.Zaxis = value;
+                UpdateData(data);
+            });
+            //if (axisDropDown != null) axisDropDown.onValueChanged.AddListener((value) =>
+            //{
+            //    data.axis = GetAxis(axisDropDown.options[value].text);
+            //    UpdateData(data);
+            //});
             if (dirDropDown != null) dirDropDown.onValueChanged.AddListener((value) =>
             {
                 data.direction = GetDirection(dirDropDown.options[value].text);
@@ -83,7 +103,14 @@ namespace RuntimeInspectorNamespace
             });
             if (broadcastInput != null) broadcastInput.onValueChanged.AddListener((value) =>
             {
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value, data.broadcast, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)rotateField.Value).referenceGO, componentType = typeof(Atom.Rotate).Name });
                 data.broadcast = value;
+                UpdateData(data);
+            });
+            if (listenInput != null) listenInput.onValueChanged.AddListener((value) =>
+            {
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(value, data.listenTo, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)rotateField.Value).referenceGO, componentType = typeof(Atom.Rotate).Name });
+                data.listenTo = value;
                 UpdateData(data);
             });
             if (canListenMultipleTimesToggle != null) canListenMultipleTimesToggle.onValueChanged.AddListener((value) =>
@@ -143,7 +170,7 @@ namespace RuntimeInspectorNamespace
         public void LoadDefaultValues()
         {
             // axis 
-            if (axisDropDown != null) { axisDropDown.AddOptions(Enum.GetNames(typeof(Axis)).ToList()); }
+          //  if (axisDropDown != null) { axisDropDown.AddOptions(Enum.GetNames(typeof(Axis)).ToList()); }
 
             // direction
             if (dirDropDown != null) { dirDropDown.AddOptions(Enum.GetNames(typeof(Direction)).ToList()); }
@@ -165,7 +192,10 @@ namespace RuntimeInspectorNamespace
         public void SetData(RotateComponentData _data)
         {
             data = _data;
-            if (axisDropDown) axisDropDown.SetValueWithoutNotify((int)Enum.Parse(typeof(Axis), _data.axis.ToString()));
+            // if (axisDropDown) axisDropDown.SetValueWithoutNotify((int)Enum.Parse(typeof(Axis), _data.axis.ToString()));
+            if (xAxis) xAxis.SetIsOnWithoutNotify(_data.Xaxis);
+            if (yAxis) yAxis.SetIsOnWithoutNotify(_data.Yaxis);
+            if (zAxis) zAxis.SetIsOnWithoutNotify(_data.Zaxis);
             if (dirDropDown) dirDropDown.SetValueWithoutNotify((int)Enum.Parse(typeof(Direction), _data.direction.ToString()));
             if (broadcastAt) broadcastAt.SetValueWithoutNotify((int)Enum.Parse(typeof(BroadcastAt), _data.broadcastAt.ToString()));
             if (degreesInput) degreesInput.SetTextWithoutNotify(_data.degrees.ToString());
