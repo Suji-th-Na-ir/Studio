@@ -91,7 +91,7 @@ namespace RuntimeInspectorNamespace
 				if( elements[i] is ExpandableInspectorField && ( elements[i].Value as Object ) )
 					componentsExpandedStates.Add( ( (ExpandableInspectorField) elements[i] ).IsExpanded );
 			}
-
+			Length = 4;
 			base.ClearElements();
 		}
 
