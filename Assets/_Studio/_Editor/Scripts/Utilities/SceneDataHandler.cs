@@ -5,13 +5,14 @@ using Newtonsoft.Json;
 using RuntimeInspectorNamespace;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-using System.Reflection;
 
 namespace Terra.Studio
 {
     public class SceneDataHandler
     {
         public Func<GameObject, string> TryGetAssetPath;
+        public Vector3 PlayerSpawnPoint { get; private set; }
+        private Camera editorCamera;
 
         public void Save()
         {
@@ -36,10 +37,12 @@ namespace Terra.Studio
 
         public void LoadScene()
         {
-            InitializeScene();
+            InitializeSceneObjects();
+            SetupSceneDefaultObjects();
+            new EditorEssentialsLoader().LoadEssentials();
         }
 
-        private void InitializeScene()
+        private void InitializeSceneObjects()
         {
             string data;
             var prevState = SystemOp.Resolve<System>().PreviousStudioState;
@@ -74,7 +77,7 @@ namespace Terra.Studio
             {
                 var metaData = worldData.metaData;
                 if (metaData.Equals(default(WorldMetaData))) return;
-                EditorOp.Resolve<EditorSystem>().PlayerSpawnPoint = metaData.playerSpawnPoint;
+                PlayerSpawnPoint = metaData.playerSpawnPoint;
             }
         }
 
@@ -399,6 +402,31 @@ namespace Terra.Studio
                     metaData.playerSpawnPoint = go.transform.position;
                 }
             }
+        }
+
+        #endregion
+
+        #region Miscellaneous
+
+        private void SetupSceneDefaultObjects()
+        {
+            editorCamera = Camera.main;
+            var isDataPresent = SystemOp.Resolve<CrossSceneDataHolder>().Get("CameraPos", out var data);
+            if (isDataPresent)
+            {
+                editorCamera.transform.position = (Vector3)data;
+            }
+            isDataPresent = SystemOp.Resolve<CrossSceneDataHolder>().Get("CameraRot", out data);
+            if (isDataPresent)
+            {
+                editorCamera.transform.rotation = Quaternion.Euler((Vector3)data);
+            }
+        }
+
+        public void SaveQoFDetails()
+        {
+            SystemOp.Resolve<CrossSceneDataHolder>().Set("CameraPos", editorCamera.transform.position);
+            SystemOp.Resolve<CrossSceneDataHolder>().Set("CameraRot", editorCamera.transform.eulerAngles);
         }
 
         #endregion

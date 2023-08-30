@@ -4,10 +4,6 @@ namespace Terra.Studio
 {
     public class EditorSystem : MonoBehaviour, ISubsystem
     {
-        [HideInInspector] public Vector3 PlayerSpawnPoint;
-
-        private Camera editorCamera;
-
         private void Awake()
         {
             SystemOp.Register(this as ISubsystem);
@@ -25,8 +21,6 @@ namespace Terra.Studio
             EditorOp.Resolve<UILogicDisplayProcessor>().Init();
             EditorOp.Resolve<SelectionHandler>().Init();
             EditorOp.Resolve<SceneDataHandler>().LoadScene();
-            new EditorEssentialsLoader().LoadEssentials();
-            SetupScene();
         }
 
         public void Dispose()
@@ -36,7 +30,7 @@ namespace Terra.Studio
             EditorOp.Resolve<ToolbarView>().Flush();
             EditorOp.Resolve<SceneView>().Flush();
             EditorOp.Resolve<SelectionHandler>().Flush();
-            SaveQoFDetails();
+            EditorOp.Resolve<SceneDataHandler>().SaveQoFDetails();
         }
 
         private void OnDestroy()
@@ -50,27 +44,6 @@ namespace Terra.Studio
         public void RequestSwitchState()
         {
             SystemOp.Resolve<System>().SwitchState();
-        }
-
-        private void SetupScene()
-        {
-            editorCamera = Camera.main;
-            var isDataPresent = SystemOp.Resolve<CrossSceneDataHolder>().Get("CameraPos", out var data);
-            if (isDataPresent)
-            {
-                editorCamera.transform.position = (Vector3)data;
-            }
-            isDataPresent = SystemOp.Resolve<CrossSceneDataHolder>().Get("CameraRot", out data);
-            if (isDataPresent)
-            {
-                editorCamera.transform.rotation = Quaternion.Euler((Vector3)data);
-            }
-        }
-
-        private void SaveQoFDetails()
-        {
-            SystemOp.Resolve<CrossSceneDataHolder>().Set("CameraPos", editorCamera.transform.position);
-            SystemOp.Resolve<CrossSceneDataHolder>().Set("CameraRot", editorCamera.transform.eulerAngles);
         }
     }
 }

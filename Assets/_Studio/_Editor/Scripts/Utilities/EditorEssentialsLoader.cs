@@ -19,6 +19,16 @@ namespace Terra.Studio
                 var studioGO = spawnedObj.AddComponent<StudioGameObject>();
                 studioGO.itemData = essential.itemData;
                 studioGO.type = essential.type;
+                HandleLoadedObj(spawnedObj, essential.type);
+            }
+        }
+
+        private void HandleLoadedObj(GameObject go, EditorObjectType type)
+        {
+            if (type == EditorObjectType.SpawnPoint)
+            {
+                var pos = EditorOp.Resolve<SceneDataHandler>().PlayerSpawnPoint;
+                go.transform.position = pos;
             }
         }
     }
