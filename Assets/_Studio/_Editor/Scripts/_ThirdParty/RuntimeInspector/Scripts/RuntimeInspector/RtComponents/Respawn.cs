@@ -13,7 +13,13 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
         public string Broadcast = null;
-        
+        private string guid;
+
+        private void Awake()
+        {
+            guid = Guid.NewGuid().ToString("N");
+        }
+
         public void Start()
         {
             PlaySFX.Setup(gameObject);
@@ -24,7 +30,7 @@ namespace RuntimeInspectorNamespace
         {
             if (!String.IsNullOrEmpty(Broadcast))
             {
-                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(this.GetInstanceID() + "_respawn", Broadcast);
+                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, Broadcast);
             }
         }
         

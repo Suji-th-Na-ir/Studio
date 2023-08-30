@@ -24,19 +24,21 @@ namespace RuntimeInspectorNamespace
         public bool CanUpdateScore = false;
         public float ScoreValue = 0;
         public string Broadcast = null;
+        private string guid;
         
         public void Awake()
         {
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>());
             PlaySFX.Setup(gameObject);
             PlayVFX.Setup(gameObject);
+            guid = Guid.NewGuid().ToString("N");
         }
         
         public void Update()
         {
             if (!String.IsNullOrEmpty(Broadcast))
             {
-                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(this.GetInstanceID()+"_collectible", Broadcast);
+                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, Broadcast);
             }
         }
 

@@ -100,7 +100,7 @@ namespace Terra.Studio
         {
             get
             {
-                var newList = new List<string>() {  "None", "Game Win", "Game Lose" };
+                var newList = new List<string> {  "None", "Game Win", "Game Lose" };
                 if (listenDictionary.Count > 0)
                 {
                     newList.AddRange(listenDictionary.Where(x => newList.Contains(x.Value) == false).Select(y => y.Value));   
@@ -114,8 +114,8 @@ namespace Terra.Studio
 
         public void AddToListenList(string _id, string _type)
         {
-            if (string.IsNullOrEmpty(_type))
-                return;
+            // if (string.IsNullOrEmpty(_type))
+            //     return;
             if (!listenDictionary.ContainsKey(_id))
             {
                 listenDictionary.Add(_id, _type);
@@ -124,17 +124,46 @@ namespace Terra.Studio
             {
                 listenDictionary[_id] = _type;
             }
+
+            foreach (var dict in listenDictionary)
+            {
+                // Debug.Log($"Adding to listen list: {dict.Value} | by: {dict.Key}");
+            }
         }
 
-        public void UpdateListenToTypes(string _id, string _type)
+        public void UpdateListenToTypes(string _id, string _type, GameObject go = null)
         {
-            if (string.IsNullOrEmpty(_type))
-                return;
+            if (prevListenType == _type) return;
             
-            if (prevListenType != _type)
+            
+            Debug.Log("=======================================");
+            Debug.Log($"Received data: {_id} | {_type}", go);
+            
+            if (!string.IsNullOrEmpty(_type))
             {
-                listenDictionary[_id] =  _type;
                 prevListenType = _type;
+            }
+            if (listenDictionary.ContainsKey(_id))
+            {
+                if (listenDictionary[_id] == _type)
+                {
+                    return;
+                }
+                listenDictionary[_id] =  _type;
+            }
+            else
+            {
+                listenDictionary.Add(_id, _type);
+            }
+
+            if (string.IsNullOrEmpty(listenDictionary[_id]))
+            {
+                listenDictionary.Remove(_id);
+            }
+            
+            foreach (var dict in listenDictionary)
+            {
+                Debug.Log($"Updating Listen To Types: {dict.Value} | by: {dict.Key}");
             }
         }
         

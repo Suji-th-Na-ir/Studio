@@ -23,12 +23,18 @@ namespace RuntimeInspectorNamespace
         [HideInInspector]
         public TranslateField translateField = null;
         private TranslateComponentData data = new TranslateComponentData();
+        private string guid;
+
+        private void Awake()
+        {
+            guid = Guid.NewGuid().ToString("N");
+        }
 
         public void Update()
         {
             if (broadcastInput != null && !String.IsNullOrEmpty(broadcastInput.text))
             {
-                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(this.GetInstanceID() + "_respawn", broadcastInput.text);
+                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, broadcastInput.text);
             }
         }
         
@@ -89,6 +95,7 @@ namespace RuntimeInspectorNamespace
 
         private void UpdateData(TranslateComponentData _data)
         {
+            return;
             translateField.UpdateData(_data);
             UpdateOtherSelectedObjects(_data);
         }

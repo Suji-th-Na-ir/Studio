@@ -25,21 +25,25 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySfx PlaySFX = new ();
         public Atom.PlayVfx PlayVFX = new ();
         public string Broadcast = null;
+        private string guid;
+        private string cachedValue;
 
         public void Awake()
         {
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>());
             PlaySFX.Setup(gameObject);
             PlayVFX.Setup(gameObject);
+            guid = Guid.NewGuid().ToString("N");
         }
 
         public void Update()
         {
-            if (!String.IsNullOrEmpty(Broadcast))
+            if (Broadcast == cachedValue)
             {
-                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(this.GetInstanceID()+"_destroy", Broadcast);
+                return;
             }
-
+            cachedValue = Broadcast;
+            EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, Broadcast,gameObject);
             if (Input.GetKeyDown(KeyCode.H)) Export();
         }
 
@@ -68,7 +72,6 @@ namespace RuntimeInspectorNamespace
             gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(destroyOn, Formatting.Indented);
-            Debug.Log(data);
             return (type, data);
         }
         
@@ -77,7 +80,6 @@ namespace RuntimeInspectorNamespace
             int index = startOn.data.startIndex;
             string inputString = ((DestroyOnEnum)index).ToString();
             
-            Debug.Log("input string "+inputString);
             if (!string.IsNullOrEmpty(_input))
                 inputString = _input;
             
@@ -93,7 +95,6 @@ namespace RuntimeInspectorNamespace
         
         public string GetStartCondition(string _input = null)
         {
-            Debug.Log("stgart index "+startOn.data.startIndex);
             int index = startOn.data.startIndex;
             string inputString = ((DestroyOnEnum)index).ToString();
             if (!string.IsNullOrEmpty(_input))
@@ -121,11 +122,9 @@ namespace RuntimeInspectorNamespace
                 startOn.data.startIndex = (int)(DestroyOnEnum)result;
             }
             
-            Debug.Log("import s i "+startOn.data.startIndex);
-
             if (cc.ConditionType.ToLower().Contains("listen"))
             {
-                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_destroy",cc.ConditionData);
+                EditorOp.Resolve<DataProvider>().AddToListenList(guid,cc.ConditionData);
             }
             startOn.data.listenIndex = cc.listenIndex;
             

@@ -27,12 +27,19 @@ namespace RuntimeInspectorNamespace
         [HideInInspector]
         public RotateField rotateField = null;
         private RotateComponentData data = new();
-        
+
+        private string guid;
+
+        private void Awake()
+        {
+            guid = Guid.NewGuid().ToString("N");
+        }
+
         public void Update()
         {
             if (broadcastInput != null && !String.IsNullOrEmpty(broadcastInput.text))
             {
-                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(this.GetInstanceID() + "_respawn", broadcastInput.text);
+                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, broadcastInput.text);
             }
         }
 
@@ -88,9 +95,9 @@ namespace RuntimeInspectorNamespace
 
         private void UpdateData(RotateComponentData _data)
         {
+            return;
             rotateField.UpdateData(_data);
             UpdateOtherSelectedObjects(_data);
-            // ComponentMessenger.UpdateCompData(_data);
         }
 
         private void UpdateOtherSelectedObjects(RotateComponentData _data)

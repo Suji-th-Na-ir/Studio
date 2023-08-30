@@ -11,12 +11,18 @@ namespace RuntimeInspectorNamespace
     {
         public uint Time;
         public string Broadcast = null;
-        
+        private string guid;
+
+        private void Awake()
+        {
+            guid = Guid.NewGuid().ToString("N");
+        }
+
         public void Update()
         {
             if (!String.IsNullOrEmpty(Broadcast))
             {
-                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(this.GetInstanceID() + "_timer", Broadcast);
+                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, Broadcast);
             }
         }
 
