@@ -1177,6 +1177,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1462891019}
     m_Modifications:
+    - target: {fileID: 1017921965567929832, guid: e129bd23d24e34d56873726a93a6757c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3308729233739158944, guid: e129bd23d24e34d56873726a93a6757c,
         type: 3}
       propertyPath: m_RootOrder
@@ -2095,6 +2100,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 880908753}
+  - component: {fileID: 880908754}
   m_Layer: 0
   m_Name: first-obstacle
   m_TagString: Untagged
@@ -2118,6 +2124,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 51
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &880908754
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880908750}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2892911, y: 1.2515079, z: 1.2910345}
+  m_Center: {x: 0.001547798, y: 0.09584825, z: 0.0061395206}
 --- !u!1001 &892913859
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2704,6 +2723,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1156064608}
     m_Modifications:
+    - target: {fileID: 1017921965567929832, guid: e129bd23d24e34d56873726a93a6757c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3308729233739158944, guid: e129bd23d24e34d56873726a93a6757c,
         type: 3}
       propertyPath: m_RootOrder
@@ -3033,6 +3057,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1156064608}
+  - component: {fileID: 1156064609}
   m_Layer: 0
   m_Name: third-obstacle
   m_TagString: Untagged
@@ -3056,6 +3081,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 53
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1156064609
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1156064605}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2892911, y: 1.2515079, z: 1.2910345}
+  m_Center: {x: 0.001547798, y: 0.09584825, z: 0.0061395206}
 --- !u!1001 &1209346356
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3149,6 +3187,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1263499775}
+  - component: {fileID: 1263499776}
   m_Layer: 0
   m_Name: fourth-obstacle
   m_TagString: Untagged
@@ -3172,6 +3211,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 54
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1263499776
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1263499772}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2892911, y: 1.2515079, z: 1.2910345}
+  m_Center: {x: 0.001547798, y: 0.09584825, z: 0.0061395206}
 --- !u!1001 &1299344631
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3517,6 +3569,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1462891019}
+  - component: {fileID: 1462891020}
   m_Layer: 0
   m_Name: second-obstacle
   m_TagString: Untagged
@@ -3540,6 +3593,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 52
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1462891020
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462891016}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2892911, y: 1.2515079, z: 1.2910345}
+  m_Center: {x: 0.001547798, y: 0.09584825, z: 0.0061395206}
 --- !u!1001 &1498990464
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4071,6 +4137,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1263499775}
     m_Modifications:
+    - target: {fileID: 1017921965567929832, guid: e129bd23d24e34d56873726a93a6757c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3308729233739158944, guid: e129bd23d24e34d56873726a93a6757c,
         type: 3}
       propertyPath: m_RootOrder
@@ -4734,6 +4805,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 880908753}
     m_Modifications:
+    - target: {fileID: 1017921965567929832, guid: e129bd23d24e34d56873726a93a6757c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3308729233739158944, guid: e129bd23d24e34d56873726a93a6757c,
         type: 3}
       propertyPath: m_RootOrder
