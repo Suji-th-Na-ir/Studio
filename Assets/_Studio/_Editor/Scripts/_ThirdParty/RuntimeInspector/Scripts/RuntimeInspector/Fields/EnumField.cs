@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
@@ -144,7 +144,7 @@ namespace RuntimeInspectorNamespace
 			input.captionText.SetSkinInputFieldText( Skin );
 			templateText.SetSkinInputFieldText( Skin );
 
-			templateBackground.color = Skin.InputFieldNormalBackgroundColor.Tint( 0.075f );
+//			templateBackground.color = Skin.InputFieldNormalBackgroundColor.Tint( 0.075f );
 			templateCheckmark.color = Skin.ToggleCheckmarkColor;
 
 			Vector2 rightSideAnchorMin = new Vector2( Skin.LabelWidthPercentage, 0f );
