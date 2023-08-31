@@ -59,6 +59,7 @@ namespace RuntimeInspectorNamespace
                     });
                 }
             }
+            startOn.captionText.text = atom.StartList[atom.data.startIndex];
         }
 
         public override bool SupportsType( Type type )
