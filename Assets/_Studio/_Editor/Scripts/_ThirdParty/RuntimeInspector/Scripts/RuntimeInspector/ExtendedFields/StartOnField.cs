@@ -87,16 +87,27 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        private bool resetListenIndex = false;
         private void OnStartValueChanged(int _index)
         {
-            if(Inspector)  Inspector.RefreshDelayed();
+            if (Inspector) Inspector.RefreshDelayed();
             Atom.StartOn atom = (Atom.StartOn)Value;
             atom.data.startIndex = _index;
             atom.data.startName = atom.StartList[_index];
-            // rest the listen field to previous value
+            // reset the listen field to previous value
             atom.data.listenIndex = prevListenOnValue;
+            var prevString = string.Empty;
+            var newString = string.Empty;
 
+            if (_index != 2)
+            {
+                prevString = atom.data.listenName;
+            }
+            else
+            {
+                newString = atom.data.listenName;
+            }
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(newString, prevString,
+                    new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
             UpdateData(atom);
         }
 
