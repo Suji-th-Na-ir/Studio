@@ -15,8 +15,8 @@ namespace RuntimeInspectorNamespace
 
         public void Start()
         {
-            PlaySFX.Setup(gameObject);
-            PlayVFX.Setup(gameObject);
+            PlaySFX.Setup<Checkpoint>(gameObject);
+            PlayVFX.Setup<Checkpoint>(gameObject);
         }
 
         public (string type, string data) Export()

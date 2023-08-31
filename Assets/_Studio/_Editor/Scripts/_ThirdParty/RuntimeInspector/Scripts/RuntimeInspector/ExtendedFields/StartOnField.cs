@@ -137,7 +137,11 @@ namespace RuntimeInspectorNamespace
                 foreach (Atom.StartOn atom in Atom.StartOn.AllInstances)
                 {
                     if (obj.GetInstanceID() == atom.target.GetInstanceID())
-                    { atom.data = Helper.DeepCopy(_atom.data);
+                    {
+                        if (_atom.componentType.Equals(atom.componentType))
+                        {
+                            atom.data = Helper.DeepCopy(_atom.data);
+                        }
                     }
                 }
             }

@@ -18,8 +18,8 @@ namespace RuntimeInspectorNamespace
         {
             Type.referenceGO = gameObject;
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
-            PlaySFX.Setup(gameObject);
-            PlayVFX.Setup(gameObject);
+            PlaySFX.Setup<Translate>(gameObject);
+            PlayVFX.Setup<Translate>(gameObject);
         }
 
         private void Start()

@@ -22,8 +22,8 @@ namespace RuntimeInspectorNamespace
 
         public void Start()
         {
-            PlaySFX.Setup(gameObject);
-            PlayVFX.Setup(gameObject);
+            PlaySFX.Setup<Respawn>(gameObject);
+            PlayVFX.Setup<Respawn>(gameObject);
         }
         
         public void Update()

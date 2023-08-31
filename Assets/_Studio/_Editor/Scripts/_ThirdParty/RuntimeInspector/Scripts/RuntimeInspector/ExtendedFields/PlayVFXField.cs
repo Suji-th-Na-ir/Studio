@@ -110,7 +110,10 @@ namespace RuntimeInspectorNamespace
                 {
                     if (obj.GetInstanceID() == vfx.target.GetInstanceID())
                     {
-                        vfx.data = Helper.DeepCopy(_vfx.data);
+                        if (_vfx.componentType.Equals(vfx.componentType))
+                        {
+                            vfx.data = Helper.DeepCopy(_vfx.data);
+                        }
                     }
                 }
             }

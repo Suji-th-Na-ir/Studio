@@ -19,8 +19,8 @@ namespace RuntimeInspectorNamespace
         {
             Type.referenceGO = gameObject;
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
-            PlaySFX.Setup(gameObject);
-            PlayVFX.Setup(gameObject);
+            PlaySFX.Setup<Rotate>(gameObject);
+            PlayVFX.Setup<Rotate>(gameObject);
         }
 
         public (string type, string data) Export()

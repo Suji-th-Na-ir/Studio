@@ -34,10 +34,12 @@ namespace Terra.Studio
             [HideInInspector] public PlaySFXField field;
             [HideInInspector] public PlaySFXData data;
             [HideInInspector] public GameObject target;
+            [HideInInspector] public Type componentType = null;
 
-            public void Setup(GameObject _target)
+            public void Setup<T>(GameObject _target)
             {
                 target = _target;
+                componentType = typeof(T);
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
             }
@@ -50,10 +52,12 @@ namespace Terra.Studio
             [HideInInspector] public PlayVFXField field;
             [HideInInspector] public PlayVFXData data;
             [HideInInspector] public GameObject target;
+            [HideInInspector] public Type componentType = null;
 
-            public void Setup(GameObject _target)
+            public void Setup<T>(GameObject _target)
             {
                 target = _target;
+                componentType = typeof(T);
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
             }
