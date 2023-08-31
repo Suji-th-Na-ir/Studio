@@ -22,14 +22,6 @@ namespace RuntimeInspectorNamespace
             PlayVFX.Setup<Translate>(gameObject);
         }
 
-        private void Start()
-        {
-            if (Type.data.moveTo == default)
-            {
-                Type.data.moveTo = transform.localPosition;
-            }
-        }
-
         public (string type, string data) Export()
         {
             TranslateComponent rc = new TranslateComponent
