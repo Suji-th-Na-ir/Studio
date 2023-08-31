@@ -34,7 +34,7 @@ namespace RuntimeInspectorNamespace
 		{
 			
 			base.Initialize();
-			length = 4; // 4: active, name, tag, layer
+			length = 0; // 4: active, name, tag, layer
             isActiveGetter = () => ( (GameObject) Value ).activeSelf;
 			isActiveSetter = ( value ) => ( (GameObject) Value ).SetActive( (bool) value );
 
