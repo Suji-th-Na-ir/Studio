@@ -101,19 +101,19 @@ namespace RuntimeInspectorNamespace
 			//if( components.Count == 0 )
 			//	return;
 		
-			if (Inspector.currentPageIndex == 0)
-			{
-				//CreateDrawer(typeof(bool), "Is Active", isActiveGetter, isActiveSetter);
-				//StringField nameField = CreateDrawer(typeof(string), "Name", nameGetter, nameSetter) as StringField;
-				//StringField tagField = CreateDrawer(typeof(string), "Tag", tagGetter, tagSetter) as StringField;
-				//CreateDrawerForVariable(layerProp, "Layer");
+			//if (Inspector.currentPageIndex == 0)
+			//{
+			//	//CreateDrawer(typeof(bool), "Is Active", isActiveGetter, isActiveSetter);
+			//	//StringField nameField = CreateDrawer(typeof(string), "Name", nameGetter, nameSetter) as StringField;
+			//	//StringField tagField = CreateDrawer(typeof(string), "Tag", tagGetter, tagSetter) as StringField;
+			//	//CreateDrawerForVariable(layerProp, "Layer");
 
-				//if (nameField)
-				//	nameField.SetterMode = StringField.Mode.OnSubmit;
+			//	//if (nameField)
+			//	//	nameField.SetterMode = StringField.Mode.OnSubmit;
 
-				//if (tagField)
-				//	tagField.SetterMode = StringField.Mode.OnSubmit;
-            }
+			//	//if (tagField)
+			//	//	tagField.SetterMode = StringField.Mode.OnSubmit;
+   //         }
 
             for (int i = 0, j = 0; i < components.Count; i++)
 			{

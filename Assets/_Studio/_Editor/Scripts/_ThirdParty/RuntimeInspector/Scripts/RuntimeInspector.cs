@@ -514,7 +514,7 @@ namespace RuntimeInspectorNamespace
                 if (inspectedObjectDrawer != null)
                 {
                     inspectedObjectDrawer.BindTo(obj.GetType(), string.Empty, () => m_inspectedObject, (value) => m_inspectedObject = value);
-                    inspectedObjectDrawer.NameRaw = obj.GetNameWithType();
+                    inspectedObjectDrawer.NameRaw = obj.GetNameWithType().Replace("(GameObject)","");
                     inspectedObjectDrawer.Refresh();
 
                     if (inspectedObjectDrawer is ExpandableInspectorField)
