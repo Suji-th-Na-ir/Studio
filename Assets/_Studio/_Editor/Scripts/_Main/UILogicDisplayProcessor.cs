@@ -123,7 +123,7 @@ namespace Terra.Studio
             ValidateBroadcastListen();
         }
 
-        public void UpdateListnerString(string newString, string lastString, ComponentDisplayDock obj)
+        public void UpdateListenerString(string newString, string lastString, ComponentDisplayDock obj)
         {
             UpdateDictionaryWithNewStringKey(m_Listners, lastString, newString, obj);
             ValidateBroadcastListen();
@@ -220,7 +220,7 @@ namespace Terra.Studio
         {
             AddComponentIcon(new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
             UpdateBroadcastString(broadcast, "", new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
-            UpdateListnerString(broadcastListen, "", new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
+            UpdateListenerString(broadcastListen, "", new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
         }
 
         private void RemoveIcon(ComponentDisplayDock componentDisplay)

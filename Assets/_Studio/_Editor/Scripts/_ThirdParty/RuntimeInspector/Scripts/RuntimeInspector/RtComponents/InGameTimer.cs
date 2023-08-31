@@ -15,7 +15,7 @@ namespace RuntimeInspectorNamespace
 
         private void Awake()
         {
-            guid = Guid.NewGuid().ToString("N");
+            guid = GetInstanceID() + "_timer"; //Guid.NewGuid().ToString("N");
         }
 
         public void Update()

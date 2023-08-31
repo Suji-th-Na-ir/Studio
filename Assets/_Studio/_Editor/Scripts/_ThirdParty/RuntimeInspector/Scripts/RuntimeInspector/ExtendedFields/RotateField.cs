@@ -22,7 +22,7 @@ namespace RuntimeInspectorNamespace
             base.Initialize();
             Setup();
         }
-
+        
         private void Setup()
         {
             foreach (var type in allRotateTypes)
@@ -118,7 +118,6 @@ namespace RuntimeInspectorNamespace
 
         protected override void OnBound(MemberInfo variable)
         {
-            // Debug.Log("rotate bound called "+this.gameObject.name);
             base.OnBound(variable);
             Atom.Rotate rt = (Atom.Rotate)Value;
             // Debug.Log($"translate atom data x value {rt.data.Xaxis}");

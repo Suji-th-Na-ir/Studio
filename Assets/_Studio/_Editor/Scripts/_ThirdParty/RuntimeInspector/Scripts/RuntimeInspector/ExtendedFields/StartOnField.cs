@@ -106,7 +106,7 @@ namespace RuntimeInspectorNamespace
             Atom.StartOn atom = (Atom.StartOn)Value;
             // visual changes 
             string newString = EditorOp.Resolve<DataProvider>().ListenToTypes[_index];
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(newString, atom.data.listenName, 
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(newString, atom.data.listenName, 
                 new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
 
             if(Inspector)  Inspector.RefreshDelayed();

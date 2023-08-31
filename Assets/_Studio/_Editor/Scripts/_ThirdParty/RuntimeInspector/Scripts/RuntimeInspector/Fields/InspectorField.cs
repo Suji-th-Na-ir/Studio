@@ -316,7 +316,7 @@ namespace RuntimeInspectorNamespace
                             }
                             else if (NameRaw == "Broadcast Listen")
                             {
-                                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(Value.ToString(), oldValue == null ? "" : oldValue.ToString(),
+                                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(Value.ToString(), oldValue == null ? "" : oldValue.ToString(),
                                  new ComponentDisplayDock() { componentGameObject = obj, componentType = ComponentType.Name });
                             }
                         }

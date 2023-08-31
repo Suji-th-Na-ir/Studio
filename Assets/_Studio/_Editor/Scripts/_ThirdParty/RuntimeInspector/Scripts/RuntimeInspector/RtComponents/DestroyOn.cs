@@ -33,7 +33,7 @@ namespace RuntimeInspectorNamespace
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), this.GetType().Name);
             PlaySFX.Setup<DestroyOn>(gameObject);
             PlayVFX.Setup<DestroyOn>(gameObject);
-            guid = Guid.NewGuid().ToString("N");
+            guid = GetInstanceID() + "_destroy";//Guid.NewGuid().ToString("N");
         }
 
         public void Update()
@@ -43,7 +43,7 @@ namespace RuntimeInspectorNamespace
                 return;
             }
             cachedValue = Broadcast;
-            EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, Broadcast,gameObject);
+            EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, Broadcast);
             if (Input.GetKeyDown(KeyCode.H)) Export();
         }
 
