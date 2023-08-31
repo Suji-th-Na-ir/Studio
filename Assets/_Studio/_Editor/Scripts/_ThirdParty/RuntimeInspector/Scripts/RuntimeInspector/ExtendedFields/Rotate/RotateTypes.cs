@@ -125,7 +125,7 @@ namespace RuntimeInspectorNamespace
             });
             if (broadcastInput != null) broadcastInput.onValueChanged.AddListener((value) =>
             {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value, value, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)field.Value).referenceGO, componentType = typeof(Atom.Rotate).Name });
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value, field.GetAtom().data.broadcast, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)field.Value).referenceGO, componentType = typeof(Atom.Rotate).Name });
                 field.GetAtom().data.broadcast = value;
                 UpdateVariablesForAll(VariableTypes.BROADCAST_STRING,  value);
             });
