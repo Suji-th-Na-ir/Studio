@@ -17,7 +17,7 @@ namespace RuntimeInspectorNamespace
 
         private void Awake()
         {
-            guid = Guid.NewGuid().ToString("N");
+            guid = GetInstanceID() + "_respawn";//Guid.NewGuid().ToString("N");
         }
 
         public void Start()

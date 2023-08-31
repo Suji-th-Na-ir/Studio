@@ -16,12 +16,14 @@ namespace RuntimeInspectorNamespace
         [SerializeField] private Dropdown listenOn;
 #pragma warning restore 0649
 
+        private int prevListenOnValue = -1;
         public override void Initialize()
         {
             base.Initialize();
             startOn.onValueChanged.AddListener(OnStartValueChanged);
             listenOn.onValueChanged.AddListener(OnListenValueChanged);
             LoadListenTo();
+            // Debug.Log("start on initlized");
         }
 
         private void LoadListenTo()
@@ -57,6 +59,7 @@ namespace RuntimeInspectorNamespace
                     });
                 }
             }
+            startOn.captionText.text = atom.StartList[atom.data.startIndex];
         }
 
         public override bool SupportsType( Type type )
@@ -85,19 +88,28 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        private bool resetListenIndex = false;
         private void OnStartValueChanged(int _index)
         {
-            if(Inspector)  Inspector.RefreshDelayed();
+            if (Inspector) Inspector.RefreshDelayed();
             Atom.StartOn atom = (Atom.StartOn)Value;
             atom.data.startIndex = _index;
             atom.data.startName = atom.StartList[_index];
-            // rest the listen field
-            // if (resetListenIndex) {
-            //     atom.data.listenIndex = 0;
-            // }
-            // resetListenIndex = true;
+            // reset the listen field to previous value
+            if(prevListenOnValue != -1)
+                atom.data.listenIndex = prevListenOnValue;
+            var prevString = string.Empty;
+            var newString = string.Empty;
 
+            if (_index != 2)
+            {
+                prevString = atom.data.listenName;
+            }
+            else
+            {
+                newString = atom.data.listenName;
+            }
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(newString, prevString,
+                    new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
             UpdateData(atom);
         }
 
@@ -106,13 +118,15 @@ namespace RuntimeInspectorNamespace
             Atom.StartOn atom = (Atom.StartOn)Value;
             // visual changes 
             string newString = EditorOp.Resolve<DataProvider>().ListenToTypes[_index];
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(newString, atom.data.listenName, 
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(newString, atom.data.listenName, 
                 new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
 
             if(Inspector)  Inspector.RefreshDelayed();
             atom.data.listenName = newString;
             atom.data.listenIndex = _index;
             UpdateData(atom);
+            prevListenOnValue = _index;
+            // Debug.Log($"listen to newstring {newString}   index {_index}");
         }
 
         protected override void OnSkinChanged()
@@ -140,6 +154,8 @@ namespace RuntimeInspectorNamespace
                     {
                         if (_atom.componentType.Equals(atom.componentType))
                         {
+                            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(_atom.data.listenName, atom.data.listenName,
+                            new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
                             atom.data = Helper.DeepCopy(_atom.data);
                         }
                     }
@@ -158,8 +174,8 @@ namespace RuntimeInspectorNamespace
             Atom.StartOn atom = (Atom.StartOn)Value;
             if (atom != null)
             {
-                startOn.value = atom.data.startIndex;
-                listenOn.value = atom.data.listenIndex;
+                startOn.SetValueWithoutNotify(atom.data.startIndex);
+                listenOn.SetValueWithoutNotify(atom.data.listenIndex);
                 ShowHideListenDD();
             }
         }

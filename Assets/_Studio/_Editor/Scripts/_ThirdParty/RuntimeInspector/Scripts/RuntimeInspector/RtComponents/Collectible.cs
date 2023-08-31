@@ -31,7 +31,7 @@ namespace RuntimeInspectorNamespace
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>(), this.GetType().Name);
             PlaySFX.Setup<Collectible>(gameObject);
             PlayVFX.Setup<Collectible>(gameObject);
-            guid = Guid.NewGuid().ToString("N");
+            guid = GetInstanceID() + "_collect";//Guid.NewGuid().ToString("N");
         }
         
         public void Update()

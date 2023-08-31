@@ -24,6 +24,8 @@ namespace Terra.Studio
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
                 componentType = _componentType;
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(data.listenName, ""
+                                , new ComponentDisplayDock() { componentGameObject = _target, componentType = _componentType });
             }
         }
         
@@ -74,7 +76,7 @@ namespace Terra.Studio
         [Serializable]
         public class Translate
         {
-            [HideInInspector] public RotateField field;
+            [HideInInspector] public TranslateField field;
             [HideInInspector] public TranslateComponentData data = new();
             [HideInInspector] public GameObject referenceGO;
         }

@@ -20,14 +20,8 @@ namespace RuntimeInspectorNamespace
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             PlaySFX.Setup<Translate>(gameObject);
             PlayVFX.Setup<Translate>(gameObject);
-        }
-
-        private void Start()
-        {
-            if (Type.data.moveTo == default)
-            {
-                Type.data.moveTo = transform.localPosition;
-            }
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Type.data.broadcast, ""
+                                , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = this.GetType().Name });
         }
 
         public (string type, string data) Export()
