@@ -24,6 +24,8 @@ namespace Terra.Studio
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
                 componentType = _componentType;
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(data.listenName, ""
+                                , new ComponentDisplayDock() { componentGameObject = _target, componentType = _componentType });
             }
         }
         
