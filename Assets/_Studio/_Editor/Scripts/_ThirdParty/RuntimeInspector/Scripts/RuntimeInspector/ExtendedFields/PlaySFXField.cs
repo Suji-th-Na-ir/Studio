@@ -103,7 +103,7 @@ namespace RuntimeInspectorNamespace
                 {
                     if (obj.GetInstanceID() == sfx.target.GetInstanceID())
                     {
-                        if (_sfx.componentType != null && _sfx.componentType == sfx.componentType)
+                        if (_sfx != null && _sfx.componentType != null && _sfx.componentType == sfx.componentType)
                         {
                             sfx.data = Helper.DeepCopy(_sfx.data);
                         }
