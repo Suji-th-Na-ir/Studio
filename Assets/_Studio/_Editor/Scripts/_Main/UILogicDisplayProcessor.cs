@@ -58,7 +58,7 @@ namespace Terra.Studio
                 lastKey = "";
             if (list.TryGetValue(lastKey, out List<ComponentDisplayDock> value))
             {
-                if (newKey.Equals(lastKey) &&!string.IsNullOrEmpty(newKey))
+                if ( !string.IsNullOrEmpty(newKey) && newKey.Equals(lastKey))
                     return;
                 if (!string.IsNullOrEmpty(newKey))
                 {

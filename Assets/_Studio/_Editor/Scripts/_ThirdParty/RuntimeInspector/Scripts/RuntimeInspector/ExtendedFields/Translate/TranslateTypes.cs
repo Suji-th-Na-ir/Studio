@@ -105,6 +105,10 @@ namespace RuntimeInspectorNamespace
                     var dataField = typeValue.GetType().GetField("data", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
                     var dataValue = (TranslateComponentData)dataField.GetValue(typeValue);
                     var targetValue = dataValue.GetType().GetField(varName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.IgnoreCase);
+                    if (varName == "broadcast")
+                    {
+                        EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value.ToString(), targetValue.GetValue(dataValue).ToString(), new ComponentDisplayDock() { componentGameObject = obj, componentType = typeof(Atom.Translate).Name });
+                    }
                     targetValue.SetValueDirect(__makeref(dataValue), value);
                     dataField.SetValue(typeValue, dataValue);
                     typeField.SetValue(translate, typeValue);

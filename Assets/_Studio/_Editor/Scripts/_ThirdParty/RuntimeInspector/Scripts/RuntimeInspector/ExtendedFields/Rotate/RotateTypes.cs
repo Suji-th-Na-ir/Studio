@@ -182,6 +182,8 @@ namespace RuntimeInspectorNamespace
                                 comp.Type.data.repeat = (int)_value;
                                 break;
                             case VariableTypes.BROADCAST_STRING:
+                                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(
+                                    _value.ToString(), comp.Type.data.broadcast, new ComponentDisplayDock() { componentGameObject = obj, componentType = typeof(Atom.Rotate).Name });
                                 comp.Type.data.broadcast = (string)_value;
                                 break;
                             case VariableTypes.CAN_LISTEN_MULTIPLE_TIMES:

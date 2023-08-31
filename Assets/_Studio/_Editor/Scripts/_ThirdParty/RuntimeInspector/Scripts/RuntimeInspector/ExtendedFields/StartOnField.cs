@@ -154,6 +154,8 @@ namespace RuntimeInspectorNamespace
                     {
                         if (_atom.componentType.Equals(atom.componentType))
                         {
+                            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(_atom.data.listenName, atom.data.listenName,
+                            new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
                             atom.data = Helper.DeepCopy(_atom.data);
                         }
                     }
