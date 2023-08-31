@@ -24,7 +24,7 @@ namespace Terra.Studio
                 var allMesh = gm.transform.GetComponentsInChildren<MeshRenderer>();
                 foreach (var mesh in allMesh)
                 {
-                    mesh.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                    mesh.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
                 }
             }
 
