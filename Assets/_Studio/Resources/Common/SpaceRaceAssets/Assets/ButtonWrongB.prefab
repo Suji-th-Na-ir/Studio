@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9058365537676490638}
   - component: {fileID: 3037482369400051130}
   - component: {fileID: 289652265054915911}
+  - component: {fileID: 8169379367980332383}
   m_Layer: 0
   m_Name: ButtonWrongB
   m_TagString: Untagged
@@ -84,3 +85,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8169379367980332383
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 813283469100729155}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10.260529, y: 6.133809, z: 10.260529}
+  m_Center: {x: -0.00033283234, y: 3.0749469, z: 0.000019073486}

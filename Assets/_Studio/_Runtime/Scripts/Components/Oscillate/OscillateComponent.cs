@@ -11,6 +11,7 @@ namespace Terra.Studio
         [JsonConverter(typeof(Vector3Converter))] public Vector3 fromPoint;
         [JsonConverter(typeof(Vector3Converter))] public Vector3 toPoint;
         public bool loop;
+        public int listenIndex;
         public string ConditionType { get; set; }
         public string ConditionData { get; set; }
         public bool IsConditionAvailable { get; set; }

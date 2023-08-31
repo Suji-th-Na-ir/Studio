@@ -103,13 +103,17 @@ namespace RuntimeInspectorNamespace
         private void UpdateData(Atom.PlayVfx _vfx)
         {
             List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selectedObjects.Count <= 1) return;
             foreach (var obj in selectedObjects)
             {
                 foreach (Atom.PlayVfx vfx in Atom.PlayVfx.AllInstances)
                 {
                     if (obj.GetInstanceID() == vfx.target.GetInstanceID())
                     {
-                        vfx.data = Helper.DeepCopy(_vfx.data);
+                        if (_vfx.componentType.Equals(vfx.componentType))
+                        {
+                            vfx.data = Helper.DeepCopy(_vfx.data);
+                        }
                     }
                 }
             }

@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using PlayShifu.Terra;
 using Terra.Studio;
 using UnityEngine;
+using System;
 
 namespace RuntimeInspectorNamespace
 {
@@ -16,18 +17,29 @@ namespace RuntimeInspectorNamespace
             OnClick
         }
 
-        public StartOnCollectible start = StartOnCollectible.OnPlayerCollide;
+        public Atom.StartOn startOn = new Atom.StartOn();
         public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
         public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
-        public bool ShowScoreUI = false;
+        // public bool ShowScoreUI = false;
         public bool CanUpdateScore = false;
         public float ScoreValue = 0;
         public string Broadcast = null;
+        private string guid;
         
-        public void Start()
+        public void Awake()
         {
-            PlaySFX.Setup(gameObject);
-            PlayVFX.Setup(gameObject);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>(), this.GetType().Name);
+            PlaySFX.Setup<Collectible>(gameObject);
+            PlayVFX.Setup<Collectible>(gameObject);
+            guid = GetInstanceID() + "_collect";//Guid.NewGuid().ToString("N");
+        }
+        
+        public void Update()
+        {
+            if (!String.IsNullOrEmpty(Broadcast))
+            {
+                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, Broadcast);
+            }
         }
 
         public (string type, string data) Export()
@@ -36,7 +48,8 @@ namespace RuntimeInspectorNamespace
             {
                 collectable.IsConditionAvailable = true;
                 collectable.ConditionType = GetStartEvent();
-                collectable.ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(start);
+                collectable.ConditionData = GetStartCondition();
+                collectable.listenIndex = startOn.data.listenIndex;
                 collectable.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
                 collectable.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
 
@@ -51,26 +64,58 @@ namespace RuntimeInspectorNamespace
 
                 collectable.canUpdateScore = CanUpdateScore;
                 collectable.scoreValue = ScoreValue;
-                collectable.showScoreUI = ShowScoreUI;
+                collectable.showScoreUI = true;
             }
+            
             gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(collectable);
             return (type, data);
+        }
+        
+        public string GetStartEvent(string _input = null)
+        {
+            int index = startOn.data.startIndex;
+            string inputString = ((StartOnCollectible)index).ToString();
+            if (!string.IsNullOrEmpty(_input))
+                inputString = _input;
+            
+            if (Enum.TryParse(inputString, out StartOnCollectible enumValue))
+            {
+                var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(enumValue);
+                return eventName;
+            }
+            return EditorOp.Resolve<DataProvider>().GetEnumValue(StartOnCollectible.OnClick);
+        }
+
+
+        public string GetStartCondition(string _input = null)
+        {
+            int index = startOn.data.startIndex;
+            string inputString = ((StartOnCollectible)index).ToString();
+            if (!string.IsNullOrEmpty(_input))
+                inputString = _input;
+            
+            if (inputString.ToLower().Contains("listen"))
+            {
+                return EditorOp.Resolve<DataProvider>().GetListenString(startOn.data.listenIndex);
+            }
+            else
+            {
+                if (Enum.TryParse(inputString, out StartOnCollectible enumValue))
+                {
+                    return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(enumValue);
+                }
+                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOnCollectible.OnClick);
+            }
         }
 
         public void Import(EntityBasedComponent cdata)
         {
             CollectableComponent cc = JsonConvert.DeserializeObject<CollectableComponent>($"{cdata.data}");
             CanUpdateScore = cc.canUpdateScore;
-            ShowScoreUI = cc.showScoreUI;
+            // ShowScoreUI = cc.showScoreUI;
             ScoreValue = cc.scoreValue;
-
-            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOnCollectible), out object result))
-            {
-                start = (StartOnCollectible)result;
-            }
-
             Broadcast = cc.Broadcast;
 
             PlaySFX.data.canPlay = cc.canPlaySFX;
@@ -79,15 +124,20 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.canPlay = cc.canPlayVFX;
             PlayVFX.data.clipIndex = cc.vfxIndex;
             PlayVFX.data.clipName = cc.vfxName;
+            
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOnCollectible), out object result))
+            {
+                startOn.data.startIndex = (int)(StartOnCollectible)result;
+            }
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, null);
+        
+            if (cc.ConditionType.ToLower().Contains("listen"))
+            {
+                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_collectible",cc.ConditionData);
+            }
+            startOn.data.listenIndex = cc.listenIndex;
         }
-
-        public string GetStartEvent()
-        {
-            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(start);
-            return eventName;
-        }
-
+        
         private void OnDestroy()
         {
             if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))

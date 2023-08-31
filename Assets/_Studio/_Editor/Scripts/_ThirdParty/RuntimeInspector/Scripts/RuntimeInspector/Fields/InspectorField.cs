@@ -316,7 +316,7 @@ namespace RuntimeInspectorNamespace
                             }
                             else if (NameRaw == "Broadcast Listen")
                             {
-                                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(Value.ToString(), oldValue == null ? "" : oldValue.ToString(),
+                                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(Value.ToString(), oldValue == null ? "" : oldValue.ToString(),
                                  new ComponentDisplayDock() { componentGameObject = obj, componentType = ComponentType.Name });
                             }
                         }
@@ -575,6 +575,11 @@ namespace RuntimeInspectorNamespace
 
         public InspectorField CreateDrawerForVariable(MemberInfo variable, string variableName = null)
         {
+            // xnx 
+            if (variable.Name.ToLower() == "enabled")
+                return null;
+            // xnx
+            
             Type variableType = variable is FieldInfo ? ((FieldInfo)variable).FieldType : ((PropertyInfo)variable).PropertyType;
             InspectorField variableDrawer = Inspector.CreateDrawerForType(variableType, drawArea, Depth + 1, true, variable);
             if (variableDrawer != null)

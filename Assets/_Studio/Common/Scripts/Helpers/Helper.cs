@@ -11,6 +11,11 @@ namespace PlayShifu.Terra
 {
     public static class Helper
     {
+        public static List<string> componentsToFilterOut = new List<string>()
+        {
+            "Checkpoint"
+        };
+        
         public static string GetCurrentAppPlatform()
         {
             string platform = "ios";
@@ -590,6 +595,40 @@ namespace PlayShifu.Terra
                     mc.isTrigger = isTrigger;
                     break;
             }
+        }
+
+        public static T GetEnumValueByIndex<T>(int index) where T : Enum
+        {
+            if (!typeof(T).IsEnum)
+            {
+                throw new ArgumentException("Type T must be an Enum");
+            }
+
+            T[] enumValues = (T[])Enum.GetValues(typeof(T));
+
+            if (index >= 0 && index < enumValues.Length)
+            {
+                return enumValues[index];
+            }
+
+            throw new ArgumentOutOfRangeException("Index is out of range");
+        }
+        
+        public static int GetEnumIndexByString<TEnum>(string value) where TEnum : struct, Enum
+        {
+            if (Enum.TryParse<TEnum>(value, out TEnum enumValue))
+            {
+                return Convert.ToInt32(enumValue);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        
+        public static List<string> GetEnumValuesAsStrings<TEnum>() where TEnum : Enum
+        {
+            return new List<string>(Enum.GetNames(typeof(TEnum)));
         }
     }
 }

@@ -96,13 +96,17 @@ namespace RuntimeInspectorNamespace
         private void UpdateData(Atom.PlaySfx _sfx)
         {
             List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selectedObjects.Count <= 1) return;
             foreach (var obj in selectedObjects)
             {
                 foreach (Atom.PlaySfx sfx in Atom.PlaySfx.AllInstances)
                 {
                     if (obj.GetInstanceID() == sfx.target.GetInstanceID())
                     {
-                        sfx.data = Helper.DeepCopy(_sfx.data);
+                        if (_sfx.componentType.Equals(sfx.componentType))
+                        {
+                            sfx.data = Helper.DeepCopy(_sfx.data);
+                        }
                     }
                 }
             }

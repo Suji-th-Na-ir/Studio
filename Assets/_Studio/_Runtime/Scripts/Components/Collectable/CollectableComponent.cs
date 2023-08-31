@@ -27,5 +27,6 @@ namespace Terra.Studio
         public bool canUpdateScore;
         public float scoreValue;
         public bool showScoreUI;
+        public int listenIndex;
     }
 }

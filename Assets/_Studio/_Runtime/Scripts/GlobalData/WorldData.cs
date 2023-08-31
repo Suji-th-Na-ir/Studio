@@ -31,7 +31,8 @@ namespace Terra.Studio
     public struct EntityBasedComponent
     {
         public string type;
-        public object data;
+        [TextArea]
+        public string data;
     }
 
     [Serializable]

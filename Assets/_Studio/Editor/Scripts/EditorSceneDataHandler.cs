@@ -60,7 +60,7 @@ namespace Terra.Studio.RTEditor
             };
             sceneDataHandler.Save();
             var persistentPath = FileService.GetSavedFilePath();
-            var newPath = EditorUtility.SaveFilePanelInProject("Select Save Path", "SaveFile.json", "json", "Please enter a file name to save it in the project");
+            var newPath = EditorUtility.SaveFilePanelInProject("Select Save Path", "SaveFile.json", "json", "Please enter a file name to save it in the project", "Assets/_Studio/Scenes/Templates/");
             if (!string.IsNullOrEmpty(newPath))
             {
                 SyncMetaData(newPath, persistentPath);

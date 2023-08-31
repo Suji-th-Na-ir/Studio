@@ -63,6 +63,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 20521951331922788, guid: 41c209abb2d73574a9baf7bf474510cc,
+        type: 3}
+      propertyPath: m_HDR
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114808892733143080, guid: 41c209abb2d73574a9baf7bf474510cc,
+        type: 3}
+      propertyPath: stepHeightRatio
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 136179175772395822, guid: 41c209abb2d73574a9baf7bf474510cc,
+        type: 3}
+      propertyPath: m_Height
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 136179175772395822, guid: 41c209abb2d73574a9baf7bf474510cc,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 41c209abb2d73574a9baf7bf474510cc, type: 3}
 --- !u!1 &7106070483486116925 stripped

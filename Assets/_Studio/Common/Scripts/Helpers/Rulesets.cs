@@ -21,11 +21,11 @@ namespace Terra.Studio
         {
             public void Apply(GameObject gm)
             {
-                var allMesh = gm.transform.GetComponentsInChildren<MeshRenderer>();
-                foreach (var mesh in allMesh)
-                {
-                    mesh.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                }
+                //var allMesh = gm.transform.GetComponentsInChildren<MeshRenderer>();
+                //foreach (var mesh in allMesh)
+                //{
+                //    mesh.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                //}
             }
 
         }

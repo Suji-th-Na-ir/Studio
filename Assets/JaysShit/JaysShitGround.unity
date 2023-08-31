@@ -204,7 +204,7 @@ PrefabInstance:
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
@@ -283,7 +283,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 32
+      value: 31
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -357,26 +357,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &74538090 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 74538089}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &74538091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 74538090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &95740958
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -387,7 +367,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 33
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -461,26 +441,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &95740959 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 95740958}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &95740960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 95740959}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &213879717
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -491,7 +451,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 35
+      value: 34
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -565,26 +525,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &213879718 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 213879717}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &213879719
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 213879718}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &220184515
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -750,7 +690,7 @@ PrefabInstance:
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
@@ -834,7 +774,7 @@ PrefabInstance:
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
       propertyPath: m_RootOrder
-      value: 17
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
@@ -913,7 +853,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 30
+      value: 29
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -987,26 +927,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &429054707 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 429054706}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &429054708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 429054707}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &433598546
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1017,7 +937,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 37
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -1091,26 +1011,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &433598547 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 433598546}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &433598548
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 433598547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &489056772
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1201,7 +1101,7 @@ PrefabInstance:
     - target: {fileID: 9058365537676490638, guid: 61ec8ab1099264fc1b7aa1e9b792dc3e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9058365537676490638, guid: 61ec8ab1099264fc1b7aa1e9b792dc3e,
         type: 3}
@@ -1277,6 +1177,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1462891019}
     m_Modifications:
+    - target: {fileID: 1017921965567929832, guid: e129bd23d24e34d56873726a93a6757c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3308729233739158944, guid: e129bd23d24e34d56873726a93a6757c,
         type: 3}
       propertyPath: m_RootOrder
@@ -1345,6 +1250,90 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 571629805}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &582335301
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1407919406057807431, guid: 7e75e148af240414b96d56006debd750,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1407919406057807431, guid: 7e75e148af240414b96d56006debd750,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1407919406057807431, guid: 7e75e148af240414b96d56006debd750,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1407919406057807431, guid: 7e75e148af240414b96d56006debd750,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1407919406057807431, guid: 7e75e148af240414b96d56006debd750,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -24.49
+      objectReference: {fileID: 0}
+    - target: {fileID: 1407919406057807431, guid: 7e75e148af240414b96d56006debd750,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 1407919406057807431, guid: 7e75e148af240414b96d56006debd750,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 40.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 1407919406057807431, guid: 7e75e148af240414b96d56006debd750,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.63016665
+      objectReference: {fileID: 0}
+    - target: {fileID: 1407919406057807431, guid: 7e75e148af240414b96d56006debd750,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.32076466
+      objectReference: {fileID: 0}
+    - target: {fileID: 1407919406057807431, guid: 7e75e148af240414b96d56006debd750,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.63016665
+      objectReference: {fileID: 0}
+    - target: {fileID: 1407919406057807431, guid: 7e75e148af240414b96d56006debd750,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.32076472
+      objectReference: {fileID: 0}
+    - target: {fileID: 1407919406057807431, guid: 7e75e148af240414b96d56006debd750,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -53.954
+      objectReference: {fileID: 0}
+    - target: {fileID: 1407919406057807431, guid: 7e75e148af240414b96d56006debd750,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1407919406057807431, guid: 7e75e148af240414b96d56006debd750,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2541686506718161813, guid: 7e75e148af240414b96d56006debd750,
+        type: 3}
+      propertyPath: m_Name
+      value: GameWin
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7e75e148af240414b96d56006debd750, type: 3}
 --- !u!1001 &591893038
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1355,7 +1344,7 @@ PrefabInstance:
     - target: {fileID: 1795341688757438268, guid: 85fdf7cf7f2664a0896deefc2b8b2ce9,
         type: 3}
       propertyPath: m_RootOrder
-      value: 49
+      value: 48
       objectReference: {fileID: 0}
     - target: {fileID: 1795341688757438268, guid: 85fdf7cf7f2664a0896deefc2b8b2ce9,
         type: 3}
@@ -1430,26 +1419,6 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 8633243926421438248, guid: 85fdf7cf7f2664a0896deefc2b8b2ce9, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 85fdf7cf7f2664a0896deefc2b8b2ce9, type: 3}
---- !u!1 &591893039 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7733308750058590201, guid: 85fdf7cf7f2664a0896deefc2b8b2ce9,
-    type: 3}
-  m_PrefabInstance: {fileID: 591893038}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &591893040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 591893039}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &597109031
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1460,7 +1429,7 @@ PrefabInstance:
     - target: {fileID: 382500270877042306, guid: 6bebf9bfb44014695810ddbce4f7914c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 23
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 382500270877042306, guid: 6bebf9bfb44014695810ddbce4f7914c,
         type: 3}
@@ -1549,7 +1518,7 @@ PrefabInstance:
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
       propertyPath: m_RootOrder
-      value: 21
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
@@ -1633,7 +1602,7 @@ PrefabInstance:
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
@@ -1712,7 +1681,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 42
+      value: 41
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -1786,26 +1755,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &630091162 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 630091161}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &630091163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 630091162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &699601359
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1816,7 +1765,7 @@ PrefabInstance:
     - target: {fileID: 7621478851117590626, guid: 6afe8be04bbd641b1b80b8ae9e91f185,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7621478851117590626, guid: 6afe8be04bbd641b1b80b8ae9e91f185,
         type: 3}
@@ -1900,7 +1849,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 36
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -1974,26 +1923,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &702878782 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 702878781}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &702878783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 702878782}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &705822161
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2004,7 +1933,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 39
+      value: 38
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -2078,26 +2007,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &705822162 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 705822161}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &705822163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 705822162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &785157167
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2108,7 +2017,7 @@ PrefabInstance:
     - target: {fileID: 3554407543260486105, guid: ce8353283c9d849e487ad9d5e80d4c14,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3554407543260486105, guid: ce8353283c9d849e487ad9d5e80d4c14,
         type: 3}
@@ -2182,110 +2091,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce8353283c9d849e487ad9d5e80d4c14, type: 3}
---- !u!1 &785157168 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5423661441474882800, guid: ce8353283c9d849e487ad9d5e80d4c14,
-    type: 3}
-  m_PrefabInstance: {fileID: 785157167}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &785157169
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 785157168}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Translate
---- !u!1001 &816082381
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1407919406057807431, guid: e6b485027f1c24e89b8939930e2b15aa,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1407919406057807431, guid: e6b485027f1c24e89b8939930e2b15aa,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1407919406057807431, guid: e6b485027f1c24e89b8939930e2b15aa,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1407919406057807431, guid: e6b485027f1c24e89b8939930e2b15aa,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1407919406057807431, guid: e6b485027f1c24e89b8939930e2b15aa,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 125.26293
-      objectReference: {fileID: 0}
-    - target: {fileID: 1407919406057807431, guid: e6b485027f1c24e89b8939930e2b15aa,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.73466635
-      objectReference: {fileID: 0}
-    - target: {fileID: 1407919406057807431, guid: e6b485027f1c24e89b8939930e2b15aa,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 40.29971
-      objectReference: {fileID: 0}
-    - target: {fileID: 1407919406057807431, guid: e6b485027f1c24e89b8939930e2b15aa,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 1407919406057807431, guid: e6b485027f1c24e89b8939930e2b15aa,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1407919406057807431, guid: e6b485027f1c24e89b8939930e2b15aa,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 1407919406057807431, guid: e6b485027f1c24e89b8939930e2b15aa,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1407919406057807431, guid: e6b485027f1c24e89b8939930e2b15aa,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1407919406057807431, guid: e6b485027f1c24e89b8939930e2b15aa,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1407919406057807431, guid: e6b485027f1c24e89b8939930e2b15aa,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2541686506718161813, guid: e6b485027f1c24e89b8939930e2b15aa,
-        type: 3}
-      propertyPath: m_Name
-      value: CheckPoint(Clone)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e6b485027f1c24e89b8939930e2b15aa, type: 3}
 --- !u!1001 &848315539
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2296,7 +2101,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 47
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -2370,26 +2175,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &848315540 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 848315539}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &848315541
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 848315540}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1 &880908750
 GameObject:
   m_ObjectHideFlags: 0
@@ -2399,8 +2184,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 880908753}
-  - component: {fileID: 880908752}
-  - component: {fileID: 880908751}
+  - component: {fileID: 880908754}
   m_Layer: 0
   m_Name: first-obstacle
   m_TagString: Untagged
@@ -2408,34 +2192,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &880908751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 880908750}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
---- !u!114 &880908752
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 880908750}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Rotate
 --- !u!4 &880908753
 Transform:
   m_ObjectHideFlags: 0
@@ -2452,6 +2208,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 52
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &880908754
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880908750}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2892911, y: 1.2515079, z: 1.2910345}
+  m_Center: {x: 0.001547798, y: 0.09584825, z: 0.0061395206}
 --- !u!1001 &892913859
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2467,7 +2236,7 @@ PrefabInstance:
     - target: {fileID: 8036796656455657045, guid: 19ad06caea5fc4ed8b5c694e7aba00d1,
         type: 3}
       propertyPath: m_RootOrder
-      value: 28
+      value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 8036796656455657045, guid: 19ad06caea5fc4ed8b5c694e7aba00d1,
         type: 3}
@@ -2536,26 +2305,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19ad06caea5fc4ed8b5c694e7aba00d1, type: 3}
---- !u!1 &892913860 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 872647363825892293, guid: 19ad06caea5fc4ed8b5c694e7aba00d1,
-    type: 3}
-  m_PrefabInstance: {fileID: 892913859}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &892913861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 892913860}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Translate
 --- !u!1001 &928230645
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2571,7 +2320,7 @@ PrefabInstance:
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
@@ -2650,7 +2399,7 @@ PrefabInstance:
     - target: {fileID: 382500270877042306, guid: 6bebf9bfb44014695810ddbce4f7914c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 382500270877042306, guid: 6bebf9bfb44014695810ddbce4f7914c,
         type: 3}
@@ -2734,7 +2483,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 41
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -2808,26 +2557,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &958107762 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 958107761}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &958107763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 958107762}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &1000622538
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2838,7 +2567,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 29
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -2912,26 +2641,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &1000622539 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1000622538}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1000622540
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1000622539}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &1008293101
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3022,7 +2731,7 @@ PrefabInstance:
     - target: {fileID: 9177593205217785896, guid: 1c5a7380f360346b49d794efec566ca6,
         type: 3}
       propertyPath: m_RootOrder
-      value: 24
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 9177593205217785896, guid: 1c5a7380f360346b49d794efec566ca6,
         type: 3}
@@ -3091,26 +2800,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c5a7380f360346b49d794efec566ca6, type: 3}
---- !u!1 &1013751278 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8636857572604471239, guid: 1c5a7380f360346b49d794efec566ca6,
-    type: 3}
-  m_PrefabInstance: {fileID: 1013751277}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1013751279
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1013751278}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Rotate
 --- !u!1001 &1075446309
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3118,6 +2807,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1156064608}
     m_Modifications:
+    - target: {fileID: 1017921965567929832, guid: e129bd23d24e34d56873726a93a6757c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3308729233739158944, guid: e129bd23d24e34d56873726a93a6757c,
         type: 3}
       propertyPath: m_RootOrder
@@ -3196,7 +2890,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 46
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -3270,26 +2964,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &1107367078 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1107367077}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1107367079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1107367078}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &1113475694
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3300,7 +2974,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 40
+      value: 39
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -3374,26 +3048,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &1113475695 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1113475694}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1113475696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1113475695}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &1155059417
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3404,7 +3058,7 @@ PrefabInstance:
     - target: {fileID: 3353281798414747919, guid: af3776fe2907c4c878a96aae3f09ca3c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 48
+      value: 47
       objectReference: {fileID: 0}
     - target: {fileID: 3353281798414747919, guid: af3776fe2907c4c878a96aae3f09ca3c,
         type: 3}
@@ -3478,26 +3132,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af3776fe2907c4c878a96aae3f09ca3c, type: 3}
---- !u!1 &1155059418 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6374241024228851138, guid: af3776fe2907c4c878a96aae3f09ca3c,
-    type: 3}
-  m_PrefabInstance: {fileID: 1155059417}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1155059419
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1155059418}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.DestroyOn
 --- !u!1 &1156064605
 GameObject:
   m_ObjectHideFlags: 0
@@ -3507,8 +3141,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1156064608}
-  - component: {fileID: 1156064607}
-  - component: {fileID: 1156064606}
+  - component: {fileID: 1156064609}
   m_Layer: 0
   m_Name: third-obstacle
   m_TagString: Untagged
@@ -3516,34 +3149,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1156064606
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1156064605}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
---- !u!114 &1156064607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1156064605}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Rotate
 --- !u!4 &1156064608
 Transform:
   m_ObjectHideFlags: 0
@@ -3560,6 +3165,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 54
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1156064609
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1156064605}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2892911, y: 1.2515079, z: 1.2910345}
+  m_Center: {x: 0.001547798, y: 0.09584825, z: 0.0061395206}
 --- !u!1001 &1209346356
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3575,7 +3193,7 @@ PrefabInstance:
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
@@ -3653,8 +3271,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1263499775}
-  - component: {fileID: 1263499774}
-  - component: {fileID: 1263499773}
+  - component: {fileID: 1263499776}
   m_Layer: 0
   m_Name: fourth-obstacle
   m_TagString: Untagged
@@ -3662,34 +3279,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1263499773
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1263499772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
---- !u!114 &1263499774
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1263499772}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Rotate
 --- !u!4 &1263499775
 Transform:
   m_ObjectHideFlags: 0
@@ -3706,6 +3295,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 55
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1263499776
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1263499772}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2892911, y: 1.2515079, z: 1.2910345}
+  m_Center: {x: 0.001547798, y: 0.09584825, z: 0.0061395206}
 --- !u!1001 &1299344631
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3716,7 +3318,7 @@ PrefabInstance:
     - target: {fileID: 2010710634844589713, guid: caabc602c2a52433b84f83ba8c18d22e,
         type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 2010710634844589713, guid: caabc602c2a52433b84f83ba8c18d22e,
         type: 3}
@@ -3805,7 +3407,7 @@ PrefabInstance:
     - target: {fileID: 9177593205217785896, guid: 1c5a7380f360346b49d794efec566ca6,
         type: 3}
       propertyPath: m_RootOrder
-      value: 25
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 9177593205217785896, guid: 1c5a7380f360346b49d794efec566ca6,
         type: 3}
@@ -3884,7 +3486,7 @@ PrefabInstance:
     - target: {fileID: 3308729233739158944, guid: e129bd23d24e34d56873726a93a6757c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 26
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 3308729233739158944, guid: e129bd23d24e34d56873726a93a6757c,
         type: 3}
@@ -3958,26 +3560,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e129bd23d24e34d56873726a93a6757c, type: 3}
---- !u!1 &1444070164 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7921222708155779150, guid: e129bd23d24e34d56873726a93a6757c,
-    type: 3}
-  m_PrefabInstance: {fileID: 1444070163}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1444070165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1444070164}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.DestroyOn
 --- !u!1001 &1446656073
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3993,7 +3575,7 @@ PrefabInstance:
     - target: {fileID: 9177593205217785896, guid: 1c5a7380f360346b49d794efec566ca6,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9177593205217785896, guid: 1c5a7380f360346b49d794efec566ca6,
         type: 3}
@@ -4071,8 +3653,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1462891019}
-  - component: {fileID: 1462891018}
-  - component: {fileID: 1462891017}
+  - component: {fileID: 1462891020}
   m_Layer: 0
   m_Name: second-obstacle
   m_TagString: Untagged
@@ -4080,34 +3661,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1462891017
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1462891016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
---- !u!114 &1462891018
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1462891016}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Rotate
 --- !u!4 &1462891019
 Transform:
   m_ObjectHideFlags: 0
@@ -4124,6 +3677,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 53
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1462891020
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462891016}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2892911, y: 1.2515079, z: 1.2910345}
+  m_Center: {x: 0.001547798, y: 0.09584825, z: 0.0061395206}
 --- !u!1001 &1498990464
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4144,7 +3710,7 @@ PrefabInstance:
     - target: {fileID: 2481917486381714504, guid: 73b5aad22e10a462f87ec1926b6d7590,
         type: 3}
       propertyPath: m_RootOrder
-      value: 27
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 2481917486381714504, guid: 73b5aad22e10a462f87ec1926b6d7590,
         type: 3}
@@ -4238,7 +3804,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 45
+      value: 44
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -4312,26 +3878,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &1565014058 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1565014057}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1565014059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1565014058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &1572214106
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4342,7 +3888,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 34
+      value: 33
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -4416,26 +3962,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &1572214107 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1572214106}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1572214108
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1572214107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &1600428895
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4446,7 +3972,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 44
+      value: 43
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -4520,26 +4046,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &1600428896 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1600428895}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1600428897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1600428896}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &1619570794
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4555,7 +4061,7 @@ PrefabInstance:
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
@@ -4639,7 +4145,7 @@ PrefabInstance:
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
       propertyPath: m_RootOrder
-      value: 22
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
@@ -4715,6 +4221,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1263499775}
     m_Modifications:
+    - target: {fileID: 1017921965567929832, guid: e129bd23d24e34d56873726a93a6757c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3308729233739158944, guid: e129bd23d24e34d56873726a93a6757c,
         type: 3}
       propertyPath: m_RootOrder
@@ -4798,7 +4309,7 @@ PrefabInstance:
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
@@ -4882,7 +4393,7 @@ PrefabInstance:
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
       propertyPath: m_RootOrder
-      value: 19
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
@@ -4966,7 +4477,7 @@ PrefabInstance:
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
@@ -5050,7 +4561,7 @@ PrefabInstance:
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
@@ -5134,7 +4645,7 @@ PrefabInstance:
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
       propertyPath: m_RootOrder
-      value: 18
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
@@ -5213,7 +4724,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 43
+      value: 42
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -5287,26 +4798,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &1877010685 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1877010684}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1877010686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1877010685}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &1952648673
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5317,7 +4808,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 31
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -5391,26 +4882,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &1952648674 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 1952648673}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1952648675
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1952648674}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &1994976246
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5418,6 +4889,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 880908753}
     m_Modifications:
+    - target: {fileID: 1017921965567929832, guid: e129bd23d24e34d56873726a93a6757c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3308729233739158944, guid: e129bd23d24e34d56873726a93a6757c,
         type: 3}
       propertyPath: m_RootOrder
@@ -5580,7 +5056,7 @@ PrefabInstance:
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 38
+      value: 37
       objectReference: {fileID: 0}
     - target: {fileID: 2711920712126759930, guid: d83c1aff533db42428f40ad427c1aec5,
         type: 3}
@@ -5654,26 +5130,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d83c1aff533db42428f40ad427c1aec5, type: 3}
---- !u!1 &2091237296 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5569463243472821858, guid: d83c1aff533db42428f40ad427c1aec5,
-    type: 3}
-  m_PrefabInstance: {fileID: 2091237295}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2091237297
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2091237296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6805d3112f1974b72bb4b84558db1213, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    type: Terra.Studio.Respawn
 --- !u!1001 &2104564195
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5689,7 +5145,7 @@ PrefabInstance:
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
       propertyPath: m_RootOrder
-      value: 20
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 8004781542850726186, guid: 9e9f369994787473e9b9b6c4a2969bee,
         type: 3}
