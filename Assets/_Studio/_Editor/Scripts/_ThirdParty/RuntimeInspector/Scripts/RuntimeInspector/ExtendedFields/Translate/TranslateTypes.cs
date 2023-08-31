@@ -6,8 +6,6 @@ using Terra.Studio;
 using UnityEngine.UI;
 using PlayShifu.Terra;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine.Serialization;
 
 namespace RuntimeInspectorNamespace
 {
@@ -37,125 +35,91 @@ namespace RuntimeInspectorNamespace
                 EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, broadcastInput.text);
             }
         }
-        
-        private enum VariableTypes
-        {
-            MOVE_TO_X,
-            MOVE_TO_Y,
-            MOVE_TO_Z,
-            SPEED,
-            PAUSE_FOR,
-            REPEAT,
-            BROADCAST_AT,
-            BROADCAST_STRING,
-            LISTEN
-        }
-        
-        private void UpdateVariablesForAll(VariableTypes _type, System.Object _value)
-        {
-            List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
-            if (selectedObjects.Count > 1)
-            {
-                foreach (var obj in selectedObjects)
-                {
-                    if (obj.GetComponent<Translate>() != null)
-                    {
-                        Translate comp = obj.GetComponent<Translate>();
-                        switch (_type)
-                        {
-                            case VariableTypes.MOVE_TO_X:
-                                Debug.Log("updating x for "+obj.name);
-                                comp.Type.data.moveTo.x = (float)_value;
-                                break;
-                            case VariableTypes.MOVE_TO_Y:
-                                comp.Type.data.moveTo.y = (float)_value;
-                                break;
-                            case VariableTypes.MOVE_TO_Z:
-                                comp.Type.data.moveTo.z = (float)_value;
-                                break;
-                            case VariableTypes.SPEED:
-                                comp.Type.data.speed = (float)_value;
-                                break;
-                            case VariableTypes.PAUSE_FOR:
-                                comp.Type.data.pauseFor = (float)_value;
-                                break;
-                            case VariableTypes.REPEAT:
-                                comp.Type.data.repeat = (int)_value;
-                                break;
-                            case VariableTypes.BROADCAST_AT:
-                                comp.Type.data.broadcastAt = (BroadcastAt)_value;
-                                break;
-                            case VariableTypes.BROADCAST_STRING:
-                                comp.Type.data.broadcast = (string)_value;
-                                break;
-                            case VariableTypes.LISTEN:
-                                comp.Type.data.listen = (Listen)_value;
-                                break;
-                        }
-                    }
-                }
-            }
-        }
-        
+
         public void Setup()
         {
             LoadDefaultValues();
-            if (moveToInput != null) moveToInput[0].onValueChanged.AddListener(
+            moveToInput?[0].onValueChanged.AddListener(
                 (value) =>
                 {
                     field.GetAtom().data.moveTo.x = Helper.StringToFloat(value);
-                    UpdateVariablesForAll(VariableTypes.MOVE_TO_X,  Helper.StringToFloat(value));
+                    UpdateAllSelectedObjects("moveTo", field.GetAtom().data.moveTo);
                 });
 
-            if (moveToInput != null) moveToInput[1].onValueChanged.AddListener(
+            moveToInput?[1].onValueChanged.AddListener(
                 (value) =>
                 {
                     field.GetAtom().data.moveTo.y = Helper.StringToFloat(value);
-                    UpdateVariablesForAll(VariableTypes.MOVE_TO_Y,  Helper.StringToFloat(value));
+                    UpdateAllSelectedObjects("moveTo", field.GetAtom().data.moveTo);
                 });
 
-            if (moveToInput != null) moveToInput[2].onValueChanged.AddListener(
+            moveToInput?[2].onValueChanged.AddListener(
                 (value) =>
                 {
                     field.GetAtom().data.moveTo.z = Helper.StringToFloat(value);
-                    UpdateVariablesForAll(VariableTypes.MOVE_TO_Z,  Helper.StringToFloat(value));
+                    UpdateAllSelectedObjects("moveTo", field.GetAtom().data.moveTo);
                 });
-            if (speedInput != null) speedInput.onValueChanged.AddListener(
-                (value) =>
+            if (speedInput != null) speedInput.onValueChanged.AddListener((value) =>
             {
                 field.GetAtom().data.speed = Helper.StringToFloat(value);
-                UpdateVariablesForAll(VariableTypes.SPEED,  Helper.StringToFloat(value));
+                UpdateAllSelectedObjects("speed", field.GetAtom().data.speed);
             });
-            if (pauseForInput != null) pauseForInput.onValueChanged.AddListener(
-                (value) =>
-                {
-                    field.GetAtom().data.pauseFor = Helper.StringToFloat(value);
-                    UpdateVariablesForAll(VariableTypes.PAUSE_FOR,  Helper.StringToFloat(value));
-                });
+            if (pauseForInput != null) pauseForInput.onValueChanged.AddListener((value) =>
+            {
+                field.GetAtom().data.pauseFor = Helper.StringToFloat(value);
+                UpdateAllSelectedObjects("pauseFor", field.GetAtom().data.pauseFor);
+            });
             if (repeatInput != null) repeatInput.onValueChanged.AddListener((value) =>
             {
                 field.GetAtom().data.repeat = Helper.StringInInt(value);
-                UpdateVariablesForAll(VariableTypes.REPEAT,  Helper.StringInInt(value));
+                UpdateAllSelectedObjects("repeat", field.GetAtom().data.repeat);
             });
             if (broadcastInput != null) broadcastInput.onValueChanged.AddListener((value) =>
             {
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value, field.GetAtom().data.broadcast, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)field.Value).referenceGO, componentType = typeof(Atom.Translate).Name });
                 field.GetAtom().data.broadcast = value;
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value, 
-                    value, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)field.Value).referenceGO, componentType = typeof(Atom.Translate).Name });
-                UpdateVariablesForAll(VariableTypes.BROADCAST_STRING, value);
+                UpdateAllSelectedObjects("broadcast", field.GetAtom().data.broadcast);
             });
             if (broadcastAt != null) broadcastAt.onValueChanged.AddListener((value) =>
             {
-                field.GetAtom().data.broadcastAt = (BroadcastAt)value;
-                UpdateVariablesForAll(VariableTypes.BROADCAST_AT, (BroadcastAt)value);
+                field.GetAtom().data.broadcastAt = GetBroadcastAt(broadcastAt.options[value].text);
+                UpdateAllSelectedObjects("broadcastAt", field.GetAtom().data.broadcastAt);
             });
             if (canListenMultipleTimesToggle != null) canListenMultipleTimesToggle.onValueChanged.AddListener((value) =>
             {
                 field.GetAtom().data.listen = value ? Listen.Always : Listen.Once;
-                UpdateVariablesForAll(VariableTypes.LISTEN, field.GetAtom().data.listen);
+                UpdateAllSelectedObjects("listen", field.GetAtom().data.listen);
             });
         }
-        
+
+        private void UpdateAllSelectedObjects(string varName, object value)
+        {
+            List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            foreach (var obj in selectedObjects)
+            {
+                if (obj.TryGetComponent(out Translate translate))
+                {
+                    var type = typeof(Translate);
+                    var typeField = type.GetField("Type", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                    var typeValue = (Atom.Translate)typeField.GetValue(translate);
+                    var dataField = typeValue.GetType().GetField("data", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                    var dataValue = (TranslateComponentData)dataField.GetValue(typeValue);
+                    var targetValue = dataValue.GetType().GetField(varName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.IgnoreCase);
+                    targetValue.SetValueDirect(__makeref(dataValue), value);
+                    dataField.SetValue(typeValue, dataValue);
+                    typeField.SetValue(translate, typeValue);
+                }
+            }
+        }
+
+        private BroadcastAt GetBroadcastAt(string _value)
+        {
+            if (_value == BroadcastAt.End.ToString()) return BroadcastAt.End;
+            else if (_value == BroadcastAt.Never.ToString()) return BroadcastAt.Never;
+            else if (_value == BroadcastAt.AtEveryInterval.ToString()) return BroadcastAt.AtEveryInterval;
+            return BroadcastAt.Never;
+        }
+
         public void LoadDefaultValues()
         {
             if (broadcastAt != null) { broadcastAt.AddOptions(Enum.GetNames(typeof(BroadcastAt)).ToList()); }
@@ -163,6 +127,7 @@ namespace RuntimeInspectorNamespace
 
         public void SetData(TranslateComponentData _data)
         {
+            field.GetAtom().data = _data;
             if (broadcastAt != null) broadcastAt.value = ((int)Enum.Parse(typeof(BroadcastAt), _data.broadcastAt.ToString()));
             if (pauseForInput != null) pauseForInput.text = _data.pauseFor.ToString();
             if (speedInput != null) speedInput.text = _data.speed.ToString();
