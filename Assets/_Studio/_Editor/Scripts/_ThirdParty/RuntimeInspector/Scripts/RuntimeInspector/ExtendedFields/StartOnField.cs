@@ -174,8 +174,8 @@ namespace RuntimeInspectorNamespace
             Atom.StartOn atom = (Atom.StartOn)Value;
             if (atom != null)
             {
-                startOn.value = atom.data.startIndex;
-                listenOn.value = atom.data.listenIndex;
+                startOn.SetValueWithoutNotify(atom.data.startIndex);
+                listenOn.SetValueWithoutNotify(atom.data.listenIndex);
                 ShowHideListenDD();
             }
         }
