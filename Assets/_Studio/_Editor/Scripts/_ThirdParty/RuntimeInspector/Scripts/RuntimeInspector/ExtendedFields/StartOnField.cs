@@ -97,19 +97,19 @@ namespace RuntimeInspectorNamespace
             // reset the listen field to previous value
             if(prevListenOnValue != -1)
                 atom.data.listenIndex = prevListenOnValue;
-            var prevString = string.Empty;
-            var newString = string.Empty;
+            //var prevString = string.Empty;
+            //var newString = string.Empty;
 
-            if (_index != 2)
-            {
-                prevString = atom.data.listenName;
-            }
-            else
-            {
-                newString = atom.data.listenName;
-            }
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(newString, prevString,
-                    new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
+            //if (_index != 2)
+            //{
+            //    prevString = atom.data.listenName;
+            //}
+            //else
+            //{
+            //    newString = atom.data.listenName;
+            //}
+            //EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(newString, prevString,
+            //        new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
             UpdateData(atom);
         }
 
