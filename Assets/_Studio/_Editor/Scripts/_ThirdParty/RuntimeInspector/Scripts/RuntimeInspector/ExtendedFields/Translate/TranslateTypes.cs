@@ -128,14 +128,14 @@ namespace RuntimeInspectorNamespace
         public void SetData(TranslateComponentData _data)
         {
             field.GetAtom().data = _data;
-            if (broadcastAt != null) broadcastAt.value = ((int)Enum.Parse(typeof(BroadcastAt), _data.broadcastAt.ToString()));
-            if (pauseForInput != null) pauseForInput.text = _data.pauseFor.ToString();
-            if (speedInput != null) speedInput.text = _data.speed.ToString();
-            if (repeatInput != null) repeatInput.text = _data.repeat.ToString();
-            if (broadcastInput != null) broadcastInput.text = _data.broadcast;
-            if (moveToInput != null) moveToInput[0].text = _data.moveTo.x.ToString();
-            if (moveToInput != null) moveToInput[1].text = _data.moveTo.y.ToString();
-            if (moveToInput != null) moveToInput[2].text = _data.moveTo.z.ToString();
+            if (broadcastAt != null) broadcastAt.SetValueWithoutNotify((int)Enum.Parse(typeof(BroadcastAt), _data.broadcastAt.ToString()));
+            if (pauseForInput != null) pauseForInput.SetTextWithoutNotify(_data.pauseFor.ToString());
+            if (speedInput != null) speedInput.SetTextWithoutNotify(_data.speed.ToString());
+            if (repeatInput != null) repeatInput.SetTextWithoutNotify(_data.repeat.ToString());
+            if (broadcastInput != null) broadcastInput.SetTextWithoutNotify(_data.broadcast);
+            if (moveToInput != null) moveToInput[0].SetTextWithoutNotify(_data.moveTo.x.ToString());
+            if (moveToInput != null) moveToInput[1].SetTextWithoutNotify(_data.moveTo.y.ToString());
+            if (moveToInput != null) moveToInput[2].SetTextWithoutNotify(_data.moveTo.z.ToString());
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
     }
