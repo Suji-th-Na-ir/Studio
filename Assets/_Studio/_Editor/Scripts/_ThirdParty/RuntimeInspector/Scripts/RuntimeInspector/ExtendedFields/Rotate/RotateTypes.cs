@@ -6,6 +6,7 @@ using Terra.Studio;
 using UnityEngine.UI;
 using PlayShifu.Terra;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 using Object = System.Object;
 
 namespace RuntimeInspectorNamespace
@@ -29,8 +30,7 @@ namespace RuntimeInspectorNamespace
         public TMP_InputField broadcastInput = null;
         public Toggle canListenMultipleTimesToggle;
 
-        [HideInInspector]
-        public RotateField rotateField = null;
+        [HideInInspector] public RotateField field = null;
 
         private string guid;
 
@@ -53,7 +53,7 @@ namespace RuntimeInspectorNamespace
             Y_AXIS,
             Z_AXIS,
             DIRECTION_DROPDOWN,
-            BROADCAST_AT_DROPDOWN,
+            BROADCAST_AT,
             DEGREES,
             SPEED,
             PAUSE,
@@ -62,67 +62,82 @@ namespace RuntimeInspectorNamespace
             CAN_LISTEN_MULTIPLE_TIMES
         }
 
+        public void ClearElements()
+        {
+            xAxis.onValueChanged.RemoveAllListeners();
+            yAxis.onValueChanged.RemoveAllListeners();
+            zAxis.onValueChanged.RemoveAllListeners();
+            xAxis.onValueChanged.RemoveAllListeners();
+            dirDropDown.onValueChanged.RemoveAllListeners();
+            broadcastAt.onValueChanged.RemoveAllListeners();
+            degreesInput.onValueChanged.RemoveAllListeners();
+            speedInput.onValueChanged.RemoveAllListeners();
+            pauseInput.onValueChanged.RemoveAllListeners();
+            repeatInput.onValueChanged.RemoveAllListeners();
+            broadcastInput.onValueChanged.RemoveAllListeners();
+            canListenMultipleTimesToggle.onValueChanged.RemoveAllListeners();
+        }
+
         public void Setup()
         {
             LoadDefaultValues();
             if (xAxis != null) xAxis.onValueChanged.AddListener((value) =>
             {
-                // data.Xaxis= value;
-                rotateField.GetRotateAtom().data.Xaxis = value;
+                field.GetAtom().data.Xaxis = value;
                 UpdateVariablesForAll(VariableTypes.X_AXIS, value);
             });
             if (yAxis != null) yAxis.onValueChanged.AddListener((value) =>
             {
-                rotateField.GetRotateAtom().data.Yaxis = value;
+                field.GetAtom().data.Yaxis = value;
                 UpdateVariablesForAll(VariableTypes.Y_AXIS, value);
             });
 
             if (zAxis != null) zAxis.onValueChanged.AddListener((value) =>
             {
-                rotateField.GetRotateAtom().data.Zaxis = value;
+                field.GetAtom().data.Zaxis = value;
                 UpdateVariablesForAll(VariableTypes.Z_AXIS, value);
             });
 
             if (dirDropDown != null) dirDropDown.onValueChanged.AddListener((value) =>
             {
-                rotateField.GetRotateAtom().data.direction = (Direction)value;
+                field.GetAtom().data.direction = (Direction)value;
                 UpdateVariablesForAll(VariableTypes.DIRECTION_DROPDOWN, value);
-            });
-            if (broadcastAt != null) broadcastAt.onValueChanged.AddListener((value) =>
-            {
-                rotateField.GetRotateAtom().data.broadcastAt = (BroadcastAt)value;
-                UpdateVariablesForAll(VariableTypes.BROADCAST_AT_DROPDOWN, value);
             });
             if (degreesInput != null) degreesInput.onValueChanged.AddListener((value) =>
             {
-                rotateField.GetRotateAtom().data.degrees =  Helper.StringToFloat(value);
+                field.GetAtom().data.degrees =  Helper.StringToFloat(value);
                 UpdateVariablesForAll(VariableTypes.DEGREES,  Helper.StringToFloat(value));
             });
             if (speedInput != null) speedInput.onValueChanged.AddListener((value) =>
             {
-                rotateField.GetRotateAtom().data.speed = Helper.StringToFloat(value);
+                field.GetAtom().data.speed = Helper.StringToFloat(value);
                 UpdateVariablesForAll(VariableTypes.SPEED,  Helper.StringToFloat(value));
             });
             if (pauseInput != null) pauseInput.onValueChanged.AddListener((value) =>
             {
-                rotateField.GetRotateAtom().data.pauseBetween = Helper.StringToFloat(value);
+                field.GetAtom().data.pauseBetween = Helper.StringToFloat(value);
                 UpdateVariablesForAll(VariableTypes.PAUSE,  Helper.StringToFloat(value));
             });
             if (repeatInput != null) repeatInput.onValueChanged.AddListener((value) =>
             {
-                rotateField.GetRotateAtom().data.repeat = Helper.StringInInt(value);
+                field.GetAtom().data.repeat = Helper.StringInInt(value);
                 UpdateVariablesForAll(VariableTypes.REPEAT,  Helper.StringInInt(value));
             });
             if (broadcastInput != null) broadcastInput.onValueChanged.AddListener((value) =>
             {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value, value, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)rotateField.Value).referenceGO, componentType = typeof(Atom.Rotate).Name });
-                rotateField.GetRotateAtom().data.broadcast = value;
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value, value, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)field.Value).referenceGO, componentType = typeof(Atom.Rotate).Name });
+                field.GetAtom().data.broadcast = value;
                 UpdateVariablesForAll(VariableTypes.BROADCAST_STRING,  value);
+            });
+            if (broadcastAt != null) broadcastAt.onValueChanged.AddListener((value) =>
+            {
+                field.GetAtom().data.broadcastAt = (BroadcastAt)value;
+                UpdateVariablesForAll(VariableTypes.BROADCAST_AT, (BroadcastAt)value);
             });
             if (canListenMultipleTimesToggle != null) canListenMultipleTimesToggle.onValueChanged.AddListener((value) =>
             {
-                rotateField.GetRotateAtom().data.listen = value ? Listen.Always : Listen.Once;
-                UpdateVariablesForAll(VariableTypes.CAN_LISTEN_MULTIPLE_TIMES,  value);
+                field.GetAtom().data.listen = value ? Listen.Always : Listen.Once;
+                UpdateVariablesForAll(VariableTypes.CAN_LISTEN_MULTIPLE_TIMES,  field.GetAtom().data.listen);
             });
         }
 
@@ -135,41 +150,42 @@ namespace RuntimeInspectorNamespace
                 {
                     if (obj.GetComponent<Rotate>() != null)
                     {
-                        Rotate rotate = obj.GetComponent<Rotate>();
+                        Rotate comp = obj.GetComponent<Rotate>();
                         switch (_type)
                         {
                             case VariableTypes.X_AXIS:
-                                rotate.Type.data.Xaxis = (bool)_value;
+                                // Debug.Log("setting for x "+obj.name);
+                                comp.Type.data.Xaxis = (bool)_value;
                                 break;
                             case VariableTypes.Y_AXIS:
-                                rotate.Type.data.Yaxis = (bool)_value;
+                                comp.Type.data.Yaxis = (bool)_value;
                                 break;
                             case VariableTypes.Z_AXIS:
-                                rotate.Type.data.Zaxis = (bool)_value;
+                                comp.Type.data.Zaxis = (bool)_value;
                                 break;
                             case VariableTypes.DIRECTION_DROPDOWN:
-                                rotate.Type.data.direction = (Direction)_value;
+                                comp.Type.data.direction = (Direction)_value;
                                 break;
-                            case VariableTypes.BROADCAST_AT_DROPDOWN:
-                                rotate.Type.data.broadcastAt = (BroadcastAt)_value;
+                            case VariableTypes.BROADCAST_AT:
+                                comp.Type.data.broadcastAt = (BroadcastAt)_value;
                                 break;
                             case VariableTypes.DEGREES:
-                                rotate.Type.data.degrees = (float)_value;
+                                comp.Type.data.degrees = (float)_value;
                                 break;
                             case VariableTypes.SPEED:
-                                rotate.Type.data.speed = (float)_value;
+                                comp.Type.data.speed = (float)_value;
                                 break;
                             case VariableTypes.PAUSE:
-                                rotate.Type.data.pauseBetween = (float)_value;
+                                comp.Type.data.pauseBetween = (float)_value;
                                 break;
                             case VariableTypes.REPEAT:
-                                rotate.Type.data.repeat = (int)_value;
+                                comp.Type.data.repeat = (int)_value;
                                 break;
                             case VariableTypes.BROADCAST_STRING:
-                                rotate.Type.data.broadcast = (string)_value;
+                                comp.Type.data.broadcast = (string)_value;
                                 break;
                             case VariableTypes.CAN_LISTEN_MULTIPLE_TIMES:
-                                rotate.Type.data.listen = (Listen)_value;
+                                comp.Type.data.listen = (Listen)_value;
                                 break;
                         }
                     }

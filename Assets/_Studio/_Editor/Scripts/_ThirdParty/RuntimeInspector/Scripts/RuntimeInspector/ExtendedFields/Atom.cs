@@ -74,7 +74,7 @@ namespace Terra.Studio
         [Serializable]
         public class Translate
         {
-            [HideInInspector] public RotateField field;
+            [HideInInspector] public TranslateField field;
             [HideInInspector] public TranslateComponentData data = new();
             [HideInInspector] public GameObject referenceGO;
         }

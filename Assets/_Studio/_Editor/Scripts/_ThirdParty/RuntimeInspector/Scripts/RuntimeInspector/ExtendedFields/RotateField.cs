@@ -27,7 +27,7 @@ namespace RuntimeInspectorNamespace
         {
             foreach (var type in allRotateTypes)
             {
-                type.rotateField = this;
+                type.field = this;
                 type.Setup();
             }
 
@@ -111,24 +111,17 @@ namespace RuntimeInspectorNamespace
             if (variableNameMask != null) variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
         }
 
-        // public void UpdateData(RotateComponentData _rData)
-        // {
-        //     Atom.Rotate rt = (Atom.Rotate)Value;
-        //
-        //     // rotate type should come from rotatefield
-        //     _rData.rotateType = rt.data.rotateType;
-        //     rt.data = _rData;
-        // }
-
-        public Atom.Rotate GetRotateAtom()
+        public Atom.Rotate GetAtom()
         {
             return (Atom.Rotate)Value;
         }
 
         protected override void OnBound(MemberInfo variable)
         {
+            // Debug.Log("rotate bound called "+this.gameObject.name);
             base.OnBound(variable);
             Atom.Rotate rt = (Atom.Rotate)Value;
+            // Debug.Log($"translate atom data x value {rt.data.Xaxis}");
             rotateTypesDD.onValueChanged.AddListener(OnRotateTypesValueChanged);
             int rotationTypeIndex = (int)Enum.Parse(typeof(RotationType), rt.data.rotateType.ToString());
             rotateTypesDD.SetValueWithoutNotify(rotationTypeIndex);
