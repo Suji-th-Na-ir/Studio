@@ -280,6 +280,10 @@ namespace RuntimeInspectorNamespace
 
             designButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
             behaviourButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
+            designButton.GetComponentInChildren<Text>().color = Skin.ButtonTextColor;
+            behaviourButton.GetComponentInChildren<Text>().color = Skin.ButtonTextColor;
+            designButton.GetComponentInChildren<Text>().font = Skin.Font;
+            behaviourButton.GetComponentInChildren<Text>().font = Skin.Font;
             designButton.onClick.AddListener(() =>
             {
                 currentPageIndex = 0;
