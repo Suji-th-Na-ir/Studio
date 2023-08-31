@@ -2,6 +2,7 @@ using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
+using System;
 
 namespace RuntimeInspectorNamespace
 {
@@ -11,8 +12,21 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
         public string Broadcast = null;
+        private string guid;
 
-
+        private void Awake()
+        {
+            guid = GetInstanceID() + "_respawn";//Guid.NewGuid().ToString("N");
+        }
+        
+        public void Update()
+        {
+            if (!String.IsNullOrEmpty(Broadcast))
+            {
+                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, Broadcast);
+            }
+        }
+        
         public void Start()
         {
             PlaySFX.Setup<Checkpoint>(gameObject);
