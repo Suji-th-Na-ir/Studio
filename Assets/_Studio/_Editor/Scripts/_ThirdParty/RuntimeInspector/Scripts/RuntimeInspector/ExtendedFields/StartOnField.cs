@@ -16,7 +16,7 @@ namespace RuntimeInspectorNamespace
         [SerializeField] private Dropdown listenOn;
 #pragma warning restore 0649
 
-        private int prevListenOnValue = 0;
+        private int prevListenOnValue = -1;
         public override void Initialize()
         {
             base.Initialize();
@@ -94,7 +94,8 @@ namespace RuntimeInspectorNamespace
             atom.data.startIndex = _index;
             atom.data.startName = atom.StartList[_index];
             // reset the listen field to previous value
-            atom.data.listenIndex = prevListenOnValue;
+            if(prevListenOnValue != -1)
+                atom.data.listenIndex = prevListenOnValue;
             var prevString = string.Empty;
             var newString = string.Empty;
 
