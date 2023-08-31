@@ -16,12 +16,14 @@ namespace RuntimeInspectorNamespace
         [SerializeField] private Dropdown listenOn;
 #pragma warning restore 0649
 
+        private int prevListenOnValue = 0;
         public override void Initialize()
         {
             base.Initialize();
             startOn.onValueChanged.AddListener(OnStartValueChanged);
             listenOn.onValueChanged.AddListener(OnListenValueChanged);
             LoadListenTo();
+            // Debug.Log("start on initlized");
         }
 
         private void LoadListenTo()
@@ -92,11 +94,8 @@ namespace RuntimeInspectorNamespace
             Atom.StartOn atom = (Atom.StartOn)Value;
             atom.data.startIndex = _index;
             atom.data.startName = atom.StartList[_index];
-            // rest the listen field
-            // if (resetListenIndex) {
-            //     atom.data.listenIndex = 0;
-            // }
-            // resetListenIndex = true;
+            // rest the listen field to previous value
+            atom.data.listenIndex = prevListenOnValue;
 
             UpdateData(atom);
         }
@@ -113,6 +112,8 @@ namespace RuntimeInspectorNamespace
             atom.data.listenName = newString;
             atom.data.listenIndex = _index;
             UpdateData(atom);
+            prevListenOnValue = _index;
+            // Debug.Log($"listen to newstring {newString}   index {_index}");
         }
 
         protected override void OnSkinChanged()

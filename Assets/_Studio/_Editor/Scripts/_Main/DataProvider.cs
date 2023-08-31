@@ -126,7 +126,7 @@ namespace Terra.Studio
             }
         }
 
-        public void UpdateListenToTypes(string _id, string _type, GameObject go = null)
+        public void UpdateListenToTypes(string _id, string _type)
         {
             if (prevListenType == _type) return;
 
