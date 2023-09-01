@@ -65,7 +65,7 @@ namespace Terra.Studio
 
             private void HandleEntityAndComponentGeneration(GameObject go, VirtualEntity virtualEntity)
             {
-                if (go == null && !virtualEntity.shouldLoadAssetAtRuntime)
+                if (go == null && virtualEntity.shouldLoadAssetAtRuntime)
                 {
                     return;
                 }
