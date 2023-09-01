@@ -10,12 +10,14 @@ namespace Terra.Studio
 
         public void WriteFile(string data, string fullFilePath, bool ignoreIfFileExists)
         {
-            if (ignoreIfFileExists)
+            if (ignoreIfFileExists && File.Exists(fullFilePath))
             {
-                if (File.Exists(fullFilePath))
-                {
-                    return;
-                }
+                return;
+            }
+            if (File.Exists(fullFilePath) && !ignoreIfFileExists)
+            {
+                var backupFile = Path.Combine(Path.GetDirectoryName(fullFilePath), $"{Path.GetFileNameWithoutExtension(fullFilePath)}_backup{Path.GetExtension(fullFilePath)}");
+                File.Copy(fullFilePath, backupFile);
             }
             WriteFile(data, fullFilePath);
         }
