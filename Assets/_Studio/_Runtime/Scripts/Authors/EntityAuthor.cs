@@ -62,7 +62,12 @@ namespace Terra.Studio
                     var entity = ecsWorld.NewEntity();
                     foreach (var component in virtualEntity.components)
                     {
-                        ComponentAuthorOp.Generate((entity, component, go));
+                        ComponentAuthorOp.Generate(new ComponentGenerateData()
+                        {
+                            entity = entity,
+                            data = component,
+                            obj = go
+                        });
                     }
                 }
                 RuntimeOp.Resolve<SceneDataHandler>().HandleChildren(go, virtualEntity.children, HandleEntityAndComponentGeneration);

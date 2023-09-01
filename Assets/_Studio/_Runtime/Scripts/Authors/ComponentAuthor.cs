@@ -30,15 +30,20 @@ namespace Terra.Studio
         {
             public override void Generate(object data)
             {
-                var tuple = ((int id, EntityBasedComponent data, GameObject obj))data;
+                var tuple = (ComponentGenerateData)data;
                 var compData = tuple.data;
                 if (compData.Equals(default(EntityBasedComponent)))
                 {
                     return;
                 }
-                var jString = (string)compData.data;
                 var indivCompAuthor = RuntimeOp.Resolve<ComponentsData>().GetAuthorForType(compData.type);
-                indivCompAuthor?.Generate((tuple.id, tuple.data.type, jString, tuple.obj));
+                indivCompAuthor?.Generate(new ComponentAuthorData()
+                {
+                    entity = tuple.entity,
+                    type = tuple.data.type,
+                    compData = compData.data,
+                    obj = tuple.obj
+                });
             }
         }
     }

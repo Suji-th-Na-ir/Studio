@@ -8,6 +8,7 @@ namespace Terra.Studio
     public class CheckpointSystem : BaseSystem
     {
         public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
+        private EventExecutorData eventExecutorData;
 
         public override void Init(EcsWorld currentWorld, int entity)
         {
@@ -17,12 +18,17 @@ namespace Terra.Studio
             var conditionData = entityRef.ConditionData;
             var goRef = entityRef.refObj;
             var compsData = RuntimeOp.Resolve<ComponentsData>();
+            eventExecutorData = new()
+            {
+                goRef = entityRef.refObj,
+                data = conditionData
+            };
             IdToConditionalCallback ??= new();
             IdToConditionalCallback.Add(entity, (obj) =>
             {
                 OnConditionalCheck((entity, conditionType, conditionData, goRef));
             });
-            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (goRef, conditionData));
+            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, eventExecutorData);
             if (entityRef.IsBroadcastable)
             {
                 RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(entityRef.Broadcast);
@@ -33,7 +39,7 @@ namespace Terra.Studio
         {
             var (entity, conditionType, conditionData, go) = ((int, string, string, GameObject))data;
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (go, conditionData));
+            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, eventExecutorData);
             IdToConditionalCallback.Remove(entity);
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
             var checkpointPool = world.GetPool<CheckpointComponent>();
@@ -66,7 +72,7 @@ namespace Terra.Studio
             {
                 if (!IdToConditionalCallback.ContainsKey(entity)) continue;
                 var checkpoint = checkPointPool.Get(entity);
-                compsData.ProvideEventContext(checkpoint.ConditionType, IdToConditionalCallback[entity], false, (checkpoint.refObj, checkpoint.ConditionData));
+                compsData.ProvideEventContext(checkpoint.ConditionType, IdToConditionalCallback[entity], false, eventExecutorData);
                 IdToConditionalCallback.Remove(entity);
             }
         }

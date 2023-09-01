@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 using UnityEngine.Scripting;
 
 namespace Terra.Studio
@@ -8,17 +7,16 @@ namespace Terra.Studio
     [EventExecutor("Terra.Studio.Listener")]
     public struct ListenerActionEvent : IEventExecutor
     {
-        public readonly void Execute(Action<object> onConditionalCheck, bool subscribe, object conditionalCheck = null)
+        public readonly void Execute(Action<object> onConditionalCheck, bool subscribe, EventExecutorData conditionalCheck)
         {
             var broadcaster = RuntimeOp.Resolve<Broadcaster>();
-            var (_, condition) = ((GameObject go, string condition))conditionalCheck;
             if (subscribe)
             {
-                broadcaster.ListenTo(condition, onConditionalCheck);
+                broadcaster.ListenTo(conditionalCheck.data, onConditionalCheck);
             }
             else
             {
-                broadcaster.StopListenTo(condition, onConditionalCheck);
+                broadcaster.StopListenTo(conditionalCheck.data, onConditionalCheck);
             }
         }
     }

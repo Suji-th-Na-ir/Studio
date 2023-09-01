@@ -50,7 +50,7 @@ namespace Terra.Studio
             }
         }
 
-        public void ProvideEventContext(string dataType, Action<object> onConditionalCheck, bool subscribe, object conditionalCheck = null)
+        public void ProvideEventContext(string dataType, Action<object> onConditionalCheck, bool subscribe, EventExecutorData conditionalCheck)
         {
             if (eventMap == null)
             {

@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 using UnityEngine.Scripting;
 
 namespace Terra.Studio
@@ -8,24 +7,22 @@ namespace Terra.Studio
     [EventExecutor("Terra.Studio.TriggerAction")]
     public struct TriggerActionEvent : IEventExecutor
     {
-        public readonly void Execute(Action<object> onConditionalCheck, bool subscribe, object conditionalCheck = null)
+        public readonly void Execute(Action<object> onConditionalCheck, bool subscribe, EventExecutorData conditionalCheck)
         {
-            if (conditionalCheck == null)
+            if (conditionalCheck.Equals(default(EventExecutorData)))
             {
                 return;
             }
-            var (goRef, tagCheck) = ((GameObject, string))conditionalCheck;
-            var go = goRef;
             if (subscribe)
             {
-                var triggerAction = go.AddComponent<OnTriggerAction>();
-                triggerAction.TagAgainst = tagCheck;
+                var triggerAction = conditionalCheck.goRef.AddComponent<OnTriggerAction>();
+                triggerAction.TagAgainst = conditionalCheck.data;
                 triggerAction.OnTriggered = () =>
                 {
                     onConditionalCheck?.Invoke(null);
                 };
             }
-            else if (go && go.TryGetComponent(out OnTriggerAction triggerAction))
+            else if (conditionalCheck.goRef && conditionalCheck.goRef.TryGetComponent(out OnTriggerAction triggerAction))
             {
                 triggerAction.OnTriggered = null;
                 UnityEngine.Object.Destroy(triggerAction);

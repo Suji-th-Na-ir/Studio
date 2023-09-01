@@ -8,6 +8,7 @@ namespace Terra.Studio
     public class InGameTimerSystem : BaseSystem, IEcsRunSystem
     {
         public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
+        private EventExecutorData eventExecutorData;
 
         public override void Init(EcsWorld currentWorld, int entity)
         {
@@ -16,26 +17,29 @@ namespace Terra.Studio
             entityRef.CanExecute = false;
             var conditionData = entityRef.ConditionData;
             var conditionType = entityRef.ConditionType;
-            object data = null;
             if (entityRef.IsBroadcastable)
             {
                 RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(entityRef.Broadcast);
             }
             RuntimeOp.Resolve<CoreGameManager>().EnableModule<InGameTimeHandler>();
+            eventExecutorData = new()
+            {
+                goRef = null,
+                data = conditionData
+            };
             IdToConditionalCallback ??= new();
             IdToConditionalCallback.Add(entity, (obj) =>
             {
                 OnConditionalCheck((entity, conditionData, conditionType));
             });
-            RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (data, conditionData));
+            RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, eventExecutorData);
         }
 
         public override void OnConditionalCheck(object data)
         {
-            object temp = null;
             var (entity, conditionData, conditionType) = ((int, string, string))data;
             var compData = RuntimeOp.Resolve<ComponentsData>();
-            compData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (temp, conditionData));
+            compData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, eventExecutorData);
             IdToConditionalCallback.Remove(entity);
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
             var pool = world.GetPool<InGameTimerComponent>();

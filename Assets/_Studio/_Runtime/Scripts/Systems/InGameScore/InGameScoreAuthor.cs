@@ -1,4 +1,3 @@
-using UnityEngine;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
 
@@ -9,12 +8,12 @@ namespace Terra.Studio
     {
         public override void Generate(object data)
         {
-            var tuple = ((int id, string type, string compData, GameObject obj))data;
+            var tuple = (ComponentAuthorData)data;
             var compData = JsonConvert.DeserializeObject<InGameScoreComponent>(tuple.compData);
             var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
             var compPool = ecsWorld.GetPool<InGameScoreComponent>();
-            compPool.Add(tuple.id);
-            ref var compRef = ref compPool.Get(tuple.id);
+            compPool.Add(tuple.entity);
+            ref var compRef = ref compPool.Get(tuple.entity);
             Helper.CopyStructFieldValues(compData, ref compRef);
             compRef.IsBroadcastable = compData.IsBroadcastable;
             compRef.Broadcast = compData.Broadcast;

@@ -17,7 +17,7 @@ namespace PlayShifu.Terra
             "GameScore",
             "InGameTimer"
         };
-        
+
         public static string GetCurrentAppPlatform()
         {
             string platform = "ios";
@@ -615,7 +615,7 @@ namespace PlayShifu.Terra
 
             throw new ArgumentOutOfRangeException("Index is out of range");
         }
-        
+
         public static int GetEnumIndexByString<TEnum>(string value) where TEnum : struct, Enum
         {
             if (Enum.TryParse<TEnum>(value, out TEnum enumValue))
@@ -627,7 +627,7 @@ namespace PlayShifu.Terra
                 return 0;
             }
         }
-        
+
         public static List<string> GetEnumValuesAsStrings<TEnum>() where TEnum : Enum
         {
             return new List<string>(Enum.GetNames(typeof(TEnum)));

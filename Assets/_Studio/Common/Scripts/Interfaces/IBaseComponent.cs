@@ -11,5 +11,8 @@ namespace Terra.Studio
         public string Broadcast { get; set; }
         public bool IsTargeted { get; set; }
         public int TargetId { get; set; }
+        public EventExecutorData EventExecutorData { get; set; }
+        public void Setup();
+        public void CloneFrom<T>(ref T data) where T : IBaseComponent;
     }
 }

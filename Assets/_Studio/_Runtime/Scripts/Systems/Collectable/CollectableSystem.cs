@@ -8,6 +8,7 @@ namespace Terra.Studio
     public class CollectableSystem : BaseSystem
     {
         public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
+        private EventExecutorData eventExecutorData;
 
         public override void Init(EcsWorld currentWorld, int entity)
         {
@@ -31,12 +32,17 @@ namespace Terra.Studio
             {
                 RuntimeOp.Resolve<CoreGameManager>().EnableModule<ScoreHandler>();
             }
+            eventExecutorData = new()
+            {
+                goRef = collectable.refObject,
+                data = conditionData
+            };
             IdToConditionalCallback ??= new();
             IdToConditionalCallback.Add(entity, (obj) =>
             {
                 OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
             });
-            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (goRef, conditionData));
+            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, eventExecutorData);
         }
 
         public override void OnConditionalCheck(object data)
@@ -50,7 +56,7 @@ namespace Terra.Studio
                 }
             }
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (go, conditionData));
+            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, eventExecutorData);
             IdToConditionalCallback.Remove(entity);
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
             var collectablePool = world.GetPool<CollectableComponent>();
@@ -88,7 +94,7 @@ namespace Terra.Studio
             {
                 if (!IdToConditionalCallback.ContainsKey(entity)) continue;
                 var collectable = collectablePool.Get(entity);
-                compsData.ProvideEventContext(collectable.ConditionType, IdToConditionalCallback[entity], false, (collectable.refObject, collectable.ConditionData));
+                compsData.ProvideEventContext(collectable.ConditionType, IdToConditionalCallback[entity], false, eventExecutorData);
                 IdToConditionalCallback.Remove(entity);
             }
         }

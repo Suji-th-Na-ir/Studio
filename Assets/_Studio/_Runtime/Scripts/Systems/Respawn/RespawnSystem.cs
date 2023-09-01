@@ -8,6 +8,7 @@ namespace Terra.Studio
     public class RespawnSystem : BaseSystem
     {
         public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
+        private EventExecutorData eventExecutorData;
 
         public override void Init(EcsWorld currentWorld, int entity)
         {
@@ -17,12 +18,17 @@ namespace Terra.Studio
             var conditionData = entityRef.ConditionData;
             var goRef = entityRef.refObj;
             var compsData = RuntimeOp.Resolve<ComponentsData>();
+            eventExecutorData = new()
+            {
+                goRef = goRef,
+                data = conditionData
+            };
             IdToConditionalCallback ??= new();
             IdToConditionalCallback.Add(entity, (obj) =>
             {
                 OnConditionalCheck((entity, conditionType, conditionData, goRef));
             });
-            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (goRef, conditionData));
+            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, eventExecutorData);
             if (entityRef.IsBroadcastable)
             {
                 RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(entityRef.Broadcast);
@@ -64,7 +70,7 @@ namespace Terra.Studio
             {
                 if (!IdToConditionalCallback.ContainsKey(entity)) continue;
                 var respawn = respawnPool.Get(entity);
-                compsData.ProvideEventContext(respawn.ConditionType, IdToConditionalCallback[entity], false, (respawn.refObj, respawn.ConditionData));
+                compsData.ProvideEventContext(respawn.ConditionType, IdToConditionalCallback[entity], false, eventExecutorData);
                 IdToConditionalCallback.Remove(entity);
             }
         }

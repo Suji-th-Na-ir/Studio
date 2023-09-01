@@ -8,6 +8,7 @@ namespace Terra.Studio
     public class TranslateSystem : BaseSystem
     {
         public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
+        private EventExecutorData eventExecutorData;
 
         public override void Init(EcsWorld currentWorld, int entity)
         {
@@ -61,16 +62,21 @@ namespace Terra.Studio
             var goRef = entityRef.refObj;
             if (inject)
             {
+                eventExecutorData = new()
+                {
+                    goRef = goRef,
+                    data = conditionData
+                };
                 IdToConditionalCallback ??= new();
                 IdToConditionalCallback.Add(entity, (obj) =>
                 {
                     OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
                 });
-                RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, (goRef, conditionData));
+                RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, eventExecutorData);
             }
             else if (IdToConditionalCallback.ContainsKey(entity))
             {
-                RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, (goRef, conditionData));
+                RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, eventExecutorData);
                 IdToConditionalCallback.Remove(entity);
             }
         }

@@ -1,4 +1,3 @@
-using UnityEngine;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
 
@@ -9,12 +8,12 @@ namespace Terra.Studio
     {
         public override void Generate(object data)
         {
-            var tuple = ((int id, string type, string compData, GameObject obj))data;
-            var compData = JsonConvert.DeserializeObject<RespawnComponent>(tuple.compData);
+            var authorData = (ComponentAuthorData)data;
+            var compData = JsonConvert.DeserializeObject<RespawnComponent>(authorData.compData);
             var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
             var compPool = ecsWorld.GetPool<RespawnComponent>();
-            compPool.Add(tuple.id);
-            ref var compRef = ref compPool.Get(tuple.id);
+            compPool.Add(authorData.entity);
+            ref var compRef = ref compPool.Get(authorData.entity);
             Helper.CopyStructFieldValues(compData, ref compRef);
             compRef.IsConditionAvailable = compData.IsConditionAvailable;
             compRef.ConditionType = compData.ConditionType;
@@ -23,9 +22,9 @@ namespace Terra.Studio
             compRef.Broadcast = compData.Broadcast;
             compRef.IsTargeted = compData.IsTargeted;
             compRef.TargetId = compData.TargetId;
-            compRef.refObj = tuple.obj;
+            compRef.refObj = authorData.obj;
             var instance = RuntimeOp.Resolve<RuntimeSystem>().AddRunningInstance<RespawnSystem>();
-            instance.Init(ecsWorld, tuple.id);
+            instance.Init(ecsWorld, authorData.entity);
         }
     }
 }
