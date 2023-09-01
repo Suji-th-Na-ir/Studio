@@ -14,7 +14,8 @@ namespace PlayShifu.Terra
         public static readonly List<string> COMPONENTS_TO_FILTER_OUT = new()
         {
             "Checkpoint",
-            "GameScore"
+            "GameScore",
+            "InGameTimer"
         };
         
         public static string GetCurrentAppPlatform()
