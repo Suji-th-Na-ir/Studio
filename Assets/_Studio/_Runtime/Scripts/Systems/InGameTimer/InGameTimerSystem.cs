@@ -11,6 +11,7 @@ namespace Terra.Studio
             var compData = RuntimeOp.Resolve<ComponentsData>();
             compData.ProvideEventContext(false, entityRef.EventContext);
             entityRef.CanExecute = true;
+            RuntimeOp.Resolve<CoreGameManager>().EnableModule<InGameTimeHandler>();
             RuntimeOp.Resolve<InGameTimeHandler>().UpdateTime(entityRef.totalTime);
         }
 
