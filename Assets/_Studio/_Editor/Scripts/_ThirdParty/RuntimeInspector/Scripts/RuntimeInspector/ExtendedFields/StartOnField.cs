@@ -23,7 +23,6 @@ namespace RuntimeInspectorNamespace
             startOn.onValueChanged.AddListener(OnStartValueChanged);
             listenOn.onValueChanged.AddListener(OnListenValueChanged);
             LoadListenTo();
-            // Debug.Log("start on initlized");
         }
 
         private void LoadListenTo()
@@ -94,6 +93,7 @@ namespace RuntimeInspectorNamespace
             Atom.StartOn atom = (Atom.StartOn)Value;
             atom.data.startIndex = _index;
             atom.data.startName = atom.StartList[_index];
+            
             // reset the listen field to previous value
             if(prevListenOnValue != -1)
                 atom.data.listenIndex = prevListenOnValue;

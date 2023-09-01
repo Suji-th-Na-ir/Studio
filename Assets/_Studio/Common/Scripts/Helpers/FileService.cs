@@ -6,8 +6,6 @@ namespace Terra.Studio
 {
     public class FileService
     {
-        private const string SAVED_FILE_TEXT_NAME = "SavedFile.json";
-
         public void WriteFile(string data, string fullFilePath, bool ignoreIfFileExists)
         {
             if (ignoreIfFileExists && File.Exists(fullFilePath))
@@ -17,7 +15,7 @@ namespace Terra.Studio
             if (File.Exists(fullFilePath) && !ignoreIfFileExists)
             {
                 var backupFile = Path.Combine(Path.GetDirectoryName(fullFilePath), $"{Path.GetFileNameWithoutExtension(fullFilePath)}_backup{Path.GetExtension(fullFilePath)}");
-                File.Copy(fullFilePath, backupFile);
+                File.Copy(fullFilePath, backupFile, true);
             }
             WriteFile(data, fullFilePath);
         }
@@ -56,9 +54,16 @@ namespace Terra.Studio
             return data;
         }
 
-        public static string GetSavedFilePath()
+        public static string GetSavedFilePath(string existingFilePath)
         {
-            return Path.Combine(Application.persistentDataPath, SAVED_FILE_TEXT_NAME);
+            if (existingFilePath.Contains("/") || existingFilePath.Contains(@"\"))
+            {
+                return Path.Combine(Application.persistentDataPath, Path.GetFileName(existingFilePath));
+            }
+            else
+            {
+                return Path.Combine(Application.persistentDataPath, $"{existingFilePath}.json");
+            }
         }
     }
 }

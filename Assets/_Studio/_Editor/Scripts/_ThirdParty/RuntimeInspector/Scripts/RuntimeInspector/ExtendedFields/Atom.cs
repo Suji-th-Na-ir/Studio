@@ -8,9 +8,31 @@ namespace Terra.Studio
     public class Atom
     {
         [Serializable]
+        public class Broadcast
+        {
+            public static List<Broadcast> AllInstances = new();
+            [HideInInspector] public BroadcastField field;
+            [HideInInspector] public BroadcastData data;
+            [HideInInspector] public GameObject target;
+            [HideInInspector] public string componentType = null;
+            
+            public void Setup(GameObject _target, string _componentType, string _id)
+            {
+                target = _target;
+                
+                if(!AllInstances.Contains(this))
+                    AllInstances.Add(this);
+
+                componentType = _componentType;
+
+                data.id = _id;
+            }
+        }
+        
+        [Serializable]
         public class StartOn
         {
-            [HideInInspector] public static List<StartOn> AllInstances = new();
+            public static List<StartOn> AllInstances = new();
             [HideInInspector] public StartOnField field;
             [HideInInspector] public StartOnData data;
             [HideInInspector] public GameObject target;
@@ -32,11 +54,11 @@ namespace Terra.Studio
         [Serializable]
         public class PlaySfx
         {
-            [HideInInspector] public static List<PlaySfx> AllInstances = new();
+            public static List<PlaySfx> AllInstances = new();
             [HideInInspector] public PlaySFXField field;
             [HideInInspector] public PlaySFXData data;
             [HideInInspector] public GameObject target;
-            [HideInInspector] public Type componentType = null;
+            public Type componentType = null;
 
             public void Setup<T>(GameObject _target)
             {
@@ -50,11 +72,11 @@ namespace Terra.Studio
         [Serializable]
         public class PlayVfx
         {
-            [HideInInspector] public static List<PlayVfx> AllInstances = new();
+            public static List<PlayVfx> AllInstances = new();
             [HideInInspector] public PlayVFXField field;
             [HideInInspector] public PlayVFXData data;
             [HideInInspector] public GameObject target;
-            [HideInInspector] public Type componentType = null;
+            public Type componentType = null;
 
             public void Setup<T>(GameObject _target)
             {
@@ -98,6 +120,14 @@ namespace Terra.Studio
         public int startIndex;
         public string listenName;
         public int listenIndex;
+    }
+    
+    [Serializable]
+    public struct BroadcastData
+    {
+        public int broadcastTypeIndex;
+        public string broadcastName;
+        public string id;
     }
     
     
