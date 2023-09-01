@@ -113,5 +113,13 @@ namespace RuntimeInspectorNamespace
                 customString.SetTextWithoutNotify(atom.data.broadcastName);
             }
         }
+
+
+        protected override void OnSkinChanged()
+        {
+            base.OnSkinChanged();
+            broadcastType?.SetSkinDropDownField(Skin);
+            customString?.SetupInputFieldSkin(Skin);
+        }
     }
 }
