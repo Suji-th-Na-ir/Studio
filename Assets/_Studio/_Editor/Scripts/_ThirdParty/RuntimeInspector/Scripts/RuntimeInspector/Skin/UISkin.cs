@@ -53,7 +53,22 @@ namespace RuntimeInspectorNamespace
 			}
 		}
 
-		[SerializeField]
+        [SerializeField]
+        private int m_headinhfontSize = 20;
+        public int HeadingFontSize
+        {
+            get { return m_headinhfontSize; }
+            set
+            {
+                if (m_headinhfontSize != value)
+                {
+                    m_headinhfontSize = value;
+                    m_version++;
+                }
+            }
+        }
+
+        [SerializeField]
 		private int m_lineHeight = 30;
 		public int LineHeight
 		{

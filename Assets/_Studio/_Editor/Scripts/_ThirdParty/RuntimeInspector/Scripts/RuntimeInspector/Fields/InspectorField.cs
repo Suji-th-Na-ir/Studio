@@ -475,7 +475,10 @@ namespace RuntimeInspectorNamespace
                 layoutGroup.padding.top = Skin.LineHeight;
 
                 if (m_headerVisibility == RuntimeInspector.HeaderVisibility.Collapsible)
-                    variableNameText.rectTransform.sizeDelta = new Vector2(-(Skin.ExpandArrowSpacing + Skin.LineHeight * 0.5f), 0f);
+                {
+                    variableNameText.rectTransform.sizeDelta = new Vector2(-(Skin.LineHeight*0.05f ), 0f);
+                    variableNameText.fontSize = Skin.HeadingFontSize;
+                }
             }
 
             if (expandArrow != null)
