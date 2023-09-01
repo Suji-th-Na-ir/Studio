@@ -137,6 +137,8 @@ namespace RuntimeInspectorNamespace
             // toggleInput.graphic.color = Skin.ToggleCheckmarkColor;
 
             Vector2 rightSideAnchorMin = new Vector2( Skin.LabelWidthPercentage, 0f );
+            startOn.SetSkinDropDownField(Skin);
+            listenOn.SetSkinDropDownField(Skin);
             // variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
             // ( (RectTransform) toggleInput.transform ).anchorMin = rightSideAnchorMin;
         }
