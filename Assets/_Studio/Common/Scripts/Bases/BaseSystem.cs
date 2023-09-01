@@ -6,7 +6,7 @@ namespace Terra.Studio
     {
         public virtual void Init<T>(int entity) where T : struct, IBaseComponent
         {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<DestroyOnComponent>(entity);
+            ref var entityRef = ref EntityAuthorOp.GetComponent<T>(entity);
             var eventContext = entityRef.EventContext;
             eventContext.onConditionMet = (obj) =>
             {

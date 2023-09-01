@@ -10,7 +10,7 @@ namespace Terra.Studio
             var authorData = (ComponentAuthorData)data;
             var compData = JsonConvert.DeserializeObject<InGameTimerComponent>(authorData.compData);
             ref var compRef = ref ComponentAuthorOp.AddEntityToComponent<InGameTimerComponent>(authorData.entity);
-            ((IBaseComponent)compRef).Clone(compData, ref compRef);
+            ((IBaseComponent)compRef).Clone(compData, ref compRef, authorData.obj);
             var instance = RuntimeOp.Resolve<RuntimeSystem>().AddRunningInstance<InGameTimerSystem>();
             instance.Init<InGameTimerComponent>(authorData.entity);
         }

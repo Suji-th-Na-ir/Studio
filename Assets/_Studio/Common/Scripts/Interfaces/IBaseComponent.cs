@@ -17,7 +17,7 @@ namespace Terra.Studio
         public EventContext EventContext { get; set; }
         public GameObject RefObj { get; set; }
 
-        public virtual void Clone<T>(T actualData, ref T targetData) where T : struct, IBaseComponent
+        public virtual void Clone<T>(T actualData, ref T targetData, GameObject go) where T : struct, IBaseComponent
         {
             Helper.CopyStructFieldValues(actualData, ref targetData);
             targetData.IsConditionAvailable = actualData.IsConditionAvailable;
@@ -27,18 +27,15 @@ namespace Terra.Studio
             targetData.Broadcast = actualData.Broadcast;
             targetData.IsTargeted = actualData.IsTargeted;
             targetData.TargetId = actualData.TargetId;
-            SetDefaultForEvent(ref targetData);
-        }
-
-        public virtual void SetDefaultForEvent<T>(ref T actualData) where T : struct, IBaseComponent
-        {
+            targetData.EventContext = actualData.EventContext;
+            targetData.RefObj = go;
             var conditionalCheckData = new EventConditionalCheckData()
             {
-                conditionType = ConditionType,
-                conditionData = ConditionData,
-                goRef = RefObj
+                conditionType = targetData.ConditionType,
+                conditionData = targetData.ConditionData,
+                goRef = targetData.RefObj
             };
-            actualData.EventContext = new()
+            targetData.EventContext = new()
             {
                 data = conditionalCheckData
             };

@@ -10,7 +10,7 @@ namespace Terra.Studio
             var authorData = (ComponentAuthorData)data;
             var component = JsonConvert.DeserializeObject<CheckpointComponent>(authorData.compData);
             ref var compRef = ref ComponentAuthorOp.AddEntityToComponent<CheckpointComponent>(authorData.entity);
-            ((IBaseComponent)component).Clone(component, ref compRef);
+            ((IBaseComponent)component).Clone(component, ref compRef, authorData.obj);
             var instance = RuntimeOp.Resolve<RuntimeSystem>().AddRunningInstance<CheckpointSystem>();
             instance.Init<CheckpointComponent>(authorData.entity);
         }

@@ -30,7 +30,6 @@ namespace Terra.Studio
         {
             public WorldData? GetWorldData()
             {
-                //var resourceData = UnityEngine.Resources.Load<UnityEngine.TextAsset>("OscillationLogic").text;
                 var resourceData = SystemOp.Resolve<CrossSceneDataHolder>().Get();
                 if (string.IsNullOrEmpty(resourceData)) return null;
                 var worldData = JsonConvert.DeserializeObject<WorldData>(resourceData);

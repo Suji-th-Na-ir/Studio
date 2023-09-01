@@ -10,7 +10,7 @@ namespace Terra.Studio
             var authorData = (ComponentAuthorData)data;
             var compData = JsonConvert.DeserializeObject<DestroyOnComponent>(authorData.compData);
             ref var compRef = ref ComponentAuthorOp.AddEntityToComponent<DestroyOnComponent>(authorData.entity);
-            ((IBaseComponent)compRef).Clone(compData, ref compRef);
+            ((IBaseComponent)compRef).Clone(compData, ref compRef, authorData.obj);
             var instance = RuntimeOp.Resolve<RuntimeSystem>().AddRunningInstance<DestroyOnSystem>();
             instance.Init<DestroyOnComponent>(authorData.entity);
         }
