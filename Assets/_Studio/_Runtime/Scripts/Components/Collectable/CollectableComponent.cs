@@ -12,6 +12,7 @@ namespace Terra.Studio
         public string ConditionData { get; set; }
         public bool IsBroadcastable { get; set; }
         public string Broadcast { get; set; }
+        public string BroadcastListen { get; set; }
         public bool IsTargeted { get; set; }
         public int TargetId { get; set; }
         [JsonIgnore] public bool CanExecute { get; set; }
@@ -26,7 +27,7 @@ namespace Terra.Studio
         public int vfxIndex;
         public bool canUpdateScore;
         public float scoreValue;
-        public bool showScoreUI;
         public int listenIndex;
+        public int broadcastTypeIndex;
     }
 }
