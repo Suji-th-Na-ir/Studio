@@ -27,6 +27,20 @@ namespace Terra.Studio
             Author<EntityAuthor>.Flush();
         }
 
+        public static ref T GetComponent<T>(int entity) where T : struct, IBaseComponent
+        {
+            var world = RuntimeOp.Resolve<RuntimeSystem>().World;
+            var pool = world.GetPool<T>();
+            ref var component = ref pool.Get(entity);
+            return ref component;
+        }
+
+        public static EventContext GetEventContext<T>(int entity) where T : struct, IBaseComponent
+        {
+            ref var component = ref GetComponent<T>(entity);
+            return component.EventContext;
+        }
+
         private class EntityAuthor : BaseAuthor
         {
             public override void Generate(object data)

@@ -12,11 +12,11 @@ namespace Terra.Studio
             var broadcaster = RuntimeOp.Resolve<Broadcaster>();
             if (subscribe)
             {
-                broadcaster.ListenTo(conditionalCheck.data, onConditionalCheck);
+                broadcaster.ListenTo(conditionalCheck.conditionData, onConditionalCheck);
             }
             else
             {
-                broadcaster.StopListenTo(conditionalCheck.data, onConditionalCheck);
+                broadcaster.StopListenTo(conditionalCheck.conditionData, onConditionalCheck);
             }
         }
     }

@@ -1,46 +1,33 @@
-using System;
-using UnityEngine;
 using Leopotam.EcsLite;
-using System.Collections.Generic;
 
 namespace Terra.Studio
 {
     public class CheckpointSystem : BaseSystem
     {
-        public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
-        private EventExecutorData eventExecutorData;
-
-        public override void Init(EcsWorld currentWorld, int entity)
+        public override void Init(int entity)
         {
-            var pool = currentWorld.GetPool<CheckpointComponent>();
-            ref var entityRef = ref pool.Get(entity);
-            var conditionType = entityRef.ConditionType;
-            var conditionData = entityRef.ConditionData;
-            var goRef = entityRef.refObj;
-            var compsData = RuntimeOp.Resolve<ComponentsData>();
-            eventExecutorData = new()
+            ref var entityRef = ref EntityAuthorOp.GetComponent<CheckpointComponent>(entity);
+            var eventContext = entityRef.EventContext;
+            eventContext.onConditionMet = (obj) =>
             {
-                goRef = entityRef.refObj,
-                data = conditionData
+                OnConditionalCheck(entity, obj);
             };
-            IdToConditionalCallback ??= new();
-            IdToConditionalCallback.Add(entity, (obj) =>
-            {
-                OnConditionalCheck((entity, conditionType, conditionData, goRef));
-            });
-            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, eventExecutorData);
+            entityRef.EventContext = eventContext;
+            entityRef.IsExecuted = false;
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
+            compsData.ProvideEventContext(true, eventContext);
             if (entityRef.IsBroadcastable)
             {
                 RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(entityRef.Broadcast);
             }
         }
 
-        public override void OnConditionalCheck(object data)
+        public override void OnConditionalCheck(int entity, object data)
         {
-            var (entity, conditionType, conditionData, go) = ((int, string, string, GameObject))data;
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, eventExecutorData);
-            IdToConditionalCallback.Remove(entity);
+            ref var entityRef = ref EntityAuthorOp.GetComponent<CheckpointComponent>(entity);
+            entityRef.IsExecuted = true;
+            compsData.ProvideEventContext(false, entityRef.EventContext);
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
             var checkpointPool = world.GetPool<CheckpointComponent>();
             OnDemandRun(in checkpointPool.Get(entity));
@@ -54,7 +41,7 @@ namespace Terra.Studio
             }
             if (component.canPlayVFX)
             {
-                RuntimeWrappers.PlayVFX(component.vfxName, component.refObj.transform.position);
+                RuntimeWrappers.PlayVFX(component.vfxName, component.RefObj.transform.position);
             }
             RuntimeOp.Resolve<GameData>().RespawnPoint = component.respawnPoint;
             if (component.IsBroadcastable)
@@ -70,10 +57,12 @@ namespace Terra.Studio
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             foreach (var entity in filter)
             {
-                if (!IdToConditionalCallback.ContainsKey(entity)) continue;
                 var checkpoint = checkPointPool.Get(entity);
-                compsData.ProvideEventContext(checkpoint.ConditionType, IdToConditionalCallback[entity], false, eventExecutorData);
-                IdToConditionalCallback.Remove(entity);
+                if (checkpoint.IsExecuted)
+                {
+                    continue;
+                }
+                compsData.ProvideEventContext(false, checkpoint.EventContext);
             }
         }
     }

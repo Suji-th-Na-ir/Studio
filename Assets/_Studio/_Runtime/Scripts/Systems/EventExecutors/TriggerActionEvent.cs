@@ -16,7 +16,7 @@ namespace Terra.Studio
             if (subscribe)
             {
                 var triggerAction = conditionalCheck.goRef.AddComponent<OnTriggerAction>();
-                triggerAction.TagAgainst = conditionalCheck.data;
+                triggerAction.TagAgainst = conditionalCheck.conditionData;
                 triggerAction.OnTriggered = () =>
                 {
                     onConditionalCheck?.Invoke(null);

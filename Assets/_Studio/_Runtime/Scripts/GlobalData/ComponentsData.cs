@@ -50,21 +50,21 @@ namespace Terra.Studio
             }
         }
 
-        public void ProvideEventContext(string dataType, Action<object> onConditionalCheck, bool subscribe, EventExecutorData conditionalCheck)
+        public void ProvideEventContext(bool subscribe, EventContext context)
         {
             if (eventMap == null)
             {
                 GetAllEvents();
             }
-            if (eventMap.ContainsKey(dataType))
+            if (eventMap.ContainsKey(context.data.conditionType))
             {
-                var type = eventMap[dataType];
+                var type = eventMap[context.data.conditionType];
                 var instance = Activator.CreateInstance(type) as IEventExecutor;
-                instance.Execute(onConditionalCheck, subscribe, conditionalCheck);
+                instance.Execute(context.onConditionMet, subscribe, context.data);
             }
             else
             {
-                Debug.Log($"Event for type does not exist: {dataType}");
+                Debug.Log($"Event for type does not exist: {context.data.conditionType}");
             }
         }
     }

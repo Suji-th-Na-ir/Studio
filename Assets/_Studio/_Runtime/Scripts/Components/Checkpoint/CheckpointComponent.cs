@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using Newtonsoft.Json;
-using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
@@ -17,9 +16,8 @@ namespace Terra.Studio
         public int TargetId { get; set; }
         [JsonIgnore] public bool CanExecute { get; set; }
         [JsonIgnore] public bool IsExecuted { get; set; }
-        [JsonIgnore] public EventExecutorData EventExecutorData { get; set; }
-
-        [JsonIgnore] public GameObject refObj;
+        [JsonIgnore] public EventContext EventContext { get; set; }
+        [JsonIgnore] public GameObject RefObj { get; set; }
         [JsonConverter(typeof(Vector3Converter))] public Vector3 respawnPoint;
 
         public bool canPlaySFX;
@@ -28,20 +26,5 @@ namespace Terra.Studio
         public string vfxName;
         public int sfxIndex;
         public int vfxIndex;
-
-        public void Setup()
-        {
-            EventExecutorData = new()
-            {
-                data = ConditionData,
-                goRef = refObj
-            };
-        }
-
-        public void CloneFrom<T>(T data) where T : struct, IBaseComponent
-        {
-            Helper.CopyStructFieldValues<CheckpointComponent>(this, data);
-            Setup();
-        }
     }
 }

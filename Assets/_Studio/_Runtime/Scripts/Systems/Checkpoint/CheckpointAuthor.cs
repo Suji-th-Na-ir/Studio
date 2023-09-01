@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
@@ -14,17 +13,9 @@ namespace Terra.Studio
             var compPool = ecsWorld.GetPool<CheckpointComponent>();
             compPool.Add(authorData.entity);
             ref var compRef = ref compPool.Get(authorData.entity);
-            component.CloneFrom(compRef);
-            compRef.IsConditionAvailable = component.IsConditionAvailable;
-            compRef.ConditionType = component.ConditionType;
-            compRef.ConditionData = component.ConditionData;
-            compRef.IsBroadcastable = component.IsBroadcastable;
-            compRef.Broadcast = component.Broadcast;
-            compRef.IsTargeted = component.IsTargeted;
-            compRef.TargetId = component.TargetId;
-            compRef.refObj = authorData.obj;
+            ((IBaseComponent)component).Clone(component, ref compRef);
             var instance = RuntimeOp.Resolve<RuntimeSystem>().AddRunningInstance<CheckpointSystem>();
-            instance.Init(ecsWorld, authorData.entity);
+            instance.Init(authorData.entity);
         }
     }
 }

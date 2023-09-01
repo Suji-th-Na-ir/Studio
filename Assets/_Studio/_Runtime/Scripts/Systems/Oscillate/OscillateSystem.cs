@@ -32,7 +32,7 @@ namespace Terra.Studio
             eventExecutorData = new()
             {
                 goRef = oscillatable.oscillatableTr.gameObject,
-                data = conditionData
+                conditionData = conditionData
             };
             IdToConditionalCallback ??= new();
             IdToConditionalCallback.Add(entity, (obj) =>

@@ -21,7 +21,7 @@ namespace Terra.Studio
             eventExecutorData = new()
             {
                 goRef = goRef,
-                data = conditionData
+                conditionData = conditionData
             };
             IdToConditionalCallback ??= new();
             IdToConditionalCallback.Add(entity, (obj) =>

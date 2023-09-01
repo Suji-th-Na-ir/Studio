@@ -5,12 +5,20 @@ namespace Terra.Studio
 {
     public interface IEventExecutor
     {
-        public void Execute(Action<object> onConditionalCheck, bool subscribe, EventExecutorData conditionalCheck);
+        public void Execute(Action<object> onConditionalCheck, bool subscribe, EventConditionalCheckData conditionalCheck);
     }
 
-    public struct EventExecutorData
+    public struct EventContext
     {
+        public Action<object> onConditionMet;
+        public EventConditionalCheckData data;
+    }
+
+    public struct EventConditionalCheckData
+    {
+        public string conditionType;
+        public string conditionData;
         public GameObject goRef;
-        public string data;
+        public GameObject toCheckAgainst;
     }
 }
