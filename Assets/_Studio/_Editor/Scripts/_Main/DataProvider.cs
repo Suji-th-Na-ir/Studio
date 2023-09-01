@@ -100,7 +100,7 @@ namespace Terra.Studio
         {
             get
             {
-                var newList = new List<string> {  "None", "Game Win", "Game Lose" };
+                var newList = new List<string> {  "None", "Game Win", "Game Lose" ,"Custom"};
                 if (listenDictionary.Count > 0)
                 {
                     newList.AddRange(listenDictionary.Where(x => newList.Contains(x.Value) == false).Select(y => y.Value));   
