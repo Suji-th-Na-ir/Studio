@@ -11,17 +11,18 @@ namespace Terra.Studio
     public class SceneDataHandler
     {
         public Func<GameObject, string> TryGetAssetPath;
+        public Func<string> GetAssetName;
 
         public void Save()
         {
             var sceneData = ExportSceneData();
             if (!Helper.IsInUnityEditorMode())
             {
-                SystemOp.Resolve<FileService>().WriteFile(sceneData, FileService.GetSavedFilePath());
+                SystemOp.Resolve<FileService>().WriteFile(sceneData, FileService.GetSavedFilePath(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name));
             }
             else
             {
-                new FileService().WriteFile(sceneData, FileService.GetSavedFilePath());
+                new FileService().WriteFile(sceneData, FileService.GetSavedFilePath(GetAssetName?.Invoke()));
             }
         }
 
@@ -44,7 +45,7 @@ namespace Terra.Studio
             var prevState = SystemOp.Resolve<System>().PreviousStudioState;
             if (prevState != StudioState.Runtime && SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
             {
-                var saveFilePath = FileService.GetSavedFilePath();
+                var saveFilePath = FileService.GetSavedFilePath(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name);
                 data = SystemOp.Resolve<FileService>().ReadFromFile(saveFilePath);
             }
             else

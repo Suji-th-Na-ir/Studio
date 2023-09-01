@@ -55,7 +55,7 @@ namespace Terra.Studio
 #endif
                 SystemOp.Resolve<FileService>().WriteFile(
                     configData.SceneDataToLoad.text,
-                    FileService.GetSavedFilePath(),
+                    FileService.GetSavedFilePath(ConfigSO.SceneDataToLoad.name),
                     shouldIgnore);
             }
         }
