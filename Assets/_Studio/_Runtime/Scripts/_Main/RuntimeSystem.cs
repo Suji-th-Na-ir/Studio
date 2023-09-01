@@ -156,6 +156,7 @@ namespace Terra.Studio
             ComponentAuthorOp.Flush();
             EntityAuthorOp.Flush();
             RuntimeOp.Unregister<CoreGameManager>();
+            RuntimeOp.Unregister<SceneDataHandler>();
             DestroyEcsSystemsAndWorld();
         }
 
@@ -195,7 +196,6 @@ namespace Terra.Studio
         {
             RuntimeOp.Unregister<Broadcaster>();
             RuntimeOp.Unregister<ComponentsData>();
-            RuntimeOp.Unregister<SceneDataHandler>();
             SystemOp.Unregister(this as ISubsystem);
             RuntimeOp.Unregister(this);
         }

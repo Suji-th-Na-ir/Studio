@@ -2,6 +2,7 @@
   "Terra.Studio.Checkpoint": "Terra.Studio.CheckpointAuthor",
   "Terra.Studio.Collectable": "Terra.Studio.CollectableAuthor",
   "Terra.Studio.DestroyOn": "Terra.Studio.DestroyOnAuthor",
+  "Terra.Studio.GameScore": "Terra.Studio.InGameScoreAuthor",
   "Terra.Studio.InGameTimer": "Terra.Studio.InGameTimerAuthor",
   "Terra.Studio.Oscillate": "Terra.Studio.OscillateAuthor",
   "Terra.Studio.Respawn": "Terra.Studio.RespawnAuthor",

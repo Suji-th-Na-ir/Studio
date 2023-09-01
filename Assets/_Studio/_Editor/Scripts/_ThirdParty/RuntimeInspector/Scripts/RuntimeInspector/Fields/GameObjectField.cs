@@ -180,7 +180,7 @@ namespace RuntimeInspectorNamespace
 						foreach( Type type in assembly.GetExportedTypes() )
 						{
 							bool canSkip = false;
-							foreach (var compName in Helper.componentsToFilterOut)
+							foreach (var compName in Helper.COMPONENTS_TO_FILTER_OUT)
 							{
 								if (type.Name.Contains(compName))
 								{

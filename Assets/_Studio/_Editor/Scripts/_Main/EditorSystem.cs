@@ -31,12 +31,12 @@ namespace Terra.Studio
             EditorOp.Resolve<SceneView>().Flush();
             EditorOp.Resolve<SelectionHandler>().Flush();
             EditorOp.Resolve<SceneDataHandler>().SaveQoFDetails();
+            EditorOp.Unregister<SceneDataHandler>();
         }
 
         private void OnDestroy()
         {
             EditorOp.Unregister<DataProvider>();
-            EditorOp.Unregister<SceneDataHandler>();
             SystemOp.Unregister(this as ISubsystem);
             EditorOp.Unregister(this);
         }

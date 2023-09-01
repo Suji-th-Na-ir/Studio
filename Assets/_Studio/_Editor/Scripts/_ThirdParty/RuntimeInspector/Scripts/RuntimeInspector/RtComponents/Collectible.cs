@@ -17,12 +17,10 @@ namespace RuntimeInspectorNamespace
             OnClick
         }
 
-        public Atom.StartOn startOn = new Atom.StartOn();
-        public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
-        public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
-        // public bool ShowScoreUI = false;
-        public bool CanUpdateScore = false;
-        public float ScoreValue = 0;
+        public Atom.StartOn startOn = new();
+        public Atom.PlaySfx PlaySFX = new();
+        public Atom.PlayVfx PlayVFX = new();
+        public Atom.ScoreData Score = new();
         public string Broadcast = null;
         private string guid;
         
@@ -32,11 +30,12 @@ namespace RuntimeInspectorNamespace
             PlaySFX.Setup<Collectible>(gameObject);
             PlayVFX.Setup<Collectible>(gameObject);
             guid = GetInstanceID() + "_collect";//Guid.NewGuid().ToString("N");
+            Score.instanceId = guid;
         }
         
         public void Update()
         {
-            if (!String.IsNullOrEmpty(Broadcast))
+            if (!string.IsNullOrEmpty(Broadcast))
             {
                 EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, Broadcast);
             }
@@ -62,9 +61,8 @@ namespace RuntimeInspectorNamespace
                 collectable.sfxIndex = PlaySFX.data.clipIndex;
                 collectable.vfxIndex = PlayVFX.data.clipIndex;
 
-                collectable.canUpdateScore = CanUpdateScore;
-                collectable.scoreValue = ScoreValue;
-                collectable.showScoreUI = true;
+                collectable.canUpdateScore = Score.score != 0;
+                collectable.scoreValue = Score.score;
             }
             
             gameObject.TrySetTrigger(false, true);
@@ -113,9 +111,7 @@ namespace RuntimeInspectorNamespace
         public void Import(EntityBasedComponent cdata)
         {
             CollectableComponent cc = JsonConvert.DeserializeObject<CollectableComponent>($"{cdata.data}");
-            CanUpdateScore = cc.canUpdateScore;
-            // ShowScoreUI = cc.showScoreUI;
-            ScoreValue = cc.scoreValue;
+            Score.score = (int)cc.scoreValue;
             Broadcast = cc.Broadcast;
 
             PlaySFX.data.canPlay = cc.canPlaySFX;
@@ -144,6 +140,7 @@ namespace RuntimeInspectorNamespace
             {
                 Destroy(collider);
             }
+            EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(false, guid);
         }
     }
 }

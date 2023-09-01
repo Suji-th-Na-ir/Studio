@@ -1,16 +1,15 @@
+using System;
 using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
-using System;
-using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
 {
     [EditorDrawComponent("Terra.Studio.InGameTimer")]
     public class InGameTimer : MonoBehaviour, IComponent
     {
-        public uint Time;
-        public string Broadcast = null;
+        public uint Time = 180;
+        public string Broadcast = "Game Lose";
         private string guid;
 
         private void Awake()

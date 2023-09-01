@@ -38,14 +38,19 @@ namespace Terra.Studio
 
             private GameObject CreateVisualRepresentation(VirtualEntity entity)
             {
+                GameObject generatedObj = null;
+                if (!entity.shouldLoadAssetAtRuntime)
+                {
+                    return generatedObj;
+                }
                 var trs = new Vector3[] { entity.position, entity.rotation, entity.scale };
-                GameObject generatedObj = RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, trs);
+                generatedObj = RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, trs);
                 return generatedObj;
             }
 
             private void HandleEntityAndComponentGeneration(GameObject go, VirtualEntity virtualEntity)
             {
-                if (go == null)
+                if (go == null && !virtualEntity.shouldLoadAssetAtRuntime)
                 {
                     return;
                 }

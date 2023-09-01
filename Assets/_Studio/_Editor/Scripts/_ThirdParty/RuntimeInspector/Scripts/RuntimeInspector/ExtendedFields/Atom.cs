@@ -80,6 +80,14 @@ namespace Terra.Studio
             [HideInInspector] public TranslateComponentData data = new();
             [HideInInspector] public GameObject referenceGO;
         }
+
+        [Serializable]
+        public class ScoreData
+        {
+            [HideInInspector] public ScoreField field;
+            [HideInInspector] public int score;
+            [HideInInspector] public string instanceId;
+        }
     }
 
     // define component data classes here

@@ -5,14 +5,25 @@ using Newtonsoft.Json;
 using RuntimeInspectorNamespace;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace Terra.Studio
 {
-    public class SceneDataHandler
+    public class SceneDataHandler : IDisposable
     {
         public Func<GameObject, string> TryGetAssetPath;
         public Vector3 PlayerSpawnPoint { get; private set; }
         private Camera editorCamera;
+
+        public SceneDataHandler()
+        {
+            EditorOp.Register(new EditorEssentialsLoader());
+        }
+
+        public void Dispose()
+        {
+            EditorOp.Unregister<EditorEssentialsLoader>();
+        }
 
         public void Save()
         {
@@ -39,7 +50,7 @@ namespace Terra.Studio
         {
             InitializeSceneObjects();
             SetupSceneDefaultObjects();
-            new EditorEssentialsLoader().LoadEssentials();
+            EditorOp.Resolve<EditorEssentialsLoader>().LoadEssentials();
         }
 
         private void InitializeSceneObjects()
@@ -176,7 +187,7 @@ namespace Terra.Studio
                 }
                 if (allGos[i].TryGetComponent(out IgnoreToPackObject _))
                 {
-                    TryHandleUnpackableGameObjectData(allGos[i], ref worldMetaData);
+                    TryHandleUnpackableGameObjectData(allGos[i], virtualEntities, ref worldMetaData);
                     continue;
                 }
                 var entity = GetVirtualEntity(allGos[i], i, true);
@@ -202,7 +213,8 @@ namespace Terra.Studio
                 position = go.transform.position,
                 rotation = go.transform.eulerAngles,
                 scale = go.transform.parent != null ? go.transform.localScale.LocalToWorldScale(go.transform.parent) : go.transform.localScale,
-                assetType = !string.IsNullOrEmpty(GetAssetPath(go)) ? AssetType.Prefab : GetAssetType(go)
+                assetType = !string.IsNullOrEmpty(GetAssetPath(go)) ? AssetType.Prefab : GetAssetType(go),
+                shouldLoadAssetAtRuntime = true
             };
             if (newEntity.assetType == AssetType.Primitive)
             {
@@ -319,7 +331,7 @@ namespace Terra.Studio
             }
         }
 
-        private void GetColliderData(GameObject go, ref EnitityMetaData metaData)
+        private void GetColliderData(GameObject go, ref EntityMetaData metaData)
         {
             if (go.TryGetComponent(out Collider collider))
             {
@@ -351,7 +363,7 @@ namespace Terra.Studio
             }
         }
 
-        public void SetColliderData(GameObject go, EnitityMetaData metaData)
+        public void SetColliderData(GameObject go, EntityMetaData metaData)
         {
             var colliderData = metaData.colliderData;
             var doesColliderExist = colliderData.doesHaveCollider;
@@ -393,7 +405,7 @@ namespace Terra.Studio
             }
         }
 
-        private void TryHandleUnpackableGameObjectData(GameObject go, ref WorldMetaData metaData)
+        private void TryHandleUnpackableGameObjectData(GameObject go, List<VirtualEntity> virtualEntities, ref WorldMetaData metaData)
         {
             if (go.TryGetComponent(out StudioGameObject studioGameObject))
             {
@@ -401,12 +413,20 @@ namespace Terra.Studio
                 {
                     metaData.playerSpawnPoint = go.transform.position;
                 }
+                if (studioGameObject.type == EditorObjectType.Score)
+                {
+                    var entity = GetVirtualEntity(go, -1000, true);
+                    virtualEntities.Add(entity);
+                }
             }
         }
 
         #endregion
 
         #region Miscellaneous
+
+        public GameObject ScoreManagerObj;
+        private List<string> modifiers = new();
 
         private void SetupSceneDefaultObjects()
         {
@@ -427,6 +447,48 @@ namespace Terra.Studio
         {
             SystemOp.Resolve<CrossSceneDataHolder>().Set("CameraPos", editorCamera.transform.position);
             SystemOp.Resolve<CrossSceneDataHolder>().Set("CameraRot", editorCamera.transform.eulerAngles);
+        }
+
+        public void UpdateScoreModifiersCount(bool add, string id)
+        {
+            if (add)
+            {
+                if (modifiers.Contains(id))
+                {
+                    return;
+                }
+                modifiers.Add(id);
+                SetupScoreManager(true);
+            }
+            else
+            {
+                if (!modifiers.Contains(id))
+                {
+                    return;
+                }
+                modifiers.Remove(id);
+            }
+            if (modifiers.Count == 0)
+            {
+                SetupScoreManager(false);
+            }
+        }
+
+        private void SetupScoreManager(bool create)
+        {
+            if (create)
+            {
+                if (ScoreManagerObj)
+                {
+                    return;
+                }
+                EditorOp.Resolve<EditorEssentialsLoader>().Load(EditorObjectType.Score, out ScoreManagerObj);
+                ScoreManagerObj.transform.SetAsFirstSibling();
+            }
+            else if (ScoreManagerObj)
+            {
+                Object.Destroy(ScoreManagerObj);
+            }
         }
 
         #endregion

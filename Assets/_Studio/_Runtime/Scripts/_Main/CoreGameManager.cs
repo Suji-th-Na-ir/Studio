@@ -94,14 +94,20 @@ namespace Terra.Studio
 
     public class ScoreHandler
     {
+        public int targetScore;
         public int currentScore;
         public int CurrentScore { get { return currentScore; } }
         public event Action<int> OnScoreModified;
+        public event Action OnTargetScoreReached;
 
         public void AddScore(int addBy)
         {
             currentScore += addBy;
             OnScoreModified?.Invoke(currentScore);
+            if (currentScore >= targetScore)
+            {
+                OnTargetScoreReached?.Invoke();
+            }
         }
 
         public void RemoveScore(int removeBy)

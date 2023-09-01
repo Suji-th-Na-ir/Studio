@@ -29,6 +29,14 @@ MonoBehaviour:
     guid: fe0c2d29fcdab49ee8fc44aa49d05d36
     isPrimitive: 0
     primitiveType: 0
+  - name: GameScore
+    absolutePath: Assets/_Studio/Resources/Common/Prefabs/GameScore.prefab
+    resourcePath: Common/Prefabs/GameScore
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b9df99a6790c24f0fbab44a711153491
+    isPrimitive: 0
+    primitiveType: 0
   - name: InGameTimer
     absolutePath: Assets/_Studio/Resources/Common/Prefabs/InGameTimer.prefab
     resourcePath: Common/Prefabs/InGameTimer
@@ -220,6 +228,14 @@ MonoBehaviour:
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: e6b485027f1c24e89b8939930e2b15aa
+    isPrimitive: 0
+    primitiveType: 0
+  - name: GameWin
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/GameWin.prefab
+    resourcePath: Common/SpaceRaceAssets/GameWin
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 7e75e148af240414b96d56006debd750
     isPrimitive: 0
     primitiveType: 0
   - name: Kathakali
@@ -712,6 +728,150 @@ MonoBehaviour:
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: 9a1ca7ed0292842b898590ce7344ccc8
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Flash 2
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Flash 2.prefab
+    resourcePath: Common/vfx/Flash 2
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 99649c5fed10ce848a575f679ff0e303
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Flash 3
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Flash 3.prefab
+    resourcePath: Common/vfx/Flash 3
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 29fec53fa5329e345981c83555fa131e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Flash 4
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Flash 4.prefab
+    resourcePath: Common/vfx/Flash 4
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c9e6ddab55c69eb4b81803e860d80c55
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 1
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 1.prefab
+    resourcePath: Common/vfx/Hit 1
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 7e59152fc3be99d4aa2760fb61212ce2
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 13
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 13.prefab
+    resourcePath: Common/vfx/Hit 13
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3a3ebdd477adb6444969752e68f9e55e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 16
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 16.prefab
+    resourcePath: Common/vfx/Hit 16
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f95ef7e849953e2428a605bb742e8b9e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 17
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 17.prefab
+    resourcePath: Common/vfx/Hit 17
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 953acd63f3feb604da8867d4f55f7351
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 18
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 18.prefab
+    resourcePath: Common/vfx/Hit 18
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: fcb7ef11e81f7264990b58f26051651b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 19
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 19.prefab
+    resourcePath: Common/vfx/Hit 19
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e90b0a20dc997ef4c9e67b1c8b6db6c9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 20
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 20.prefab
+    resourcePath: Common/vfx/Hit 20
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 7e33fe33aff4f49449f51ed88f138e9c
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 22
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 22.prefab
+    resourcePath: Common/vfx/Hit 22
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c5a11cdca0c02ec46af89a4f25515b5f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 25
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 25.prefab
+    resourcePath: Common/vfx/Hit 25
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 266bfc3979b19d3478e92304dab844d6
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 3
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 3.prefab
+    resourcePath: Common/vfx/Hit 3
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: df365974c854a33438e5aea62ca4b975
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 4
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 4.prefab
+    resourcePath: Common/vfx/Hit 4
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 983ffc7b1f02f0d46a330ab4d104d17d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 6
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 6.prefab
+    resourcePath: Common/vfx/Hit 6
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 4754d1c93d0ffde46a4b52472f289725
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 7
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 7.prefab
+    resourcePath: Common/vfx/Hit 7
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c8c637b8f0130b84b8e2d623d873832d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 8
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 8.prefab
+    resourcePath: Common/vfx/Hit 8
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 245bf6b0acdf9474ca212c5a4f28b2ce
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 9
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 9.prefab
+    resourcePath: Common/vfx/Hit 9
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 7bb551564a4a9a1498e0624fd34ce7d3
     isPrimitive: 0
     primitiveType: 0
   - name: vfx_ArrowBlue

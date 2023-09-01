@@ -11,9 +11,10 @@ namespace PlayShifu.Terra
 {
     public static class Helper
     {
-        public static List<string> componentsToFilterOut = new List<string>()
+        public static readonly List<string> COMPONENTS_TO_FILTER_OUT = new()
         {
-            "Checkpoint"
+            "Checkpoint",
+            "GameScore"
         };
         
         public static string GetCurrentAppPlatform()
