@@ -425,6 +425,7 @@ namespace Terra.Studio
 
         #region Miscellaneous
 
+        public GameObject TimerManagerObj;
         public GameObject ScoreManagerObj;
         private List<string> modifiers = new();
 
@@ -482,8 +483,8 @@ namespace Terra.Studio
                 {
                     return;
                 }
-                EditorOp.Resolve<EditorEssentialsLoader>().Load(EditorObjectType.Score, out ScoreManagerObj);
-                ScoreManagerObj.transform.SetAsFirstSibling();
+                EditorOp.Resolve<EditorEssentialsLoader>().Load(EditorObjectType.Score, out GameObject scoreManagerObj);
+                scoreManagerObj.transform.SetAsFirstSibling();
             }
             else if (ScoreManagerObj)
             {

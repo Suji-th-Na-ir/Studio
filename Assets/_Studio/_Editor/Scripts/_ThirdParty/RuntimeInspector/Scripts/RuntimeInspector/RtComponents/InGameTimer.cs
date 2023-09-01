@@ -15,6 +15,15 @@ namespace RuntimeInspectorNamespace
         private void Awake()
         {
             guid = GetInstanceID() + "_timer"; //Guid.NewGuid().ToString("N");
+            var timer = EditorOp.Resolve<SceneDataHandler>().TimerManagerObj;
+            if (timer)
+            {
+                Destroy(gameObject);
+            }
+            else
+            {
+                EditorOp.Resolve<SceneDataHandler>().TimerManagerObj = gameObject;
+            }
         }
 
         public void Update()
