@@ -352,6 +352,21 @@ namespace RuntimeInspectorNamespace
 				}
 			}
 		}
+
+        [SerializeField]
+        private Color m_dropDownItemColor = Color.black;
+        public Color DropDownItemColor
+        {
+            get { return m_dropDownItemColor; }
+            set
+            {
+                if (m_dropDownItemColor != value)
+                {
+                    m_dropDownItemColor = value;
+                    m_version++;
+                }
+            }
+        }
 #pragma warning restore 0649
-	}
+    }
 }

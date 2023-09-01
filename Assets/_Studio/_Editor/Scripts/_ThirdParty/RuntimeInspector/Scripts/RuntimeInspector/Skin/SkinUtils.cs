@@ -57,7 +57,7 @@ namespace RuntimeInspectorNamespace
             input.captionText.SetSkinInputFieldText(Skin);
             templateText.SetSkinInputFieldText(Skin);
 
-            templateBackground.color = Skin.InputFieldNormalBackgroundColor.Tint(0.075f);
+            templateBackground.color = Skin.DropDownItemColor;
             templateCheckmark.color = Skin.ToggleCheckmarkColor;
         }
 
