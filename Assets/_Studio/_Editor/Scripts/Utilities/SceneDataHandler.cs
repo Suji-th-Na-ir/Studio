@@ -18,12 +18,18 @@ namespace Terra.Studio
 
         public SceneDataHandler()
         {
-            EditorOp.Register(new EditorEssentialsLoader());
+            if (!Helper.IsInUnityEditorMode())
+            {
+                EditorOp.Register(new EditorEssentialsLoader());
+            }
         }
 
         public void Dispose()
         {
-            EditorOp.Unregister<EditorEssentialsLoader>();
+            if (!Helper.IsInUnityEditorMode())
+            {
+                EditorOp.Unregister<EditorEssentialsLoader>();
+            }
         }
 
         public void Save()
