@@ -16,5 +16,6 @@ namespace Terra.Studio
         [JsonIgnore] public bool CanExecute { get; set; }
         [JsonIgnore] public bool IsExecuted { get; set; }
         public uint totalTime;
+        public int broadcastTypeIndex;
     }
 }

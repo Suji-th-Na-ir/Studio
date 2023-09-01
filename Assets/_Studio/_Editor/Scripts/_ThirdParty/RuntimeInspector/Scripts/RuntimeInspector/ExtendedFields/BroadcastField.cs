@@ -11,12 +11,10 @@ namespace RuntimeInspectorNamespace
     {
 #pragma warning disable 0649
         [SerializeField] private Dropdown broadcastType;
-
         [SerializeField] private InputField customString;
 #pragma warning restore 0649
         
         private int prevListenOnValue = -1;
-
         public override void Initialize()
         {
             base.Initialize();

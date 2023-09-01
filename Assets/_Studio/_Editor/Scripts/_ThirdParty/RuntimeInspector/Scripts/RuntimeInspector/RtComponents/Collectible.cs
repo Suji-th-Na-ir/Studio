@@ -17,59 +17,53 @@ namespace RuntimeInspectorNamespace
             OnClick
         }
 
-        public Atom.StartOn startOn = new Atom.StartOn();
-        public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
-        public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
-        // public bool ShowScoreUI = false;
+        public Atom.StartOn startOn = new ();
+        public Atom.PlaySfx PlaySFX = new ();
+        public Atom.PlayVfx PlayVFX = new ();
         public bool CanUpdateScore = false;
         public float ScoreValue = 0;
-        public string Broadcast = null;
+        public Atom.Broadcast Broadcast = new ();
+
         private string guid;
-        
         public void Awake()
         {
+            guid = GetInstanceID() + "_collect";//Guid.NewGuid().ToString("N");
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>(), this.GetType().Name);
+            Broadcast.Setup(gameObject, this.GetType().Name, guid);
             PlaySFX.Setup<Collectible>(gameObject);
             PlayVFX.Setup<Collectible>(gameObject);
-            guid = GetInstanceID() + "_collect";//Guid.NewGuid().ToString("N");
-        }
-        
-        public void Update()
-        {
-            if (!String.IsNullOrEmpty(Broadcast))
-            {
-                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, Broadcast);
-            }
         }
 
         public (string type, string data) Export()
         {
-            CollectableComponent collectable = new();
+            CollectableComponent comp = new();
             {
-                collectable.IsConditionAvailable = true;
-                collectable.ConditionType = GetStartEvent();
-                collectable.ConditionData = GetStartCondition();
-                collectable.listenIndex = startOn.data.listenIndex;
-                collectable.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
-                collectable.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
+                comp.IsConditionAvailable = true;
+                comp.ConditionType = GetStartEvent();
+                comp.ConditionData = GetStartCondition();
+                comp.listenIndex = startOn.data.listenIndex;
+                
+                comp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast.data.broadcastName);
+                comp.Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? null : Broadcast.data.broadcastName;
+                comp.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? null : startOn.data.listenName;
+                comp.broadcastTypeIndex = Broadcast.data.broadcastTypeIndex;
+                
+                comp.canPlaySFX = PlaySFX.data.canPlay;
+                comp.canPlayVFX = PlayVFX.data.canPlay;
 
-                collectable.canPlaySFX = PlaySFX.data.canPlay;
-                collectable.canPlayVFX = PlayVFX.data.canPlay;
+                comp.sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName;
+                comp.vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName;
 
-                collectable.sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName;
-                collectable.vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName;
+                comp.sfxIndex = PlaySFX.data.clipIndex;
+                comp.vfxIndex = PlayVFX.data.clipIndex;
 
-                collectable.sfxIndex = PlaySFX.data.clipIndex;
-                collectable.vfxIndex = PlayVFX.data.clipIndex;
-
-                collectable.canUpdateScore = CanUpdateScore;
-                collectable.scoreValue = ScoreValue;
-                collectable.showScoreUI = true;
+                comp.canUpdateScore = CanUpdateScore;
+                comp.scoreValue = ScoreValue;
             }
             
             gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
-            var data = JsonConvert.SerializeObject(collectable);
+            var data = JsonConvert.SerializeObject(comp);
             return (type, data);
         }
         
@@ -112,30 +106,30 @@ namespace RuntimeInspectorNamespace
 
         public void Import(EntityBasedComponent cdata)
         {
-            CollectableComponent cc = JsonConvert.DeserializeObject<CollectableComponent>($"{cdata.data}");
-            CanUpdateScore = cc.canUpdateScore;
-            // ShowScoreUI = cc.showScoreUI;
-            ScoreValue = cc.scoreValue;
-            Broadcast = cc.Broadcast;
+            CollectableComponent comp = JsonConvert.DeserializeObject<CollectableComponent>($"{cdata.data}");
+            CanUpdateScore = comp.canUpdateScore;
+            ScoreValue = comp.scoreValue;
+            Broadcast.data.broadcastName = comp.Broadcast;
+            Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
 
-            PlaySFX.data.canPlay = cc.canPlaySFX;
-            PlaySFX.data.clipIndex = cc.sfxIndex;
-            PlaySFX.data.clipName = cc.sfxName;
-            PlayVFX.data.canPlay = cc.canPlayVFX;
-            PlayVFX.data.clipIndex = cc.vfxIndex;
-            PlayVFX.data.clipName = cc.vfxName;
+            PlaySFX.data.canPlay = comp.canPlaySFX;
+            PlaySFX.data.clipIndex = comp.sfxIndex;
+            PlaySFX.data.clipName = comp.sfxName;
+            PlayVFX.data.canPlay = comp.canPlayVFX;
+            PlayVFX.data.clipIndex = comp.vfxIndex;
+            PlayVFX.data.clipName = comp.vfxName;
             
-            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOnCollectible), out object result))
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOnCollectible), out object result))
             {
                 startOn.data.startIndex = (int)(StartOnCollectible)result;
             }
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, null);
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast.data.broadcastName, null);
         
-            if (cc.ConditionType.ToLower().Contains("listen"))
+            if (comp.ConditionType.ToLower().Contains("listen"))
             {
-                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_collectible",cc.ConditionData);
+                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_collectible",comp.ConditionData);
             }
-            startOn.data.listenIndex = cc.listenIndex;
+            startOn.data.listenIndex = comp.listenIndex;
         }
         
         private void OnDestroy()

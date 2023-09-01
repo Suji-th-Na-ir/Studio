@@ -26,7 +26,7 @@ namespace RuntimeInspectorNamespace
 
         public (string type, string data) Export()
         {
-            TranslateComponent rc = new TranslateComponent
+            TranslateComponent comp = new TranslateComponent
             {
                 translateType = (TranslateType)Type.data.translateType,
                 speed = Type.data.speed,
@@ -55,10 +55,10 @@ namespace RuntimeInspectorNamespace
                 listenIndex = startOn.data.listenIndex
             };
 
-            ModifyDataAsPerGiven(ref rc);
+            ModifyDataAsPerGiven(ref comp);
             gameObject.TrySetTrigger(false, true);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
-            var data = JsonConvert.SerializeObject(rc, Formatting.Indented);
+            var data = JsonConvert.SerializeObject(comp, Formatting.Indented);
             return (type, data);
         }
         
@@ -108,35 +108,35 @@ namespace RuntimeInspectorNamespace
 
         public void Import(EntityBasedComponent cdata)
         {
-            TranslateComponent cc = JsonConvert.DeserializeObject<TranslateComponent>($"{cdata.data}");
-            PlaySFX.data.canPlay = cc.canPlaySFX;
-            PlaySFX.data.clipIndex = cc.sfxIndex;
-            PlaySFX.data.clipName = cc.sfxName;
-            PlayVFX.data.canPlay = cc.canPlayVFX;
-            PlayVFX.data.clipIndex = cc.vfxIndex;
-            PlayVFX.data.clipName = cc.vfxName;
+            TranslateComponent comp = JsonConvert.DeserializeObject<TranslateComponent>($"{cdata.data}");
+            PlaySFX.data.canPlay = comp.canPlaySFX;
+            PlaySFX.data.clipIndex = comp.sfxIndex;
+            PlaySFX.data.clipName = comp.sfxName;
+            PlayVFX.data.canPlay = comp.canPlayVFX;
+            PlayVFX.data.clipIndex = comp.vfxIndex;
+            PlayVFX.data.clipName = comp.vfxName;
 
-            Type.data.translateType = (int)cc.translateType;
+            Type.data.translateType = (int)comp.translateType;
 
-            Type.data.speed = cc.speed;
-            Type.data.pauseFor = cc.pauseFor;
-            Type.data.moveTo = cc.targetPosition;
-            Type.data.repeat = cc.repeatFor;
-            Type.data.broadcast = cc.Broadcast;
-            Type.data.broadcastAt = cc.broadcastAt;
-            Type.data.listenTo = cc.ConditionData;
-            Type.data.listen = cc.listen;
+            Type.data.speed = comp.speed;
+            Type.data.pauseFor = comp.pauseFor;
+            Type.data.moveTo = comp.targetPosition;
+            Type.data.repeat = comp.repeatFor;
+            Type.data.broadcast = comp.Broadcast;
+            Type.data.broadcastAt = comp.broadcastAt;
+            Type.data.listenTo = comp.ConditionData;
+            Type.data.listen = comp.listen;
 
-            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOn), out object result))
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
                 startOn.data.startIndex = (int)(StartOn)result;
             }
 
-            if (cc.ConditionType.ToLower().Contains("listen"))
+            if (comp.ConditionType.ToLower().Contains("listen"))
             {
-                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_translate",cc.ConditionData);
+                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_translate",comp.ConditionData);
             }
-            startOn.data.listenIndex = cc.listenIndex;
+            startOn.data.listenIndex = comp.listenIndex;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
         }
 

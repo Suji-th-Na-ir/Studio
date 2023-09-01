@@ -27,6 +27,5 @@ namespace Terra.Studio
         public int vfxIndex;
         public int listenIndex;
         public int broadcastTypeIndex;
-        public string broadcastTypeString;
     }
 }
