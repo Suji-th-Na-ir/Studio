@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Terra.Studio
 {
     public class ComponentAuthorOp
@@ -24,6 +22,15 @@ namespace Terra.Studio
         public static void Flush()
         {
             Author<ComponentAuthor>.Flush();
+        }
+
+        public static ref T AddEntityToComponent<T>(int entity) where T : struct, IBaseComponent
+        {
+            var world = RuntimeOp.Resolve<RuntimeSystem>().World;
+            var pool = world.GetPool<T>();
+            pool.Add(entity);
+            ref var refComp = ref pool.Get(entity);
+            return ref refComp;
         }
 
         private class ComponentAuthor : BaseAuthor

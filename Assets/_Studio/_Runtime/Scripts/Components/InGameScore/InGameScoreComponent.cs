@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using Newtonsoft.Json;
 
 namespace Terra.Studio
@@ -15,6 +16,8 @@ namespace Terra.Studio
         public int TargetId { get; set; }
         [JsonIgnore] public bool CanExecute { get; set; }
         [JsonIgnore] public bool IsExecuted { get; set; }
+        [JsonIgnore] public EventContext EventContext { get; set; }
+        [JsonIgnore] public GameObject RefObj { get; set; }
         public int targetScore;
     }
 }

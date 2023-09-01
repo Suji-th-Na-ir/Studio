@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
@@ -10,22 +9,10 @@ namespace Terra.Studio
         {
             var authorData = (ComponentAuthorData)data;
             var compData = JsonConvert.DeserializeObject<DestroyOnComponent>(authorData.compData);
-            var runtimeSystem = RuntimeOp.Resolve<RuntimeSystem>();
-            var compPool = runtimeSystem.World.GetPool<DestroyOnComponent>();
-            compPool.Add(authorData.entity);
-            ref var compRef = ref compPool.Get(authorData.entity);
-            Helper.CopyStructFieldValues(compData, ref compRef);
-            compRef.CanExecute = compData.CanExecute;
-            compRef.IsConditionAvailable = compData.IsConditionAvailable;
-            compRef.ConditionType = compData.ConditionType;
-            compRef.ConditionData = compData.ConditionData;
-            compRef.IsBroadcastable = compData.IsBroadcastable;
-            compRef.Broadcast = compData.Broadcast;
-            compRef.IsTargeted = compData.IsTargeted;
-            compRef.TargetId = compData.TargetId;
-            compRef.refObj = authorData.obj;
-            var instance = runtimeSystem.AddRunningInstance<DestroyOnSystem>();
-            instance.Init(runtimeSystem.World, authorData.entity);
+            ref var compRef = ref ComponentAuthorOp.AddEntityToComponent<DestroyOnComponent>(authorData.entity);
+            ((IBaseComponent)compRef).Clone(compData, ref compRef);
+            var instance = RuntimeOp.Resolve<RuntimeSystem>().AddRunningInstance<DestroyOnSystem>();
+            instance.Init<DestroyOnComponent>(authorData.entity);
         }
     }
 }

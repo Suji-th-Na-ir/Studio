@@ -1,71 +1,41 @@
-using System;
 using UnityEngine;
 using Leopotam.EcsLite;
-using System.Collections.Generic;
 
 namespace Terra.Studio
 {
     public class OscillateSystem : BaseSystem, IEcsRunSystem
     {
-        public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
-        private EventExecutorData eventExecutorData;
-
-        public override void Init(EcsWorld currentWorld, int entity)
+        public override void Init<T>(int entity)
         {
-            var oscillatorPool = currentWorld.GetPool<OscillateComponent>();
-            ref var oscillatable = ref oscillatorPool.Get(entity);
-            if (oscillatable.IsExecuted || !oscillatable.IsConditionAvailable)
+            base.Init<T>(entity);
+            ref var oscillatable = ref EntityAuthorOp.GetComponent<OscillateComponent>(entity);
+            if (oscillatable.RefObj.transform.parent != null)
             {
-                oscillatable.CanExecute = true;
-                return;
+                oscillatable.fromPoint = oscillatable.RefObj.transform.TransformPoint(oscillatable.fromPoint);
+                oscillatable.toPoint = oscillatable.RefObj.transform.TransformPoint(oscillatable.toPoint);
             }
-            if (oscillatable.isRegistered)
-            {
-                return;
-            }
-            var conditionType = oscillatable.ConditionType;
-            var conditionData = oscillatable.ConditionData;
-            oscillatable.fromPoint = oscillatable.oscillatableTr.TransformPoint(oscillatable.fromPoint);
-            oscillatable.toPoint = oscillatable.oscillatableTr.TransformPoint(oscillatable.toPoint);
-            oscillatable.isRegistered = true;
-            var compsData = RuntimeOp.Resolve<ComponentsData>();
-            eventExecutorData = new()
-            {
-                goRef = oscillatable.oscillatableTr.gameObject,
-                conditionData = conditionData
-            };
-            IdToConditionalCallback ??= new();
-            IdToConditionalCallback.Add(entity, (obj) =>
-            {
-                var go = obj != null ? obj as GameObject : null;
-                OnConditionalCheck((entity, go, conditionType, conditionData));
-            });
-            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, eventExecutorData);
         }
 
-        public override void OnConditionalCheck(object data)
+        public override void OnConditionalCheck(int entity, object data)
         {
-            var (id, reference, conditionType, conditionData) = ((int, GameObject, string, string))data;
-            var world = RuntimeOp.Resolve<RuntimeSystem>().World;
-            var oscillatorPool = world.GetPool<OscillateComponent>();
-            ref var oscillatable = ref oscillatorPool.Get(id);
-            if (conditionType.Equals("Terra.Studio.MouseAction"))
+            ref var entityRef = ref EntityAuthorOp.GetComponent<OscillateComponent>(entity);
+            if (entityRef.ConditionType.Equals("Terra.Studio.MouseAction"))
             {
-                if (!reference)
+                if (data == null)
                 {
                     return;
                 }
-                else if (reference != oscillatable.oscillatableTr.gameObject)
+                var selection = (GameObject)data;
+                if (selection != entityRef.RefObj)
                 {
                     return;
                 }
             }
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[id], false, eventExecutorData);
-            IdToConditionalCallback.Remove(id);
-            oscillatable.CanExecute = true;
-            oscillatable.IsExecuted = false;
-            oscillatable.oscillatableTr.position = oscillatable.fromPoint;
+            compsData.ProvideEventContext(false, entityRef.EventContext);
+            entityRef.RefObj.transform.position = entityRef.fromPoint;
+            entityRef.CanExecute = true;
+            entityRef.EventContext = default;
         }
 
         public virtual void Run(IEcsSystems systems)
@@ -85,7 +55,7 @@ namespace Terra.Studio
                     totalEntitiesFinishedJob++;
                     continue;
                 }
-                var targetTr = oscillatable.oscillatableTr;
+                var targetTr = oscillatable.RefObj.transform;
                 var delta = targetTr.position - oscillatable.toPoint;
                 if (Mathf.Approximately(delta.sqrMagnitude, float.Epsilon))
                 {
@@ -118,10 +88,12 @@ namespace Terra.Studio
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             foreach (var entity in filter)
             {
-                if (!IdToConditionalCallback.ContainsKey(entity)) continue;
                 var oscillatable = oscillatorPool.Get(entity);
-                compsData.ProvideEventContext(oscillatable.ConditionType, IdToConditionalCallback[entity], false, eventExecutorData);
-                IdToConditionalCallback.Remove(entity);
+                if (oscillatable.EventContext.Equals(default(EventContext)))
+                {
+                    continue;
+                }
+                compsData.ProvideEventContext(false, oscillatable.EventContext);
             }
         }
     }

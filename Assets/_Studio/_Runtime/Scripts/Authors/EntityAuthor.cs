@@ -37,7 +37,7 @@ namespace Terra.Studio
 
         public static EventContext GetEventContext<T>(int entity) where T : struct, IBaseComponent
         {
-            ref var component = ref GetComponent<T>(entity);
+            var component = GetComponent<T>(entity);
             return component.EventContext;
         }
 

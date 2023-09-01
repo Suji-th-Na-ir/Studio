@@ -4,24 +4,6 @@ namespace Terra.Studio
 {
     public class CheckpointSystem : BaseSystem
     {
-        public override void Init(int entity)
-        {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<CheckpointComponent>(entity);
-            var eventContext = entityRef.EventContext;
-            eventContext.onConditionMet = (obj) =>
-            {
-                OnConditionalCheck(entity, obj);
-            };
-            entityRef.EventContext = eventContext;
-            entityRef.IsExecuted = false;
-            var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(true, eventContext);
-            if (entityRef.IsBroadcastable)
-            {
-                RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(entityRef.Broadcast);
-            }
-        }
-
         public override void OnConditionalCheck(int entity, object data)
         {
             var compsData = RuntimeOp.Resolve<ComponentsData>();

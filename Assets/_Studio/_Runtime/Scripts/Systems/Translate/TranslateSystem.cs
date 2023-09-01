@@ -1,43 +1,29 @@
-using System;
 using UnityEngine;
 using Leopotam.EcsLite;
-using System.Collections.Generic;
 
 namespace Terra.Studio
 {
     public class TranslateSystem : BaseSystem
     {
-        public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
-        private EventExecutorData eventExecutorData;
-
-        public override void Init(EcsWorld currentWorld, int entity)
+        public override void OnConditionalCheck(int entity, object data)
         {
-            var pool = currentWorld.GetPool<TranslateComponent>();
-            ref var entityRef = ref pool.Get(entity);
-            entityRef.CanExecute = false;
-            if (entityRef.IsBroadcastable)
+            ref var entityRef = ref EntityAuthorOp.GetComponent<TranslateComponent>(entity);
+            if (entityRef.ConditionType.Equals("Terra.Studio.MouseAction"))
             {
-                RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(entityRef.Broadcast);
-            }
-            InjectCondition(true, entity, entityRef);
-        }
-
-        public override void OnConditionalCheck(object data)
-        {
-            var (entity, conditionType, go, _, selection) = ((int, string, GameObject, string, object))data;
-            if (conditionType.Equals("Terra.Studio.MouseAction"))
-            {
-                if (selection == null || selection as GameObject != go)
+                if (data == null)
+                {
+                    return;
+                }
+                var selection = (GameObject)data;
+                if (selection != entityRef.RefObj)
                 {
                     return;
                 }
             }
-            var world = RuntimeOp.Resolve<RuntimeSystem>().World;
-            var pool = world.GetPool<TranslateComponent>();
-            ref var entityRef = ref pool.Get(entity);
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
+            compsData.ProvideEventContext(false, entityRef.EventContext);
             entityRef.CanExecute = true;
             entityRef.IsExecuted = true;
-            InjectCondition(false, entity, entityRef);
             OnDemandRun(ref entityRef, entity);
         }
 
@@ -49,42 +35,15 @@ namespace Terra.Studio
             }
             if (translatable.canPlayVFX)
             {
-                RuntimeWrappers.PlayVFX(translatable.vfxName, translatable.refObj.transform.position);
+                RuntimeWrappers.PlayVFX(translatable.vfxName, translatable.RefObj.transform.position);
             }
             var translateParams = GetParams(ref translatable, entity);
             RuntimeWrappers.TranslateObject(translateParams);
         }
 
-        private void InjectCondition(bool inject, int entity, TranslateComponent entityRef)
-        {
-            var conditionType = entityRef.ConditionType;
-            var conditionData = entityRef.ConditionData;
-            var goRef = entityRef.refObj;
-            if (inject)
-            {
-                eventExecutorData = new()
-                {
-                    goRef = goRef,
-                    conditionData = conditionData
-                };
-                IdToConditionalCallback ??= new();
-                IdToConditionalCallback.Add(entity, (obj) =>
-                {
-                    OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
-                });
-                RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, eventExecutorData);
-            }
-            else if (IdToConditionalCallback.ContainsKey(entity))
-            {
-                RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, eventExecutorData);
-                IdToConditionalCallback.Remove(entity);
-            }
-        }
-
         private TranslateParams GetParams(ref TranslateComponent translatable, int entity)
         {
-            var copy = translatable;
-            var tr = translatable.refObj.transform;
+            var tr = translatable.RefObj.transform;
             var targetPos = tr.parent == null ? translatable.targetPosition : tr.TransformPoint(translatable.targetPosition);
             var pauseDistance = Vector3.Distance(translatable.startPosition, targetPos);
             var direction = targetPos - translatable.startPosition;
@@ -96,7 +55,7 @@ namespace Terra.Studio
             }
             var translateParams = new TranslateParams()
             {
-                translateFrom = translatable.refObj.transform.position,
+                translateFrom = translatable.RefObj.transform.position,
                 translateTo = targetPos,
                 speed = translatable.speed,
                 translateTimes = translatable.repeatFor,
@@ -104,17 +63,18 @@ namespace Terra.Studio
                 shouldPause = translatable.pauseFor > 0f,
                 pauseDistance = pauseDistance,
                 pauseForTime = translatable.pauseFor,
-                targetObj = translatable.refObj,
+                targetObj = translatable.RefObj,
                 onTranslated = (isDone) =>
                 {
-                    OnTranslateDone(copy, isDone, entity);
+                    OnTranslateDone(isDone, entity);
                 }
             };
             return translateParams;
         }
 
-        private void OnTranslateDone(TranslateComponent translatable, bool isDone, int entity)
+        private void OnTranslateDone(bool isDone, int entity)
         {
+            ref var translatable = ref EntityAuthorOp.GetComponent<TranslateComponent>(entity);
             if (translatable.IsBroadcastable)
             {
                 if (translatable.broadcastAt == BroadcastAt.AtEveryInterval && !isDone)
@@ -128,7 +88,9 @@ namespace Terra.Studio
             }
             if (translatable.listen == Listen.Always && !translatable.ConditionType.Equals("Terra.Studio.GameStart") && isDone)
             {
-                InjectCondition(true, entity, translatable);
+                translatable.IsExecuted = false;
+                var compsData = RuntimeOp.Resolve<ComponentsData>();
+                compsData.ProvideEventContext(true, translatable.EventContext);
             }
         }
 
@@ -139,7 +101,12 @@ namespace Terra.Studio
             foreach (var entity in filter)
             {
                 var translatable = translatePool.Get(entity);
-                InjectCondition(false, entity, translatable);
+                if (translatable.IsExecuted)
+                {
+                    continue;
+                }
+                var compsData = RuntimeOp.Resolve<ComponentsData>();
+                compsData.ProvideEventContext(false, translatable.EventContext);
             }
         }
     }

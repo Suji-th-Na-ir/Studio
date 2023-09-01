@@ -1,46 +1,16 @@
-using System;
-using UnityEngine;
 using Leopotam.EcsLite;
-using System.Collections.Generic;
 
 namespace Terra.Studio
 {
     public class RespawnSystem : BaseSystem
     {
-        public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
-        private EventExecutorData eventExecutorData;
-
-        public override void Init(EcsWorld currentWorld, int entity)
+        public override void OnConditionalCheck(int entity, object data)
         {
-            var pool = currentWorld.GetPool<RespawnComponent>();
-            ref var entityRef = ref pool.Get(entity);
-            var conditionType = entityRef.ConditionType;
-            var conditionData = entityRef.ConditionData;
-            var goRef = entityRef.refObj;
+            ref var entityRef = ref EntityAuthorOp.GetComponent<RespawnComponent>(entity);
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            eventExecutorData = new()
-            {
-                goRef = goRef,
-                conditionData = conditionData
-            };
-            IdToConditionalCallback ??= new();
-            IdToConditionalCallback.Add(entity, (obj) =>
-            {
-                OnConditionalCheck((entity, conditionType, conditionData, goRef));
-            });
-            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, eventExecutorData);
-            if (entityRef.IsBroadcastable)
-            {
-                RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(entityRef.Broadcast);
-            }
-        }
-
-        public override void OnConditionalCheck(object data)
-        {
-            var (entity, _, _, _) = ((int, string, string, GameObject))data;
-            var world = RuntimeOp.Resolve<RuntimeSystem>().World;
-            var pool = world.GetPool<RespawnComponent>();
-            OnDemandRun(in pool.Get(entity));
+            compsData.ProvideEventContext(false, entityRef.EventContext);
+            entityRef.IsExecuted = true;
+            OnDemandRun(in entityRef);
         }
 
         public void OnDemandRun(in RespawnComponent component)
@@ -68,10 +38,12 @@ namespace Terra.Studio
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             foreach (var entity in filter)
             {
-                if (!IdToConditionalCallback.ContainsKey(entity)) continue;
                 var respawn = respawnPool.Get(entity);
-                compsData.ProvideEventContext(respawn.ConditionType, IdToConditionalCallback[entity], false, eventExecutorData);
-                IdToConditionalCallback.Remove(entity);
+                if (respawn.IsExecuted)
+                {
+                    continue;
+                }
+                compsData.ProvideEventContext(false, respawn.EventContext);
             }
         }
     }

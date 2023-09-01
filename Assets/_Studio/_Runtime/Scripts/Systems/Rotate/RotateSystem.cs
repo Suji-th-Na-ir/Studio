@@ -1,42 +1,29 @@
-using System;
 using UnityEngine;
 using Leopotam.EcsLite;
-using System.Collections.Generic;
 
 namespace Terra.Studio
 {
     public class RotateSystem : BaseSystem
     {
-        public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
-        private EventExecutorData eventExecutorData;
-
-        public override void Init(EcsWorld currentWorld, int entity)
+        public override void OnConditionalCheck(int entity, object data)
         {
-            var pool = currentWorld.GetPool<RotateComponent>();
-            ref var entityRef = ref pool.Get(entity);
-            entityRef.CanExecute = false;
-            if (entityRef.IsBroadcastable)
+            ref var entityRef = ref EntityAuthorOp.GetComponent<RotateComponent>(entity);
+            if (entityRef.ConditionType.Equals("Terra.Studio.MouseAction"))
             {
-                RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(entityRef.Broadcast);
-            }
-            InjectCondition(true, entity, entityRef);
-        }
-
-        public override void OnConditionalCheck(object data)
-        {
-            var (entity, conditionType, go, _, selection) = ((int, string, GameObject, string, object))data;
-            if (conditionType.Equals("Terra.Studio.MouseAction"))
-            {
-                if (selection == null || selection as GameObject != go)
+                if (data == null)
+                {
+                    return;
+                }
+                var selection = (GameObject)data;
+                if (selection != entityRef.RefObj)
                 {
                     return;
                 }
             }
-            var world = RuntimeOp.Resolve<RuntimeSystem>().World;
-            var pool = world.GetPool<RotateComponent>();
-            ref var entityRef = ref pool.Get(entity);
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
+            compsData.ProvideEventContext(false, entityRef.EventContext);
             entityRef.CanExecute = true;
-            InjectCondition(false, entity, entityRef);
+            entityRef.IsExecuted = true;
             OnDemandRun(in entityRef, entity);
         }
 
@@ -48,36 +35,10 @@ namespace Terra.Studio
             }
             if (rotatable.canPlayVFX)
             {
-                RuntimeWrappers.PlayVFX(rotatable.vfxName, rotatable.refObj.transform.position);
+                RuntimeWrappers.PlayVFX(rotatable.vfxName, rotatable.RefObj.transform.position);
             }
             var rotateParams = GetParams(rotatable, entity);
             RuntimeWrappers.RotateObject(rotateParams);
-        }
-
-        private void InjectCondition(bool inject, int entity, RotateComponent entityRef)
-        {
-            var conditionType = entityRef.ConditionType;
-            var conditionData = entityRef.ConditionData;
-            var goRef = entityRef.refObj;
-            if (inject)
-            {
-                eventExecutorData = new()
-                {
-                    goRef = goRef,
-                    data = conditionData
-                };
-                IdToConditionalCallback ??= new();
-                IdToConditionalCallback.Add(entity, (obj) =>
-                {
-                    OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
-                });
-                RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, eventExecutorData);
-            }
-            else if (IdToConditionalCallback.ContainsKey(entity))
-            {
-                RuntimeOp.Resolve<ComponentsData>().ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, eventExecutorData);
-                IdToConditionalCallback.Remove(entity);
-            }
         }
 
         private RotateByParams GetParams(RotateComponent rotatable, int entity)
@@ -91,18 +52,19 @@ namespace Terra.Studio
                 rotateBy = rotatable.rotateBy,
                 shouldPause = rotatable.pauseFor > 0f,
                 pauseForTime = rotatable.pauseFor,
-                targetObj = rotatable.refObj,
+                targetObj = rotatable.RefObj,
                 shouldPingPong = rotatable.rotationType is RotationType.Oscillate or RotationType.OscillateForever,
                 onRotated = (isDone) =>
                 {
-                    OnRotationDone(rotatable, isDone, entity);
+                    OnRotationDone(isDone, entity);
                 }
             };
             return rotateParams;
         }
 
-        private void OnRotationDone(RotateComponent rotatable, bool isDone, int entity)
+        private void OnRotationDone(bool isDone, int entity)
         {
+            ref var rotatable = ref EntityAuthorOp.GetComponent<RotateComponent>(entity);
             if (rotatable.IsBroadcastable)
             {
                 if (rotatable.broadcastAt == BroadcastAt.AtEveryInterval && !isDone)
@@ -116,7 +78,9 @@ namespace Terra.Studio
             }
             if (rotatable.listen == Listen.Always && !rotatable.ConditionType.Equals("Terra.Studio.GameStart") && isDone)
             {
-                InjectCondition(true, entity, rotatable);
+                rotatable.IsExecuted = false;
+                var compsData = RuntimeOp.Resolve<ComponentsData>();
+                compsData.ProvideEventContext(true, rotatable.EventContext);
             }
         }
 
@@ -127,7 +91,12 @@ namespace Terra.Studio
             foreach (var entity in filter)
             {
                 var rotatable = rotatePool.Get(entity);
-                InjectCondition(false, entity, rotatable);
+                if (rotatable.IsExecuted)
+                {
+                    continue;
+                }
+                var compsData = RuntimeOp.Resolve<ComponentsData>();
+                compsData.ProvideEventContext(false, rotatable.EventContext);
             }
         }
     }

@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
@@ -10,19 +9,10 @@ namespace Terra.Studio
         {
             var authorData = (ComponentAuthorData)data;
             var oscillateCompData = JsonConvert.DeserializeObject<OscillateComponent>(authorData.compData);
-            var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
-            var compPool = ecsWorld.GetPool<OscillateComponent>();
-            compPool.Add(authorData.entity);
-            ref var compRef = ref compPool.Get(authorData.entity);
-            Helper.CopyStructFieldValues(oscillateCompData, ref compRef);
-            compRef.ConditionData = oscillateCompData.ConditionData;
-            compRef.ConditionType = oscillateCompData.ConditionType;
-            compRef.IsConditionAvailable = oscillateCompData.IsConditionAvailable;
-            compRef.IsBroadcastable = oscillateCompData.IsBroadcastable;
-            compRef.Broadcast = oscillateCompData.Broadcast;
-            compRef.oscillatableTr = authorData.obj.transform;
+            ref var compRef = ref ComponentAuthorOp.AddEntityToComponent<OscillateComponent>(authorData.entity);
+            ((IBaseComponent)compRef).Clone(oscillateCompData, ref compRef);
             var instance = RuntimeOp.Resolve<RuntimeSystem>().AddRunningInstance<OscillateSystem>();
-            instance.Init(ecsWorld, authorData.entity);
+            instance.Init<OscillateComponent>(authorData.entity);
         }
     }
 }

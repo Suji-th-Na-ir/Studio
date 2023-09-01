@@ -14,11 +14,10 @@ namespace Terra.Studio
         public string Broadcast { get; set; }
         public bool IsTargeted { get; set; }
         public int TargetId { get; set; }
-
         [JsonIgnore] public bool CanExecute { get; set; }
         [JsonIgnore] public bool IsExecuted { get; set; }
-        [JsonIgnore, HideInInspector] public GameObject refObj;
-
+        [JsonIgnore] public EventContext EventContext { get; set; }
+        [JsonIgnore] public GameObject RefObj { get; set; }
         public Axis[] axis;
         public Direction direction;
         public RotationType rotationType;

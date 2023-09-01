@@ -7,7 +7,7 @@ namespace Terra.Studio
     [EventExecutor("Terra.Studio.Listener")]
     public struct ListenerActionEvent : IEventExecutor
     {
-        public readonly void Execute(Action<object> onConditionalCheck, bool subscribe, EventExecutorData conditionalCheck)
+        public readonly void Execute(Action<object> onConditionalCheck, bool subscribe, EventConditionalCheckData conditionalCheck)
         {
             var broadcaster = RuntimeOp.Resolve<Broadcaster>();
             if (subscribe)

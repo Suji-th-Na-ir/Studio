@@ -7,9 +7,9 @@ namespace Terra.Studio
     [EventExecutor("Terra.Studio.TriggerAction")]
     public struct TriggerActionEvent : IEventExecutor
     {
-        public readonly void Execute(Action<object> onConditionalCheck, bool subscribe, EventExecutorData conditionalCheck)
+        public readonly void Execute(Action<object> onConditionalCheck, bool subscribe, EventConditionalCheckData conditionalCheck)
         {
-            if (conditionalCheck.Equals(default(EventExecutorData)))
+            if (conditionalCheck.Equals(default(EventConditionalCheckData)))
             {
                 return;
             }

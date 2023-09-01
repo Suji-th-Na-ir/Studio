@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
@@ -8,15 +7,10 @@ namespace Terra.Studio
     {
         public override void Generate(object data)
         {
-            var tuple = (ComponentAuthorData)data;
-            var compData = JsonConvert.DeserializeObject<InGameScoreComponent>(tuple.compData);
-            var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
-            var compPool = ecsWorld.GetPool<InGameScoreComponent>();
-            compPool.Add(tuple.entity);
-            ref var compRef = ref compPool.Get(tuple.entity);
-            Helper.CopyStructFieldValues(compData, ref compRef);
-            compRef.IsBroadcastable = compData.IsBroadcastable;
-            compRef.Broadcast = compData.Broadcast;
+            var authorData = (ComponentAuthorData)data;
+            var compData = JsonConvert.DeserializeObject<InGameScoreComponent>(authorData.compData);
+            ref var compRef = ref ComponentAuthorOp.AddEntityToComponent<InGameScoreComponent>(authorData.entity);
+            ((IBaseComponent)compRef).Clone(compData, ref compRef);
             RuntimeOp.Resolve<CoreGameManager>().EnableModule<ScoreHandler>();
             RuntimeOp.Resolve<ScoreHandler>().targetScore = compRef.targetScore;
             RuntimeOp.Resolve<ScoreHandler>().OnTargetScoreReached += () =>

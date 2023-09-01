@@ -1,66 +1,39 @@
-using System;
 using UnityEngine;
 using Leopotam.EcsLite;
-using System.Collections.Generic;
 
 namespace Terra.Studio
 {
     public class CollectableSystem : BaseSystem
     {
-        public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
-        private EventExecutorData eventExecutorData;
-
-        public override void Init(EcsWorld currentWorld, int entity)
+        public override void Init<T>(int entity)
         {
-            var filter = currentWorld.Filter<CollectableComponent>().End();
-            var collectablePool = currentWorld.GetPool<CollectableComponent>();
-            ref var collectable = ref collectablePool.Get(entity);
-            if (collectable.isRegistered)
-            {
-                return;
-            }
-            collectable.isRegistered = true;
-            var conditionType = collectable.ConditionType;
-            var goRef = collectable.refObject;
-            var conditionData = collectable.ConditionData;
-            var compsData = RuntimeOp.Resolve<ComponentsData>();
-            if (collectable.IsBroadcastable)
-            {
-                RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(collectable.Broadcast);
-            }
+            base.Init<T>(entity);
+            ref var collectable = ref EntityAuthorOp.GetComponent<CollectableComponent>(entity);
             if (collectable.canUpdateScore)
             {
                 RuntimeOp.Resolve<CoreGameManager>().EnableModule<ScoreHandler>();
             }
-            eventExecutorData = new()
-            {
-                goRef = collectable.refObject,
-                conditionData = conditionData
-            };
-            IdToConditionalCallback ??= new();
-            IdToConditionalCallback.Add(entity, (obj) =>
-            {
-                OnConditionalCheck((entity, conditionType, goRef, conditionData, obj));
-            });
-            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], true, eventExecutorData);
         }
 
-        public override void OnConditionalCheck(object data)
+        public override void OnConditionalCheck(int entity, object data)
         {
-            var (entity, conditionType, go, conditionData, selection) = ((int, string, GameObject, string, object))data;
-            if (conditionType.Equals("Terra.Studio.MouseAction"))
+            ref var entityRef = ref EntityAuthorOp.GetComponent<CollectableComponent>(entity);
+            if (entityRef.ConditionType.Equals("Terra.Studio.MouseAction"))
             {
-                if (selection == null || selection as GameObject != go)
+                if (data == null)
+                {
+                    return;
+                }
+                var selection = (GameObject)data;
+                if (selection != entityRef.RefObj)
                 {
                     return;
                 }
             }
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(conditionType, IdToConditionalCallback[entity], false, eventExecutorData);
-            IdToConditionalCallback.Remove(entity);
-            var world = RuntimeOp.Resolve<RuntimeSystem>().World;
-            var collectablePool = world.GetPool<CollectableComponent>();
-            OnDemandRun(entity, in collectablePool.Get(entity));
+            compsData.ProvideEventContext(false, entityRef.EventContext);
+            entityRef.IsExecuted = true;
+            OnDemandRun(entity, entityRef);
         }
 
         public void OnDemandRun(int entityID, in CollectableComponent component)
@@ -71,7 +44,7 @@ namespace Terra.Studio
             }
             if (component.canPlayVFX)
             {
-                RuntimeWrappers.PlayVFX(component.vfxName, component.refObject.transform.position);
+                RuntimeWrappers.PlayVFX(component.vfxName, component.RefObj.transform.position);
             }
             if (component.IsBroadcastable)
             {
@@ -81,7 +54,7 @@ namespace Terra.Studio
             {
                 RuntimeWrappers.AddScore(component.scoreValue);
             }
-            UnityEngine.Object.Destroy(component.refObject);
+            Object.Destroy(component.RefObj);
             EntityAuthorOp.Degenerate(entityID);
         }
 
@@ -92,10 +65,12 @@ namespace Terra.Studio
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             foreach (var entity in filter)
             {
-                if (!IdToConditionalCallback.ContainsKey(entity)) continue;
                 var collectable = collectablePool.Get(entity);
-                compsData.ProvideEventContext(collectable.ConditionType, IdToConditionalCallback[entity], false, eventExecutorData);
-                IdToConditionalCallback.Remove(entity);
+                if (collectable.IsExecuted)
+                {
+                    continue;
+                }
+                compsData.ProvideEventContext(false, collectable.EventContext);
             }
         }
     }

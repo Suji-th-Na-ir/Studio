@@ -16,8 +16,8 @@ namespace Terra.Studio
         public int TargetId { get; set; }
         [JsonIgnore] public bool CanExecute { get; set; }
         [JsonIgnore] public bool IsExecuted { get; set; }
-        [JsonIgnore] public GameObject refObject;
-        [JsonIgnore] public bool isRegistered;
+        [JsonIgnore] public EventContext EventContext { get; set; }
+        [JsonIgnore] public GameObject RefObj { get; set; }
         public bool canPlaySFX;
         public string sfxName;
         public int sfxIndex;

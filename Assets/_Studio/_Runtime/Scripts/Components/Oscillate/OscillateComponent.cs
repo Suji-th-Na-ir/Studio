@@ -22,7 +22,7 @@ namespace Terra.Studio
         public int TargetId { get; set; }
         [JsonIgnore] public bool CanExecute { get; set; }
         [JsonIgnore] public bool IsExecuted { get; set; }
-        [JsonIgnore] public bool isRegistered;
-        [JsonIgnore] public Transform oscillatableTr;
+        [JsonIgnore] public EventContext EventContext { get; set; }
+        [JsonIgnore] public GameObject RefObj { get; set; }
     }
 }

@@ -19,6 +19,5 @@ namespace Terra.Studio
         public string conditionType;
         public string conditionData;
         public GameObject goRef;
-        public GameObject toCheckAgainst;
     }
 }
