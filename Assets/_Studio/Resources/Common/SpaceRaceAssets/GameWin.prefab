@@ -198,7 +198,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: TOUCH ME
+  m_text: 'TOUCH ME
+
+    TO WIN'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7e4186700af6d45d6b70942a9fd4e051, type: 2}
   m_sharedMaterial: {fileID: 3542970225165642965, guid: 7e4186700af6d45d6b70942a9fd4e051,
