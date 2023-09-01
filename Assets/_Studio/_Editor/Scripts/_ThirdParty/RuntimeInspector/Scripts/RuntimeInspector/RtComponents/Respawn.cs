@@ -74,14 +74,5 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.clipName = cc.vfxName;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, null);
         }
-
-      
-        private void OnDestroy()
-        {
-            if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))
-            {
-                Destroy(collider);
-            }
-        }
     }
 }

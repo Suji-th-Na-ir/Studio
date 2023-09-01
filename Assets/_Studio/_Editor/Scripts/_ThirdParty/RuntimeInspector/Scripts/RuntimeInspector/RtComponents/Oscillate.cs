@@ -104,13 +104,5 @@ namespace RuntimeInspectorNamespace
             startOn.data.listenName = cc.BroadcastListen;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, null, startOn.data.listenName);
         }
-
-        private void OnDestroy()
-        {
-            if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))
-            {
-                Destroy(collider);
-            }
-        }
     }
 }

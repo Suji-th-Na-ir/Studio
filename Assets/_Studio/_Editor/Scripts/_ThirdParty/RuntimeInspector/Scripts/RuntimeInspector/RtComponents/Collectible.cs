@@ -136,10 +136,6 @@ namespace RuntimeInspectorNamespace
         
         private void OnDestroy()
         {
-            if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))
-            {
-                Destroy(collider);
-            }
             EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(false, guid);
         }
     }

@@ -173,14 +173,6 @@ namespace RuntimeInspectorNamespace
             }
             if (component.rotationType == RotationType.RotateForever) component.rotateBy = 360f;
         }
-
-        private void OnDestroy()
-        {
-            if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))
-            {
-                Destroy(collider);
-            }
-        }
     }
 }
 

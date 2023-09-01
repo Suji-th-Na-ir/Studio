@@ -69,13 +69,5 @@ namespace RuntimeInspectorNamespace
             Broadcast = component.Broadcast;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, null);
         }
-
-        private void OnDestroy()
-        {
-            if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))
-            {
-                Destroy(collider);
-            }
-        }
     }
 }
