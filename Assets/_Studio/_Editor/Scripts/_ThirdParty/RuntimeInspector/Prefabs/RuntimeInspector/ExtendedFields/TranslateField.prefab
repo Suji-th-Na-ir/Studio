@@ -90,7 +90,7 @@ MonoBehaviour:
   ignoreLayout: 1
   variableNameText: {fileID: 114392269213132144}
   variableNameMask: {fileID: 0}
-  visibleArea: {fileID: 0}
+  visibleArea: {fileID: 666216228023271261}
   translateTypesDD: {fileID: 5402255416815306912}
   allTranslateTypes:
   - {fileID: 6475905488613884737}
@@ -138,8 +138,8 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-  borderWidth: 0
-  falloffDistance: 0
+  borderWidth: 1
+  falloffDistance: 1
 --- !u!114 &666216228023271260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -667,6 +667,7 @@ MonoBehaviour:
   speedInput: {fileID: 713691646179125319}
   repeatInput: {fileID: 0}
   pauseForInput: {fileID: 126610917868226966}
+  listenTo: {fileID: 0}
   broadcastAt: {fileID: 2253920143956113790}
   broadcastInput: {fileID: 248062396816111816}
   canListenMultipleTimesToggle: {fileID: 1744993391782510867}
@@ -6318,6 +6319,7 @@ MonoBehaviour:
   speedInput: {fileID: 3009828254015439025}
   repeatInput: {fileID: 8319584526628163594}
   pauseForInput: {fileID: 1543790952583859484}
+  listenTo: {fileID: 0}
   broadcastAt: {fileID: 4050101534536419036}
   broadcastInput: {fileID: 1719285627060157506}
   canListenMultipleTimesToggle: {fileID: 4935026010606118036}
@@ -23470,6 +23472,7 @@ MonoBehaviour:
   speedInput: {fileID: 220286018089078346}
   repeatInput: {fileID: 0}
   pauseForInput: {fileID: 1129134186441254684}
+  listenTo: {fileID: 0}
   broadcastAt: {fileID: 6572329566851485825}
   broadcastInput: {fileID: 3278881115907089847}
   canListenMultipleTimesToggle: {fileID: 0}
@@ -33089,6 +33092,7 @@ MonoBehaviour:
   speedInput: {fileID: 3210528634952691734}
   repeatInput: {fileID: 5441457984584925930}
   pauseForInput: {fileID: 263178256181464046}
+  listenTo: {fileID: 0}
   broadcastAt: {fileID: 8438232368057223036}
   broadcastInput: {fileID: 7408782135346666605}
   canListenMultipleTimesToggle: {fileID: 908069586196759961}
@@ -34482,6 +34486,7 @@ MonoBehaviour:
   speedInput: {fileID: 747394281483615757}
   repeatInput: {fileID: 0}
   pauseForInput: {fileID: 271024227994300075}
+  listenTo: {fileID: 0}
   broadcastAt: {fileID: 858747346645171700}
   broadcastInput: {fileID: 1749448505394522065}
   canListenMultipleTimesToggle: {fileID: 0}
@@ -38128,6 +38133,7 @@ MonoBehaviour:
   speedInput: {fileID: 8063262668575067862}
   repeatInput: {fileID: 0}
   pauseForInput: {fileID: 0}
+  listenTo: {fileID: 0}
   broadcastAt: {fileID: 5923789495016023286}
   broadcastInput: {fileID: 0}
   canListenMultipleTimesToggle: {fileID: 0}

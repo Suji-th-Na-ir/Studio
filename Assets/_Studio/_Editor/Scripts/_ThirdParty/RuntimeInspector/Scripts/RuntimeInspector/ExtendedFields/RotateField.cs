@@ -90,7 +90,7 @@ namespace RuntimeInspectorNamespace
             base.OnSkinChanged();
             Vector2 rightSideAnchorMin = new Vector2(Skin.LabelWidthPercentage, 0f);
             if (variableNameMask != null) variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
-            variableNameMask.color = Skin.BackgroundColor;
+            variableNameMask.color = Skin.InputFieldTextColor;
             rotateTypesDD.SetSkinDropDownField(Skin);
             foreach (var types in allRotateTypes)
             {

@@ -11,7 +11,7 @@ namespace RuntimeInspectorNamespace
     public class RotateTypes : MonoBehaviour
     {
         public RotationType myType;
-       // public Dropdown axisDropDown;
+        // public Dropdown axisDropDown;
         public Dropdown dirDropDown;
 
         public Toggle xAxis;
@@ -37,7 +37,7 @@ namespace RuntimeInspectorNamespace
             LoadDefaultValues();
             if (xAxis != null) xAxis.onValueChanged.AddListener((value) =>
             {
-                data.Xaxis= value;
+                data.Xaxis = value;
                 UpdateData(data);
             });
             if (yAxis != null) yAxis.onValueChanged.AddListener((value) =>
@@ -155,7 +155,7 @@ namespace RuntimeInspectorNamespace
         public void LoadDefaultValues()
         {
             // axis 
-          //  if (axisDropDown != null) { axisDropDown.AddOptions(Enum.GetNames(typeof(Axis)).ToList()); }
+            //  if (axisDropDown != null) { axisDropDown.AddOptions(Enum.GetNames(typeof(Axis)).ToList()); }
 
             // direction
             if (dirDropDown != null) { dirDropDown.AddOptions(Enum.GetNames(typeof(Direction)).ToList()); }
@@ -194,49 +194,18 @@ namespace RuntimeInspectorNamespace
 
         public void ApplySkin(UISkin Skin)
         {
-            SetupToggeleSkin(xAxis, Skin);
-            SetupToggeleSkin(yAxis, Skin);
-            SetupToggeleSkin(zAxis, Skin);
-            SetupToggeleSkin(canListenMultipleTimesToggle, Skin);
-            SetupInputFieldSkin(degreesInput, Skin);
-            SetupInputFieldSkin(speedInput, Skin);
-            SetupInputFieldSkin(pauseInput, Skin);
-            SetupInputFieldSkin(repeatInput, Skin);
-            SetupInputFieldSkin(broadcastInput, Skin);
-            SetupInputFieldSkin(listenInput, Skin);
+            xAxis?.SetupToggeleSkin(Skin);
+            yAxis?.SetupToggeleSkin(Skin);
+            zAxis?.SetupToggeleSkin(Skin);
+            canListenMultipleTimesToggle?.SetupToggeleSkin(Skin);
+            degreesInput?.SetupInputFieldSkin(Skin);
+            speedInput?.SetupInputFieldSkin(Skin);
+            pauseInput?.SetupInputFieldSkin(Skin);
+            repeatInput?.SetupInputFieldSkin(Skin);
+            broadcastInput?.SetupInputFieldSkin(Skin);
+            listenInput?.SetupInputFieldSkin(Skin);
             dirDropDown?.SetSkinDropDownField(Skin);
             broadcastAt?.SetSkinDropDownField(Skin);
         }
-
-        private void SetupToggeleSkin(Toggle toggle,UISkin Skin)
-        {
-            if (!toggle)
-                return;
-            toggle.transform.GetChild(0).GetComponent<Image>().color = Skin.InputFieldNormalBackgroundColor;
-           // toggle.graphic.color = Skin.ToggleCheckmarkColor;
-            Vector2 rightSideAnchorMin = new Vector2(Skin.LabelWidthPercentage, 0f);
-            Text label = toggle.GetComponentInChildren<Text>();
-            if (label != null) label.rectTransform.anchorMin = rightSideAnchorMin;
-        }
-
-        private void SetupInputFieldSkin(InputField inputField, UISkin Skin)
-        {
-            if (!inputField)
-                return;
-            inputField.textComponent.color = Skin.InputFieldTextColor;
-            //  inputFieldBackground.color = Skin.InputFieldNormalBackgroundColor;
-
-            Text placeholder = inputField.placeholder as Text;
-            if (placeholder != null)
-            {
-                float placeholderAlpha = placeholder.color.a;
-                placeholder.color=Skin.InputFieldTextColor;
-
-                Color placeholderColor = placeholder.color;
-                placeholderColor.a = placeholderAlpha;
-                placeholder.color = placeholderColor;
-            }
-        }
-
     }
 }

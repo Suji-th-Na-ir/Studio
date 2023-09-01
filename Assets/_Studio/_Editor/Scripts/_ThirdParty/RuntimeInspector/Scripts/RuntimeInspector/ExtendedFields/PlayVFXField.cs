@@ -19,29 +19,6 @@ namespace RuntimeInspectorNamespace
         [SerializeField]
         private Dropdown optionsDropdown;
 
-        [SerializeField]
-        private Image background;
-
-        [SerializeField]
-        private Image dropdownArrow;
-
-        [SerializeField]
-        private RectTransform templateRoot;
-
-        [SerializeField]
-        private RectTransform templateContentTransform;
-
-        [SerializeField]
-        private RectTransform templateItemTransform;
-
-        [SerializeField]
-        private Image templateBackground;
-
-        [SerializeField]
-        private Image templateCheckmark;
-
-        [SerializeField]
-        private Text templateText;
 #pragma warning restore 0649
 
         public override void Initialize()
@@ -124,39 +101,7 @@ namespace RuntimeInspectorNamespace
             variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
             ((RectTransform)toggleInput.transform).anchorMin = rightSideAnchorMin;
 
-            Vector2 templateContentSizeDelta = templateContentTransform.sizeDelta;
-            templateContentSizeDelta.y = Skin.LineHeight + 6f; // Padding at top and bottom edges
-            templateContentTransform.sizeDelta = templateContentSizeDelta;
-
-            Vector2 templateItemSizeDelta = templateItemTransform.sizeDelta;
-            templateItemSizeDelta.y = Skin.LineHeight;
-            templateItemTransform.sizeDelta = templateItemSizeDelta;
-
-            // Resize the checkmark icon
-            float templateCheckmarkSize = Skin.LineHeight * 0.66f;
-            Vector2 templateTextSizeDelta = templateText.rectTransform.sizeDelta;
-            templateTextSizeDelta.x -= templateCheckmarkSize - templateCheckmark.rectTransform.sizeDelta.x;
-            templateText.rectTransform.sizeDelta = templateTextSizeDelta;
-            templateCheckmark.rectTransform.sizeDelta = new Vector2(templateCheckmarkSize, templateCheckmarkSize);
-
-            // Resize the dropdown arrow
-            Vector2 dropdownTextSizeDelta = optionsDropdown.captionText.rectTransform.sizeDelta;
-            dropdownTextSizeDelta.x -= templateCheckmarkSize - dropdownArrow.rectTransform.sizeDelta.x;
-            optionsDropdown.captionText.rectTransform.sizeDelta = dropdownTextSizeDelta;
-            dropdownArrow.rectTransform.sizeDelta = new Vector2(templateCheckmarkSize, templateCheckmarkSize);
-
-            background.color = Skin.InputFieldNormalBackgroundColor;
-            dropdownArrow.color = Skin.TextColor.Tint(0.1f);
-
-            optionsDropdown.captionText.SetSkinInputFieldText(Skin);
-            templateText.SetSkinInputFieldText(Skin);
-
-            templateBackground.color = Skin.InputFieldNormalBackgroundColor.Tint(0.075f);
-            templateCheckmark.color = Skin.ToggleCheckmarkColor;
-
-            rightSideAnchorMin = new Vector2(Skin.LabelWidthPercentage, 0f);
-            variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
-            ((RectTransform)optionsDropdown.transform).anchorMin = rightSideAnchorMin;
+            optionsDropdown.SetSkinDropDownField(Skin);
         }
 
         private void UpdateData(Atom.PlayVfx _vfx)
