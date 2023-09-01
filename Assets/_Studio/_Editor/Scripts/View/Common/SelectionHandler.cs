@@ -154,7 +154,7 @@ public class SelectionHandler : View
                         if (mInfo1 != null)
                         {
                             var oldValue1 = mInfo1?.GetValue(components[i]);
-                            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListnerString(oldValue1.ToString(), "",
+                            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(oldValue1.ToString(), "",
                              new ComponentDisplayDock() { componentGameObject = iObj, componentType = componentType.Name });
                         }
 

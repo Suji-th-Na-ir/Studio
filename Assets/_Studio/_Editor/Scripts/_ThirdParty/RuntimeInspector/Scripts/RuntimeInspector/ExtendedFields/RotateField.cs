@@ -22,12 +22,12 @@ namespace RuntimeInspectorNamespace
             base.Initialize();
             Setup();
         }
-
+        
         private void Setup()
         {
             foreach (var type in allRotateTypes)
             {
-                type.rotateField = this;
+                type.field = this;
                 type.Setup();
             }
 
@@ -73,6 +73,25 @@ namespace RuntimeInspectorNamespace
             var finalPath = rotationType.GetPresetName("Rotate");
             var preset = ((RotatePreset)EditorOp.Load(ResourceTag.ComponentPresets, finalPath)).Value;
             LoadData(preset);
+            UpdateTypeForMultiselect(rotationType,preset);
+        }
+
+        private void UpdateTypeForMultiselect(RotationType _data, RotateComponentData? compData = null)
+        {
+            List<GameObject> selectedObjecs = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+
+            if (selectedObjecs.Count > 1)
+            {
+                foreach (var obj in selectedObjecs)
+                {
+                    if (obj.GetComponent<Rotate>() != null)
+                    {
+                        Rotate rotate = obj.GetComponent<Rotate>();
+                        rotate.Type.data.rotateType = (int)_data;
+                        rotate.Type.data = compData.Value;
+                    }
+                }
+            }
         }
 
         private bool IsDataDefault()
@@ -101,19 +120,16 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        public void UpdateData(RotateComponentData _rData)
+        public Atom.Rotate GetAtom()
         {
-            Atom.Rotate rt = (Atom.Rotate)Value;
-
-            // rotate type should come from rotatefield
-            _rData.rotateType = rt.data.rotateType;
-            rt.data = _rData;
+            return (Atom.Rotate)Value;
         }
 
         protected override void OnBound(MemberInfo variable)
         {
             base.OnBound(variable);
             Atom.Rotate rt = (Atom.Rotate)Value;
+            // Debug.Log($"translate atom data x value {rt.data.Xaxis}");
             rotateTypesDD.onValueChanged.AddListener(OnRotateTypesValueChanged);
             int rotationTypeIndex = (int)Enum.Parse(typeof(RotationType), rt.data.rotateType.ToString());
             rotateTypesDD.SetValueWithoutNotify(rotationTypeIndex);

@@ -31,7 +31,7 @@ namespace RuntimeInspectorNamespace
         {
             foreach (var type in allTranslateTypes)
             {
-                type.translateField = this;
+                type.field = this;
                 type.Setup();
             }
             List<string> data = Enum.GetNames(typeof(TranslateType)).ToList();
@@ -77,7 +77,30 @@ namespace RuntimeInspectorNamespace
             var preset = ((TranslatePreset)EditorOp.Load(ResourceTag.ComponentPresets, finalPath)).Value;
             LoadData(preset);
             Atom.Translate rt = (Atom.Translate)Value;
-            rt.data.moveTo = rt.referenceGO.transform.localPosition;
+            if (rt.data.moveTo == default)
+            {
+                rt.data.moveTo = rt.referenceGO.transform.localPosition;
+            }
+            UpdateTypeForMultiselect(translateType, preset);
+        }
+
+        private void UpdateTypeForMultiselect(TranslateType _data, TranslateComponentData? componentData = null)
+        {
+            List<GameObject> selectedObjecs = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+
+            if (selectedObjecs.Count > 1)
+            {
+                foreach (var obj in selectedObjecs)
+                {
+                    if (obj.GetComponent<Translate>() != null)
+                    {
+                        Translate translate = obj.GetComponent<Translate>();
+                        translate.Type.data.translateType = (int)_data;
+                        translate.Type.data = componentData.Value;
+                        translate.Type.data.moveTo = translate.Type.referenceGO.transform.localPosition;
+                    }
+                }
+            }
         }
 
         private bool IsDataDefault()
@@ -105,24 +128,26 @@ namespace RuntimeInspectorNamespace
                 types.ApplySkin(Skin);
             }
         }
-
-        public void UpdateData(TranslateComponentData _rData)
+        
+        public Atom.Translate GetAtom()
         {
-            Atom.Translate rt = (Atom.Translate)Value;
-            _rData.translateType = rt.data.translateType;
-            rt.data = _rData;
+            return (Atom.Translate)Value;
         }
-
+        
         protected override void OnBound(MemberInfo variable)
         {
+            // Debug.Log("translate bound called "+this.gameObject.name);
             base.OnBound(variable);
             Atom.Translate rt = (Atom.Translate)Value;
+            // Debug.Log($"translate atom data x value {rt.data.moveTo}");
             translateTypesDD.onValueChanged.AddListener(OnTranslateTypesValueChanged);
             int translationTypeIndex = (((int)Enum.Parse(typeof(TranslateType), rt.data.translateType.ToString())));
             translateTypesDD.SetValueWithoutNotify(translationTypeIndex);
             ShowTranslateOptionsMenu(translationTypeIndex);
             selectedTranslateType.SetData(rt.data);
         }
+
+
         public override void Refresh()
         {
             base.Refresh();
@@ -142,12 +167,6 @@ namespace RuntimeInspectorNamespace
             {
                 selectedTranslateType.SetData(rt.data);
             }
-        }
-
-        public TranslateComponentData GetAtomTranslateData()
-        {
-            Atom.Translate rt = (Atom.Translate)Value;
-            return rt.data;
         }
     }
 }

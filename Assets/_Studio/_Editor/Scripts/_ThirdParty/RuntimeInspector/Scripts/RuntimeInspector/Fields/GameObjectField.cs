@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using PlayShifu.Terra;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Terra.Studio;
@@ -204,6 +205,18 @@ namespace RuntimeInspectorNamespace
 					{
 						foreach( Type type in assembly.GetExportedTypes() )
 						{
+							bool canSkip = false;
+							foreach (var compName in Helper.componentsToFilterOut)
+							{
+								if (type.Name.Contains(compName))
+								{
+									canSkip = true;
+									break;
+								}
+							}
+							
+							if(canSkip) continue;
+							
 							// show classes that only inherits from Terra.Studio.RTEditor.IComponent
 							if(!type.GetTypeInfo().GetInterfaces().Contains(typeof(IComponent)))
 								continue;

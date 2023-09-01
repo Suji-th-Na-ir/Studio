@@ -80,18 +80,13 @@ namespace Terra.Studio
             var copy = translatable;
             var tr = translatable.refObj.transform;
             var targetPos = tr.parent == null ? translatable.targetPosition : tr.TransformPoint(translatable.targetPosition);
-            var pauseDistance = Vector3.Distance(tr.position, targetPos);
-            if (translatable.pauseFor != 0f && translatable.pauseDistance == 0)
+            var pauseDistance = Vector3.Distance(translatable.startPosition, targetPos);
+            var direction = targetPos - translatable.startPosition;
+            translatable.pauseDistance = pauseDistance;
+            translatable.direction = direction;
+            if (translatable.startPosition != tr.position)
             {
-                var direction = targetPos - translatable.startPosition;
-                translatable.direction = direction;
-                var distance = Vector3.Distance(translatable.startPosition, targetPos);
-                translatable.pauseDistance = pauseDistance = distance;
-                var newPos = tr.position;
-                if (translatable.startPosition != newPos)
-                {
-                    targetPos = newPos + direction * distance;
-                }
+                targetPos = tr.position + direction * pauseDistance;
             }
             var translateParams = new TranslateParams()
             {
