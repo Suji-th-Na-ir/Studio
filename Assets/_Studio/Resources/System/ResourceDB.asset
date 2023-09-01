@@ -29,22 +29,6 @@ MonoBehaviour:
     guid: fe0c2d29fcdab49ee8fc44aa49d05d36
     isPrimitive: 0
     primitiveType: 0
-  - name: GameScore
-    absolutePath: Assets/_Studio/Resources/Common/Prefabs/GameScore.prefab
-    resourcePath: Common/Prefabs/GameScore
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: b9df99a6790c24f0fbab44a711153491
-    isPrimitive: 0
-    primitiveType: 0
-  - name: InGameTimer
-    absolutePath: Assets/_Studio/Resources/Common/Prefabs/InGameTimer.prefab
-    resourcePath: Common/Prefabs/InGameTimer
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: b99761ac560514439aa04b0465ceeb26
-    isPrimitive: 0
-    primitiveType: 0
   - name: Plane
     absolutePath: Assets/_Studio/Resources/Common/Prefabs/Plane.prefab
     resourcePath: Common/Prefabs/Plane
@@ -230,12 +214,44 @@ MonoBehaviour:
     guid: e6b485027f1c24e89b8939930e2b15aa
     isPrimitive: 0
     primitiveType: 0
+  - name: dome-2-tutorial
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/dome-2-tutorial.prefab
+    resourcePath: Common/SpaceRaceAssets/dome-2-tutorial
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: fc147b1a02f544747bf547a18bf26518
+    isPrimitive: 0
+    primitiveType: 0
+  - name: dome-3-tutorial
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/dome-3-tutorial.prefab
+    resourcePath: Common/SpaceRaceAssets/dome-3-tutorial
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0a6e2c1011978445d9cf5233c30dbd50
+    isPrimitive: 0
+    primitiveType: 0
+  - name: dome-4-tutorial
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/dome-4-tutorial.prefab
+    resourcePath: Common/SpaceRaceAssets/dome-4-tutorial
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a351d8f5c16be4e32bea020a09cc3299
+    isPrimitive: 0
+    primitiveType: 0
   - name: GameWin
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/GameWin.prefab
     resourcePath: Common/SpaceRaceAssets/GameWin
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: 7e75e148af240414b96d56006debd750
+    isPrimitive: 0
+    primitiveType: 0
+  - name: internal-obby-lights
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/internal-obby-lights.prefab
+    resourcePath: Common/SpaceRaceAssets/internal-obby-lights
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 794592809dbf7491286dce1498b40a74
     isPrimitive: 0
     primitiveType: 0
   - name: Kathakali
@@ -712,6 +728,38 @@ MonoBehaviour:
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: 7a6e1839a362c4b69b28d3a1289d0952
+    isPrimitive: 0
+    primitiveType: 0
+  - name: pipe-1-tutorial
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/pipe-1-tutorial.prefab
+    resourcePath: Common/SpaceRaceAssets/pipe-1-tutorial
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 825c6ef8ce56440ba92563b011434f0a
+    isPrimitive: 0
+    primitiveType: 0
+  - name: pipe-2-tutorial
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/pipe-2-tutorial.prefab
+    resourcePath: Common/SpaceRaceAssets/pipe-2-tutorial
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 2d97c6010e9e843c584d0a3ed7ef0816
+    isPrimitive: 0
+    primitiveType: 0
+  - name: pipe-3-tutorial
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/pipe-3-tutorial.prefab
+    resourcePath: Common/SpaceRaceAssets/pipe-3-tutorial
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 6d0e8ae78f84742a48d19ec3add0edde
+    isPrimitive: 0
+    primitiveType: 0
+  - name: pipe-4-tutorial
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/pipe-4-tutorial.prefab
+    resourcePath: Common/SpaceRaceAssets/pipe-4-tutorial
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0ee5c5caffc04443888637f38e83472f
     isPrimitive: 0
     primitiveType: 0
   - name: Pizza 1

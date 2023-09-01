@@ -63,6 +63,7 @@ namespace Terra.Studio.RTEditor
             if (GUILayout.Button("Clear Saved Data"))
             {
                 ClearSavedData();
+                EditorUtility.SetDirty(target);
             }
             if (GUILayout.Button("Force Update"))
             {
