@@ -29,6 +29,22 @@ MonoBehaviour:
     guid: fe0c2d29fcdab49ee8fc44aa49d05d36
     isPrimitive: 0
     primitiveType: 0
+  - name: GameScore
+    absolutePath: Assets/_Studio/Resources/Common/Prefabs/GameScore.prefab
+    resourcePath: Common/Prefabs/GameScore
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b9df99a6790c24f0fbab44a711153491
+    isPrimitive: 0
+    primitiveType: 0
+  - name: InGameTimer
+    absolutePath: Assets/_Studio/Resources/Common/Prefabs/InGameTimer.prefab
+    resourcePath: Common/Prefabs/InGameTimer
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b99761ac560514439aa04b0465ceeb26
+    isPrimitive: 0
+    primitiveType: 0
   - name: Plane
     absolutePath: Assets/_Studio/Resources/Common/Prefabs/Plane.prefab
     resourcePath: Common/Prefabs/Plane
