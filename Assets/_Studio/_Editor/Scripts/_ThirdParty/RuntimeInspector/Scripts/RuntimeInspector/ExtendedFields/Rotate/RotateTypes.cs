@@ -1,4 +1,3 @@
-using TMPro;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -19,14 +18,14 @@ namespace RuntimeInspectorNamespace
         public Toggle yAxis;
         public Toggle zAxis;
 
-        public TMP_InputField degreesInput = null;
-        public TMP_InputField speedInput = null;
-        public TMP_InputField pauseInput = null;
-        public TMP_InputField repeatInput = null;
+        public InputField degreesInput = null;
+        public InputField speedInput = null;
+        public InputField pauseInput = null;
+        public InputField repeatInput = null;
 
         public Dropdown broadcastAt;
-        public TMP_InputField broadcastInput;
-        public TMP_InputField listenInput;
+        public InputField broadcastInput;
+        public InputField listenInput;
         public Toggle canListenMultipleTimesToggle;
 
         [HideInInspector]
@@ -192,5 +191,52 @@ namespace RuntimeInspectorNamespace
             if (listenInput) listenInput.SetTextWithoutNotify(_data.listenTo);
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
+
+        public void ApplySkin(UISkin Skin)
+        {
+            SetupToggeleSkin(xAxis, Skin);
+            SetupToggeleSkin(yAxis, Skin);
+            SetupToggeleSkin(zAxis, Skin);
+            SetupToggeleSkin(canListenMultipleTimesToggle, Skin);
+            SetupInputFieldSkin(degreesInput, Skin);
+            SetupInputFieldSkin(speedInput, Skin);
+            SetupInputFieldSkin(pauseInput, Skin);
+            SetupInputFieldSkin(repeatInput, Skin);
+            SetupInputFieldSkin(broadcastInput, Skin);
+            SetupInputFieldSkin(listenInput, Skin);
+            dirDropDown?.SetSkinDropDownField(Skin);
+            broadcastAt?.SetSkinDropDownField(Skin);
+        }
+
+        private void SetupToggeleSkin(Toggle toggle,UISkin Skin)
+        {
+            if (!toggle)
+                return;
+            toggle.transform.GetChild(0).GetComponent<Image>().color = Skin.InputFieldNormalBackgroundColor;
+           // toggle.graphic.color = Skin.ToggleCheckmarkColor;
+            Vector2 rightSideAnchorMin = new Vector2(Skin.LabelWidthPercentage, 0f);
+            Text label = toggle.GetComponentInChildren<Text>();
+            if (label != null) label.rectTransform.anchorMin = rightSideAnchorMin;
+        }
+
+        private void SetupInputFieldSkin(InputField inputField, UISkin Skin)
+        {
+            if (!inputField)
+                return;
+            inputField.textComponent.color = Skin.InputFieldTextColor;
+            //  inputFieldBackground.color = Skin.InputFieldNormalBackgroundColor;
+
+            Text placeholder = inputField.placeholder as Text;
+            if (placeholder != null)
+            {
+                float placeholderAlpha = placeholder.color.a;
+                placeholder.color=Skin.InputFieldTextColor;
+
+                Color placeholderColor = placeholder.color;
+                placeholderColor.a = placeholderAlpha;
+                placeholder.color = placeholderColor;
+            }
+        }
+
     }
 }
