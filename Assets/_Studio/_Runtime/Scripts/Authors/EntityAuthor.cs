@@ -45,6 +45,7 @@ namespace Terra.Studio
                 }
                 var trs = new Vector3[] { entity.position, entity.rotation, entity.scale };
                 generatedObj = RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, trs);
+                generatedObj.name = entity.name;
                 return generatedObj;
             }
 
@@ -54,7 +55,6 @@ namespace Terra.Studio
                 {
                     return;
                 }
-                go.name = virtualEntity.name;
                 RuntimeOp.Resolve<SceneDataHandler>().SetColliderData(go, virtualEntity.metaData);
                 var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
                 if (virtualEntity.components != null && virtualEntity.components.Length > 0)
