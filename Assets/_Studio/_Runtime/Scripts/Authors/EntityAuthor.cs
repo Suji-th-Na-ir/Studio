@@ -35,12 +35,6 @@ namespace Terra.Studio
             return ref component;
         }
 
-        public static EventContext GetEventContext<T>(int entity) where T : struct, IBaseComponent
-        {
-            var component = GetComponent<T>(entity);
-            return component.EventContext;
-        }
-
         private class EntityAuthor : BaseAuthor
         {
             public override void Generate(object data)

@@ -30,9 +30,9 @@ namespace Terra.Studio
         {
             ResolveEssentials();
             InitializeEcs();
-            RuntimeOp.Resolve<GameStateHandler>().SwitchToNextState();
             RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameStart(true, (data) => { canRunSystems = true; });
             RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameEnd(true, (data) => { DestroyEcsSystemsAndWorld(); });
+            RuntimeOp.Resolve<GameStateHandler>().SwitchToNextState();
             RuntimeOp.Resolve<CoreGameManager>().SpawnPlayer();
         }
 

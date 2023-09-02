@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5a1c529fc0c64233866d82675ea80d8, type: 3}
+  m_Name: DataManagerSO
+  m_EditorClassIdentifier: 
+  systemData:
+  - Key: Terra.Studio.Checkpoint
+    ComponentName: Terra.Studio.CheckpointComponent
+    SystemName: Terra.Studio.CheckpointSystem
+    DrawerName: RuntimeInspectorNamespace.Checkpoint
+  - Key: Terra.Studio.Collectable
+    ComponentName: Terra.Studio.CollectableComponent
+    SystemName: Terra.Studio.CollectableSystem
+    DrawerName: RuntimeInspectorNamespace.Collectible
+  - Key: Terra.Studio.DestroyOn
+    ComponentName: Terra.Studio.DestroyOnComponent
+    SystemName: Terra.Studio.DestroyOnSystem
+    DrawerName: RuntimeInspectorNamespace.DestroyOn
+  - Key: Terra.Studio.InGameTimer
+    ComponentName: Terra.Studio.InGameTimerComponent
+    SystemName: Terra.Studio.InGameTimerSystem
+    DrawerName: RuntimeInspectorNamespace.InGameTimer
+  - Key: Terra.Studio.Oscillate
+    ComponentName: Terra.Studio.OscillateComponent
+    SystemName: Terra.Studio.OscillateSystem
+    DrawerName: RuntimeInspectorNamespace.Oscillate
+  - Key: Terra.Studio.Respawn
+    ComponentName: Terra.Studio.RespawnComponent
+    SystemName: Terra.Studio.RespawnSystem
+    DrawerName: RuntimeInspectorNamespace.Respawn
+  - Key: Terra.Studio.Rotate
+    ComponentName: Terra.Studio.RotateComponent
+    SystemName: Terra.Studio.RotateSystem
+    DrawerName: RuntimeInspectorNamespace.Rotate
+  - Key: Terra.Studio.Translate
+    ComponentName: Terra.Studio.TranslateComponent
+    SystemName: Terra.Studio.TranslateSystem
+    DrawerName: RuntimeInspectorNamespace.Translate
+  - Key: Terra.Studio.GameScore
+    ComponentName: Terra.Studio.InGameScoreComponent
+    SystemName: Terra.Studio.InGameScoreSystem
+    DrawerName: Terra.Studio.GameScore
+  eventData:
+  - Key: Terra.Studio.GameStart
+    EventName: Terra.Studio.GameStartActionEvent
+    EventValue: 0
+    DefaultData: OnStart
+  - Key: Terra.Studio.Listener
+    EventName: Terra.Studio.ListenerActionEvent
+    EventValue: 3
+    DefaultData: 
+  - Key: Terra.Studio.MouseAction
+    EventName: Terra.Studio.MouseActionEvent
+    EventValue: 2
+    DefaultData: OnClick
+  - Key: Terra.Studio.TriggerAction
+    EventName: Terra.Studio.TriggerActionEvent
+    EventValue: 1
+    DefaultData: Player

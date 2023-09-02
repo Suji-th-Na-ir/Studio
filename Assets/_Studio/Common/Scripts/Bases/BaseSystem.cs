@@ -2,7 +2,7 @@ using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
-    public abstract class BaseSystem
+    public partial class BaseSystem
     {
         public virtual void Init<T>(int entity) where T : struct, IBaseComponent
         {
