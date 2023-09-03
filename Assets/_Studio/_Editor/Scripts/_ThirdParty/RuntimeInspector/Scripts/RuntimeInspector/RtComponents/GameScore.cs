@@ -28,7 +28,7 @@ namespace Terra.Studio
             var compData = new InGameScoreComponent()
             {
                 targetScore = targetScore,
-                IsBroadcastable = !string.IsNullOrEmpty(broadcast),
+                IsBroadcastable = !string.IsNullOrEmpty(broadcast) && targetScore != 0,
                 Broadcast = broadcast
             };
             var json = JsonConvert.SerializeObject(compData);
