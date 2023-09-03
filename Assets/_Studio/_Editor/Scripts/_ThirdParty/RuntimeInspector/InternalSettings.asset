@@ -102,3 +102,4 @@ MonoBehaviour:
   - Translate
   - InGameTimer
   - Transform
+  - GameScore

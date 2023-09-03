@@ -9,7 +9,11 @@ namespace Terra.Studio
             RuntimeOp.Resolve<ScoreHandler>().targetScore = compData.targetScore;
             RuntimeOp.Resolve<ScoreHandler>().OnTargetScoreReached += () =>
             {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(compData.Broadcast, true);
+                if (compData.IsBroadcastable)
+                {
+                    RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(compData.Broadcast);
+                    RuntimeOp.Resolve<Broadcaster>().Broadcast(compData.Broadcast, true);
+                }
             };
         }
     }
