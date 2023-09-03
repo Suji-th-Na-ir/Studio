@@ -33,7 +33,6 @@ namespace Terra.Studio
             RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameStart(true, (data) => { canRunSystems = true; });
             RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameEnd(true, (data) => { DestroyEcsSystemsAndWorld(); });
             RuntimeOp.Resolve<GameStateHandler>().SwitchToNextState();
-            RuntimeOp.Resolve<CoreGameManager>().SpawnPlayer();
         }
 
         private void ResolveEssentials()

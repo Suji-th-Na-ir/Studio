@@ -20,6 +20,7 @@ namespace Terra.Studio
             RuntimeOp.Register(new GameData());
             RuntimeOp.Register(new GameStateHandler());
             SpawnGameUI();
+            RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameStart(true, (data) => { SpawnPlayer(); });
         }
 
         public void SpawnPlayer()
