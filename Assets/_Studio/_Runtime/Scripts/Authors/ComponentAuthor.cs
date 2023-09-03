@@ -30,15 +30,6 @@ namespace Terra.Studio
             Author<ComponentAuthor>.Flush();
         }
 
-        public static ref T AddEntityToComponent<T>(int entity) where T : struct, IBaseComponent
-        {
-            var world = RuntimeOp.Resolve<RuntimeSystem>().World;
-            var pool = world.GetPool<T>();
-            pool.Add(entity);
-            ref var refComp = ref pool.Get(entity);
-            return ref refComp;
-        }
-
         private class ComponentAuthor : BaseAuthor
         {
             private RTDataManagerSO managerSO;
