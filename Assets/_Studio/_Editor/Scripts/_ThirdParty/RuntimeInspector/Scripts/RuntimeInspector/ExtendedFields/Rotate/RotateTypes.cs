@@ -1,4 +1,3 @@
-using TMPro;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -14,20 +13,21 @@ namespace RuntimeInspectorNamespace
     public class RotateTypes : MonoBehaviour
     {
         public RotationType myType;
-       // public Dropdown axisDropDown;
+        // public Dropdown axisDropDown;
         public Dropdown dirDropDown;
 
         public Toggle xAxis;
         public Toggle yAxis;
         public Toggle zAxis;
 
-        public TMP_InputField degreesInput = null;
-        public TMP_InputField speedInput = null;
-        public TMP_InputField pauseInput = null;
-        public TMP_InputField repeatInput = null;
+        public InputField degreesInput = null;
+        public InputField speedInput = null;
+        public InputField pauseInput = null;
+        public InputField repeatInput = null;
 
         public Dropdown broadcastAt;
-        public TMP_InputField broadcastInput = null;
+        public InputField broadcastInput;
+        public InputField listenInput;
         public Toggle canListenMultipleTimesToggle;
 
         [HideInInspector] public RotateField field = null;
@@ -221,7 +221,7 @@ namespace RuntimeInspectorNamespace
         public void LoadDefaultValues()
         {
             // axis 
-          //  if (axisDropDown != null) { axisDropDown.AddOptions(Enum.GetNames(typeof(Axis)).ToList()); }
+            //  if (axisDropDown != null) { axisDropDown.AddOptions(Enum.GetNames(typeof(Axis)).ToList()); }
 
             // direction
             if (dirDropDown != null) { dirDropDown.AddOptions(Enum.GetNames(typeof(Direction)).ToList()); }
@@ -254,6 +254,22 @@ namespace RuntimeInspectorNamespace
             if (repeatInput) repeatInput.SetTextWithoutNotify(_data.repeat.ToString());
             if (broadcastInput) broadcastInput.SetTextWithoutNotify(_data.broadcast);
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
+        }
+
+        public void ApplySkin(UISkin Skin)
+        {
+            xAxis?.SetupToggeleSkin(Skin);
+            yAxis?.SetupToggeleSkin(Skin);
+            zAxis?.SetupToggeleSkin(Skin);
+            canListenMultipleTimesToggle?.SetupToggeleSkin(Skin);
+            degreesInput?.SetupInputFieldSkin(Skin);
+            speedInput?.SetupInputFieldSkin(Skin);
+            pauseInput?.SetupInputFieldSkin(Skin);
+            repeatInput?.SetupInputFieldSkin(Skin);
+            broadcastInput?.SetupInputFieldSkin(Skin);
+            listenInput?.SetupInputFieldSkin(Skin);
+            dirDropDown?.SetSkinDropDownField(Skin);
+            broadcastAt?.SetSkinDropDownField(Skin);
         }
     }
 }

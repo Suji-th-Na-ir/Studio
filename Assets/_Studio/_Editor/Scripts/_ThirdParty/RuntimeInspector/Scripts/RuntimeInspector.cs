@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using PlayShifu.Terra;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -196,6 +197,8 @@ namespace RuntimeInspectorNamespace
         [SerializeField]
         private ScrollRect scrollView;
         private RectTransform drawArea;
+        private Button designButton;
+        private Button behaviourButton;
 
         [SerializeField]
         private Image background;
@@ -234,6 +237,8 @@ namespace RuntimeInspectorNamespace
 
         public InspectedObjectChangingDelegate OnInspectedObjectChanging;
 
+        public int currentPageIndex = 0;
+
         private ComponentFilterDelegate m_componentFilter;
         public ComponentFilterDelegate ComponentFilter
         {
@@ -245,6 +250,15 @@ namespace RuntimeInspectorNamespace
             }
         }
 
+        public String[] ShownComponents
+        {
+            get
+            {
+                if (settings[0] != null)
+                    return settings[0].ShowComponents;
+                return null;
+            }
+        }
         protected override void Awake()
         {
             base.Awake();
@@ -261,6 +275,30 @@ namespace RuntimeInspectorNamespace
             drawArea = scrollView.content;
             m_canvas = GetComponentInParent<Canvas>();
             nullPointerEventData = new PointerEventData(null);
+            designButton = Helper.FindDeepChild(transform, "design_button", true).GetComponent<Button>();
+            behaviourButton = Helper.FindDeepChild(transform, "behaviour_button", true).GetComponent<Button>();
+
+            designButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
+            behaviourButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
+            designButton.GetComponentInChildren<Text>().color = Skin.ButtonTextColor;
+            behaviourButton.GetComponentInChildren<Text>().color = Skin.ButtonTextColor;
+            designButton.GetComponentInChildren<Text>().font = Skin.Font;
+            behaviourButton.GetComponentInChildren<Text>().font = Skin.Font;
+            designButton.onClick.AddListener(() =>
+            {
+                currentPageIndex = 0;
+                isDirty = true;
+                designButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
+                behaviourButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
+            });
+
+            behaviourButton.onClick.AddListener(() =>
+            {
+                currentPageIndex = 1;
+                isDirty = true;
+                behaviourButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
+                designButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
+            });
 
             if (m_showTooltips)
             {
@@ -476,7 +514,7 @@ namespace RuntimeInspectorNamespace
                 if (inspectedObjectDrawer != null)
                 {
                     inspectedObjectDrawer.BindTo(obj.GetType(), string.Empty, () => m_inspectedObject, (value) => m_inspectedObject = value);
-                    inspectedObjectDrawer.NameRaw = obj.GetNameWithType();
+                    inspectedObjectDrawer.NameRaw = obj.GetNameWithType().Replace("(GameObject)","");
                     inspectedObjectDrawer.Refresh();
 
                     if (inspectedObjectDrawer is ExpandableInspectorField)

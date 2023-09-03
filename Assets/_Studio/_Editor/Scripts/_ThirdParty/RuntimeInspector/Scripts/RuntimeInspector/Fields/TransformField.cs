@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 
 namespace RuntimeInspectorNamespace
@@ -9,26 +10,45 @@ namespace RuntimeInspectorNamespace
 		protected override int Length { get { return 3; } } // localPosition, localEulerAngles, localScale
 
 		private PropertyInfo positionProp, rotationProp, scaleProp;
-
-		public override void Initialize()
+        private bool didCheckForExpand;
+        public override void Initialize()
 		{
 			base.Initialize();
 
-			positionProp = typeof( Transform ).GetProperty( "localPosition" );
-			rotationProp = typeof( Transform ).GetProperty( "localEulerAngles" );
-			scaleProp = typeof( Transform ).GetProperty( "localScale" );
+			positionProp = typeof(Transform).GetProperty("localPosition");
+			rotationProp = typeof(Transform).GetProperty("localEulerAngles");
+			scaleProp = typeof(Transform).GetProperty("localScale");
 		}
 
-		public override bool SupportsType( Type type )
+		public override bool SupportsType(Type type)
 		{
-			return type == typeof( Transform );
+			return type == typeof(Transform);
 		}
 
 		protected override void GenerateElements()
 		{
-			CreateDrawerForVariable( positionProp, "Position" );
-			CreateDrawerForVariable( rotationProp, "Rotation" );
-			CreateDrawerForVariable( scaleProp, "Scale" );
-		}
-	}
+			CreateDrawerForVariable(positionProp, "Position");
+			CreateDrawerForVariable(rotationProp, "Rotation");
+			CreateDrawerForVariable(scaleProp, "Scale");
+        }
+
+        protected override void ClearElements()
+        {
+            base.ClearElements();
+            didCheckForExpand = false;
+        }
+
+        public override void Refresh()
+        {
+            if (!didCheckForExpand && Value != null)
+            {
+                didCheckForExpand = true;
+                IsExpanded = true;
+
+            }
+            base.Refresh();
+        
+            
+        }
+    }
 }

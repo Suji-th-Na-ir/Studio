@@ -1,52 +1,38 @@
-using System;
 using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
+using System;
+using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
 {
     [EditorDrawComponent("Terra.Studio.InGameTimer")]
     public class InGameTimer : MonoBehaviour, IComponent
     {
-        public uint Time = 180;
-        public string Broadcast = "Game Lose";
+        public uint Time;
+        public Atom.Broadcast Broadcast = new ();
         private string guid;
 
         private void Awake()
         {
             guid = GetInstanceID() + "_timer"; //Guid.NewGuid().ToString("N");
-            var timer = EditorOp.Resolve<SceneDataHandler>().TimerManagerObj;
-            if (timer)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                EditorOp.Resolve<SceneDataHandler>().TimerManagerObj = gameObject;
-            }
-        }
-
-        public void Update()
-        {
-            if (!String.IsNullOrEmpty(Broadcast))
-            {
-                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, Broadcast);
-            }
+            Broadcast.Setup(gameObject, this.GetType().Name, guid);
         }
 
         public (string type, string data) Export()
         {
-            InGameTimerComponent component = new()
+            InGameTimerComponent comp = new()
             {
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.GameStart",
                 ConditionData = "OnStart",
-                IsBroadcastable = !string.IsNullOrEmpty(Broadcast),
-                Broadcast = Broadcast,
+                IsBroadcastable = !string.IsNullOrEmpty(Broadcast.data.broadcastName),
+                Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? null : Broadcast.data.broadcastName,
+                broadcastTypeIndex = Broadcast.data.broadcastTypeIndex,
                 totalTime = Time
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
-            var data = JsonConvert.SerializeObject(component);
+            var data = JsonConvert.SerializeObject(comp);
             return (type, data);
         }
 
@@ -54,8 +40,9 @@ namespace RuntimeInspectorNamespace
         {
             var comp = JsonConvert.DeserializeObject<InGameTimerComponent>($"{data.data}");
             Time = comp.totalTime;
-            Broadcast = comp.Broadcast;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, null);
+            Broadcast.data.broadcastName = comp.Broadcast;
+            Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast.data.broadcastName, null);
         }
     }
 }

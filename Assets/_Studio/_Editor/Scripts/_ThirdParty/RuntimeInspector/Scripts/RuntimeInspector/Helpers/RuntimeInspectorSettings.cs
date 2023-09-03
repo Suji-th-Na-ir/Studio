@@ -25,6 +25,10 @@ namespace RuntimeInspectorNamespace
         [SerializeField]
         private string[] m_autoexpandableDrawers;
         public string[] AutoExpandableDrawers { get { return m_autoexpandableDrawers; } }
+
+        [SerializeField]
+        private string[] m_ShowComponents;
+        public string[] ShowComponents { get { return m_ShowComponents; } }
 #pragma warning restore 0649
     }
 }

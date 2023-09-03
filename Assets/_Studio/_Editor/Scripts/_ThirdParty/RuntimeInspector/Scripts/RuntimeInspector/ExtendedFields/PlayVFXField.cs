@@ -18,6 +18,7 @@ namespace RuntimeInspectorNamespace
 
         [SerializeField]
         private Dropdown optionsDropdown;
+
 #pragma warning restore 0649
 
         public override void Initialize()
@@ -88,6 +89,7 @@ namespace RuntimeInspectorNamespace
             optionsDropdown.gameObject.SetActive(_value);
         }
 
+
         protected override void OnSkinChanged()
         {
             base.OnSkinChanged();
@@ -98,6 +100,8 @@ namespace RuntimeInspectorNamespace
             Vector2 rightSideAnchorMin = new Vector2(Skin.LabelWidthPercentage, 0f);
             variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
             ((RectTransform)toggleInput.transform).anchorMin = rightSideAnchorMin;
+
+            optionsDropdown.SetSkinDropDownField(Skin);
         }
 
         private void UpdateData(Atom.PlayVfx _vfx)

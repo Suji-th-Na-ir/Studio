@@ -335,6 +335,7 @@ namespace RuntimeInspectorNamespace
         [SerializeField]
         private PointerEventListener expandToggle;
         private RectTransform expandToggleTransform;
+        [SerializeField] bool isExpandable = false;
 
         [SerializeField]
         private LayoutGroup layoutGroup;
@@ -346,7 +347,7 @@ namespace RuntimeInspectorNamespace
         protected readonly List<InspectorField> elements = new List<InspectorField>(8);
         protected readonly List<ExposedMethodField> exposedMethods = new List<ExposedMethodField>();
 
-        protected virtual int Length { get { return elements.Count; } }
+        protected virtual int Length { get { return elements.Count; } set{}}
 
         public override bool ShouldRefresh { get { return true; } }
 
@@ -421,10 +422,18 @@ namespace RuntimeInspectorNamespace
             base.Initialize();
 
             expandToggleTransform = (RectTransform)expandToggle.transform;
-            expandToggle.PointerClick += (_) =>
+            if (isExpandable)
             {
-                CheckAndExpand();
-            };
+                expandArrow.gameObject.SetActive(true);
+                expandToggle.PointerClick += (_) =>
+                {
+                    CheckAndExpand();
+                };
+            }
+            else
+            {
+                expandArrow.gameObject.SetActive(false);
+            }
 
             IsExpanded = m_isExpanded;
         }
@@ -466,7 +475,10 @@ namespace RuntimeInspectorNamespace
                 layoutGroup.padding.top = Skin.LineHeight;
 
                 if (m_headerVisibility == RuntimeInspector.HeaderVisibility.Collapsible)
-                    variableNameText.rectTransform.sizeDelta = new Vector2(-(Skin.ExpandArrowSpacing + Skin.LineHeight * 0.5f), 0f);
+                {
+                    variableNameText.rectTransform.sizeDelta = new Vector2(-(Skin.LineHeight*0.05f ), 0f);
+                    variableNameText.fontSize = Skin.HeadingFontSize;
+                }
             }
 
             if (expandArrow != null)
@@ -511,7 +523,7 @@ namespace RuntimeInspectorNamespace
 
         private void GenerateExposedMethodButtons()
         {
-            if (Inspector.ShowRemoveComponentButton && typeof(Component).IsAssignableFrom(BoundVariableType) && !typeof(Transform).IsAssignableFrom(BoundVariableType))
+            if (Inspector.ShowRemoveComponentButton && typeof(Component).IsAssignableFrom(BoundVariableType) && !typeof(Transform).IsAssignableFrom(BoundVariableType) &&Inspector.currentPageIndex==1)
                 CreateExposedMethodButton(GameObjectField.removeComponentMethod, () => this, (value) => { });
 
             ExposedMethod[] methods = BoundVariableType.GetExposedMethods();
@@ -562,7 +574,7 @@ namespace RuntimeInspectorNamespace
             if (variableDrawer != null)
             {
                 if (variableName == null)
-                    variableName = component.GetType().Name + " component";
+                    variableName = component.GetType().Name ;
 
                 variableDrawer.BindTo(component.GetType(), string.Empty, () => component, (value) => { });
                 variableDrawer.NameRaw = variableName;

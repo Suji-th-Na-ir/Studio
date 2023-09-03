@@ -19,5 +19,6 @@ namespace Terra.Studio
         public EventContext EventContext { get; set; }
         public GameObject RefObj { get; set; }
         public uint totalTime;
+        public int broadcastTypeIndex;
     }
 }

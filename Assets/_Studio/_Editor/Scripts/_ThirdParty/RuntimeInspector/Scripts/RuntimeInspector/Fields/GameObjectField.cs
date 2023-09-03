@@ -13,27 +13,30 @@ namespace RuntimeInspectorNamespace
 {
 	public class GameObjectField : ExpandableInspectorField
 	{
-		protected override int Length { get { return components.Count + 4; } } // 4: active, name, tag, layer
+		int length;
+        protected override int Length { get { return length; } set { length = value; } }
 
-		private string currentTag = null;
+        private string currentTag = null;
 
 		private Getter isActiveGetter, nameGetter, tagGetter;
 		private Setter isActiveSetter, nameSetter, tagSetter;
 		private PropertyInfo layerProp;
 
 		private readonly List<Component> components = new List<Component>( 8 );
-		private readonly List<bool> componentsExpandedStates = new List<bool>();
+
+        private readonly List<bool> componentsExpandedStates = new List<bool>();
 
 		private Type[] addComponentTypes;
 
-		internal static ExposedMethod addComponentMethod = new ExposedMethod( typeof( GameObjectField ).GetMethod( "AddComponentButtonClicked", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ), new RuntimeInspectorButtonAttribute( "Add Component", false, ButtonVisibility.InitializedObjects ), false );
-		internal static ExposedMethod removeComponentMethod = new ExposedMethod( typeof( GameObjectField ).GetMethod( "RemoveComponentButtonClicked", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static ), new RuntimeInspectorButtonAttribute( "Remove Component", false, ButtonVisibility.InitializedObjects ), true );
+		internal static ExposedMethod addComponentMethod = new ExposedMethod( typeof( GameObjectField ).GetMethod( "AddComponentButtonClicked", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance ), new RuntimeInspectorButtonAttribute( "Add Behaviour", false, ButtonVisibility.InitializedObjects ), false );
+		internal static ExposedMethod removeComponentMethod = new ExposedMethod( typeof( GameObjectField ).GetMethod( "RemoveComponentButtonClicked", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static ), new RuntimeInspectorButtonAttribute( "Remove Behaviour", false, ButtonVisibility.InitializedObjects ), true );
 
 		public override void Initialize()
 		{
+			
 			base.Initialize();
-
-			isActiveGetter = () => ( (GameObject) Value ).activeSelf;
+			length = 0; // 4: active, name, tag, layer
+            isActiveGetter = () => ( (GameObject) Value ).activeSelf;
 			isActiveSetter = ( value ) => ( (GameObject) Value ).SetActive( (bool) value );
 
 			nameGetter = () => ( (GameObject) Value ).name;
@@ -43,7 +46,8 @@ namespace RuntimeInspectorNamespace
 				NameRaw = Value.GetNameWithType();
 
 				RuntimeHierarchy hierarchy = Inspector.ConnectedHierarchy;
-				if( hierarchy )
+               // Inspector.currentPageChanged += this.Refresh;
+                if ( hierarchy )
 					hierarchy.RefreshNameOf( ( (GameObject) Value ).transform );
 			};
 
@@ -57,7 +61,7 @@ namespace RuntimeInspectorNamespace
 			};
 			tagSetter = ( value ) => ( (GameObject) Value ).tag = (string) value;
 
-			layerProp = typeof( GameObject ).GetProperty( "layer" );
+			layerProp = typeof( GameObject ).GetProperty( "layer" );	
 		}
 
 		public override bool SupportsType( Type type )
@@ -88,35 +92,41 @@ namespace RuntimeInspectorNamespace
 				if( elements[i] is ExpandableInspectorField && ( elements[i].Value as Object ) )
 					componentsExpandedStates.Add( ( (ExpandableInspectorField) elements[i] ).IsExpanded );
 			}
-
+		
 			base.ClearElements();
-		}
+            Length = 1;
+        }
 
 		protected override void GenerateElements()
 		{
-			if( components.Count == 0 )
-				return;
+			//if( components.Count == 0 )
+			//	return;
+		
+			//if (Inspector.currentPageIndex == 0)
+			//{
+			//	//CreateDrawer(typeof(bool), "Is Active", isActiveGetter, isActiveSetter);
+			//	//StringField nameField = CreateDrawer(typeof(string), "Name", nameGetter, nameSetter) as StringField;
+			//	//StringField tagField = CreateDrawer(typeof(string), "Tag", tagGetter, tagSetter) as StringField;
+			//	//CreateDrawerForVariable(layerProp, "Layer");
 
-			CreateDrawer( typeof( bool ), "Is Active", isActiveGetter, isActiveSetter );
-			StringField nameField = CreateDrawer( typeof( string ), "Name", nameGetter, nameSetter ) as StringField;
-			StringField tagField = CreateDrawer( typeof( string ), "Tag", tagGetter, tagSetter ) as StringField;
-			CreateDrawerForVariable( layerProp, "Layer" );
+			//	//if (nameField)
+			//	//	nameField.SetterMode = StringField.Mode.OnSubmit;
 
-			for( int i = 0, j = 0; i < components.Count; i++ )
+			//	//if (tagField)
+			//	//	tagField.SetterMode = StringField.Mode.OnSubmit;
+   //         }
+
+            for (int i = 0, j = 0; i < components.Count; i++)
 			{
-				InspectorField componentDrawer = CreateDrawerForComponent( components[i] );
-				if( componentDrawer as ExpandableInspectorField && j < componentsExpandedStates.Count && componentsExpandedStates[j++] )
-					( (ExpandableInspectorField) componentDrawer ).IsExpanded = true;
+				InspectorField componentDrawer = CreateDrawerForComponent(components[i]);
+				if (componentDrawer as ExpandableInspectorField && j < componentsExpandedStates.Count && componentsExpandedStates[j++])
+					((ExpandableInspectorField)componentDrawer).IsExpanded = true;
 			}
 
-			if( nameField )
-				nameField.SetterMode = StringField.Mode.OnSubmit;
+			
 
-			if( tagField )
-				tagField.SetterMode = StringField.Mode.OnSubmit;
-
-			if( Inspector.ShowAddComponentButton )
-				CreateExposedMethodButton( addComponentMethod, () => this, ( value ) => { } );
+			if (Inspector.ShowAddComponentButton && Inspector.currentPageIndex == 1)
+				CreateExposedMethodButton(addComponentMethod, () => this, (value) => { });
 
 			componentsExpandedStates.Clear();
 		}
@@ -126,18 +136,34 @@ namespace RuntimeInspectorNamespace
 			// Refresh components
 			components.Clear();
 			GameObject go = Value as GameObject;
-			if( go )
+			if (go)
 			{
-				go.GetComponents( components );
+				go.GetComponents(components);
 
-				for( int i = components.Count - 1; i >= 0; i-- )
+				for (int i = components.Count - 1; i >= 0; i--)
 				{
-					if( !components[i] )
-						components.RemoveAt( i );
-				}
+					if (!components[i] || (Inspector.currentPageIndex == 0 && (components[i].GetType().Namespace == "RuntimeInspectorNamespace" ||
+						components[i].GetType().Namespace == "Terra.Studio")) ||
+						(Inspector.currentPageIndex == 1 && (components[i].GetType().Namespace != "RuntimeInspectorNamespace" &&
+						components[i].GetType().Namespace != "Terra.Studio"))
+						|| !Inspector.ShownComponents.Contains(components[i].GetType().Name))
+					{
+						if (components[i] as Transform == null)
+							components.RemoveAt(i);
+					}
 
-				if( Inspector.ComponentFilter != null )
-					Inspector.ComponentFilter( go, components );
+				}
+                if (Inspector.currentPageIndex == 0)
+                {
+                    Length = components.Count;
+                }
+                else
+                {
+						Length = components.Count;
+                }
+
+                if (Inspector.ComponentFilter != null)
+					Inspector.ComponentFilter(go, components);
 			}
 
 			// Regenerate components' drawers, if necessary

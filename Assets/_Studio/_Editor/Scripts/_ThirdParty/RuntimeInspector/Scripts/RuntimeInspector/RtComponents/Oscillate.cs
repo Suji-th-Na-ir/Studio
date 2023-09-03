@@ -85,23 +85,23 @@ namespace RuntimeInspectorNamespace
 
         public void Import(EntityBasedComponent cdata)
         {
-            OscillateComponent cc = JsonConvert.DeserializeObject<OscillateComponent>($"{cdata.data}");
-            fromPoint = cc.fromPoint;
-            toPoint = cc.toPoint;
-            Speed = cc.speed;
-            Loop = cc.loop;
+            OscillateComponent comp = JsonConvert.DeserializeObject<OscillateComponent>($"{cdata.data}");
+            fromPoint = comp.fromPoint;
+            toPoint = comp.toPoint;
+            Speed = comp.speed;
+            Loop = comp.loop;
 
-            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOn), out object result))
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
                 startOn.data.startIndex = (int)(StartOn)result;
             }
 
-            if (cc.ConditionType.ToLower().Contains("listen"))
+            if (comp.ConditionType.ToLower().Contains("listen"))
             {
-                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_oscillate", cc.ConditionData);
+                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_oscillate", comp.ConditionData);
             }
-            startOn.data.listenIndex = cc.listenIndex;
-            startOn.data.listenName = cc.BroadcastListen;
+            startOn.data.listenIndex = comp.listenIndex;
+            startOn.data.listenName = comp.BroadcastListen;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, null, startOn.data.listenName);
         }
     }

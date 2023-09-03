@@ -12,12 +12,13 @@ namespace RuntimeInspectorNamespace
     public class TranslateTypes : MonoBehaviour
     {
         public InputField[] moveToInput;
-        public TMP_InputField speedInput = null;
-        public TMP_InputField repeatInput = null;
-        public TMP_InputField pauseForInput = null;
+        public InputField speedInput = null;
+        public InputField repeatInput = null;
+        public InputField pauseForInput = null;
+        public InputField listenTo = null;
 
         public Dropdown broadcastAt;
-        public TMP_InputField broadcastInput = null;
+        public InputField broadcastInput;
         public Toggle canListenMultipleTimesToggle;
 
         [HideInInspector] public TranslateField field = null;
@@ -141,6 +142,21 @@ namespace RuntimeInspectorNamespace
             if (moveToInput != null) moveToInput[1].SetTextWithoutNotify(_data.moveTo.y.ToString());
             if (moveToInput != null) moveToInput[2].SetTextWithoutNotify(_data.moveTo.z.ToString());
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
+        }
+
+        public void ApplySkin(UISkin skin)
+        {
+            canListenMultipleTimesToggle?.SetupToggeleSkin(skin);
+            broadcastAt?.SetSkinDropDownField(skin);
+            for (int i = 0; i < moveToInput.Length; i++)
+            {
+                moveToInput[i]?.SetupInputFieldSkin(skin);
+            }
+            speedInput?.SetupInputFieldSkin(skin);
+            pauseForInput?.SetupInputFieldSkin(skin);
+            repeatInput?.SetupInputFieldSkin(skin);
+            broadcastInput?.SetupInputFieldSkin(skin);
+            listenTo?.SetupInputFieldSkin(skin);
         }
     }
 }
