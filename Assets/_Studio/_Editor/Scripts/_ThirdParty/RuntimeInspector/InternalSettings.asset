@@ -93,13 +93,33 @@ MonoBehaviour:
   - RuntimeInspectorNamespace.InGameTimer
   - Terra.Studio.GameScore
   m_ShowComponents:
-  - Collectible
-  - Checkpoint
-  - DestroyOn
-  - Oscillate
-  - Respawn
-  - Rotate
-  - Translate
-  - InGameTimer
-  - Transform
-  - GameScore
+  - ComponentName: Collectible
+    hideAddButton: 0
+    hideRemoveButton: 0
+  - ComponentName: DestroyOn
+    hideAddButton: 0
+    hideRemoveButton: 0
+  - ComponentName: Oscillate
+    hideAddButton: 0
+    hideRemoveButton: 0
+  - ComponentName: Rotate
+    hideAddButton: 0
+    hideRemoveButton: 0
+  - ComponentName: Translate
+    hideAddButton: 0
+    hideRemoveButton: 0
+  - ComponentName: Checkpoint
+    hideAddButton: 0
+    hideRemoveButton: 1
+  - ComponentName: Respawn
+    hideAddButton: 0
+    hideRemoveButton: 0
+  - ComponentName: InGameTimer
+    hideAddButton: 1
+    hideRemoveButton: 1
+  - ComponentName: Transform
+    hideAddButton: 0
+    hideRemoveButton: 0
+  - ComponentName: GameScore
+    hideAddButton: 0
+    hideRemoveButton: 0

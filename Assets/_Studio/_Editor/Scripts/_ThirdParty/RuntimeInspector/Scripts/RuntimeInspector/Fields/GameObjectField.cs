@@ -114,20 +114,32 @@ namespace RuntimeInspectorNamespace
 
 			//	//if (tagField)
 			//	//	tagField.SetterMode = StringField.Mode.OnSubmit;
-   //         }
+			//         }
 
             for (int i = 0, j = 0; i < components.Count; i++)
 			{
 				InspectorField componentDrawer = CreateDrawerForComponent(components[i]);
 				if (componentDrawer as ExpandableInspectorField && j < componentsExpandedStates.Count && componentsExpandedStates[j++])
 					((ExpandableInspectorField)componentDrawer).IsExpanded = true;
+				
+
+
+            }
+
+
+            bool hideAddButtonInAny = false;
+            var comp = Inspector.ShownComponents.FirstOrDefault(component => component.ComponentName == components[components.Count-1].GetType().Name);
+            if (comp.hideAddButton && !hideAddButtonInAny)
+            {
+                hideAddButtonInAny = true;
+            }
+
+            if (!hideAddButtonInAny)
+			{
+				if (Inspector.ShowAddComponentButton && Inspector.currentPageIndex == 1)
+					CreateExposedMethodButton(addComponentMethod, () => this, (value) => { });
 			}
-
 			
-
-			if (Inspector.ShowAddComponentButton && Inspector.currentPageIndex == 1)
-				CreateExposedMethodButton(addComponentMethod, () => this, (value) => { });
-
 			componentsExpandedStates.Clear();
 		}
 
@@ -146,7 +158,7 @@ namespace RuntimeInspectorNamespace
 						components[i].GetType().Namespace == "Terra.Studio")) ||
 						(Inspector.currentPageIndex == 1 && (components[i].GetType().Namespace != "RuntimeInspectorNamespace" &&
 						components[i].GetType().Namespace != "Terra.Studio"))
-						|| !Inspector.ShownComponents.Contains(components[i].GetType().Name))
+						|| !Inspector.ShownComponents.Any(component => component.ComponentName == components[i].GetType().Name))
 					{
 						if (components[i] as Transform == null)
 							components.RemoveAt(i);

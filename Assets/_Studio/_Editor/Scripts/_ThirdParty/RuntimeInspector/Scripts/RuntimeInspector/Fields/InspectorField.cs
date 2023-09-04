@@ -4,6 +4,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using Terra.Studio;
+using System.Linq;
 
 namespace RuntimeInspectorNamespace
 {
@@ -525,8 +526,23 @@ namespace RuntimeInspectorNamespace
 
         private void GenerateExposedMethodButtons()
         {
-            if (Inspector.ShowRemoveComponentButton && typeof(Component).IsAssignableFrom(BoundVariableType) && !typeof(Transform).IsAssignableFrom(BoundVariableType) &&Inspector.currentPageIndex==1)
-                CreateExposedMethodButton(GameObjectField.removeComponentMethod, () => this, (value) => { });
+            bool hideRemoveButtonInAny = false;
+            if (elements != null)
+            {
+                if (elements[elements.Count - 1].ComponentType != null)
+                {
+                    var comp = Inspector.ShownComponents.FirstOrDefault(component => component.ComponentName == elements[elements.Count - 1].ComponentType.Name);
+                    if (comp.hideRemoveButton && !hideRemoveButtonInAny)
+                    {
+                        hideRemoveButtonInAny = true;
+                    }
+                }
+            }
+            if (!hideRemoveButtonInAny)
+            {
+                if (Inspector.ShowRemoveComponentButton && typeof(Component).IsAssignableFrom(BoundVariableType) && !typeof(Transform).IsAssignableFrom(BoundVariableType) && Inspector.currentPageIndex == 1)
+                    CreateExposedMethodButton(GameObjectField.removeComponentMethod, () => this, (value) => { });
+            }
 
             ExposedMethod[] methods = BoundVariableType.GetExposedMethods();
             if (methods != null)

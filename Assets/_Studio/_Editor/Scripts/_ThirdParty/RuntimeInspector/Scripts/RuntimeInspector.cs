@@ -250,7 +250,7 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        public String[] ShownComponents
+        public ShownComponent[] ShownComponents
         {
             get
             {
