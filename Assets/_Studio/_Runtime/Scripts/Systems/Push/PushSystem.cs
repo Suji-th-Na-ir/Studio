@@ -2,14 +2,14 @@ using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
-    public class REPLACEMESystem : BaseSystem
+    public class PushSystem : BaseSystem
     {
         public override void OnConditionalCheck(int entity, object data)
         {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<REPLACEMEComponent>(entity);
+            ref var entityRef = ref EntityAuthorOp.GetComponent<PushComponent>(entity);
         }
 
-        public void OnDemandRun(in REPLACEMEComponent component, int entity)
+        public void OnDemandRun(in PushComponent component, int entity)
         {
             if (component.canPlaySFX)
             {
@@ -27,8 +27,8 @@ namespace Terra.Studio
 
         public override void OnHaltRequested(EcsWorld currentWorld)
         {
-            var filter = currentWorld.Filter<REPLACEMEComponent>().End();
-            var compPool = currentWorld.GetPool<REPLACEMEComponent>();
+            var filter = currentWorld.Filter<PushComponent>().End();
+            var compPool = currentWorld.GetPool<PushComponent>();
             foreach (var entity in filter)
             {
                 var component = compPool.Get(entity);

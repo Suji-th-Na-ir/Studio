@@ -49,6 +49,10 @@ MonoBehaviour:
     ComponentName: Terra.Studio.InGameScoreComponent
     SystemName: Terra.Studio.InGameScoreSystem
     DrawerName: Terra.Studio.GameScore
+  - Key: Terra.Studio.Push
+    ComponentName: Terra.Studio.PushComponent
+    SystemName: Terra.Studio.PushSystem
+    DrawerName: Terra.Studio.Push
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent
