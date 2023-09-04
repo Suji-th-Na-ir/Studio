@@ -93,6 +93,7 @@ namespace RuntimeInspectorNamespace
         private void SetCustomString(string _newString)
         {
             Atom.Broadcast atom = (Atom.Broadcast)Value;
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(_newString, atom.data.broadcastName, new ComponentDisplayDock { componentGameObject = atom.target, componentType = atom.componentType });
             atom.data.broadcastName = _newString;
             
             EditorOp.Resolve<DataProvider>().UpdateListenToTypes(atom.data.id, _newString);
