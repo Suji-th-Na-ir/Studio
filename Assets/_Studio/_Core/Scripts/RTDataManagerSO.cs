@@ -39,6 +39,17 @@ namespace Terra.Studio
         private List<CachedSystemData> cachedSystemData = new();
         private List<Type> cachedEventTypes = new();
 
+        public bool TryGetDefaultFromEnumOfEventType(string enumValue, out string defaultValue)
+        {
+            defaultValue = null;
+            var foundData = eventData.Find(x => x.EventValue.ToString().Equals(enumValue));
+            if (foundData != null)
+            {
+                defaultValue = foundData.DefaultData;
+            }
+            return defaultValue != null;
+        }
+
         public bool TryGetKeyFromDrawerType<T>(T _, out string key)
         {
             key = null;
