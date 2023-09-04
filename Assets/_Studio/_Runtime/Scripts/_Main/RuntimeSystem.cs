@@ -30,10 +30,9 @@ namespace Terra.Studio
         {
             ResolveEssentials();
             InitializeEcs();
-            RuntimeOp.Resolve<GameStateHandler>().SwitchToNextState();
             RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameStart(true, (data) => { canRunSystems = true; });
             RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameEnd(true, (data) => { DestroyEcsSystemsAndWorld(); });
-            RuntimeOp.Resolve<CoreGameManager>().SpawnPlayer();
+            RuntimeOp.Resolve<GameStateHandler>().SwitchToNextState();
         }
 
         private void ResolveEssentials()
@@ -156,6 +155,7 @@ namespace Terra.Studio
             ComponentAuthorOp.Flush();
             EntityAuthorOp.Flush();
             RuntimeOp.Unregister<CoreGameManager>();
+            RuntimeOp.Unregister<SceneDataHandler>();
             DestroyEcsSystemsAndWorld();
         }
 
@@ -195,7 +195,6 @@ namespace Terra.Studio
         {
             RuntimeOp.Unregister<Broadcaster>();
             RuntimeOp.Unregister<ComponentsData>();
-            RuntimeOp.Unregister<SceneDataHandler>();
             SystemOp.Unregister(this as ISubsystem);
             RuntimeOp.Unregister(this);
         }

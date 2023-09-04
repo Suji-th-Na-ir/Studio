@@ -144,12 +144,13 @@ namespace RuntimeInspectorNamespace
 			input.captionText.SetSkinInputFieldText( Skin );
 			templateText.SetSkinInputFieldText( Skin );
 
-			templateBackground.color = Skin.InputFieldNormalBackgroundColor.Tint( 0.075f );
+			templateBackground.color = Skin.DropDownItemColor;
 			templateCheckmark.color = Skin.ToggleCheckmarkColor;
 
 			Vector2 rightSideAnchorMin = new Vector2( Skin.LabelWidthPercentage, 0f );
 			variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
 			( (RectTransform) input.transform ).anchorMin = rightSideAnchorMin;
+			variableNameText.fontSize = Skin.HeadingFontSize;
 		}
 
 		public override void Refresh()

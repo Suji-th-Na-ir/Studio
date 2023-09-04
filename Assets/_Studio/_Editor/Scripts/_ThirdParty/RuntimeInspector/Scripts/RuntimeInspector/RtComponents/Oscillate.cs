@@ -18,8 +18,11 @@ namespace RuntimeInspectorNamespace
         public float Speed = 1f;
         public bool Loop = false;
 
+        private string guid;
+
         private void Awake()
         {
+            guid = GetInstanceID() + "_oscillate";
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             fromPoint = transform.localPosition;
             Component.fromPoint = fromPoint;
@@ -35,7 +38,7 @@ namespace RuntimeInspectorNamespace
             Component.ConditionData = GetStartCondition();
             Component.listenIndex = startOn.data.listenIndex;
             
-            Component.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? null : startOn.data.listenName;
+            Component.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName;
             
             Component.loop = Loop;
             Component.speed = Speed;
@@ -85,32 +88,22 @@ namespace RuntimeInspectorNamespace
 
         public void Import(EntityBasedComponent cdata)
         {
-            OscillateComponent cc = JsonConvert.DeserializeObject<OscillateComponent>($"{cdata.data}");
-            fromPoint = cc.fromPoint;
-            toPoint = cc.toPoint;
-            Speed = cc.speed;
-            Loop = cc.loop;
+            OscillateComponent comp = JsonConvert.DeserializeObject<OscillateComponent>($"{cdata.data}");
+            fromPoint = comp.fromPoint;
+            toPoint = comp.toPoint;
+            Speed = comp.speed;
+            Loop = comp.loop;
 
-            if (EditorOp.Resolve<DataProvider>().TryGetEnum(cc.ConditionType, typeof(StartOn), out object result))
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
                 startOn.data.startIndex = (int)(StartOn)result;
             }
 
-            if (cc.ConditionType.ToLower().Contains("listen"))
-            {
-                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_oscillate", cc.ConditionData);
-            }
-            startOn.data.listenIndex = cc.listenIndex;
-            startOn.data.listenName = cc.BroadcastListen;
+            EditorOp.Resolve<DataProvider>().AddToListenList(guid, comp.ConditionData);
+            
+            startOn.data.listenIndex = comp.listenIndex;
+            startOn.data.listenName = comp.BroadcastListen;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, null, startOn.data.listenName);
-        }
-
-        private void OnDestroy()
-        {
-            if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))
-            {
-                Destroy(collider);
-            }
         }
     }
 }

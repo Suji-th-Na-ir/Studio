@@ -27,6 +27,14 @@ namespace Terra.Studio
             Author<EntityAuthor>.Flush();
         }
 
+        public static ref T GetComponent<T>(int entity) where T : struct, IBaseComponent
+        {
+            var world = RuntimeOp.Resolve<RuntimeSystem>().World;
+            var pool = world.GetPool<T>();
+            ref var component = ref pool.Get(entity);
+            return ref component;
+        }
+
         private class EntityAuthor : BaseAuthor
         {
             public override void Generate(object data)
@@ -38,18 +46,23 @@ namespace Terra.Studio
 
             private GameObject CreateVisualRepresentation(VirtualEntity entity)
             {
+                GameObject generatedObj = null;
+                if (!entity.shouldLoadAssetAtRuntime)
+                {
+                    return generatedObj;
+                }
                 var trs = new Vector3[] { entity.position, entity.rotation, entity.scale };
-                GameObject generatedObj = RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, trs);
+                generatedObj = RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, trs);
+                generatedObj.name = entity.name;
                 return generatedObj;
             }
 
             private void HandleEntityAndComponentGeneration(GameObject go, VirtualEntity virtualEntity)
             {
-                if (go == null)
+                if (go == null && virtualEntity.shouldLoadAssetAtRuntime)
                 {
                     return;
                 }
-                go.name = virtualEntity.name;
                 RuntimeOp.Resolve<SceneDataHandler>().SetColliderData(go, virtualEntity.metaData);
                 var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
                 if (virtualEntity.components != null && virtualEntity.components.Length > 0)
@@ -57,7 +70,12 @@ namespace Terra.Studio
                     var entity = ecsWorld.NewEntity();
                     foreach (var component in virtualEntity.components)
                     {
-                        ComponentAuthorOp.Generate((entity, component, go));
+                        ComponentAuthorOp.Generate(new ComponentGenerateData()
+                        {
+                            entity = entity,
+                            data = component,
+                            obj = go
+                        });
                     }
                 }
                 RuntimeOp.Resolve<SceneDataHandler>().HandleChildren(go, virtualEntity.children, HandleEntityAndComponentGeneration);

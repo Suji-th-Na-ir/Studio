@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace Terra.Studio
 {
@@ -17,6 +18,21 @@ namespace Terra.Studio
         public virtual void Degenerate(int entityID)
         {
 
+        }
+
+        public struct ComponentGenerateData
+        {
+            public int entity;
+            public EntityBasedComponent data;
+            public GameObject obj;
+        }
+
+        public struct ComponentAuthorData
+        {
+            public int entity;
+            public string type;
+            public string compData;
+            public GameObject obj;
         }
     }
 

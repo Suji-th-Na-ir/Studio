@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Terra.Studio;
 
+
+
 namespace RuntimeInspectorNamespace
 {
     public class PlaySFXField : InspectorField
@@ -18,8 +20,9 @@ namespace RuntimeInspectorNamespace
 
         [SerializeField] 
         private Dropdown optionsDropdown;
+
 #pragma warning restore 0649
-        
+
         public override void Initialize()
         {
             base.Initialize();
@@ -91,6 +94,8 @@ namespace RuntimeInspectorNamespace
             Vector2 rightSideAnchorMin = new Vector2( Skin.LabelWidthPercentage, 0f );
             variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
             ( (RectTransform) toggleInput.transform ).anchorMin = rightSideAnchorMin;
+
+            optionsDropdown.SetSkinDropDownField(Skin);
         }
         
         private void UpdateData(Atom.PlaySfx _sfx)

@@ -10,78 +10,61 @@ namespace RuntimeInspectorNamespace
     [EditorDrawComponent("Terra.Studio.Respawn")]
     public class Respawn : MonoBehaviour, IComponent
     {
-        public Atom.PlaySfx PlaySFX = new Atom.PlaySfx();
-        public Atom.PlayVfx PlayVFX = new Atom.PlayVfx();
-        public string Broadcast = null;
+        public Atom.PlaySfx PlaySFX = new ();
+        public Atom.PlayVfx PlayVFX = new ();
+        public Atom.Broadcast Broadcast = new ();
         private string guid;
 
         private void Awake()
         {
             guid = GetInstanceID() + "_respawn";//Guid.NewGuid().ToString("N");
-        }
-
-        public void Start()
-        {
+            Broadcast.Setup(gameObject, this.GetType().Name, guid);
             PlaySFX.Setup<Respawn>(gameObject);
             PlayVFX.Setup<Respawn>(gameObject);
         }
-        
-        public void Update()
-        {
-            if (!String.IsNullOrEmpty(Broadcast))
-            {
-                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, Broadcast);
-            }
-        }
-        
+
         public (string type, string data) Export()
         {
-            RespawnComponent respawnComp = new();
+            RespawnComponent comp = new();
             {
-                respawnComp.IsConditionAvailable = true;
-                respawnComp.ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(StartOn.OnPlayerCollide);
-                respawnComp.ConditionData = "Player";
+                comp.IsConditionAvailable = true;
+                comp.ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(StartOn.OnPlayerCollide);
+                comp.ConditionData = "Player";
 
-                respawnComp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
-                respawnComp.Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast;
+                comp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast.data.broadcastName);
+                comp.Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? "None" : Broadcast.data.broadcastName;
+                comp.broadcastTypeIndex = Broadcast.data.broadcastTypeIndex;
 
-                respawnComp.canPlaySFX = PlaySFX.data.canPlay;
-                respawnComp.canPlayVFX = PlayVFX.data.canPlay;
+                comp.canPlaySFX = PlaySFX.data.canPlay;
+                comp.canPlayVFX = PlayVFX.data.canPlay;
 
-                respawnComp.sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName;
-                respawnComp.vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName;
+                comp.sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName;
+                comp.vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName;
 
-                respawnComp.sfxIndex = PlaySFX.data.clipIndex;
-                respawnComp.vfxIndex = PlayVFX.data.clipIndex;
+                comp.sfxIndex = PlaySFX.data.clipIndex;
+                comp.vfxIndex = PlayVFX.data.clipIndex;
 
             }
             gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
-            var data = JsonConvert.SerializeObject(respawnComp);
+            var data = JsonConvert.SerializeObject(comp);
             return (type, data);
         }
 
         public void Import(EntityBasedComponent data)
         {
-            RespawnComponent cc = JsonConvert.DeserializeObject<RespawnComponent>($"{data.data}");
-            Broadcast = cc.Broadcast;
-
-            PlaySFX.data.canPlay = cc.canPlaySFX;
-            PlaySFX.data.clipIndex = cc.sfxIndex;
-            PlaySFX.data.clipName = cc.sfxName;
-            PlayVFX.data.canPlay = cc.canPlayVFX;
-            PlayVFX.data.clipIndex = cc.vfxIndex;
-            PlayVFX.data.clipName = cc.vfxName;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, null);
-        }
-
-      
-        private void OnDestroy()
-        {
-            if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))
-            {
-                Destroy(collider);
-            }
+            RespawnComponent comp = JsonConvert.DeserializeObject<RespawnComponent>($"{data.data}");
+            
+            Broadcast.data.broadcastName = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
+            Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
+            
+            PlaySFX.data.canPlay = comp.canPlaySFX;
+            PlaySFX.data.clipIndex = comp.sfxIndex;
+            PlaySFX.data.clipName = comp.sfxName;
+            PlayVFX.data.canPlay = comp.canPlayVFX;
+            PlayVFX.data.clipIndex = comp.vfxIndex;
+            PlayVFX.data.clipName = comp.vfxName;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast.data.broadcastName, null);
         }
     }
 }

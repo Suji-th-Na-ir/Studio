@@ -23,17 +23,18 @@ namespace RuntimeInspectorNamespace
             startOn.onValueChanged.AddListener(OnStartValueChanged);
             listenOn.onValueChanged.AddListener(OnListenValueChanged);
             LoadListenTo();
-            // Debug.Log("start on initlized");
         }
 
         private void LoadListenTo()
         {
             listenOn.options.Clear();
-            foreach (string _name in EditorOp.Resolve<DataProvider>().ListenToTypes)
+            // lets hide last entry which is "Custom"
+            List<string> loadList = EditorOp.Resolve<DataProvider>().ListenToTypes;
+            for (int i = 0; i < loadList.Count - 1; i++)
             {
                 listenOn.options.Add(new Dropdown.OptionData()
                 {
-                    text = _name
+                    text = loadList[i]
                 });
             }
         }
@@ -94,6 +95,7 @@ namespace RuntimeInspectorNamespace
             Atom.StartOn atom = (Atom.StartOn)Value;
             atom.data.startIndex = _index;
             atom.data.startName = atom.StartList[_index];
+            
             // reset the listen field to previous value
             if(prevListenOnValue != -1)
                 atom.data.listenIndex = prevListenOnValue;
@@ -137,6 +139,8 @@ namespace RuntimeInspectorNamespace
             // toggleInput.graphic.color = Skin.ToggleCheckmarkColor;
 
             Vector2 rightSideAnchorMin = new Vector2( Skin.LabelWidthPercentage, 0f );
+            startOn.SetSkinDropDownField(Skin);
+            listenOn.SetSkinDropDownField(Skin);
             // variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
             // ( (RectTransform) toggleInput.transform ).anchorMin = rightSideAnchorMin;
         }

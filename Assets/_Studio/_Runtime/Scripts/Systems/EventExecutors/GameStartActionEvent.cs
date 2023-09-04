@@ -7,7 +7,7 @@ namespace Terra.Studio
     [EventExecutor("Terra.Studio.GameStart")]
     public struct GameStartActionEvent : IEventExecutor
     {
-        public readonly void Execute(Action<object> onConditionalCheck, bool subscribe, object conditionalCheck = null)
+        public readonly void Execute(Action<object> onConditionalCheck, bool subscribe, EventConditionalCheckData _)
         {
             RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameStart(subscribe, onConditionalCheck);
         }

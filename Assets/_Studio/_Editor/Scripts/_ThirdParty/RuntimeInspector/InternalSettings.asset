@@ -13,27 +13,29 @@ MonoBehaviour:
   m_Name: InternalSettings
   m_EditorClassIdentifier: 
   m_standardDrawers:
-  - {fileID: 114453255388587516, guid: b292c517aa17d35498474513ea51053b, type: 3}
-  - {fileID: 114003958484321768, guid: 97d2e6ff56f4e8148a2c0c88e8455e15, type: 3}
-  - {fileID: 114836596486658644, guid: dc6c99ef010462949be7c6a4420501b2, type: 3}
-  - {fileID: 114833464836618182, guid: 58feae853e7be46429c9eb218ce89d38, type: 3}
-  - {fileID: 114583257696006140, guid: 300fe0c02ada2ff45ad008ce1485e476, type: 3}
-  - {fileID: 114877360959551668, guid: 45ac4396d8db67243a86cff18038a1a6, type: 3}
-  - {fileID: 114338582795875158, guid: 13387474de83f0a46923dc0a1439eb92, type: 3}
-  - {fileID: 114596495426353880, guid: 883ba064f0c0aeb46b2b0a43f522aedc, type: 3}
-  - {fileID: 114047556489614352, guid: b7340ba69c557ad44a95011249f11829, type: 3}
-  - {fileID: 114684740158495808, guid: 42aaa277c0ec5da49bc91c254509c77a, type: 3}
-  - {fileID: 114184647969537138, guid: c5ce82bfc5f4dd946a7339b9d7c8b540, type: 3}
-  - {fileID: 114829980111601818, guid: 7b318668e35de1b44a870ab854cbcb55, type: 3}
-  - {fileID: 114163722636733822, guid: 894e271a7dd5a2c4783d3941f327627c, type: 3}
-  - {fileID: 114450452470005710, guid: 5222bf6ce9fc43a48bca671310a25abd, type: 3}
-  - {fileID: 114477343362451516, guid: 157ccac14e6c44d47ab2729a4b4c4547, type: 3}
-  - {fileID: 114440567464390842, guid: 08eb8cea8faf9b4428f3d50f79e14c63, type: 3}
+  - {fileID: 114453255388587516, guid: 099506b21a8a449ddb854e41c2d90f7b, type: 3}
+  - {fileID: 114003958484321768, guid: ff57331a9127a4450b86e8a30c431f0f, type: 3}
+  - {fileID: 114836596486658644, guid: 9cd074982e05e45ac94f6f5dcdc8c400, type: 3}
+  - {fileID: 114833464836618182, guid: 4e2abfeaf21ee4ad48f8fd74535def68, type: 3}
+  - {fileID: 114583257696006140, guid: 97e6933cf8d6147759f599699f88415c, type: 3}
+  - {fileID: 114877360959551668, guid: f61724ff41ec74804bb1d1220baa5f69, type: 3}
+  - {fileID: 114338582795875158, guid: 0829ddc3f1d824dd49543d87defa15ff, type: 3}
+  - {fileID: 114596495426353880, guid: 774f014ec57724197b741de0345c7f3a, type: 3}
+  - {fileID: 114047556489614352, guid: 47e38a7234bcf4963bb80559799981fd, type: 3}
+  - {fileID: 114684740158495808, guid: 1be5cdb12fc2a415bb3a3bd42662f7c8, type: 3}
+  - {fileID: 114184647969537138, guid: f36fe91188a2147d8b6b83428dfc6d62, type: 3}
+  - {fileID: 114829980111601818, guid: 42fbe22a7e37c490091474be2aac427a, type: 3}
+  - {fileID: 114163722636733822, guid: 96ac4d78ada914cdab1039ef99de54c8, type: 3}
+  - {fileID: 114450452470005710, guid: c7e2fdfc18ade4b9cab4207f7d3e2fb4, type: 3}
+  - {fileID: 114477343362451516, guid: 29eea78d0504944fd8d13f386bc505c2, type: 3}
+  - {fileID: 114440567464390842, guid: dc6c5a356200347e1bc415b22d9be7e0, type: 3}
   - {fileID: -8222105899991718747, guid: ccfc0f75b286e463ca70f2f978f86d2d, type: 3}
   - {fileID: 4654453036125554094, guid: 10acdd34f68c84fe0b142576ffa0148b, type: 3}
   - {fileID: 5796965628761400944, guid: 6ab345c380f314a508c602c8dd6db5bb, type: 3}
   - {fileID: -6807667490536456449, guid: 6e1d12302375b49098070fce022dabba, type: 3}
   - {fileID: 6847311389216224266, guid: 49c9b02c3d5204759a754f61e0720d2e, type: 3}
+  - {fileID: 4822529570597946089, guid: 8f412197f1bd845fca170a8332382bdd, type: 3}
+  - {fileID: 2658517854177472053, guid: 6c1797c0243234d22ac044198358ef80, type: 3}
   m_referenceDrawers:
   - {fileID: 114341945564567828, guid: c2fc4d683d351b642a3c95411cfd089c, type: 3}
   - {fileID: 114690843832701802, guid: 540d9c4334a9e61498a26125e42ae81c, type: 3}
@@ -89,3 +91,35 @@ MonoBehaviour:
   - RuntimeInspectorNamespace.Rotate
   - RuntimeInspectorNamespace.Translate
   - RuntimeInspectorNamespace.InGameTimer
+  - Terra.Studio.GameScore
+  m_ShowComponents:
+  - ComponentName: Collectible
+    hideAddButton: 0
+    hideRemoveButton: 0
+  - ComponentName: DestroyOn
+    hideAddButton: 0
+    hideRemoveButton: 0
+  - ComponentName: Oscillate
+    hideAddButton: 0
+    hideRemoveButton: 0
+  - ComponentName: Rotate
+    hideAddButton: 0
+    hideRemoveButton: 0
+  - ComponentName: Translate
+    hideAddButton: 0
+    hideRemoveButton: 0
+  - ComponentName: Checkpoint
+    hideAddButton: 0
+    hideRemoveButton: 1
+  - ComponentName: Respawn
+    hideAddButton: 0
+    hideRemoveButton: 0
+  - ComponentName: InGameTimer
+    hideAddButton: 1
+    hideRemoveButton: 1
+  - ComponentName: Transform
+    hideAddButton: 0
+    hideRemoveButton: 0
+  - ComponentName: GameScore
+    hideAddButton: 0
+    hideRemoveButton: 0

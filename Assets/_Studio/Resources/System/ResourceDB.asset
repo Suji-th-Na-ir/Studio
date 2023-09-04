@@ -18,140 +18,293 @@ MonoBehaviour:
     resourcePath: Common/Prefabs/Cube
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: a512d320691c44370aecfd2a501bd561
+    isPrimitive: 0
+    primitiveType: 0
   - name: Cylinder
     absolutePath: Assets/_Studio/Resources/Common/Prefabs/Cylinder.prefab
     resourcePath: Common/Prefabs/Cylinder
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: fe0c2d29fcdab49ee8fc44aa49d05d36
+    isPrimitive: 0
+    primitiveType: 0
+  - name: GameScore
+    absolutePath: Assets/_Studio/Resources/Common/Prefabs/GameScore.prefab
+    resourcePath: Common/Prefabs/GameScore
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b9df99a6790c24f0fbab44a711153491
+    isPrimitive: 0
+    primitiveType: 0
+  - name: InGameTimer
+    absolutePath: Assets/_Studio/Resources/Common/Prefabs/InGameTimer.prefab
+    resourcePath: Common/Prefabs/InGameTimer
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b99761ac560514439aa04b0465ceeb26
+    isPrimitive: 0
+    primitiveType: 0
   - name: Plane
     absolutePath: Assets/_Studio/Resources/Common/Prefabs/Plane.prefab
     resourcePath: Common/Prefabs/Plane
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 02b89516cd86a481a973002b5d825f67
+    isPrimitive: 0
+    primitiveType: 0
+  - name: PlayerSpawnPoint
+    absolutePath: Assets/_Studio/Resources/Common/Prefabs/PlayerSpawnPoint.prefab
+    resourcePath: Common/Prefabs/PlayerSpawnPoint
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: cfae9c88ca88f4a02abb5a00f0bf617c
+    isPrimitive: 0
+    primitiveType: 0
   - name: Jeep_done
     absolutePath: Assets/_Studio/Resources/Common/Prefabs/source/Jeep_done.fbx
     resourcePath: Common/Prefabs/source/Jeep_done
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: b958fc347100d40199ec38dbbe32d5a7
+    isPrimitive: 0
+    primitiveType: 0
   - name: Sphere
     absolutePath: Assets/_Studio/Resources/Common/Prefabs/Sphere.prefab
     resourcePath: Common/Prefabs/Sphere
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: f7c4e2fbd3b4a48009fd40fa826f1e2c
+    isPrimitive: 0
+    primitiveType: 0
   - name: SpaceshipA
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/AlienSpaceship/SpaceshipA.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/AlienSpaceship/SpaceshipA
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: cf44c7c03c9b44aefa42e7b6a3bf2536
+    isPrimitive: 0
+    primitiveType: 0
   - name: SpaceshipB
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/AlienSpaceship/SpaceshipB.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/AlienSpaceship/SpaceshipB
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 09a30d96a0fe847f6a47b9e6614d61cd
+    isPrimitive: 0
+    primitiveType: 0
   - name: ButtonWrongA
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/ButtonWrongA.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/ButtonWrongA
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 05eb880f3f29a42e0b914d1f6053515c
+    isPrimitive: 0
+    primitiveType: 0
   - name: ButtonWrongB
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/ButtonWrongB.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/ButtonWrongB
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 61ec8ab1099264fc1b7aa1e9b792dc3e
+    isPrimitive: 0
+    primitiveType: 0
   - name: Cable_Stright
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/cable/Cable_Stright.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/cable/Cable_Stright
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 73b5aad22e10a462f87ec1926b6d7590
+    isPrimitive: 0
+    primitiveType: 0
   - name: CorrectButtonA
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/CorrectButtonA.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/CorrectButtonA
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: af3776fe2907c4c878a96aae3f09ca3c
+    isPrimitive: 0
+    primitiveType: 0
   - name: CorrectTubePrefab1
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/CorrectTubePrefab1.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/CorrectTubePrefab1
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 1aec48a3dfac64f008bb740548d5c553
+    isPrimitive: 0
+    primitiveType: 0
   - name: DomeRoom2
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/DomeRoom/DomeRoom2.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/DomeRoom/DomeRoom2
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 660d54277c98746c8a1ac35348ecf105
+    isPrimitive: 0
+    primitiveType: 0
   - name: LaunchPad
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/LaunchPad/LaunchPad.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/LaunchPad/LaunchPad
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: c2bd4590d3af44f1280820bb199cd426
+    isPrimitive: 0
+    primitiveType: 0
   - name: Pipe_side_long
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/Pipes/Pipe_side_long.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/Pipes/Pipe_side_long
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 7db0ce2a417954b42b627d505e7b0685
+    isPrimitive: 0
+    primitiveType: 0
   - name: Pipe_stright
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/Pipes/Pipe_stright.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/Pipes/Pipe_stright
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 8fd01d75a815346f98b151d19d670467
+    isPrimitive: 0
+    primitiveType: 0
   - name: pIPE_STRIGHT_SMALL
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/Pipes/pIPE_STRIGHT_SMALL.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/Pipes/pIPE_STRIGHT_SMALL
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: dc6737a1338354af6b4d9986852efa0e
+    isPrimitive: 0
+    primitiveType: 0
   - name: RingPlanet
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/Planet/RingPlanet.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/Planet/RingPlanet
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: c4531d2ac93c84f4281d5c08a1a50f71
+    isPrimitive: 0
+    primitiveType: 0
   - name: Cliffwall 1
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/RockPillars/Cliffwall
       1.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/RockPillars/Cliffwall 1
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 21b64fc85162f41ad8011ab2fae5a077
+    isPrimitive: 0
+    primitiveType: 0
   - name: SpaceStation
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/SpaceStation/SpaceStation.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/SpaceStation/SpaceStation
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 7a096519c822a4178b860cb808c13681
+    isPrimitive: 0
+    primitiveType: 0
   - name: UFO
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/UFO/UFO.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/UFO/UFO
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: a027dda1c76d04a08b66f7f7f00ce2cb
+    isPrimitive: 0
+    primitiveType: 0
   - name: WrongTubePrefab1
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/WrongTubePrefab1.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/WrongTubePrefab1
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: dc34ea56a14cf4d5292b35a3162f86e9
+    isPrimitive: 0
+    primitiveType: 0
   - name: WrongTubePrefab2
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Assets/WrongTubePrefab2.prefab
     resourcePath: Common/SpaceRaceAssets/Assets/WrongTubePrefab2
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 1ddea1ab0a92941db91894a4512ad163
+    isPrimitive: 0
+    primitiveType: 0
   - name: CheckPoint
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/CheckPoint.prefab
     resourcePath: Common/SpaceRaceAssets/CheckPoint
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: e6b485027f1c24e89b8939930e2b15aa
+    isPrimitive: 0
+    primitiveType: 0
+  - name: dome-2-tutorial
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/dome-2-tutorial.prefab
+    resourcePath: Common/SpaceRaceAssets/dome-2-tutorial
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: fc147b1a02f544747bf547a18bf26518
+    isPrimitive: 0
+    primitiveType: 0
+  - name: dome-3-tutorial
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/dome-3-tutorial.prefab
+    resourcePath: Common/SpaceRaceAssets/dome-3-tutorial
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0a6e2c1011978445d9cf5233c30dbd50
+    isPrimitive: 0
+    primitiveType: 0
+  - name: dome-4-tutorial
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/dome-4-tutorial.prefab
+    resourcePath: Common/SpaceRaceAssets/dome-4-tutorial
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a351d8f5c16be4e32bea020a09cc3299
+    isPrimitive: 0
+    primitiveType: 0
+  - name: GameWin
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/GameWin.prefab
+    resourcePath: Common/SpaceRaceAssets/GameWin
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 7e75e148af240414b96d56006debd750
+    isPrimitive: 0
+    primitiveType: 0
+  - name: internal-obby-lights
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/internal-obby-lights.prefab
+    resourcePath: Common/SpaceRaceAssets/internal-obby-lights
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 794592809dbf7491286dce1498b40a74
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Kathakali
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Kathakali.prefab
+    resourcePath: Common/SpaceRaceAssets/Kathakali
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 52021fd6da75d42939eaeb7346b66147
+    isPrimitive: 0
+    primitiveType: 0
   - name: Alien_Spacecraft_A_Tail_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Alien
       Spacecraft/Alien_Spacecraft_A_Tail_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Alien Spacecraft/Alien_Spacecraft_A_Tail_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: c5813be2c76a6444e889e209457bf2d2
+    isPrimitive: 0
+    primitiveType: 0
   - name: Alien_Spacecraft_A_Wing_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Alien
       Spacecraft/Alien_Spacecraft_A_Wing_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Alien Spacecraft/Alien_Spacecraft_A_Wing_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: f69d800d4bf0d439aaaf0dae0658132f
+    isPrimitive: 0
+    primitiveType: 0
   - name: Alien_Spacecraft_B_Wing_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Alien
       Spacecraft/Alien_Spacecraft_B_Wing_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Alien Spacecraft/Alien_Spacecraft_B_Wing_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: ce8353283c9d849e487ad9d5e80d4c14
+    isPrimitive: 0
+    primitiveType: 0
   - name: Alien_Spacecraft_B_Wing_Support _Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Alien
       Spacecraft/Alien_Spacecraft_B_Wing_Support _Prefab.prefab
@@ -159,330 +312,1533 @@ MonoBehaviour:
       _Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 6574872446254498c91faa7a54312404
+    isPrimitive: 0
+    primitiveType: 0
   - name: Alien_Spacecraft_Capsule_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Alien
       Spacecraft/Alien_Spacecraft_Capsule_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Alien Spacecraft/Alien_Spacecraft_Capsule_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: e16ee1c533cfd4f4195e80a15ed43537
+    isPrimitive: 0
+    primitiveType: 0
   - name: Cable_Straight_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Cables/Cable_Straight_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Cables/Cable_Straight_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 19ad06caea5fc4ed8b5c694e7aba00d1
+    isPrimitive: 0
+    primitiveType: 0
   - name: Coin_prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/COINS/Coin_prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/COINS/Coin_prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: a1f0580542e2c46f894296c36d9f11a7
+    isPrimitive: 0
+    primitiveType: 0
   - name: Domehouse_Dome_A_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Domehouse/Domehouse_Dome_A_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Domehouse/Domehouse_Dome_A_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 1c5a7380f360346b49d794efec566ca6
+    isPrimitive: 0
+    primitiveType: 0
   - name: Domehouse_Dome_B_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Domehouse/Domehouse_Dome_B_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Domehouse/Domehouse_Dome_B_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 6bebf9bfb44014695810ddbce4f7914c
+    isPrimitive: 0
+    primitiveType: 0
   - name: Domehouse_Junction_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Domehouse/Domehouse_Junction_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Domehouse/Domehouse_Junction_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: caabc602c2a52433b84f83ba8c18d22e
+    isPrimitive: 0
+    primitiveType: 0
   - name: Domehouse_Tube_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Domehouse/Domehouse_Tube_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Domehouse/Domehouse_Tube_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 9e9f369994787473e9b9b6c4a2969bee
+    isPrimitive: 0
+    primitiveType: 0
   - name: Launchpad_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Launchpad/Launchpad_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Launchpad/Launchpad_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 3539731a3747c44e0a328234e43954b6
+    isPrimitive: 0
+    primitiveType: 0
   - name: Pipe_Angular _Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Pipe/Pipe_Angular
       _Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Pipe/Pipe_Angular _Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: f9cbcf409e6324e69ba86020c1c0ec04
+    isPrimitive: 0
+    primitiveType: 0
   - name: Pipe_Connector_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Pipe/Pipe_Connector_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Pipe/Pipe_Connector_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 55e080829a6b44e6faf632d6ad4eac74
+    isPrimitive: 0
+    primitiveType: 0
   - name: Pipe_Straight_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Pipe/Pipe_Straight_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Pipe/Pipe_Straight_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 504b22d00f5264b00a8eb7f4d149a2bc
+    isPrimitive: 0
+    primitiveType: 0
   - name: Planet _2
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Planet/Planet
       _2.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Planet/Planet _2
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: ef9c0ba3b5b2544478ecd6a95210bd87
+    isPrimitive: 0
+    primitiveType: 0
   - name: Planet _Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Planet/Planet
       _Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Planet/Planet _Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 9caa57146790640e49af10c7186b4261
+    isPrimitive: 0
+    primitiveType: 0
   - name: Planet_Ring_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Planet/Planet_Ring_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Planet/Planet_Ring_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: e40ee5d3c947a44149c47f633161ab84
+    isPrimitive: 0
+    primitiveType: 0
   - name: Beacon
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Solar
       Environment/Beacon.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Solar Environment/Beacon
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 60e7808ef58994f7f832592f9cee1db7
+    isPrimitive: 0
+    primitiveType: 0
   - name: HOStation
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Solar
       Environment/HOStation.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Solar Environment/HOStation
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: e0f7c4370232d49d28522e6682cf5cec
+    isPrimitive: 0
+    primitiveType: 0
   - name: SpacePod
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Solar
       Environment/SpacePod.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Solar Environment/SpacePod
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: db46e473c57de446995f83f73d7939cf
+    isPrimitive: 0
+    primitiveType: 0
   - name: Space_Shuttle_Body_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Space
       Shuttle/Space_Shuttle_Body_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Space Shuttle/Space_Shuttle_Body_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 737c964c9004944839510614b933ca0c
+    isPrimitive: 0
+    primitiveType: 0
   - name: Space_Shuttle_Ladder_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Space
       Shuttle/Space_Shuttle_Ladder_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Space Shuttle/Space_Shuttle_Ladder_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 861285e73eb7f41639a2c113bea0a15d
+    isPrimitive: 0
+    primitiveType: 0
   - name: Space_Station_Antenna_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Space
       Station/Space_Station_Antenna_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Space Station/Space_Station_Antenna_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 9e4b772a0f380424fb955099b16319c8
+    isPrimitive: 0
+    primitiveType: 0
   - name: Space_Station_Centre_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Space
       Station/Space_Station_Centre_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Space Station/Space_Station_Centre_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 153bbd8bd15394e0b80484700d0adf92
+    isPrimitive: 0
+    primitiveType: 0
   - name: Space_Station_MainSection_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Space
       Station/Space_Station_MainSection_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Space Station/Space_Station_MainSection_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 30ec4dbf78ca04b22be90fb4cdfd934d
+    isPrimitive: 0
+    primitiveType: 0
   - name: Space_Station_O2Tank_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Space
       Station/Space_Station_O2Tank_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Space Station/Space_Station_O2Tank_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 50d7af691df2b4562a0fee8b4b502519
+    isPrimitive: 0
+    primitiveType: 0
   - name: Space_Station_RIngPillar_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Space
       Station/Space_Station_RIngPillar_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Space Station/Space_Station_RIngPillar_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 52ea3808341b843819c8d61a6b7f5ea7
+    isPrimitive: 0
+    primitiveType: 0
   - name: Space_Station_SolarPanel_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Space
       Station/Space_Station_SolarPanel_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Space Station/Space_Station_SolarPanel_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: c177fcc79f5494061847080f44db7a34
+    isPrimitive: 0
+    primitiveType: 0
   - name: TallTower_FloatingSlab1_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab1_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab1_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 8f9f5f83ec04d49c0b57b6c966b2ef25
+    isPrimitive: 0
+    primitiveType: 0
   - name: TallTower_FloatingSlab4_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab4_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab4_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 987e729f5457046738b9dfff54f3d246
+    isPrimitive: 0
+    primitiveType: 0
   - name: TallTower_FloatingSlab6_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab6_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab6_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: acd3e6d1bdf0644dea6d18d32939619e
+    isPrimitive: 0
+    primitiveType: 0
   - name: TallTower_FloatingSlab7_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab7_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab7_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 494cc57245f184e6bb0adc9fd874fab4
+    isPrimitive: 0
+    primitiveType: 0
   - name: TallTower_FloatingSlab8_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab8_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab8_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: c51890cda4bfa467697d624d0d677b11
+    isPrimitive: 0
+    primitiveType: 0
   - name: TallTower_FloatingSlab9_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab9_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Tall Tower/TallTower_FloatingSlab9_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: c4bc7085f2b7a44d58c5717de805d6ac
+    isPrimitive: 0
+    primitiveType: 0
   - name: alian_tree1
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/alian_tree1.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/alian_tree1
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: ffc1738a20e3b444e95e48ae27d573db
+    isPrimitive: 0
+    primitiveType: 0
   - name: Alian_tree2
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/Alian_tree2.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/Alian_tree2
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 7b68885b735d449588f3609884a1e704
+    isPrimitive: 0
+    primitiveType: 0
   - name: CliffwallRockExtraLarge_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/CliffwallRockExtraLarge_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/CliffwallRockExtraLarge_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 68c5d001933644d7c9ff23dbf07a6ad4
+    isPrimitive: 0
+    primitiveType: 0
   - name: cliffwallRockLarge_prefabs
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/cliffwallRockLarge_prefabs.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/cliffwallRockLarge_prefabs
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: d084f0067ae104c9395848798879a7d9
+    isPrimitive: 0
+    primitiveType: 0
   - name: cliffwallRockMedium_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/cliffwallRockMedium_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/cliffwallRockMedium_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: daa9e5dbe15a949968181326e353b59a
+    isPrimitive: 0
+    primitiveType: 0
   - name: cliffwallRockSmall_prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/cliffwallRockSmall_prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/cliffwallRockSmall_prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: e129bd23d24e34d56873726a93a6757c
+    isPrimitive: 0
+    primitiveType: 0
   - name: concaveRamp_prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/concaveRamp_prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/concaveRamp_prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 5adb2248fd356499687cfbeaef9a92da
+    isPrimitive: 0
+    primitiveType: 0
   - name: crater_prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/crater_prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/crater_prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: c6a9dde6595544a6c954ed57a44252d9
+    isPrimitive: 0
+    primitiveType: 0
   - name: mainGroundUneven_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/mainGroundUneven_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/mainGroundUneven_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 85fdf7cf7f2664a0896deefc2b8b2ce9
+    isPrimitive: 0
+    primitiveType: 0
   - name: Mountain01_prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/Mountain01_prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/Mountain01_prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: abcc6f3fdf3404206b78083bf5a05c7e
+    isPrimitive: 0
+    primitiveType: 0
   - name: mountain02_prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/mountain02_prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/mountain02_prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: d0aa9601fcf1246e180227ad6e5081f9
+    isPrimitive: 0
+    primitiveType: 0
   - name: mountain03_prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/mountain03_prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/mountain03_prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 7279b714924984e8f9b1b7687e0ef9b4
+    isPrimitive: 0
+    primitiveType: 0
   - name: mountain04_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/mountain04_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/mountain04_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 90253c10abd624d34a22a7831a17d17a
+    isPrimitive: 0
+    primitiveType: 0
   - name: mountain05_pefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/mountain05_pefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/mountain05_pefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 7e4b16aafddf44bed86096e4e1b49d5a
+    isPrimitive: 0
+    primitiveType: 0
   - name: mountain_prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/mountain_prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/mountain_prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 166439062faa147dbb8d3ac0de6eddfd
+    isPrimitive: 0
+    primitiveType: 0
   - name: mountainRange02_prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/mountainRange02_prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/mountainRange02_prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 792cafc462d6b46cda8372084b951387
+    isPrimitive: 0
+    primitiveType: 0
   - name: Plateau_Large_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/Plateau_Large_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/Plateau_Large_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 6afe8be04bbd641b1b80b8ae9e91f185
+    isPrimitive: 0
+    primitiveType: 0
   - name: straightRamp_prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/Terrain/straightRamp_prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/Terrain/straightRamp_prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 32160905e01e4487aa5ac6511b2cf95c
+    isPrimitive: 0
+    primitiveType: 0
   - name: UFO_Ladder_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/UFO/UFO_Ladder_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/UFO/UFO_Ladder_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 25ac4520c4eb247beb30f4dcbaeba23c
+    isPrimitive: 0
+    primitiveType: 0
   - name: UFO_MainBody_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/UFO/UFO_MainBody_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/UFO/UFO_MainBody_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: d83c1aff533db42428f40ad427c1aec5
+    isPrimitive: 0
+    primitiveType: 0
   - name: UFO_OpeningHatch_Prefab
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pallette/UFO/UFO_OpeningHatch_Prefab.prefab
     resourcePath: Common/SpaceRaceAssets/Pallette/UFO/UFO_OpeningHatch_Prefab
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 7a6e1839a362c4b69b28d3a1289d0952
+    isPrimitive: 0
+    primitiveType: 0
+  - name: pipe-1-tutorial
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/pipe-1-tutorial.prefab
+    resourcePath: Common/SpaceRaceAssets/pipe-1-tutorial
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 825c6ef8ce56440ba92563b011434f0a
+    isPrimitive: 0
+    primitiveType: 0
+  - name: pipe-2-tutorial
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/pipe-2-tutorial.prefab
+    resourcePath: Common/SpaceRaceAssets/pipe-2-tutorial
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 2d97c6010e9e843c584d0a3ed7ef0816
+    isPrimitive: 0
+    primitiveType: 0
+  - name: pipe-3-tutorial
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/pipe-3-tutorial.prefab
+    resourcePath: Common/SpaceRaceAssets/pipe-3-tutorial
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 6d0e8ae78f84742a48d19ec3add0edde
+    isPrimitive: 0
+    primitiveType: 0
+  - name: pipe-4-tutorial
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/pipe-4-tutorial.prefab
+    resourcePath: Common/SpaceRaceAssets/pipe-4-tutorial
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0ee5c5caffc04443888637f38e83472f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Pizza 1
+    absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/Pizza 1.prefab
+    resourcePath: Common/SpaceRaceAssets/Pizza 1
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3c632c67bde3e40189cada323d0b9598
+    isPrimitive: 0
+    primitiveType: 0
   - name: UFO (6)
     absolutePath: Assets/_Studio/Resources/Common/SpaceRaceAssets/UFO (6).prefab
     resourcePath: Common/SpaceRaceAssets/UFO (6)
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 9a1ca7ed0292842b898590ce7344ccc8
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Flash 2
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Flash 2.prefab
+    resourcePath: Common/vfx/Flash 2
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 99649c5fed10ce848a575f679ff0e303
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Flash 3
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Flash 3.prefab
+    resourcePath: Common/vfx/Flash 3
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 29fec53fa5329e345981c83555fa131e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Flash 4
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Flash 4.prefab
+    resourcePath: Common/vfx/Flash 4
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c9e6ddab55c69eb4b81803e860d80c55
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 1
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 1.prefab
+    resourcePath: Common/vfx/Hit 1
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 7e59152fc3be99d4aa2760fb61212ce2
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 13
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 13.prefab
+    resourcePath: Common/vfx/Hit 13
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3a3ebdd477adb6444969752e68f9e55e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 16
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 16.prefab
+    resourcePath: Common/vfx/Hit 16
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f95ef7e849953e2428a605bb742e8b9e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 17
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 17.prefab
+    resourcePath: Common/vfx/Hit 17
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 953acd63f3feb604da8867d4f55f7351
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 18
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 18.prefab
+    resourcePath: Common/vfx/Hit 18
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: fcb7ef11e81f7264990b58f26051651b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 19
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 19.prefab
+    resourcePath: Common/vfx/Hit 19
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e90b0a20dc997ef4c9e67b1c8b6db6c9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 20
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 20.prefab
+    resourcePath: Common/vfx/Hit 20
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 7e33fe33aff4f49449f51ed88f138e9c
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 22
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 22.prefab
+    resourcePath: Common/vfx/Hit 22
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c5a11cdca0c02ec46af89a4f25515b5f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 25
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 25.prefab
+    resourcePath: Common/vfx/Hit 25
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 266bfc3979b19d3478e92304dab844d6
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 3
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 3.prefab
+    resourcePath: Common/vfx/Hit 3
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: df365974c854a33438e5aea62ca4b975
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 4
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 4.prefab
+    resourcePath: Common/vfx/Hit 4
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 983ffc7b1f02f0d46a330ab4d104d17d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 6
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 6.prefab
+    resourcePath: Common/vfx/Hit 6
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 4754d1c93d0ffde46a4b52472f289725
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 7
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 7.prefab
+    resourcePath: Common/vfx/Hit 7
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c8c637b8f0130b84b8e2d623d873832d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 8
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 8.prefab
+    resourcePath: Common/vfx/Hit 8
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 245bf6b0acdf9474ca212c5a4f28b2ce
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Hit 9
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 9.prefab
+    resourcePath: Common/vfx/Hit 9
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 7bb551564a4a9a1498e0624fd34ce7d3
+    isPrimitive: 0
+    primitiveType: 0
   - name: vfx_ArrowBlue
     absolutePath: Assets/_Studio/Resources/Common/vfx/vfx_ArrowBlue.prefab
     resourcePath: Common/vfx/vfx_ArrowBlue
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: a17580581e360e74db460cc3d5dc0396
+    isPrimitive: 0
+    primitiveType: 0
   - name: vfx_ArrowFire
     absolutePath: Assets/_Studio/Resources/Common/vfx/vfx_ArrowFire.prefab
     resourcePath: Common/vfx/vfx_ArrowFire
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 2a08b3071ec108040959cc25cf08be4b
+    isPrimitive: 0
+    primitiveType: 0
   - name: vfx_ArrowGreen
     absolutePath: Assets/_Studio/Resources/Common/vfx/vfx_ArrowGreen.prefab
     resourcePath: Common/vfx/vfx_ArrowGreen
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 73a45666000e9ab44a46a4a4da5ff8f1
+    isPrimitive: 0
+    primitiveType: 0
   - name: vfx_ArrowPoisoned
     absolutePath: Assets/_Studio/Resources/Common/vfx/vfx_ArrowPoisoned.prefab
     resourcePath: Common/vfx/vfx_ArrowPoisoned
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 9a723d60088206e4a86eb5411a8d5df3
+    isPrimitive: 0
+    primitiveType: 0
   - name: bell_1
     absolutePath: Assets/_Studio/Resources/Common/sfx/bell_1.mp3
     resourcePath: Common/sfx/bell_1
     type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: b766fe666be0e4705a2dc20adb5dea82
+    isPrimitive: 0
+    primitiveType: 0
   - name: bell_2
     absolutePath: Assets/_Studio/Resources/Common/sfx/bell_2.mp3
     resourcePath: Common/sfx/bell_2
     type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: d601a2cf33a3c4486ac8953db8067473
+    isPrimitive: 0
+    primitiveType: 0
   - name: collect_1
     absolutePath: Assets/_Studio/Resources/Common/sfx/collect_1.mp3
     resourcePath: Common/sfx/collect_1
     type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
+    guid: 102ddff5bb9314cca9cff1e59869cb44
+    isPrimitive: 0
+    primitiveType: 0
   - name: success_1
     absolutePath: Assets/_Studio/Resources/Common/sfx/success_1.mp3
     resourcePath: Common/sfx/success_1
     type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  data:
-    name: 
-    absolutePath: 
-    resourcePath: 
-    type: 
+    guid: 298df2f553b0747c2a28fe8ee0b8c6f9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Watermemlon
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetables and
+      fruits/Watermemlon.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetables and fruits/Watermemlon
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 4f393b93a0df5194b9f425cadda7ed51
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Flower_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/Flower_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/Flower_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f2d61a807ffc9da40b2872deeddd2ab5
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Tile_Grass_cube
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Tile_Grass_cube.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Tile_Grass_cube
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1079eb4aea060a14cb0afed26b4bb498
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Radish_Plant_03
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Radish_Plant_03.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Radish_Plant_03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 9780d1181f9b4ec4a929f22978c72a2f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Rock_04
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Rocks/Rock_04.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Rocks/Rock_04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: ff0b489afe2240b4bb2e4cf7de961d42
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Radish
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetables and
+      fruits/Radish.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetables and fruits/Radish
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 226802d016172354f8ef64d0e552a41e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Farmland_03
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Farmland_03.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Farmland_03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3d3e73f051dd5d34e98de1c9958e44f1
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Tree_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Trees/Tree_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Trees/Tree_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 49e4a85c321c4ce4fa9649de30eb0b7f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Mango_tree
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/FruitTree/Mango_tree.prefab
+    resourcePath: Common/KawaiiLandPrefabs/FruitTree/Mango_tree
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: eacb90534775f2947ba0d7695c412555
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Rock_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Rocks/Rock_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Rocks/Rock_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e7101a69a982e764fb87764134999d3b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: TreeStump
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Props/TreeStump.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Props/TreeStump
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 689e0e395ec9cb243b15de84f377e7c5
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Farmland_05
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Farmland_05.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Farmland_05
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a5c6eb68ccacd4a42a40f6c8e9780fbc
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Tile_road
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Tile_road.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Tile_road
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8dd0f9263f05daa43a93723ac851a9c1
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Orange_juice
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetables and
+      fruits/Orange_juice.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetables and fruits/Orange_juice
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 41cd87fec3f12b04399cf9018d0474dd
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Box
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Props/Box.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Props/Box
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 49e8714086d004d4b9c891f92631a414
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Radish_Plant_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Radish_Plant_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Radish_Plant_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 252dc5d1f7030e043a3523800027bdab
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Corn_Plant_03
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Corn_Plant_03.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Corn_Plant_03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 93476962347969940818ca1d762224c8
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Radish_Plant_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Radish_Plant_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Radish_Plant_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: d1d9340f66e18a54eba2d5eb8d9ec8cb
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Cliff_corner_inside
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Cliff_corner_inside.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Cliff_corner_inside
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5d478e533f00f154cb4bb6a59d95ed51
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Watermelon_Plant_03
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Watermelon_Plant_03.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Watermelon_Plant_03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 6812c758634f5034eae234ba5215d1bc
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Orange_juice_tree
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/FruitTree/Orange_juice_tree.prefab
+    resourcePath: Common/KawaiiLandPrefabs/FruitTree/Orange_juice_tree
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: eef87955854fa59459bca43515591cc6
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Flower_03
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/Flower_03.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/Flower_03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e57d2dd65d1fe0144ba615b5e75dc46f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Tile_crossroads_4
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Tile_crossroads_4.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Tile_crossroads_4
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 33b82a99246027142a6fce28572f6d1f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Flower_07
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/Flower_07.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/Flower_07
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0bf488bd2214fc14c97f5d8290ada76d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Avocado_tree
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/FruitTree/Avocado_tree.prefab
+    resourcePath: Common/KawaiiLandPrefabs/FruitTree/Avocado_tree
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5b84cf0f898f5c94faacdf18e44576a1
+    isPrimitive: 0
+    primitiveType: 0
+  - name: TreeHollow_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Props/TreeHollow_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Props/TreeHollow_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 573cb948bf70e3d4bb6c8151e9a692f8
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Carrot
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetables and
+      fruits/Carrot.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetables and fruits/Carrot
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1f64467a0b3f1714898af0ccb0f325e5
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Tomato
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetables and
+      fruits/Tomato.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetables and fruits/Tomato
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b6224e336b07028409eed7a3c507f193
+    isPrimitive: 0
+    primitiveType: 0
+  - name: FlowerBush_violet
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/FlowerBush_violet.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/FlowerBush_violet
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8e6bd1410d74be34e992f93c290a5304
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Mango
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetables and
+      fruits/Mango.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetables and fruits/Mango
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: aba3ed5e43ba42d4080edeb5599be7d3
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Carrot_plant_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Carrot_plant_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Carrot_plant_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5a574a6ad5ce06649a0c706b85bee6d7
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Mushroom_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Mushroom_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Mushroom_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1b0085bbd3b95534aafbb30c38ac9d04
+    isPrimitive: 0
+    primitiveType: 0
+  - name: FlowerBush_red
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/FlowerBush_red.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/FlowerBush_red
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 6e137735a82dc1545a35608e519ef697
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Grass_04
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/Grass_04.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/Grass_04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: cb902082cb2c1b44781af8d74d13152e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Watermelon_Plant_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Watermelon_Plant_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Watermelon_Plant_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 9054662b855522d49a343b298c6405ed
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Flower_06
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/Flower_06.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/Flower_06
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 50107d390cb907141b7a4d52186075b5
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Avocado
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetables and
+      fruits/Avocado.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetables and fruits/Avocado
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: dd324597d148b8447a3fc9ba60a2c31a
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Barley
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetables and
+      fruits/Barley.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetables and fruits/Barley
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f14c7fe750538634fb3bc294cbcfa796
+    isPrimitive: 0
+    primitiveType: 0
+  - name: KawaiiLandDayLights
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/KawaiiLandDayLights.prefab
+    resourcePath: Common/KawaiiLandPrefabs/KawaiiLandDayLights
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 243c4855b51ac480bba29083a0a32714
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Mushroom_03
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Mushroom_03.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Mushroom_03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 950703cb1a620c54290f83a4764e7759
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Bush_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/Bush_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/Bush_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5d67375e7b334f849818911b8ade36b3
+    isPrimitive: 0
+    primitiveType: 0
+  - name: FlowerBush_blue
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/FlowerBush_blue.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/FlowerBush_blue
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: bc25cb500dd8e79439eb4069e86dcc2a
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Tile_road_curse
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Tile_road_curse.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Tile_road_curse
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8d3ee00b0fff8ef4f98f11a5464e7fa8
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Peach_tree
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/FruitTree/Peach_tree.prefab
+    resourcePath: Common/KawaiiLandPrefabs/FruitTree/Peach_tree
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 7699347d0fa3f2e4690004b4abab37ff
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Farmland_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Farmland_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Farmland_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 643b6171f9418d740ba08c2b366f47f2
+    isPrimitive: 0
+    primitiveType: 0
+  - name: NewBush_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/NewBush_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/NewBush_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: d0b71771b25106648bb859f77b8342e5
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Carrot_plant_03
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Carrot_plant_03.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Carrot_plant_03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 64d55a71a6c7ed34c9134ceefe6010f4
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Grass_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/Grass_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/Grass_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 57d932d6a8ea7754e9a61b0a037abe12
+    isPrimitive: 0
+    primitiveType: 0
+  - name: KawaiiLandNightWater
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/KawaiiLandNightWater.prefab
+    resourcePath: Common/KawaiiLandPrefabs/KawaiiLandNightWater
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b1052c1c79f144382820247c420ef1a3
+    isPrimitive: 0
+    primitiveType: 0
+  - name: WoodFence
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Props/WoodFence.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Props/WoodFence
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 2ad7e32aaf1af5b489aa9851ee06dd65
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Pear_tree
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/FruitTree/Pear_tree.prefab
+    resourcePath: Common/KawaiiLandPrefabs/FruitTree/Pear_tree
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3c68a25321fb8a84bb2165aff27ada1d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Tree_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Trees/Tree_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Trees/Tree_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 700dd2d4ad10ab74d85d00b4c387fe56
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Pumpkin_plant_03
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Pumpkin_plant_03.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Pumpkin_plant_03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 88603bd024b18b74792c92289e3e8019
+    isPrimitive: 0
+    primitiveType: 0
+  - name: FlowerBush_yellow
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/FlowerBush_yellow.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/FlowerBush_yellow
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 183014b45b75e0347b6831fd832c9928
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Rock_03
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Rocks/Rock_03.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Rocks/Rock_03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0f0412b0a6d36bd448ebd567e9081f59
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Tile_road_end
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Tile_road_end.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Tile_road_end
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: d5f4e3ba517eaed4183c95be1d494fd1
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Mushroom_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Mushroom_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Mushroom_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 127eac80052d2bb4da40cc07c331860b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Pumpkin_plant_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Pumpkin_plant_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Pumpkin_plant_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 03e350a65ff8268428b89708f52b5734
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Grass_03
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/Grass_03.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/Grass_03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 722121f68d90cae40b6621fc1ef7525d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Branch_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Props/Branch_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Props/Branch_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5bb3e241ca884e44bb3c7cfaef21b633
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Branch_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Props/Branch_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Props/Branch_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 09bfb31cab268164580d28d36bca5cf5
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Apple
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetables and
+      fruits/Apple.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetables and fruits/Apple
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3a8f68d3e6575c54896d6dc301c89114
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Pumpkin
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetables and
+      fruits/Pumpkin.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetables and fruits/Pumpkin
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: cebf93603c8b57949bceeebbbb1286f4
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Pumpkin_plant_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Pumpkin_plant_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Pumpkin_plant_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 4de2f62d3af5eec4784124bfeef3fe5c
+    isPrimitive: 0
+    primitiveType: 0
+  - name: KawaiiLandDayWater
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/KawaiiLandDayWater.prefab
+    resourcePath: Common/KawaiiLandPrefabs/KawaiiLandDayWater
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a9eda68c0372c4d14b3d6bdc39773ae9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Flower_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/Flower_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/Flower_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 65d53ec83a9f17948979cccf0b7f0a93
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Tile_Grass_plane
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Tile_Grass_plane.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Tile_Grass_plane
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 4f99f5b219d7a8a4e9eba7787f21baf6
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Bridge
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Props/Bridge.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Props/Bridge
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e1a0689d46886f144a45c3a21696b11f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Rock_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Rocks/Rock_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Rocks/Rock_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5cc08660e891c3c42b28cdacdefd0b53
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Cliff_Edge_2
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Cliff_Edge_2.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Cliff_Edge_2
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: bfe81fad0194c934f89ba7ddbcce2bce
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Corn
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetables and
+      fruits/Corn.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetables and fruits/Corn
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b1c58ad5388d67e4b8c49e11cfd4d5d9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Grass_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/Grass_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/Grass_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5a1552bdf640e304a8c0f0397307b0f7
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Peach
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetables and
+      fruits/Peach.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetables and fruits/Peach
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8d0eb710b6309624e836f99712ac156b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: KawaiiLandNightLights
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/KawaiiLandNightLights.prefab
+    resourcePath: Common/KawaiiLandPrefabs/KawaiiLandNightLights
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 880eda04c72694519a46cdb73cd2f30f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Watermelon_Plant_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Watermelon_Plant_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Watermelon_Plant_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 93c6dd6897439634896de3dc84c81ed3
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Corn_Plant_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Corn_Plant_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Corn_Plant_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 6b3def407bfb5b44f827eab69c86126e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: FlowerBush_pink
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/FlowerBush_pink.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/FlowerBush_pink
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1e1d4d40c2f50a84eb2b687502f8c99d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Tomato_Plant_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Tomato_Plant_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Tomato_Plant_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b8522af6ca27efe47a72b1c4e96c8aec
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Corn_Plant_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Corn_Plant_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Corn_Plant_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 20c934d62f699ea4393afd34af8d271f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Apple_tree
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/FruitTree/Apple_tree.prefab
+    resourcePath: Common/KawaiiLandPrefabs/FruitTree/Apple_tree
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 23bfb955924ee9042a95c94e62fcff4d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Barley_Plant_03
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Barley_Plant_03.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Barley_Plant_03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e4f877385ee46714da50d1437aa1df95
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Tomato_Plant_03
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Tomato_Plant_03.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Tomato_Plant_03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 2c5c1286d1ce23c459fa507566e7d306
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Farmland_04
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Farmland_04.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Farmland_04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 29cc465afd058e84f915ca72701fe3e9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Tomato_Plant_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Tomato_Plant_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Tomato_Plant_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: fcf9b2d573555a74db13c3fe68fd7732
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Cliff_Edge_3
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Cliff_Edge_3.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Cliff_Edge_3
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1548e755fd0039f43a136e7f955a27d1
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Carrot_plant_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Carrot_plant_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Carrot_plant_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8f808205646f3be488fe51889b57959d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: TreeHollow_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Props/TreeHollow_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Props/TreeHollow_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 44cd802aeebbad545a2f2bc0ab8cec1a
+    isPrimitive: 0
+    primitiveType: 0
+  - name: GreenPear
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetables and
+      fruits/GreenPear.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetables and fruits/GreenPear
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e13ee6ee8a8a515438763b44a8b56e77
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Cliff_Edge_4
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Cliff_Edge_4.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Cliff_Edge_4
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: be1a3f8f4d0d29b48a385dd779121e8c
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Cliff_Corner_outside
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Cliff_Corner_outside.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Cliff_Corner_outside
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 03423ce0ceb2949488495a0375b5d3db
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Farmland_06
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Farmland_06.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Farmland_06
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 481f4679783c09641bc93c7c1954cb2b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Farmland_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Farmland_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Farmland_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5d30f002d0c38af43a00d0ffad4004a0
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Flower_05
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/Flower_05.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/Flower_05
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: aec65d6c1545357489b24311c06ac0ef
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Cliff_Edge_1
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Cliff_Edge_1.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Cliff_Edge_1
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 6d3b2d63c9113444783bdf6ca8936b5b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Bush_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/Bush_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/Bush_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f365d49c31496754cad73b3fc4661099
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Flower_04
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/Flower_04.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/Flower_04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: ad5b24680d90a68439afe45404680e8d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Pomegranate_tree
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/FruitTree/Pomegranate_tree.prefab
+    resourcePath: Common/KawaiiLandPrefabs/FruitTree/Pomegranate_tree
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b00bef8de1437444f8d84b6a2633e34a
+    isPrimitive: 0
+    primitiveType: 0
+  - name: NewBush_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/NewBush_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/NewBush_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 994082dea894ab647ae2ec9afb651cf1
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Pomegranate
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetables and
+      fruits/Pomegranate.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetables and fruits/Pomegranate
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: fe7aed49c5db4684788afdbb523106e0
+    isPrimitive: 0
+    primitiveType: 0
+  - name: FlowerBush_white
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Plants/FlowerBush_white.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Plants/FlowerBush_white
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3db05949bac4207449b50b4e9e1592fa
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Barley_Plant_01
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Barley_Plant_01.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Barley_Plant_01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: ee2a32d4aa1de7849800b21539c466d3
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Tile_crossroads_3
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Tiles/Tile_crossroads_3.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Tiles/Tile_crossroads_3
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3304492ff9b70e04db3cddef778a4b83
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Barley_Plant_02
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Vegetable plants/Barley_Plant_02.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Vegetable plants/Barley_Plant_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 77125381895b2b744a01d6082faafe60
+    isPrimitive: 0
+    primitiveType: 0
   watchFolders:
   - Assets/_Studio/Resources/Common

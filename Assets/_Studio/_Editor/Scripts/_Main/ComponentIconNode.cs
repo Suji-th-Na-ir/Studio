@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using RuntimeInspectorNamespace;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,7 +25,7 @@ namespace Terra.Studio
         private Sprite m_broadcastSprite;
         private Sprite m_broadcastNoListnerSprite;
         private Sprite m_GameWonBroadcastSprite;
-
+        RuntimeInspector Inspector;
         private bool m_isBroadcating = false;
         public bool ISBroadcasting
         {
@@ -72,7 +73,8 @@ namespace Terra.Studio
         }
 
         public void Setup(Sprite icon, Sprite broadcastIcon,Sprite broadcast_noListners,Sprite gameWonIcon,  ComponentDisplayDock displayDock)
-        { 
+        {
+            Inspector = FindAnyObjectByType<RuntimeInspector>();
             m_ObjectTarget = displayDock;
             if (!m_MainCamera)
                 m_MainCamera = Camera.main;
@@ -124,6 +126,17 @@ namespace Terra.Studio
             //    }
             //    return;
             //}
+            if(Inspector.currentPageIndex==0)
+            {
+                m_BroadcastIcon.enabled = m_PointImage.enabled = false;
+                ClearAllLineRenderers();
+                return;
+            }
+            else
+            {
+                m_BroadcastIcon.enabled = m_PointImage.enabled = true;
+            }
+
             if (IsTargetDestroyed())
             {
                 return;

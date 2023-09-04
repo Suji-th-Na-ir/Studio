@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae08b96fc8928445ba743b0f85963263, type: 3}
   m_Name: EditorEssentialsLoaderSO
   m_EditorClassIdentifier: 
-  data:
+  essentials:
   - itemData:
       name: PlayerSpawnPoint
       absolutePath: Assets/_Studio/Resources/Common/Prefabs/PlayerSpawnPoint.prefab
@@ -23,3 +23,16 @@ MonoBehaviour:
       isPrimitive: 0
       primitiveType: 0
     type: 1
+    spawnPosition: {x: 0, y: 0, z: 0}
+  loadOnDemandData:
+  - itemData:
+      name: GameScore
+      absolutePath: Assets/_Studio/Resources/Common/Prefabs/GameScore.prefab
+      resourcePath: Common/Prefabs/GameScore
+      type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      guid: b9df99a6790c24f0fbab44a711153491
+      isPrimitive: 0
+      primitiveType: 0
+    type: 3
+    spawnPosition: {x: 0, y: 0, z: 0}

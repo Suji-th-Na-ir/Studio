@@ -24,7 +24,7 @@ namespace Terra.Studio.RTEditor
             }
             var fileRef = asset.SceneDataToLoad;
             var filePath = AssetDatabase.GetAssetPath(fileRef);
-            var persistentPath = FileService.GetSavedFilePath();
+            var persistentPath = FileService.GetSavedFilePath(filePath);
             if (didEnterPlayMode)
             {
                 new FileService().CopyFile(filePath, persistentPath);
@@ -56,15 +56,21 @@ namespace Terra.Studio.RTEditor
         {
             var sceneDataHandler = new SceneDataHandler
             {
-                TryGetAssetPath = GetAssetPath
+                TryGetAssetPath = GetAssetPath,
+                GetAssetName = GetAssetName
             };
             sceneDataHandler.Save();
-            var persistentPath = FileService.GetSavedFilePath();
-            var newPath = EditorUtility.SaveFilePanelInProject("Select Save Path", "SaveFile.json", "json", "Please enter a file name to save it in the project", "Assets/_Studio/Scenes/Templates/");
+            var persistentPath = FileService.GetSavedFilePath(GetAssetName());
+            var newPath = EditorUtility.SaveFilePanelInProject("Select Save Path", $"{GetAssetName()}.json", "json", "Please enter a file name to save it in the project", "Assets/_Studio/Scenes/Templates/");
             if (!string.IsNullOrEmpty(newPath))
             {
                 SyncMetaData(newPath, persistentPath);
                 new FileService().CopyFile(persistentPath, newPath);
+                var resourceObj = Resources.Load<SystemConfigurationSO>("System/SystemSettings");
+                AssetDatabase.Refresh();
+                resourceObj.PickupSavedData = true;
+                resourceObj.SceneDataToLoad = AssetDatabase.LoadAssetAtPath<TextAsset>(newPath);
+                EditorUtility.SetDirty(resourceObj);
                 AssetDatabase.Refresh();
             }
         }
@@ -76,7 +82,8 @@ namespace Terra.Studio.RTEditor
             var fileRef = asset.SceneDataToLoad;
             var sceneDataHandler = new SceneDataHandler
             {
-                TryGetAssetPath = GetAssetPath
+                TryGetAssetPath = GetAssetPath,
+                GetAssetName = GetAssetName
             };
             sceneDataHandler.RecreateScene(fileRef.text);
         }
@@ -90,6 +97,16 @@ namespace Terra.Studio.RTEditor
                 return resourcePath;
             }
             return null;
+        }
+
+        private static string GetAssetName()
+        {
+            var resourceObj = Resources.Load<SystemConfigurationSO>("System/SystemSettings");
+            if (resourceObj.SceneDataToLoad == null)
+            {
+                return "SaveFile";
+            }
+            return resourceObj.SceneDataToLoad.name;
         }
     }
 }

@@ -53,7 +53,22 @@ namespace RuntimeInspectorNamespace
 			}
 		}
 
-		[SerializeField]
+        [SerializeField]
+        private int m_headingfontSize = 20;
+        public int HeadingFontSize
+        {
+            get { return m_headingfontSize; }
+            set
+            {
+                if (m_headingfontSize != value)
+                {
+                    m_headingfontSize = value;
+                    m_version++;
+                }
+            }
+        }
+
+        [SerializeField]
 		private int m_lineHeight = 30;
 		public int LineHeight
 		{
@@ -337,6 +352,21 @@ namespace RuntimeInspectorNamespace
 				}
 			}
 		}
+
+        [SerializeField]
+        private Color m_dropDownItemColor = Color.black;
+        public Color DropDownItemColor
+        {
+            get { return m_dropDownItemColor; }
+            set
+            {
+                if (m_dropDownItemColor != value)
+                {
+                    m_dropDownItemColor = value;
+                    m_version++;
+                }
+            }
+        }
 #pragma warning restore 0649
-	}
+    }
 }

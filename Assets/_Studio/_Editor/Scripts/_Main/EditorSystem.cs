@@ -1,20 +1,13 @@
 using UnityEngine;
-using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
     public class EditorSystem : MonoBehaviour, ISubsystem
     {
-        [HideInInspector]
-        public Vector3 PlayerSpawnPoint;
-        private SaveSystem _saveSystem;
-        private Camera editorCamera;
-
         private void Awake()
         {
             SystemOp.Register(this as ISubsystem);
             EditorOp.Register(this);
-            if (!gameObject.TryGetComponent(out _saveSystem)) Debug.LogError("save system not attached.");
         }
 
         public void Initialize()
@@ -28,8 +21,6 @@ namespace Terra.Studio
             EditorOp.Resolve<UILogicDisplayProcessor>().Init();
             EditorOp.Resolve<SelectionHandler>().Init();
             EditorOp.Resolve<SceneDataHandler>().LoadScene();
-            new EditorEssentialsLoader().LoadEssentials();
-            SetupScene();
         }
 
         public void Dispose()
@@ -39,13 +30,13 @@ namespace Terra.Studio
             EditorOp.Resolve<ToolbarView>().Flush();
             EditorOp.Resolve<SceneView>().Flush();
             EditorOp.Resolve<SelectionHandler>().Flush();
-            SaveQoFDetails();
+            EditorOp.Resolve<SceneDataHandler>().SaveQoFDetails();
+            EditorOp.Unregister<SceneDataHandler>();
         }
 
         private void OnDestroy()
         {
             EditorOp.Unregister<DataProvider>();
-            EditorOp.Unregister<SceneDataHandler>();
             SystemOp.Unregister(this as ISubsystem);
             EditorOp.Unregister(this);
         }
@@ -53,37 +44,6 @@ namespace Terra.Studio
         public void RequestSwitchState()
         {
             SystemOp.Resolve<System>().SwitchState();
-        }
-
-        public void RequestSaveScene()
-        {
-            _saveSystem.Save(Helper.GetCoreDataSavePath(), "core_data", ".data");
-        }
-
-        public void RequestLoadScene()
-        {
-            _saveSystem.Load(Helper.GetCoreDataSavePath(), "core_data", ".data");
-        }
-
-        private void SetupScene()
-        {
-            editorCamera = Camera.main;
-            var isDataPresent = SystemOp.Resolve<CrossSceneDataHolder>().Get("CameraPos", out var data);
-            if (isDataPresent)
-            {
-                editorCamera.transform.position = (Vector3)data;
-            }
-            isDataPresent = SystemOp.Resolve<CrossSceneDataHolder>().Get("CameraRot", out data);
-            if (isDataPresent)
-            {
-                editorCamera.transform.rotation = Quaternion.Euler((Vector3)data);
-            }
-        }
-
-        private void SaveQoFDetails()
-        {
-            SystemOp.Resolve<CrossSceneDataHolder>().Set("CameraPos", editorCamera.transform.position);
-            SystemOp.Resolve<CrossSceneDataHolder>().Set("CameraRot", editorCamera.transform.eulerAngles);
         }
     }
 }

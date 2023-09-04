@@ -24,7 +24,8 @@ namespace Terra.Studio
         [JsonConverter(typeof(Vector3Converter))] public Vector3 scale;
         public EntityBasedComponent[] components;
         public VirtualEntity[] children;
-        public EnitityMetaData metaData;
+        public EntityMetaData metaData;
+        public bool shouldLoadAssetAtRuntime;
     }
 
     [Serializable]
@@ -42,7 +43,7 @@ namespace Terra.Studio
     }
 
     [Serializable]
-    public struct EnitityMetaData
+    public struct EntityMetaData
     {
         public ColliderData colliderData;
     }

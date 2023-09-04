@@ -14,8 +14,20 @@ namespace Terra.Studio
         public StudioState DefaultStudioState { get { return defaultStudioState; } }
         public string EditorSceneName { get { return editorSceneName; } }
         public string RuntimeSceneName { get { return runtimeSceneName; } }
-        public TextAsset SceneDataToLoad { get { return SceneData; } }
-        public bool PickupSavedData { get { return pickupSavedData; } }
+        public TextAsset SceneDataToLoad
+        {
+            get { return SceneData; }
+#if UNITY_EDITOR
+            set { SceneData = value; }
+#endif
+        }
+        public bool PickupSavedData
+        {
+            get { return pickupSavedData; }
+#if UNITY_EDITOR
+            set { pickupSavedData = value; }
+#endif
+        }
 
 #if UNITY_EDITOR
         [Space(10), Header("Editor only")]
