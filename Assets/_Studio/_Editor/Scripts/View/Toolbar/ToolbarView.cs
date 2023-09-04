@@ -87,11 +87,13 @@ namespace Terra.Studio
             if (name.Equals("CheckPoint"))
             {
                 primitive.AddComponent<Checkpoint>();
+                EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = primitive, componentType = "Checkpoint" });
             }
             if (name.Equals("InGameTimer"))
             {
                 primitive.AddComponent<InGameTimer>();
                 EditorOp.Resolve<SceneDataHandler>().TimerManagerObj = primitive;
+                EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = primitive, componentType = "InGameTimer" });
             }
         }
 
