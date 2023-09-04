@@ -351,16 +351,16 @@ namespace RuntimeInspectorNamespace
                     ShowBehaviourPage();
             }
         }
-
+        List<Transform> selected;
         private void ShowBehaviourPage()
         {
-            List<Transform> selected = new List<Transform>();
+            selected?.Clear();
+            selected = new List<Transform>();
             Helper.DeepCopy<Transform>(EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Where(obj => obj != null).Select(obj => obj.transform).ToList(), selected);
             currentPageIndex = 1;
             SystemOp.Resolve<CrossSceneDataHolder>().Set("CurrentPageIndex", 1);
-            if (selected.Count > 0)
-                InspectInternal(selected[0]);
-            m_connectedHierarchy.Select(selected);
+            isDirty = true;
+            StartCoroutine(WaitForRefreshAndSelectAgain());
 
             behaviourButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
             designButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
@@ -368,16 +368,21 @@ namespace RuntimeInspectorNamespace
 
         private void ShowDesignPage()
         {
-            List<Transform> selected = new List<Transform>();
+            selected?.Clear();
+            selected = new List<Transform>();
             Helper.DeepCopy<Transform>(EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Where(obj => obj != null).Select(obj => obj.transform).ToList(), selected);
             currentPageIndex = 0;
             SystemOp.Resolve<CrossSceneDataHolder>().Set("CurrentPageIndex", 0);
-            if (selected.Count > 0)
-                InspectInternal(selected[0]);
-            m_connectedHierarchy.Select(selected);
-
+            isDirty = true;
+            StartCoroutine(WaitForRefreshAndSelectAgain());
             designButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
             behaviourButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
+        }
+
+        IEnumerator WaitForRefreshAndSelectAgain()
+        {
+            yield return new WaitUntil(() => !isDirty);
+            m_connectedHierarchy.Select(selected);
         }
 
         private void OnDestroy()
