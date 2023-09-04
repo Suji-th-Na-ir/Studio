@@ -632,5 +632,15 @@ namespace PlayShifu.Terra
         {
             return new List<string>(Enum.GetNames(typeof(TEnum)));
         }
+
+        public static void DeepCopy<T>(List<T> source, List<T> destination)
+        {
+            destination.Clear();
+            foreach (var originalItem in source)
+            {
+                T newItem = originalItem;
+                destination.Add(newItem);
+            }
+        }
     }
 }
