@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_font: {fileID: 12800000, guid: 6bd1cffe3eb0246d3bb405c5bcaa31b1, type: 3}
   m_fontSize: 15
+  m_headingfontSize: 15
   m_lineHeight: 45
   m_indentAmount: 10
   m_labelWidthPercentage: 0.33
@@ -34,3 +35,4 @@ MonoBehaviour:
   m_buttonTextColor: {r: 0.9411765, g: 0.9342561, b: 0.9342561, a: 1}
   m_selectedItemBackgroundColor: {r: 0.29094398, g: 0.16834284, b: 0.9150943, a: 0.69411767}
   m_selectedItemTextColor: {r: 0.9254902, g: 0.93333334, b: 0.93333334, a: 1}
+  m_dropDownItemColor: {r: 0, g: 0, b: 0, a: 1}

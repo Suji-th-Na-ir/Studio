@@ -150,6 +150,7 @@ namespace RuntimeInspectorNamespace
 			Vector2 rightSideAnchorMin = new Vector2( Skin.LabelWidthPercentage, 0f );
 			variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
 			( (RectTransform) input.transform ).anchorMin = rightSideAnchorMin;
+			variableNameText.fontSize = Skin.HeadingFontSize;
 		}
 
 		public override void Refresh()

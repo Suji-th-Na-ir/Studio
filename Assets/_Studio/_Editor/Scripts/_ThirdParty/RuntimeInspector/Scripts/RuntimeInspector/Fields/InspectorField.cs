@@ -478,6 +478,8 @@ namespace RuntimeInspectorNamespace
                 {
                     variableNameText.rectTransform.sizeDelta = new Vector2(-(Skin.LineHeight*0.05f ), 0f);
                     variableNameText.fontSize = Skin.HeadingFontSize;
+                    variableNameText.supportRichText = true;
+                    variableNameText.fontStyle =FontStyle.Bold;
                 }
             }
 

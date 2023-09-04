@@ -12,8 +12,6 @@ GameObject:
   - component: {fileID: 2885853469568540334}
   - component: {fileID: 5796965628761400944}
   - component: {fileID: 6464182421232436731}
-  - component: {fileID: 6464182421232436730}
-  - component: {fileID: 6464182421232436725}
   m_Layer: 5
   m_Name: RotateField
   m_TagString: Untagged
@@ -61,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 5
+    m_Left: 20
     m_Right: 5
     m_Top: 5
     m_Bottom: 5
@@ -89,7 +87,7 @@ MonoBehaviour:
   layoutElement: {fileID: 0}
   ignoreLayout: 1
   variableNameText: {fileID: 114392269213132144}
-  variableNameMask: {fileID: 6464182421232436730}
+  variableNameMask: {fileID: 0}
   visibleArea: {fileID: 0}
   rotateTypesDD: {fileID: 5402255416815306912}
   allRotateTypes:
@@ -107,51 +105,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1165314373957364}
   m_CullTransparentMesh: 1
---- !u!114 &6464182421232436730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1165314373957364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41f1c5417c9d7ab4b84e531f83f60a4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.8773585, g: 0.8773585, b: 0.8773585, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3f91331724a9da84197e9b6d94f0483c, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
-  borderWidth: 1
-  falloffDistance: 1
---- !u!114 &6464182421232436725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1165314373957364}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8714c362c0c8a6449a9559a31cdab9a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 5
 --- !u!1 &1643231647150954
 GameObject:
   m_ObjectHideFlags: 0
