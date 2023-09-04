@@ -27,6 +27,10 @@
     "Terra.Studio.Listener",
     null
   ],
+  "Terra.Studio.StartOn.OnOtherOfSameTypeCollide": [
+    "Terra.Studio.CollisionAction",
+    "Any"
+  ],
   "RuntimeInspectorNamespace.Collectible+StartOnCollectible.OnPlayerCollide": [
     "Terra.Studio.TriggerAction",
     "Player"
