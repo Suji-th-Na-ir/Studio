@@ -16,9 +16,7 @@ namespace Terra.Studio
         [EditorEnumField("Terra.Studio.MouseAction", "OnClick")]
         OnClick,
         [EditorEnumField("Terra.Studio.Listener")]
-        BroadcastListen,
-        [EditorEnumField("Terra.Studio.CollisionAction", "Any")]
-        OnOtherOfSameTypeCollide
+        BroadcastListen
     }
 
     public enum Direction

@@ -10,6 +10,8 @@ namespace Terra.Studio
         [SerializeField] private GameObject timerGo;
         [SerializeField] private TextMeshProUGUI timerText;
 
+        private GameObject dynamicSpawnedGO;
+
         public override void Init()
         {
             RuntimeOp.Resolve<CoreGameManager>().GetCallbackOnModuleActivation<ScoreHandler>(() =>
@@ -50,6 +52,20 @@ namespace Terra.Studio
             var minutes = Mathf.FloorToInt(currentTime / 60);
             var seconds = Mathf.FloorToInt(currentTime % 60);
             timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+        }
+
+        public override GameObject AttachDynamicUI(GameObject go)
+        {
+            if (dynamicSpawnedGO)
+            {
+                if (dynamicSpawnedGO.name.Contains(go.name))
+                {
+                    return dynamicSpawnedGO;
+                }
+                Destroy(dynamicSpawnedGO);
+            }
+            dynamicSpawnedGO = Instantiate(go, transform);
+            return dynamicSpawnedGO;
         }
     }
 }

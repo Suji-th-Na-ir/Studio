@@ -18,6 +18,7 @@ namespace Terra.Studio
         [JsonIgnore] public bool IsExecuted { get; set; }
         [JsonIgnore] public EventContext EventContext { get; set; }
         [JsonIgnore] public GameObject RefObj { get; set; }
+        [JsonIgnore] public Vector3 initialPosition;
 
         public bool canPlaySFX;
         public string sfxName;
@@ -27,5 +28,6 @@ namespace Terra.Studio
         public int vfxIndex;
         public float drag;
         public bool showResetButton;
+        public Listen listen;
     }
 }
