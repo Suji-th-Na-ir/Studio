@@ -866,7 +866,7 @@ namespace RuntimeInspectorNamespace
         {
             background.color = Skin.BackgroundColor;
             verticalScrollbar.color = Skin.ScrollbarColor;
-            horizontalScrollbar.color = Skin.ScrollbarColor;
+            if(horizontalScrollbar) horizontalScrollbar.color = Skin.ScrollbarColor;
 
             searchInputField.textComponent.SetSkinInputFieldText(Skin);
             searchInputFieldBackground.color = Skin.InputFieldNormalBackgroundColor.Tint(0.08f);
