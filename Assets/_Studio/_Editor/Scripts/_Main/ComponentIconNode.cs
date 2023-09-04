@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using RuntimeInspectorNamespace;
@@ -19,6 +21,7 @@ namespace Terra.Studio
         private Image m_BroadcastIcon;
         private const float m_MinScalingDistance = 40.0f; // Minimum distance for scaling up
         private const float m_MaxScalingDistance = 0.0f; // Maximum distance for scaling down
+        private const int RESOLUTION = 20;
         private float initialWidth;
         private float initialHeight;
 
@@ -42,7 +45,7 @@ namespace Terra.Studio
         
         public bool m_isBroadcatingGameWon = false;
         public int m_componentIndex = 0;
-
+        public bool isTargetSelected;
         List<UILineRenderer> m_LineConnectors;
 
         ComponentDisplayDock m_ObjectTarget;
@@ -63,11 +66,22 @@ namespace Terra.Studio
             }
         }
 
+        [SerializeField] List<ComponentIconNode> m_BroadcastTargetNodes;
+        public List<ComponentIconNode> BroadcastTargets
+        {
+            get { return m_BroadcastTargetNodes; }
+            set
+            {
+                if (m_BroadcastTargetNodes == null)
+                    m_BroadcastTargetNodes = new List<ComponentIconNode>();
 
+                m_BroadcastTargetNodes.Clear();
+                m_BroadcastTargetNodes = value;
+            }
+        }
 
         public void RemoveListnerTargets(ComponentIconNode toRemove)
-        {
-           
+        {  
             if(ListnerTargets!=null)
             m_ListnerTargetNodes.Remove(toRemove);
         }
@@ -114,21 +128,11 @@ namespace Terra.Studio
 
         private void Update()
         {
-            //if(!EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Contains(currentTarget.componentGameObject))
-            //{
-            //    rectTransform.sizeDelta = Vector2.zero;
-            //    if (lineConnectors != null)
-            //    {
-            //        for (int i = lineConnectors.Count - 1; i >= 0; i--)
-            //        {
-            //            lineConnectors[i].gameObject.SetActive(false);
-            //        }
-            //    }
-            //    return;
-            //}
-            if(Inspector.currentPageIndex==0)
+
+            if(Inspector.currentPageIndex==0 &&!isTargetSelected)
             {
                 m_BroadcastIcon.enabled = m_PointImage.enabled = false;
+                RectTransform.localScale = Vector3.zero;
                 ClearAllLineRenderers();
                 return;
             }
@@ -148,9 +152,9 @@ namespace Terra.Studio
             float distanceToTarget = Vector3.Distance(m_ObjectTarget.componentGameObject.transform.position, m_MainCamera.transform.position);
             float scalingFactor = CalculateScalingFactor(distanceToTarget);
            
-            if (screenPoint.z > 0 &&
+            if ((screenPoint.z > 0 &&
     screenPoint.x > 0 && screenPoint.x <= Screen.width &&
-    screenPoint.y > 0 && screenPoint.y <= Screen.height)
+    screenPoint.y > 0 && screenPoint.y <= Screen.height) ||isTargetSelected)
             {
                 m_RectTransform.localScale = new Vector2(initialWidth * scalingFactor, initialHeight * scalingFactor);
             }
@@ -188,6 +192,19 @@ namespace Terra.Studio
             if (m_LineConnectors == null)
                 m_LineConnectors = new List<UILineRenderer>();
 
+            //Update Curves
+            if (!isTargetSelected)
+            {
+                if (!CheckIfInsideScreen(m_RectTransform) || scalingFactor == 0)
+                {
+                    for (int i = 0; i <m_LineConnectors.Count ; i++)
+                    {
+                        m_LineConnectors[i].gameObject.SetActive(false);
+                    }
+                    m_BroadcastIcon.gameObject.SetActive(false);
+                    return;
+                }
+            }
 
             while (m_LineConnectors.Count < m_ListnerTargetNodes.Count)
             {
@@ -213,37 +230,23 @@ namespace Terra.Studio
             }
 
 
-
-
-            //Update Curves
-            if (!CheckIfInsideScreen(m_RectTransform) || scalingFactor == 0)
-            {
-                for (int i = m_LineConnectors.Count - 1; i >= 0; i--)
-                {
-                    m_LineConnectors[i].gameObject.SetActive(false);
-                }
-                m_BroadcastIcon.gameObject.SetActive(false);
-                return;
-            }
-
-            var resolution = 20;
-
             for (int j = 0; j < m_ListnerTargetNodes.Count; j++)
             {
                 if (m_ListnerTargetNodes[j] == this)
                     continue;
-                if (m_ListnerTargetNodes[j] == null ||!CheckIfInsideScreen(m_ListnerTargetNodes[j].RectTransform) || (Vector2)m_ListnerTargetNodes[j].RectTransform.localScale == Vector2.zero )
+                if (m_ListnerTargetNodes[j] == null || !CheckIfInsideScreen(m_ListnerTargetNodes[j].RectTransform) ||
+                    (Vector2)m_ListnerTargetNodes[j].RectTransform.localScale == Vector2.zero)
                 {
                     m_LineConnectors[j].gameObject.SetActive(false);
                     continue;
                 }
 
-                Vector3[] points = new Vector3[resolution + 1];
+                Vector3[] points = new Vector3[RESOLUTION + 1];
                 var endPoint = m_ListnerTargetNodes[j].RectTransform.anchoredPosition;
 
-                for (int i = 0; i <= resolution; i++)
+                for (int i = 0; i <= RESOLUTION; i++)
                 {
-                    float t = (float)i / resolution;
+                    float t = (float)i / RESOLUTION;
                     Vector3 controlPoint1 = m_RectTransform.anchoredPosition + new Vector2(0, 100);
 
                     Vector3 controlPoint2 = (Vector2)endPoint + new Vector2(0, 100);

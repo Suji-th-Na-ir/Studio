@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using RuntimeInspectorNamespace;
 using UnityEngine;
 
 namespace Terra.Studio
@@ -22,6 +24,9 @@ namespace Terra.Studio
         private List<ComponentDisplayDock> GetListnersInSceneFor(string broadcastString) => m_Listners.TryGetValue(broadcastString, out var value) ? value :new List<ComponentDisplayDock>();
         private List<ComponentDisplayDock> GetBroadcastersInSceneFor(string listenString) => m_Broadcasters.TryGetValue(listenString, out var value) ? value : new List<ComponentDisplayDock>();
 
+        private RuntimeHierarchy runtimeHierarchy;
+
+        public RuntimeInspector Inspector { get; private set; }
 
         private void Awake()
         {
@@ -35,6 +40,9 @@ namespace Terra.Studio
 
         public void Init()
         {
+            runtimeHierarchy = FindAnyObjectByType<RuntimeHierarchy>();
+            Inspector = FindAnyObjectByType<RuntimeInspector>();
+            runtimeHierarchy.OnSelectionChanged += OnSelectionChanged;
             m_Broadcasters = new Dictionary<string, List<ComponentDisplayDock>>();
             m_Listners = new Dictionary<string, List<ComponentDisplayDock>>();
             m_icons = new Dictionary<GameObject, List<ComponentIconNode>>();
@@ -138,6 +146,8 @@ namespace Terra.Studio
             {
                 var listners = GetListnersInSceneFor(broadcast.Key);
                 var allbroadCastObject = broadcast.Value;
+
+                List<ComponentIconNode> broadcastNode = new List<ComponentIconNode>();
                 for (int i = 0; i < allbroadCastObject.Count; i++)
                 {
                     if (m_icons.TryGetValue(allbroadCastObject[i].componentGameObject, out var compIcons))
@@ -146,6 +156,7 @@ namespace Terra.Studio
                         {
                             if (compIcons[j].GetComponentDisplayDockTarget().Equals(allbroadCastObject[i]))
                             {
+                                broadcastNode.Add(compIcons[j]);
                                 compIcons[j].ListnerTargets = GetTargetIconsForDisplayDock(listners);
                                 compIcons[j].ISBroadcasting = true;
                                 if (broadcast.Key == "Game Win")
@@ -155,6 +166,12 @@ namespace Terra.Studio
                             }
                         }
                     }
+                }
+
+                var listnerNodes = GetTargetIconsForDisplayDock(listners);
+                foreach (var l in listnerNodes)
+                {
+                    l.BroadcastTargets =broadcastNode;
                 }
             }
 
@@ -262,6 +279,53 @@ namespace Terra.Studio
                     listner.Value.Remove(componentDisplay);
             }
 
+        }
+
+        private void OnSelectionChanged(ReadOnlyCollection<Transform> selection)
+        {
+           
+           
+            foreach (var item in m_icons)
+            {
+                for (int i = 0; i < item.Value.Count; i++)
+                {
+                    item.Value[i].isTargetSelected = false;
+                }
+            }
+
+         
+            if (Inspector.currentPageIndex == 1)
+            {
+                return;
+            }
+
+            foreach (var s in selection)
+            {
+                if (m_icons.TryGetValue(s.gameObject, out var value))
+                {
+                
+                    for (int i = 0; i < value.Count; i++)
+                    {
+                        value[i].isTargetSelected = true;
+
+                        if (value[i].ListnerTargets != null)
+                            foreach (var l in value[i].ListnerTargets)
+                            {
+                                l.isTargetSelected = true;
+                            }
+
+                        if (value[i].BroadcastTargets != null)
+                            foreach (var b in value[i].BroadcastTargets)
+                            {
+                                b.isTargetSelected = true;
+                            }
+                    }
+
+                }
+            }
+           
+
+            
         }
     }
 }
