@@ -10,6 +10,7 @@ namespace Terra.Studio
         [SerializeField] private GameObject timerGo;
         [SerializeField] private TextMeshProUGUI timerText;
 
+        private int entity = int.MinValue;
         private GameObject dynamicSpawnedGO;
 
         public override void Init()
@@ -54,17 +55,18 @@ namespace Terra.Studio
             timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         }
 
-        public override GameObject AttachDynamicUI(GameObject go)
+        public override GameObject AttachDynamicUI(int entity, GameObject go)
         {
+            if (this.entity == entity)
+            {
+                return dynamicSpawnedGO;
+            }
             if (dynamicSpawnedGO)
             {
-                if (dynamicSpawnedGO.name.Contains(go.name))
-                {
-                    return dynamicSpawnedGO;
-                }
                 Destroy(dynamicSpawnedGO);
             }
             dynamicSpawnedGO = Instantiate(go, transform);
+            this.entity = entity;
             return dynamicSpawnedGO;
         }
     }

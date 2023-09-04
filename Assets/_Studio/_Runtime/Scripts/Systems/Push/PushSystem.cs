@@ -74,7 +74,7 @@ namespace Terra.Studio
             return false;
         }
 
-        public void OnDemandRun(in PushComponent component, int _)
+        public void OnDemandRun(in PushComponent component, int entity)
         {
             if (component.canPlaySFX)
             {
@@ -94,19 +94,20 @@ namespace Terra.Studio
                 var compsData = RuntimeOp.Resolve<ComponentsData>();
                 compsData.ProvideEventContext(false, component.EventContext);
             }
-            LoadUI(component);
+            LoadUI(component, entity);
         }
 
-        private void LoadUI(in PushComponent component)
+        private void LoadUI(in PushComponent component, int entity)
         {
             if (!component.showResetButton)
             {
                 return;
             }
-            var go = RuntimeOp.Resolve<View>().AttachDynamicUI(resetPrefabObj);
+            var go = RuntimeOp.Resolve<View>().AttachDynamicUI(entity, resetPrefabObj);
             var btn = go.GetComponent<Button>();
             var refTr = component.RefObj.transform;
             var newPos = component.initialPosition;
+            btn.onClick.RemoveAllListeners();
             btn.onClick.AddListener(() => { refTr.position = newPos; });
         }
 
