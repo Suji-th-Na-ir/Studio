@@ -18,6 +18,7 @@ namespace Terra.Studio
                 rb = entityRef.RefObj.AddComponent<Rigidbody>();
             }
             rb.drag = entityRef.drag;
+            rb.freezeRotation = true;
             entityRef.initialPosition = entityRef.RefObj.transform.position;
             InitializeUI();
         }
