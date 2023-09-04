@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using PlayShifu.Terra;
+using Terra.Studio;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -284,21 +286,12 @@ namespace RuntimeInspectorNamespace
             behaviourButton.GetComponentInChildren<Text>().color = Skin.ButtonTextColor;
             designButton.GetComponentInChildren<Text>().font = Skin.Font;
             behaviourButton.GetComponentInChildren<Text>().font = Skin.Font;
-            designButton.onClick.AddListener(() =>
-            {
-                currentPageIndex = 0;
-                isDirty = true;
-                designButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
-                behaviourButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
-            });
 
-            behaviourButton.onClick.AddListener(() =>
-            {
-                currentPageIndex = 1;
-                isDirty = true;
-                behaviourButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
-                designButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
-            });
+           StartCoroutine( InitLastPageIndex());
+
+            designButton.onClick.AddListener(ShowDesignPage);
+            behaviourButton.onClick.AddListener(ShowBehaviourPage);
+
 
             if (m_showTooltips)
             {
@@ -345,6 +338,37 @@ namespace RuntimeInspectorNamespace
 			// On new Input System, scroll sensitivity is much higher than legacy Input system
 			scrollView.scrollSensitivity *= 0.25f;
 #endif
+        }
+
+        private IEnumerator InitLastPageIndex()
+        {
+            yield return new WaitForSeconds(Time.deltaTime * 2);
+            if (SystemOp.Resolve<CrossSceneDataHolder>().Get("CurrentPageIndex", out var data))
+            {
+                if ((int)(data) == 0)
+                    ShowDesignPage();
+                else
+                    ShowBehaviourPage();
+            }
+        }
+
+        private void ShowBehaviourPage()
+        {
+            currentPageIndex = 1;
+            SystemOp.Resolve<CrossSceneDataHolder>().Set("CurrentPageIndex", 1);
+            isDirty = true;
+            behaviourButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
+            designButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
+        }
+
+        private void ShowDesignPage()
+        {
+
+            currentPageIndex = 0;
+            SystemOp.Resolve<CrossSceneDataHolder>().Set("CurrentPageIndex", 0);
+            isDirty = true;
+            designButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
+            behaviourButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
         }
 
         private void OnDestroy()

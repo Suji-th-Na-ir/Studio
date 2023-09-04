@@ -14,7 +14,7 @@ namespace Terra.Studio
 
         public void Set(string key, object data)
         {
-            if (keyToSharedData.ContainsKey(key))
+            if (!keyToSharedData.ContainsKey(key))
             {
                 keyToSharedData.Add(key, data);
             }

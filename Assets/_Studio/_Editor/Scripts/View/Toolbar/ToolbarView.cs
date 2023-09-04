@@ -72,6 +72,10 @@ namespace Terra.Studio
 
         public void CreateObject(string name)
         {
+            if (!CanSpawn(name))
+            {
+                return;
+            }
             Transform cameraTransform = Camera.main.transform;
             Vector3 cameraPosition = cameraTransform.position;
             Vector3 spawnPosition = cameraPosition + cameraTransform.forward * 5;
@@ -83,11 +87,25 @@ namespace Terra.Studio
             if (name.Equals("CheckPoint"))
             {
                 primitive.AddComponent<Checkpoint>();
+                EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = primitive, componentType = "Checkpoint" });
             }
             if (name.Equals("InGameTimer"))
             {
                 primitive.AddComponent<InGameTimer>();
+                EditorOp.Resolve<SceneDataHandler>().TimerManagerObj = primitive;
+                EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = primitive, componentType = "InGameTimer" });
             }
+        }
+
+        private bool CanSpawn(string name)
+        {
+            if (name.Equals("InGameTimer"))
+            {
+                var timerObj = EditorOp.Resolve<SceneDataHandler>().TimerManagerObj;
+                var canSpawn = !timerObj;
+                return canSpawn;
+            }
+            return true;
         }
 
         public override void Draw()
