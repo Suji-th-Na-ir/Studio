@@ -7,7 +7,7 @@ namespace RuntimeInspectorNamespace
     [EditorDrawComponent("Terra.Studio.InGameTimer")]
     public class InGameTimer : MonoBehaviour, IComponent
     {
-        public uint Time;
+        public uint Time = 180;
         public Atom.Broadcast Broadcast = new();
         private string guid;
 
@@ -15,15 +15,6 @@ namespace RuntimeInspectorNamespace
         {
             guid = GetInstanceID() + "_timer";
             Broadcast.Setup(gameObject, GetType().Name, guid);
-            var timer = EditorOp.Resolve<SceneDataHandler>().TimerManagerObj;
-            if (timer)
-            {
-                Destroy(gameObject);
-            }
-            else
-            {
-                EditorOp.Resolve<SceneDataHandler>().TimerManagerObj = gameObject;
-            }
         }
 
         public (string type, string data) Export()
