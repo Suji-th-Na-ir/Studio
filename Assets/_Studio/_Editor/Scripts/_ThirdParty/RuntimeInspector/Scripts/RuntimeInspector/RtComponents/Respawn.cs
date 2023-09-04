@@ -32,7 +32,7 @@ namespace RuntimeInspectorNamespace
                 comp.ConditionData = "Player";
 
                 comp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast.data.broadcastName);
-                comp.Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? null : Broadcast.data.broadcastName;
+                comp.Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? "None" : Broadcast.data.broadcastName;
                 comp.broadcastTypeIndex = Broadcast.data.broadcastTypeIndex;
 
                 comp.canPlaySFX = PlaySFX.data.canPlay;
@@ -55,7 +55,7 @@ namespace RuntimeInspectorNamespace
         {
             RespawnComponent comp = JsonConvert.DeserializeObject<RespawnComponent>($"{data.data}");
             
-            Broadcast.data.broadcastName = comp.Broadcast;
+            Broadcast.data.broadcastName = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
             Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
             
             PlaySFX.data.canPlay = comp.canPlaySFX;

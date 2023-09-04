@@ -18,8 +18,11 @@ namespace RuntimeInspectorNamespace
         public float Speed = 1f;
         public bool Loop = false;
 
+        private string guid;
+
         private void Awake()
         {
+            guid = GetInstanceID() + "_oscillate";
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             fromPoint = transform.localPosition;
             Component.fromPoint = fromPoint;
@@ -35,7 +38,7 @@ namespace RuntimeInspectorNamespace
             Component.ConditionData = GetStartCondition();
             Component.listenIndex = startOn.data.listenIndex;
             
-            Component.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? null : startOn.data.listenName;
+            Component.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName;
             
             Component.loop = Loop;
             Component.speed = Speed;
@@ -96,10 +99,8 @@ namespace RuntimeInspectorNamespace
                 startOn.data.startIndex = (int)(StartOn)result;
             }
 
-            if (comp.ConditionType.ToLower().Contains("listen"))
-            {
-                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_oscillate", comp.ConditionData);
-            }
+            EditorOp.Resolve<DataProvider>().AddToListenList(guid, comp.ConditionData);
+            
             startOn.data.listenIndex = comp.listenIndex;
             startOn.data.listenName = comp.BroadcastListen;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, null, startOn.data.listenName);

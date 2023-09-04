@@ -27,7 +27,7 @@ namespace RuntimeInspectorNamespace
                 ConditionType = "Terra.Studio.GameStart",
                 ConditionData = "OnStart",
                 IsBroadcastable = !string.IsNullOrEmpty(Broadcast.data.broadcastName),
-                Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? null : Broadcast.data.broadcastName,
+                Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? "None" : Broadcast.data.broadcastName,
                 broadcastTypeIndex = Broadcast.data.broadcastTypeIndex,
                 totalTime = Time
             };
@@ -40,7 +40,8 @@ namespace RuntimeInspectorNamespace
         {
             var comp = JsonConvert.DeserializeObject<InGameTimerComponent>($"{data.data}");
             Time = comp.totalTime;
-            Broadcast.data.broadcastName = comp.Broadcast;
+            EditorOp.Resolve<DataProvider>().AddToListenList(guid,comp.Broadcast);
+            Broadcast.data.broadcastName = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
             Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast.data.broadcastName, null);
         }

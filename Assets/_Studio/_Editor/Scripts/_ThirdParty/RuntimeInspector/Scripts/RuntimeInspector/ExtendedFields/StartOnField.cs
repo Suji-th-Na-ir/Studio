@@ -28,11 +28,13 @@ namespace RuntimeInspectorNamespace
         private void LoadListenTo()
         {
             listenOn.options.Clear();
-            foreach (string _name in EditorOp.Resolve<DataProvider>().ListenToTypes)
+            // lets hide last entry which is "Custom"
+            List<string> loadList = EditorOp.Resolve<DataProvider>().ListenToTypes;
+            for (int i = 0; i < loadList.Count - 1; i++)
             {
                 listenOn.options.Add(new Dropdown.OptionData()
                 {
-                    text = _name
+                    text = loadList[i]
                 });
             }
         }

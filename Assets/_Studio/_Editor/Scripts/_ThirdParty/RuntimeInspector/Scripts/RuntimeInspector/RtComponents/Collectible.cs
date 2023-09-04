@@ -43,8 +43,8 @@ namespace RuntimeInspectorNamespace
                 comp.listenIndex = startOn.data.listenIndex;
 
                 comp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast.data.broadcastName);
-                comp.Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? null : Broadcast.data.broadcastName;
-                comp.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? null : startOn.data.listenName;
+                comp.Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? "None" : Broadcast.data.broadcastName;
+                comp.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName;
                 comp.broadcastTypeIndex = Broadcast.data.broadcastTypeIndex;
 
                 comp.canPlaySFX = PlaySFX.data.canPlay;
@@ -107,8 +107,10 @@ namespace RuntimeInspectorNamespace
         {
             CollectableComponent comp = JsonConvert.DeserializeObject<CollectableComponent>($"{cdata.data}");
             Score.score = (int)comp.scoreValue;
-            Broadcast.data.broadcastName = comp.Broadcast;
+            Broadcast.data.broadcastName = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
             Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
+            
+            EditorOp.Resolve<DataProvider>().AddToListenList(guid,comp.Broadcast);
 
             PlaySFX.data.canPlay = comp.canPlaySFX;
             PlaySFX.data.clipIndex = comp.sfxIndex;

@@ -36,7 +36,7 @@ namespace RuntimeInspectorNamespace
             PlaySFX.Setup<DestroyOn>(gameObject);
             PlayVFX.Setup<DestroyOn>(gameObject);
         }
-
+        
         public (string type, string data) Export()
         {
             DestroyOnComponent comp = new();
@@ -44,8 +44,8 @@ namespace RuntimeInspectorNamespace
             comp.IsConditionAvailable = true;
             
             comp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast.data.broadcastName);
-            comp.Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? null : Broadcast.data.broadcastName;
-            comp.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? null : startOn.data.listenName;
+            comp.Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? "None" : Broadcast.data.broadcastName;
+            comp.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName;
             comp.broadcastTypeIndex = Broadcast.data.broadcastTypeIndex;
 
             comp.canPlaySFX = PlaySFX.data.canPlay;
@@ -114,16 +114,14 @@ namespace RuntimeInspectorNamespace
                 startOn.data.startIndex = (int)(DestroyOnEnum)result;
             }
             
-            if (comp.ConditionType.ToLower().Contains("listen"))
-            {
-                EditorOp.Resolve<DataProvider>().AddToListenList(guid,comp.ConditionData);
-            }
+            EditorOp.Resolve<DataProvider>().AddToListenList(guid,comp.Broadcast);
+
             startOn.data.listenIndex = comp.listenIndex;
             
             startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
 
-            Broadcast.data.broadcastName = comp.Broadcast;
+            Broadcast.data.broadcastName = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
             Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
             
             PlaySFX.data.canPlay = comp.canPlaySFX;
