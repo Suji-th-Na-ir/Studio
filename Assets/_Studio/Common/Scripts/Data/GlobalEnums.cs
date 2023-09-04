@@ -62,6 +62,13 @@ namespace Terra.Studio
         End
     }
 
+    public enum BroadcastAtForPushObjects
+    {
+        Never,
+        OnPushStart,
+        OnPushEnd
+    }
+
     public enum Listen
     {
         Once,
