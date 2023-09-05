@@ -25,13 +25,7 @@ namespace RuntimeInspectorNamespace
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Type.data.broadcast, ""
                                 , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = this.GetType().Name });
         }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.H))
-                Export();
-        }
-
+        
         public (string type, string data) Export()
         {
             TranslateComponent comp = new TranslateComponent
@@ -68,7 +62,6 @@ namespace RuntimeInspectorNamespace
             gameObject.TrySetTrigger(false, true);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp, Formatting.Indented);
-            Debug.Log(data);
             return (type, data);
         }
         
@@ -146,11 +139,12 @@ namespace RuntimeInspectorNamespace
                 startOn.data.startIndex = (int)(StartOn)result;
             }
 
-            if (comp.ConditionType.ToLower().Contains("listen"))
-            {
-                EditorOp.Resolve<DataProvider>().UpdateToListenList(GetInstanceID()+"_translate",comp.ConditionData);
-            }
+            EditorOp.Resolve<DataProvider>().UpdateToListenList(guid,comp.Broadcast);
+
             startOn.data.listenIndex = comp.listenIndex;
+            startOn.data.startName = comp.ConditionType;
+            startOn.data.listenName = comp.ConditionData;
+            
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
         }
 

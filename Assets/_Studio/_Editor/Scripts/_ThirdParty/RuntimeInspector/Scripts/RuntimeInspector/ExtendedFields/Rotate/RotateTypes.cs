@@ -113,8 +113,7 @@ namespace RuntimeInspectorNamespace
                 
                 field.GetAtom().data.broadcastTypeIndex = value;
                 field.GetAtom().data.broadcastName = broadcastType.options[value].text;
-
-                ResetCustomString();
+                ResetCustomString(broadcastType.options[value].text);
                 EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(selectedString, field.GetAtom().data.broadcastName, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)field.Value).target, componentType = typeof(Atom.Rotate).Name });
                 // UpdateVariablesForAll(VariableTypes.BROADCAST_STRING,  value);
             });
@@ -155,16 +154,15 @@ namespace RuntimeInspectorNamespace
         {
             Atom.Rotate atom = field.GetAtom();
             atom.data.broadcastName = _newString;
-            
-            EditorOp.Resolve<DataProvider>().UpdateToListenList(atom.data.id, _newString);
+            EditorOp.Resolve<DataProvider>().UpdateToListenList(atom.id, _newString);
         }
         
-        private void ResetCustomString()
+        private void ResetCustomString(string _broadcastType)
         {
-            if (!field.GetAtom().data.broadcastName.ToLower().Contains("custom"))
+            if (_broadcastType.ToLower().Contains("custom"))
             {
                 field.GetAtom().data.broadcastName = "";
-                customString.text = "";
+                customString.SetTextWithoutNotify("");
             }
         }
 
@@ -223,29 +221,6 @@ namespace RuntimeInspectorNamespace
             }
         }
         
-        private Axis GetAxis(string _value)
-        {
-            if (_value == Axis.X.ToString()) return Axis.X;
-            else if (_value == Axis.Y.ToString()) return Axis.Y;
-            else if (_value == Axis.Z.ToString()) return Axis.Z;
-            return Axis.X;
-        }
-
-        private Direction GetDirection(string _value)
-        {
-            if (_value == Direction.Clockwise.ToString()) return Direction.Clockwise;
-            else if (_value == Direction.AntiClockwise.ToString()) return Direction.AntiClockwise;
-            return Direction.Clockwise;
-        }
-
-        private BroadcastAt GetBroadcastAt(string _value)
-        {
-            if (_value == BroadcastAt.End.ToString()) return BroadcastAt.End;
-            else if (_value == BroadcastAt.Never.ToString()) return BroadcastAt.Never;
-            else if (_value == BroadcastAt.AtEveryInterval.ToString()) return BroadcastAt.AtEveryInterval;
-            return BroadcastAt.Never;
-        }
-
         public void LoadDefaultValues()
         {
             // axis 
@@ -294,6 +269,7 @@ namespace RuntimeInspectorNamespace
             if (pauseInput) pauseInput.SetTextWithoutNotify(_data.pauseBetween.ToString());
             if (repeatInput) repeatInput.SetTextWithoutNotify(_data.repeat.ToString());
             if (broadcastType) broadcastType.SetValueWithoutNotify(_data.broadcastTypeIndex);
+            if (customString) customString.SetTextWithoutNotify( _data.broadcastName);
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
 

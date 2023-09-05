@@ -75,7 +75,7 @@ namespace RuntimeInspectorNamespace
                 ShowCustomStringInput(value);
                 field.GetAtom().data.broadcastTypeIndex = value;
                 field.GetAtom().data.broadcastName = broadcastType.options[value].text;
-                ResetCustomString();
+                ResetCustomString(broadcastType.options[value].text);
                 EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(selectedString, field.GetAtom().data.broadcastName, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)field.Value).target, componentType = typeof(Atom.Translate).Name });
                 // UpdateVariablesForAll(VariableTypes.BROADCAST_STRING,  value);
             });
@@ -112,23 +112,17 @@ namespace RuntimeInspectorNamespace
         private void SetCustomString(string _newString)
         {
             Atom.Translate atom = field.GetAtom();
-            
-            Debug.Log($"target name {atom.target.name}");
-            
             atom.data.broadcastName = _newString;
-            
-            Debug.Log($"atom id {atom.data.id}  new string {_newString}");
-            
-            EditorOp.Resolve<DataProvider>().UpdateToListenList(atom.data.id, _newString);
+            EditorOp.Resolve<DataProvider>().UpdateToListenList(atom.id, _newString);
         }
 
         
-        private void ResetCustomString()
+        private void ResetCustomString(string _broadcastType)
         {
-            if (!field.GetAtom().data.broadcastName.ToLower().Contains("custom"))
+            if (_broadcastType.ToLower().Contains("custom"))
             {
                 field.GetAtom().data.broadcastName = "";
-                customString.text = "";
+                customString.SetTextWithoutNotify("");
             }
         }
 
@@ -184,7 +178,6 @@ namespace RuntimeInspectorNamespace
 
         public void SetData(TranslateComponentData _data)
         {
-            field.GetAtom().data = _data;
             if (broadcastAt != null) broadcastAt.SetValueWithoutNotify((int)Enum.Parse(typeof(BroadcastAt), _data.broadcastAt.ToString()));
             if (pauseForInput != null) pauseForInput.SetTextWithoutNotify(_data.pauseFor.ToString());
             if (speedInput != null) speedInput.SetTextWithoutNotify(_data.speed.ToString());
@@ -193,6 +186,7 @@ namespace RuntimeInspectorNamespace
             if (moveToInput != null) moveToInput[1].SetTextWithoutNotify(_data.moveTo.y.ToString());
             if (moveToInput != null) moveToInput[2].SetTextWithoutNotify(_data.moveTo.z.ToString());
             if (broadcastType) broadcastType.SetValueWithoutNotify(_data.broadcastTypeIndex);
+            if (customString) customString.SetTextWithoutNotify( _data.broadcastName);
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
 

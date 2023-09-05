@@ -124,7 +124,6 @@ namespace RuntimeInspectorNamespace
             EditorOp.Resolve<DataProvider>().UpdateToListenList(guid,comp.Broadcast);
 
             startOn.data.listenIndex = comp.listenIndex;
-            
             startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
 

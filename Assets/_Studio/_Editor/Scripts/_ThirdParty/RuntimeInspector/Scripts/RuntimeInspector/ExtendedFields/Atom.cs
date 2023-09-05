@@ -94,11 +94,12 @@ namespace Terra.Studio
             [HideInInspector] public RotateField field;
             [HideInInspector] public RotateComponentData data = new();
             [HideInInspector] public GameObject target;
+            [HideInInspector] public string id;
             
             public void Setup(string _id, GameObject _target)
             {
                 target = _target;
-                data.id = _id;
+                id = _id;
             }
         }
 
@@ -108,11 +109,12 @@ namespace Terra.Studio
             [HideInInspector] public TranslateField field;
             [HideInInspector] public TranslateComponentData data = new();
             [HideInInspector] public GameObject target;
+            [HideInInspector] public string id;
             
             public void Setup(string _id, GameObject _target)
             {
                 target = _target;
-                data.id = _id;
+                id = _id;
             }
         }
 
@@ -186,7 +188,6 @@ namespace Terra.Studio
         
         public string listenTo;
         public Listen listen;
-        public string id;
     }
 
     [Serializable]
@@ -205,6 +206,5 @@ namespace Terra.Studio
         
         public string listenTo;
         public Listen listen;
-        public string id;
     }
 }
