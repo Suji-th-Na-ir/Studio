@@ -21,6 +21,12 @@ namespace Terra.Studio
                 }
             }
             entityRef.UpdateState();
+            if (entityRef.listen != Listen.Always)
+            {
+                var compsData = RuntimeOp.Resolve<ComponentsData>();
+                compsData.ProvideEventContext(false, entityRef.EventContext);
+                entityRef.IsExecuted = true;
+            }
             OnDemandRun(in entityRef, entity);
         }
 
@@ -39,11 +45,6 @@ namespace Terra.Studio
             if (data.isBroadcastable)
             {
                 RuntimeOp.Resolve<Broadcaster>().Broadcast(data.broadcast, !listenMultipleTimes);
-            }
-            if (!listenMultipleTimes)
-            {
-                var compsData = RuntimeOp.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(false, component.EventContext);
             }
         }
 

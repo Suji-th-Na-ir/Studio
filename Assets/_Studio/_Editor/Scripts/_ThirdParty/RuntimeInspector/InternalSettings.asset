@@ -120,3 +120,6 @@ MonoBehaviour:
   - ComponentName: Switch
     hideAddButton: 0
     hideRemoveButton: 0
+  - ComponentName: Teleport
+    hideAddButton: 0
+    hideRemoveButton: 0

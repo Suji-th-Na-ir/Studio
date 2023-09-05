@@ -9,5 +9,6 @@
   "Terra.Studio.Translate": "RuntimeInspectorNamespace.Translate",
   "Terra.Studio.GameScore": "Terra.Studio.GameScore",
   "Terra.Studio.Push": "Terra.Studio.Push",
-  "Terra.Studio.Switch": "Terra.Studio.Switch"
+  "Terra.Studio.Switch": "Terra.Studio.Switch",
+  "Terra.Studio.Teleport": "Terra.Studio.Teleport"
 }
