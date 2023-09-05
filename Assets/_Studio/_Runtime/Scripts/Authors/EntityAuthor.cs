@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Terra.Studio
 {
-    public class EntityAuthorOp
+    public static class EntityAuthorOp
     {
         public static IAuthor Author => Author<EntityAuthor>.Current;
 
@@ -27,7 +27,7 @@ namespace Terra.Studio
             Author<EntityAuthor>.Flush();
         }
 
-        public static ref T GetComponent<T>(int entity) where T : struct, IBaseComponent
+        public static ref T GetComponent<T>(this int entity) where T : struct, IBaseComponent
         {
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
             var pool = world.GetPool<T>();

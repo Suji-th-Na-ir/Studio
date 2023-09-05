@@ -89,7 +89,7 @@ namespace Terra.Studio
             {
                 RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, !listenMultipleTimes);
             }
-            if (component.listen != Listen.Always)
+            if (!listenMultipleTimes)
             {
                 var compsData = RuntimeOp.Resolve<ComponentsData>();
                 compsData.ProvideEventContext(false, component.EventContext);

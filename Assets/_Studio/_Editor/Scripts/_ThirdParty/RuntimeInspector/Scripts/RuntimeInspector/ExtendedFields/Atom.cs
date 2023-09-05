@@ -16,12 +16,12 @@ namespace Terra.Studio
             [HideInInspector] public BroadcastData data;
             [HideInInspector] public GameObject target;
             [HideInInspector] public string componentType = null;
-            
+
             public void Setup(GameObject _target, string _componentType, string _id)
             {
                 target = _target;
-                
-                if(!AllInstances.Contains(this))
+
+                if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
 
                 componentType = _componentType;
@@ -29,7 +29,7 @@ namespace Terra.Studio
                 data.id = _id;
             }
         }
-        
+
         [Serializable]
         public class StartOn
         {
@@ -51,7 +51,7 @@ namespace Terra.Studio
                                 , new ComponentDisplayDock() { componentGameObject = _target, componentType = _componentType });
             }
         }
-        
+
         [Serializable]
         public class PlaySfx
         {
@@ -123,6 +123,12 @@ namespace Terra.Studio
             [HideInInspector] public int score;
             [HideInInspector] public string instanceId;
         }
+
+        [Serializable]
+        public class SwitchData
+        {
+            [HideInInspector] public SwitchComponent data;
+        }
     }
 
     // define component data classes here
@@ -134,7 +140,7 @@ namespace Terra.Studio
         public string listenName;
         public int listenIndex;
     }
-    
+
     [Serializable]
     public struct BroadcastData
     {
@@ -142,8 +148,8 @@ namespace Terra.Studio
         public string broadcastName;
         public string id;
     }
-    
-    
+
+
     [Serializable]
     public struct PlaySFXData
     {
@@ -201,5 +207,4 @@ namespace Terra.Studio
         public Listen listen;
         public string id;
     }
-
 }

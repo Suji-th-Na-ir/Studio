@@ -53,6 +53,10 @@ MonoBehaviour:
     ComponentName: Terra.Studio.PushComponent
     SystemName: Terra.Studio.PushSystem
     DrawerName: Terra.Studio.Push
+  - Key: Terra.Studio.Switch
+    ComponentName: Terra.Studio.SwitchComponent
+    SystemName: Terra.Studio.SwitchSystem
+    DrawerName: Terra.Studio.Switch
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent
