@@ -18,7 +18,7 @@ namespace RuntimeInspectorNamespace
         private void Awake()
         {
             guid = GetInstanceID() + "_translate"; //Guid.NewGuid().ToString("N");
-            Type.Setup(guid, gameObject);
+            Type.Setup(guid, gameObject, GetType().Name);
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             PlaySFX.Setup<Translate>(gameObject);
             PlayVFX.Setup<Translate>(gameObject);
@@ -145,7 +145,8 @@ namespace RuntimeInspectorNamespace
             startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
             
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject,
+                this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
         }
 
         private void ModifyDataAsPerGiven(ref TranslateComponent component)

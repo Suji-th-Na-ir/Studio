@@ -114,12 +114,10 @@ namespace RuntimeInspectorNamespace
                 field.GetAtom().data.broadcastTypeIndex = value;
                 field.GetAtom().data.broadcastName = broadcastType.options[value].text;
                 ResetCustomString(broadcastType.options[value].text);
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(selectedString, field.GetAtom().data.broadcastName, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)field.Value).target, componentType = typeof(Atom.Rotate).Name });
                 // UpdateVariablesForAll(VariableTypes.BROADCAST_STRING,  value);
             });
             if(customString != null) customString.onValueChanged.AddListener((value) =>
             {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value, field.GetAtom().data.broadcastName, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)field.Value).target, componentType = typeof(Atom.Rotate).Name });
                 SetCustomString(value);
                 // UpdateAllSelectedObjects("broadcast", field.GetAtom().data.broadcast);
             });
@@ -139,10 +137,10 @@ namespace RuntimeInspectorNamespace
         private void ShowCustomStringInput(int _index)
         {
             string selectedString = "None";
+            
             if (_index < broadcastType.options.Count)
                 selectedString = broadcastType.options[_index].text;
-            // string selectedString = EditorOp.Resolve<DataProvider>().GetListenString(_index);
-            Debug.Log("selected string "+selectedString);
+            
             if (selectedString.ToLower().Contains("custom"))
                 customString.transform.parent.gameObject.SetActive(true);
             else
@@ -153,17 +151,29 @@ namespace RuntimeInspectorNamespace
         private void SetCustomString(string _newString)
         {
             Atom.Rotate atom = field.GetAtom();
+            
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(_newString, 
+                atom.data.broadcastName, 
+                new ComponentDisplayDock { componentGameObject = atom.target,
+                    componentType = atom.componentType });
             atom.data.broadcastName = _newString;
+            
             EditorOp.Resolve<DataProvider>().UpdateToListenList(atom.id, _newString);
         }
         
         private void ResetCustomString(string _broadcastType)
         {
+            Atom.Rotate atom = field.GetAtom();
             if (_broadcastType.ToLower().Contains("custom"))
             {
-                field.GetAtom().data.broadcastName = "";
+                atom.data.broadcastName = "";
                 customString.SetTextWithoutNotify("");
             }
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(atom.data.broadcastName, 
+                atom.data.broadcastName, 
+                new ComponentDisplayDock { componentGameObject = atom.target,
+                    componentType = atom.componentType });
+            atom.data.broadcastName = atom.data.broadcastName;
         }
 
 

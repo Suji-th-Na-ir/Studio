@@ -19,7 +19,7 @@ namespace RuntimeInspectorNamespace
         private void Awake()
         {
             guid = GetInstanceID() + "_rotate";//Guid.NewGuid().ToString("N");
-            Type.Setup(guid, gameObject);
+            Type.Setup(guid, gameObject, GetType().Name);
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             PlaySFX.Setup<Rotate>(gameObject);
             PlayVFX.Setup<Rotate>(gameObject);
@@ -166,11 +166,13 @@ namespace RuntimeInspectorNamespace
             }
 
             EditorOp.Resolve<DataProvider>().UpdateToListenList(guid,comp.Broadcast);
+            
             startOn.data.listenIndex = comp.listenIndex;
             startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
             
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Type.data.broadcastName, Type.data.listenTo);
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject,
+                this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
         }
 
         private void ModifyDataAsPerSelected(ref RotateComponent component)

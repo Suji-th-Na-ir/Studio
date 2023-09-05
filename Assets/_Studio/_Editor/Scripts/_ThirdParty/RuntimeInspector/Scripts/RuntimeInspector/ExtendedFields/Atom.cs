@@ -95,11 +95,13 @@ namespace Terra.Studio
             [HideInInspector] public RotateComponentData data = new();
             [HideInInspector] public GameObject target;
             [HideInInspector] public string id;
+            [HideInInspector] public string componentType = null;
             
-            public void Setup(string _id, GameObject _target)
+            public void Setup(string _id, GameObject _target, string _componentType)
             {
                 target = _target;
                 id = _id;
+                componentType = _componentType;
             }
         }
 
@@ -110,11 +112,13 @@ namespace Terra.Studio
             [HideInInspector] public TranslateComponentData data = new();
             [HideInInspector] public GameObject target;
             [HideInInspector] public string id;
+            [HideInInspector] public string componentType = null;
             
-            public void Setup(string _id, GameObject _target)
+            public void Setup(string _id, GameObject _target, string _componentType)
             {
                 target = _target;
                 id = _id;
+                componentType = _componentType;
             }
         }
 

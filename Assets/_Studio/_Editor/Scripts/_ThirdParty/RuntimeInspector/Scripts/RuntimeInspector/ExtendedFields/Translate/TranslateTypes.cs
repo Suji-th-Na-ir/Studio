@@ -76,12 +76,10 @@ namespace RuntimeInspectorNamespace
                 field.GetAtom().data.broadcastTypeIndex = value;
                 field.GetAtom().data.broadcastName = broadcastType.options[value].text;
                 ResetCustomString(broadcastType.options[value].text);
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(selectedString, field.GetAtom().data.broadcastName, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)field.Value).target, componentType = typeof(Atom.Translate).Name });
                 // UpdateVariablesForAll(VariableTypes.BROADCAST_STRING,  value);
             });
             if(customString != null) customString.onValueChanged.AddListener((value) =>
             {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value, field.GetAtom().data.broadcastName, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)field.Value).target, componentType = typeof(Atom.Translate).Name });
                 SetCustomString(value);
                 // UpdateAllSelectedObjects("broadcast", field.GetAtom().data.broadcast);
             });
@@ -112,6 +110,10 @@ namespace RuntimeInspectorNamespace
         private void SetCustomString(string _newString)
         {
             Atom.Translate atom = field.GetAtom();
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(_newString, 
+                atom.data.broadcastName, 
+                new ComponentDisplayDock { componentGameObject = atom.target,
+                    componentType = atom.componentType });
             atom.data.broadcastName = _newString;
             EditorOp.Resolve<DataProvider>().UpdateToListenList(atom.id, _newString);
         }

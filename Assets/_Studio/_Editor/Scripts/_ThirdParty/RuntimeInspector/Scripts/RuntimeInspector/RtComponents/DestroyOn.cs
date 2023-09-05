@@ -37,11 +37,11 @@ namespace RuntimeInspectorNamespace
             PlayVFX.Setup<DestroyOn>(gameObject);
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.H))
-                Export();
-        }
+        // private void Update()
+        // {
+        //     if (Input.GetKeyDown(KeyCode.H))
+        //         Export();
+        // }
 
         public (string type, string data) Export()
         {
@@ -70,7 +70,7 @@ namespace RuntimeInspectorNamespace
             gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp, Formatting.Indented);
-            Debug.Log(data);
+            // Debug.Log(data);
             return (type, data);
         }
         
