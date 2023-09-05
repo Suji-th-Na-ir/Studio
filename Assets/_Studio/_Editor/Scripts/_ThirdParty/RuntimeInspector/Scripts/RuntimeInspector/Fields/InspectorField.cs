@@ -295,9 +295,9 @@ namespace RuntimeInspectorNamespace
             catch
             {
 #if UNITY_EDITOR || !NETFX_CORE
-                if (BoundVariableType.IsValueType)
+                if (BoundVariableType?.IsValueType ?? false)
 #else
-				if( BoundVariableType.GetTypeInfo().IsValueType )
+				if( BoundVariableType?.GetTypeInfo().IsValueType ?? false)
 #endif
                     m_value = Activator.CreateInstance(BoundVariableType);
                 else
@@ -622,6 +622,15 @@ namespace RuntimeInspectorNamespace
             // xnx
 
             Type variableType = variable is FieldInfo ? ((FieldInfo)variable).FieldType : ((PropertyInfo)variable).PropertyType;
+            if (variable is FieldInfo fi && TryGetHeaderField(fi, out var header))
+            {
+                var headerDrawer = Inspector.CreateDrawerForType(typeof(HeaderAttribute), drawArea, Depth + 1, true, variable);
+                if (headerDrawer != null)
+                {
+                    headerDrawer.NameRaw = header;
+                }
+                elements.Add(headerDrawer);
+            }
             InspectorField variableDrawer = Inspector.CreateDrawerForType(variableType, drawArea, Depth + 1, true, variable);
             if (variableDrawer != null)
             {
@@ -633,6 +642,18 @@ namespace RuntimeInspectorNamespace
             }
 
             return variableDrawer;
+        }
+
+        private bool TryGetHeaderField(FieldInfo fieldInfo, out string headerValue)
+        {
+            headerValue = null;
+            var attribs = fieldInfo.GetCustomAttributes(typeof(HeaderAttribute), false) as HeaderAttribute[];
+            if (attribs.Length > 0)
+            {
+                headerValue = attribs[0].header;
+                return true;
+            }
+            return false;
         }
 
         public InspectorField CreateDrawer(Type variableType, string variableName, Getter getter, Setter setter, bool drawObjectsAsFields = true)

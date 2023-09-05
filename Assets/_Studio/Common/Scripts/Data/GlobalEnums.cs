@@ -122,7 +122,7 @@ namespace Terra.Studio
 
     public enum SwitchState
     {
-        On,
-        Off
+        Off,
+        On
     }
 }

@@ -1,13 +1,14 @@
 using System;
+using UnityEngine;
 using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
-    public class SwitchField : InspectorField
+    public class LabelField : InspectorField
     {
         public override bool SupportsType(Type type)
         {
-            return type == typeof(Atom.SwitchData);
+            return type == typeof(HeaderAttribute);
         }
     }
 }

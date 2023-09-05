@@ -18,7 +18,7 @@ namespace Terra.Studio
         [JsonIgnore] public bool IsExecuted { get; set; }
         [JsonIgnore] public EventContext EventContext { get; set; }
         [JsonIgnore] public GameObject RefObj { get; set; }
-        [JsonIgnore] public SwitchState currentState;
+        public SwitchState currentState;
         public SwitchComponentData onStateData;
         public SwitchComponentData offStateData;
         public Listen listen;
@@ -57,5 +57,8 @@ namespace Terra.Studio
         public bool canPlayVFX;
         public string vfxName;
         public int vfxIndex;
+        public bool isBroadcastable;
+        public string broadcast;
+        public int broadcastIndex;
     }
 }
