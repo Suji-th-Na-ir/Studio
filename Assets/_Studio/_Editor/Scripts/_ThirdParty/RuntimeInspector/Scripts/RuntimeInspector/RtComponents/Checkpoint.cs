@@ -23,7 +23,7 @@ namespace RuntimeInspectorNamespace
         {
             if (!String.IsNullOrEmpty(Broadcast))
             {
-                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, Broadcast);
+                EditorOp.Resolve<DataProvider>().UpdateToListenList(guid, Broadcast);
             }
         }
         

@@ -72,7 +72,10 @@ namespace RuntimeInspectorNamespace
             if (atom != null)
             {
                 int index = atom.data.broadcastTypeIndex;
-                string selectedString = EditorOp.Resolve<DataProvider>().ListenToTypes[index];
+                string selectedString = "None";
+                if(index < broadcastType.options.Count)
+                    selectedString = broadcastType.options[index].text;
+
 
                 if (selectedString.ToLower().Contains("custom"))
                     customString.gameObject.SetActive(true);
@@ -96,7 +99,7 @@ namespace RuntimeInspectorNamespace
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(_newString, atom.data.broadcastName, new ComponentDisplayDock { componentGameObject = atom.target, componentType = atom.componentType });
             atom.data.broadcastName = _newString;
             
-            EditorOp.Resolve<DataProvider>().UpdateListenToTypes(atom.data.id, _newString);
+            EditorOp.Resolve<DataProvider>().UpdateToListenList(atom.data.id, _newString);
         }
 
         public override void Refresh()

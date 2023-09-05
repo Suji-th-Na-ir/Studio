@@ -14,16 +14,24 @@ namespace RuntimeInspectorNamespace
         public Atom.Rotate Type = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
-
+        
+        private string guid;
         private void Awake()
         {
-            Type.referenceGO = gameObject;
+            guid = GetInstanceID() + "_rotate";//Guid.NewGuid().ToString("N");
+            Type.Setup(guid, gameObject);
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             PlaySFX.Setup<Rotate>(gameObject);
             PlayVFX.Setup<Rotate>(gameObject);
 
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Type.data.broadcast, ""
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Type.data.broadcastName, ""
                                , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = this.GetType().Name });
+        }
+
+        public void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.H))
+                Export();
         }
 
         public (string type, string data) Export()
@@ -41,6 +49,8 @@ namespace RuntimeInspectorNamespace
 
                 IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcast),
                 broadcastAt = Type.data.broadcastAt,
+                BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName,
+                broadcastTypeIndex = Type.data.broadcastTypeIndex,
                 Broadcast = Type.data.broadcast,
 
                 canPlaySFX = PlaySFX.data.canPlay,
@@ -71,6 +81,7 @@ namespace RuntimeInspectorNamespace
             gameObject.TrySetTrigger(false, true);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp, Formatting.Indented);
+            Debug.Log(data);
             return (type, data);
         }
         
@@ -143,8 +154,12 @@ namespace RuntimeInspectorNamespace
             Type.data.degrees = comp.rotateBy;
             Type.data.pauseBetween = comp.pauseFor;
             Type.data.repeat = comp.repeatFor;
-            Type.data.broadcast = comp.Broadcast;
+            
+            Type.data.broadcastName = comp.Broadcast;
             Type.data.broadcastAt = comp.broadcastAt;
+            Type.data.broadcastName = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
+            Type.data.broadcastTypeIndex = comp.broadcastTypeIndex;
+            
             Type.data.listen = comp.listen;
 
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
@@ -154,10 +169,10 @@ namespace RuntimeInspectorNamespace
 
             if (comp.ConditionType.ToLower().Contains("listen"))
             {
-                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_rotate",comp.ConditionData);
+                EditorOp.Resolve<DataProvider>().UpdateToListenList(GetInstanceID()+"_rotate",comp.ConditionData);
             }
             startOn.data.listenIndex = comp.listenIndex;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Type.data.broadcastName, Type.data.listenTo);
         }
 
         private void ModifyDataAsPerSelected(ref RotateComponent component)

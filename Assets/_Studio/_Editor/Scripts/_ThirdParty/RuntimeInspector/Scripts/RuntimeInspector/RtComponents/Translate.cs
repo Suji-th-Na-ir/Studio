@@ -14,9 +14,11 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
 
+        private string guid;
         private void Awake()
         {
-            Type.referenceGO = gameObject;
+            guid = GetInstanceID() + "_translate"; //Guid.NewGuid().ToString("N");
+            Type.Setup(guid, gameObject);
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             PlaySFX.Setup<Translate>(gameObject);
             PlayVFX.Setup<Translate>(gameObject);
@@ -37,9 +39,10 @@ namespace RuntimeInspectorNamespace
 
                 IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcast),
                 broadcastAt = Type.data.broadcastAt,
-
-
+                BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName,
+                broadcastTypeIndex = Type.data.broadcastTypeIndex,
                 Broadcast = Type.data.broadcast,
+                
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
@@ -122,8 +125,12 @@ namespace RuntimeInspectorNamespace
             Type.data.pauseFor = comp.pauseFor;
             Type.data.moveTo = comp.targetPosition;
             Type.data.repeat = comp.repeatFor;
+            
             Type.data.broadcast = comp.Broadcast;
             Type.data.broadcastAt = comp.broadcastAt;
+            Type.data.broadcastName = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
+            Type.data.broadcastTypeIndex = comp.broadcastTypeIndex;
+            
             Type.data.listenTo = comp.ConditionData;
             Type.data.listen = comp.listen;
 
@@ -134,7 +141,7 @@ namespace RuntimeInspectorNamespace
 
             if (comp.ConditionType.ToLower().Contains("listen"))
             {
-                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_translate",comp.ConditionData);
+                EditorOp.Resolve<DataProvider>().UpdateToListenList(GetInstanceID()+"_translate",comp.ConditionData);
             }
             startOn.data.listenIndex = comp.listenIndex;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Type.data.broadcast, Type.data.listenTo);

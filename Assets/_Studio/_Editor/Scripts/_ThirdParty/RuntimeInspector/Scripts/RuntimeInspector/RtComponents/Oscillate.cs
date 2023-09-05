@@ -99,7 +99,7 @@ namespace RuntimeInspectorNamespace
                 startOn.data.startIndex = (int)(StartOn)result;
             }
 
-            EditorOp.Resolve<DataProvider>().AddToListenList(guid, comp.ConditionData);
+            EditorOp.Resolve<DataProvider>().UpdateToListenList(guid, comp.ConditionData);
             
             startOn.data.listenIndex = comp.listenIndex;
             startOn.data.listenName = comp.BroadcastListen;

@@ -110,25 +110,28 @@ namespace RuntimeInspectorNamespace
             {
                 newString = atom.data.listenName;
             }
+            UpdateData(atom);
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(newString, prevString,
                     new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
-            UpdateData(atom);
         }
 
         private void OnListenValueChanged(int _index)
         {
             Atom.StartOn atom = (Atom.StartOn)Value;
             // visual changes 
-            string newString = EditorOp.Resolve<DataProvider>().ListenToTypes[_index];
+            string newString = "None";
+            if (_index < listenOn.options.Count)
+                newString = listenOn.options[_index].text;
+            
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(newString, atom.data.listenName, 
                 new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
-
+           
             if(Inspector)  Inspector.RefreshDelayed();
             atom.data.listenName = newString;
             atom.data.listenIndex = _index;
             UpdateData(atom);
             prevListenOnValue = _index;
-            // Debug.Log($"listen to newstring {newString}   index {_index}");
+            Debug.Log($"listen to newstring {newString}   index {_index}");
         }
 
         protected override void OnSkinChanged()

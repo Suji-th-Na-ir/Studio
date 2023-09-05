@@ -110,7 +110,7 @@ namespace RuntimeInspectorNamespace
             Broadcast.data.broadcastName = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
             Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
             
-            EditorOp.Resolve<DataProvider>().AddToListenList(guid,comp.Broadcast);
+            EditorOp.Resolve<DataProvider>().UpdateToListenList(guid,comp.Broadcast);
 
             PlaySFX.data.canPlay = comp.canPlaySFX;
             PlaySFX.data.clipIndex = comp.sfxIndex;
@@ -127,7 +127,7 @@ namespace RuntimeInspectorNamespace
 
             if (comp.ConditionType.ToLower().Contains("listen"))
             {
-                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID() + "_collectible", comp.ConditionData);
+                EditorOp.Resolve<DataProvider>().UpdateToListenList(GetInstanceID() + "_collectible", comp.ConditionData);
             }
             startOn.data.listenIndex = comp.listenIndex;
         }

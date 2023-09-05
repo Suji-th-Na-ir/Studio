@@ -38,7 +38,7 @@ namespace RuntimeInspectorNamespace
         {
             var comp = JsonConvert.DeserializeObject<InGameTimerComponent>($"{data.data}");
             Time = comp.totalTime;
-            EditorOp.Resolve<DataProvider>().AddToListenList(guid,comp.Broadcast);
+            EditorOp.Resolve<DataProvider>().UpdateToListenList(guid,comp.Broadcast);
             Broadcast.data.broadcastName = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
             Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast.data.broadcastName, null);

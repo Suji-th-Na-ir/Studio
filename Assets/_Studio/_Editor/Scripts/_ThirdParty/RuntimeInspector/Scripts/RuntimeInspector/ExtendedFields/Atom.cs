@@ -2,6 +2,7 @@ using System;
 using RuntimeInspectorNamespace;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 namespace Terra.Studio
 {
@@ -92,7 +93,13 @@ namespace Terra.Studio
         {
             [HideInInspector] public RotateField field;
             [HideInInspector] public RotateComponentData data = new();
-            [HideInInspector] public GameObject referenceGO;
+            [HideInInspector] public GameObject target;
+            
+            public void Setup(string _id, GameObject _target)
+            {
+                target = _target;
+                data.id = _id;
+            }
         }
 
         [Serializable]
@@ -100,7 +107,13 @@ namespace Terra.Studio
         {
             [HideInInspector] public TranslateField field;
             [HideInInspector] public TranslateComponentData data = new();
-            [HideInInspector] public GameObject referenceGO;
+            [HideInInspector] public GameObject target;
+            
+            public void Setup(string _id, GameObject _target)
+            {
+                target = _target;
+                data.id = _id;
+            }
         }
 
         [Serializable]
@@ -159,10 +172,15 @@ namespace Terra.Studio
         public float speed;
         public int repeat;
         public float pauseBetween;
+        
         public string broadcast;
-        public string listenTo;
         public BroadcastAt broadcastAt;
+        public int broadcastTypeIndex;
+        public string broadcastName;
+        
+        public string listenTo;
         public Listen listen;
+        public string id;
     }
 
     [Serializable]
@@ -173,10 +191,15 @@ namespace Terra.Studio
         public float pauseFor;
         public float speed;
         public int repeat;
+        
         public string broadcast;
         public BroadcastAt broadcastAt;
+        public int broadcastTypeIndex;
+        public string broadcastName;
+        
         public string listenTo;
         public Listen listen;
+        public string id;
     }
 
 }

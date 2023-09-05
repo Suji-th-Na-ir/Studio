@@ -114,7 +114,7 @@ namespace RuntimeInspectorNamespace
                 startOn.data.startIndex = (int)(DestroyOnEnum)result;
             }
             
-            EditorOp.Resolve<DataProvider>().AddToListenList(guid,comp.Broadcast);
+            EditorOp.Resolve<DataProvider>().UpdateToListenList(guid,comp.Broadcast);
 
             startOn.data.listenIndex = comp.listenIndex;
             
