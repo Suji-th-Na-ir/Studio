@@ -60,6 +60,7 @@ namespace Terra.Studio
             playVFX.data.clipIndex = obj.vfxIndex;
             broadcast.data.broadcastName = obj.Broadcast;
             broadcast.data.broadcastTypeIndex = obj.broadcastIndex;
+            executeMultipleTimes = obj.listen == Listen.Always;
         }
     }
 }
