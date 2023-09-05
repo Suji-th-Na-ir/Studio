@@ -119,4 +119,10 @@ namespace Terra.Studio
         Timer,
         Score
     }
+
+    public enum SwitchState
+    {
+        On,
+        Off
+    }
 }

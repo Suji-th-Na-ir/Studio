@@ -152,11 +152,9 @@ namespace RuntimeInspectorNamespace
         public void BindTo(InspectorField parent, MemberInfo variable, string variableName = null)
         {
             m_Component = variable.DeclaringType;
-            if (variable is FieldInfo)
+            if (variable is FieldInfo field)
             {
-                FieldInfo field = (FieldInfo)variable;
-                if (variableName == null)
-                    variableName = field.Name;
+                variableName ??= field.Name;
 #if UNITY_EDITOR || !NETFX_CORE
                 if (!parent.BoundVariableType.IsValueType)
 #else
@@ -171,11 +169,9 @@ namespace RuntimeInspectorNamespace
                     }, variable);
                 virutalObject = parent.Value;
             }
-            else if (variable is PropertyInfo)
+            else if (variable is PropertyInfo property)
             {
-                PropertyInfo property = (PropertyInfo)variable;
-                if (variableName == null)
-                    variableName = property.Name;
+                variableName ??= property.Name;
 
 #if UNITY_EDITOR || !NETFX_CORE
                 if (!parent.BoundVariableType.IsValueType)
@@ -196,8 +192,23 @@ namespace RuntimeInspectorNamespace
 
         public void BindTo(Type variableType, string variableName, Getter getter, Setter setter, MemberInfo variable = null)
         {
+            if (variable != null && variable is FieldInfo fieldInfo)
+            {
+                var alias = fieldInfo.GetAliasIfAny();
+                if (!string.IsNullOrEmpty(alias))
+                {
+                    Name = alias;
+                }
+                else
+                {
+                    Name = variableName;
+                }
+            }
+            else
+            {
+                Name = variableName;
+            }
             m_boundVariableType = variableType;
-            Name = variableName;
             ReflectedName = variableName;
 
             this.getter = getter;
@@ -308,7 +319,7 @@ namespace RuntimeInspectorNamespace
                         var oldValue = mInfo?.GetValue(component);
                         mInfo?.SetValue(component, Value);
 
-                        if (mInfo!=null)
+                        if (mInfo != null)
                         {
                             if (NameRaw == "Broadcast")
                             {
@@ -348,7 +359,7 @@ namespace RuntimeInspectorNamespace
         protected readonly List<InspectorField> elements = new List<InspectorField>(8);
         protected readonly List<ExposedMethodField> exposedMethods = new List<ExposedMethodField>();
 
-        protected virtual int Length { get { return elements.Count; } set{}}
+        protected virtual int Length { get { return elements.Count; } set { } }
 
         public override bool ShouldRefresh { get { return true; } }
 
@@ -477,10 +488,10 @@ namespace RuntimeInspectorNamespace
 
                 if (m_headerVisibility == RuntimeInspector.HeaderVisibility.Collapsible)
                 {
-                    variableNameText.rectTransform.sizeDelta = new Vector2(-(Skin.LineHeight*0.05f ), 0f);
+                    variableNameText.rectTransform.sizeDelta = new Vector2(-(Skin.LineHeight * 0.05f), 0f);
                     variableNameText.fontSize = Skin.HeadingFontSize;
                     variableNameText.supportRichText = true;
-                    variableNameText.fontStyle =FontStyle.Bold;
+                    variableNameText.fontStyle = FontStyle.Bold;
                 }
             }
 
@@ -592,7 +603,7 @@ namespace RuntimeInspectorNamespace
             if (variableDrawer != null)
             {
                 if (variableName == null)
-                    variableName = component.GetType().Name ;
+                    variableName = component.GetType().Name;
 
                 variableDrawer.BindTo(component.GetType(), string.Empty, () => component, (value) => { });
                 variableDrawer.NameRaw = variableName;
@@ -609,7 +620,7 @@ namespace RuntimeInspectorNamespace
             if (variable.Name.ToLower() == "enabled")
                 return null;
             // xnx
-            
+
             Type variableType = variable is FieldInfo ? ((FieldInfo)variable).FieldType : ((PropertyInfo)variable).PropertyType;
             InspectorField variableDrawer = Inspector.CreateDrawerForType(variableType, drawArea, Depth + 1, true, variable);
             if (variableDrawer != null)
