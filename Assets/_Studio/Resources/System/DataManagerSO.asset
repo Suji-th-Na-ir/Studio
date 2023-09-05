@@ -61,6 +61,10 @@ MonoBehaviour:
     ComponentName: Terra.Studio.TeleportComponent
     SystemName: Terra.Studio.TeleportSystem
     DrawerName: Terra.Studio.Teleport
+  - Key: Terra.Studio.Collide
+    ComponentName: Terra.Studio.CollideComponent
+    SystemName: Terra.Studio.CollideSystem
+    DrawerName: Terra.Studio.Collide
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent
