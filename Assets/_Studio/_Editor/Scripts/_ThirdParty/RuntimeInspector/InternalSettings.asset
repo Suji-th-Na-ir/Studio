@@ -126,3 +126,6 @@ MonoBehaviour:
   - ComponentName: Collide
     hideAddButton: 0
     hideRemoveButton: 0
+  - ComponentName: Click
+    hideAddButton: 0
+    hideRemoveButton: 0

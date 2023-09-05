@@ -65,6 +65,10 @@ MonoBehaviour:
     ComponentName: Terra.Studio.CollideComponent
     SystemName: Terra.Studio.CollideSystem
     DrawerName: Terra.Studio.Collide
+  - Key: Terra.Studio.Click
+    ComponentName: Terra.Studio.ClickComponent
+    SystemName: Terra.Studio.ClickSystem
+    DrawerName: Terra.Studio.Click
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent
