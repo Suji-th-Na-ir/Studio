@@ -118,7 +118,8 @@ namespace Terra.Studio
         {
             if (string.IsNullOrEmpty(_type) || string.IsNullOrWhiteSpace(_type))
             {
-                listenDictionary.Remove(_id);
+                // Debug.Log("removing signal "+_type);
+                // listenDictionary.Remove(_id);
                 return;
             }
 

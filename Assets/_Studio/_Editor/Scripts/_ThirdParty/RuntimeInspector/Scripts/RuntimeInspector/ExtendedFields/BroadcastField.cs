@@ -55,6 +55,7 @@ namespace RuntimeInspectorNamespace
         {
             Atom.Broadcast atom = (Atom.Broadcast)Value;
             atom.data.broadcastTypeIndex = _index;
+            atom.data.broadcastName = broadcastType.options[_index].text;
             ShowCustomStringInputGroup();
             ResetCustomString();
         }
@@ -62,8 +63,11 @@ namespace RuntimeInspectorNamespace
         private void ResetCustomString()
         {
             Atom.Broadcast atom = (Atom.Broadcast)Value;
-            atom.data.broadcastName = "";
-            customString.text = "";
+            if (atom.data.broadcastName.ToLower().Contains("custom"))
+            {
+                atom.data.broadcastName = "";
+                customString.text = "";
+            }
         }
 
         private void ShowCustomStringInputGroup()

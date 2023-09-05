@@ -131,7 +131,6 @@ namespace RuntimeInspectorNamespace
             atom.data.listenIndex = _index;
             UpdateData(atom);
             prevListenOnValue = _index;
-            Debug.Log($"listen to newstring {newString}   index {_index}");
         }
 
         protected override void OnSkinChanged()

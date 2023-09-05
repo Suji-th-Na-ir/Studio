@@ -25,11 +25,10 @@ namespace RuntimeInspectorNamespace
         public Toggle canListenMultipleTimesToggle;
 
         [HideInInspector] public TranslateField field = null;
-        private string guid;
 
-        private void Awake()
+        public void RefreshUI()
         {
-            guid = GetInstanceID() + "_translate";//Guid.NewGuid().ToString("N");
+            ShowCustomStringInput(broadcastType.value);
         }
         
         public void Setup()
@@ -73,15 +72,18 @@ namespace RuntimeInspectorNamespace
             if (broadcastType != null) broadcastType.onValueChanged.AddListener((value) =>
             {
                 string selectedString = EditorOp.Resolve<DataProvider>().GetListenString(value);
-                if (selectedString.ToLower().Contains("custom"))
-                    customString.transform.parent.gameObject.SetActive(true);
-                else
-                    customString.transform.parent.gameObject.SetActive(false);
-                
+                ShowCustomStringInput(value);
                 field.GetAtom().data.broadcastTypeIndex = value;
+                field.GetAtom().data.broadcastName = broadcastType.options[value].text;
                 ResetCustomString();
                 EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(selectedString, field.GetAtom().data.broadcastName, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)field.Value).target, componentType = typeof(Atom.Translate).Name });
                 // UpdateVariablesForAll(VariableTypes.BROADCAST_STRING,  value);
+            });
+            if(customString != null) customString.onValueChanged.AddListener((value) =>
+            {
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value, field.GetAtom().data.broadcastName, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)field.Value).target, componentType = typeof(Atom.Translate).Name });
+                SetCustomString(value);
+                // UpdateAllSelectedObjects("broadcast", field.GetAtom().data.broadcast);
             });
             if (broadcastAt != null) broadcastAt.onValueChanged.AddListener((value) =>
             {
@@ -94,11 +96,40 @@ namespace RuntimeInspectorNamespace
                 UpdateAllSelectedObjects("listen", field.GetAtom().data.listen);
             });
         }
+
+        private void ShowCustomStringInput(int _index)
+        {
+            string selectedString = "None";
+            if (_index < broadcastType.options.Count)
+                selectedString = broadcastType.options[_index].text;
+            
+            if (selectedString.ToLower().Contains("custom"))
+                customString.transform.parent.gameObject.SetActive(true);
+            else
+                customString.transform.parent.gameObject.SetActive(false);
+        }
+        
+        private void SetCustomString(string _newString)
+        {
+            Atom.Translate atom = field.GetAtom();
+            
+            Debug.Log($"target name {atom.target.name}");
+            
+            atom.data.broadcastName = _newString;
+            
+            Debug.Log($"atom id {atom.data.id}  new string {_newString}");
+            
+            EditorOp.Resolve<DataProvider>().UpdateToListenList(atom.data.id, _newString);
+        }
+
         
         private void ResetCustomString()
         {
-            field.GetAtom().data.broadcastName = "";
-            customString.text = "";
+            if (!field.GetAtom().data.broadcastName.ToLower().Contains("custom"))
+            {
+                field.GetAtom().data.broadcastName = "";
+                customString.text = "";
+            }
         }
 
 
@@ -137,6 +168,18 @@ namespace RuntimeInspectorNamespace
         public void LoadDefaultValues()
         {
             if (broadcastAt != null) { broadcastAt.AddOptions(Enum.GetNames(typeof(BroadcastAt)).ToList()); }
+            if (broadcastType != null)
+            {
+                broadcastType.options.Clear();
+                List<string> newList = EditorOp.Resolve<DataProvider>().ListenToTypes;
+                foreach (string _name in newList)
+                {
+                    broadcastType.options.Add(new Dropdown.OptionData()
+                    {
+                        text = _name
+                    });
+                }
+            }
         }
 
         public void SetData(TranslateComponentData _data)
@@ -146,7 +189,6 @@ namespace RuntimeInspectorNamespace
             if (pauseForInput != null) pauseForInput.SetTextWithoutNotify(_data.pauseFor.ToString());
             if (speedInput != null) speedInput.SetTextWithoutNotify(_data.speed.ToString());
             if (repeatInput != null) repeatInput.SetTextWithoutNotify(_data.repeat.ToString());
-            // if (broadcastInput != null) broadcastInput.SetTextWithoutNotify(_data.broadcast);
             if (moveToInput != null) moveToInput[0].SetTextWithoutNotify(_data.moveTo.x.ToString());
             if (moveToInput != null) moveToInput[1].SetTextWithoutNotify(_data.moveTo.y.ToString());
             if (moveToInput != null) moveToInput[2].SetTextWithoutNotify(_data.moveTo.z.ToString());

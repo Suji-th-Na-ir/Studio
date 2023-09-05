@@ -128,13 +128,15 @@ namespace RuntimeInspectorNamespace
         protected override void OnBound(MemberInfo variable)
         {
             base.OnBound(variable);
+            
             Atom.Rotate rt = (Atom.Rotate)Value;
-            // Debug.Log($"translate atom data x value {rt.data.Xaxis}");
+            // Debug.Log($"translate atom data");
             rotateTypesDD.onValueChanged.AddListener(OnRotateTypesValueChanged);
             int rotationTypeIndex = (int)Enum.Parse(typeof(RotationType), rt.data.rotateType.ToString());
             rotateTypesDD.SetValueWithoutNotify(rotationTypeIndex);
             ShowRotateOptionsMenu(rotationTypeIndex);
             selectedRotateType.SetData(rt.data);
+            selectedRotateType.RefreshUI();
         }
 
         public override void Refresh()

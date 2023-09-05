@@ -26,6 +26,12 @@ namespace RuntimeInspectorNamespace
                                 , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = this.GetType().Name });
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.H))
+                Export();
+        }
+
         public (string type, string data) Export()
         {
             TranslateComponent comp = new TranslateComponent
@@ -37,11 +43,11 @@ namespace RuntimeInspectorNamespace
                 targetPosition = Type.data.moveTo,
                 startPosition = transform.position,
 
-                IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcast),
                 broadcastAt = Type.data.broadcastAt,
+                IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcastName),
+                Broadcast = string.IsNullOrEmpty(Type.data.broadcastName) ? "None" : Type.data.broadcastName,
                 BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName,
                 broadcastTypeIndex = Type.data.broadcastTypeIndex,
-                Broadcast = Type.data.broadcast,
                 
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
@@ -62,6 +68,7 @@ namespace RuntimeInspectorNamespace
             gameObject.TrySetTrigger(false, true);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp, Formatting.Indented);
+            Debug.Log(data);
             return (type, data);
         }
         

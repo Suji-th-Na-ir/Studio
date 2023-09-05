@@ -29,5 +29,6 @@ namespace Terra.Studio
         public float drag;
         public bool showResetButton;
         public Listen listen;
+        public int broadcastTypeIndex;
     }
 }

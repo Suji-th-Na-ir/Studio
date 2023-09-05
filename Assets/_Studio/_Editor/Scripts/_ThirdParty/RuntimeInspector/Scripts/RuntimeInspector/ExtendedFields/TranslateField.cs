@@ -145,6 +145,8 @@ namespace RuntimeInspectorNamespace
             translateTypesDD.SetValueWithoutNotify(translationTypeIndex);
             ShowTranslateOptionsMenu(translationTypeIndex);
             selectedTranslateType.SetData(rt.data);
+            
+            selectedTranslateType.RefreshUI();
         }
 
 

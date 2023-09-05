@@ -46,12 +46,11 @@ namespace RuntimeInspectorNamespace
                 pauseFor = Type.data.pauseBetween,
                 repeatFor = Type.data.repeat,
 
-
-                IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcast),
                 broadcastAt = Type.data.broadcastAt,
+                IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcastName),
+                Broadcast = string.IsNullOrEmpty(Type.data.broadcastName) ? "None" : Type.data.broadcastName,
                 BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName,
                 broadcastTypeIndex = Type.data.broadcastTypeIndex,
-                Broadcast = Type.data.broadcast,
 
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,

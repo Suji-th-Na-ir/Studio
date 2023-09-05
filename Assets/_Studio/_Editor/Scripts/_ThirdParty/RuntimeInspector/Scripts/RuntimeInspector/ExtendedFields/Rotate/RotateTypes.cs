@@ -50,24 +50,14 @@ namespace RuntimeInspectorNamespace
             BROADCAST_STRING,
             CAN_LISTEN_MULTIPLE_TIMES
         }
-
-        public void ClearElements()
+        
+        
+        public void RefreshUI()
         {
-            xAxis.onValueChanged.RemoveAllListeners();
-            yAxis.onValueChanged.RemoveAllListeners();
-            zAxis.onValueChanged.RemoveAllListeners();
-            xAxis.onValueChanged.RemoveAllListeners();
-            dirDropDown.onValueChanged.RemoveAllListeners();
-            broadcastAt.onValueChanged.RemoveAllListeners();
-            degreesInput.onValueChanged.RemoveAllListeners();
-            speedInput.onValueChanged.RemoveAllListeners();
-            pauseInput.onValueChanged.RemoveAllListeners();
-            repeatInput.onValueChanged.RemoveAllListeners();
-            broadcastType.onValueChanged.RemoveAllListeners();
-            customString.onValueChanged.RemoveAllListeners();
-            canListenMultipleTimesToggle.onValueChanged.RemoveAllListeners();
+            if(broadcastType)
+                ShowCustomStringInput(broadcastType.value);
         }
-
+        
         public void Setup()
         {
             LoadDefaultValues();
@@ -122,6 +112,8 @@ namespace RuntimeInspectorNamespace
                     customString.transform.parent.gameObject.SetActive(false);
                 
                 field.GetAtom().data.broadcastTypeIndex = value;
+                field.GetAtom().data.broadcastName = broadcastType.options[value].text;
+
                 ResetCustomString();
                 EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(selectedString, field.GetAtom().data.broadcastName, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)field.Value).target, componentType = typeof(Atom.Rotate).Name });
                 // UpdateVariablesForAll(VariableTypes.BROADCAST_STRING,  value);
@@ -145,9 +137,23 @@ namespace RuntimeInspectorNamespace
             });
         }
         
+        private void ShowCustomStringInput(int _index)
+        {
+            string selectedString = "None";
+            if (_index < broadcastType.options.Count)
+                selectedString = broadcastType.options[_index].text;
+            // string selectedString = EditorOp.Resolve<DataProvider>().GetListenString(_index);
+            Debug.Log("selected string "+selectedString);
+            if (selectedString.ToLower().Contains("custom"))
+                customString.transform.parent.gameObject.SetActive(true);
+            else
+                customString.transform.parent.gameObject.SetActive(false);
+        }
+
+        
         private void SetCustomString(string _newString)
         {
-            Atom.Rotate atom = (Atom.Rotate)field.Value;
+            Atom.Rotate atom = field.GetAtom();
             atom.data.broadcastName = _newString;
             
             EditorOp.Resolve<DataProvider>().UpdateToListenList(atom.data.id, _newString);
@@ -155,8 +161,11 @@ namespace RuntimeInspectorNamespace
         
         private void ResetCustomString()
         {
-            field.GetAtom().data.broadcastName = "";
-            customString.text = "";
+            if (!field.GetAtom().data.broadcastName.ToLower().Contains("custom"))
+            {
+                field.GetAtom().data.broadcastName = "";
+                customString.text = "";
+            }
         }
 
 

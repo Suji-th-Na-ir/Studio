@@ -1,6 +1,8 @@
+using System;
 using UnityEngine;
 using Newtonsoft.Json;
 using RuntimeInspectorNamespace;
+using UnityEngine.Serialization;
 
 namespace Terra.Studio
 {
@@ -9,9 +11,19 @@ namespace Terra.Studio
     {
         public float resistance = 0;
         public bool showResetButton = true;
-        public Atom.PlaySfx playSFX = new();
-        public Atom.PlayVfx playVFX = new();
-        public Atom.Broadcast broadcast = new();
+        public Atom.PlaySfx PlaySFX = new();
+        public Atom.PlayVfx PlayVFX = new();
+        public Atom.Broadcast Broadcast = new();
+
+        private string guid;
+
+        public void Awake()
+        {
+            guid = GetInstanceID() + "_push";//Guid.NewGuid().ToString("N");
+            Broadcast.Setup(gameObject, this.GetType().Name, guid);
+            PlaySFX.Setup<DestroyOn>(gameObject);
+            PlayVFX.Setup<DestroyOn>(gameObject);
+        }
 
         public (string type, string data) Export()
         {
@@ -20,15 +32,19 @@ namespace Terra.Studio
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.TriggerAction",
                 ConditionData = "Any",
-                canPlaySFX = playSFX.data.canPlay,
-                sfxName = playSFX.data.clipName,
-                sfxIndex = playSFX.data.clipIndex,
-                canPlayVFX = playVFX.data.canPlay,
-                vfxName = playVFX.data.clipName,
-                vfxIndex = playVFX.data.clipIndex,
+                canPlaySFX = PlaySFX.data.canPlay,
+                sfxName = PlaySFX.data.clipName,
+                sfxIndex = PlaySFX.data.clipIndex,
+                canPlayVFX = PlayVFX.data.canPlay,
+                vfxName = PlayVFX.data.clipName,
+                vfxIndex = PlayVFX.data.clipIndex,
                 drag = resistance,
                 showResetButton = showResetButton,
-                listen = Listen.Always
+                listen = Listen.Always,
+                
+                IsBroadcastable = !string.IsNullOrEmpty(Broadcast.data.broadcastName),
+                Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? "None" : Broadcast.data.broadcastName,
+                broadcastTypeIndex = Broadcast.data.broadcastTypeIndex,
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(component);
@@ -37,15 +53,20 @@ namespace Terra.Studio
 
         public void Import(EntityBasedComponent data)
         {
-            var component = JsonConvert.DeserializeObject<PushComponent>(data.data);
-            resistance = component.drag;
-            showResetButton = component.showResetButton;
-            playSFX.data.canPlay = component.canPlaySFX;
-            playSFX.data.clipIndex = component.sfxIndex;
-            playSFX.data.clipName = component.sfxName;
-            playVFX.data.canPlay = component.canPlayVFX;
-            playVFX.data.clipIndex = component.vfxIndex;
-            playVFX.data.clipName = component.vfxName;
+            var comp = JsonConvert.DeserializeObject<PushComponent>(data.data);
+            resistance = comp.drag;
+            showResetButton = comp.showResetButton;
+            PlaySFX.data.canPlay = comp.canPlaySFX;
+            PlaySFX.data.clipIndex = comp.sfxIndex;
+            PlaySFX.data.clipName = comp.sfxName;
+            PlayVFX.data.canPlay = comp.canPlayVFX;
+            PlayVFX.data.clipIndex = comp.vfxIndex;
+            PlayVFX.data.clipName = comp.vfxName;
+            
+            EditorOp.Resolve<DataProvider>().UpdateToListenList(guid,comp.Broadcast);
+            
+            Broadcast.data.broadcastName = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
+            Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
         }
     }
 }
