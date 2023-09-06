@@ -120,12 +120,6 @@ namespace Terra.Studio
             RuntimeOp.Resolve<ScoreHandler>().AddScore((int)addBy);
         }
 
-        public static void RotateObject(RotateByParams rotateParams)
-        {
-            var rotateBy = rotateParams.targetObj.AddComponent<RotateByHelper>();
-            rotateBy.Rotate(rotateParams);
-        }
-
         public static void TranslateObject(TranslateParams translateParams)
         {
             var translate = translateParams.targetObj.AddComponent<TranslateHelper>();
@@ -136,20 +130,6 @@ namespace Terra.Studio
         {
             RuntimeOp.Resolve<GameData>().PlayerRef.position = position;
         }
-    }
-
-    public struct RotateByParams
-    {
-        public float rotateBy;
-        public float rotationSpeed;
-        public int rotationTimes;
-        public bool shouldPingPong;
-        public bool shouldPause;
-        public float pauseForTime;
-        public GameObject targetObj;
-        public Action<bool> onRotated;
-        public Axis[] axis;
-        public Direction direction;
     }
 
     public struct TranslateParams

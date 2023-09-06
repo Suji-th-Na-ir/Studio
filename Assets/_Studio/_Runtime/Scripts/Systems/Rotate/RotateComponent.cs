@@ -36,5 +36,15 @@ namespace Terra.Studio
         public int vfxIndex;
         public int listenIndex;
         public int broadcastTypeIndex;
+
+        [JsonIgnore] public int currentRotateCount;
+        [JsonIgnore] public int directionFactor;
+        [JsonIgnore] public float targetRotation;
+        [JsonIgnore] public float currentRotation;
+        [JsonIgnore] public float pauseStartTime;
+        [JsonIgnore] public bool canPause;
+        [JsonIgnore] public bool isPaused;
+        [JsonIgnore] public bool shouldPingPong;
+        [JsonIgnore] public bool rotateForever;
     }
 }
