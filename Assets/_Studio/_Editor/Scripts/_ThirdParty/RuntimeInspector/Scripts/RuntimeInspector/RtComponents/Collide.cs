@@ -7,10 +7,10 @@ namespace Terra.Studio
     [EditorDrawComponent("Terra.Studio.Collide")]
     public class Collide : MonoBehaviour, IComponent
     {
-        public Atom.Broadcast broadcast = new();
+        public string broadcast = null;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
-        public bool executeMultipleTimes;
+        public bool executeMultipleTimes = true;
 
         public (string type, string data) Export()
         {
@@ -22,9 +22,8 @@ namespace Terra.Studio
                 canPlayVFX = playVFX.data.canPlay,
                 vfxName = playVFX.data.clipName,
                 vfxIndex = playVFX.data.clipIndex,
-                IsBroadcastable = !string.IsNullOrEmpty(broadcast.data.broadcastName),
-                Broadcast = broadcast.data.broadcastName,
-                broadcastIndex = broadcast.data.broadcastTypeIndex,
+                IsBroadcastable = !string.IsNullOrEmpty(broadcast),
+                Broadcast = broadcast,
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.TriggerAction",
                 ConditionData = "Player",
@@ -44,8 +43,9 @@ namespace Terra.Studio
             playVFX.data.canPlay = obj.canPlayVFX;
             playVFX.data.clipName = obj.vfxName;
             playVFX.data.clipIndex = obj.vfxIndex;
-            broadcast.data.broadcastName = obj.Broadcast;
-            broadcast.data.broadcastTypeIndex = obj.broadcastIndex;
+            broadcast = obj.Broadcast;
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(broadcast, ""
+                    , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = EditorOp.Resolve<DataProvider>().GetCovariance(this) });
         }
     }
 }

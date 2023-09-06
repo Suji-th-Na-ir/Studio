@@ -10,8 +10,8 @@ namespace Terra.Studio
         public Vector3 teleportTo;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
-        public Atom.Broadcast broadcast = new();
-        public bool executeMultipleTimes;
+        public string broadcast = null;
+        public bool executeMultipleTimes = true;
 
         private void Start()
         {
@@ -35,9 +35,8 @@ namespace Terra.Studio
                 canPlayVFX = playVFX.data.canPlay,
                 vfxName = playVFX.data.clipName,
                 vfxIndex = playVFX.data.clipIndex,
-                IsBroadcastable = !string.IsNullOrEmpty(broadcast.data.broadcastName),
-                Broadcast = broadcast.data.broadcastName,
-                broadcastIndex = broadcast.data.broadcastTypeIndex,
+                IsBroadcastable = !string.IsNullOrEmpty(broadcast),
+                Broadcast = broadcast,
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.TriggerAction",
                 ConditionData = "Player",
@@ -58,9 +57,10 @@ namespace Terra.Studio
             playVFX.data.canPlay = obj.canPlayVFX;
             playVFX.data.clipName = obj.vfxName;
             playVFX.data.clipIndex = obj.vfxIndex;
-            broadcast.data.broadcastName = obj.Broadcast;
-            broadcast.data.broadcastTypeIndex = obj.broadcastIndex;
+            broadcast = obj.Broadcast;
             executeMultipleTimes = obj.listen == Listen.Always;
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(broadcast, ""
+                    , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = EditorOp.Resolve<DataProvider>().GetCovariance(this) });
         }
     }
 }
