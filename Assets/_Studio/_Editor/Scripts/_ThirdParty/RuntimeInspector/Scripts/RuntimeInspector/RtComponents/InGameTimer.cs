@@ -8,13 +8,12 @@ namespace RuntimeInspectorNamespace
     public class InGameTimer : MonoBehaviour, IComponent
     {
         public uint Time = 180;
-        public Atom.Broadcast Broadcast = new();
+        public string Broadcast = "";
         private string guid;
 
         private void Awake()
         {
             guid = GetInstanceID() + "_timer";
-            Broadcast.Setup(gameObject, GetType().Name, guid);
         }
 
         public (string type, string data) Export()
@@ -24,9 +23,9 @@ namespace RuntimeInspectorNamespace
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.GameStart",
                 ConditionData = "OnStart",
-                IsBroadcastable = !string.IsNullOrEmpty(Broadcast.data.broadcastName),
-                Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? "None" : Broadcast.data.broadcastName,
-                broadcastTypeIndex = Broadcast.data.broadcastTypeIndex,
+                IsBroadcastable = !string.IsNullOrEmpty(Broadcast),
+                Broadcast = string.IsNullOrEmpty(Broadcast) ? "None" : Broadcast,
+                // broadcastTypeIndex = Broadcast.data.broadcastTypeIndex,
                 totalTime = Time
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -38,10 +37,10 @@ namespace RuntimeInspectorNamespace
         {
             var comp = JsonConvert.DeserializeObject<InGameTimerComponent>($"{data.data}");
             Time = comp.totalTime;
-            EditorOp.Resolve<DataProvider>().UpdateToListenList(guid,comp.Broadcast);
-            Broadcast.data.broadcastName = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
-            Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast.data.broadcastName, null);
+           
+            Broadcast = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
+            // Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, null);
         }
     }
 }

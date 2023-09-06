@@ -19,18 +19,12 @@ namespace RuntimeInspectorNamespace
 
         public Dropdown broadcastAt;
         
-        public Dropdown broadcastType;
         public InputField customString;
         
         public Toggle canListenMultipleTimesToggle;
 
         [HideInInspector] public TranslateField field = null;
 
-        public void RefreshUI()
-        {
-            ShowCustomStringInput(broadcastType.value);
-        }
-        
         public void Setup()
         {
             LoadDefaultValues();
@@ -69,19 +63,8 @@ namespace RuntimeInspectorNamespace
                 field.GetAtom().data.repeat = Helper.StringInInt(value);
                 UpdateAllSelectedObjects("repeat", field.GetAtom().data.repeat);
             });
-            if (broadcastType != null) broadcastType.onValueChanged.AddListener((value) =>
-            {
-                string selectedString = EditorOp.Resolve<DataProvider>().GetListenString(value);
-                ShowCustomStringInput(value);
-                field.GetAtom().data.broadcastTypeIndex = value;
-                field.GetAtom().data.broadcastName = broadcastType.options[value].text;
-                ResetCustomString();
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(selectedString, field.GetAtom().data.broadcastName, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)field.Value).target, componentType = typeof(Atom.Translate).Name });
-                // UpdateVariablesForAll(VariableTypes.BROADCAST_STRING,  value);
-            });
             if(customString != null) customString.onValueChanged.AddListener((value) =>
             {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value, field.GetAtom().data.broadcastName, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)field.Value).target, componentType = typeof(Atom.Translate).Name });
                 SetCustomString(value);
                 // UpdateAllSelectedObjects("broadcast", field.GetAtom().data.broadcast);
             });
@@ -97,41 +80,15 @@ namespace RuntimeInspectorNamespace
             });
         }
 
-        private void ShowCustomStringInput(int _index)
-        {
-            string selectedString = "None";
-            if (_index < broadcastType.options.Count)
-                selectedString = broadcastType.options[_index].text;
-            
-            if (selectedString.ToLower().Contains("custom"))
-                customString.transform.parent.gameObject.SetActive(true);
-            else
-                customString.transform.parent.gameObject.SetActive(false);
-        }
-        
         private void SetCustomString(string _newString)
         {
             Atom.Translate atom = field.GetAtom();
-            
-            Debug.Log($"target name {atom.target.name}");
-            
-            atom.data.broadcastName = _newString;
-            
-            Debug.Log($"atom id {atom.data.id}  new string {_newString}");
-            
-            EditorOp.Resolve<DataProvider>().UpdateToListenList(atom.data.id, _newString);
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(_newString, 
+                atom.data.broadcast, 
+                new ComponentDisplayDock { componentGameObject = atom.target,
+                    componentType = atom.componentType });
+            atom.data.broadcast = _newString;
         }
-
-        
-        private void ResetCustomString()
-        {
-            if (!field.GetAtom().data.broadcastName.ToLower().Contains("custom"))
-            {
-                field.GetAtom().data.broadcastName = "";
-                customString.text = "";
-            }
-        }
-
 
         private void UpdateAllSelectedObjects(string varName, object value)
         {
@@ -167,24 +124,13 @@ namespace RuntimeInspectorNamespace
 
         public void LoadDefaultValues()
         {
-            if (broadcastAt != null) { broadcastAt.AddOptions(Enum.GetNames(typeof(BroadcastAt)).ToList()); }
-            if (broadcastType != null)
-            {
-                broadcastType.options.Clear();
-                List<string> newList = EditorOp.Resolve<DataProvider>().ListenToTypes;
-                foreach (string _name in newList)
-                {
-                    broadcastType.options.Add(new Dropdown.OptionData()
-                    {
-                        text = _name
-                    });
-                }
-            }
+            if (broadcastAt) { broadcastAt.AddOptions(Enum.GetNames(typeof(BroadcastAt)).ToList()); }
+
+            if (customString) { customString.text = ""; }
         }
 
         public void SetData(TranslateComponentData _data)
         {
-            field.GetAtom().data = _data;
             if (broadcastAt != null) broadcastAt.SetValueWithoutNotify((int)Enum.Parse(typeof(BroadcastAt), _data.broadcastAt.ToString()));
             if (pauseForInput != null) pauseForInput.SetTextWithoutNotify(_data.pauseFor.ToString());
             if (speedInput != null) speedInput.SetTextWithoutNotify(_data.speed.ToString());
@@ -192,7 +138,7 @@ namespace RuntimeInspectorNamespace
             if (moveToInput != null) moveToInput[0].SetTextWithoutNotify(_data.moveTo.x.ToString());
             if (moveToInput != null) moveToInput[1].SetTextWithoutNotify(_data.moveTo.y.ToString());
             if (moveToInput != null) moveToInput[2].SetTextWithoutNotify(_data.moveTo.z.ToString());
-            if (broadcastType) broadcastType.SetValueWithoutNotify(_data.broadcastTypeIndex);
+            if (customString) customString.SetTextWithoutNotify( _data.broadcast);
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
 
@@ -208,7 +154,6 @@ namespace RuntimeInspectorNamespace
             pauseForInput?.SetupInputFieldSkin(skin);
             repeatInput?.SetupInputFieldSkin(skin);
             listenTo?.SetupInputFieldSkin(skin);
-            broadcastType?.SetSkinDropDownField(skin);
             customString?.SetupInputFieldSkin(skin);
         }
     }

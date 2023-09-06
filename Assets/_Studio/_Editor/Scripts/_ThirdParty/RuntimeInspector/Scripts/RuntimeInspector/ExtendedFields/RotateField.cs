@@ -33,6 +33,7 @@ namespace RuntimeInspectorNamespace
 
             List<string> data = Enum.GetNames(typeof(RotationType)).ToList();
             rotateTypesDD.AddOptions(data);
+            rotateTypesDD.onValueChanged.AddListener(OnRotateTypesValueChanged);
         }
 
         public override bool SupportsType(Type type)
@@ -130,13 +131,11 @@ namespace RuntimeInspectorNamespace
             base.OnBound(variable);
             
             Atom.Rotate rt = (Atom.Rotate)Value;
-            // Debug.Log($"translate atom data");
-            rotateTypesDD.onValueChanged.AddListener(OnRotateTypesValueChanged);
+            
             int rotationTypeIndex = (int)Enum.Parse(typeof(RotationType), rt.data.rotateType.ToString());
             rotateTypesDD.SetValueWithoutNotify(rotationTypeIndex);
             ShowRotateOptionsMenu(rotationTypeIndex);
             selectedRotateType.SetData(rt.data);
-            selectedRotateType.RefreshUI();
         }
 
         public override void Refresh()

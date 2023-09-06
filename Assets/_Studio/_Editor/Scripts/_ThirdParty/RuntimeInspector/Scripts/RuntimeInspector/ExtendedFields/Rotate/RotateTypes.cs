@@ -26,8 +26,6 @@ namespace RuntimeInspectorNamespace
         public InputField repeatInput = null;
 
         public Dropdown broadcastAt;
-        
-        public Dropdown broadcastType;
         public InputField customString;
         
         public InputField listenInput;
@@ -50,14 +48,7 @@ namespace RuntimeInspectorNamespace
             BROADCAST_STRING,
             CAN_LISTEN_MULTIPLE_TIMES
         }
-        
-        
-        public void RefreshUI()
-        {
-            if(broadcastType)
-                ShowCustomStringInput(broadcastType.value);
-        }
-        
+
         public void Setup()
         {
             LoadDefaultValues();
@@ -103,24 +94,8 @@ namespace RuntimeInspectorNamespace
                 field.GetAtom().data.repeat = Helper.StringInInt(value);
                 UpdateVariablesForAll(VariableTypes.REPEAT,  Helper.StringInInt(value));
             });
-            if (broadcastType != null) broadcastType.onValueChanged.AddListener((value) =>
-            {
-                string selectedString = EditorOp.Resolve<DataProvider>().GetListenString(value);
-                if (selectedString.ToLower().Contains("custom"))
-                    customString.transform.parent.gameObject.SetActive(true);
-                else
-                    customString.transform.parent.gameObject.SetActive(false);
-                
-                field.GetAtom().data.broadcastTypeIndex = value;
-                field.GetAtom().data.broadcastName = broadcastType.options[value].text;
-
-                ResetCustomString();
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(selectedString, field.GetAtom().data.broadcastName, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)field.Value).target, componentType = typeof(Atom.Rotate).Name });
-                // UpdateVariablesForAll(VariableTypes.BROADCAST_STRING,  value);
-            });
             if(customString != null) customString.onValueChanged.AddListener((value) =>
             {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value, field.GetAtom().data.broadcastName, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)field.Value).target, componentType = typeof(Atom.Rotate).Name });
                 SetCustomString(value);
                 // UpdateAllSelectedObjects("broadcast", field.GetAtom().data.broadcast);
             });
@@ -136,38 +111,16 @@ namespace RuntimeInspectorNamespace
                 UpdateVariablesForAll(VariableTypes.CAN_LISTEN_MULTIPLE_TIMES,  field.GetAtom().data.listen);
             });
         }
-        
-        private void ShowCustomStringInput(int _index)
-        {
-            string selectedString = "None";
-            if (_index < broadcastType.options.Count)
-                selectedString = broadcastType.options[_index].text;
-            // string selectedString = EditorOp.Resolve<DataProvider>().GetListenString(_index);
-            Debug.Log("selected string "+selectedString);
-            if (selectedString.ToLower().Contains("custom"))
-                customString.transform.parent.gameObject.SetActive(true);
-            else
-                customString.transform.parent.gameObject.SetActive(false);
-        }
 
-        
         private void SetCustomString(string _newString)
         {
             Atom.Rotate atom = field.GetAtom();
-            atom.data.broadcastName = _newString;
-            
-            EditorOp.Resolve<DataProvider>().UpdateToListenList(atom.data.id, _newString);
+            atom.data.broadcast = _newString;
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(_newString, 
+                _newString, 
+                new ComponentDisplayDock { componentGameObject = atom.target,
+                    componentType = atom.componentType });
         }
-        
-        private void ResetCustomString()
-        {
-            if (!field.GetAtom().data.broadcastName.ToLower().Contains("custom"))
-            {
-                field.GetAtom().data.broadcastName = "";
-                customString.text = "";
-            }
-        }
-
 
         private void UpdateVariablesForAll(VariableTypes _type, Object _value)
         {
@@ -211,8 +164,8 @@ namespace RuntimeInspectorNamespace
                                 break;
                             case VariableTypes.BROADCAST_STRING:
                                 EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(
-                                    _value.ToString(), comp.Type.data.broadcastName, new ComponentDisplayDock() { componentGameObject = obj, componentType = typeof(Atom.Rotate).Name });
-                                comp.Type.data.broadcastName = (string)_value;
+                                    _value.ToString(), comp.Type.data.broadcast, new ComponentDisplayDock() { componentGameObject = obj, componentType = typeof(Atom.Rotate).Name });
+                                comp.Type.data.broadcast = (string)_value;
                                 break;
                             case VariableTypes.CAN_LISTEN_MULTIPLE_TIMES:
                                 comp.Type.data.listen = (Listen)_value;
@@ -223,29 +176,6 @@ namespace RuntimeInspectorNamespace
             }
         }
         
-        private Axis GetAxis(string _value)
-        {
-            if (_value == Axis.X.ToString()) return Axis.X;
-            else if (_value == Axis.Y.ToString()) return Axis.Y;
-            else if (_value == Axis.Z.ToString()) return Axis.Z;
-            return Axis.X;
-        }
-
-        private Direction GetDirection(string _value)
-        {
-            if (_value == Direction.Clockwise.ToString()) return Direction.Clockwise;
-            else if (_value == Direction.AntiClockwise.ToString()) return Direction.AntiClockwise;
-            return Direction.Clockwise;
-        }
-
-        private BroadcastAt GetBroadcastAt(string _value)
-        {
-            if (_value == BroadcastAt.End.ToString()) return BroadcastAt.End;
-            else if (_value == BroadcastAt.Never.ToString()) return BroadcastAt.Never;
-            else if (_value == BroadcastAt.AtEveryInterval.ToString()) return BroadcastAt.AtEveryInterval;
-            return BroadcastAt.Never;
-        }
-
         public void LoadDefaultValues()
         {
             // axis 
@@ -266,19 +196,6 @@ namespace RuntimeInspectorNamespace
                     BroadcastAt.AtEveryInterval.ToString()
                 });
             }
-
-            if (broadcastType != null)
-            {
-                broadcastType.options.Clear();
-                List<string> newList = EditorOp.Resolve<DataProvider>().ListenToTypes;
-                foreach (string _name in newList)
-                {
-                    broadcastType.options.Add(new Dropdown.OptionData()
-                    {
-                        text = _name
-                    });
-                }
-            }
         }
 
         public void SetData(RotateComponentData _data)
@@ -293,7 +210,7 @@ namespace RuntimeInspectorNamespace
             if (speedInput) speedInput.SetTextWithoutNotify(_data.speed.ToString());
             if (pauseInput) pauseInput.SetTextWithoutNotify(_data.pauseBetween.ToString());
             if (repeatInput) repeatInput.SetTextWithoutNotify(_data.repeat.ToString());
-            if (broadcastType) broadcastType.SetValueWithoutNotify(_data.broadcastTypeIndex);
+            if (customString) customString.SetTextWithoutNotify( _data.broadcast);
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
 
@@ -307,11 +224,9 @@ namespace RuntimeInspectorNamespace
             speedInput?.SetupInputFieldSkin(Skin);
             pauseInput?.SetupInputFieldSkin(Skin);
             repeatInput?.SetupInputFieldSkin(Skin);
-            broadcastType?.SetSkinDropDownField(Skin);
             listenInput?.SetupInputFieldSkin(Skin);
             dirDropDown?.SetSkinDropDownField(Skin);
             broadcastAt?.SetSkinDropDownField(Skin);
-            broadcastType?.SetSkinDropDownField(Skin);
             customString?.SetupInputFieldSkin(Skin);
         }
     }

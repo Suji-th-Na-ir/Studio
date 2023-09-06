@@ -21,14 +21,13 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
         public Atom.ScoreData Score = new();
-        public Atom.Broadcast Broadcast = new();
+        public string Broadcast = null;
 
         private string guid;
         public void Awake()
         {
             guid = GetInstanceID() + "_collect";//Guid.NewGuid().ToString("N");
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>(), this.GetType().Name);
-            Broadcast.Setup(gameObject, this.GetType().Name, guid);
             PlaySFX.Setup<Collectible>(gameObject);
             PlayVFX.Setup<Collectible>(gameObject);
         }
@@ -40,12 +39,9 @@ namespace RuntimeInspectorNamespace
                 comp.IsConditionAvailable = true;
                 comp.ConditionType = GetStartEvent();
                 comp.ConditionData = GetStartCondition();
-                comp.listenIndex = startOn.data.listenIndex;
-
-                comp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast.data.broadcastName);
-                comp.Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? "None" : Broadcast.data.broadcastName;
-                comp.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName;
-                comp.broadcastTypeIndex = Broadcast.data.broadcastTypeIndex;
+                comp.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? "" : startOn.data.listenName;
+                comp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
+                comp.Broadcast = string.IsNullOrEmpty(Broadcast) ? "None" : Broadcast;
 
                 comp.canPlaySFX = PlaySFX.data.canPlay;
                 comp.canPlayVFX = PlayVFX.data.canPlay;
@@ -91,7 +87,7 @@ namespace RuntimeInspectorNamespace
 
             if (inputString.ToLower().Contains("listen"))
             {
-                return EditorOp.Resolve<DataProvider>().GetListenString(startOn.data.listenIndex);
+                return string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName;
             }
             else
             {
@@ -107,11 +103,7 @@ namespace RuntimeInspectorNamespace
         {
             CollectableComponent comp = JsonConvert.DeserializeObject<CollectableComponent>($"{cdata.data}");
             Score.score = (int)comp.scoreValue;
-            Broadcast.data.broadcastName = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
-            Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
             
-            EditorOp.Resolve<DataProvider>().UpdateToListenList(guid,comp.Broadcast);
-
             PlaySFX.data.canPlay = comp.canPlaySFX;
             PlaySFX.data.clipIndex = comp.sfxIndex;
             PlaySFX.data.clipName = comp.sfxName;
@@ -123,13 +115,12 @@ namespace RuntimeInspectorNamespace
             {
                 startOn.data.startIndex = (int)(StartOnCollectible)result;
             }
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast.data.broadcastName, null);
-
-            if (comp.ConditionType.ToLower().Contains("listen"))
-            {
-                EditorOp.Resolve<DataProvider>().UpdateToListenList(GetInstanceID() + "_collectible", comp.ConditionData);
-            }
-            startOn.data.listenIndex = comp.listenIndex;
+            
+            Broadcast = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
+            startOn.data.startName = comp.ConditionType;
+            startOn.data.listenName = (comp.ConditionData == "None")? "" : comp.ConditionData;
+            
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, null);
         }
 
         private void OnDestroy()

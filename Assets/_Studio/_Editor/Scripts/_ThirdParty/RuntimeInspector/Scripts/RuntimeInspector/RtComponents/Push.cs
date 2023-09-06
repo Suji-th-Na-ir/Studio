@@ -13,14 +13,10 @@ namespace Terra.Studio
         public bool showResetButton = true;
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
-        public Atom.Broadcast Broadcast = new();
-
-        private string guid;
-
+        public string Broadcast = null;
+        
         public void Awake()
-        {
-            guid = GetInstanceID() + "_push";//Guid.NewGuid().ToString("N");
-            Broadcast.Setup(gameObject, this.GetType().Name, guid);
+        { 
             PlaySFX.Setup<DestroyOn>(gameObject);
             PlayVFX.Setup<DestroyOn>(gameObject);
         }
@@ -41,10 +37,8 @@ namespace Terra.Studio
                 drag = resistance,
                 showResetButton = showResetButton,
                 listen = Listen.Always,
-                
-                IsBroadcastable = !string.IsNullOrEmpty(Broadcast.data.broadcastName),
-                Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? "None" : Broadcast.data.broadcastName,
-                broadcastTypeIndex = Broadcast.data.broadcastTypeIndex,
+                Broadcast = string.IsNullOrEmpty(Broadcast) ? "None" : Broadcast,
+                IsBroadcastable = !string.IsNullOrEmpty(Broadcast)
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(component);
@@ -62,11 +56,7 @@ namespace Terra.Studio
             PlayVFX.data.canPlay = comp.canPlayVFX;
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
-            
-            EditorOp.Resolve<DataProvider>().UpdateToListenList(guid,comp.Broadcast);
-            
-            Broadcast.data.broadcastName = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
-            Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
+            Broadcast = comp.Broadcast;
         }
     }
 }

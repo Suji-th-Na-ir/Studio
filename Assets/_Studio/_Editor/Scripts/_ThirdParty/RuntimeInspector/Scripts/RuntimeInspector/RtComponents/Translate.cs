@@ -3,6 +3,7 @@ using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
 using System;
+using UnityEngine.UI;
 
 namespace RuntimeInspectorNamespace
 {
@@ -18,20 +19,14 @@ namespace RuntimeInspectorNamespace
         private void Awake()
         {
             guid = GetInstanceID() + "_translate"; //Guid.NewGuid().ToString("N");
-            Type.Setup(guid, gameObject);
+            Type.Setup(guid, gameObject, GetType().Name);
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             PlaySFX.Setup<Translate>(gameObject);
             PlayVFX.Setup<Translate>(gameObject);
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Type.data.broadcast, ""
                                 , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = this.GetType().Name });
         }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.H))
-                Export();
-        }
-
+        
         public (string type, string data) Export()
         {
             TranslateComponent comp = new TranslateComponent
@@ -42,13 +37,14 @@ namespace RuntimeInspectorNamespace
                 repeatFor = Type.data.repeat,
                 targetPosition = Type.data.moveTo,
                 startPosition = transform.position,
-
-                broadcastAt = Type.data.broadcastAt,
-                IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcastName),
-                Broadcast = string.IsNullOrEmpty(Type.data.broadcastName) ? "None" : Type.data.broadcastName,
-                BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName,
-                broadcastTypeIndex = Type.data.broadcastTypeIndex,
                 
+                IsConditionAvailable = true,
+                ConditionType = GetStartEvent(),
+                ConditionData = GetStartCondition(),
+                broadcastAt = Type.data.broadcastAt,
+                IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcast),
+                Broadcast = string.IsNullOrEmpty(Type.data.broadcast) ? "None" : Type.data.broadcast,
+
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
@@ -56,19 +52,13 @@ namespace RuntimeInspectorNamespace
                 sfxIndex = PlaySFX.data.clipIndex,
                 vfxIndex = PlayVFX.data.clipIndex,
 
-                IsConditionAvailable = true,
                 listen = Type.data.listen,
-                
-                ConditionType = GetStartEvent(),
-                ConditionData = GetStartCondition(),
-                listenIndex = startOn.data.listenIndex
             };
 
             ModifyDataAsPerGiven(ref comp);
             gameObject.TrySetTrigger(false, true);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp, Formatting.Indented);
-            Debug.Log(data);
             return (type, data);
         }
         
@@ -97,23 +87,14 @@ namespace RuntimeInspectorNamespace
             
             if (inputString.ToLower().Contains("listen"))
             {
-                return EditorOp.Resolve<DataProvider>().GetListenString(startOn.data.listenIndex);
+                return string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName;
             }
-            else
-            {
-                if (Enum.TryParse(inputString, out StartOn enumValue))
-                {
-                    return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(enumValue);
-                }
-                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOn.GameStart);
+            
+            if (Enum.TryParse(inputString, out StartOn enumValue)) 
+            { 
+                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(enumValue);
             }
-        }
-
-
-        private RepeatType GetRepeatType(float _value)
-        {
-            if (_value == 0) return RepeatType.Forever;
-            else return RepeatType.XTimes;
+            return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOn.GameStart);
         }
 
         public void Import(EntityBasedComponent cdata)
@@ -135,9 +116,7 @@ namespace RuntimeInspectorNamespace
             
             Type.data.broadcast = comp.Broadcast;
             Type.data.broadcastAt = comp.broadcastAt;
-            Type.data.broadcastName = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
-            Type.data.broadcastTypeIndex = comp.broadcastTypeIndex;
-            
+
             Type.data.listenTo = comp.ConditionData;
             Type.data.listen = comp.listen;
 
@@ -146,12 +125,11 @@ namespace RuntimeInspectorNamespace
                 startOn.data.startIndex = (int)(StartOn)result;
             }
 
-            if (comp.ConditionType.ToLower().Contains("listen"))
-            {
-                EditorOp.Resolve<DataProvider>().UpdateToListenList(GetInstanceID()+"_translate",comp.ConditionData);
-            }
-            startOn.data.listenIndex = comp.listenIndex;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
+            startOn.data.startName = comp.ConditionType;
+            startOn.data.listenName = (comp.ConditionData == "None")? "" : comp.ConditionData;
+            
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject,
+                this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
         }
 
         private void ModifyDataAsPerGiven(ref TranslateComponent component)
