@@ -869,7 +869,7 @@ namespace RuntimeInspectorNamespace
             if(horizontalScrollbar) horizontalScrollbar.color = Skin.ScrollbarColor;
 
             searchInputField.textComponent.SetSkinInputFieldText(Skin);
-            searchInputFieldBackground.color = Skin.InputFieldNormalBackgroundColor.Tint(0.08f);
+            searchInputFieldBackground.color = Skin.BackgroundColor;
             searchIcon.color = Skin.ButtonTextColor;
             searchBarLayoutElement.SetHeight(Skin.LineHeight);
 
