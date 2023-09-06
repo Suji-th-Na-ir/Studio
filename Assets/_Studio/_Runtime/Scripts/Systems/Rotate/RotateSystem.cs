@@ -96,9 +96,14 @@ namespace Terra.Studio
             foreach (var entity in filter)
             {
                 ref var component = ref pool.Get(entity);
-                if (!component.CanExecute || component.IsExecuted)
+                if (!component.CanExecute)
                 {
-                    return;
+                    continue;
+                }
+                if (component.IsExecuted)
+                {
+                    totalEntitiesFinishedJob++;
+                    continue;
                 }
                 if (!component.rotateForever &&
                     component.currentRotateCount >= component.repeatFor)
