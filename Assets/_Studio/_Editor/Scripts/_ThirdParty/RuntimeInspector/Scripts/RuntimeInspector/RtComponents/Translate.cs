@@ -56,39 +56,26 @@ namespace RuntimeInspectorNamespace
             return (type, data);
         }
 
-        public string GetStartEvent(string _input = null)
+        public string GetStartEvent()
         {
             int index = startOn.data.startIndex;
-            string inputString = ((StartOn)index).ToString();
-            if (!string.IsNullOrEmpty(_input))
-                inputString = _input;
-
-            if (Enum.TryParse(inputString, out StartOn enumValue))
-            {
-                var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(enumValue);
-                return eventName;
-            }
-            return EditorOp.Resolve<DataProvider>().GetEnumValue(StartOn.OnClick);
+            var value = (StartOn)index;
+            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(value);
+            return eventName;
         }
 
 
-        public string GetStartCondition(string _input = null)
+        public string GetStartCondition()
         {
             int index = startOn.data.startIndex;
-            string inputString = ((StartOn)index).ToString();
-            if (!string.IsNullOrEmpty(_input))
-                inputString = _input;
-
+            var value = (StartOn)index;
+            string inputString = value.ToString();
             if (inputString.ToLower().Contains("listen"))
             {
-                return string.IsNullOrEmpty(startOn.data.listenName) ? null : startOn.data.listenName;
+                return startOn.data.listenName;
             }
-
-            if (Enum.TryParse(inputString, out StartOn enumValue))
-            {
-                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(enumValue);
-            }
-            return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOn.GameStart);
+            var data = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(value);
+            return data;
         }
 
         public void Import(EntityBasedComponent cdata)
