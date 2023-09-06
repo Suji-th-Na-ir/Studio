@@ -1,7 +1,6 @@
 using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
-using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
 {
