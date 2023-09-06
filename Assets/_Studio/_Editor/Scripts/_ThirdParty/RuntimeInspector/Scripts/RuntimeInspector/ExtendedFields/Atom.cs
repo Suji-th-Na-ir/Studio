@@ -9,28 +9,6 @@ namespace Terra.Studio
     public class Atom
     {
         [Serializable]
-        public class Broadcast
-        {
-            public static List<Broadcast> AllInstances = new();
-            [HideInInspector] public BroadcastField field;
-            [HideInInspector] public BroadcastData data;
-            [HideInInspector] public GameObject target;
-            [HideInInspector] public string componentType = null;
-
-            public void Setup(GameObject _target, string _componentType, string _id)
-            {
-                target = _target;
-
-                if (!AllInstances.Contains(this))
-                    AllInstances.Add(this);
-
-                componentType = _componentType;
-
-                data.id = _id;
-            }
-        }
-
-        [Serializable]
         public class StartOn
         {
             public static List<StartOn> AllInstances = new();
@@ -144,17 +122,8 @@ namespace Terra.Studio
         public string startName;
         public int startIndex;
         public string listenName;
-        public int listenIndex;
+        // public int listenIndex;
     }
-
-    [Serializable]
-    public struct BroadcastData
-    {
-        public int broadcastTypeIndex;
-        public string broadcastName;
-        public string id;
-    }
-
 
     [Serializable]
     public struct PlaySFXData
@@ -186,12 +155,10 @@ namespace Terra.Studio
         public float pauseBetween;
         
         public string broadcast;
-        public BroadcastAt broadcastAt;
-        public int broadcastTypeIndex;
-        public string broadcastName;
-        
+
         public string listenTo;
         public Listen listen;
+        public BroadcastAt broadcastAt;
     }
 
     [Serializable]
@@ -204,11 +171,9 @@ namespace Terra.Studio
         public int repeat;
         
         public string broadcast;
-        public BroadcastAt broadcastAt;
-        public int broadcastTypeIndex;
-        public string broadcastName;
-        
+
         public string listenTo;
         public Listen listen;
+        public BroadcastAt broadcastAt;
     }
 }

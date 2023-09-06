@@ -12,13 +12,10 @@ namespace RuntimeInspectorNamespace
     {
         public Atom.PlaySfx PlaySFX = new ();
         public Atom.PlayVfx PlayVFX = new ();
-        public Atom.Broadcast Broadcast = new ();
-        private string guid;
+        public string Broadcast = null;
 
         private void Awake()
         {
-            guid = GetInstanceID() + "_respawn";//Guid.NewGuid().ToString("N");
-            Broadcast.Setup(gameObject, this.GetType().Name, guid);
             PlaySFX.Setup<Respawn>(gameObject);
             PlayVFX.Setup<Respawn>(gameObject);
         }
@@ -30,10 +27,9 @@ namespace RuntimeInspectorNamespace
                 comp.IsConditionAvailable = true;
                 comp.ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(StartOn.OnPlayerCollide);
                 comp.ConditionData = "Player";
-
-                comp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast.data.broadcastName);
-                comp.Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? "None" : Broadcast.data.broadcastName;
-                comp.broadcastTypeIndex = Broadcast.data.broadcastTypeIndex;
+                comp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
+                comp.Broadcast = string.IsNullOrEmpty(Broadcast) ? "None" : Broadcast;
+                
 
                 comp.canPlaySFX = PlaySFX.data.canPlay;
                 comp.canPlayVFX = PlayVFX.data.canPlay;
@@ -55,8 +51,7 @@ namespace RuntimeInspectorNamespace
         {
             RespawnComponent comp = JsonConvert.DeserializeObject<RespawnComponent>($"{data.data}");
             
-            Broadcast.data.broadcastName = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
-            Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
+            Broadcast = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
             
             PlaySFX.data.canPlay = comp.canPlaySFX;
             PlaySFX.data.clipIndex = comp.sfxIndex;
@@ -64,7 +59,7 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.canPlay = comp.canPlayVFX;
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast.data.broadcastName, null);
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, null);
         }
     }
 }

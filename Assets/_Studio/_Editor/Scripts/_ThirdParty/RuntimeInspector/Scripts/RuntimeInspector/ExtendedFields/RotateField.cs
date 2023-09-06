@@ -131,12 +131,11 @@ namespace RuntimeInspectorNamespace
             base.OnBound(variable);
             
             Atom.Rotate rt = (Atom.Rotate)Value;
-            // Debug.Log($"translate atom data");
+            
             int rotationTypeIndex = (int)Enum.Parse(typeof(RotationType), rt.data.rotateType.ToString());
             rotateTypesDD.SetValueWithoutNotify(rotationTypeIndex);
             ShowRotateOptionsMenu(rotationTypeIndex);
             selectedRotateType.SetData(rt.data);
-            selectedRotateType.RefreshUI();
         }
 
         public override void Refresh()

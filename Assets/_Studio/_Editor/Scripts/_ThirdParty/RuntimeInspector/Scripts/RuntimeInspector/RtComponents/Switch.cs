@@ -21,11 +21,11 @@ namespace Terra.Studio
         public StartOn switchWhen;
         public SwitchState defaultState;
         [Header("When Switch is \"On\"")]
-        [AliasDrawer("Broadcast")] public Atom.Broadcast broadcastWhenOn = new();
+        [AliasDrawer("Broadcast")] public string broadcastWhenOn;
         [AliasDrawer("Play SFX")] public Atom.PlaySfx playSFXWhenOn = new();
         [AliasDrawer("Play VFX")] public Atom.PlayVfx playVFXWhenOn = new();
         [Header("When Switch is \"Off\"")]
-        [AliasDrawer("Broadcast")] public Atom.Broadcast broadcastWhenOff = new();
+        [AliasDrawer("Broadcast")] public string broadcastWhenOff;
         [AliasDrawer("Play SFX")] public Atom.PlaySfx playSFXWhenOff = new();
         [AliasDrawer("Play VFX")] public Atom.PlayVfx playVFXWhenOff = new();
 
@@ -44,8 +44,8 @@ namespace Terra.Studio
                 ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(switchWhen),
                 ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(switchWhen),
                 currentState = defaultState,
-                onStateData = GetSwitchComponentData(SwitchState.On, playSFXWhenOn.data, playVFXWhenOn.data, broadcastWhenOn.data),
-                offStateData = GetSwitchComponentData(SwitchState.Off, playSFXWhenOff.data, playVFXWhenOff.data, broadcastWhenOff.data),
+                onStateData = GetSwitchComponentData(SwitchState.On, playSFXWhenOn.data, playVFXWhenOn.data, broadcastWhenOn),
+                offStateData = GetSwitchComponentData(SwitchState.Off, playSFXWhenOff.data, playVFXWhenOff.data, broadcastWhenOff),
                 listen = Listen.Always
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -58,15 +58,15 @@ namespace Terra.Studio
             var component = JsonConvert.DeserializeObject<SwitchComponent>(data.data);
             defaultState = component.currentState;
             switchWhen = GetStartOn(component.ConditionType, component.ConditionData);
-            broadcastWhenOn.data = GetBroadcastData(component.onStateData);
-            broadcastWhenOff.data = GetBroadcastData(component.offStateData);
+            broadcastWhenOn = GetBroadcastData(component.onStateData);
+            broadcastWhenOff = GetBroadcastData(component.offStateData);
             playSFXWhenOn.data = GetPlaySFXData(component.onStateData);
             playSFXWhenOff.data = GetPlaySFXData(component.offStateData);
             playVFXWhenOn.data = GetPlayVFXData(component.onStateData);
             playVFXWhenOff.data = GetPlayVFXData(component.offStateData);
         }
 
-        private SwitchComponentData GetSwitchComponentData(SwitchState state, PlaySFXData playSFXData, PlayVFXData playVFXData, BroadcastData broadcast)
+        private SwitchComponentData GetSwitchComponentData(SwitchState state, PlaySFXData playSFXData, PlayVFXData playVFXData, string broadcast)
         {
             return new SwitchComponentData()
             {
@@ -77,20 +77,21 @@ namespace Terra.Studio
                 canPlayVFX = playVFXData.canPlay,
                 vfxName = playVFXData.clipName,
                 vfxIndex = playVFXData.clipIndex,
-                isBroadcastable = !string.IsNullOrEmpty(broadcast.broadcastName),
-                broadcast = broadcast.broadcastName,
-                broadcastIndex = broadcast.broadcastTypeIndex
+                isBroadcastable = !string.IsNullOrEmpty(broadcast),
+                broadcast = broadcast,
+                // broadcastIndex = broadcast.broadcastTypeIndex
             };
         }
 
-        private BroadcastData GetBroadcastData(SwitchComponentData data)
+        private string GetBroadcastData(SwitchComponentData data)
         {
-            return new BroadcastData()
-            {
-                id = guid,
-                broadcastName = data.broadcast,
-                broadcastTypeIndex = data.broadcastIndex
-            };
+            // return new BroadcastData()
+            // {
+            //     id = guid,
+            //     broadcastName = data.broadcast,
+            //     broadcastTypeIndex = data.broadcastIndex
+            // };
+            return data.broadcast;
         }
 
         private PlaySFXData GetPlaySFXData(SwitchComponentData data)

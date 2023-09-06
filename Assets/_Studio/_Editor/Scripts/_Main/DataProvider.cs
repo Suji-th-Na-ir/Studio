@@ -94,56 +94,56 @@ namespace Terra.Studio
             return false;
         }
         
-        #region Listen Types Dict
+        // #region Listen Types Dict
 
-        public List<string> ListenToTypes
-        {
-            get
-            {
-                var newList = new List<string> {  "None", "Game Win", "Game Lose"};
-                foreach (var item in listenDictionary)
-                {
-                    if(!newList.Contains(item.Value))
-                        newList.Add(item.Value);
-                }
-                newList.Add("Custom");
-                return newList;
-            }
-        }
-
-        private Dictionary<string, string> listenDictionary = new ();
-        private string prevListenType = "";
-
-        public void UpdateToListenList(string _id, string _type)
-        {
-            if (string.IsNullOrEmpty(_type) || string.IsNullOrWhiteSpace(_type))
-            {
-                // Debug.Log("removing signal "+_type);
-                // listenDictionary.Remove(_id);
-                return;
-            }
-
-            if (!listenDictionary.ContainsKey(_id))
-            {
-                listenDictionary.Add(_id, _type);
-            }
-            else
-            {
-                listenDictionary[_id] = _type;
-            }
-        }
-
-        public string GetListenString(int _index)
-        {
-            if (_index < ListenToTypes.Count)
-            {
-                return ListenToTypes[_index];
-            }
-
-            Debug.Log($"getlistensting index error {_index}");
-            return ListenToTypes[0];
-        }
-        #endregion
+        // public List<string> ListenToTypes
+        // {
+        //     get
+        //     {
+        //         var newList = new List<string> {  "None", "Game Win", "Game Lose"};
+        //         foreach (var item in listenDictionary)
+        //         {
+        //             if(!newList.Contains(item.Value))
+        //                 newList.Add(item.Value);
+        //         }
+        //         newList.Add("Custom");
+        //         return newList;
+        //     }
+        // }
+        //
+        // private Dictionary<string, string> listenDictionary = new ();
+        // private string prevListenType = "";
+        //
+        // public void UpdateToListenList(string _id, string _type)
+        // {
+        //     if (string.IsNullOrEmpty(_type) || string.IsNullOrWhiteSpace(_type))
+        //     {
+        //         // Debug.Log("removing signal "+_type);
+        //         // listenDictionary.Remove(_id);
+        //         return;
+        //     }
+        //
+        //     if (!listenDictionary.ContainsKey(_id))
+        //     {
+        //         listenDictionary.Add(_id, _type);
+        //     }
+        //     else
+        //     {
+        //         listenDictionary[_id] = _type;
+        //     }
+        // }
+        //
+        // public string GetListenString(int _index)
+        // {
+        //     if (_index < ListenToTypes.Count)
+        //     {
+        //         return ListenToTypes[_index];
+        //     }
+        //
+        //     Debug.Log($"getlistensting index error {_index}");
+        //     return ListenToTypes[0];
+        // }
+        // #endregion
         
     }
 }
