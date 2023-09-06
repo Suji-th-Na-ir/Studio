@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Terra.Studio
 {
@@ -93,7 +92,7 @@ namespace Terra.Studio
             }
             return false;
         }
-        
+
         // #region Listen Types Dict
 
         // public List<string> ListenToTypes
@@ -144,6 +143,6 @@ namespace Terra.Studio
         //     return ListenToTypes[0];
         // }
         // #endregion
-        
+
     }
 }
