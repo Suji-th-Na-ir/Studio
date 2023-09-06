@@ -1,8 +1,6 @@
 using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
-using PlayShifu.Terra;
-using System;
 
 namespace RuntimeInspectorNamespace
 {
@@ -12,21 +10,7 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
         public string Broadcast = null;
-        private string guid;
 
-        private void Awake()
-        {
-            guid = GetInstanceID() + "_respawn";//Guid.NewGuid().ToString("N");
-        }
-        
-        public void Update()
-        {
-            if (!String.IsNullOrEmpty(Broadcast))
-            {
-                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, Broadcast);
-            }
-        }
-        
         public void Start()
         {
             PlaySFX.Setup<Checkpoint>(gameObject);
@@ -44,13 +28,12 @@ namespace RuntimeInspectorNamespace
                 vfxName = PlayVFX.data.clipName,
                 vfxIndex = PlayVFX.data.clipIndex,
                 IsBroadcastable = !string.IsNullOrEmpty(Broadcast),
-                Broadcast = Broadcast,
                 respawnPoint = transform.position,
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.TriggerAction",
-                ConditionData = "Player"
+                ConditionData = "Player",
+                Broadcast = Broadcast
             };
-            gameObject.TrySetTrigger(true, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(component);
             return (type, data);
@@ -58,7 +41,7 @@ namespace RuntimeInspectorNamespace
 
         public void Import(EntityBasedComponent data)
         {
-            var json = (string)data.data;
+            var json = data.data;
             var component = JsonConvert.DeserializeObject<CheckpointComponent>(json);
             PlaySFX.data.canPlay = component.canPlaySFX;
             PlaySFX.data.clipName = component.sfxName;
@@ -67,7 +50,7 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.clipName = component.vfxName;
             PlayVFX.data.clipIndex = component.vfxIndex;
             Broadcast = component.Broadcast;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, null);
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, null);
         }
     }
 }

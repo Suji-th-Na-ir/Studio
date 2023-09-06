@@ -1,27 +1,44 @@
-using System;
 using Leopotam.EcsLite;
-using System.Collections.Generic;
 
 namespace Terra.Studio
 {
     public class REPLACEMESystem : BaseSystem
     {
-        public override Dictionary<int, Action<object>> IdToConditionalCallback { get; set; }
-
-        public override void Init(EcsWorld currentWorld, int entity)
+        public override void OnConditionalCheck(int entity, object data)
         {
-            var pool = currentWorld.GetPool<REPLACEMEComponent>();
-            ref var entityRef = ref pool.Get(entity);
+            ref var entityRef = ref EntityAuthorOp.GetComponent<REPLACEMEComponent>(entity);
         }
 
-        public override void OnConditionalCheck(object data)
+        public void OnDemandRun(in REPLACEMEComponent component, int entity)
         {
-            
+            if (component.canPlaySFX)
+            {
+                RuntimeWrappers.PlaySFX(component.sfxName);
+            }
+            if (component.canPlayVFX)
+            {
+                RuntimeWrappers.PlayVFX(component.vfxName, component.RefObj.transform.position);
+            }
+            if (component.IsBroadcastable)
+            {
+                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
+            }
         }
 
         public override void OnHaltRequested(EcsWorld currentWorld)
         {
-
+            var filter = currentWorld.Filter<REPLACEMEComponent>().End();
+            var compPool = currentWorld.GetPool<REPLACEMEComponent>();
+            foreach (var entity in filter)
+            {
+                var component = compPool.Get(entity);
+                if (component.IsExecuted)
+                {
+                    continue;
+                }
+                var compsData = RuntimeOp.Resolve<ComponentsData>();
+                compsData.ProvideEventContext(false, component.EventContext);
+            }
         }
     }
 }

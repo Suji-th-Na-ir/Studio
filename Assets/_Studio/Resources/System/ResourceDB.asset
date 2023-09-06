@@ -1002,5 +1002,54 @@ MonoBehaviour:
     guid: 298df2f553b0747c2a28fe8ee0b8c6f9
     isPrimitive: 0
     primitiveType: 0
+  - name: ResetParent
+    absolutePath: Assets/_Studio/Resources/Runtime/DynamicUI/ResetParent.prefab
+    resourcePath: Runtime/DynamicUI/ResetParent
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0dc4dbe0925e54796a9351fdd141e67f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: GameViewCanvas
+    absolutePath: Assets/_Studio/Resources/Runtime/GameViewCanvas.prefab
+    resourcePath: Runtime/GameViewCanvas
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 536d878fd9e0847d5bae89cfdd194b25
+    isPrimitive: 0
+    primitiveType: 0
+  - name: InGameUI
+    absolutePath: Assets/_Studio/Resources/Runtime/InGameUI.prefab
+    resourcePath: Runtime/InGameUI
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: afb31b8bf882149a8afdf2f6ff6dd905
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Player
+    absolutePath: Assets/_Studio/Resources/Runtime/Player.prefab
+    resourcePath: Runtime/Player
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: ceceb926927bf49f78a118d69eb9eeca
+    isPrimitive: 0
+    primitiveType: 0
+  - name: PostGameUI
+    absolutePath: Assets/_Studio/Resources/Runtime/PostGameUI.prefab
+    resourcePath: Runtime/PostGameUI
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 6105b93b49a1346559c95f40ac01acfd
+    isPrimitive: 0
+    primitiveType: 0
+  - name: PreGameUI
+    absolutePath: Assets/_Studio/Resources/Runtime/PreGameUI.prefab
+    resourcePath: Runtime/PreGameUI
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: d5aa186d95fc84196922788e1051c643
+    isPrimitive: 0
+    primitiveType: 0
   watchFolders:
   - Assets/_Studio/Resources/Common
+  - Assets/_Studio/Resources/Runtime

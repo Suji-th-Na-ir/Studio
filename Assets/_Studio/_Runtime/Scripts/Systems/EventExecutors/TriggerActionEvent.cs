@@ -16,10 +16,10 @@ namespace Terra.Studio
             if (subscribe)
             {
                 var triggerAction = conditionalCheck.goRef.AddComponent<OnTriggerAction>();
-                triggerAction.TagAgainst = conditionalCheck.conditionData;
-                triggerAction.OnTriggered = () =>
+                triggerAction.tagAgainst = conditionalCheck.conditionData;
+                triggerAction.OnTriggered = (gameObject) =>
                 {
-                    onConditionalCheck?.Invoke(null);
+                    onConditionalCheck?.Invoke(gameObject);
                 };
             }
             else if (conditionalCheck.goRef && conditionalCheck.goRef.TryGetComponent(out OnTriggerAction triggerAction))

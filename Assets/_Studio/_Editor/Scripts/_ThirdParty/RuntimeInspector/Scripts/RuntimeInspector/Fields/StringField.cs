@@ -83,12 +83,12 @@ namespace RuntimeInspectorNamespace
             if (m_setterMode == Mode.OnValueChange)
                 Value = input;
 
-            if (NameRaw == "Broadcast")
+            if (NameRaw.ToLower().Equals("broadcast"))
             {
                 EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Value.ToString(), oldValue == null ? "" : oldValue.ToString()
                     , new ComponentDisplayDock() { componentGameObject = ((MonoBehaviour)virutalObject).gameObject, componentType = ComponentType.Name });
             }
-            else if (NameRaw == "Broadcast Listen")
+            else if (NameRaw.ToLower().Equals("broadcast listen"))
             {
                 EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(Value.ToString(), oldValue == null ? "" : oldValue.ToString(),
                  new ComponentDisplayDock() { componentGameObject = ((MonoBehaviour)virutalObject).gameObject, componentType = ComponentType.Name });

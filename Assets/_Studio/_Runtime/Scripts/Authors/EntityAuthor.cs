@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Terra.Studio
 {
-    public class EntityAuthorOp
+    public static class EntityAuthorOp
     {
         public static IAuthor Author => Author<EntityAuthor>.Current;
 
@@ -27,7 +27,7 @@ namespace Terra.Studio
             Author<EntityAuthor>.Flush();
         }
 
-        public static ref T GetComponent<T>(int entity) where T : struct, IBaseComponent
+        public static ref T GetComponent<T>(this int entity) where T : struct, IBaseComponent
         {
             var world = RuntimeOp.Resolve<RuntimeSystem>().World;
             var pool = world.GetPool<T>();
@@ -83,15 +83,19 @@ namespace Terra.Studio
 
             public override void Degenerate(int entityID)
             {
-                var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
-                var entities = new int[0];
-                ecsWorld.GetAllEntities(ref entities);
-                if (entities.Length == 0 || entities.Any(x => x == entityID) == false)
+                CoroutineService.RunCoroutine(() =>
                 {
-                    Debug.Log($"Entity {entityID} not found!");
-                    return;
-                }
-                ecsWorld.DelEntity(entityID);
+                    var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
+                    var entities = new int[0];
+                    ecsWorld.GetAllEntities(ref entities);
+                    if (entities.Length == 0 || entities.Any(x => x == entityID) == false)
+                    {
+                        Debug.Log($"Entity {entityID} not found!");
+                        return;
+                    }
+                    ecsWorld.DelEntity(entityID);
+                },
+                CoroutineService.DelayType.WaitForFrame);
             }
         }
     }

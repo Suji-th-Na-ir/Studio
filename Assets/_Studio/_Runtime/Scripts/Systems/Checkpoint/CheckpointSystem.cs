@@ -10,9 +10,7 @@ namespace Terra.Studio
             ref var entityRef = ref EntityAuthorOp.GetComponent<CheckpointComponent>(entity);
             entityRef.IsExecuted = true;
             compsData.ProvideEventContext(false, entityRef.EventContext);
-            var world = RuntimeOp.Resolve<RuntimeSystem>().World;
-            var checkpointPool = world.GetPool<CheckpointComponent>();
-            OnDemandRun(in checkpointPool.Get(entity));
+            OnDemandRun(in entityRef);
         }
 
         public void OnDemandRun(in CheckpointComponent component)

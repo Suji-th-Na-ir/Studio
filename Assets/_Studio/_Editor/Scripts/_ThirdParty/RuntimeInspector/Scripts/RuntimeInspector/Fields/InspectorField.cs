@@ -4,6 +4,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using Terra.Studio;
+using System.Linq;
 
 namespace RuntimeInspectorNamespace
 {
@@ -151,11 +152,9 @@ namespace RuntimeInspectorNamespace
         public void BindTo(InspectorField parent, MemberInfo variable, string variableName = null)
         {
             m_Component = variable.DeclaringType;
-            if (variable is FieldInfo)
+            if (variable is FieldInfo field)
             {
-                FieldInfo field = (FieldInfo)variable;
-                if (variableName == null)
-                    variableName = field.Name;
+                variableName ??= field.Name;
 #if UNITY_EDITOR || !NETFX_CORE
                 if (!parent.BoundVariableType.IsValueType)
 #else
@@ -170,11 +169,9 @@ namespace RuntimeInspectorNamespace
                     }, variable);
                 virutalObject = parent.Value;
             }
-            else if (variable is PropertyInfo)
+            else if (variable is PropertyInfo property)
             {
-                PropertyInfo property = (PropertyInfo)variable;
-                if (variableName == null)
-                    variableName = property.Name;
+                variableName ??= property.Name;
 
 #if UNITY_EDITOR || !NETFX_CORE
                 if (!parent.BoundVariableType.IsValueType)
@@ -195,8 +192,23 @@ namespace RuntimeInspectorNamespace
 
         public void BindTo(Type variableType, string variableName, Getter getter, Setter setter, MemberInfo variable = null)
         {
+            if (variable != null && variable is FieldInfo fieldInfo)
+            {
+                var alias = fieldInfo.GetAliasIfAny();
+                if (!string.IsNullOrEmpty(alias))
+                {
+                    Name = alias;
+                }
+                else
+                {
+                    Name = variableName;
+                }
+            }
+            else
+            {
+                Name = variableName;
+            }
             m_boundVariableType = variableType;
-            Name = variableName;
             ReflectedName = variableName;
 
             this.getter = getter;
@@ -283,9 +295,9 @@ namespace RuntimeInspectorNamespace
             catch
             {
 #if UNITY_EDITOR || !NETFX_CORE
-                if (BoundVariableType.IsValueType)
+                if (BoundVariableType?.IsValueType ?? false)
 #else
-				if( BoundVariableType.GetTypeInfo().IsValueType )
+				if( BoundVariableType?.GetTypeInfo().IsValueType ?? false)
 #endif
                     m_value = Activator.CreateInstance(BoundVariableType);
                 else
@@ -307,7 +319,7 @@ namespace RuntimeInspectorNamespace
                         var oldValue = mInfo?.GetValue(component);
                         mInfo?.SetValue(component, Value);
 
-                        if (mInfo!=null)
+                        if (mInfo != null)
                         {
                             if (NameRaw == "Broadcast")
                             {
@@ -347,7 +359,7 @@ namespace RuntimeInspectorNamespace
         protected readonly List<InspectorField> elements = new List<InspectorField>(8);
         protected readonly List<ExposedMethodField> exposedMethods = new List<ExposedMethodField>();
 
-        protected virtual int Length { get { return elements.Count; } set{}}
+        protected virtual int Length { get { return elements.Count; } set { } }
 
         public override bool ShouldRefresh { get { return true; } }
 
@@ -476,8 +488,10 @@ namespace RuntimeInspectorNamespace
 
                 if (m_headerVisibility == RuntimeInspector.HeaderVisibility.Collapsible)
                 {
-                    variableNameText.rectTransform.sizeDelta = new Vector2(-(Skin.LineHeight*0.05f ), 0f);
+                    variableNameText.rectTransform.sizeDelta = new Vector2(-(Skin.LineHeight * 0.05f), 0f);
                     variableNameText.fontSize = Skin.HeadingFontSize;
+                    variableNameText.supportRichText = true;
+                    variableNameText.fontStyle = FontStyle.Bold;
                 }
             }
 
@@ -523,8 +537,23 @@ namespace RuntimeInspectorNamespace
 
         private void GenerateExposedMethodButtons()
         {
-            if (Inspector.ShowRemoveComponentButton && typeof(Component).IsAssignableFrom(BoundVariableType) && !typeof(Transform).IsAssignableFrom(BoundVariableType) &&Inspector.currentPageIndex==1)
-                CreateExposedMethodButton(GameObjectField.removeComponentMethod, () => this, (value) => { });
+            bool hideRemoveButtonInAny = false;
+            if (elements != null)
+            {
+                if (elements[elements.Count - 1].ComponentType != null)
+                {
+                    var comp = Inspector.ShownComponents.FirstOrDefault(component => component.ComponentName == elements[elements.Count - 1].ComponentType.Name);
+                    if (comp.hideRemoveButton && !hideRemoveButtonInAny)
+                    {
+                        hideRemoveButtonInAny = true;
+                    }
+                }
+            }
+            if (!hideRemoveButtonInAny)
+            {
+                if (Inspector.ShowRemoveComponentButton && typeof(Component).IsAssignableFrom(BoundVariableType) && !typeof(Transform).IsAssignableFrom(BoundVariableType) && Inspector.currentPageIndex == 1)
+                    CreateExposedMethodButton(GameObjectField.removeComponentMethod, () => this, (value) => { });
+            }
 
             ExposedMethod[] methods = BoundVariableType.GetExposedMethods();
             if (methods != null)
@@ -574,7 +603,7 @@ namespace RuntimeInspectorNamespace
             if (variableDrawer != null)
             {
                 if (variableName == null)
-                    variableName = component.GetType().Name ;
+                    variableName = component.GetType().Name;
 
                 variableDrawer.BindTo(component.GetType(), string.Empty, () => component, (value) => { });
                 variableDrawer.NameRaw = variableName;
@@ -591,8 +620,17 @@ namespace RuntimeInspectorNamespace
             if (variable.Name.ToLower() == "enabled")
                 return null;
             // xnx
-            
+
             Type variableType = variable is FieldInfo ? ((FieldInfo)variable).FieldType : ((PropertyInfo)variable).PropertyType;
+            if (variable is FieldInfo fi && TryGetHeaderField(fi, out var header))
+            {
+                var headerDrawer = Inspector.CreateDrawerForType(typeof(HeaderAttribute), drawArea, Depth + 1, true, variable);
+                if (headerDrawer != null)
+                {
+                    headerDrawer.NameRaw = header;
+                }
+                elements.Add(headerDrawer);
+            }
             InspectorField variableDrawer = Inspector.CreateDrawerForType(variableType, drawArea, Depth + 1, true, variable);
             if (variableDrawer != null)
             {
@@ -604,6 +642,18 @@ namespace RuntimeInspectorNamespace
             }
 
             return variableDrawer;
+        }
+
+        private bool TryGetHeaderField(FieldInfo fieldInfo, out string headerValue)
+        {
+            headerValue = null;
+            var attribs = fieldInfo.GetCustomAttributes(typeof(HeaderAttribute), false) as HeaderAttribute[];
+            if (attribs.Length > 0)
+            {
+                headerValue = attribs[0].header;
+                return true;
+            }
+            return false;
         }
 
         public InspectorField CreateDrawer(Type variableType, string variableName, Getter getter, Setter setter, bool drawObjectsAsFields = true)

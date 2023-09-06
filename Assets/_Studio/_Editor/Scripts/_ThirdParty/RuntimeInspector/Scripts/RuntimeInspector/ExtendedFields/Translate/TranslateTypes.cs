@@ -18,24 +18,12 @@ namespace RuntimeInspectorNamespace
         public InputField listenTo = null;
 
         public Dropdown broadcastAt;
-        public InputField broadcastInput;
+        
+        public InputField customString;
+        
         public Toggle canListenMultipleTimesToggle;
 
         [HideInInspector] public TranslateField field = null;
-        private string guid;
-
-        private void Awake()
-        {
-            guid = GetInstanceID() + "_translate";//Guid.NewGuid().ToString("N");
-        }
-
-        public void Update()
-        {
-            if (broadcastInput != null && !String.IsNullOrEmpty(broadcastInput.text))
-            {
-                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, broadcastInput.text);
-            }
-        }
 
         public void Setup()
         {
@@ -75,11 +63,10 @@ namespace RuntimeInspectorNamespace
                 field.GetAtom().data.repeat = Helper.StringInInt(value);
                 UpdateAllSelectedObjects("repeat", field.GetAtom().data.repeat);
             });
-            if (broadcastInput != null) broadcastInput.onValueChanged.AddListener((value) =>
+            if(customString != null) customString.onValueChanged.AddListener((value) =>
             {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value, field.GetAtom().data.broadcast, new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)field.Value).referenceGO, componentType = typeof(Atom.Translate).Name });
-                field.GetAtom().data.broadcast = value;
-                UpdateAllSelectedObjects("broadcast", field.GetAtom().data.broadcast);
+                SetCustomString(value);
+                // UpdateAllSelectedObjects("broadcast", field.GetAtom().data.broadcast);
             });
             if (broadcastAt != null) broadcastAt.onValueChanged.AddListener((value) =>
             {
@@ -91,6 +78,16 @@ namespace RuntimeInspectorNamespace
                 field.GetAtom().data.listen = value ? Listen.Always : Listen.Once;
                 UpdateAllSelectedObjects("listen", field.GetAtom().data.listen);
             });
+        }
+
+        private void SetCustomString(string _newString)
+        {
+            Atom.Translate atom = field.GetAtom();
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(_newString, 
+                atom.data.broadcast, 
+                new ComponentDisplayDock { componentGameObject = atom.target,
+                    componentType = atom.componentType });
+            atom.data.broadcast = _newString;
         }
 
         private void UpdateAllSelectedObjects(string varName, object value)
@@ -127,20 +124,21 @@ namespace RuntimeInspectorNamespace
 
         public void LoadDefaultValues()
         {
-            if (broadcastAt != null) { broadcastAt.AddOptions(Enum.GetNames(typeof(BroadcastAt)).ToList()); }
+            if (broadcastAt) { broadcastAt.AddOptions(Enum.GetNames(typeof(BroadcastAt)).ToList()); }
+
+            if (customString) { customString.text = ""; }
         }
 
         public void SetData(TranslateComponentData _data)
         {
-            field.GetAtom().data = _data;
             if (broadcastAt != null) broadcastAt.SetValueWithoutNotify((int)Enum.Parse(typeof(BroadcastAt), _data.broadcastAt.ToString()));
             if (pauseForInput != null) pauseForInput.SetTextWithoutNotify(_data.pauseFor.ToString());
             if (speedInput != null) speedInput.SetTextWithoutNotify(_data.speed.ToString());
             if (repeatInput != null) repeatInput.SetTextWithoutNotify(_data.repeat.ToString());
-            if (broadcastInput != null) broadcastInput.SetTextWithoutNotify(_data.broadcast);
             if (moveToInput != null) moveToInput[0].SetTextWithoutNotify(_data.moveTo.x.ToString());
             if (moveToInput != null) moveToInput[1].SetTextWithoutNotify(_data.moveTo.y.ToString());
             if (moveToInput != null) moveToInput[2].SetTextWithoutNotify(_data.moveTo.z.ToString());
+            if (customString) customString.SetTextWithoutNotify( _data.broadcast);
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
 
@@ -155,8 +153,8 @@ namespace RuntimeInspectorNamespace
             speedInput?.SetupInputFieldSkin(skin);
             pauseForInput?.SetupInputFieldSkin(skin);
             repeatInput?.SetupInputFieldSkin(skin);
-            broadcastInput?.SetupInputFieldSkin(skin);
             listenTo?.SetupInputFieldSkin(skin);
+            customString?.SetupInputFieldSkin(skin);
         }
     }
 }

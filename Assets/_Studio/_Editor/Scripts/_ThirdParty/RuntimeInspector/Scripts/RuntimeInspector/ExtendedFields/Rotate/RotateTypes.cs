@@ -26,26 +26,13 @@ namespace RuntimeInspectorNamespace
         public InputField repeatInput = null;
 
         public Dropdown broadcastAt;
-        public InputField broadcastInput;
+        public InputField customString;
+        
         public InputField listenInput;
         public Toggle canListenMultipleTimesToggle;
 
         [HideInInspector] public RotateField field = null;
-
-        private string guid;
-
-        private void Awake()
-        {
-            guid = GetInstanceID() + "_rotate";//Guid.NewGuid().ToString("N");
-        }
-
-        public void Update()
-        {
-            if (broadcastInput != null && !String.IsNullOrEmpty(broadcastInput.text))
-            {
-                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, broadcastInput.text);
-            }
-        }
+        
         
         private enum VariableTypes
         {
@@ -60,22 +47,6 @@ namespace RuntimeInspectorNamespace
             REPEAT,
             BROADCAST_STRING,
             CAN_LISTEN_MULTIPLE_TIMES
-        }
-
-        public void ClearElements()
-        {
-            xAxis.onValueChanged.RemoveAllListeners();
-            yAxis.onValueChanged.RemoveAllListeners();
-            zAxis.onValueChanged.RemoveAllListeners();
-            xAxis.onValueChanged.RemoveAllListeners();
-            dirDropDown.onValueChanged.RemoveAllListeners();
-            broadcastAt.onValueChanged.RemoveAllListeners();
-            degreesInput.onValueChanged.RemoveAllListeners();
-            speedInput.onValueChanged.RemoveAllListeners();
-            pauseInput.onValueChanged.RemoveAllListeners();
-            repeatInput.onValueChanged.RemoveAllListeners();
-            broadcastInput.onValueChanged.RemoveAllListeners();
-            canListenMultipleTimesToggle.onValueChanged.RemoveAllListeners();
         }
 
         public void Setup()
@@ -123,12 +94,12 @@ namespace RuntimeInspectorNamespace
                 field.GetAtom().data.repeat = Helper.StringInInt(value);
                 UpdateVariablesForAll(VariableTypes.REPEAT,  Helper.StringInInt(value));
             });
-            if (broadcastInput != null) broadcastInput.onValueChanged.AddListener((value) =>
+            if(customString != null) customString.onValueChanged.AddListener((value) =>
             {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value, field.GetAtom().data.broadcast, new ComponentDisplayDock() { componentGameObject = ((Atom.Rotate)field.Value).referenceGO, componentType = typeof(Atom.Rotate).Name });
-                field.GetAtom().data.broadcast = value;
-                UpdateVariablesForAll(VariableTypes.BROADCAST_STRING,  value);
+                SetCustomString(value);
+                // UpdateAllSelectedObjects("broadcast", field.GetAtom().data.broadcast);
             });
+                
             if (broadcastAt != null) broadcastAt.onValueChanged.AddListener((value) =>
             {
                 field.GetAtom().data.broadcastAt = (BroadcastAt)value;
@@ -139,6 +110,17 @@ namespace RuntimeInspectorNamespace
                 field.GetAtom().data.listen = value ? Listen.Always : Listen.Once;
                 UpdateVariablesForAll(VariableTypes.CAN_LISTEN_MULTIPLE_TIMES,  field.GetAtom().data.listen);
             });
+        }
+
+        private void SetCustomString(string _newString)
+        {
+            Atom.Rotate atom = field.GetAtom();
+          
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(_newString, 
+                atom.data.broadcast, 
+                new ComponentDisplayDock { componentGameObject = atom.target,
+                    componentType = atom.componentType });
+            atom.data.broadcast = _newString;
         }
 
         private void UpdateVariablesForAll(VariableTypes _type, Object _value)
@@ -195,29 +177,6 @@ namespace RuntimeInspectorNamespace
             }
         }
         
-        private Axis GetAxis(string _value)
-        {
-            if (_value == Axis.X.ToString()) return Axis.X;
-            else if (_value == Axis.Y.ToString()) return Axis.Y;
-            else if (_value == Axis.Z.ToString()) return Axis.Z;
-            return Axis.X;
-        }
-
-        private Direction GetDirection(string _value)
-        {
-            if (_value == Direction.Clockwise.ToString()) return Direction.Clockwise;
-            else if (_value == Direction.AntiClockwise.ToString()) return Direction.AntiClockwise;
-            return Direction.Clockwise;
-        }
-
-        private BroadcastAt GetBroadcastAt(string _value)
-        {
-            if (_value == BroadcastAt.End.ToString()) return BroadcastAt.End;
-            else if (_value == BroadcastAt.Never.ToString()) return BroadcastAt.Never;
-            else if (_value == BroadcastAt.AtEveryInterval.ToString()) return BroadcastAt.AtEveryInterval;
-            return BroadcastAt.Never;
-        }
-
         public void LoadDefaultValues()
         {
             // axis 
@@ -252,7 +211,7 @@ namespace RuntimeInspectorNamespace
             if (speedInput) speedInput.SetTextWithoutNotify(_data.speed.ToString());
             if (pauseInput) pauseInput.SetTextWithoutNotify(_data.pauseBetween.ToString());
             if (repeatInput) repeatInput.SetTextWithoutNotify(_data.repeat.ToString());
-            if (broadcastInput) broadcastInput.SetTextWithoutNotify(_data.broadcast);
+            if (customString) customString.SetTextWithoutNotify( _data.broadcast);
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
 
@@ -266,10 +225,10 @@ namespace RuntimeInspectorNamespace
             speedInput?.SetupInputFieldSkin(Skin);
             pauseInput?.SetupInputFieldSkin(Skin);
             repeatInput?.SetupInputFieldSkin(Skin);
-            broadcastInput?.SetupInputFieldSkin(Skin);
             listenInput?.SetupInputFieldSkin(Skin);
             dirDropDown?.SetSkinDropDownField(Skin);
             broadcastAt?.SetSkinDropDownField(Skin);
+            customString?.SetupInputFieldSkin(Skin);
         }
     }
 }

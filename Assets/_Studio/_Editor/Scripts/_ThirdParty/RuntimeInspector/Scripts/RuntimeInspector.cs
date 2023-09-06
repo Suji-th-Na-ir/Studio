@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using PlayShifu.Terra;
+using Terra.Studio;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -250,7 +252,7 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        public String[] ShownComponents
+        public ShownComponent[] ShownComponents
         {
             get
             {
@@ -284,21 +286,12 @@ namespace RuntimeInspectorNamespace
             behaviourButton.GetComponentInChildren<Text>().color = Skin.ButtonTextColor;
             designButton.GetComponentInChildren<Text>().font = Skin.Font;
             behaviourButton.GetComponentInChildren<Text>().font = Skin.Font;
-            designButton.onClick.AddListener(() =>
-            {
-                currentPageIndex = 0;
-                isDirty = true;
-                designButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
-                behaviourButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
-            });
 
-            behaviourButton.onClick.AddListener(() =>
-            {
-                currentPageIndex = 1;
-                isDirty = true;
-                behaviourButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
-                designButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
-            });
+            StartCoroutine(InitLastPageIndex());
+
+            designButton.onClick.AddListener(ShowDesignPage);
+            behaviourButton.onClick.AddListener(ShowBehaviourPage);
+
 
             if (m_showTooltips)
             {
@@ -345,6 +338,51 @@ namespace RuntimeInspectorNamespace
 			// On new Input System, scroll sensitivity is much higher than legacy Input system
 			scrollView.scrollSensitivity *= 0.25f;
 #endif
+        }
+
+        private IEnumerator InitLastPageIndex()
+        {
+            yield return new WaitForSeconds(Time.deltaTime * 2);
+            if (SystemOp.Resolve<CrossSceneDataHolder>().Get("CurrentPageIndex", out var data))
+            {
+                if ((int)(data) == 0)
+                    ShowDesignPage();
+                else
+                    ShowBehaviourPage();
+            }
+        }
+        List<Transform> selected;
+        private void ShowBehaviourPage()
+        {
+            selected?.Clear();
+            selected = new List<Transform>();
+            Helper.DeepCopy<Transform>(EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Where(obj => obj != null).Select(obj => obj.transform).ToList(), selected);
+            currentPageIndex = 1;
+            SystemOp.Resolve<CrossSceneDataHolder>().Set("CurrentPageIndex", 1);
+            isDirty = true;
+            StartCoroutine(WaitForRefreshAndSelectAgain());
+
+            behaviourButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
+            designButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
+        }
+
+        private void ShowDesignPage()
+        {
+            selected?.Clear();
+            selected = new List<Transform>();
+            Helper.DeepCopy<Transform>(EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Where(obj => obj != null).Select(obj => obj.transform).ToList(), selected);
+            currentPageIndex = 0;
+            SystemOp.Resolve<CrossSceneDataHolder>().Set("CurrentPageIndex", 0);
+            isDirty = true;
+            StartCoroutine(WaitForRefreshAndSelectAgain());
+            designButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
+            behaviourButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
+        }
+
+        IEnumerator WaitForRefreshAndSelectAgain()
+        {
+            yield return new WaitUntil(() => !isDirty);
+            m_connectedHierarchy.Select(selected);
         }
 
         private void OnDestroy()
@@ -514,7 +552,7 @@ namespace RuntimeInspectorNamespace
                 if (inspectedObjectDrawer != null)
                 {
                     inspectedObjectDrawer.BindTo(obj.GetType(), string.Empty, () => m_inspectedObject, (value) => m_inspectedObject = value);
-                    inspectedObjectDrawer.NameRaw = obj.GetNameWithType().Replace("(GameObject)","");
+                    inspectedObjectDrawer.NameRaw = obj.GetNameWithType().Replace("(GameObject)", "");
                     inspectedObjectDrawer.Refresh();
 
                     if (inspectedObjectDrawer is ExpandableInspectorField)
@@ -689,21 +727,6 @@ namespace RuntimeInspectorNamespace
             }
 
             return new ExposedVariablesEnumerator(allVariables, hiddenVariablesForType, exposedVariablesForType, m_exposeFields, m_exposeProperties);
-        }
-
-        public bool CanAutoExpand(object value)
-        {
-            if (value.IsNull())
-            {
-                return false;
-            }
-            var fullName = value.GetType().FullName;
-            if (settings[0].AutoExpandableDrawers != null)
-            {
-                var canExpand = settings[0].AutoExpandableDrawers.Any(x => x.Equals(fullName));
-                return canExpand;
-            }
-            return false;
         }
     }
 }

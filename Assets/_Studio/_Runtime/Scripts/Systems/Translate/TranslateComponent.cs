@@ -19,6 +19,8 @@ namespace Terra.Studio
         [JsonIgnore] public bool IsExecuted { get; set; }
         [JsonIgnore] public EventContext EventContext { get; set; }
         [JsonIgnore] public GameObject RefObj { get; set; }
+        [JsonIgnore] public float pauseDistance;
+        [JsonIgnore] public Vector3 direction;
 
         public bool canPlaySFX;
         public string sfxName;
@@ -27,6 +29,7 @@ namespace Terra.Studio
         public string vfxName;
         public int vfxIndex;
         public int listenIndex;
+        public int broadcastTypeIndex;
 
         [JsonConverter(typeof(Vector3Converter))] public Vector3 startPosition;
         [JsonConverter(typeof(Vector3Converter))] public Vector3 targetPosition;
@@ -36,7 +39,5 @@ namespace Terra.Studio
         public float speed;
         public float pauseFor;
         public int repeatFor;
-        [JsonIgnore] public float pauseDistance;
-        [JsonIgnore] public Vector3 direction;
     }
 }

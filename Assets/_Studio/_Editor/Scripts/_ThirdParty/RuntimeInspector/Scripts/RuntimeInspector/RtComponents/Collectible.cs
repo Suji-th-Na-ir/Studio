@@ -21,14 +21,11 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
         public Atom.ScoreData Score = new();
-        public Atom.Broadcast Broadcast = new();
+        public string Broadcast = null;
 
-        private string guid;
         public void Awake()
         {
-            guid = GetInstanceID() + "_collect";//Guid.NewGuid().ToString("N");
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>(), this.GetType().Name);
-            Broadcast.Setup(gameObject, this.GetType().Name, guid);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>(), GetType().Name);
             PlaySFX.Setup<Collectible>(gameObject);
             PlayVFX.Setup<Collectible>(gameObject);
         }
@@ -40,102 +37,56 @@ namespace RuntimeInspectorNamespace
                 comp.IsConditionAvailable = true;
                 comp.ConditionType = GetStartEvent();
                 comp.ConditionData = GetStartCondition();
-                comp.listenIndex = startOn.data.listenIndex;
-
-                comp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast.data.broadcastName);
-                comp.Broadcast = string.IsNullOrEmpty(Broadcast.data.broadcastName) ? null : Broadcast.data.broadcastName;
-                comp.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? null : startOn.data.listenName;
-                comp.broadcastTypeIndex = Broadcast.data.broadcastTypeIndex;
-
+                comp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
+                comp.Broadcast = Broadcast;
                 comp.canPlaySFX = PlaySFX.data.canPlay;
                 comp.canPlayVFX = PlayVFX.data.canPlay;
-
                 comp.sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName;
                 comp.vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName;
-
                 comp.sfxIndex = PlaySFX.data.clipIndex;
                 comp.vfxIndex = PlayVFX.data.clipIndex;
-
                 comp.canUpdateScore = Score.score != 0;
                 comp.scoreValue = Score.score;
             }
-
             gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp);
             return (type, data);
         }
 
-        public string GetStartEvent(string _input = null)
+        public string GetStartEvent()
         {
             int index = startOn.data.startIndex;
-            string inputString = ((StartOnCollectible)index).ToString();
-            if (!string.IsNullOrEmpty(_input))
-                inputString = _input;
-
-            if (Enum.TryParse(inputString, out StartOnCollectible enumValue))
-            {
-                var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(enumValue);
-                return eventName;
-            }
-            return EditorOp.Resolve<DataProvider>().GetEnumValue(StartOnCollectible.OnClick);
+            var value = (StartOnCollectible)index;
+            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(value);
+            return eventName;
         }
 
-
-        public string GetStartCondition(string _input = null)
+        public string GetStartCondition()
         {
             int index = startOn.data.startIndex;
-            string inputString = ((StartOnCollectible)index).ToString();
-            if (!string.IsNullOrEmpty(_input))
-                inputString = _input;
-
-            if (inputString.ToLower().Contains("listen"))
-            {
-                return EditorOp.Resolve<DataProvider>().GetListenString(startOn.data.listenIndex);
-            }
-            else
-            {
-                if (Enum.TryParse(inputString, out StartOnCollectible enumValue))
-                {
-                    return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(enumValue);
-                }
-                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOnCollectible.OnClick);
-            }
+            var value = (StartOnCollectible)index;
+            return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(value);
         }
 
         public void Import(EntityBasedComponent cdata)
         {
             CollectableComponent comp = JsonConvert.DeserializeObject<CollectableComponent>($"{cdata.data}");
-            Score.score = (int)comp.scoreValue;
-            Broadcast.data.broadcastName = comp.Broadcast;
-            Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
-
+            Score.score = comp.scoreValue;
             PlaySFX.data.canPlay = comp.canPlaySFX;
             PlaySFX.data.clipIndex = comp.sfxIndex;
             PlaySFX.data.clipName = comp.sfxName;
             PlayVFX.data.canPlay = comp.canPlayVFX;
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
-
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOnCollectible), out object result))
             {
                 startOn.data.startIndex = (int)(StartOnCollectible)result;
             }
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast.data.broadcastName, null);
-
-            if (comp.ConditionType.ToLower().Contains("listen"))
-            {
-                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID() + "_collectible", comp.ConditionData);
-            }
-            startOn.data.listenIndex = comp.listenIndex;
-        }
-
-        private void OnDestroy()
-        {
-            if (gameObject.TryGetComponent(out Collider collider) && !gameObject.TryGetComponent(out MeshRenderer _))
-            {
-                Destroy(collider);
-            }
+            Broadcast = comp.Broadcast;
+            startOn.data.startName = comp.ConditionType;
+            startOn.data.listenName = comp.ConditionData;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, null);
         }
     }
 }

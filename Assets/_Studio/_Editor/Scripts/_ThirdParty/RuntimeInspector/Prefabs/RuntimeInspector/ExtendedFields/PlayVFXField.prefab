@@ -256,14 +256,6 @@ MonoBehaviour:
   toggleBackground: {fileID: 3020557578215508041}
   toggleInput: {fileID: 114536213069398136}
   optionsDropdown: {fileID: 1779548944164561934}
-  background: {fileID: 1371879477568639978}
-  dropdownArrow: {fileID: 7312060831811786372}
-  templateRoot: {fileID: 4923922168023851879}
-  templateContentTransform: {fileID: 1594524603604527406}
-  templateItemTransform: {fileID: 8502065557128597148}
-  templateBackground: {fileID: 8896730302429768351}
-  templateCheckmark: {fileID: 2931729928473332748}
-  templateText: {fileID: 8325337053504341695}
 --- !u!114 &2885853469568540334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -282,7 +274,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 2
-  m_Spacing: 0
+  m_Spacing: 7
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -326,7 +318,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 26.21379, y: 0}
+  m_AnchoredPosition: {x: 20, y: 0}
   m_SizeDelta: {x: 277.7862, y: 30}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &222133981671437382
@@ -429,7 +421,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.1}
   m_AnchorMax: {x: 0, y: 0.9}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 5, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &222128757676916424
@@ -724,7 +716,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 182.3181, y: 30}
+  m_SizeDelta: {x: 178.1164, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6797783100520056173
 CanvasRenderer:

@@ -57,7 +57,7 @@ namespace Terra.Studio
             customUpdateSystemToRemove = new();
             coroutineRunners = new();
             globalUpdateSystems = new EcsSystems(ecsWorld)
-                                    .Add(new ClickSystem());
+                                    .Add(new InputSystem());
             globalUpdateSystems.Init();
         }
 
