@@ -49,45 +49,6 @@ namespace Terra.Studio
             }
         }
 
-        private void OnRotationDone(bool isDone, int entity)
-        {
-            ref var rotatable = ref entity.GetComponent<RotateComponent>();
-            if (rotatable.IsBroadcastable)
-            {
-                if (rotatable.broadcastAt == BroadcastAt.AtEveryInterval && !isDone)
-                {
-                    RuntimeOp.Resolve<Broadcaster>().Broadcast(rotatable.Broadcast, false);
-                }
-                if (rotatable.broadcastAt == BroadcastAt.End && isDone)
-                {
-                    RuntimeOp.Resolve<Broadcaster>().Broadcast(rotatable.Broadcast, true);
-                }
-            }
-            if (rotatable.listen == Listen.Always && !rotatable.ConditionType.Equals("Terra.Studio.GameStart") && isDone)
-            {
-                rotatable.IsExecuted = false;
-                rotatable.CanExecute = false;
-                var compsData = RuntimeOp.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(true, rotatable.EventContext);
-            }
-        }
-
-        public override void OnHaltRequested(EcsWorld currentWorld)
-        {
-            var filter = currentWorld.Filter<RotateComponent>().End();
-            var rotatePool = currentWorld.GetPool<RotateComponent>();
-            foreach (var entity in filter)
-            {
-                var rotatable = rotatePool.Get(entity);
-                if (rotatable.CanExecute)
-                {
-                    continue;
-                }
-                var compsData = RuntimeOp.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(false, rotatable.EventContext);
-            }
-        }
-
         public void Run(IEcsSystems systems)
         {
             var filter = systems.GetWorld().Filter<RotateComponent>().End();
@@ -110,6 +71,10 @@ namespace Terra.Studio
                 {
                     component.IsExecuted = true;
                     OnRotationDone(true, entity);
+                    continue;
+                }
+                if (component.isHaltedByEvent)
+                {
                     continue;
                 }
                 if (component.isPaused)
@@ -170,6 +135,45 @@ namespace Terra.Studio
                 }
             }
             return vector;
+        }
+
+        private void OnRotationDone(bool isDone, int entity)
+        {
+            ref var rotatable = ref entity.GetComponent<RotateComponent>();
+            if (rotatable.IsBroadcastable)
+            {
+                if (rotatable.broadcastAt == BroadcastAt.AtEveryInterval && !isDone)
+                {
+                    RuntimeOp.Resolve<Broadcaster>().Broadcast(rotatable.Broadcast, false);
+                }
+                if (rotatable.broadcastAt == BroadcastAt.End && isDone)
+                {
+                    RuntimeOp.Resolve<Broadcaster>().Broadcast(rotatable.Broadcast, true);
+                }
+            }
+            if (rotatable.listen == Listen.Always && !rotatable.ConditionType.Equals("Terra.Studio.GameStart") && isDone)
+            {
+                rotatable.IsExecuted = false;
+                rotatable.CanExecute = false;
+                var compsData = RuntimeOp.Resolve<ComponentsData>();
+                compsData.ProvideEventContext(true, rotatable.EventContext);
+            }
+        }
+
+        public override void OnHaltRequested(EcsWorld currentWorld)
+        {
+            var filter = currentWorld.Filter<RotateComponent>().End();
+            var rotatePool = currentWorld.GetPool<RotateComponent>();
+            foreach (var entity in filter)
+            {
+                var rotatable = rotatePool.Get(entity);
+                if (rotatable.CanExecute)
+                {
+                    continue;
+                }
+                var compsData = RuntimeOp.Resolve<ComponentsData>();
+                compsData.ProvideEventContext(false, rotatable.EventContext);
+            }
         }
     }
 }

@@ -46,5 +46,6 @@ namespace Terra.Studio
         [JsonIgnore] public bool isPaused;
         [JsonIgnore] public bool shouldPingPong;
         [JsonIgnore] public bool rotateForever;
+        [JsonIgnore] public bool isHaltedByEvent;
     }
 }
