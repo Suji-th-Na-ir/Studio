@@ -18,7 +18,7 @@ namespace RuntimeInspectorNamespace
                 ConditionType = "Terra.Studio.GameStart",
                 ConditionData = "OnStart",
                 IsBroadcastable = !string.IsNullOrEmpty(Broadcast),
-                Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast,
+                Broadcast = Broadcast,
                 totalTime = Time
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
