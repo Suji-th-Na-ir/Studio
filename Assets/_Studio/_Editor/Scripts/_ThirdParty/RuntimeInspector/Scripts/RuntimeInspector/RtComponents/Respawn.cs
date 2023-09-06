@@ -30,8 +30,8 @@ namespace RuntimeInspectorNamespace
                 comp.Broadcast = Broadcast;
                 comp.canPlaySFX = PlaySFX.data.canPlay;
                 comp.canPlayVFX = PlayVFX.data.canPlay;
-                comp.sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName;
-                comp.vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName;
+                comp.sfxName = PlaySFX.data.clipName;
+                comp.vfxName = PlayVFX.data.clipName;
                 comp.sfxIndex = PlaySFX.data.clipIndex;
                 comp.vfxIndex = PlayVFX.data.clipIndex;
             }
