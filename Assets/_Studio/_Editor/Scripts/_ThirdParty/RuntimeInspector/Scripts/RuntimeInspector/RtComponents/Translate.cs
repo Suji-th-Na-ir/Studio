@@ -1,9 +1,8 @@
+using System;
 using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
-using System;
-using UnityEngine.UI;
 
 namespace RuntimeInspectorNamespace
 {
@@ -18,15 +17,13 @@ namespace RuntimeInspectorNamespace
         private string guid;
         private void Awake()
         {
-            guid = GetInstanceID() + "_translate"; //Guid.NewGuid().ToString("N");
+            guid = GetInstanceID() + "_translate";
             Type.Setup(guid, gameObject, GetType().Name);
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             PlaySFX.Setup<Translate>(gameObject);
             PlayVFX.Setup<Translate>(gameObject);
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Type.data.broadcast, ""
-                                , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = this.GetType().Name });
         }
-        
+
         public (string type, string data) Export()
         {
             TranslateComponent comp = new TranslateComponent
@@ -37,21 +34,18 @@ namespace RuntimeInspectorNamespace
                 repeatFor = Type.data.repeat,
                 targetPosition = Type.data.moveTo,
                 startPosition = transform.position,
-                
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
                 broadcastAt = Type.data.broadcastAt,
                 IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcast),
-                Broadcast = string.IsNullOrEmpty(Type.data.broadcast) ? "None" : Type.data.broadcast,
-
+                Broadcast = Type.data.broadcast,
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
                 vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName,
                 sfxIndex = PlaySFX.data.clipIndex,
                 vfxIndex = PlayVFX.data.clipIndex,
-
                 listen = Type.data.listen,
             };
 
@@ -61,75 +55,54 @@ namespace RuntimeInspectorNamespace
             var data = JsonConvert.SerializeObject(comp, Formatting.Indented);
             return (type, data);
         }
-        
-        public string GetStartEvent(string _input = null)
+
+        public string GetStartEvent()
         {
             int index = startOn.data.startIndex;
-            string inputString = ((StartOn)index).ToString();
-            if (!string.IsNullOrEmpty(_input))
-                inputString = _input;
-            
-            if (Enum.TryParse(inputString, out StartOn enumValue))
-            {
-                var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(enumValue);
-                return eventName;
-            }
-            return EditorOp.Resolve<DataProvider>().GetEnumValue(StartOn.OnClick);
+            var value = (StartOn)index;
+            var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(value);
+            return eventName;
         }
 
 
-        public string GetStartCondition(string _input = null)
+        public string GetStartCondition()
         {
             int index = startOn.data.startIndex;
-            string inputString = ((StartOn)index).ToString();
-            if (!string.IsNullOrEmpty(_input))
-                inputString = _input;
-            
+            var value = (StartOn)index;
+            string inputString = value.ToString();
             if (inputString.ToLower().Contains("listen"))
             {
-                return string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName;
+                return startOn.data.listenName;
             }
-            
-            if (Enum.TryParse(inputString, out StartOn enumValue)) 
-            { 
-                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(enumValue);
-            }
-            return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOn.GameStart);
+            var data = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(value);
+            return data;
         }
 
         public void Import(EntityBasedComponent cdata)
         {
-            TranslateComponent comp = JsonConvert.DeserializeObject<TranslateComponent>($"{cdata.data}");
+            TranslateComponent comp = JsonConvert.DeserializeObject<TranslateComponent>(cdata.data);
             PlaySFX.data.canPlay = comp.canPlaySFX;
             PlaySFX.data.clipIndex = comp.sfxIndex;
             PlaySFX.data.clipName = comp.sfxName;
             PlayVFX.data.canPlay = comp.canPlayVFX;
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
-
             Type.data.translateType = (int)comp.translateType;
-
             Type.data.speed = comp.speed;
             Type.data.pauseFor = comp.pauseFor;
             Type.data.moveTo = comp.targetPosition;
             Type.data.repeat = comp.repeatFor;
-            
             Type.data.broadcast = comp.Broadcast;
             Type.data.broadcastAt = comp.broadcastAt;
-
             Type.data.listenTo = comp.ConditionData;
             Type.data.listen = comp.listen;
-
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
                 startOn.data.startIndex = (int)(StartOn)result;
             }
-
             startOn.data.startName = comp.ConditionType;
-            startOn.data.listenName = (comp.ConditionData == "None")? "" : comp.ConditionData;
-            
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject,
-                this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
+            startOn.data.listenName = comp.ConditionData;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Type.data.broadcast, Type.data.listenTo);
         }
 
         private void ModifyDataAsPerGiven(ref TranslateComponent component)

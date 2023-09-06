@@ -83,15 +83,19 @@ namespace Terra.Studio
 
             public override void Degenerate(int entityID)
             {
-                var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
-                var entities = new int[0];
-                ecsWorld.GetAllEntities(ref entities);
-                if (entities.Length == 0 || entities.Any(x => x == entityID) == false)
+                CoroutineService.RunCoroutine(() =>
                 {
-                    Debug.Log($"Entity {entityID} not found!");
-                    return;
-                }
-                ecsWorld.DelEntity(entityID);
+                    var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
+                    var entities = new int[0];
+                    ecsWorld.GetAllEntities(ref entities);
+                    if (entities.Length == 0 || entities.Any(x => x == entityID) == false)
+                    {
+                        Debug.Log($"Entity {entityID} not found!");
+                        return;
+                    }
+                    ecsWorld.DelEntity(entityID);
+                },
+                CoroutineService.DelayType.WaitForFrame);
             }
         }
     }

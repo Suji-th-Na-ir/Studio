@@ -12,7 +12,6 @@ namespace Terra.Studio
         public string ConditionData { get; set; }
         public bool IsBroadcastable { get; set; }
         public string Broadcast { get; set; }
-        public string BroadcastListen { get; set; }
         public bool IsTargeted { get; set; }
         public int TargetId { get; set; }
 
@@ -20,6 +19,8 @@ namespace Terra.Studio
         [JsonIgnore] public bool IsExecuted { get; set; }
         [JsonIgnore] public EventContext EventContext { get; set; }
         [JsonIgnore] public GameObject RefObj { get; set; }
+        [JsonIgnore] public float pauseDistance;
+        [JsonIgnore] public Vector3 direction;
 
         public bool canPlaySFX;
         public string sfxName;
@@ -38,7 +39,5 @@ namespace Terra.Studio
         public float speed;
         public float pauseFor;
         public int repeatFor;
-        [JsonIgnore] public float pauseDistance;
-        [JsonIgnore] public Vector3 direction;
     }
 }

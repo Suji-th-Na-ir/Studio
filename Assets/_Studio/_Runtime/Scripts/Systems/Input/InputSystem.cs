@@ -3,7 +3,7 @@ using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
-    public class ClickSystem : IEcsRunSystem
+    public class InputSystem : IEcsRunSystem
     {
         private bool isPressedDown;
 

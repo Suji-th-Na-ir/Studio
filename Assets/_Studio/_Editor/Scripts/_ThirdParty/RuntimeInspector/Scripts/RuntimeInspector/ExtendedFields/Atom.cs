@@ -155,8 +155,6 @@ namespace Terra.Studio
         public float pauseBetween;
         
         public string broadcast;
-
-        public string listenTo;
         public Listen listen;
         public BroadcastAt broadcastAt;
     }

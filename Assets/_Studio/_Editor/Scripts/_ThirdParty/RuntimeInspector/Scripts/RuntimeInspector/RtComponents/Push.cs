@@ -1,8 +1,6 @@
-using System;
 using UnityEngine;
 using Newtonsoft.Json;
 using RuntimeInspectorNamespace;
-using UnityEngine.Serialization;
 
 namespace Terra.Studio
 {
@@ -14,9 +12,9 @@ namespace Terra.Studio
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
         public string Broadcast = null;
-        
+
         public void Awake()
-        { 
+        {
             PlaySFX.Setup<DestroyOn>(gameObject);
             PlayVFX.Setup<DestroyOn>(gameObject);
         }
@@ -37,7 +35,7 @@ namespace Terra.Studio
                 drag = resistance,
                 showResetButton = showResetButton,
                 listen = Listen.Always,
-                Broadcast = string.IsNullOrEmpty(Broadcast) ? "None" : Broadcast,
+                Broadcast = Broadcast,
                 IsBroadcastable = !string.IsNullOrEmpty(Broadcast)
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -57,6 +55,7 @@ namespace Terra.Studio
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
             Broadcast = comp.Broadcast;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, null);
         }
     }
 }

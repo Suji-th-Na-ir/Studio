@@ -59,6 +59,5 @@ namespace Terra.Studio
         public int vfxIndex;
         public bool isBroadcastable;
         public string broadcast;
-        public int broadcastIndex;
     }
 }

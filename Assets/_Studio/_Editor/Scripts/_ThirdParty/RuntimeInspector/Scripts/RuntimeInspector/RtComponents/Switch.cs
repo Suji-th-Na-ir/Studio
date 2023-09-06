@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Newtonsoft.Json;
 using RuntimeInspectorNamespace;
@@ -29,13 +28,6 @@ namespace Terra.Studio
         [AliasDrawer("Play SFX")] public Atom.PlaySfx playSFXWhenOff = new();
         [AliasDrawer("Play VFX")] public Atom.PlayVfx playVFXWhenOff = new();
 
-        private string guid;
-
-        private void Awake()
-        {
-            guid = Guid.NewGuid().ToString("N");
-        }
-
         public (string type, string data) Export()
         {
             var data = new SwitchComponent()
@@ -64,13 +56,14 @@ namespace Terra.Studio
             playSFXWhenOff.data = GetPlaySFXData(component.offStateData);
             playVFXWhenOn.data = GetPlayVFXData(component.onStateData);
             playVFXWhenOff.data = GetPlayVFXData(component.offStateData);
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcastWhenOn, null);
         }
 
         private SwitchComponentData GetSwitchComponentData(SwitchState state, PlaySFXData playSFXData, PlayVFXData playVFXData, string broadcast)
         {
             return new SwitchComponentData()
             {
-                state = SwitchState.On,
+                state = state,
                 canPlaySFX = playSFXData.canPlay,
                 sfxName = playSFXData.clipName,
                 sfxIndex = playSFXData.clipIndex,
@@ -78,19 +71,12 @@ namespace Terra.Studio
                 vfxName = playVFXData.clipName,
                 vfxIndex = playVFXData.clipIndex,
                 isBroadcastable = !string.IsNullOrEmpty(broadcast),
-                broadcast = broadcast,
-                // broadcastIndex = broadcast.broadcastTypeIndex
+                broadcast = broadcast
             };
         }
 
         private string GetBroadcastData(SwitchComponentData data)
         {
-            // return new BroadcastData()
-            // {
-            //     id = guid,
-            //     broadcastName = data.broadcast,
-            //     broadcastTypeIndex = data.broadcastIndex
-            // };
             return data.broadcast;
         }
 
