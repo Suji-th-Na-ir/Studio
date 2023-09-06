@@ -127,7 +127,8 @@ namespace Terra.Studio
                 {
                     var rotationThisFrame = component.speed * Time.deltaTime;
                     component.currentRotation += rotationThisFrame * component.directionFactor;
-                    component.RefObj.transform.Rotate(GetVector3(rotationThisFrame * component.directionFactor, component.axis));
+                    var targetRotation = GetVector3(rotationThisFrame * component.directionFactor, component.axis);
+                    component.RefObj.transform.Rotate(targetRotation);
                     continue;
                 }
                 if (component.canPause)
