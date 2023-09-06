@@ -12,20 +12,6 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
         public string Broadcast = null;
-        private string guid;
-
-        private void Awake()
-        {
-            guid = GetInstanceID() + "_respawn";//Guid.NewGuid().ToString("N");
-        }
-        
-        public void Update()
-        {
-            if (!String.IsNullOrEmpty(Broadcast))
-            {
-                EditorOp.Resolve<DataProvider>().UpdateListenToTypes(guid, Broadcast);
-            }
-        }
         
         public void Start()
         {
@@ -44,11 +30,12 @@ namespace RuntimeInspectorNamespace
                 vfxName = PlayVFX.data.clipName,
                 vfxIndex = PlayVFX.data.clipIndex,
                 IsBroadcastable = !string.IsNullOrEmpty(Broadcast),
-                Broadcast = Broadcast,
                 respawnPoint = transform.position,
+                
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.TriggerAction",
-                ConditionData = "Player"
+                ConditionData = "Player",
+                Broadcast = string.IsNullOrEmpty(Broadcast) ? "None" : Broadcast
             };
             gameObject.TrySetTrigger(true, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);

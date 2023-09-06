@@ -17,12 +17,9 @@ namespace RuntimeInspectorNamespace
         public Vector3 toPoint;
         public float Speed = 1f;
         public bool Loop = false;
-
-        private string guid;
-
+        
         private void Awake()
         {
-            guid = GetInstanceID() + "_oscillate";
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             fromPoint = transform.localPosition;
             Component.fromPoint = fromPoint;
@@ -34,15 +31,15 @@ namespace RuntimeInspectorNamespace
 
             Component.fromPoint = fromPoint;
             Component.toPoint = toPoint;
-            Component.ConditionType = GetStartEvent();
-            Component.ConditionData = GetStartCondition();
-            Component.listenIndex = startOn.data.listenIndex;
-            
-            Component.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName;
-            
             Component.loop = Loop;
             Component.speed = Speed;
+            
             Component.IsConditionAvailable = GetStartEvent() != "";
+            Component.ConditionType = GetStartEvent();
+            Component.ConditionData = GetStartCondition();
+            Component.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName;
+
+            
             gameObject.TrySetTrigger(false, true);
             var data = JsonConvert.SerializeObject(Component);
             return (type, data);
@@ -52,6 +49,7 @@ namespace RuntimeInspectorNamespace
         {
             int index = startOn.data.startIndex;
             string inputString = ((StartOn)index).ToString();
+            
             if (!string.IsNullOrEmpty(_input))
                 inputString = _input;
             
@@ -73,7 +71,7 @@ namespace RuntimeInspectorNamespace
             
             if (inputString.ToLower().Contains("listen"))
             {
-                return EditorOp.Resolve<DataProvider>().GetListenString(startOn.data.listenIndex);
+                return string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName;
             }
             else
             {
@@ -98,11 +96,10 @@ namespace RuntimeInspectorNamespace
             {
                 startOn.data.startIndex = (int)(StartOn)result;
             }
-
-            EditorOp.Resolve<DataProvider>().AddToListenList(guid, comp.ConditionData);
             
-            startOn.data.listenIndex = comp.listenIndex;
-            startOn.data.listenName = comp.BroadcastListen;
+            startOn.data.startName = comp.ConditionType;
+            startOn.data.listenName = (comp.ConditionData == "None")? "" : comp.ConditionData;
+            
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, null, startOn.data.listenName);
         }
     }

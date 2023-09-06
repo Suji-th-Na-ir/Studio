@@ -34,8 +34,8 @@ MonoBehaviour:
   - {fileID: 5796965628761400944, guid: 6ab345c380f314a508c602c8dd6db5bb, type: 3}
   - {fileID: -6807667490536456449, guid: 6e1d12302375b49098070fce022dabba, type: 3}
   - {fileID: 6847311389216224266, guid: 49c9b02c3d5204759a754f61e0720d2e, type: 3}
-  - {fileID: 4822529570597946089, guid: 8f412197f1bd845fca170a8332382bdd, type: 3}
-  - {fileID: 2658517854177472053, guid: 6c1797c0243234d22ac044198358ef80, type: 3}
+  - {fileID: 4258432072560892968, guid: b9c4745eb585740008f8fb8b5320fb59, type: 3}
+  - {fileID: -7502050379305031079, guid: 68b016d88dc5e4d72828487602d5d652, type: 3}
   m_referenceDrawers:
   - {fileID: 114341945564567828, guid: c2fc4d683d351b642a3c95411cfd089c, type: 3}
   - {fileID: 114690843832701802, guid: 540d9c4334a9e61498a26125e42ae81c, type: 3}
@@ -82,16 +82,6 @@ MonoBehaviour:
     - localPosition
     - localEulerAngles
     - localScale
-  m_autoexpandableDrawers:
-  - RuntimeInspectorNamespace.Collectible
-  - RuntimeInspectorNamespace.Checkpoint
-  - RuntimeInspectorNamespace.DestroyOn
-  - RuntimeInspectorNamespace.Oscillate
-  - RuntimeInspectorNamespace.Respawn
-  - RuntimeInspectorNamespace.Rotate
-  - RuntimeInspectorNamespace.Translate
-  - RuntimeInspectorNamespace.InGameTimer
-  - Terra.Studio.GameScore
   m_ShowComponents:
   - ComponentName: Collectible
     hideAddButton: 0
@@ -121,5 +111,11 @@ MonoBehaviour:
     hideAddButton: 0
     hideRemoveButton: 0
   - ComponentName: GameScore
+    hideAddButton: 1
+    hideRemoveButton: 1
+  - ComponentName: Push
+    hideAddButton: 0
+    hideRemoveButton: 0
+  - ComponentName: Switch
     hideAddButton: 0
     hideRemoveButton: 0

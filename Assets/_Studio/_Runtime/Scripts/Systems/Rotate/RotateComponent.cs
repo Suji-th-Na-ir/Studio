@@ -12,6 +12,7 @@ namespace Terra.Studio
         public string ConditionData { get; set; }
         public bool IsBroadcastable { get; set; }
         public string Broadcast { get; set; }
+        public string BroadcastListen { get; set; }
         public bool IsTargeted { get; set; }
         public int TargetId { get; set; }
         [JsonIgnore] public bool CanExecute { get; set; }
@@ -35,5 +36,6 @@ namespace Terra.Studio
         public string vfxName;
         public int vfxIndex;
         public int listenIndex;
+        public int broadcastTypeIndex;
     }
 }

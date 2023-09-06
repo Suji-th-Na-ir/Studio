@@ -15,7 +15,6 @@ namespace RuntimeInspectorNamespace
 
         public Dropdown translateTypesDD;
         public TranslateTypes[] allTranslateTypes;
-        public Vector3 targetPosition = Vector3.zero;
 
 #pragma warning restore 0649
 
@@ -36,6 +35,7 @@ namespace RuntimeInspectorNamespace
             }
             List<string> data = Enum.GetNames(typeof(TranslateType)).ToList();
             translateTypesDD.AddOptions(data);
+            translateTypesDD.onValueChanged.AddListener(OnTranslateTypesValueChanged);
         }
 
         public override bool SupportsType(Type type)
@@ -79,13 +79,13 @@ namespace RuntimeInspectorNamespace
             Atom.Translate rt = (Atom.Translate)Value;
             if (rt.data.moveTo == default)
             {
-                rt.data.moveTo = rt.referenceGO.transform.localPosition;
+                rt.data.moveTo = rt.target.transform.localPosition;
             }
             UpdateTypeForMultiselect(translateType, preset);
         }
 
         private void UpdateTypeForMultiselect(TranslateType _data, TranslateComponentData? componentData = null)
-        {
+        { 
             List<GameObject> selectedObjecs = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
 
             if (selectedObjecs.Count > 1)
@@ -97,7 +97,7 @@ namespace RuntimeInspectorNamespace
                         Translate translate = obj.GetComponent<Translate>();
                         translate.Type.data.translateType = (int)_data;
                         translate.Type.data = componentData.Value;
-                        translate.Type.data.moveTo = translate.Type.referenceGO.transform.localPosition;
+                        translate.Type.data.moveTo = translate.Type.target.transform.localPosition;
                     }
                 }
             }
@@ -140,7 +140,7 @@ namespace RuntimeInspectorNamespace
             base.OnBound(variable);
             Atom.Translate rt = (Atom.Translate)Value;
             // Debug.Log($"translate atom data x value {rt.data.moveTo}");
-            translateTypesDD.onValueChanged.AddListener(OnTranslateTypesValueChanged);
+            // translateTypesDD.onValueChanged.AddListener(OnTranslateTypesValueChanged);
             int translationTypeIndex = (((int)Enum.Parse(typeof(TranslateType), rt.data.translateType.ToString())));
             translateTypesDD.SetValueWithoutNotify(translationTypeIndex);
             ShowTranslateOptionsMenu(translationTypeIndex);

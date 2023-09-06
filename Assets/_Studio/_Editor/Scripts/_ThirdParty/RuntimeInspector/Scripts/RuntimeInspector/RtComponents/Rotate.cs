@@ -4,6 +4,7 @@ using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 namespace RuntimeInspectorNamespace
 {
@@ -15,15 +16,17 @@ namespace RuntimeInspectorNamespace
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
 
+        private string guid;
         private void Awake()
         {
-            Type.referenceGO = gameObject;
+            guid = GetInstanceID() + "_rotate";//Guid.NewGuid().ToString("N");
+            Type.Setup(guid, gameObject, GetType().Name);
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             PlaySFX.Setup<Rotate>(gameObject);
             PlayVFX.Setup<Rotate>(gameObject);
 
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Type.data.broadcast, ""
-                               , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = this.GetType().Name });
+            // EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Broadcast, ""
+            //                    , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = this.GetType().Name });
         }
 
         public (string type, string data) Export()
@@ -38,10 +41,12 @@ namespace RuntimeInspectorNamespace
                 pauseFor = Type.data.pauseBetween,
                 repeatFor = Type.data.repeat,
 
-
-                IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcast),
+                IsConditionAvailable = true,
+                ConditionType = GetStartEvent(),
+                ConditionData = GetStartCondition(),
                 broadcastAt = Type.data.broadcastAt,
-                Broadcast = Type.data.broadcast,
+                IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcast),
+                Broadcast = string.IsNullOrEmpty(Type.data.broadcast) ? "None" : Type.data.broadcast,
 
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
@@ -50,13 +55,9 @@ namespace RuntimeInspectorNamespace
                 sfxIndex = PlaySFX.data.clipIndex,
                 vfxIndex = PlayVFX.data.clipIndex,
 
-                IsConditionAvailable = true,
                 listen = Type.data.listen
             };
 
-            comp.ConditionType = GetStartEvent();
-            comp.ConditionData = GetStartCondition();
-            comp.listenIndex = startOn.data.listenIndex;
             List<Axis> axes = new List<Axis>();
             if (Type.data.Xaxis)
                 axes.Add(Axis.X);
@@ -99,16 +100,15 @@ namespace RuntimeInspectorNamespace
             
             if (inputString.ToLower().Contains("listen"))
             {
-                return EditorOp.Resolve<DataProvider>().GetListenString(startOn.data.listenIndex);
+                return string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName;
             }
-            else
+
+            if (Enum.TryParse(inputString, out StartOn enumValue))
             {
-                if (Enum.TryParse(inputString, out StartOn enumValue))
-                {
-                    return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(enumValue);
-                }
-                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOn.GameStart);
+                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(enumValue);
             }
+            return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOn.GameStart);
+          
         }
 
         private RepeatType GetRepeatType(float _value)
@@ -143,8 +143,10 @@ namespace RuntimeInspectorNamespace
             Type.data.degrees = comp.rotateBy;
             Type.data.pauseBetween = comp.pauseFor;
             Type.data.repeat = comp.repeatFor;
-            Type.data.broadcast = comp.Broadcast;
+            
+
             Type.data.broadcastAt = comp.broadcastAt;
+            Type.data.broadcast = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
             Type.data.listen = comp.listen;
 
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
@@ -152,12 +154,11 @@ namespace RuntimeInspectorNamespace
                 startOn.data.startIndex = (int)(StartOn)result;
             }
 
-            if (comp.ConditionType.ToLower().Contains("listen"))
-            {
-                EditorOp.Resolve<DataProvider>().AddToListenList(GetInstanceID()+"_rotate",comp.ConditionData);
-            }
-            startOn.data.listenIndex = comp.listenIndex;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
+            startOn.data.startName = comp.ConditionType;
+            startOn.data.listenName = (comp.ConditionData == "None")? "" : comp.ConditionData;
+            
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject,
+                this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
         }
 
         private void ModifyDataAsPerSelected(ref RotateComponent component)

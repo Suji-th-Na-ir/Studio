@@ -10,14 +10,11 @@ namespace Terra.Studio.RTEditor
     {
         private readonly GUIContent SYSTEM_NAME_CONTENT = EditorGUIUtility.TrTextContent("System Name", "Enter your system name, the necessary components and authors to be generated");
         private readonly GUIContent GENERATE_BUTTON_CONTENT = EditorGUIUtility.TrTextContent("Generate", "Generates system, the necessary components and authors");
-        private const string COMPONENT_SAVE_PATH = "Assets/_Studio/_Runtime/Scripts/Components/";
-        private const string AUTHOR_SAVE_PATH = "Assets/_Studio/_Runtime/Scripts/Systems/";
+        private const string SAVE_PATH = "Assets/_Studio/_Runtime/Scripts/Systems/";
         private const string COMPONENT_TEMPLATE_PATH = "Assets/_Studio/Editor/Templates/ComponentTemplate.txt";
-        private const string AUTHOR_TEMPLATE_PATH = "Assets/_Studio/Editor/Templates/AuthorTemplate.txt";
         private const string SYSTEM_TEMPLATE_PATH = "Assets/_Studio/Editor/Templates/SystemTemplate.txt";
         private const string REPLACABLE_ID = "REPLACEME";
         private const string SUFFIX_COMPONENT_FILE = "Component";
-        private const string SUFFIX_AUTHOR_FILE = "Author";
         private const string SUFFIX_SYSTEM_FILE = "System";
 
         private string systemName;
@@ -26,8 +23,10 @@ namespace Terra.Studio.RTEditor
         public static void Init()
         {
             var window = GetWindow<SystemGenerater>();
-            window.titleContent = new GUIContent("Generate System");
-            window.titleContent.image = EditorGUIUtility.IconContent("cs Script Icon").image;
+            window.titleContent = new GUIContent("Generate System")
+            {
+                image = EditorGUIUtility.IconContent("cs Script Icon").image
+            };
             window.Show();
         }
 
@@ -83,22 +82,33 @@ namespace Terra.Studio.RTEditor
             {
                 return;
             }
+
+            #region Creation of directory
+
+            var newSavePath = Path.Combine(SAVE_PATH, $"{systemName}{Path.DirectorySeparatorChar}");
+            if (!Directory.Exists(newSavePath))
+            {
+                Directory.CreateDirectory(newSavePath);
+            }
+
+            #endregion
+            #region Creation of component
+
             var componentTemplateData = AssetDatabase.LoadAssetAtPath<TextAsset>(COMPONENT_TEMPLATE_PATH).text;
             componentTemplateData = componentTemplateData.Replace(REPLACABLE_ID, systemName);
-            var componentDirPath = Path.Combine(COMPONENT_SAVE_PATH, systemName);
-            Directory.CreateDirectory(componentDirPath);
-            var componentSavePath = string.Concat($"{componentDirPath}/", $"{systemName}{SUFFIX_COMPONENT_FILE}.cs");
+            var componentSavePath = Path.Combine(newSavePath, $"{systemName}{SUFFIX_COMPONENT_FILE}.cs");
             File.WriteAllText(componentSavePath, componentTemplateData);
-            var authorDirPath = string.Concat(AUTHOR_SAVE_PATH, $"{systemName}{Path.DirectorySeparatorChar}");
-            Directory.CreateDirectory(authorDirPath);
-            var authorTemplateData = AssetDatabase.LoadAssetAtPath<TextAsset>(AUTHOR_TEMPLATE_PATH).text;
-            authorTemplateData = authorTemplateData.Replace(REPLACABLE_ID, systemName);
-            var authorSavePath = string.Concat(authorDirPath, $"{systemName}{SUFFIX_AUTHOR_FILE}.cs");
-            File.WriteAllText(authorSavePath, authorTemplateData);
+
+            #endregion
+            #region Creation of system
+
             var systemTemplateData = AssetDatabase.LoadAssetAtPath<TextAsset>(SYSTEM_TEMPLATE_PATH).text;
             systemTemplateData = systemTemplateData.Replace(REPLACABLE_ID, systemName);
-            var systemSavePath = string.Concat(authorDirPath, $"{systemName}{SUFFIX_SYSTEM_FILE}.cs");
+            var systemSavePath = Path.Combine(newSavePath, $"{systemName}{SUFFIX_SYSTEM_FILE}.cs");
             File.WriteAllText(systemSavePath, systemTemplateData);
+
+            #endregion
+
             AssetDatabase.Refresh();
         }
 

@@ -2,33 +2,12 @@ using System;
 using RuntimeInspectorNamespace;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 namespace Terra.Studio
 {
     public class Atom
     {
-        [Serializable]
-        public class Broadcast
-        {
-            public static List<Broadcast> AllInstances = new();
-            [HideInInspector] public BroadcastField field;
-            [HideInInspector] public BroadcastData data;
-            [HideInInspector] public GameObject target;
-            [HideInInspector] public string componentType = null;
-            
-            public void Setup(GameObject _target, string _componentType, string _id)
-            {
-                target = _target;
-                
-                if(!AllInstances.Contains(this))
-                    AllInstances.Add(this);
-
-                componentType = _componentType;
-
-                data.id = _id;
-            }
-        }
-        
         [Serializable]
         public class StartOn
         {
@@ -50,7 +29,7 @@ namespace Terra.Studio
                                 , new ComponentDisplayDock() { componentGameObject = _target, componentType = _componentType });
             }
         }
-        
+
         [Serializable]
         public class PlaySfx
         {
@@ -92,7 +71,16 @@ namespace Terra.Studio
         {
             [HideInInspector] public RotateField field;
             [HideInInspector] public RotateComponentData data = new();
-            [HideInInspector] public GameObject referenceGO;
+            [HideInInspector] public GameObject target;
+            [HideInInspector] public string id;
+            [HideInInspector] public string componentType = null;
+            
+            public void Setup(string _id, GameObject _target, string _componentType)
+            {
+                target = _target;
+                id = _id;
+                componentType = _componentType;
+            }
         }
 
         [Serializable]
@@ -100,7 +88,16 @@ namespace Terra.Studio
         {
             [HideInInspector] public TranslateField field;
             [HideInInspector] public TranslateComponentData data = new();
-            [HideInInspector] public GameObject referenceGO;
+            [HideInInspector] public GameObject target;
+            [HideInInspector] public string id;
+            [HideInInspector] public string componentType = null;
+            
+            public void Setup(string _id, GameObject _target, string _componentType)
+            {
+                target = _target;
+                id = _id;
+                componentType = _componentType;
+            }
         }
 
         [Serializable]
@@ -109,6 +106,12 @@ namespace Terra.Studio
             [HideInInspector] public ScoreField field;
             [HideInInspector] public int score;
             [HideInInspector] public string instanceId;
+        }
+
+        [Serializable]
+        public class SwitchData
+        {
+            [HideInInspector] public SwitchComponent data;
         }
     }
 
@@ -119,18 +122,9 @@ namespace Terra.Studio
         public string startName;
         public int startIndex;
         public string listenName;
-        public int listenIndex;
+        // public int listenIndex;
     }
-    
-    [Serializable]
-    public struct BroadcastData
-    {
-        public int broadcastTypeIndex;
-        public string broadcastName;
-        public string id;
-    }
-    
-    
+
     [Serializable]
     public struct PlaySFXData
     {
@@ -159,10 +153,12 @@ namespace Terra.Studio
         public float speed;
         public int repeat;
         public float pauseBetween;
+        
         public string broadcast;
+
         public string listenTo;
-        public BroadcastAt broadcastAt;
         public Listen listen;
+        public BroadcastAt broadcastAt;
     }
 
     [Serializable]
@@ -173,10 +169,11 @@ namespace Terra.Studio
         public float pauseFor;
         public float speed;
         public int repeat;
+        
         public string broadcast;
-        public BroadcastAt broadcastAt;
+
         public string listenTo;
         public Listen listen;
+        public BroadcastAt broadcastAt;
     }
-
 }

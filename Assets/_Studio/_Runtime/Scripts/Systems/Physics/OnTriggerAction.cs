@@ -5,25 +5,32 @@ namespace Terra.Studio
 {
     public class OnTriggerAction : MonoBehaviour
     {
-        public Action OnTriggered { get; set; }
-        public string TagAgainst { get; set; }
+        private const string CALLBACK_ON_ANY_KEY = "Any";
+        public Action<GameObject> OnTriggered { get; set; }
+        public string tagAgainst;
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!other.CompareTag(TagAgainst))
+            if (!tagAgainst.Equals(CALLBACK_ON_ANY_KEY))
             {
-                return;
+                if (!other.CompareTag(tagAgainst))
+                {
+                    return;
+                }
             }
-            OnTriggered?.Invoke();
+            OnTriggered?.Invoke(other.gameObject);
         }
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (!collision.transform.CompareTag(TagAgainst))
+            if (!tagAgainst.Equals(CALLBACK_ON_ANY_KEY))
             {
-                return;
+                if (!collision.transform.CompareTag(tagAgainst))
+                {
+                    return;
+                }
             }
-            OnTriggered?.Invoke();
+            OnTriggered?.Invoke(collision.transform.gameObject);
         }
     }
 }

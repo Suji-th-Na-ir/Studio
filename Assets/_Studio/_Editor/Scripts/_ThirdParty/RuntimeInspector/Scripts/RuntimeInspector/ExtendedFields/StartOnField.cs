@@ -13,7 +13,7 @@ namespace RuntimeInspectorNamespace
 #pragma warning disable 0649
         [SerializeField] private Dropdown startOn;
 
-        [SerializeField] private Dropdown listenOn;
+        [SerializeField] private InputField listenOn;
 #pragma warning restore 0649
 
         private int prevListenOnValue = -1;
@@ -22,28 +22,26 @@ namespace RuntimeInspectorNamespace
             base.Initialize();
             startOn.onValueChanged.AddListener(OnStartValueChanged);
             listenOn.onValueChanged.AddListener(OnListenValueChanged);
-            LoadListenTo();
         }
 
-        private void LoadListenTo()
-        {
-            listenOn.options.Clear();
-            // lets hide last entry which is "Custom"
-            List<string> loadList = EditorOp.Resolve<DataProvider>().ListenToTypes;
-            for (int i = 0; i < loadList.Count - 1; i++)
-            {
-                listenOn.options.Add(new Dropdown.OptionData()
-                {
-                    text = loadList[i]
-                });
-            }
-        }
+        // private void LoadListenTo()
+        // {
+        //     listenOn.options.Clear();
+        //     // lets hide last entry which is "Custom"
+        //     List<string> loadList = EditorOp.Resolve<DataProvider>().ListenToTypes;
+        //     for (int i = 0; i < loadList.Count - 1; i++)
+        //     {
+        //         listenOn.options.Add(new Dropdown.OptionData()
+        //         {
+        //             text = loadList[i]
+        //         });
+        //     }
+        // }
 
         protected override void OnBound(MemberInfo variable)
         {
             base.OnBound(variable);
             LoadStartOnOptions();
-            LoadListenTo();
         }
 
         private void LoadStartOnOptions()
@@ -78,7 +76,6 @@ namespace RuntimeInspectorNamespace
                 {
                     if (!listenOn.gameObject.activeSelf)
                     {
-                        LoadListenTo();
                         listenOn.gameObject.SetActive(true);
                     }
                 }
@@ -95,40 +92,40 @@ namespace RuntimeInspectorNamespace
             Atom.StartOn atom = (Atom.StartOn)Value;
             atom.data.startIndex = _index;
             atom.data.startName = atom.StartList[_index];
-            
+            atom.data.listenName = "";
             // reset the listen field to previous value
-            if(prevListenOnValue != -1)
-                atom.data.listenIndex = prevListenOnValue;
-            var prevString = string.Empty;
-            var newString = string.Empty;
+            // if(prevListenOnValue != -1)
+            //     atom.data.listenIndex = prevListenOnValue;
+            // var prevString = string.Empty;
+            // var newString = string.Empty;
 
-            if (_index != 2)
-            {
-                prevString = atom.data.listenName;
-            }
-            else
-            {
-                newString = atom.data.listenName;
-            }
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(newString, prevString,
-                    new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
-            UpdateData(atom);
+            // if (_index != 2)
+            // {
+            //     prevString = atom.data.listenName;
+            // }
+            // else
+            // {
+            //     newString = atom.data.listenName;
+            // }
+            //
+            // EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(newString, prevString,
+            //         new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
+            UpdateOtherCompData(atom);
         }
 
-        private void OnListenValueChanged(int _index)
+        private void OnListenValueChanged(string _newString)
         {
             Atom.StartOn atom = (Atom.StartOn)Value;
-            // visual changes 
-            string newString = EditorOp.Resolve<DataProvider>().ListenToTypes[_index];
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(newString, atom.data.listenName, 
+   
+            
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(_newString, atom.data.listenName, 
                 new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
-
+           
             if(Inspector)  Inspector.RefreshDelayed();
-            atom.data.listenName = newString;
-            atom.data.listenIndex = _index;
-            UpdateData(atom);
-            prevListenOnValue = _index;
-            // Debug.Log($"listen to newstring {newString}   index {_index}");
+            atom.data.listenName = _newString;
+            // atom.data.listenIndex = _index;
+            UpdateOtherCompData(atom);
+            // prevListenOnValue = _index;
         }
 
         protected override void OnSkinChanged()
@@ -140,12 +137,12 @@ namespace RuntimeInspectorNamespace
 
             Vector2 rightSideAnchorMin = new Vector2( Skin.LabelWidthPercentage, 0f );
             startOn.SetSkinDropDownField(Skin);
-            listenOn.SetSkinDropDownField(Skin);
+            listenOn.SetupInputFieldSkin(Skin);
             // variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
             // ( (RectTransform) toggleInput.transform ).anchorMin = rightSideAnchorMin;
         }
         
-        private void UpdateData(Atom.StartOn _atom)
+        private void UpdateOtherCompData(Atom.StartOn _atom)
         {
             List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
             if (selectedObjects.Count <= 1) return;
@@ -179,7 +176,7 @@ namespace RuntimeInspectorNamespace
             if (atom != null)
             {
                 startOn.SetValueWithoutNotify(atom.data.startIndex);
-                listenOn.SetValueWithoutNotify(atom.data.listenIndex);
+                listenOn.SetTextWithoutNotify(atom.data.listenName);
                 ShowHideListenDD();
             }
         }

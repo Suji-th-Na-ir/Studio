@@ -13,6 +13,7 @@ namespace Terra.Studio
 
         public override void Init()
         {
+            RuntimeOp.Register(this);
             var button = gameObject.GetComponentInChildren<Button>();
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(SystemOp.Resolve<System>().SwitchState);
@@ -35,6 +36,7 @@ namespace Terra.Studio
             {
                 view.Init();
                 spawnedView = view;
+                RuntimeOp.Register(view);
             }
         }
 
@@ -52,6 +54,7 @@ namespace Terra.Studio
         {
             if (!spawnedView) return;
             spawnedView.Flush();
+            RuntimeOp.Unregister(spawnedView);
             Destroy(spawnedView.gameObject);
             spawnedView = null;
         }
@@ -66,6 +69,7 @@ namespace Terra.Studio
         {
             Flush();
             RuntimeOp.Resolve<GameStateHandler>()?.SubscribeToStateChanged(false, Repaint);
+            RuntimeOp.Unregister(this);
         }
     }
 }

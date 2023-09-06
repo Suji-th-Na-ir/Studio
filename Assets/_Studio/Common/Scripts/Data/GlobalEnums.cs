@@ -62,6 +62,13 @@ namespace Terra.Studio
         End
     }
 
+    public enum BroadcastAtForPushObjects
+    {
+        Never,
+        OnPushStart,
+        OnPushEnd
+    }
+
     public enum Listen
     {
         Once,
@@ -111,5 +118,11 @@ namespace Terra.Studio
         SpawnPoint,
         Timer,
         Score
+    }
+
+    public enum SwitchState
+    {
+        Off,
+        On
     }
 }

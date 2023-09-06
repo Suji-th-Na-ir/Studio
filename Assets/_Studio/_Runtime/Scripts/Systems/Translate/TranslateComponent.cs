@@ -12,6 +12,7 @@ namespace Terra.Studio
         public string ConditionData { get; set; }
         public bool IsBroadcastable { get; set; }
         public string Broadcast { get; set; }
+        public string BroadcastListen { get; set; }
         public bool IsTargeted { get; set; }
         public int TargetId { get; set; }
 
@@ -27,6 +28,7 @@ namespace Terra.Studio
         public string vfxName;
         public int vfxIndex;
         public int listenIndex;
+        public int broadcastTypeIndex;
 
         [JsonConverter(typeof(Vector3Converter))] public Vector3 startPosition;
         [JsonConverter(typeof(Vector3Converter))] public Vector3 targetPosition;
