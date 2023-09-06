@@ -128,3 +128,6 @@ MonoBehaviour:
   - ComponentName: Click
     hideAddButton: 0
     hideRemoveButton: 0
+  - ComponentName: StopRotate
+    hideAddButton: 0
+    hideRemoveButton: 0
