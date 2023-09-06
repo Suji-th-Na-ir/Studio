@@ -57,7 +57,6 @@ namespace Terra.Studio
             playVFXWhenOn.data = GetPlayVFXData(component.onStateData);
             playVFXWhenOff.data = GetPlayVFXData(component.offStateData);
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcastWhenOn, null);
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcastWhenOff, null);
         }
 
         private SwitchComponentData GetSwitchComponentData(SwitchState state, PlaySFXData playSFXData, PlayVFXData playVFXData, string broadcast)
