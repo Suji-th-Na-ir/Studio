@@ -9,12 +9,6 @@ namespace RuntimeInspectorNamespace
     {
         public uint Time = 180;
         public string Broadcast = "";
-        private string guid;
-
-        private void Awake()
-        {
-            guid = GetInstanceID() + "_timer";
-        }
 
         public (string type, string data) Export()
         {
@@ -24,8 +18,7 @@ namespace RuntimeInspectorNamespace
                 ConditionType = "Terra.Studio.GameStart",
                 ConditionData = "OnStart",
                 IsBroadcastable = !string.IsNullOrEmpty(Broadcast),
-                Broadcast = string.IsNullOrEmpty(Broadcast) ? "None" : Broadcast,
-                // broadcastTypeIndex = Broadcast.data.broadcastTypeIndex,
+                Broadcast = string.IsNullOrEmpty(Broadcast) ? null : Broadcast,
                 totalTime = Time
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -35,12 +28,10 @@ namespace RuntimeInspectorNamespace
 
         public void Import(EntityBasedComponent data)
         {
-            var comp = JsonConvert.DeserializeObject<InGameTimerComponent>($"{data.data}");
+            var comp = JsonConvert.DeserializeObject<InGameTimerComponent>(data.data);
             Time = comp.totalTime;
-           
-            Broadcast = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
-            // Broadcast.data.broadcastTypeIndex = comp.broadcastTypeIndex;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, Broadcast, null);
+            Broadcast = comp.Broadcast;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, null);
         }
     }
 }

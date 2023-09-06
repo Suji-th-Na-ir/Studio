@@ -45,8 +45,7 @@ namespace Terra.Studio
             playVFX.data.clipIndex = obj.vfxIndex;
             broadcast = obj.Broadcast;
             executeMultipleTimes = obj.listen == Listen.Always;
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(broadcast, ""
-                    , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = GetType().Name });
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcast, null);
         }
     }
 }

@@ -4,7 +4,6 @@ using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
 namespace RuntimeInspectorNamespace
 {
@@ -17,16 +16,14 @@ namespace RuntimeInspectorNamespace
         public Atom.PlayVfx PlayVFX = new();
 
         private string guid;
+
         private void Awake()
         {
-            guid = GetInstanceID() + "_rotate";//Guid.NewGuid().ToString("N");
+            guid = GetInstanceID() + "_rotate";
             Type.Setup(guid, gameObject, GetType().Name);
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
             PlaySFX.Setup<Rotate>(gameObject);
             PlayVFX.Setup<Rotate>(gameObject);
-
-            // EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Broadcast, ""
-            //                    , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = this.GetType().Name });
         }
 
         public (string type, string data) Export()
@@ -40,14 +37,12 @@ namespace RuntimeInspectorNamespace
                 rotateBy = Type.data.degrees,
                 pauseFor = Type.data.pauseBetween,
                 repeatFor = Type.data.repeat,
-
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
                 broadcastAt = Type.data.broadcastAt,
                 IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcast),
-                Broadcast = string.IsNullOrEmpty(Type.data.broadcast) ? "None" : Type.data.broadcast,
-
+                Broadcast = string.IsNullOrEmpty(Type.data.broadcast) ? null : Type.data.broadcast,
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
@@ -74,14 +69,14 @@ namespace RuntimeInspectorNamespace
             var data = JsonConvert.SerializeObject(comp, Formatting.Indented);
             return (type, data);
         }
-        
+
         public string GetStartEvent(string _input = null)
         {
             int index = startOn.data.startIndex;
             string inputString = ((StartOn)index).ToString();
             if (!string.IsNullOrEmpty(_input))
                 inputString = _input;
-            
+
             if (Enum.TryParse(inputString, out StartOn enumValue))
             {
                 var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(enumValue);
@@ -97,18 +92,17 @@ namespace RuntimeInspectorNamespace
             string inputString = ((StartOn)index).ToString();
             if (!string.IsNullOrEmpty(_input))
                 inputString = _input;
-            
+
             if (inputString.ToLower().Contains("listen"))
             {
-                return string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName;
+                return string.IsNullOrEmpty(startOn.data.listenName) ? null : startOn.data.listenName;
             }
-
             if (Enum.TryParse(inputString, out StartOn enumValue))
             {
                 return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(enumValue);
             }
             return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOn.GameStart);
-          
+
         }
 
         private RepeatType GetRepeatType(float _value)
@@ -120,14 +114,13 @@ namespace RuntimeInspectorNamespace
 
         public void Import(EntityBasedComponent cdata)
         {
-            RotateComponent comp = JsonConvert.DeserializeObject<RotateComponent>($"{cdata.data}");
+            RotateComponent comp = JsonConvert.DeserializeObject<RotateComponent>(cdata.data);
             PlaySFX.data.canPlay = comp.canPlaySFX;
             PlaySFX.data.clipIndex = comp.sfxIndex;
             PlaySFX.data.clipName = comp.sfxName;
             PlayVFX.data.canPlay = comp.canPlayVFX;
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
-
             for (int i = 0; i < comp.axis.Length; i++)
             {
                 if (comp.axis[i] == Axis.X)
@@ -143,22 +136,16 @@ namespace RuntimeInspectorNamespace
             Type.data.degrees = comp.rotateBy;
             Type.data.pauseBetween = comp.pauseFor;
             Type.data.repeat = comp.repeatFor;
-            
-
             Type.data.broadcastAt = comp.broadcastAt;
-            Type.data.broadcast = string.IsNullOrEmpty(comp.Broadcast) ? "None" : comp.Broadcast;
+            Type.data.broadcast = comp.Broadcast;
             Type.data.listen = comp.listen;
-
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
                 startOn.data.startIndex = (int)(StartOn)result;
             }
-
             startOn.data.startName = comp.ConditionType;
-            startOn.data.listenName = (comp.ConditionData == "None")? "" : comp.ConditionData;
-            
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject,
-                this.GetType().Name, Type.data.broadcast, Type.data.listenTo);
+            startOn.data.listenName = comp.ConditionData;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Type.data.broadcast, Type.data.listenTo);
         }
 
         private void ModifyDataAsPerSelected(ref RotateComponent component)

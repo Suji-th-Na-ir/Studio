@@ -35,7 +35,7 @@ namespace Terra.Studio
                 drag = resistance,
                 showResetButton = showResetButton,
                 listen = Listen.Always,
-                Broadcast = string.IsNullOrEmpty(Broadcast) ? "None" : Broadcast,
+                Broadcast = Broadcast,
                 IsBroadcastable = !string.IsNullOrEmpty(Broadcast)
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -55,8 +55,7 @@ namespace Terra.Studio
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
             Broadcast = comp.Broadcast;
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Broadcast, ""
-                    , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = EditorOp.Resolve<DataProvider>().GetCovariance(this) });
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, null);
         }
     }
 }

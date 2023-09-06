@@ -17,10 +17,10 @@ namespace RuntimeInspectorNamespace
         public Vector3 toPoint;
         public float Speed = 1f;
         public bool Loop = false;
-        
+
         private void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), GetType().Name);
             fromPoint = transform.localPosition;
             Component.fromPoint = fromPoint;
         }
@@ -33,13 +33,10 @@ namespace RuntimeInspectorNamespace
             Component.toPoint = toPoint;
             Component.loop = Loop;
             Component.speed = Speed;
-            
             Component.IsConditionAvailable = GetStartEvent() != "";
             Component.ConditionType = GetStartEvent();
             Component.ConditionData = GetStartCondition();
-            Component.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName;
-
-            
+            Component.BroadcastListen = string.IsNullOrEmpty(startOn.data.listenName) ? null : startOn.data.listenName;
             gameObject.TrySetTrigger(false, true);
             var data = JsonConvert.SerializeObject(Component);
             return (type, data);
@@ -49,10 +46,10 @@ namespace RuntimeInspectorNamespace
         {
             int index = startOn.data.startIndex;
             string inputString = ((StartOn)index).ToString();
-            
+
             if (!string.IsNullOrEmpty(_input))
                 inputString = _input;
-            
+
             if (Enum.TryParse(inputString, out StartOn enumValue))
             {
                 var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(enumValue);
@@ -68,10 +65,10 @@ namespace RuntimeInspectorNamespace
             string inputString = ((StartOn)index).ToString();
             if (!string.IsNullOrEmpty(_input))
                 inputString = _input;
-            
+
             if (inputString.ToLower().Contains("listen"))
             {
-                return string.IsNullOrEmpty(startOn.data.listenName) ? "None" : startOn.data.listenName;
+                return string.IsNullOrEmpty(startOn.data.listenName) ? null : startOn.data.listenName;
             }
             else
             {
@@ -91,15 +88,12 @@ namespace RuntimeInspectorNamespace
             toPoint = comp.toPoint;
             Speed = comp.speed;
             Loop = comp.loop;
-
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
                 startOn.data.startIndex = (int)(StartOn)result;
             }
-            
             startOn.data.startName = comp.ConditionType;
-            startOn.data.listenName = (comp.ConditionData == "None")? "" : comp.ConditionData;
-            
+            startOn.data.listenName = comp.ConditionData;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, this.GetType().Name, null, startOn.data.listenName);
         }
     }
