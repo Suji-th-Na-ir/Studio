@@ -57,9 +57,9 @@ namespace Terra.Studio
             playVFXWhenOn.data = GetPlayVFXData(component.onStateData);
             playVFXWhenOff.data = GetPlayVFXData(component.offStateData);
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(broadcastWhenOn, ""
-                    , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = EditorOp.Resolve<DataProvider>().GetCovariance(this) });
+                    , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = GetType().Name });
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(broadcastWhenOff, ""
-                    , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = EditorOp.Resolve<DataProvider>().GetCovariance(this) });
+                    , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = GetType().Name });
         }
 
         private SwitchComponentData GetSwitchComponentData(SwitchState state, PlaySFXData playSFXData, PlayVFXData playVFXData, string broadcast)

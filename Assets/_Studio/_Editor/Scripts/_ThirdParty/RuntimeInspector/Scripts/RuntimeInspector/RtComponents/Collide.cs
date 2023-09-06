@@ -45,7 +45,7 @@ namespace Terra.Studio
             playVFX.data.clipIndex = obj.vfxIndex;
             broadcast = obj.Broadcast;
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(broadcast, ""
-                    , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = EditorOp.Resolve<DataProvider>().GetCovariance(this) });
+                    , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = GetType().Name });
         }
     }
 }

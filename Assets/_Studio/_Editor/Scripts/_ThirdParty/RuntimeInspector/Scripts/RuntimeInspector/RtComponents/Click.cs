@@ -46,7 +46,7 @@ namespace Terra.Studio
             broadcast = obj.Broadcast;
             executeMultipleTimes = obj.listen == Listen.Always;
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(broadcast, ""
-                    , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = EditorOp.Resolve<DataProvider>().GetCovariance(this) });
+                    , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = GetType().Name });
         }
     }
 }
