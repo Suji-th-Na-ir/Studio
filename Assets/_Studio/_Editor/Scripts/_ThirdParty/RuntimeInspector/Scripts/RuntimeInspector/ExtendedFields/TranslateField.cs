@@ -75,6 +75,11 @@ namespace RuntimeInspectorNamespace
             var translateType = (TranslateType)((Atom.Translate)Value).data.translateType;
             var finalPath = translateType.GetPresetName("Translate");
             var preset = ((TranslatePreset)EditorOp.Load(ResourceTag.ComponentPresets, finalPath)).Value;
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(
+                string.Empty,
+           ((Atom.Translate)Value).data.broadcast,
+                new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)Value).target, componentType = typeof(Atom.Translate).Name });
+
             LoadData(preset);
             Atom.Translate rt = (Atom.Translate)Value;
             if (rt.data.moveTo == default)

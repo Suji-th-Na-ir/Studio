@@ -40,10 +40,5 @@ namespace Terra.Studio
                 }
             }
         }
-
-        protected override void OnSkinChanged()
-        {
-            base.OnSkinChanged();
-        }
     }
 }

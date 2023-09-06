@@ -115,11 +115,12 @@ namespace RuntimeInspectorNamespace
         private void SetCustomString(string _newString)
         {
             Atom.Rotate atom = field.GetAtom();
-            atom.data.broadcast = _newString;
+          
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(_newString, 
-                _newString, 
+                atom.data.broadcast, 
                 new ComponentDisplayDock { componentGameObject = atom.target,
                     componentType = atom.componentType });
+            atom.data.broadcast = _newString;
         }
 
         private void UpdateVariablesForAll(VariableTypes _type, Object _value)

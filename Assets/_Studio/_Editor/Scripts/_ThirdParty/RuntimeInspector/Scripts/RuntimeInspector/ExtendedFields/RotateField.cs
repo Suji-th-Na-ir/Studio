@@ -70,11 +70,16 @@ namespace RuntimeInspectorNamespace
 
         private void ResetValues()
         {
-            var rotationType = (RotationType)((Atom.Rotate)Value).data.rotateType;
+            var value = (Atom.Rotate)Value;
+            var rotationType = (RotationType)value.data.rotateType;
             var finalPath = rotationType.GetPresetName("Rotate");
             var preset = ((RotatePreset)EditorOp.Load(ResourceTag.ComponentPresets, finalPath)).Value;
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(
+                string.Empty,
+                value.data.broadcast,
+                new ComponentDisplayDock() { componentGameObject = value.target, componentType = typeof(Atom.Rotate).Name });
             LoadData(preset);
-            UpdateTypeForMultiselect(rotationType,preset);
+            UpdateTypeForMultiselect(rotationType, preset);
         }
 
         private void UpdateTypeForMultiselect(RotationType _data, RotateComponentData? compData = null)

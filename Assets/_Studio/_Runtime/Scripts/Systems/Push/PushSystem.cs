@@ -47,6 +47,12 @@ namespace Terra.Studio
             {
                 return;
             }
+            if (entityRef.listen != Listen.Always)
+            {
+                var compsData = RuntimeOp.Resolve<ComponentsData>();
+                compsData.ProvideEventContext(false, entityRef.EventContext);
+                entityRef.IsExecuted = true;
+            }
             OnDemandRun(in entityRef, entity);
         }
 
@@ -88,11 +94,6 @@ namespace Terra.Studio
             if (component.IsBroadcastable)
             {
                 RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, !listenMultipleTimes);
-            }
-            if (!listenMultipleTimes)
-            {
-                var compsData = RuntimeOp.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(false, component.EventContext);
             }
             LoadUI(component, entity);
         }
