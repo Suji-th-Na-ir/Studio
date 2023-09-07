@@ -33,6 +33,8 @@ public class SelectionHandler : View
     private GameObject lastPickedGameObject;
     private void Awake()
     {
+        // setting target framerate to 90
+        Application.targetFrameRate = 90;
         EditorOp.Register(this);
         runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
     }
@@ -58,20 +60,20 @@ public class SelectionHandler : View
 
     public override void Init()
     {
-        // objectMoveGizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
-        // objectRotationGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
-        // objectScaleGizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();
-        // objectUniversalGizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
-        //
-        // ResetAllHandles();
-        //
-        // objectMoveGizmo.SetTargetObjects(_selectedObjects);
-        // objectRotationGizmo.SetTargetObjects(_selectedObjects);
-        // objectScaleGizmo.SetTargetObjects(_selectedObjects);
-        // objectUniversalGizmo.SetTargetObjects(_selectedObjects);
-        //
-        // _workGizmo = objectMoveGizmo;
-        // _workGizmoId = GizmoId.Move;
+        objectMoveGizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
+        objectRotationGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
+        objectScaleGizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();
+        objectUniversalGizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
+        
+        ResetAllHandles();
+        
+        objectMoveGizmo.SetTargetObjects(_selectedObjects);
+        objectRotationGizmo.SetTargetObjects(_selectedObjects);
+        objectScaleGizmo.SetTargetObjects(_selectedObjects);
+        objectUniversalGizmo.SetTargetObjects(_selectedObjects);
+        
+        _workGizmo = objectMoveGizmo;
+        _workGizmoId = GizmoId.Move;
     }
 
     public override void Draw()

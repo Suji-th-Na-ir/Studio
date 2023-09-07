@@ -108,10 +108,10 @@ namespace RTG
             // Note: Don't change the order :)
             RTInputDevice.Get.Update_SystemCall();
             RTFocusCamera.Get.Update_SystemCall();
-            RTScene.Get.Update_SystemCall();
+            // RTScene.Get.Update_SystemCall();
             RTSceneGrid.Get.Update_SystemCall();
             RTGizmosEngine.Get.Update_SystemCall();
-            RTUndoRedo.Get.Update_SystemCall();
+            // RTUndoRedo.Get.Update_SystemCall();
         }
 
         private void OnRenderObject()
