@@ -43,11 +43,16 @@ namespace Terra.Studio
             runtimeHierarchy = FindAnyObjectByType<RuntimeHierarchy>();
             Inspector = FindAnyObjectByType<RuntimeInspector>();
             runtimeHierarchy.OnSelectionChanged += OnSelectionChanged;
+            Inspector.OnPageIndexChanged += OnPageChanged;
             m_Broadcasters = new Dictionary<string, List<ComponentDisplayDock>>();
             m_Listners = new Dictionary<string, List<ComponentDisplayDock>>();
             m_icons = new Dictionary<GameObject, List<ComponentIconNode>>();
         }
 
+        private void OnPageChanged(int index)
+        {
+            OnSelectionChanged(null);
+        }
         public void AddComponentIcon(ComponentDisplayDock obj)
         {
             AddIcon(obj);
@@ -94,6 +99,7 @@ namespace Terra.Studio
                             if (compIcons[j].GetComponentDisplayDockTarget().Equals(obj))
                             {
                                 compIcons[j].ISBroadcasting = false;
+                                compIcons[j].IsListning = false;
                             }
                         }
                     }
@@ -175,6 +181,23 @@ namespace Terra.Studio
                 }
             }
 
+            foreach (var listner in m_Listners)
+            {
+                var allListnerObject = listner.Value;
+                for (int i = 0; i < allListnerObject.Count; i++)
+                {
+                    if (m_icons.TryGetValue(allListnerObject[i].componentGameObject, out var compIcons))
+                    {
+                        for (int j = 0; j < compIcons.Count; j++)
+                        {
+                            if (compIcons[j].GetComponentDisplayDockTarget().Equals(allListnerObject[i]))
+                            {
+                                compIcons[j].IsListning = true;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private List<ComponentIconNode> GetTargetIconsForDisplayDock(List<ComponentDisplayDock> docks)
@@ -209,8 +232,9 @@ namespace Terra.Studio
             var broadcastSprite = iconPresets.GetIcon("Broadcast");
             var broadcastNoListnerSprite = iconPresets.GetIcon("BroadcastNoListner");
             var gameWonBroadcastSprite = iconPresets.GetIcon("GameWon");
+            var listenSprite= iconPresets.GetIcon("Listen");
             var compIcon = iconGameObject.AddComponent<ComponentIconNode>();
-            compIcon.Setup(iconSprite,broadcastSprite,broadcastNoListnerSprite,gameWonBroadcastSprite, componentDisplay);
+            compIcon.Setup(iconSprite,broadcastSprite,broadcastNoListnerSprite,gameWonBroadcastSprite,listenSprite, componentDisplay);
             if (!m_icons.TryGetValue(componentDisplay.componentGameObject, out List<ComponentIconNode> value))
             {
                 if (m_icons.ContainsKey(componentDisplay.componentGameObject))
@@ -225,8 +249,6 @@ namespace Terra.Studio
             else
             {
                 m_icons[componentDisplay.componentGameObject].Add(compIcon);
-               
-
             }
 
             for (int i = 0; i < m_icons[componentDisplay.componentGameObject].Count; i++)
@@ -283,8 +305,17 @@ namespace Terra.Studio
 
         private void OnSelectionChanged(ReadOnlyCollection<Transform> selection)
         {
-           
-           
+            if (selection==null|| selection.Count == 0)
+            {
+                foreach (var item in m_icons)
+                {
+                    for (int i = 0; i < item.Value.Count; i++)
+                    {
+                        item.Value[i].isTargetSelected = true;
+                    }
+                }
+                return;
+            }
             foreach (var item in m_icons)
             {
                 for (int i = 0; i < item.Value.Count; i++)
@@ -293,6 +324,7 @@ namespace Terra.Studio
                 }
             }
 
+            
 
             foreach (var s in selection)
             {

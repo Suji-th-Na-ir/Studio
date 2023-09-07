@@ -240,7 +240,8 @@ namespace RuntimeInspectorNamespace
         public InspectedObjectChangingDelegate OnInspectedObjectChanging;
 
         public int currentPageIndex = 0;
-
+        public delegate void PageIndexChangeDelegate(int index);
+        public PageIndexChangeDelegate OnPageIndexChanged;
         private ComponentFilterDelegate m_componentFilter;
         public ComponentFilterDelegate ComponentFilter
         {
@@ -364,6 +365,7 @@ namespace RuntimeInspectorNamespace
 
             behaviourButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
             designButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
+            OnPageIndexChanged?.Invoke(1);
         }
 
         private void ShowDesignPage()
@@ -377,6 +379,7 @@ namespace RuntimeInspectorNamespace
             StartCoroutine(WaitForRefreshAndSelectAgain());
             designButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
             behaviourButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
+            OnPageIndexChanged?.Invoke(0);
         }
 
         IEnumerator WaitForRefreshAndSelectAgain()

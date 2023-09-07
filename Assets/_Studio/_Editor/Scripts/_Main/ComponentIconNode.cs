@@ -14,18 +14,19 @@ namespace Terra.Studio
 
         private Image m_PointImage;
         private Image m_BroadcastIcon;
+        private Image m_ListenIcon;
         private const float m_MinScalingDistance = 40.0f; // Minimum distance for scaling up
         private const float m_MaxScalingDistance = 0.0f; // Maximum distance for scaling down
         private const int RESOLUTION = 20;
         private float initialWidth;
         private float initialHeight;
-
+        private GameObject m_LineRenderGO;
         private Sprite m_broadcastSprite;
         private Sprite m_broadcastNoListnerSprite;
         private Sprite m_GameWonBroadcastSprite;
+        private Sprite m_ListenSprite;
         RuntimeInspector Inspector;
-        private bool m_isBroadcating = false;
-        private GameObject m_LineRenderGO;
+        private bool m_isBroadcating = false; 
         public bool ISBroadcasting
         {
             get { return m_isBroadcating; }
@@ -38,7 +39,17 @@ namespace Terra.Studio
                 }
             }
         }
-        
+
+        private bool m_isListning = false;
+        public bool IsListning
+        {
+            get { return m_isListning; }
+            set
+            {
+                m_isListning = value;
+            }
+        }
+
         public bool m_isBroadcatingGameWon = false;
         public int m_componentIndex = 0;
         public bool isTargetSelected;
@@ -82,7 +93,7 @@ namespace Terra.Studio
             m_ListnerTargetNodes.Remove(toRemove);
         }
 
-        public void Setup(Sprite icon, Sprite broadcastIcon,Sprite broadcast_noListners,Sprite gameWonIcon,  ComponentDisplayDock displayDock)
+        public void Setup(Sprite icon, Sprite broadcastIcon, Sprite broadcast_noListners, Sprite gameWonIcon, Sprite listenSprite,  ComponentDisplayDock displayDock)
         {
             Inspector = FindAnyObjectByType<RuntimeInspector>();
             m_ObjectTarget = displayDock;
@@ -113,6 +124,18 @@ namespace Terra.Studio
             m_broadcastSprite = broadcastIcon;
             m_broadcastNoListnerSprite = broadcast_noListners;
             m_GameWonBroadcastSprite = gameWonIcon;
+
+            GameObject gm2 = new GameObject("Listen_Icon");
+            var rectTransform2 = gm2.AddComponent<RectTransform>();
+            var pointImage2 = gm2.AddComponent<Image>();
+            pointImage2.rectTransform.sizeDelta = new Vector2(30, 30);
+            pointImage2.raycastTarget = false;
+            m_ListenIcon = pointImage2;
+            rectTransform2.SetParent(this.transform, false);
+            rectTransform2.anchoredPosition = m_RectTransform.anchoredPosition + new Vector2(-10, 10);
+            rectTransform2.localScale = new Vector2(initialWidth * 0.5f, initialHeight * 0.5f);
+            m_ListenSprite = listenSprite;
+            m_ListenIcon.sprite = m_ListenSprite;
             m_LineRenderGO = EditorOp.Load<GameObject>("Prefabs/Line");
         }
 
@@ -188,6 +211,22 @@ namespace Terra.Studio
             {
                 m_BroadcastIcon.gameObject.SetActive(false);
                 return;
+            }
+
+            if (IsListning)
+            {
+                if (m_BroadcastTargetNodes != null && m_BroadcastTargetNodes.Count > 0)
+                {
+                    m_ListenIcon.gameObject.SetActive(false);
+                }
+                else
+                {
+                    m_ListenIcon.gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                m_ListenIcon.gameObject.SetActive(false);
             }
 
             if (m_ListnerTargetNodes == null)
