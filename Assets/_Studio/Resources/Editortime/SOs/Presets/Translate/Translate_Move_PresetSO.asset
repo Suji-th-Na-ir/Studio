@@ -17,8 +17,8 @@ MonoBehaviour:
     moveTo: {x: 0, y: 0, z: 0}
     pauseFor: 0
     speed: 5
-    repeat: 0
+    repeat: 1
     broadcast: 
-    broadcastAt: 2
     listenTo: 
     listen: 1
+    broadcastAt: 2

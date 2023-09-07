@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -120,29 +119,9 @@ namespace Terra.Studio
             RuntimeOp.Resolve<ScoreHandler>().AddScore((int)addBy);
         }
 
-        public static void TranslateObject(TranslateParams translateParams)
-        {
-            var translate = translateParams.targetObj.AddComponent<TranslateHelper>();
-            translate.Translate(translateParams);
-        }
-
         public static void RespawnPlayer(Vector3 position)
         {
             RuntimeOp.Resolve<GameData>().PlayerRef.position = position;
         }
-    }
-
-    public struct TranslateParams
-    {
-        public Vector3 translateFrom;
-        public Vector3 translateTo;
-        public float speed;
-        public int translateTimes;
-        public bool shouldPingPong;
-        public bool shouldPause;
-        public float pauseForTime;
-        public float pauseDistance;
-        public GameObject targetObj;
-        public Action<bool> onTranslated;
     }
 }
