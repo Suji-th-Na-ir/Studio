@@ -88,6 +88,7 @@ namespace Terra.Studio
             playVFX.data.canPlay = obj.canPlayVFX;
             playVFX.data.clipIndex = obj.vfxIndex;
             playVFX.data.clipName = obj.vfxName;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcast, null);
         }
 
         private StartOn GetStart(StopRotateComponent comp)
