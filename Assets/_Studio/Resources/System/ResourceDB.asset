@@ -1888,6 +1888,30 @@ MonoBehaviour:
     guid: d5aa186d95fc84196922788e1051c643
     isPrimitive: 0
     primitiveType: 0
+  - name: Projectile 19
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Projectile 19.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Projectile 19
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5c16c201ada1f4a43965ab102abb63a9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Projectile 19
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Projectile 19.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Projectile 19
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5c16c201ada1f4a43965ab102abb63a9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Teleporter
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Teleporter.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Teleporter
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 20b2b545afc944bbab1e1bb347c546f2
+    isPrimitive: 0
+    primitiveType: 0
   watchFolders:
   - Assets/_Studio/Resources/Common
   - Assets/_Studio/Resources/Runtime
