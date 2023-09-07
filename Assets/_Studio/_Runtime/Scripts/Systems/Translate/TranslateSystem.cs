@@ -161,7 +161,7 @@ namespace Terra.Studio
         private void PerformTranslation(ref TranslateComponent component, int entity)
         {
             var step = component.speed * Time.deltaTime;
-            var movement = component.direction * step;
+            var movement = component.direction.normalized * step;
             component.RefObj.transform.position += movement;
             component.remainingDistance -= step;
             component.coveredDistance += step;
@@ -183,7 +183,7 @@ namespace Terra.Studio
         private void PerformOscillation(ref TranslateComponent component, int entity)
         {
             var step = component.speed * Time.deltaTime;
-            var movement = component.direction * step;
+            var movement = component.direction.normalized * step;
             component.RefObj.transform.position += movement;
             component.remainingDistance -= step;
             if (component.remainingDistance <= 0.01f)
