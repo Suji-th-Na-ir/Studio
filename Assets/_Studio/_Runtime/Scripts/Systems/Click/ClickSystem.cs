@@ -1,3 +1,4 @@
+using UnityEngine;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
@@ -7,6 +8,15 @@ namespace Terra.Studio
         public override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref EntityAuthorOp.GetComponent<ClickComponent>(entity);
+            if (data == null)
+            {
+                return;
+            }
+            var selection = (GameObject)data;
+            if (selection != entityRef.RefObj)
+            {
+                return;
+            }
             if (entityRef.listen != Listen.Always)
             {
                 var compsData = RuntimeOp.Resolve<ComponentsData>();
