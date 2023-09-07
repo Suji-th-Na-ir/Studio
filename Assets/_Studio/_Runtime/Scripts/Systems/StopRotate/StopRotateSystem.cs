@@ -26,15 +26,18 @@ namespace Terra.Studio
                 Debug.Log($"Rotate system not found on entity: {entity} for stop rotate to act on");
                 return;
             }
+            var compsData = RuntimeOp.Resolve<ComponentsData>();
             ref var rotateRef = ref entity.GetComponent<RotateComponent>();
-            if (!rotateRef.CanExecute)
+            rotateRef.CanExecute = false;
+            if (rotateRef.ConditionType.Equals("Terra.Studio.GameStart"))
             {
-                Debug.Log($"Rotate system is not running on entity: {entity} for stop rotate to act on");
-                return;
+                rotateRef.IsExecuted = true;
+            }
+            else if (!rotateRef.isHaltedByEvent)
+            {
+                compsData.ProvideEventContext(true, rotateRef.EventContext);
             }
             rotateRef.isHaltedByEvent = true;
-            var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(false, entityRef.EventContext);
             OnDemandRun(in entityRef, entity);
         }
 

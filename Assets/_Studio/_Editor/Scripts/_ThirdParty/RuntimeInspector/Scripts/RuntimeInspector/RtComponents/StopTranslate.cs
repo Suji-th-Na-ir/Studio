@@ -26,8 +26,9 @@ namespace Terra.Studio
         {
             startOn.Setup(gameObject,
                 Helper.GetEnumValuesAsStrings<StartOn>(),
-                typeof(StopRotate).Name);
-            startOn.data = new();
+                typeof(StopTranslate).Name);
+            playSFX.Setup<StopTranslate>(gameObject);
+            playVFX.Setup<StopTranslate>(gameObject);
         }
 
         public (string type, string data) Export()

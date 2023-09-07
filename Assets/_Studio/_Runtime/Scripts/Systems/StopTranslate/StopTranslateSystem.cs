@@ -20,21 +20,24 @@ namespace Terra.Studio
                     return;
                 }
             }
-            var isRotateFound = CheckIfRotateComponentExistsOnEntity(entity);
-            if (!isRotateFound)
+            var isTranslateFound = CheckIfRotateComponentExistsOnEntity(entity);
+            if (!isTranslateFound)
             {
                 Debug.Log($"Translate system not found on entity: {entity} for stop translate to act on");
                 return;
             }
-            ref var rotateRef = ref entity.GetComponent<TranslateComponent>();
-            if (!rotateRef.CanExecute)
-            {
-                Debug.Log($"Translate system is not running on entity: {entity} for stop translate to act on");
-                return;
-            }
-            rotateRef.isHaltedByEvent = true;
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(false, entityRef.EventContext);
+            ref var translateRef = ref entity.GetComponent<TranslateComponent>();
+            translateRef.CanExecute = false;
+            if (translateRef.ConditionType.Equals("Terra.Studio.GameStart"))
+            {
+                translateRef.IsExecuted = true;
+            }
+            else if (!translateRef.isHaltedByEvent)
+            {
+                compsData.ProvideEventContext(true, translateRef.EventContext);
+            }
+            translateRef.isHaltedByEvent = true;
             OnDemandRun(in entityRef, entity);
         }
 
