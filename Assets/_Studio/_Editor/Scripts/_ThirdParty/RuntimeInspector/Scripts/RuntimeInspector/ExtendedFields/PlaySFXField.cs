@@ -100,6 +100,10 @@ namespace RuntimeInspectorNamespace
         
         private void UpdateData(Atom.PlaySfx _sfx)
         {
+            if (_sfx == null)
+            {
+                return;
+            }
             List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
             if (selectedObjects.Count <= 1) return;
             foreach (var obj in selectedObjects)
@@ -108,7 +112,13 @@ namespace RuntimeInspectorNamespace
                 {
                     if (obj.GetInstanceID() == sfx.target.GetInstanceID())
                     {
-                        if (_sfx != null && _sfx.componentType != null && _sfx.componentType == sfx.componentType)
+                        if (!string.IsNullOrEmpty(_sfx.fieldName) &&
+                            !string.IsNullOrEmpty(sfx.fieldName) &&
+                            !_sfx.fieldName.Equals(sfx.fieldName))
+                        {
+                            continue;
+                        }
+                        if (_sfx.componentType != null && _sfx.componentType == sfx.componentType)
                         {
                             sfx.data = Helper.DeepCopy(_sfx.data);
                         }

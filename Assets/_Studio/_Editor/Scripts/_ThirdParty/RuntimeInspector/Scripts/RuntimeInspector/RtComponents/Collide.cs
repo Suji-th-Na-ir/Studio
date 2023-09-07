@@ -12,6 +12,12 @@ namespace Terra.Studio
         public Atom.PlayVfx playVFX = new();
         public bool executeMultipleTimes = true;
 
+        public void Awake()
+        {
+            playSFX.Setup<Collide>(gameObject);
+            playVFX.Setup<Collide>(gameObject);
+        }
+
         public (string type, string data) Export()
         {
             var data = new CollideComponent()
