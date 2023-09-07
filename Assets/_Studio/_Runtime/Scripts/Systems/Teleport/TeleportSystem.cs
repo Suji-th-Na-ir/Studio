@@ -18,10 +18,7 @@ namespace Terra.Studio
 
         public void OnDemandRun(in TeleportComponent component, int _)
         {
-            var refTr = component.RefObj.transform;
-            var oldPosition = component.teleportTo;
-            var newPosition = refTr.parent != null ? refTr.TransformPoint(oldPosition) : oldPosition;
-            RuntimeOp.Resolve<GameData>().PlayerRef.position = newPosition;
+            RuntimeOp.Resolve<GameData>().PlayerRef.position = component.teleportTo;
             if (component.canPlaySFX)
             {
                 RuntimeWrappers.PlaySFX(component.sfxName);
