@@ -293,11 +293,6 @@ namespace Terra.Studio
                 }
             }
 
-         
-            if (Inspector.currentPageIndex == 1)
-            {
-                return;
-            }
 
             foreach (var s in selection)
             {
