@@ -174,15 +174,12 @@ namespace Terra.Studio
                     }
                 }
 
-                var listnerNodes = GetTargetIconsForDisplayDock(listners);
-                foreach (var l in listnerNodes)
-                {
-                    l.BroadcastTargets =broadcastNode;
-                }
+                
             }
 
             foreach (var listner in m_Listners)
             {
+                var broadcasters = GetBroadcastersInSceneFor(listner.Key);
                 var allListnerObject = listner.Value;
                 for (int i = 0; i < allListnerObject.Count; i++)
                 {
@@ -192,6 +189,7 @@ namespace Terra.Studio
                         {
                             if (compIcons[j].GetComponentDisplayDockTarget().Equals(allListnerObject[i]))
                             {
+                                compIcons[j].BroadcastTargets = GetTargetIconsForDisplayDock(broadcasters);
                                 compIcons[j].IsListning = true;
                             }
                         }

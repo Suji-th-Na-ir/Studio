@@ -186,7 +186,22 @@ namespace Terra.Studio
             {
                 transform.localScale = Vector3.zero;
             }
-           
+
+            if (IsListning)
+            {
+                if (m_BroadcastTargetNodes != null && m_BroadcastTargetNodes.Count > 0)
+                {
+                    m_ListenIcon.gameObject.SetActive(false);
+                }
+                else
+                {
+                    m_ListenIcon.gameObject.SetActive(true);
+                }
+            }
+            else
+            {
+                m_ListenIcon.gameObject.SetActive(false);
+            }
 
             if (m_isBroadcating)
             {
@@ -213,21 +228,7 @@ namespace Terra.Studio
                 return;
             }
 
-            if (IsListning)
-            {
-                if (m_BroadcastTargetNodes != null && m_BroadcastTargetNodes.Count > 0)
-                {
-                    m_ListenIcon.gameObject.SetActive(false);
-                }
-                else
-                {
-                    m_ListenIcon.gameObject.SetActive(true);
-                }
-            }
-            else
-            {
-                m_ListenIcon.gameObject.SetActive(false);
-            }
+            
 
             if (m_ListnerTargetNodes == null)
                 return;
