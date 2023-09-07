@@ -3,7 +3,7 @@ using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
-    public class RotateSystem : BaseSystem
+    public class RotateSystem : BaseSystem, IEcsRunSystem
     {
         public override void OnConditionalCheck(int entity, object data)
         {
@@ -20,14 +20,24 @@ namespace Terra.Studio
                     return;
                 }
             }
+            Init(ref entityRef);
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(false, entityRef.EventContext);
-            entityRef.CanExecute = true;
-            entityRef.IsExecuted = true;
             OnDemandRun(in entityRef, entity);
         }
 
-        public void OnDemandRun(in RotateComponent rotatable, int entity)
+        private void Init(ref RotateComponent entityRef)
+        {
+            entityRef.currentRotateCount = 0;
+            entityRef.directionFactor = (entityRef.direction == Direction.Clockwise) ? 1 : -1;
+            entityRef.targetRotation = entityRef.currentRotation + (entityRef.rotateBy * entityRef.directionFactor);
+            entityRef.canPause = entityRef.pauseFor > 0f;
+            entityRef.shouldPingPong = entityRef.rotationType is RotationType.Oscillate or RotationType.OscillateForever;
+            entityRef.rotateForever = entityRef.repeatFor == int.MaxValue;
+            entityRef.CanExecute = true;
+        }
+
+        public void OnDemandRun(in RotateComponent rotatable, int _)
         {
             if (rotatable.canPlaySFX)
             {
@@ -37,34 +47,99 @@ namespace Terra.Studio
             {
                 RuntimeWrappers.PlayVFX(rotatable.vfxName, rotatable.RefObj.transform.position);
             }
-            var rotateParams = GetParams(rotatable, entity);
-            RuntimeWrappers.RotateObject(rotateParams);
         }
 
-        private RotateByParams GetParams(RotateComponent rotatable, int entity)
+        public void Run(IEcsSystems systems)
         {
-            var rotateParams = new RotateByParams()
+            var filter = systems.GetWorld().Filter<RotateComponent>().End();
+            var pool = systems.GetWorld().GetPool<RotateComponent>();
+            var totalEntitiesFinishedJob = 0;
+            foreach (var entity in filter)
             {
-                axis = rotatable.axis,
-                direction = rotatable.direction,
-                rotationTimes = rotatable.repeatFor,
-                rotationSpeed = rotatable.speed,
-                rotateBy = rotatable.rotateBy,
-                shouldPause = rotatable.pauseFor > 0f,
-                pauseForTime = rotatable.pauseFor,
-                targetObj = rotatable.RefObj,
-                shouldPingPong = rotatable.rotationType is RotationType.Oscillate or RotationType.OscillateForever,
-                onRotated = (isDone) =>
+                ref var component = ref pool.Get(entity);
+                if (!component.CanExecute)
                 {
-                    OnRotationDone(isDone, entity);
+                    continue;
                 }
-            };
-            return rotateParams;
+                if (component.IsExecuted)
+                {
+                    totalEntitiesFinishedJob++;
+                    continue;
+                }
+                if (!component.rotateForever &&
+                    component.currentRotateCount >= component.repeatFor)
+                {
+                    component.IsExecuted = true;
+                    OnRotationDone(true, entity);
+                    continue;
+                }
+                if (component.isHaltedByEvent)
+                {
+                    continue;
+                }
+                if (component.isPaused)
+                {
+                    var delta = Time.time - component.pauseStartTime;
+                    var isDone = delta >= component.pauseFor;
+                    if (isDone)
+                    {
+                        component.isPaused = false;
+                    }
+                    continue;
+                }
+                if (component.currentRotation * component.directionFactor <
+                    component.targetRotation * component.directionFactor)
+                {
+                    var rotationThisFrame = component.speed * Time.deltaTime;
+                    component.currentRotation += rotationThisFrame * component.directionFactor;
+                    var targetRotation = GetVector3(rotationThisFrame * component.directionFactor, component.axis);
+                    component.RefObj.transform.Rotate(targetRotation);
+                    continue;
+                }
+                if (component.canPause)
+                {
+                    component.pauseStartTime = Time.time;
+                    component.isPaused = true;
+                }
+                if (component.shouldPingPong)
+                {
+                    component.directionFactor *= -1;
+                }
+                component.currentRotateCount++;
+                component.currentRotation = 0f;
+                component.targetRotation = component.rotateBy * component.directionFactor;
+                OnRotationDone(false, entity);
+            }
+            if (totalEntitiesFinishedJob == filter.GetEntitiesCount())
+            {
+                RuntimeOp.Resolve<RuntimeSystem>().RemoveRunningInstance(this);
+            }
+        }
+
+        private Vector3 GetVector3(float newRotation, Axis[] axes)
+        {
+            var vector = Vector3.zero;
+            for (int i = 0; i < axes.Length; i++)
+            {
+                switch (axes[i])
+                {
+                    case Axis.X:
+                        vector.x = newRotation;
+                        break;
+                    case Axis.Y:
+                        vector.y = newRotation;
+                        break;
+                    case Axis.Z:
+                        vector.z = newRotation;
+                        break;
+                }
+            }
+            return vector;
         }
 
         private void OnRotationDone(bool isDone, int entity)
         {
-            ref var rotatable = ref EntityAuthorOp.GetComponent<RotateComponent>(entity);
+            ref var rotatable = ref entity.GetComponent<RotateComponent>();
             if (rotatable.IsBroadcastable)
             {
                 if (rotatable.broadcastAt == BroadcastAt.AtEveryInterval && !isDone)
@@ -79,6 +154,7 @@ namespace Terra.Studio
             if (rotatable.listen == Listen.Always && !rotatable.ConditionType.Equals("Terra.Studio.GameStart") && isDone)
             {
                 rotatable.IsExecuted = false;
+                rotatable.CanExecute = false;
                 var compsData = RuntimeOp.Resolve<ComponentsData>();
                 compsData.ProvideEventContext(true, rotatable.EventContext);
             }
@@ -91,7 +167,7 @@ namespace Terra.Studio
             foreach (var entity in filter)
             {
                 var rotatable = rotatePool.Get(entity);
-                if (rotatable.IsExecuted)
+                if (rotatable.CanExecute)
                 {
                     continue;
                 }
