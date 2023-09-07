@@ -88,8 +88,8 @@ namespace Terra.Studio
                 if (!go.TryGetComponent(out StudioGameObject studioGO))
                 {
                     studioGO = go.AddComponent<StudioGameObject>();
-                    studioGO.itemData = itemData;
                 }
+                studioGO.itemData = itemData;
             }
         }
 
