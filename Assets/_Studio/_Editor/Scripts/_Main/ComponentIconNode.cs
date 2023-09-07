@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net;
 using RuntimeInspectorNamespace;
 using UnityEngine;
 using UnityEngine.UI;
@@ -148,11 +143,6 @@ namespace Terra.Studio
                 return;
             }
             Vector3 effectivePos = m_ObjectTarget.componentGameObject.transform.position;
-            
-            if (m_MainCamera.WorldToScreenPoint(effectivePos + Vector3.up * 0.3f).z<0)
-            {
-                effectivePos = m_MainCamera.transform.position +Vector3.ClampMagnitude(effectivePos - m_MainCamera.transform.position, 1.0f);
-            }
             var objectScreenPos = m_MainCamera.WorldToViewportPoint(effectivePos + Vector3.up * 0.3f);
             objectScreenPos = m_MainCamera.ViewportToScreenPoint(objectScreenPos);
             var offset = m_MainCamera.WorldToViewportPoint(effectivePos + Vector3.up * 0.5f);
@@ -163,8 +153,8 @@ namespace Terra.Studio
             float scalingFactor = CalculateScalingFactor(distanceToTarget);
 
             if ((screenPoint.z > 0 &&
-    screenPoint.x > 0 && screenPoint.x <= Screen.width &&
-    screenPoint.y > 0 && screenPoint.y <= Screen.height) || isTargetSelected)
+                screenPoint.x > 0 && screenPoint.x <= Screen.width &&
+                screenPoint.y > 0 && screenPoint.y <= Screen.height) || isTargetSelected)
             {
                 m_RectTransform.localScale = new Vector3(initialWidth * scalingFactor, initialHeight * scalingFactor, 1);
                 transform.position = screenPoint;
@@ -177,12 +167,15 @@ namespace Terra.Studio
 
             if (m_isBroadcating)
             {
-                m_BroadcastIcon.gameObject.SetActive(true);
-                if(m_isBroadcatingGameWon)
+                if (scalingFactor == 0)
+                    m_BroadcastIcon.gameObject.SetActive(false);
+                else
+                    m_BroadcastIcon.gameObject.SetActive(true);
+                if (m_isBroadcatingGameWon)
                 {
                     m_BroadcastIcon.sprite = m_GameWonBroadcastSprite;
                 }
-                else if(m_LineConnectors!=null && m_ListnerTargetNodes.Count>0)
+                else if (m_LineConnectors != null && m_ListnerTargetNodes.Count > 0)
                 {
                     m_BroadcastIcon.sprite = m_broadcastSprite;
                 }
@@ -229,19 +222,17 @@ namespace Terra.Studio
             }
 
             //Update Curves
-            if (!isTargetSelected)
+           
+            if (scalingFactor == 0 || !isTargetSelected)
             {
-                if ( scalingFactor == 0)
+                for (int i = 0; i < m_LineConnectors.Count; i++)
                 {
-                    for (int i = 0; i < m_LineConnectors.Count; i++)
-                    {
-                       
-                        m_LineConnectors[i].gameObject.SetActive(false);
-                    }
-                    m_BroadcastIcon.gameObject.SetActive(false);
-                    return;
-                }
+                    m_LineConnectors[i].gameObject.SetActive(false);
+                }           
+                return;
             }
+          
+            
 
 
             for (int j = 0; j < m_ListnerTargetNodes.Count; j++)
@@ -249,7 +240,7 @@ namespace Terra.Studio
                 if (m_ListnerTargetNodes[j] == this)
                     continue;
                 if (m_ListnerTargetNodes[j] == null || !CheckIfInsideScreen(RectTransform) && !CheckIfInsideScreen(m_ListnerTargetNodes[j].RectTransform)
-                    || transform.localScale == Vector3.zero && m_ListnerTargetNodes[j].transform.localScale == Vector3.zero)
+                    || transform.localScale == Vector3.zero && m_ListnerTargetNodes[j].transform.localScale == Vector3.zero || !m_ListnerTargetNodes[j].isTargetSelected)
                 {
                     m_LineConnectors[j].gameObject.SetActive(false);
                     continue;
