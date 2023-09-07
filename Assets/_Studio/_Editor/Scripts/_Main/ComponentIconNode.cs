@@ -275,8 +275,8 @@ namespace Terra.Studio
                     endPoint =m_MainCamera.ScreenToWorldPoint(m_ListnerTargetNodes[j].transform.position);
                 }
 
-                controlPoint1 = startPoint + Vector3.up*2;
-                controlPoint2 = endPoint + Vector3.up*2;
+                controlPoint1 = startPoint + new Vector3(0, 2);
+                controlPoint2 = endPoint + new Vector3(0, 2);
 
                 for (int i = 0; i <= RESOLUTION; i++)
                 {
