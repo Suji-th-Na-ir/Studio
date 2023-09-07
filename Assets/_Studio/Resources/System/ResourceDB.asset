@@ -1912,6 +1912,70 @@ MonoBehaviour:
     guid: 20b2b545afc944bbab1e1bb347c546f2
     isPrimitive: 0
     primitiveType: 0
+  - name: Bridge_Black_White
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Bridge_Black_White.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Bridge_Black_White
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 471e7d0f2aba74b82a58045c0e562d53
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Bridge_Green_White
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Bridge_Green_White.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Bridge_Green_White
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 4359f70a121d246f2bf39824b7634843
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Bridge_Orange_White
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Bridge_Orange_White.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Bridge_Orange_White
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 80cbc8a0a9595452c8b1eb5ba66cd482
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Bridge_Purple_White
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Bridge_Purple_White.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Bridge_Purple_White
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b4ee9cf11c5b34b3ca7be520d83e6aa9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Mushroom_Blue
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Mushroom_Blue.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Mushroom_Blue
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5ab11360c6f8e470cb55683e7bca458f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Mushroom_Red
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Mushroom_Red.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Mushroom_Red
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5f503c021ccca4d08b0caafe62c3f3a6
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Mushroom_White
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Mushroom_White.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Mushroom_White
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 27ce6dc61dd804e98908ba2cd2340d03
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Mushroom_Yellow
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Mushroom_Yellow.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Mushroom_Yellow
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 9c5a37751ab9a49189393f04c5e437be
+    isPrimitive: 0
+    primitiveType: 0
   watchFolders:
   - Assets/_Studio/Resources/Common
   - Assets/_Studio/Resources/Runtime
