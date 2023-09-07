@@ -287,7 +287,12 @@ namespace Terra.Studio
                 m_LineConnectors[j].gameObject.SetActive(true);
                 m_LineConnectors[j].positionCount = points.Length;
                 m_LineConnectors[j].SetPositions(points);
-                // m_LineConnectors[j].SetLineAlpha(GetFadeValue(distanceToTarget,-1,40));
+
+                Color c=Color.white;
+                c.a = GetFadeValue(distanceToTarget, -1, 40);
+                c.a = Mathf.Clamp(c.a, 0.0f, 1.0f);
+                m_LineConnectors[j].material.SetColor("_GoodColor", c);
+                
             }
         }
 
