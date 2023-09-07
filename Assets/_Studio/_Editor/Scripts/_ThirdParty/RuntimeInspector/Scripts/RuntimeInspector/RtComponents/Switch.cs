@@ -28,6 +28,14 @@ namespace Terra.Studio
         [AliasDrawer("Play SFX")] public Atom.PlaySfx playSFXWhenOff = new();
         [AliasDrawer("Play VFX")] public Atom.PlayVfx playVFXWhenOff = new();
 
+        public void Awake()
+        {
+            playSFXWhenOn.Setup<Switch>(gameObject);
+            playVFXWhenOn.Setup<Switch>(gameObject);
+            playSFXWhenOff.Setup<Switch>(gameObject);
+            playVFXWhenOff.Setup<Switch>(gameObject);
+        }
+
         public (string type, string data) Export()
         {
             var data = new SwitchComponent()
