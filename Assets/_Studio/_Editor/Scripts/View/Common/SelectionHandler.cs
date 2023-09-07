@@ -58,20 +58,20 @@ public class SelectionHandler : View
 
     public override void Init()
     {
-        objectMoveGizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
-        objectRotationGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
-        objectScaleGizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();
-        objectUniversalGizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
-
-        ResetAllHandles();
-        
-        objectMoveGizmo.SetTargetObjects(_selectedObjects);
-        objectRotationGizmo.SetTargetObjects(_selectedObjects);
-        objectScaleGizmo.SetTargetObjects(_selectedObjects);
-        objectUniversalGizmo.SetTargetObjects(_selectedObjects);
-
-        _workGizmo = objectMoveGizmo;
-        _workGizmoId = GizmoId.Move;
+        // objectMoveGizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
+        // objectRotationGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
+        // objectScaleGizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();
+        // objectUniversalGizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
+        //
+        // ResetAllHandles();
+        //
+        // objectMoveGizmo.SetTargetObjects(_selectedObjects);
+        // objectRotationGizmo.SetTargetObjects(_selectedObjects);
+        // objectScaleGizmo.SetTargetObjects(_selectedObjects);
+        // objectUniversalGizmo.SetTargetObjects(_selectedObjects);
+        //
+        // _workGizmo = objectMoveGizmo;
+        // _workGizmoId = GizmoId.Move;
     }
 
     public override void Draw()
