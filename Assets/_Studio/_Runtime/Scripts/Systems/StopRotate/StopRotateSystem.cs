@@ -28,13 +28,13 @@ namespace Terra.Studio
             }
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             ref var rotateRef = ref entity.GetComponent<RotateComponent>();
-            rotateRef.CanExecute = false;
             if (rotateRef.ConditionType.Equals("Terra.Studio.GameStart"))
             {
                 rotateRef.IsExecuted = true;
             }
             else if (!rotateRef.isHaltedByEvent)
             {
+                rotateRef.CanExecute = false;
                 compsData.ProvideEventContext(true, rotateRef.EventContext);
             }
             rotateRef.isHaltedByEvent = true;

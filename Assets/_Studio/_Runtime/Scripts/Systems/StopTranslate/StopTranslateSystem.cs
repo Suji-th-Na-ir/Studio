@@ -28,13 +28,13 @@ namespace Terra.Studio
             }
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             ref var translateRef = ref entity.GetComponent<TranslateComponent>();
-            translateRef.CanExecute = false;
             if (translateRef.ConditionType.Equals("Terra.Studio.GameStart"))
             {
                 translateRef.IsExecuted = true;
             }
             else if (!translateRef.isHaltedByEvent)
             {
+                translateRef.CanExecute = false;
                 compsData.ProvideEventContext(true, translateRef.EventContext);
             }
             translateRef.isHaltedByEvent = true;
