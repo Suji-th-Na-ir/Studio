@@ -154,7 +154,7 @@ namespace Terra.Studio
 
             if ((screenPoint.z > 0 &&
                 screenPoint.x > 0 && screenPoint.x <= Screen.width &&
-                screenPoint.y > 0 && screenPoint.y <= Screen.height) || isTargetSelected)
+                screenPoint.y > 0 && screenPoint.y <= Screen.height))
             {
                 m_RectTransform.localScale = new Vector3(initialWidth * scalingFactor, initialHeight * scalingFactor, 1);
                 transform.position = screenPoint;
@@ -255,7 +255,7 @@ namespace Terra.Studio
                 }
                 else
                 {
-                    startPoint = m_MainCamera.ScreenToWorldPoint(RectTransform.transform.position);
+                    startPoint = m_MainCamera.ScreenToWorldPoint(m_BroadcastIcon.transform.position);
                 }
                 if (!CheckIfInsideScreen(m_ListnerTargetNodes[j].RectTransform) || m_ListnerTargetNodes[j].transform.localScale == Vector3.zero)
                 {
@@ -263,7 +263,7 @@ namespace Terra.Studio
                 }
                 else
                 {
-                    endPoint =m_MainCamera.ScreenToWorldPoint(m_ListnerTargetNodes[j].transform.position);
+                    endPoint =m_MainCamera.ScreenToWorldPoint(m_ListnerTargetNodes[j].m_BroadcastIcon.transform.position);
                 }
 
                 controlPoint1 = startPoint + new Vector3(0, 2);
