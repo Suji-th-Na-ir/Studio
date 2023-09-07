@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using PlayShifu.Terra;
 using Newtonsoft.Json;
 using RuntimeInspectorNamespace;
 
@@ -15,21 +17,29 @@ namespace Terra.Studio
             BroadcastListen
         }
 
-        public StartOn startOn;
-        public string listen = null;
+        public Atom.StartOn startOn = new();
         public string broadcast = null;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
+
+        private void Awake()
+        {
+            startOn.Setup(gameObject,
+                Helper.GetEnumValuesAsStrings<StartOn>(),
+                typeof(StopRotate).Name);
+            startOn.data = new();
+        }
 
         public (string type, string data) Export()
         {
             var data = new StopRotateComponent
             {
                 IsConditionAvailable = true,
-                ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(startOn),
+                ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(GetEnum(startOn.data.startName)),
                 ConditionData = GetConditionValue(),
                 IsBroadcastable = !string.IsNullOrEmpty(broadcast),
                 Broadcast = broadcast,
+                startIndex = startOn.data.startIndex,
                 canPlaySFX = playSFX.data.canPlay,
                 sfxName = playSFX.data.clipName,
                 sfxIndex = playSFX.data.clipIndex,
@@ -42,23 +52,34 @@ namespace Terra.Studio
             return (type, json);
         }
 
+        private StartOn GetEnum(string data)
+        {
+            if (Enum.TryParse(data, out StartOn startOn))
+            {
+                return startOn;
+            }
+            return StartOn.OnClick;
+        }
+
         private string GetConditionValue()
         {
-            if (startOn == StartOn.OnClick)
+            if (string.IsNullOrEmpty(startOn.data.startName) ||
+                startOn.data.startName.Equals(StartOn.OnClick))
             {
-                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(startOn);
+                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOn.OnClick);
             }
             else
             {
-                return listen;
+                return startOn.data.listenName;
             }
         }
 
         public void Import(EntityBasedComponent data)
         {
             var obj = JsonConvert.DeserializeObject<StopRotateComponent>(data.data);
-            startOn = GetStart(obj);
-            listen = GetListenValues(obj);
+            startOn.data.startName = GetStart(obj).ToString();
+            startOn.data.listenName = GetListenValues(obj);
+            startOn.data.startIndex = obj.startIndex;
             broadcast = obj.Broadcast;
             playSFX.data.canPlay = obj.canPlaySFX;
             playSFX.data.clipIndex = obj.sfxIndex;

@@ -25,5 +25,6 @@ namespace Terra.Studio
         public bool canPlayVFX;
         public string vfxName;
         public int vfxIndex;
+        public int startIndex;
     }
 }
