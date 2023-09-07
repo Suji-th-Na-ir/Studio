@@ -47,3 +47,5 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: 249d184d53ec04e29818cdc51c34811a, type: 3}
   - type: StopTranslate
     icon: {fileID: 21300000, guid: 691e3420e2c24436bb00232ca13fa5ca, type: 3}
+  - type: SetObjectPosition
+    icon: {fileID: 21300000, guid: f85e9babc60e144caaa6c871e335128a, type: 3}
