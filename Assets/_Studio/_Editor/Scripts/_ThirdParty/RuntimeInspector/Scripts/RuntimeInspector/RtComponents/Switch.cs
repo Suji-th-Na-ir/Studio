@@ -30,10 +30,10 @@ namespace Terra.Studio
 
         public void Awake()
         {
-            playSFXWhenOn.Setup<Switch>(gameObject);
-            playVFXWhenOn.Setup<Switch>(gameObject);
-            playSFXWhenOff.Setup<Switch>(gameObject);
-            playVFXWhenOff.Setup<Switch>(gameObject);
+            playSFXWhenOn.Setup<Switch>(gameObject, nameof(playSFXWhenOn));
+            playVFXWhenOn.Setup<Switch>(gameObject, nameof(playVFXWhenOn));
+            playSFXWhenOff.Setup<Switch>(gameObject, nameof(playSFXWhenOff));
+            playVFXWhenOff.Setup<Switch>(gameObject, nameof(playVFXWhenOff));
         }
 
         public (string type, string data) Export()
