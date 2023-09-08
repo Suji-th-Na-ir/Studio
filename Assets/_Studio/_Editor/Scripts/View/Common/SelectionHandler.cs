@@ -142,7 +142,7 @@ public class SelectionHandler : View
                         EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock
                         { componentGameObject = iObj, componentType = componentType.Name });
 
-                        var mInfo = componentType.GetField("Broadcast", BindingFlags.Public | BindingFlags.Instance);             
+                        var mInfo = componentType.GetField("Broadcast", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);             
                         if (mInfo != null)
                         {
                             var oldValue = mInfo?.GetValue(components[i]);
@@ -150,7 +150,7 @@ public class SelectionHandler : View
                                 , new ComponentDisplayDock() { componentGameObject = iObj, componentType = componentType.Name });
                         }
                         
-                        var mInfo1 = componentType.GetField("BroadcastListen", BindingFlags.Public | BindingFlags.Instance);                    
+                        var mInfo1 = componentType.GetField("BroadcastListen", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);                    
                         if (mInfo1 != null)
                         {
                             var oldValue1 = mInfo1?.GetValue(components[i]);

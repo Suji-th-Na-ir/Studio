@@ -102,7 +102,10 @@ namespace RuntimeInspectorNamespace
             }
             startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Type.data.broadcast, Type.data.listenTo);
+            var listenString = "";
+            if (startOn.data.startIndex == 3)
+                listenString = Type.data.listenTo;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Type.data.broadcast, listenString);
         }
 
         private void ModifyDataAsPerGiven(ref TranslateComponent component)

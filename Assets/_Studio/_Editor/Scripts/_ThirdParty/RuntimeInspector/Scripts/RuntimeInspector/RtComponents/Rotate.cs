@@ -128,7 +128,10 @@ namespace RuntimeInspectorNamespace
             }
             startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Type.data.broadcast, startOn.data.listenName);
+            var listenString = "";
+            if (startOn.data.startIndex == 3)
+                listenString = startOn.data.listenName;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Type.data.broadcast,listenString);
         }
 
         private void ModifyDataAsPerSelected(ref RotateComponent component)
