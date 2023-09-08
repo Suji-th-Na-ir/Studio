@@ -8,18 +8,6 @@ namespace Terra.Studio
         public override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref EntityAuthorOp.GetComponent<SetObjectPositionComponent>(entity);
-            if (entityRef.ConditionType.Equals("Terra.Studio.MouseAction"))
-            {
-                if (data == null)
-                {
-                    return;
-                }
-                var go = (GameObject)data;
-                if (entityRef.RefObj != go)
-                {
-                    return;
-                }
-            }
             entityRef.CanExecute = true;
             entityRef.IsExecuted = true;
             var comp = RuntimeOp.Resolve<ComponentsData>();

@@ -31,6 +31,7 @@ namespace Terra.Studio
             targetData.RefObj = go;
             var conditionalCheckData = new EventConditionalCheckData()
             {
+                componentName = typeof(T).FullName,
                 conditionType = targetData.ConditionType,
                 conditionData = targetData.ConditionData,
                 goRef = targetData.RefObj

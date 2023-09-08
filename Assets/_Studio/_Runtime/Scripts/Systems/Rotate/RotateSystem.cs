@@ -8,18 +8,6 @@ namespace Terra.Studio
         public override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref EntityAuthorOp.GetComponent<RotateComponent>(entity);
-            if (entityRef.ConditionType.Equals("Terra.Studio.MouseAction"))
-            {
-                if (data == null)
-                {
-                    return;
-                }
-                var selection = (GameObject)data;
-                if (selection != entityRef.RefObj)
-                {
-                    return;
-                }
-            }
             Init(ref entityRef);
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(false, entityRef.EventContext);
