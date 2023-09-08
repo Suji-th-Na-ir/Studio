@@ -155,11 +155,11 @@ namespace Terra.Studio
             GameObject gm2 = new GameObject("Listen_Icon");
             var rectTransform2 = gm2.AddComponent<RectTransform>();
             var pointImage2 = gm2.AddComponent<Image>();
-            pointImage2.rectTransform.sizeDelta = new Vector2(50, 50);
+            pointImage2.rectTransform.sizeDelta = new Vector2(40, 40);
             pointImage2.raycastTarget = false;
             m_ListenIcon = pointImage2;
             rectTransform2.SetParent(this.transform, false);
-            rectTransform2.anchoredPosition = m_RectTransform.anchoredPosition + new Vector2(-10, 10);
+            rectTransform2.anchoredPosition = m_RectTransform.anchoredPosition + new Vector2(-15, 15);
             rectTransform2.localScale = new Vector2(initialWidth * 0.5f, initialHeight * 0.5f);
             m_ListenSprite = iconPresets.GetIcon("Listen");
             m_ListenIcon.sprite = m_ListenSprite;
@@ -176,12 +176,12 @@ namespace Terra.Studio
                 GameObject gm = new GameObject("Broadcast_Icon");
                 var rectTransform1 = gm.AddComponent<RectTransform>();
                 var pointImage1 = gm.AddComponent<Image>();
-                pointImage1.rectTransform.sizeDelta = new Vector2(30, 30);
+                pointImage1.rectTransform.sizeDelta = new Vector2(40, 40);
                 pointImage1.raycastTarget = false;
                 m_BroadcastIcon.Add(pointImage1);
                 rectTransform1.SetParent(this.transform, false);
                 rectTransform1.localScale = new Vector2(initialWidth * 0.5f, initialHeight * 0.5f);
-                PositionAroundCenterImage(rectTransform1,m_BroadcastIcon.IndexOf(pointImage1),m_BroadcastIcon.Count,20,90);
+                PositionAroundCenterImage(rectTransform1,m_BroadcastIcon.IndexOf(pointImage1),m_BroadcastIcon.Count,25,90);
             }
         }
 
@@ -221,7 +221,7 @@ namespace Terra.Studio
             Vector3 effectivePos = m_ObjectTarget.componentGameObject.transform.position;
             var objectScreenPos = m_MainCamera.WorldToViewportPoint(effectivePos + Vector3.up * 0.3f);
             objectScreenPos = m_MainCamera.ViewportToScreenPoint(objectScreenPos);
-            var offset = m_MainCamera.WorldToViewportPoint(effectivePos + Vector3.up * 0.5f);
+            var offset = m_MainCamera.WorldToViewportPoint(effectivePos + Vector3.up * 0.6f);
             offset = m_MainCamera.ViewportToScreenPoint(offset);
             var radius = (objectScreenPos - offset).magnitude;
             Vector3 screenPoint = CalculateCircularPositionAtIndex(objectScreenPos, radius, 3, m_componentIndex);
