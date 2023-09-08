@@ -345,6 +345,7 @@ namespace Terra.Studio
                         || transform.localScale == Vector3.zero && allTargets[j].transform.localScale == Vector3.zero || !allTargets[j].isTargetSelected)
                     {
                         m_LineConnectors[lineConnectorIndex].gameObject.SetActive(false);
+                        lineConnectorIndex++;
                         continue;
                     }
 
