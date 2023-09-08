@@ -304,10 +304,7 @@ namespace Terra.Studio
             {
 
                 GameObject gm = Instantiate(m_LineRenderGO);
-            
-                //var rect = gm.AddComponent<RectTransform>();
-                var parent = FindAnyObjectByType<HideInHierarchy>();
-                gm.transform.SetParent(parent.transform);
+                gm.transform.SetParent(this.transform);
               
                 var uiconnector = gm.GetComponent<LineRenderer>();
                
