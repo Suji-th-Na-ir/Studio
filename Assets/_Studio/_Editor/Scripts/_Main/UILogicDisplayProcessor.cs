@@ -43,7 +43,7 @@ namespace Terra.Studio
         {
             runtimeHierarchy = FindAnyObjectByType<RuntimeHierarchy>();
             Inspector = FindAnyObjectByType<RuntimeInspector>();
-            runtimeHierarchy.OnSelectionChanged += OnSelectionChanged;
+            EditorOp.Resolve<SelectionHandler>().SelectionChanged += OnSelectionChanged;
             Inspector.OnPageIndexChanged += OnPageChanged;
             m_Broadcasters = new Dictionary<string, List<ComponentDisplayDock>>();
             m_Listners = new Dictionary<string, List<ComponentDisplayDock>>();
@@ -52,7 +52,7 @@ namespace Terra.Studio
 
         private void OnPageChanged(int index)
         {
-            OnSelectionChanged(null);
+            OnSelectionChanged(EditorOp.Resolve<SelectionHandler>().GetSelectedObjects());
         }
         public void AddComponentIcon(ComponentDisplayDock obj)
         {
@@ -211,10 +211,9 @@ namespace Terra.Studio
                     }
                 }
             }
-            List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
-            List<Transform> selectedTransforms = selectedObjects.Select(obj => obj.transform).ToList();
+    
 
-            OnSelectionChanged(new ReadOnlyCollection<Transform>(selectedTransforms));
+            OnSelectionChanged(EditorOp.Resolve<SelectionHandler>().GetSelectedObjects());
         }
 
         private List<ComponentIconNode> GetTargetIconsForDisplayDock(List<ComponentDisplayDock> docks)
@@ -335,9 +334,9 @@ namespace Terra.Studio
 
         }
 
-        private void OnSelectionChanged(ReadOnlyCollection<Transform> selection)
+        private void OnSelectionChanged(List<GameObject> selection)
         {
-            if (selection==null|| selection.Count == 0)
+            if (selection==null || selection.Count == 0)
             {
                 foreach (var item in m_icons)
                 {

@@ -31,6 +31,9 @@ public class SelectionHandler : View
     private List<GameObject> _selectedObjects = new List<GameObject>();
     private List<GameObject> prevSelectedObjects = new List<GameObject>();
     private GameObject lastPickedGameObject;
+
+    public  delegate void SelectionChangedDelegate(List<GameObject> gm);
+    public SelectionChangedDelegate SelectionChanged;
     private void Awake()
     {
         EditorOp.Register(this);
@@ -302,6 +305,7 @@ public class SelectionHandler : View
             objectScaleGizmo.Gizmo.SetEnabled(false);
             objectUniversalGizmo.Gizmo.SetEnabled(false);
         }
+        SelectionChanged?.Invoke(_selectedObjects);
     }
 
     public List<GameObject> GetPrevSelectedObjects()
