@@ -19,13 +19,14 @@ namespace Terra.Studio
             if (translateRef.ConditionType.Equals("Terra.Studio.GameStart"))
             {
                 translateRef.IsExecuted = true;
+                translateRef.isHaltedByEvent = true;
             }
-            else if (!translateRef.isHaltedByEvent)
+            else if (!translateRef.isHaltedByEvent && translateRef.CanExecute)
             {
                 translateRef.CanExecute = false;
                 compsData.ProvideEventContext(true, translateRef.EventContext);
+                translateRef.isHaltedByEvent = true;
             }
-            translateRef.isHaltedByEvent = true;
             OnDemandRun(in entityRef, entity);
         }
 

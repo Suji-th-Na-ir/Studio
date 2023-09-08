@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Linq;
 using UnityEngine.Scripting;
 using System.Collections.Generic;
 
@@ -34,7 +35,16 @@ namespace Terra.Studio
                 }
                 else
                 {
-                    Debug.Log($"Already registered! For type: {data.componentName} | Go: {data.goRef}", data.goRef);
+                    var index = objectToEvents.IndexOf(foundData);
+                    var isQueuedToBeRemoved = toBeRemovedEventIndices.Any(x => x == index);
+                    if (isQueuedToBeRemoved)
+                    {
+                        toBeRemovedEventIndices.Remove(index);
+                    }
+                    else
+                    {
+                        Debug.Log($"Already registered! For type: {data.componentName} | Go: {data.goRef}", data.goRef);
+                    }
                 }
             }
             else
@@ -53,18 +63,23 @@ namespace Terra.Studio
 
         private readonly void OnCheck(GameObject clickedObj)
         {
-            foreach (var objEvent in objectToEvents)
-            {
-                if (objEvent.objRef == clickedObj)
-                {
-                    objEvent.action?.Invoke(clickedObj);
-                }
-            }
             foreach (var index in toBeRemovedEventIndices)
             {
                 objectToEvents.RemoveAt(index);
             }
             toBeRemovedEventIndices.Clear();
+            var executables = new List<Action<object>>();
+            foreach (var objEvent in objectToEvents)
+            {
+                if (objEvent.objRef == clickedObj)
+                {
+                    executables.Add(objEvent.action);
+                }
+            }
+            foreach (var execute in executables)
+            {
+                execute?.Invoke(clickedObj);
+            }
         }
 
         private void CheckForEventListen()

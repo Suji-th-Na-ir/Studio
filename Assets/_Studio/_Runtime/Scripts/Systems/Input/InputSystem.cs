@@ -6,6 +6,7 @@ namespace Terra.Studio
     public class InputSystem : IEcsRunSystem
     {
         private bool isPressedDown;
+        private Camera mainCamera;
 
         public void Run(IEcsSystems systems)
         {
@@ -27,11 +28,20 @@ namespace Terra.Studio
 
         private GameObject GetSelection()
         {
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100f))
+            if (Physics.Raycast(GetCamera().ScreenPointToRay(Input.mousePosition), out RaycastHit hit, 100f))
             {
                 return hit.transform.gameObject;
             }
             return null;
+        }
+
+        private Camera GetCamera()
+        {
+            if (!mainCamera)
+            {
+                mainCamera = Camera.main;
+            }
+            return mainCamera;
         }
     }
 }
