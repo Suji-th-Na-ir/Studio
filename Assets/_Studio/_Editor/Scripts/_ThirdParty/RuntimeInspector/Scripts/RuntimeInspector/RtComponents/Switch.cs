@@ -34,6 +34,10 @@ namespace Terra.Studio
             playVFXWhenOn.Setup<Switch>(gameObject, nameof(playVFXWhenOn));
             playSFXWhenOff.Setup<Switch>(gameObject, nameof(playSFXWhenOff));
             playVFXWhenOff.Setup<Switch>(gameObject, nameof(playVFXWhenOff));
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(broadcastWhenOn, ""
+                                 , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = this.GetType().Name });
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(broadcastWhenOff, ""
+                                 , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = this.GetType().Name });
         }
 
         public (string type, string data) Export()
