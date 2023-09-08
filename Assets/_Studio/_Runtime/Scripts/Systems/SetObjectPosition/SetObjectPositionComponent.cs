@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Terra.Studio
 {
     [Serializable]
-    public struct PushComponent : IBaseComponent
+    public struct SetObjectPositionComponent : IBaseComponent
     {
         public bool IsConditionAvailable { get; set; }
         public string ConditionType { get; set; }
@@ -18,7 +18,7 @@ namespace Terra.Studio
         [JsonIgnore] public bool IsExecuted { get; set; }
         [JsonIgnore] public EventContext EventContext { get; set; }
         [JsonIgnore] public GameObject RefObj { get; set; }
-        [JsonIgnore] public Vector3 initialPosition;
+        [JsonConverter(typeof(Vector3Converter))] public Vector3 targetPosition;
 
         public bool canPlaySFX;
         public string sfxName;
@@ -26,8 +26,6 @@ namespace Terra.Studio
         public bool canPlayVFX;
         public string vfxName;
         public int vfxIndex;
-        public float mass;
-        public bool showResetButton;
-        public Listen listen;
+        public int startIndex;
     }
 }

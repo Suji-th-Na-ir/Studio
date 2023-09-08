@@ -16,6 +16,7 @@ namespace Terra.Studio
 
     public struct EventConditionalCheckData
     {
+        public string componentName;
         public string conditionType;
         public string conditionData;
         public GameObject goRef;

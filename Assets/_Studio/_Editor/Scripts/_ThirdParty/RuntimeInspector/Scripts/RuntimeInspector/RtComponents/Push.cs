@@ -32,7 +32,7 @@ namespace Terra.Studio
                 canPlayVFX = PlayVFX.data.canPlay,
                 vfxName = PlayVFX.data.clipName,
                 vfxIndex = PlayVFX.data.clipIndex,
-                drag = resistance,
+                mass = resistance,
                 showResetButton = showResetButton,
                 listen = Listen.Always,
                 Broadcast = Broadcast,
@@ -46,7 +46,7 @@ namespace Terra.Studio
         public void Import(EntityBasedComponent data)
         {
             var comp = JsonConvert.DeserializeObject<PushComponent>(data.data);
-            resistance = comp.drag;
+            resistance = comp.mass;
             showResetButton = comp.showResetButton;
             PlaySFX.data.canPlay = comp.canPlaySFX;
             PlaySFX.data.clipIndex = comp.sfxIndex;

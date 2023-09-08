@@ -35,6 +35,22 @@
     "Terra.Studio.MouseAction",
     "OnClick"
   ],
+  "Terra.Studio.SetObjectPosition+StartOptions.OnClick": [
+    "Terra.Studio.MouseAction",
+    "OnClick"
+  ],
+  "Terra.Studio.SetObjectPosition+StartOptions.OnPlayerCollide": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "Terra.Studio.SetObjectPosition+StartOptions.OnObjectCollide": [
+    "Terra.Studio.TriggerAction",
+    "Any"
+  ],
+  "Terra.Studio.SetObjectPosition+StartOptions.BroadcastListen": [
+    "Terra.Studio.Listener",
+    null
+  ],
   "Terra.Studio.StopRotate+StartOn.OnClick": [
     "Terra.Studio.MouseAction",
     "OnClick"
