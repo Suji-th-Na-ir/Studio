@@ -69,6 +69,14 @@ MonoBehaviour:
     ComponentName: Terra.Studio.ClickComponent
     SystemName: Terra.Studio.ClickSystem
     DrawerName: Terra.Studio.Click
+  - Key: Terra.Studio.StopRotate
+    ComponentName: Terra.Studio.StopRotateComponent
+    SystemName: Terra.Studio.StopRotateSystem
+    DrawerName: Terra.Studio.StopRotate
+  - Key: Terra.Studio.StopTranslate
+    ComponentName: Terra.Studio.StopTranslateComponent
+    SystemName: Terra.Studio.StopTranslateSystem
+    DrawerName: Terra.Studio.StopTranslate
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent

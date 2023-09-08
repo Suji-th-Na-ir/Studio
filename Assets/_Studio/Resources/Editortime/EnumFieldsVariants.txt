@@ -35,6 +35,22 @@
     "Terra.Studio.MouseAction",
     "OnClick"
   ],
+  "Terra.Studio.StopRotate+StartOn.OnClick": [
+    "Terra.Studio.MouseAction",
+    "OnClick"
+  ],
+  "Terra.Studio.StopRotate+StartOn.BroadcastListen": [
+    "Terra.Studio.Listener",
+    null
+  ],
+  "Terra.Studio.StopTranslate+StartOn.OnClick": [
+    "Terra.Studio.MouseAction",
+    "OnClick"
+  ],
+  "Terra.Studio.StopTranslate+StartOn.BroadcastListen": [
+    "Terra.Studio.Listener",
+    null
+  ],
   "Terra.Studio.Switch+StartOn.OnClick": [
     "Terra.Studio.MouseAction",
     "OnClick"
