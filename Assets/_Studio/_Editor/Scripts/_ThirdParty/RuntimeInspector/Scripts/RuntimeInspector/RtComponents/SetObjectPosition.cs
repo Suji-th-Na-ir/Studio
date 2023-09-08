@@ -21,8 +21,9 @@ namespace Terra.Studio
             BroadcastListen
         }
 
+        private readonly Vector3 INFINITY = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
         public Atom.StartOn startOn = new();
-        public Vector3 targetPosition;
+        public Vector3 targetPosition = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
         public string broadcast;
@@ -36,7 +37,7 @@ namespace Terra.Studio
 
         private void Start()
         {
-            if (targetPosition == Vector3.zero)
+            if (targetPosition == INFINITY)
             {
                 var newTarget = transform.position;
                 newTarget.z += 5f;
@@ -108,9 +109,22 @@ namespace Terra.Studio
 
         private void AssignStartOnData(SetObjectPositionComponent comp)
         {
-            if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out var result))
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOptions), out var result))
             {
-                startOn.data.startName = ((StartOn)result).ToString();
+                var startOn = (StartOptions)result;
+                var startName = startOn.ToString();
+                if (startOn == StartOptions.OnPlayerCollide || startOn == StartOptions.OnObjectCollide)
+                {
+                    if (comp.ConditionType.Equals("Player"))
+                    {
+                        startName = StartOptions.OnPlayerCollide.ToString();
+                    }
+                    else
+                    {
+                        startName = StartOptions.OnObjectCollide.ToString();
+                    }
+                }
+                this.startOn.data.startName = startName;
             }
             startOn.data.startIndex = comp.startIndex;
             startOn.data.listenName = comp.ConditionData;
