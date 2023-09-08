@@ -28,6 +28,12 @@ namespace Terra.Studio
 
         private void Init(ref TranslateComponent entityRef)
         {
+            entityRef.CanExecute = true;
+            if (entityRef.isHaltedByEvent)
+            {
+                entityRef.isHaltedByEvent = false;
+                return;
+            }
             var tr = entityRef.RefObj.transform;
             var targetPos = tr.parent == null ? entityRef.targetPosition : tr.TransformPoint(entityRef.targetPosition);
             var pauseDistance = Vector3.Distance(entityRef.startPosition, targetPos);
@@ -46,7 +52,6 @@ namespace Terra.Studio
             entityRef.coveredDistance = 0f;
             entityRef.remainingDistance = pauseDistance;
             entityRef.repeatForever = entityRef.repeatFor == int.MaxValue;
-            entityRef.CanExecute = true;
         }
 
         public void OnDemandRun(ref TranslateComponent translatable, int _)
@@ -156,7 +161,7 @@ namespace Terra.Studio
         private void PerformTranslation(ref TranslateComponent component, int entity)
         {
             var step = component.speed * Time.deltaTime;
-            var movement = component.direction * step;
+            var movement = component.direction.normalized * step;
             component.RefObj.transform.position += movement;
             component.remainingDistance -= step;
             component.coveredDistance += step;
@@ -178,7 +183,7 @@ namespace Terra.Studio
         private void PerformOscillation(ref TranslateComponent component, int entity)
         {
             var step = component.speed * Time.deltaTime;
-            var movement = component.direction * step;
+            var movement = component.direction.normalized * step;
             component.RefObj.transform.position += movement;
             component.remainingDistance -= step;
             if (component.remainingDistance <= 0.01f)

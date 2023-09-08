@@ -28,13 +28,18 @@ namespace Terra.Studio
 
         private void Init(ref RotateComponent entityRef)
         {
+            entityRef.CanExecute = true;
+            if (entityRef.isHaltedByEvent)
+            {
+                entityRef.isHaltedByEvent = false;
+                return;
+            }
             entityRef.currentRotateCount = 0;
             entityRef.directionFactor = (entityRef.direction == Direction.Clockwise) ? 1 : -1;
             entityRef.targetRotation = entityRef.currentRotation + (entityRef.rotateBy * entityRef.directionFactor);
             entityRef.canPause = entityRef.pauseFor > 0f;
             entityRef.shouldPingPong = entityRef.rotationType is RotationType.Oscillate or RotationType.OscillateForever;
             entityRef.rotateForever = entityRef.repeatFor == int.MaxValue;
-            entityRef.CanExecute = true;
         }
 
         public void OnDemandRun(in RotateComponent rotatable, int _)
