@@ -307,7 +307,7 @@ namespace Terra.Studio
             
                 //var rect = gm.AddComponent<RectTransform>();
                 var parent = FindAnyObjectByType<HideInHierarchy>();
-                gm.transform.SetParent(this.transform);
+                gm.transform.SetParent(parent.transform);
               
                 var uiconnector = gm.GetComponent<LineRenderer>();
                
