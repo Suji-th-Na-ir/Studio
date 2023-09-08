@@ -115,7 +115,7 @@ namespace Terra.Studio
                 var startName = startOn.ToString();
                 if (startOn == StartOptions.OnPlayerCollide || startOn == StartOptions.OnObjectCollide)
                 {
-                    if (comp.ConditionType.Equals("Player"))
+                    if (comp.ConditionData.Equals("Player"))
                     {
                         startName = StartOptions.OnPlayerCollide.ToString();
                     }
