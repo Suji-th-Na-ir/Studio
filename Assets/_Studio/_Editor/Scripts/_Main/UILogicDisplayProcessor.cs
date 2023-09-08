@@ -271,7 +271,25 @@ namespace Terra.Studio
 
         public void ImportVisualisation(GameObject gameObj, string component, string broadcast, string broadcastListen)
         {
-            if(!m_icons.ContainsKey(gameObj))
+            bool newcomponent = true;
+            var compdock = new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component };
+            if (m_icons.ContainsKey(gameObj))
+            {
+                if (m_icons.TryGetValue(gameObj, out var value))
+                {
+                    foreach (var v in value)
+                    {
+                        if (v.GetComponentDisplayDockTarget().Equals(compdock))
+                        { 
+                            newcomponent = false;
+                            break;
+                            }
+                    }
+                       
+                }
+            }
+
+            if(newcomponent)
             AddComponentIcon(new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
 
             UpdateBroadcastString(broadcast, "", new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
