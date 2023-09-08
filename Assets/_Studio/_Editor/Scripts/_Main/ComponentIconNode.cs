@@ -19,7 +19,7 @@ namespace Terra.Studio
         private Image m_ListenIcon;
         private const float m_MinScalingDistance = 40.0f; // Minimum distance for scaling up
         private const float m_MaxScalingDistance = 0.0f; // Maximum distance for scaling down
-        private const int RESOLUTION = 20;
+        private const int RESOLUTION = 25;
         private float initialWidth;
         private float initialHeight;
         private GameObject m_LineRenderGO;
@@ -137,7 +137,7 @@ namespace Terra.Studio
                 m_RectTransform = gameObject.AddComponent<RectTransform>();
             if (GetComponent<Image>() == null)
                 m_ComponentTypeIcon = gameObject.AddComponent<Image>();
-            m_ComponentTypeIcon.rectTransform.sizeDelta = new Vector2(30, 30);
+            m_ComponentTypeIcon.rectTransform.sizeDelta = new Vector2(50, 50);
             m_ComponentTypeIcon.sprite = iconPresets.GetIcon(displayDock.componentType);
             m_ComponentTypeIcon.raycastTarget = false;
             initialWidth = 1.5f;
@@ -155,7 +155,7 @@ namespace Terra.Studio
             GameObject gm2 = new GameObject("Listen_Icon");
             var rectTransform2 = gm2.AddComponent<RectTransform>();
             var pointImage2 = gm2.AddComponent<Image>();
-            pointImage2.rectTransform.sizeDelta = new Vector2(30, 30);
+            pointImage2.rectTransform.sizeDelta = new Vector2(50, 50);
             pointImage2.raycastTarget = false;
             m_ListenIcon = pointImage2;
             rectTransform2.SetParent(this.transform, false);
@@ -349,7 +349,7 @@ namespace Terra.Studio
                     }
 
                     Vector3[] points = new Vector3[RESOLUTION + 1];
-                    Vector3 startPoint, endPoint, controlPoint1, controlPoint2;
+                    Vector3 startPoint, endPoint;
 
                     if (!CheckIfInsideScreen(RectTransform) || transform.localScale == Vector3.zero)
                     {
@@ -368,14 +368,16 @@ namespace Terra.Studio
                         endPoint = m_MainCamera.ScreenToWorldPoint(allTargets[j].m_ListenIcon.transform.position);
                     }
 
-                    controlPoint1 = startPoint + new Vector3(0, 2);
-                    controlPoint2 = endPoint + new Vector3(0, 2);
+                    Vector3 controlPoint = (startPoint + endPoint) / 2f;
+                    controlPoint += Vector3.up * Vector3.Distance(startPoint, endPoint) / 2f;
+
+                    // controlPoint2 = endPoint + new Vector3(0, 2);
 
                     for (int i = 0; i <= RESOLUTION; i++)
                     {
                         float t = (float)i / RESOLUTION;
 
-                        points[i] = CalculateBezierPoint(startPoint, controlPoint1, controlPoint2, endPoint, t);
+                        points[i] = CalculateBezierPoint(startPoint, controlPoint, endPoint, t);
                     }
                     m_LineConnectors[lineConnectorIndex].gameObject.SetActive(true);
                    
@@ -443,12 +445,14 @@ namespace Terra.Studio
             
         }
 
-        private Vector3 CalculateBezierPoint(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
+        private Vector3 CalculateBezierPoint(Vector3 p0, Vector3 p1, Vector3 p2, float t)
         {
             float u = 1 - t;
             float tt = t * t;
             float uu = u * u;
-            Vector3 p = uu * uu * p0 + 3 * uu * t * p1 + 3 * u * tt * p2 + tt * tt * p3;
+
+            Vector3 p = (uu * p0) + (2 * u * t * p1) + (tt * p2);
+
             return p;
         }
 
