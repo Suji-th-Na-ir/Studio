@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using RuntimeInspectorNamespace;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.UI;
 
 
@@ -12,8 +14,8 @@ namespace Terra.Studio
         private RectTransform m_RectTransform;
         public RectTransform RectTransform { get { return m_RectTransform; } }
 
-        private Image m_PointImage;
-        private Image m_BroadcastIcon;
+        private Image m_ComponentTypeIcon;
+        private List<Image> m_BroadcastIcon= new List<Image>();
         private Image m_ListenIcon;
         private const float m_MinScalingDistance = 40.0f; // Minimum distance for scaling up
         private const float m_MaxScalingDistance = 0.0f; // Maximum distance for scaling down
@@ -26,18 +28,11 @@ namespace Terra.Studio
         private Sprite m_GameWonBroadcastSprite;
         private Sprite m_ListenSprite;
         RuntimeInspector Inspector;
-        private bool m_isBroadcating = false; 
-        public bool ISBroadcasting
+        
+        private bool ISBroadcasting
         {
-            get { return m_isBroadcating; }
-            set
-            {
-                m_isBroadcating = value;
-                if (!m_isBroadcating)
-                {
-                    ClearAllLineRenderers();
-                }
-            }
+            get { return m_broadcasatingStrings.Count>0; }
+           
         }
 
         private bool m_isListning = false;
@@ -55,6 +50,36 @@ namespace Terra.Studio
         public bool isTargetSelected;
         List<LineRenderer> m_LineConnectors;
 
+        [SerializeField]private List<string> m_broadcasatingStrings=new List<string>();
+        public List<string> BroadcastingStrings
+        { 
+            get { return m_broadcasatingStrings; }
+            set
+            {
+                for (int i = 0; i < value.Count; i++)
+                {
+                    if (!m_broadcasatingStrings.Contains(value[i]))
+                        m_broadcasatingStrings.Add(value[i]);
+                }
+                UpdateBroadcastIcons();
+            }
+        }
+
+        [SerializeField] private List<string> m_listeningStrings = new List<string>();
+        public List<string> ListenStrings
+        {
+            get { return m_listeningStrings; }
+            set
+            {
+                for (int i = 0; i < value.Count; i++)
+                {
+                    if (!m_listeningStrings.Contains(value[i]))
+                        m_listeningStrings.Add(value[i]);
+                }
+            }
+        }
+
+
         ComponentDisplayDock m_ObjectTarget;
         public ComponentDisplayDock GetComponentDisplayDockTarget() { return m_ObjectTarget; }
 
@@ -68,8 +93,12 @@ namespace Terra.Studio
                 if (m_ListnerTargetNodes == null)
                     m_ListnerTargetNodes = new List<ComponentIconNode>();
 
-                m_ListnerTargetNodes.Clear();
-                m_ListnerTargetNodes = value;
+                for (int i = 0; i < value.Count; i++)
+                {
+                    if (!m_ListnerTargetNodes.Contains(value[i]))
+                        m_ListnerTargetNodes.Add(value[i]);
+                }
+              //  m_ListnerTargetNodes = value;
             }
         }
 
@@ -82,10 +111,15 @@ namespace Terra.Studio
                 if (m_BroadcastTargetNodes == null)
                     m_BroadcastTargetNodes = new List<ComponentIconNode>();
 
-                m_BroadcastTargetNodes.Clear();
+                for (int i = 0; i < value.Count; i++)
+                {
+                    if (!m_BroadcastTargetNodes.Contains(value[i]))
+                        m_BroadcastTargetNodes.Add(value[i]);
+                }
                 m_BroadcastTargetNodes = value;
             }
         }
+
 
         public void RemoveListnerTargets(ComponentIconNode toRemove)
         {  
@@ -93,7 +127,7 @@ namespace Terra.Studio
             m_ListnerTargetNodes.Remove(toRemove);
         }
 
-        public void Setup(Sprite icon, Sprite broadcastIcon, Sprite broadcast_noListners, Sprite gameWonIcon, Sprite listenSprite,  ComponentDisplayDock displayDock)
+        public void Setup(ComponentIconsPreset iconPresets,  ComponentDisplayDock displayDock)
         {
             Inspector = FindAnyObjectByType<RuntimeInspector>();
             m_ObjectTarget = displayDock;
@@ -102,29 +136,22 @@ namespace Terra.Studio
             if (GetComponent<RectTransform>() == null)
                 m_RectTransform = gameObject.AddComponent<RectTransform>();
             if (GetComponent<Image>() == null)
-                m_PointImage = gameObject.AddComponent<Image>();
-            m_PointImage.rectTransform.sizeDelta = new Vector2(30, 30);
-            m_PointImage.sprite = icon;
-            m_PointImage.raycastTarget = false;
+                m_ComponentTypeIcon = gameObject.AddComponent<Image>();
+            m_ComponentTypeIcon.rectTransform.sizeDelta = new Vector2(30, 30);
+            m_ComponentTypeIcon.sprite = iconPresets.GetIcon(displayDock.componentType);
+            m_ComponentTypeIcon.raycastTarget = false;
             initialWidth = 1.5f;
             initialHeight =1.5f;
             var canvas = FindAnyObjectByType<SceneView>();
             m_RectTransform.SetParent(canvas.transform, false);
 
             //Broadcast
-            GameObject gm = new GameObject("Broadcast_Icon");
-            var rectTransform1 = gm.AddComponent<RectTransform>();
-            var pointImage1 = gm.AddComponent<Image>();
-            pointImage1.rectTransform.sizeDelta = new Vector2(30, 30);
-            pointImage1.raycastTarget = false;
-            m_BroadcastIcon = pointImage1;
-            rectTransform1.SetParent(this.transform, false);
-            rectTransform1.anchoredPosition = m_RectTransform.anchoredPosition + new Vector2(10, 10);
-            rectTransform1.localScale = new Vector2(initialWidth*0.5f,  initialHeight * 0.5f);
-            m_broadcastSprite = broadcastIcon;
-            m_broadcastNoListnerSprite = broadcast_noListners;
-            m_GameWonBroadcastSprite = gameWonIcon;
+           
+            m_broadcastSprite = iconPresets.GetIcon("Broadcast");
+            m_broadcastNoListnerSprite = iconPresets.GetIcon("BroadcastNoListner");
+            m_GameWonBroadcastSprite = iconPresets.GetIcon("GameWon");
 
+            //Listen
             GameObject gm2 = new GameObject("Listen_Icon");
             var rectTransform2 = gm2.AddComponent<RectTransform>();
             var pointImage2 = gm2.AddComponent<Image>();
@@ -134,11 +161,29 @@ namespace Terra.Studio
             rectTransform2.SetParent(this.transform, false);
             rectTransform2.anchoredPosition = m_RectTransform.anchoredPosition + new Vector2(-10, 10);
             rectTransform2.localScale = new Vector2(initialWidth * 0.5f, initialHeight * 0.5f);
-            m_ListenSprite = listenSprite;
+            m_ListenSprite = iconPresets.GetIcon("Listen");
             m_ListenIcon.sprite = m_ListenSprite;
             m_LineRenderGO = EditorOp.Load<GameObject>("Prefabs/Line");
         }
 
+
+        private void UpdateBroadcastIcons()
+        {
+            var remaing = BroadcastingStrings.Count - m_BroadcastIcon.Count;
+
+            for (int i = 0; i < remaing; i++)
+            {
+                GameObject gm = new GameObject("Broadcast_Icon");
+                var rectTransform1 = gm.AddComponent<RectTransform>();
+                var pointImage1 = gm.AddComponent<Image>();
+                pointImage1.rectTransform.sizeDelta = new Vector2(30, 30);
+                pointImage1.raycastTarget = false;
+                m_BroadcastIcon.Add(pointImage1);
+                rectTransform1.SetParent(this.transform, false);
+                rectTransform1.localScale = new Vector2(initialWidth * 0.5f, initialHeight * 0.5f);
+                PositionAroundCenterImage(rectTransform1,m_BroadcastIcon.IndexOf(pointImage1),m_BroadcastIcon.Count,20,90);
+            }
+        }
 
         public void DestroyThisIcon()
         {
@@ -149,16 +194,24 @@ namespace Terra.Studio
         private void Update()
         {
 
-            if(Inspector.currentPageIndex==0)
+            if (Inspector.currentPageIndex == 0)
             {
-                m_BroadcastIcon.enabled = m_PointImage.enabled = false;
+                foreach (var b in m_BroadcastIcon)
+                {
+                    b.enabled = false;
+                }
+                m_ComponentTypeIcon.enabled = false;
                 RectTransform.localScale = Vector3.zero;
                 ClearAllLineRenderers();
                 return;
             }
             else
             {
-                m_BroadcastIcon.enabled = m_PointImage.enabled = true;
+                foreach (var b in m_BroadcastIcon)
+                {
+                    b.enabled = true;
+                }
+                m_ComponentTypeIcon.enabled = true;
             }
 
             if (IsTargetDestroyed())
@@ -203,31 +256,40 @@ namespace Terra.Studio
                 m_ListenIcon.gameObject.SetActive(false);
             }
 
-            if (m_isBroadcating)
+            for (int i = 0; i < m_BroadcastIcon.Count; i++)
             {
-                if (scalingFactor == 0)
-                    m_BroadcastIcon.gameObject.SetActive(false);
-                else
-                    m_BroadcastIcon.gameObject.SetActive(true);
-                if (m_isBroadcatingGameWon)
+                if (i > BroadcastingStrings.Count-1)
                 {
-                    m_BroadcastIcon.sprite = m_GameWonBroadcastSprite;
-                }
-                else if (m_LineConnectors != null && m_ListnerTargetNodes.Count > 0)
-                {
-                    m_BroadcastIcon.sprite = m_broadcastSprite;
+                    m_BroadcastIcon[i].gameObject.SetActive(false);
                 }
                 else
                 {
-                    m_BroadcastIcon.sprite = m_broadcastNoListnerSprite;
+                    if (ISBroadcasting)
+                    {
+                        if (scalingFactor == 0)
+                            m_BroadcastIcon[i].gameObject.SetActive(false);
+                        else
+                            m_BroadcastIcon[i].gameObject.SetActive(true);
+                        if (m_isBroadcatingGameWon)
+                        {
+                            m_BroadcastIcon[i].sprite = m_GameWonBroadcastSprite;
+                        }
+                        else if (m_LineConnectors != null && m_ListnerTargetNodes?.FindAll(a => a.ListenStrings.Contains(BroadcastingStrings[i])).Count != 0)
+                        {
+                            m_BroadcastIcon[i].sprite = m_broadcastSprite;
+                        }
+                        else
+                        {
+                            m_BroadcastIcon[i].sprite = m_broadcastNoListnerSprite;
+                        }
+                    }
+                    else
+                    {
+                        m_BroadcastIcon[i].gameObject.SetActive(false);
+                        
+                    }
                 }
             }
-            else
-            {
-                m_BroadcastIcon.gameObject.SetActive(false);
-                return;
-            }
-
             
 
             if (m_ListnerTargetNodes == null)
@@ -242,6 +304,7 @@ namespace Terra.Studio
             {
 
                 GameObject gm = Instantiate(m_LineRenderGO);
+            
                 //var rect = gm.AddComponent<RectTransform>();
                 var parent = FindAnyObjectByType<HideInHierarchy>();
                 gm.transform.SetParent(parent.transform);
@@ -249,6 +312,7 @@ namespace Terra.Studio
                 var uiconnector = gm.GetComponent<LineRenderer>();
                
                 m_LineConnectors.Add(uiconnector);
+                gm.name = $"Line_{m_ListnerTargetNodes[m_LineConnectors.IndexOf(uiconnector)]}";
 
             }
 
@@ -271,59 +335,63 @@ namespace Terra.Studio
                 }           
                 return;
             }
-          
-            
 
-
-            for (int j = 0; j < m_ListnerTargetNodes.Count; j++)
+            int lineConnectorIndex = 0;
+            for (int k = 0; k < m_broadcasatingStrings.Count; k++)
             {
-                if (m_ListnerTargetNodes[j] == this)
-                    continue;
-                if (m_ListnerTargetNodes[j] == null || !CheckIfInsideScreen(RectTransform) && !CheckIfInsideScreen(m_ListnerTargetNodes[j].RectTransform)
-                    || transform.localScale == Vector3.zero && m_ListnerTargetNodes[j].transform.localScale == Vector3.zero || !m_ListnerTargetNodes[j].isTargetSelected)
+                var allTargets = m_ListnerTargetNodes?.FindAll(a => a.ListenStrings.Contains(m_broadcasatingStrings[k]));
+                for (int j = 0; j < allTargets.Count; j++)
                 {
-                    m_LineConnectors[j].gameObject.SetActive(false);
-                    continue;
-                }
+                    if (allTargets[j] == this)
+                        continue;
+                    if (allTargets[j] == null || !CheckIfInsideScreen(RectTransform) && !CheckIfInsideScreen(allTargets[j].RectTransform)
+                        || transform.localScale == Vector3.zero && allTargets[j].transform.localScale == Vector3.zero || !allTargets[j].isTargetSelected)
+                    {
+                        m_LineConnectors[lineConnectorIndex].gameObject.SetActive(false);
+                        continue;
+                    }
 
-                Vector3[] points = new Vector3[RESOLUTION + 1];
-                Vector3 startPoint, endPoint, controlPoint1, controlPoint2;
+                    Vector3[] points = new Vector3[RESOLUTION + 1];
+                    Vector3 startPoint, endPoint, controlPoint1, controlPoint2;
 
-                if (!CheckIfInsideScreen(RectTransform) || transform.localScale == Vector3.zero)
-                {
-                   startPoint= m_ObjectTarget.componentGameObject.transform.position;
-                }
-                else
-                {
-                    startPoint = m_MainCamera.ScreenToWorldPoint(m_BroadcastIcon.transform.position);
-                }
-                if (!CheckIfInsideScreen(m_ListnerTargetNodes[j].RectTransform) || m_ListnerTargetNodes[j].transform.localScale == Vector3.zero)
-                {
-                    endPoint = m_ListnerTargetNodes[j].m_ObjectTarget.componentGameObject.transform.position;
-                }
-                else
-                {
-                    endPoint =m_MainCamera.ScreenToWorldPoint(m_ListnerTargetNodes[j].m_BroadcastIcon.transform.position);
-                }
+                    if (!CheckIfInsideScreen(RectTransform) || transform.localScale == Vector3.zero)
+                    {
+                        startPoint = m_ObjectTarget.componentGameObject.transform.position;
+                    }
+                    else
+                    {
+                        startPoint = m_MainCamera.ScreenToWorldPoint(m_BroadcastIcon[k].transform.position);
+                    }
+                    if (!CheckIfInsideScreen(allTargets[j].RectTransform) || allTargets[j].transform.localScale == Vector3.zero)
+                    {
+                        endPoint = allTargets[j].m_ObjectTarget.componentGameObject.transform.position;
+                    }
+                    else
+                    {
+                        endPoint = m_MainCamera.ScreenToWorldPoint(allTargets[j].m_ListenIcon.transform.position);
+                    }
 
-                controlPoint1 = startPoint + new Vector3(0, 2);
-                controlPoint2 = endPoint + new Vector3(0, 2);
+                    controlPoint1 = startPoint + new Vector3(0, 2);
+                    controlPoint2 = endPoint + new Vector3(0, 2);
 
-                for (int i = 0; i <= RESOLUTION; i++)
-                {
-                    float t = (float)i / RESOLUTION;
+                    for (int i = 0; i <= RESOLUTION; i++)
+                    {
+                        float t = (float)i / RESOLUTION;
 
-                    points[i] = CalculateBezierPoint(startPoint, controlPoint1, controlPoint2, endPoint, t);
+                        points[i] = CalculateBezierPoint(startPoint, controlPoint1, controlPoint2, endPoint, t);
+                    }
+                    m_LineConnectors[lineConnectorIndex].gameObject.SetActive(true);
+                   
+                    m_LineConnectors[lineConnectorIndex].positionCount = points.Length;
+                    m_LineConnectors[lineConnectorIndex].SetPositions(points);
+
+                    Color c = Color.white;
+                    c.a = GetFadeValue(distanceToTarget, -1, 40);
+                    c.a = Mathf.Clamp(c.a, 0.0f, 1.0f);
+                    m_LineConnectors[lineConnectorIndex].material.SetColor("_GoodColor", c);
+                    lineConnectorIndex++;
+
                 }
-                m_LineConnectors[j].gameObject.SetActive(true);
-                m_LineConnectors[j].positionCount = points.Length;
-                m_LineConnectors[j].SetPositions(points);
-
-                Color c=Color.white;
-                c.a = GetFadeValue(distanceToTarget, -1, 40);
-                c.a = Mathf.Clamp(c.a, 0.0f, 1.0f);
-                m_LineConnectors[j].material.SetColor("_GoodColor", c);
-                
             }
         }
 
@@ -352,6 +420,20 @@ namespace Terra.Studio
             return offsetPosition;
         }
 
+        void PositionAroundCenterImage(RectTransform imageToPosition, int index, int totalImages,float radius, float totalAngle)
+        {
+            float angleIncrement = totalAngle / totalImages;
+            float startingAngle = Mathf.PI / 4.0f; // 60 degrees in radians
+
+            // Calculate the angle in radians, starting from the top and moving clockwise.
+            float angle = startingAngle - index * angleIncrement;
+
+            float xOffset = radius * Mathf.Cos(angle);
+            float yOffset = radius * Mathf.Sin(angle);
+            Vector2 offsetPosition = new Vector2(xOffset, yOffset);
+            imageToPosition.anchoredPosition = offsetPosition;
+        }
+ 
         private bool CheckIfInsideScreen(RectTransform rect)
         {
             Vector2 anchoredPosition = rect.anchoredPosition;

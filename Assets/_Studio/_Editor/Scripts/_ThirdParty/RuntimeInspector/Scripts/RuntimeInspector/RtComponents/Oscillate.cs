@@ -19,7 +19,7 @@ namespace RuntimeInspectorNamespace
 
         private void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), GetType().Name);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), GetType().Name,startOn.data.startIndex==3);
             fromPoint = transform.localPosition;
             Component.fromPoint = fromPoint;
         }

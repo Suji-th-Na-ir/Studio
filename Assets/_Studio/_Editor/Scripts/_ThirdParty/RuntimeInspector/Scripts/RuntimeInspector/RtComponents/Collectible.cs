@@ -25,7 +25,7 @@ namespace RuntimeInspectorNamespace
 
         public void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>(), GetType().Name);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>(), GetType().Name,false);
             PlaySFX.Setup<Collectible>(gameObject);
             PlayVFX.Setup<Collectible>(gameObject);
         }

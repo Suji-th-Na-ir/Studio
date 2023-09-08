@@ -18,13 +18,14 @@ namespace Terra.Studio
             [HideInInspector] public List<string> StartList = new List<string>();
             [HideInInspector] public string componentType = null;
 
-            public void Setup(GameObject _target, List<string> _list, string _componentType)
+            public void Setup(GameObject _target, List<string> _list, string _componentType,bool updateListen)
             {
                 StartList = _list;
                 target = _target;
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
                 componentType = _componentType;
+                if(updateListen)
                 EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(data.listenName, ""
                                 , new ComponentDisplayDock() { componentGameObject = _target, componentType = _componentType });
             }

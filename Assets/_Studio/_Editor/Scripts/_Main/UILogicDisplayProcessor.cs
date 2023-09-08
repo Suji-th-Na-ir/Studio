@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using RuntimeInspectorNamespace;
 using UnityEngine;
 
@@ -98,8 +99,9 @@ namespace Terra.Studio
                         {
                             if (compIcons[j].GetComponentDisplayDockTarget().Equals(obj))
                             {
-                                compIcons[j].ISBroadcasting = false;
                                 compIcons[j].IsListning = false;
+                                compIcons[j].BroadcastingStrings.Clear();
+                                compIcons[j].ListenStrings.Clear();
                             }
                         }
                     }
@@ -148,6 +150,18 @@ namespace Terra.Studio
 
         private void ValidateBroadcastListen()
         {
+            foreach (var icons in m_icons)
+            {
+                var comp = icons.Value;
+                for (int i = 0; i < comp.Count; i++)
+                {
+                    comp[i]?.ListnerTargets?.Clear();
+                    comp[i]?.BroadcastTargets?.Clear();
+                    comp[i]?.BroadcastingStrings.Clear();
+                    comp[i]?.ListenStrings.Clear();
+
+                }
+            }
             foreach (var broadcast in m_Broadcasters)
             {
                 var listners = GetListnersInSceneFor(broadcast.Key);
@@ -164,11 +178,11 @@ namespace Terra.Studio
                             {
                                 broadcastNode.Add(compIcons[j]);
                                 compIcons[j].ListnerTargets = GetTargetIconsForDisplayDock(listners);
-                                compIcons[j].ISBroadcasting = true;
                                 if (broadcast.Key == "Game Win")
                                     compIcons[j].m_isBroadcatingGameWon = true;
                                 else
                                     compIcons[j].m_isBroadcatingGameWon = false;
+                                compIcons[j].BroadcastingStrings = new List<string> { broadcast.Key };
                             }
                         }
                     }
@@ -191,11 +205,16 @@ namespace Terra.Studio
                             {
                                 compIcons[j].BroadcastTargets = GetTargetIconsForDisplayDock(broadcasters);
                                 compIcons[j].IsListning = true;
+                                compIcons[j].ListenStrings= new List<string> { listner.Key };
                             }
                         }
                     }
                 }
             }
+            List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            List<Transform> selectedTransforms = selectedObjects.Select(obj => obj.transform).ToList();
+
+            OnSelectionChanged(new ReadOnlyCollection<Transform>(selectedTransforms));
         }
 
         private List<ComponentIconNode> GetTargetIconsForDisplayDock(List<ComponentDisplayDock> docks)
@@ -226,13 +245,8 @@ namespace Terra.Studio
         {
             GameObject iconGameObject = new GameObject($"Icon{componentDisplay.componentGameObject.name}_{componentDisplay.componentType}");
          
-            var iconSprite = iconPresets.GetIcon(componentDisplay.componentType);
-            var broadcastSprite = iconPresets.GetIcon("Broadcast");
-            var broadcastNoListnerSprite = iconPresets.GetIcon("BroadcastNoListner");
-            var gameWonBroadcastSprite = iconPresets.GetIcon("GameWon");
-            var listenSprite= iconPresets.GetIcon("Listen");
             var compIcon = iconGameObject.AddComponent<ComponentIconNode>();
-            compIcon.Setup(iconSprite,broadcastSprite,broadcastNoListnerSprite,gameWonBroadcastSprite,listenSprite, componentDisplay);
+            compIcon.Setup(iconPresets, componentDisplay);
             if (!m_icons.TryGetValue(componentDisplay.componentGameObject, out List<ComponentIconNode> value))
             {
                 if (m_icons.ContainsKey(componentDisplay.componentGameObject))
@@ -257,7 +271,9 @@ namespace Terra.Studio
 
         public void ImportVisualisation(GameObject gameObj, string component, string broadcast, string broadcastListen)
         {
+            if(!m_icons.ContainsKey(gameObj))
             AddComponentIcon(new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
+
             UpdateBroadcastString(broadcast, "", new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
             UpdateListenerString(broadcastListen, "", new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
         }
