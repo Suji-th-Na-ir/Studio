@@ -8,18 +8,6 @@ namespace Terra.Studio
         public override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref EntityAuthorOp.GetComponent<StopTranslateComponent>(entity);
-            if (entityRef.ConditionType.Equals("Terra.Studio.MouseAction"))
-            {
-                if (data == null)
-                {
-                    return;
-                }
-                var selection = (GameObject)data;
-                if (selection != entityRef.RefObj)
-                {
-                    return;
-                }
-            }
             var isTranslateFound = CheckIfRotateComponentExistsOnEntity(entity);
             if (!isTranslateFound)
             {
@@ -31,13 +19,14 @@ namespace Terra.Studio
             if (translateRef.ConditionType.Equals("Terra.Studio.GameStart"))
             {
                 translateRef.IsExecuted = true;
+                translateRef.isHaltedByEvent = true;
             }
-            else if (!translateRef.isHaltedByEvent)
+            else if (!translateRef.isHaltedByEvent && translateRef.CanExecute)
             {
                 translateRef.CanExecute = false;
                 compsData.ProvideEventContext(true, translateRef.EventContext);
+                translateRef.isHaltedByEvent = true;
             }
-            translateRef.isHaltedByEvent = true;
             OnDemandRun(in entityRef, entity);
         }
 

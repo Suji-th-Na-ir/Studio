@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using RuntimeInspectorNamespace;
 using UnityEngine;
 
 namespace Terra.Studio
@@ -22,6 +25,9 @@ namespace Terra.Studio
         private List<ComponentDisplayDock> GetListnersInSceneFor(string broadcastString) => m_Listners.TryGetValue(broadcastString, out var value) ? value :new List<ComponentDisplayDock>();
         private List<ComponentDisplayDock> GetBroadcastersInSceneFor(string listenString) => m_Broadcasters.TryGetValue(listenString, out var value) ? value : new List<ComponentDisplayDock>();
 
+        private RuntimeHierarchy runtimeHierarchy;
+
+        public RuntimeInspector Inspector { get; private set; }
 
         private void Awake()
         {
@@ -35,11 +41,19 @@ namespace Terra.Studio
 
         public void Init()
         {
+            runtimeHierarchy = FindAnyObjectByType<RuntimeHierarchy>();
+            Inspector = FindAnyObjectByType<RuntimeInspector>();
+            EditorOp.Resolve<SelectionHandler>().SelectionChanged += OnSelectionChanged;
+            Inspector.OnPageIndexChanged += OnPageChanged;
             m_Broadcasters = new Dictionary<string, List<ComponentDisplayDock>>();
             m_Listners = new Dictionary<string, List<ComponentDisplayDock>>();
             m_icons = new Dictionary<GameObject, List<ComponentIconNode>>();
         }
 
+        private void OnPageChanged(int index)
+        {
+            OnSelectionChanged(EditorOp.Resolve<SelectionHandler>().GetSelectedObjects());
+        }
         public void AddComponentIcon(ComponentDisplayDock obj)
         {
             AddIcon(obj);
@@ -85,7 +99,9 @@ namespace Terra.Studio
                         {
                             if (compIcons[j].GetComponentDisplayDockTarget().Equals(obj))
                             {
-                                compIcons[j].ISBroadcasting = false;
+                                compIcons[j].IsListning = false;
+                                compIcons[j].BroadcastingStrings.Clear();
+                                compIcons[j].ListenStrings.Clear();
                             }
                         }
                     }
@@ -134,10 +150,24 @@ namespace Terra.Studio
 
         private void ValidateBroadcastListen()
         {
+            foreach (var icons in m_icons)
+            {
+                var comp = icons.Value;
+                for (int i = 0; i < comp.Count; i++)
+                {
+                    comp[i]?.ListnerTargets?.Clear();
+                    comp[i]?.BroadcastTargets?.Clear();
+                    comp[i]?.BroadcastingStrings.Clear();
+                    comp[i]?.ListenStrings.Clear();
+
+                }
+            }
             foreach (var broadcast in m_Broadcasters)
             {
                 var listners = GetListnersInSceneFor(broadcast.Key);
                 var allbroadCastObject = broadcast.Value;
+
+                List<ComponentIconNode> broadcastNode = new List<ComponentIconNode>();
                 for (int i = 0; i < allbroadCastObject.Count; i++)
                 {
                     if (m_icons.TryGetValue(allbroadCastObject[i].componentGameObject, out var compIcons))
@@ -146,18 +176,44 @@ namespace Terra.Studio
                         {
                             if (compIcons[j].GetComponentDisplayDockTarget().Equals(allbroadCastObject[i]))
                             {
+                                broadcastNode.Add(compIcons[j]);
                                 compIcons[j].ListnerTargets = GetTargetIconsForDisplayDock(listners);
-                                compIcons[j].ISBroadcasting = true;
                                 if (broadcast.Key == "Game Win")
                                     compIcons[j].m_isBroadcatingGameWon = true;
                                 else
                                     compIcons[j].m_isBroadcatingGameWon = false;
+                                compIcons[j].BroadcastingStrings = new List<string> { broadcast.Key };
+                            }
+                        }
+                    }
+                }
+
+                
+            }
+
+            foreach (var listner in m_Listners)
+            {
+                var broadcasters = GetBroadcastersInSceneFor(listner.Key);
+                var allListnerObject = listner.Value;
+                for (int i = 0; i < allListnerObject.Count; i++)
+                {
+                    if (m_icons.TryGetValue(allListnerObject[i].componentGameObject, out var compIcons))
+                    {
+                        for (int j = 0; j < compIcons.Count; j++)
+                        {
+                            if (compIcons[j].GetComponentDisplayDockTarget().Equals(allListnerObject[i]))
+                            {
+                                compIcons[j].BroadcastTargets = GetTargetIconsForDisplayDock(broadcasters);
+                                compIcons[j].IsListning = true;
+                                compIcons[j].ListenStrings= new List<string> { listner.Key };
                             }
                         }
                     }
                 }
             }
+    
 
+            OnSelectionChanged(EditorOp.Resolve<SelectionHandler>().GetSelectedObjects());
         }
 
         private List<ComponentIconNode> GetTargetIconsForDisplayDock(List<ComponentDisplayDock> docks)
@@ -188,12 +244,8 @@ namespace Terra.Studio
         {
             GameObject iconGameObject = new GameObject($"Icon{componentDisplay.componentGameObject.name}_{componentDisplay.componentType}");
          
-            var iconSprite = iconPresets.GetIcon(componentDisplay.componentType);
-            var broadcastSprite = iconPresets.GetIcon("Broadcast");
-            var broadcastNoListnerSprite = iconPresets.GetIcon("BroadcastNoListner");
-            var gameWonBroadcastSprite = iconPresets.GetIcon("GameWon");
             var compIcon = iconGameObject.AddComponent<ComponentIconNode>();
-            compIcon.Setup(iconSprite,broadcastSprite,broadcastNoListnerSprite,gameWonBroadcastSprite, componentDisplay);
+            compIcon.Setup(iconPresets, componentDisplay);
             if (!m_icons.TryGetValue(componentDisplay.componentGameObject, out List<ComponentIconNode> value))
             {
                 if (m_icons.ContainsKey(componentDisplay.componentGameObject))
@@ -208,8 +260,6 @@ namespace Terra.Studio
             else
             {
                 m_icons[componentDisplay.componentGameObject].Add(compIcon);
-               
-
             }
 
             for (int i = 0; i < m_icons[componentDisplay.componentGameObject].Count; i++)
@@ -220,7 +270,27 @@ namespace Terra.Studio
 
         public void ImportVisualisation(GameObject gameObj, string component, string broadcast, string broadcastListen)
         {
+            bool newcomponent = true;
+            var compdock = new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component };
+            if (m_icons.ContainsKey(gameObj))
+            {
+                if (m_icons.TryGetValue(gameObj, out var value))
+                {
+                    foreach (var v in value)
+                    {
+                        if (v.GetComponentDisplayDockTarget().Equals(compdock))
+                        { 
+                            newcomponent = false;
+                            break;
+                            }
+                    }
+                       
+                }
+            }
+
+            if(newcomponent)
             AddComponentIcon(new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
+
             UpdateBroadcastString(broadcast, "", new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
             UpdateListenerString(broadcastListen, "", new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
         }
@@ -262,6 +332,58 @@ namespace Terra.Studio
                     listner.Value.Remove(componentDisplay);
             }
 
+        }
+
+        private void OnSelectionChanged(List<GameObject> selection)
+        {
+            if (selection==null || selection.Count == 0)
+            {
+                foreach (var item in m_icons)
+                {
+                    for (int i = 0; i < item.Value.Count; i++)
+                    {
+                        item.Value[i].isTargetSelected = true;
+                    }
+                }
+                return;
+            }
+            foreach (var item in m_icons)
+            {
+                for (int i = 0; i < item.Value.Count; i++)
+                {
+                    item.Value[i].isTargetSelected = false;
+                }
+            }
+
+            
+
+            foreach (var s in selection)
+            {
+                if (m_icons.TryGetValue(s.gameObject, out var value))
+                {
+                
+                    for (int i = 0; i < value.Count; i++)
+                    {
+                        value[i].isTargetSelected = true;
+
+                        if (value[i].ListnerTargets != null)
+                            foreach (var l in value[i].ListnerTargets)
+                            {
+                                l.isTargetSelected = true;
+                            }
+
+                        if (value[i].BroadcastTargets != null)
+                            foreach (var b in value[i].BroadcastTargets)
+                            {
+                                b.isTargetSelected = true;
+                            }
+                    }
+
+                }
+            }
+           
+
+            
         }
     }
 }

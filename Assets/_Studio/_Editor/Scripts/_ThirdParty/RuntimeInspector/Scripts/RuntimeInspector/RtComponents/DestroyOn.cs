@@ -25,7 +25,7 @@ namespace RuntimeInspectorNamespace
 
         public void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), GetType().Name);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), GetType().Name,startOn.data.startIndex==2);
             PlaySFX.Setup<DestroyOn>(gameObject);
             PlayVFX.Setup<DestroyOn>(gameObject);
         }
@@ -90,7 +90,10 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.canPlay = comp.canPlayVFX;
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, startOn.data.listenName);
+            string listenstring = "";
+            if (startOn.data.startIndex == 2)
+                listenstring = startOn.data.listenName;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, listenstring);
         }
     }
 }

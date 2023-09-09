@@ -3,6 +3,7 @@ using RuntimeInspectorNamespace;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Serialization;
+using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
@@ -18,15 +19,21 @@ namespace Terra.Studio
             [HideInInspector] public List<string> StartList = new List<string>();
             [HideInInspector] public string componentType = null;
 
-            public void Setup(GameObject _target, List<string> _list, string _componentType)
+            public void Setup(GameObject _target, List<string> _list, string _componentType,bool updateListen)
             {
                 StartList = _list;
                 target = _target;
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
                 componentType = _componentType;
+                if(updateListen)
                 EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(data.listenName, ""
                                 , new ComponentDisplayDock() { componentGameObject = _target, componentType = _componentType });
+                data = new();
+                if (StartList.Count >= data.startIndex)
+                {
+                    data.startName = StartList[data.startIndex];
+                }
             }
         }
 
@@ -47,6 +54,8 @@ namespace Terra.Studio
                 this.fieldName = fieldName;
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
+                data = new();
+                data.clipName = Helper.GetSfxClipNameByIndex(data.clipIndex);
             }
         }
 
@@ -67,6 +76,8 @@ namespace Terra.Studio
                 this.fieldName = fieldName;
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
+                data = new();
+                data.clipName = Helper.GetSfxClipNameByIndex(data.clipIndex);
             }
         }
 

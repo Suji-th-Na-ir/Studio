@@ -31,6 +31,9 @@ public class SelectionHandler : View
     private List<GameObject> _selectedObjects = new List<GameObject>();
     private List<GameObject> prevSelectedObjects = new List<GameObject>();
     private GameObject lastPickedGameObject;
+
+    public  delegate void SelectionChangedDelegate(List<GameObject> gm);
+    public SelectionChangedDelegate SelectionChanged;
     private void Awake()
     {
         EditorOp.Register(this);
@@ -142,7 +145,7 @@ public class SelectionHandler : View
                         EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock
                         { componentGameObject = iObj, componentType = componentType.Name });
 
-                        var mInfo = componentType.GetField("Broadcast", BindingFlags.Public | BindingFlags.Instance);             
+                        var mInfo = componentType.GetField("Broadcast", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);             
                         if (mInfo != null)
                         {
                             var oldValue = mInfo?.GetValue(components[i]);
@@ -150,7 +153,7 @@ public class SelectionHandler : View
                                 , new ComponentDisplayDock() { componentGameObject = iObj, componentType = componentType.Name });
                         }
                         
-                        var mInfo1 = componentType.GetField("BroadcastListen", BindingFlags.Public | BindingFlags.Instance);                    
+                        var mInfo1 = componentType.GetField("BroadcastListen", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);                    
                         if (mInfo1 != null)
                         {
                             var oldValue1 = mInfo1?.GetValue(components[i]);
@@ -302,6 +305,7 @@ public class SelectionHandler : View
             objectScaleGizmo.Gizmo.SetEnabled(false);
             objectUniversalGizmo.Gizmo.SetEnabled(false);
         }
+        SelectionChanged?.Invoke(_selectedObjects);
     }
 
     public List<GameObject> GetPrevSelectedObjects()

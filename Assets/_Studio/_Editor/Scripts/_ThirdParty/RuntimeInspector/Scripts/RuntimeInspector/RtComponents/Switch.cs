@@ -34,6 +34,10 @@ namespace Terra.Studio
             playVFXWhenOn.Setup<Switch>(gameObject, nameof(playVFXWhenOn));
             playSFXWhenOff.Setup<Switch>(gameObject, nameof(playSFXWhenOff));
             playVFXWhenOff.Setup<Switch>(gameObject, nameof(playVFXWhenOff));
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(broadcastWhenOn, ""
+                                 , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = this.GetType().Name });
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(broadcastWhenOff, ""
+                                 , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = this.GetType().Name });
         }
 
         public (string type, string data) Export()
@@ -65,6 +69,7 @@ namespace Terra.Studio
             playVFXWhenOn.data = GetPlayVFXData(component.onStateData);
             playVFXWhenOff.data = GetPlayVFXData(component.offStateData);
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcastWhenOn, null);
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcastWhenOff, null);
         }
 
         private SwitchComponentData GetSwitchComponentData(SwitchState state, PlaySFXData playSFXData, PlayVFXData playVFXData, string broadcast)

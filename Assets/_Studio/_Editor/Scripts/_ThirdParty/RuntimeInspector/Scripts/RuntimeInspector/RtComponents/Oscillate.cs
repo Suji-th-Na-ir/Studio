@@ -19,7 +19,7 @@ namespace RuntimeInspectorNamespace
 
         private void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), GetType().Name);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), GetType().Name,startOn.data.startIndex==3);
             fromPoint = transform.localPosition;
             Component.fromPoint = fromPoint;
         }
@@ -76,7 +76,10 @@ namespace RuntimeInspectorNamespace
             }
             startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, null, startOn.data.listenName);
+            var listenString = "";
+            if (startOn.data.startIndex == 3)
+                listenString = startOn.data.listenName;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, null, listenString);
         }
     }
 }

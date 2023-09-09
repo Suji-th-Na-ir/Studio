@@ -11,6 +11,9 @@
   "Terra.Studio.Collide": "Terra.Studio.Collide",
   "Terra.Studio.GameScore": "Terra.Studio.GameScore",
   "Terra.Studio.Push": "Terra.Studio.Push",
+  "Terra.Studio.SetObjectPosition": "Terra.Studio.SetObjectPosition",
+  "Terra.Studio.StopRotate": "Terra.Studio.StopRotate",
+  "Terra.Studio.StopTranslate": "Terra.Studio.StopTranslate",
   "Terra.Studio.Switch": "Terra.Studio.Switch",
   "Terra.Studio.Teleport": "Terra.Studio.Teleport"
 }

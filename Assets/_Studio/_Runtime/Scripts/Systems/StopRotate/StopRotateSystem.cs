@@ -8,22 +8,10 @@ namespace Terra.Studio
         public override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref entity.GetComponent<StopRotateComponent>();
-            if (entityRef.ConditionType.Equals("Terra.Studio.MouseAction"))
-            {
-                if (data == null)
-                {
-                    return;
-                }
-                var selection = (GameObject)data;
-                if (selection != entityRef.RefObj)
-                {
-                    return;
-                }
-            }
             var isRotateFound = CheckIfRotateComponentExistsOnEntity(entity);
             if (!isRotateFound)
             {
-                Debug.Log($"Rotate system not found on entity: {entity} for stop rotate to act on");
+                Debug.Log($"Rotate system not found on entity: {entity} for stop rotate to act on", entityRef.RefObj);
                 return;
             }
             var compsData = RuntimeOp.Resolve<ComponentsData>();
@@ -32,7 +20,7 @@ namespace Terra.Studio
             {
                 rotateRef.IsExecuted = true;
             }
-            else if (!rotateRef.isHaltedByEvent)
+            else if (!rotateRef.isHaltedByEvent && rotateRef.CanExecute)
             {
                 rotateRef.CanExecute = false;
                 compsData.ProvideEventContext(true, rotateRef.EventContext);

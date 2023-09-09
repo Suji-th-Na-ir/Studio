@@ -19,7 +19,7 @@ namespace RuntimeInspectorNamespace
         {
             guid = GetInstanceID() + "_translate";
             Type.Setup(guid, gameObject, GetType().Name);
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name,startOn.data.startIndex==3);
             PlaySFX.Setup<Translate>(gameObject);
             PlayVFX.Setup<Translate>(gameObject);
         }
@@ -102,7 +102,10 @@ namespace RuntimeInspectorNamespace
             }
             startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Type.data.broadcast, Type.data.listenTo);
+            var listenString = "";
+            if (startOn.data.startIndex == 3)
+                listenString = Type.data.listenTo;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Type.data.broadcast, listenString);
         }
 
         private void ModifyDataAsPerGiven(ref TranslateComponent component)
