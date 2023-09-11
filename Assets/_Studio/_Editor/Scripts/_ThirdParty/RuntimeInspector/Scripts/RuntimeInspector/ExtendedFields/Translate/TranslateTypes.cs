@@ -32,21 +32,21 @@ namespace RuntimeInspectorNamespace
                 (value) =>
                 {
                     field.GetAtom().data.moveBy.x = Helper.StringToFloat(value);
-                    UpdateAllSelectedObjects("moveTo", field.GetAtom().data.moveBy);
+                    UpdateAllSelectedObjects("moveBy", field.GetAtom().data.moveBy);
                 });
 
             movebyInput?[1].onValueChanged.AddListener(
                 (value) =>
                 {
                     field.GetAtom().data.moveBy.y = Helper.StringToFloat(value);
-                    UpdateAllSelectedObjects("moveTo", field.GetAtom().data.moveBy);
+                    UpdateAllSelectedObjects("moveBy", field.GetAtom().data.moveBy);
                 });
 
             movebyInput?[2].onValueChanged.AddListener(
                 (value) =>
                 {
                     field.GetAtom().data.moveBy.z = Helper.StringToFloat(value);
-                    UpdateAllSelectedObjects("moveTo", field.GetAtom().data.moveBy);
+                    UpdateAllSelectedObjects("moveBy", field.GetAtom().data.moveBy);
                 });
             if (speedInput != null) speedInput.onValueChanged.AddListener((value) =>
             {
