@@ -100,11 +100,14 @@ namespace Terra.Studio
             targetPosition = obj.targetPosition;
             AssignStartOnData(obj);
             AssignSFXandVFXData(obj);
+            var listenString = "";
+            if (startOn.data.startIndex == 3)
+                listenString = startOn.data.listenName;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(
                 gameObject,
                 GetType().Name,
                 broadcast,
-                startOn.data.listenName);
+                listenString);
         }
 
         private void AssignStartOnData(SetObjectPositionComponent comp)
