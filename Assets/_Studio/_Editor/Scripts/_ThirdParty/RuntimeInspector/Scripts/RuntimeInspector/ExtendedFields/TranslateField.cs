@@ -82,9 +82,9 @@ namespace RuntimeInspectorNamespace
 
             LoadData(preset);
             Atom.Translate rt = (Atom.Translate)Value;
-            if (rt.data.moveTo == default)
+            if (rt.data.moveBy == default)
             {
-                rt.data.moveTo = rt.target.transform.localPosition;
+                rt.data.moveBy = rt.target.transform.localPosition;
             }
             UpdateTypeForMultiselect(translateType, preset);
         }
@@ -102,7 +102,7 @@ namespace RuntimeInspectorNamespace
                         Translate translate = obj.GetComponent<Translate>();
                         translate.Type.data.translateType = (int)_data;
                         translate.Type.data = componentData.Value;
-                        translate.Type.data.moveTo = translate.Type.target.transform.localPosition;
+                        translate.Type.data.moveBy = translate.Type.target.transform.localPosition;
                     }
                 }
             }
