@@ -17,6 +17,8 @@ namespace Terra.Studio
         private const string PLANE_PRIMITIVE_BUTTON_LOC = "plane_button";
         private const string CHECKPOINT_PRIMITIVE_BUTTON_LOC = "checkpoint_button";
         private const string TIMER_BUTTON_LOC = "timer_button";
+        private const string UNDO_BUTTON_LOC = "UndoButton";
+        private const string REDO_BUTTON_LOC = "RedoButton";
 
         private void Awake()
         {
@@ -34,6 +36,8 @@ namespace Terra.Studio
             var planePrimitiveTr = Helper.FindDeepChild(transform, PLANE_PRIMITIVE_BUTTON_LOC, true);
             var checkpointTr = Helper.FindDeepChild(transform, CHECKPOINT_PRIMITIVE_BUTTON_LOC, true);
             var timerTr = Helper.FindDeepChild(transform, TIMER_BUTTON_LOC, true);
+            var undoButtonTr = Helper.FindDeepChild(transform, UNDO_BUTTON_LOC, true);
+            var redoButtonTr = Helper.FindDeepChild(transform, REDO_BUTTON_LOC, true);
 
             var playButton = playButtonTr.GetComponent<Button>();
             AddListenerEvent(playButton, () =>
@@ -62,6 +66,16 @@ namespace Terra.Studio
 
             var timerButton = timerTr.GetComponent<Button>();
             AddListenerEvent(timerButton, CreateObject, "InGameTimer");
+
+            var undoButton = undoButtonTr.GetComponent<Button>();
+            AddListenerEvent(undoButton, EditorOp.Resolve<IURCommand>().Undo);
+            undoButtonTr.gameObject.SetActive(false);
+            EditorOp.Resolve<IURCommand>().onUndoStackAvailable += (isPresent) => { undoButtonTr.gameObject.SetActive(isPresent); };
+
+            var redoButton = redoButtonTr.GetComponent<Button>();
+            AddListenerEvent(redoButton, EditorOp.Resolve<IURCommand>().Redo);
+            redoButtonTr.gameObject.SetActive(false);
+            EditorOp.Resolve<IURCommand>().onRedoStackAvailable += (isPresent) => { redoButtonTr.gameObject.SetActive(isPresent); };
         }
 
         private void AddListenerEvent<T>(Button button, Action<T> callback, T type)

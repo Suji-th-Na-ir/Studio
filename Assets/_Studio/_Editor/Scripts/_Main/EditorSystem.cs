@@ -14,6 +14,7 @@ namespace Terra.Studio
         {
             EditorOp.Register(new DataProvider());
             EditorOp.Register(new SceneDataHandler());
+            EditorOp.Register(new UndoRedoSystem() as IURCommand);
             EditorOp.Resolve<HierarchyView>().Init();
             EditorOp.Resolve<InspectorView>().Init();
             EditorOp.Resolve<ToolbarView>().Init();
@@ -32,6 +33,7 @@ namespace Terra.Studio
             EditorOp.Resolve<SelectionHandler>().Flush();
             EditorOp.Resolve<SceneDataHandler>().SaveQoFDetails();
             EditorOp.Unregister<SceneDataHandler>();
+            EditorOp.Unregister<IURCommand>();
         }
 
         private void OnDestroy()
