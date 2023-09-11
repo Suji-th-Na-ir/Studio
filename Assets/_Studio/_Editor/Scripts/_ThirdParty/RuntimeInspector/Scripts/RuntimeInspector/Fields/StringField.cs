@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Reflection;
-using Terra.Studio;
 using UnityEngine;
+using Terra.Studio;
 using UnityEngine.UI;
+using System.Reflection;
 
 namespace RuntimeInspectorNamespace
 {
@@ -66,9 +66,10 @@ namespace RuntimeInspectorNamespace
             {
                 input.BackingField.lineType = lineCount > 1 ? InputField.LineType.MultiLineNewline : InputField.LineType.SingleLine;
                 input.BackingField.textComponent.alignment = lineCount > 1 ? TextAnchor.UpperLeft : TextAnchor.MiddleLeft;
-
                 OnSkinChanged();
             }
+
+            lastSubmittedValue = Value;
         }
 
         protected override void OnUnbound()
@@ -85,12 +86,12 @@ namespace RuntimeInspectorNamespace
 
             if (NameRaw.ToLower().Equals("broadcast"))
             {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Value.ToString(), oldValue == null ? "" : oldValue.ToString()
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Value == null ? "" : Value.ToString(), oldValue == null ? "" : oldValue.ToString()
                     , new ComponentDisplayDock() { componentGameObject = ((MonoBehaviour)virutalObject).gameObject, componentType = ComponentType.Name });
             }
             else if (NameRaw.ToLower().Equals("broadcast listen"))
             {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(Value.ToString(), oldValue == null ? "" : oldValue.ToString(),
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(Value == null ? "" : Value.ToString(), oldValue == null ? "" : oldValue.ToString(),
                  new ComponentDisplayDock() { componentGameObject = ((MonoBehaviour)virutalObject).gameObject, componentType = ComponentType.Name });
             }
 
@@ -102,6 +103,19 @@ namespace RuntimeInspectorNamespace
             if (m_setterMode == Mode.OnSubmit)
                 Value = input;
 
+            if (Value != lastSubmittedValue)
+            {
+                EditorOp.Resolve<IURCommand>().Record(
+                    lastSubmittedValue, input,
+                    $"String changed to: {input}",
+                    (value) =>
+                    {
+                        OnValueChanged(source, (string)value);
+                        lastSubmittedValue = value;
+                    });
+            }
+
+            lastSubmittedValue = Value;
             Inspector.RefreshDelayed();
             return true;
         }

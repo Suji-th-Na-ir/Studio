@@ -135,6 +135,7 @@ namespace RuntimeInspectorNamespace
 
         private Getter getter;
         private Setter setter;
+        protected object lastSubmittedValue = null;
 
         public virtual void Initialize()
         {
@@ -231,6 +232,7 @@ namespace RuntimeInspectorNamespace
         protected virtual void OnBound(MemberInfo variable)
         {
             RefreshValue();
+            lastSubmittedValue = Value;
         }
 
         protected virtual void OnUnbound()
