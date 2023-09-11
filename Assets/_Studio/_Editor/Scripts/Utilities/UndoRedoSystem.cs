@@ -9,8 +9,8 @@ namespace Terra.Studio
         private List<Operation> operations;
         private int currentIndex;
 
-        public event Action<bool> onUndoStackAvailable;
-        public event Action<bool> onRedoStackAvailable;
+        public event Action<bool> OnUndoStackAvailable;
+        public event Action<bool> OnRedoStackAvailable;
 
         public UndoRedoSystem()
         {
@@ -74,15 +74,15 @@ namespace Terra.Studio
         {
             if (currentIndex < 0)
             {
-                onUndoStackAvailable?.Invoke(false);
+                OnUndoStackAvailable?.Invoke(false);
                 var isRedoStackAvailable = operations.Count > 1;
-                onRedoStackAvailable?.Invoke(isRedoStackAvailable);
+                OnRedoStackAvailable?.Invoke(isRedoStackAvailable);
             }
             if (currentIndex >= 0)
             {
-                onUndoStackAvailable?.Invoke(true);
+                OnUndoStackAvailable?.Invoke(true);
                 var isRedoStackAvailable = (operations.Count - currentIndex - 1) != 0;
-                onRedoStackAvailable?.Invoke(isRedoStackAvailable);
+                OnRedoStackAvailable?.Invoke(isRedoStackAvailable);
             }
         }
 
