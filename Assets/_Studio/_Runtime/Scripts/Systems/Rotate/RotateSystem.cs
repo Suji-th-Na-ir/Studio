@@ -7,7 +7,7 @@ namespace Terra.Studio
     {
         public override void OnConditionalCheck(int entity, object data)
         {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<RotateComponent>(entity);
+            ref var entityRef = ref entity.GetComponent<RotateComponent>();
             Init(ref entityRef);
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(false, entityRef.EventContext);

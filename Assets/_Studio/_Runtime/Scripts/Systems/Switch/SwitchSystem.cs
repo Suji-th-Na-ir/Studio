@@ -14,10 +14,10 @@ namespace Terra.Studio
                 compsData.ProvideEventContext(false, entityRef.EventContext);
                 entityRef.IsExecuted = true;
             }
-            OnDemandRun(in entityRef, entity);
+            OnDemandRun(in entityRef);
         }
 
-        public void OnDemandRun(in SwitchComponent component, int _)
+        public void OnDemandRun(in SwitchComponent component)
         {
             var data = component.GetData();
             if (data.canPlaySFX)

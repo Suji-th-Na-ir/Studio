@@ -11,10 +11,10 @@ namespace Terra.Studio
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(false, entityRef.EventContext);
             entityRef.IsExecuted = true;
-            OnDemandRun(entity, in entityRef);
+            OnDemandRun(in entityRef, entity);
         }
 
-        public void OnDemandRun(int entityID, in DestroyOnComponent component)
+        public void OnDemandRun(in DestroyOnComponent component, int entityID)
         {
             if (component.canPlaySFX)
             {

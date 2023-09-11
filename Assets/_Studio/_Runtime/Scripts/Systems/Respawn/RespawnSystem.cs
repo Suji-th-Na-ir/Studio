@@ -6,7 +6,7 @@ namespace Terra.Studio
     {
         public override void OnConditionalCheck(int entity, object data)
         {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<RespawnComponent>(entity);
+            ref var entityRef = ref entity.GetComponent<RespawnComponent>();
             OnDemandRun(in entityRef);
         }
 

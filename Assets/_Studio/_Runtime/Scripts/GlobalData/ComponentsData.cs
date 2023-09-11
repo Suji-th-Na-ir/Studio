@@ -11,22 +11,22 @@ namespace Terra.Studio
 
         public void ProvideEventContext(bool subscribe, EventContext context)
         {
-            if (cachedReferences.TryGetValue(context.data.conditionType, out var eventValue))
+            if (cachedReferences.TryGetValue(context.conditionType, out var eventValue))
             {
-                eventValue.Execute(context.onConditionMet, subscribe, context.data);
+                eventValue.Execute(subscribe, context);
             }
             else
             {
-                var isFound = GetManagerSO().TryGetEventForType(context.data.conditionType, out var type);
+                var isFound = GetManagerSO().TryGetEventForType(context.conditionType, out var type);
                 if (isFound)
                 {
                     var instance = Activator.CreateInstance(type) as IEventExecutor;
-                    instance.Execute(context.onConditionMet, subscribe, context.data);
-                    cachedReferences.Add(context.data.conditionType, instance);
+                    instance.Execute(subscribe, context);
+                    cachedReferences.Add(context.conditionType, instance);
                 }
                 else
                 {
-                    Debug.LogError($"Event for type {context.data.conditionType} is not found!");
+                    Debug.LogError($"Event for type {context.conditionType} is not found!");
                 }
             }
         }

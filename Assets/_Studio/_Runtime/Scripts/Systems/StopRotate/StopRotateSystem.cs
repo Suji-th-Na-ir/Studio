@@ -26,10 +26,10 @@ namespace Terra.Studio
                 compsData.ProvideEventContext(true, rotateRef.EventContext);
             }
             rotateRef.isHaltedByEvent = true;
-            OnDemandRun(in entityRef, entity);
+            OnDemandRun(in entityRef);
         }
 
-        public void OnDemandRun(in StopRotateComponent component, int _)
+        public void OnDemandRun(in StopRotateComponent component)
         {
             if (component.canPlaySFX)
             {

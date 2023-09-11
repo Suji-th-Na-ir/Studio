@@ -29,16 +29,12 @@ namespace Terra.Studio
             targetData.TargetId = actualData.TargetId;
             targetData.EventContext = actualData.EventContext;
             targetData.RefObj = go;
-            var conditionalCheckData = new EventConditionalCheckData()
+            targetData.EventContext = new()
             {
                 componentName = typeof(T).FullName,
                 conditionType = targetData.ConditionType,
                 conditionData = targetData.ConditionData,
                 goRef = targetData.RefObj
-            };
-            targetData.EventContext = new()
-            {
-                data = conditionalCheckData
             };
         }
     }

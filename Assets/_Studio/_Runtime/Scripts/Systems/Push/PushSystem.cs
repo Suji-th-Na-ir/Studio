@@ -12,7 +12,7 @@ namespace Terra.Studio
         public override void Init<T>(int entity)
         {
             base.Init<T>(entity);
-            ref var entityRef = ref EntityAuthorOp.GetComponent<PushComponent>(entity);
+            ref var entityRef = ref entity.GetComponent<PushComponent>();
             if (!entityRef.RefObj.TryGetComponent(out Rigidbody rb))
             {
                 rb = entityRef.RefObj.AddComponent<Rigidbody>();
@@ -36,7 +36,7 @@ namespace Terra.Studio
 
         public override void OnConditionalCheck(int entity, object data)
         {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<PushComponent>(entity);
+            ref var entityRef = ref entity.GetComponent<PushComponent>();
             if (data == null)
             {
                 return;

@@ -7,11 +7,11 @@ namespace Terra.Studio
     {
         public override void OnConditionalCheck(int entity, object data)
         {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<TranslateComponent>(entity);
+            ref var entityRef = ref entity.GetComponent<TranslateComponent>();
             Init(ref entityRef);
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(false, entityRef.EventContext);
-            OnDemandRun(ref entityRef, entity);
+            OnDemandRun(ref entityRef);
         }
 
         private void Init(ref TranslateComponent entityRef)
@@ -42,7 +42,7 @@ namespace Terra.Studio
             entityRef.repeatForever = entityRef.repeatFor == int.MaxValue;
         }
 
-        public void OnDemandRun(ref TranslateComponent translatable, int _)
+        public void OnDemandRun(ref TranslateComponent translatable)
         {
             if (translatable.canPlaySFX)
             {
