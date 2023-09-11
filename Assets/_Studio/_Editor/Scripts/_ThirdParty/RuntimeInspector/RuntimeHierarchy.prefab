@@ -700,8 +700,9 @@ MonoBehaviour:
   m_searchRefreshInterval: 5
   m_allowMultiSelection: 1
   m_exposeUnityScenes: 1
-  exposedUnityScenesSubset: []
-  m_exposeDontDestroyOnLoadScene: 1
+  exposedUnityScenesSubset:
+  - Editor
+  m_exposeDontDestroyOnLoadScene: 0
   pseudoScenesOrder: []
   m_pointerLongPressAction: 2
   m_pointerLongPressDuration: 0.4
