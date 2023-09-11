@@ -7,7 +7,7 @@ namespace Terra.Studio
         public override void OnConditionalCheck(int entity, object data)
         {
             var compsData = RuntimeOp.Resolve<ComponentsData>();
-            ref var entityRef = ref EntityAuthorOp.GetComponent<CheckpointComponent>(entity);
+            ref var entityRef = ref entity.GetComponent<CheckpointComponent>();
             entityRef.IsExecuted = true;
             compsData.ProvideEventContext(false, entityRef.EventContext);
             OnDemandRun(in entityRef);
@@ -15,6 +15,7 @@ namespace Terra.Studio
 
         public void OnDemandRun(in CheckpointComponent component)
         {
+            RuntimeOp.Resolve<GameData>().RespawnPoint = component.respawnPoint;
             if (component.canPlaySFX)
             {
                 RuntimeWrappers.PlaySFX(component.sfxName);
@@ -23,7 +24,6 @@ namespace Terra.Studio
             {
                 RuntimeWrappers.PlayVFX(component.vfxName, component.RefObj.transform.position);
             }
-            RuntimeOp.Resolve<GameData>().RespawnPoint = component.respawnPoint;
             if (component.IsBroadcastable)
             {
                 RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);

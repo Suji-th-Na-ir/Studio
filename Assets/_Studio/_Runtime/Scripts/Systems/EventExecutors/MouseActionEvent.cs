@@ -14,22 +14,22 @@ namespace Terra.Studio
         private List<int> toBeRemovedEventIndices;
         private bool isListeningToEvents;
 
-        public void Execute(Action<object> onConditionalCheck, bool subscribe, EventConditionalCheckData data)
+        public void Execute(bool subscribe, EventContext context)
         {
             objectToEvents ??= new();
             toBeRemovedEventIndices ??= new();
             var mouseEvents = RuntimeOp.Resolve<RuntimeSystem>() as IMouseEvents;
-            var foundData = objectToEvents.Find(x => x.objRef == data.goRef &&
-            x.componentName == data.componentName);
+            var foundData = objectToEvents.Find(x => x.objRef == context.goRef &&
+            x.componentName == context.componentName);
             if (subscribe)
             {
                 if (foundData.Equals(default(ObjectToEvent)))
                 {
                     var newData = new ObjectToEvent()
                     {
-                        action = onConditionalCheck,
-                        objRef = data.goRef,
-                        componentName = data.componentName
+                        action = context.onConditionMet,
+                        objRef = context.goRef,
+                        componentName = context.componentName
                     };
                     objectToEvents.Add(newData);
                 }
@@ -43,7 +43,7 @@ namespace Terra.Studio
                     }
                     else
                     {
-                        Debug.Log($"Already registered! For type: {data.componentName} | Go: {data.goRef}", data.goRef);
+                        Debug.Log($"Already registered! For type: {context.componentName} | Go: {context.goRef}", context.goRef);
                     }
                 }
             }
@@ -55,7 +55,7 @@ namespace Terra.Studio
                 }
                 else
                 {
-                    Debug.Log($"Not registered! For type: {data.componentName} | Go: {data.goRef}", data.goRef);
+                    Debug.Log($"Not registered! For type: {context.componentName} | Go: {context.goRef}", context.goRef);
                 }
             }
             CheckForEventListen();

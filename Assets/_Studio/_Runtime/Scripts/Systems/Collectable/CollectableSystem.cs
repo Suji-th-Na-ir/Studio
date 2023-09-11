@@ -8,7 +8,7 @@ namespace Terra.Studio
         public override void Init<T>(int entity)
         {
             base.Init<T>(entity);
-            ref var collectable = ref EntityAuthorOp.GetComponent<CollectableComponent>(entity);
+            ref var collectable = ref entity.GetComponent<CollectableComponent>();
             if (collectable.canUpdateScore)
             {
                 RuntimeOp.Resolve<CoreGameManager>().EnableModule<ScoreHandler>();
@@ -17,14 +17,14 @@ namespace Terra.Studio
 
         public override void OnConditionalCheck(int entity, object data)
         {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<CollectableComponent>(entity);
+            ref var entityRef = ref entity.GetComponent<CollectableComponent>();
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(false, entityRef.EventContext);
             entityRef.IsExecuted = true;
-            OnDemandRun(entity, entityRef);
+            OnDemandRun(entityRef, entity);
         }
 
-        public void OnDemandRun(int entityID, in CollectableComponent component)
+        public void OnDemandRun(in CollectableComponent component, int entityID)
         {
             if (component.canPlaySFX)
             {

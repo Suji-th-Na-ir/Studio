@@ -8,7 +8,7 @@ namespace Terra.Studio
         public override void Init<T>(int entity)
         {
             base.Init<T>(entity);
-            ref var oscillatable = ref EntityAuthorOp.GetComponent<OscillateComponent>(entity);
+            ref var oscillatable = ref entity.GetComponent<OscillateComponent>();
             if (oscillatable.RefObj.transform.parent != null)
             {
                 oscillatable.fromPoint = oscillatable.RefObj.transform.TransformPoint(oscillatable.fromPoint);
@@ -18,7 +18,7 @@ namespace Terra.Studio
 
         public override void OnConditionalCheck(int entity, object data)
         {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<OscillateComponent>(entity);
+            ref var entityRef = ref entity.GetComponent<OscillateComponent>();
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(false, entityRef.EventContext);
             entityRef.RefObj.transform.position = entityRef.fromPoint;

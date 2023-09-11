@@ -1,4 +1,3 @@
-using UnityEngine;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
@@ -7,15 +6,15 @@ namespace Terra.Studio
     {
         public override void OnConditionalCheck(int entity, object data)
         {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<SetObjectPositionComponent>(entity);
+            ref var entityRef = ref entity.GetComponent<SetObjectPositionComponent>();
             entityRef.CanExecute = true;
             entityRef.IsExecuted = true;
             var comp = RuntimeOp.Resolve<ComponentsData>();
             comp.ProvideEventContext(false, entityRef.EventContext);
-            OnDemandRun(in entityRef, entity);
+            OnDemandRun(in entityRef);
         }
 
-        public void OnDemandRun(in SetObjectPositionComponent component, int _)
+        public void OnDemandRun(in SetObjectPositionComponent component)
         {
             if (component.canPlaySFX)
             {
