@@ -182,7 +182,7 @@ namespace Terra.Studio
                     (targetPosition - component.startPosition).normalized :
                     (component.startPosition - targetPosition).normalized;
                 component.remainingDistance = component.pauseDistance;
-                if (component.shouldPause && !component.repeatForever)
+                if (component.shouldPause)
                 {
                     component.isPaused = true;
                     component.pauseStartTime = Time.time;
