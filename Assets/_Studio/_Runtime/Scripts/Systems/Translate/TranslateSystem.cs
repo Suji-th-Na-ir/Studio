@@ -23,7 +23,7 @@ namespace Terra.Studio
                 return;
             }
             var tr = entityRef.RefObj.transform;
-            var targetPos = tr.parent == null ? entityRef.targetPosition+entityRef.startPosition : tr.TransformPoint(entityRef.targetPosition+entityRef.startPosition);
+            var targetPos = tr.parent == null ? entityRef.targetPosition+entityRef.startPosition : entityRef.startPosition + tr.TransformDirection(entityRef.targetPosition);
             var pauseDistance = Vector3.Distance(entityRef.startPosition, targetPos);
             var direction = targetPos - entityRef.startPosition;
             entityRef.pauseDistance = pauseDistance;
