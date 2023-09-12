@@ -33,8 +33,8 @@ public class SelectionHandler : View
     private GameObject lastPickedGameObject;
     private void Awake()
     {
-        // setting target framerate to 90
-        Application.targetFrameRate = 90;
+        // setting target framerate to 60
+        Application.targetFrameRate = 60;
         EditorOp.Register(this);
         runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
     }
