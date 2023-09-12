@@ -139,3 +139,6 @@ MonoBehaviour:
     hideRemoveButton: 0
   m_GameEssentials:
   - InGameTimer
+  - GameScore
+  - PlayerSpawnPoint
+  - Checkpoint
