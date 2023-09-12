@@ -2485,7 +2485,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Game Helpers
+  m_Text: Game Essentials
 --- !u!1 &6428280079452661951
 GameObject:
   m_ObjectHideFlags: 0

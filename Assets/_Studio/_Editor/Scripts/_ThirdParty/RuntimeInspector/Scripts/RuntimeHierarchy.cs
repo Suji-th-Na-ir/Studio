@@ -817,8 +817,8 @@ namespace RuntimeInspectorNamespace
                             break;
                         }
                     }
-                    if (!isessential && !GetPseudoScene("", true).ContainsChild(goo.transform))
-                        AddToPseudoScene("", goo.transform);
+                    if (!isessential && !GetPseudoScene("Game World", true).ContainsChild(goo.transform))
+                        AddToPseudoScene("Game World", goo.transform);
                 }
             }
             if ( GetPseudoScene("Game Essentials",false)?.ChildCount == 0)
