@@ -123,6 +123,7 @@ namespace Terra.Studio
             var itemData = ((ResourceDB)SystemOp.Load(ResourceTag.ResourceDB)).GetItemDataForNearestName(name);
             var primitive = RuntimeWrappers.SpawnGameObject(itemData.ResourcePath, itemData);
             primitive.transform.position = spawnPosition;
+            EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Clear();
             EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);
             EditorOp.Resolve<SelectionHandler>().SelectObjectInHierarchy(primitive);
             if (name.Equals("CheckPoint"))
