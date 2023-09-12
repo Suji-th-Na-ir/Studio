@@ -555,6 +555,11 @@ namespace RuntimeInspectorNamespace
             Transform[] selection = UnityEditor.Selection.GetFiltered<Transform>(UnityEditor.SelectionMode.ExcludePrefab);
             if (selection.Length > 0)
                 Select(selection);
+            else
+            {
+                Deselect(EditorOp.Resolve<SelectionHandler>().GetPrevSelectedObjects().Select(go => go.transform).ToList());
+                m_connectedInspector.Inspect(null);
+            }
         }
 #endif
 
