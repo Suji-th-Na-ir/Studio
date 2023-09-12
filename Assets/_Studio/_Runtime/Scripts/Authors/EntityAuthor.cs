@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
@@ -93,9 +94,33 @@ namespace Terra.Studio
                         Debug.Log($"Entity {entityID} not found!");
                         return;
                     }
+                    CheckAndHandleDestroyTypes(ecsWorld, entityID);
                     ecsWorld.DelEntity(entityID);
                 },
                 CoroutineService.DelayType.WaitForFrame);
+            }
+
+            private void CheckAndHandleDestroyTypes(EcsWorld world, int toCheckEntity)
+            {
+                CheckAndHandleDestroyType<DestroyOnComponent>(world, toCheckEntity);
+                CheckAndHandleDestroyType<CollectableComponent>(world, toCheckEntity);
+            }
+
+            private void CheckAndHandleDestroyType<T>(EcsWorld world, int toCheckEntity) where T : struct, IBaseComponent
+            {
+                var filter = world.Filter<T>().End();
+                foreach (var entity in filter)
+                {
+                    if (entity == toCheckEntity)
+                    {
+                        var component = entity.GetComponent<T>();
+                        if (component.RefObj)
+                        {
+                            Object.Destroy(component.RefObj);
+                        }
+                        return;
+                    }
+                }
             }
         }
     }
