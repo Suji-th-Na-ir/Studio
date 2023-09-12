@@ -557,7 +557,15 @@ namespace RuntimeInspectorNamespace
                 Select(selection);
             else
             {
-                Deselect(EditorOp.Resolve<SelectionHandler>().GetPrevSelectedObjects().Select(go => go.transform).ToList());
+                var lastSelectedObjects = EditorOp.Resolve<SelectionHandler>().GetPrevSelectedObjects();
+
+                for (int i = 0; i < lastSelectedObjects.Count; i++)
+                {
+                    if (lastSelectedObjects[i]!=null)
+                    {
+                        Deselect(lastSelectedObjects[i].transform);
+                    }
+                }
                 m_connectedInspector.Inspect(null);
             }
         }
