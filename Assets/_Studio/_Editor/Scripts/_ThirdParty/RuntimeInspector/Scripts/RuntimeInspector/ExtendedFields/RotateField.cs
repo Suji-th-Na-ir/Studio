@@ -125,13 +125,13 @@ namespace RuntimeInspectorNamespace
                 lastComponentData.rotateType = (int)rotationType;
                 var tempValue = lastComponentData;
 
-                if (lastComponentData.speed == -1)
+                if (!selectedRotateType.speedInput|| lastComponentData.speed == -1)
                     tempValue.speed = preset.speed;
-                if (lastComponentData.degrees == -1)
+                if (!selectedRotateType.degreesInput || lastComponentData.degrees == -1)
                     tempValue.degrees = preset.degrees;
-                if (lastComponentData.repeat == -1)
+                if (!selectedRotateType.repeatInput || lastComponentData.repeat == -1)
                     tempValue.repeat = preset.repeat;
-                if (lastComponentData.pauseBetween == -1)
+                if (!selectedRotateType.pauseInput || lastComponentData.pauseBetween == -1)
                     tempValue.pauseBetween = preset.pauseBetween;
 
                 if (!selectedRotateType.customString)
