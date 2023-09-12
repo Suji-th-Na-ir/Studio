@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
@@ -10,12 +11,36 @@ namespace Terra.Studio
             return typeof(Atom.ScoreData) == type;
         }
 
+        protected override void OnBound(MemberInfo variable)
+        {
+            base.OnBound(variable);
+            lastSubmittedValue = ((Atom.ScoreData)lastSubmittedValue).score.ToString();
+        }
+
         protected override bool OnValueChanged(BoundInputField source, string input)
         {
             var value = base.OnValueChanged(source, input);
             var score = int.Parse(input);
             InvokeDataChange(score);
             return value;
+        }
+
+        protected override bool OnValueSubmitted(BoundInputField source, string input)
+        {
+            if (Value != lastSubmittedValue)
+            {
+                EditorOp.Resolve<IURCommand>().Record(
+                    lastSubmittedValue, input,
+                    $"String changed to: {input}",
+                    (value) =>
+                    {
+                        OnValueChanged(source, (string)value);
+                        lastSubmittedValue = value;
+                    });
+                lastSubmittedValue = input;
+            }
+            Inspector.RefreshDelayed();
+            return true;
         }
 
         public override void Refresh()
