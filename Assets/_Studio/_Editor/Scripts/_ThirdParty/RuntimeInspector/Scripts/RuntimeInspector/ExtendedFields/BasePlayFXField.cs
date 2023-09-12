@@ -63,15 +63,8 @@ namespace Terra.Studio
 
         protected virtual void ShowHideOptionsDropdown()
         {
-            if (toggleInput.isOn)
-            {
-                optionsDropdown.gameObject.SetActive(true);
-                optionsDropdown.value = 0;
-            }
-            else
-            {
-                optionsDropdown.gameObject.SetActive(false);
-            }
+            var isToggledOn = toggleInput.isOn;
+            optionsDropdown.gameObject.SetActive(isToggledOn);
         }
 
         protected virtual void OnToggleValueChanged(bool _input)
@@ -86,11 +79,10 @@ namespace Terra.Studio
                     $"{CommentKey} toggle changed to: {_input}",
                     (value) =>
                     {
-                        var structData = (PlayFXData)value;
-                        Debug.Log($"Toggle is {structData.CanPlay}");
-                        SetValue(structData.CanPlay);
-                        OnToggleValueSubmitted(structData.CanPlay);
-                        lastSubmittedValue = structData;
+                        data.data = (PlayFXData)value;
+                        Value = data;
+                        OnToggleValueSubmitted(data.data.CanPlay);
+                        lastSubmittedValue = value;
                     });
                 lastSubmittedValue = data.data;
             }
@@ -121,7 +113,9 @@ namespace Terra.Studio
                     $"{CommentKey} selection changed to: {_input}",
                     (value) =>
                     {
-                        OnDropdownValueSubmitted(((PlayFXData)value).ClipIndex);
+                        data.data = (PlayFXData)value;
+                        Value = data;
+                        OnDropdownValueSubmitted(data.data.ClipIndex);
                         lastSubmittedValue = value;
                     });
                 lastSubmittedValue = data.data;
@@ -163,6 +157,11 @@ namespace Terra.Studio
             {
                 SetValue(data.data.CanPlay);
                 SetValue(data.data.ClipIndex);
+                if ((data.data.CanPlay && !optionsDropdown.gameObject.activeSelf) ||
+                    (!data.data.CanPlay && optionsDropdown.gameObject.activeSelf))
+                {
+                    ShowHideOptionsDropdown();
+                }
             }
         }
 
