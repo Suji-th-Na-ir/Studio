@@ -113,6 +113,8 @@ namespace Terra.Studio
             public void Execute(bool isUndo)
             {
                 var data = isUndo ? oldValue : newValue;
+                var msg = isUndo ? Messages.UNDO_IN_PROGRESS : Messages.REDO_IN_PROGRESS;
+                Debug.Log($"{msg} {comment}");
                 action?.Invoke(data);
             }
         }
@@ -121,6 +123,8 @@ namespace Terra.Studio
         {
             public const string NOTHING_TO_UNDO = "Nothing to undo!";
             public const string NOTHING_TO_REDO = "Nothing to redo!";
+            public const string UNDO_IN_PROGRESS = "Undoing";
+            public const string REDO_IN_PROGRESS = "Redoing";
         }
     }
 }

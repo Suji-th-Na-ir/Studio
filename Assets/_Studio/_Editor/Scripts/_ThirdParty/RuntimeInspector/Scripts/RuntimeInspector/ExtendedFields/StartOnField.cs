@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
-using PlayShifu.Terra;
 using UnityEngine;
-using UnityEngine.UI;
 using Terra.Studio;
+using UnityEngine.UI;
+using PlayShifu.Terra;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace RuntimeInspectorNamespace
 {
@@ -12,36 +12,22 @@ namespace RuntimeInspectorNamespace
     {
 #pragma warning disable 0649
         [SerializeField] private Dropdown startOn;
-
         [SerializeField] private InputField listenOn;
 #pragma warning restore 0649
 
-        private int prevListenOnValue = -1;
         public override void Initialize()
         {
             base.Initialize();
             startOn.onValueChanged.AddListener(OnStartValueChanged);
             listenOn.onValueChanged.AddListener(OnListenValueChanged);
+            listenOn.onEndEdit.AddListener(OnListenValueSubmitted);
         }
-
-        // private void LoadListenTo()
-        // {
-        //     listenOn.options.Clear();
-        //     // lets hide last entry which is "Custom"
-        //     List<string> loadList = EditorOp.Resolve<DataProvider>().ListenToTypes;
-        //     for (int i = 0; i < loadList.Count - 1; i++)
-        //     {
-        //         listenOn.options.Add(new Dropdown.OptionData()
-        //         {
-        //             text = loadList[i]
-        //         });
-        //     }
-        // }
 
         protected override void OnBound(MemberInfo variable)
         {
             base.OnBound(variable);
             LoadStartOnOptions();
+            lastSubmittedValue = ((Atom.StartOn)lastSubmittedValue).data;
         }
 
         private void LoadStartOnOptions()
@@ -61,9 +47,9 @@ namespace RuntimeInspectorNamespace
             startOn.captionText.text = atom.StartList[atom.data.startIndex];
         }
 
-        public override bool SupportsType( Type type )
+        public override bool SupportsType(Type type)
         {
-            return type == typeof( Atom.StartOn );
+            return type == typeof(Atom.StartOn);
         }
 
         public void ShowHideListenDD()
@@ -88,65 +74,68 @@ namespace RuntimeInspectorNamespace
 
         private void OnStartValueChanged(int _index)
         {
-            if (Inspector) Inspector.RefreshDelayed();
+            OnStartOnValueSubmitted(_index);
+            Atom.StartOn atom = (Atom.StartOn)Value;
+            if (_index != ((StartOnData)lastSubmittedValue).startIndex)
+            {
+                EditorOp.Resolve<IURCommand>().Record(
+                    lastSubmittedValue, atom.data,
+                    $"Start on changed to: {atom.data.startName}",
+                    (value) =>
+                    {
+                        OnStartOnValueSubmitted(((StartOnData)value).startIndex);
+                    });
+            }
+            lastSubmittedValue = atom.data;
+        }
+
+        private void OnStartOnValueSubmitted(int _index)
+        {
             Atom.StartOn atom = (Atom.StartOn)Value;
             atom.data.startIndex = _index;
             atom.data.startName = atom.StartList[_index];
             atom.data.listenName = "";
-            // reset the listen field to previous value
-            // if(prevListenOnValue != -1)
-            //     atom.data.listenIndex = prevListenOnValue;
-            // var prevString = string.Empty;
-            // var newString = string.Empty;
-
-            // if (_index != 2)
-            // {
-            //     prevString = atom.data.listenName;
-            // }
-            // else
-            // {
-            //     newString = atom.data.listenName;
-            // }
-            //
-            // EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(newString, prevString,
-            //         new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
             UpdateOtherCompData(atom);
+            if (Inspector) Inspector.RefreshDelayed();
         }
 
         private void OnListenValueChanged(string _newString)
         {
             Atom.StartOn atom = (Atom.StartOn)Value;
-   
-            
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(_newString, atom.data.listenName, 
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(_newString, atom.data.listenName,
                 new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
-           
-            if(Inspector)  Inspector.RefreshDelayed();
+            if (Inspector) Inspector.RefreshDelayed();
             atom.data.listenName = _newString;
-            // atom.data.listenIndex = _index;
             UpdateOtherCompData(atom);
-            // prevListenOnValue = _index;
+        }
+
+        public void OnListenValueSubmitted(string _newString)
+        {
+            Atom.StartOn atom = (Atom.StartOn)Value;
+            if (_newString != ((StartOnData)lastSubmittedValue).listenName)
+            {
+                EditorOp.Resolve<IURCommand>().Record(
+                    lastSubmittedValue, atom.data,
+                    $"Listen value changed to: {atom.data.startName}",
+                    (value) =>
+                    {
+                        OnListenValueChanged(((StartOnData)value).listenName);
+                    });
+            }
+            lastSubmittedValue = atom.data;
         }
 
         protected override void OnSkinChanged()
         {
             base.OnSkinChanged();
-
-            // toggleBackground.color = Skin.InputFieldNormalBackgroundColor;
-            // toggleInput.graphic.color = Skin.ToggleCheckmarkColor;
-
-            Vector2 rightSideAnchorMin = new Vector2( Skin.LabelWidthPercentage, 0f );
             startOn.SetSkinDropDownField(Skin);
             listenOn.SetupInputFieldSkin(Skin);
-            // variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
-            // ( (RectTransform) toggleInput.transform ).anchorMin = rightSideAnchorMin;
         }
-        
+
         private void UpdateOtherCompData(Atom.StartOn _atom)
         {
             List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
             if (selectedObjects.Count <= 1) return;
-         
             foreach (var obj in selectedObjects)
             {
                 foreach (Atom.StartOn atom in Atom.StartOn.AllInstances)
@@ -169,7 +158,7 @@ namespace RuntimeInspectorNamespace
             base.Refresh();
             LoadData();
         }
-        
+
         private void LoadData()
         {
             Atom.StartOn atom = (Atom.StartOn)Value;
