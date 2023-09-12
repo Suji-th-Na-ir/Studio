@@ -11,7 +11,7 @@ using System.Reflection;
 
 public class SelectionHandler : View
 {
-    private enum GizmoId
+    public enum GizmoId
     {
         Move = 1,
         Rotate,
@@ -259,7 +259,7 @@ public class SelectionHandler : View
         runtimeHierarchy.Select(_obj.transform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
     }
     
-    private void SetWorkGizmoId(GizmoId gizmoId)
+    public void SetWorkGizmoId(GizmoId gizmoId)
     {
         // If the specified gizmo id is the same as the current id, there is nothing left to do
         if (gizmoId == _workGizmoId) return;

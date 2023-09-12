@@ -12,6 +12,9 @@ namespace Terra.Studio
         private const string PLAY_BUTTON_LOC = "PlayButton";
         private const string SAVE_BUTTON_LOC = "SaveButton";
         private const string LOAD_BUTTON_LOC = "LoadButton";
+        private const string MOVE_BUTTON_LOC = "MoveButton";
+        private const string ROTATE_BUTTON_LOC = "RotateButton";
+        private const string SCALE_BUTTON_LOC = "ScaleButton";
         private const string CYLINDER_PRIMITIVE_BUTTON_LOC = "cylinder_button";
         private const string SPHERE_PRIMITIVE_BUTTON_LOC = "sphere_button";
         private const string CUBE_PRIMITIVE_BUTTON_LOC = "cube_button";
@@ -38,6 +41,9 @@ namespace Terra.Studio
             var planePrimitiveTr = Helper.FindDeepChild(transform, PLANE_PRIMITIVE_BUTTON_LOC, true);
             var checkpointTr = Helper.FindDeepChild(transform, CHECKPOINT_PRIMITIVE_BUTTON_LOC, true);
             var timerTr = Helper.FindDeepChild(transform, TIMER_BUTTON_LOC, true);
+            var moveButtonTr = Helper.FindDeepChild(transform, MOVE_BUTTON_LOC, true);
+            var rotateButtonTr = Helper.FindDeepChild(transform, ROTATE_BUTTON_LOC, true);
+            var scaleButtonTr = Helper.FindDeepChild(transform, SCALE_BUTTON_LOC, true);
 
             var addButton = addButtonTr.GetComponent<Button>();
             AddListenerEvent(addButton, () =>
@@ -51,6 +57,24 @@ namespace Terra.Studio
             {
                 EditorOp.Resolve<SceneDataHandler>().PrepareSceneDataToRuntime();
                 EditorOp.Resolve<EditorSystem>().RequestSwitchState();
+            });
+
+            var moveButton = moveButtonTr.GetComponent<Button>();
+            AddListenerEvent(moveButton, () =>
+            {
+                EditorOp.Resolve<SelectionHandler>().SetWorkGizmoId(SelectionHandler.GizmoId.Move);
+            });
+
+            var rotateButton = rotateButtonTr.GetComponent<Button>();
+            AddListenerEvent(rotateButton, () =>
+            {
+                EditorOp.Resolve<SelectionHandler>().SetWorkGizmoId(SelectionHandler.GizmoId.Rotate);
+            });
+
+            var scaleButton = scaleButtonTr.GetComponent<Button>();
+            AddListenerEvent(scaleButton, () =>
+            {
+                EditorOp.Resolve<SelectionHandler>().SetWorkGizmoId(SelectionHandler.GizmoId.Scale);
             });
 
             var saveButton = saveButtonTr.GetComponent<Button>();
