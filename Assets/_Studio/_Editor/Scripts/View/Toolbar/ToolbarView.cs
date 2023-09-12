@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using PlayShifu.Terra;
 using RuntimeInspectorNamespace;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -97,6 +98,11 @@ namespace Terra.Studio
 
             var timerButton = timerTr.GetComponent<Button>();
             AddListenerEvent(timerButton, CreateObject, "InGameTimer");
+
+            EditorOp.Resolve<SelectionHandler>().SelectionChanged += (List<GameObject> gm) =>
+            {
+                PrimitivePanel.SetActive(false);
+            };
         }
 
         private void AddListenerEvent<T>(Button button, Action<T> callback, T type)

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using Terra.Studio;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -21,6 +23,8 @@ namespace RuntimeInspectorNamespace
         public delegate bool GameObjectFilterDelegate(Transform transform);
 
 #pragma warning disable 0649
+        [SerializeField]
+       public RuntimeInspectorSettings m_internalSettings;
         [SerializeField]
         private float m_refreshInterval = 0f;
         public float RefreshInterval
@@ -774,6 +778,7 @@ namespace RuntimeInspectorNamespace
             bool hasChanged = false;
             for (int i = 0; i < sceneData.Count; i++)
                 hasChanged |= sceneData[i].Refresh();
+            RefreshCustomPseudoScenes();
 
             if (hasChanged)
                 isListViewDirty = true;
@@ -785,6 +790,39 @@ namespace RuntimeInspectorNamespace
                         drawers[i].Refresh();
                 }
             }
+        }
+
+        private void RefreshCustomPseudoScenes()
+        {
+            List<GameObject> filteredObjects = new List<GameObject>();
+            SceneManager.GetActiveScene().GetRootGameObjects(filteredObjects);
+            foreach (GameObject goo in filteredObjects)
+            {
+                if (goo.GetComponent<HideInHierarchy>() == null)
+                {
+
+                    List<Component> components = new List<Component>();
+                    goo?.GetComponents(components);
+
+
+
+                    bool isessential = false;
+                    for (int j = 0; j < components.Count; j++)
+                    {
+                        if (m_internalSettings.GameEssentials.Any(component => component == components[j].GetType().Name))
+                        {
+                            if (!GetPseudoScene("Game Essentials", true).ContainsChild(goo.transform))
+                                AddToPseudoScene("Game Essentials", goo.transform);
+                            isessential = true;
+                            break;
+                        }
+                    }
+                    if (!isessential && !GetPseudoScene("", true).ContainsChild(goo.transform))
+                        AddToPseudoScene("", goo.transform);
+                }
+            }
+            if ( GetPseudoScene("Game Essentials",false)?.ChildCount == 0)
+                DeletePseudoScene("Game Essentials");
         }
 
         private void RefreshListView()
