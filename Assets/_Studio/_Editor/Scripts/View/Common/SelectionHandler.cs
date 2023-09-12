@@ -258,7 +258,12 @@ public class SelectionHandler : View
     {
         runtimeHierarchy.Select(_obj.transform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
     }
-    
+
+    public void RefreshHierarchy()
+    {
+        runtimeHierarchy.Refresh();
+    }
+
     public void SetWorkGizmoId(GizmoId gizmoId)
     {
         // If the specified gizmo id is the same as the current id, there is nothing left to do

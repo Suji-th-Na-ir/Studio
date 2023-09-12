@@ -135,6 +135,7 @@ namespace Terra.Studio
                 EditorOp.Resolve<SceneDataHandler>().TimerManagerObj = primitive;
                 EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = primitive, componentType = "InGameTimer" });
             }
+            EditorOp.Resolve<SelectionHandler>().RefreshHierarchy();
             EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Clear();
             EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);
             EditorOp.Resolve<SelectionHandler>().SelectObjectInHierarchy(primitive);
