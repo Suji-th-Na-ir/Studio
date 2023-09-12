@@ -119,12 +119,12 @@ namespace RuntimeInspectorNamespace
                 lastComponentData.translateType = (int)translateType;
                 var tempValue = lastComponentData;
 
-                if (lastComponentData.speed == -1)
+                if (!selectedTranslateType.speedInput|| lastComponentData.speed == -1)
                     tempValue.speed = preset.speed;
 
-                if (lastComponentData.repeat == -1)
+                if (!selectedTranslateType.repeatInput || lastComponentData.repeat == -1)
                     tempValue.repeat = preset.repeat;
-                if (lastComponentData.pauseFor == -1)
+                if (!selectedTranslateType.pauseForInput || lastComponentData.pauseFor == -1)
                     tempValue.pauseFor = preset.pauseFor;
 
                 if (!selectedTranslateType.customString)
