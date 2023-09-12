@@ -8,6 +8,7 @@ namespace Terra.Studio
 {
     public class ToolbarView : View
     {
+        private const string ADD_BUTTON_LOC = "AddButton";
         private const string PLAY_BUTTON_LOC = "PlayButton";
         private const string SAVE_BUTTON_LOC = "SaveButton";
         private const string LOAD_BUTTON_LOC = "LoadButton";
@@ -18,6 +19,7 @@ namespace Terra.Studio
         private const string CHECKPOINT_PRIMITIVE_BUTTON_LOC = "checkpoint_button";
         private const string TIMER_BUTTON_LOC = "timer_button";
 
+        [SerializeField] private GameObject PrimitivePanel;
         private void Awake()
         {
             EditorOp.Register(this);
@@ -25,6 +27,8 @@ namespace Terra.Studio
 
         public override void Init()
         {
+            PrimitivePanel.SetActive(false);
+            var addButtonTr = Helper.FindDeepChild(transform, ADD_BUTTON_LOC, true);
             var playButtonTr = Helper.FindDeepChild(transform, PLAY_BUTTON_LOC, true);
             var saveButtonTr = Helper.FindDeepChild(transform, SAVE_BUTTON_LOC, true);
             var loadButtonTr = Helper.FindDeepChild(transform, LOAD_BUTTON_LOC, true);
@@ -34,6 +38,13 @@ namespace Terra.Studio
             var planePrimitiveTr = Helper.FindDeepChild(transform, PLANE_PRIMITIVE_BUTTON_LOC, true);
             var checkpointTr = Helper.FindDeepChild(transform, CHECKPOINT_PRIMITIVE_BUTTON_LOC, true);
             var timerTr = Helper.FindDeepChild(transform, TIMER_BUTTON_LOC, true);
+
+            var addButton = addButtonTr.GetComponent<Button>();
+            AddListenerEvent(addButton, () =>
+            {
+                var currentActiveState = PrimitivePanel.activeSelf;
+                PrimitivePanel.SetActive(!currentActiveState);
+            });
 
             var playButton = playButtonTr.GetComponent<Button>();
             AddListenerEvent(playButton, () =>
