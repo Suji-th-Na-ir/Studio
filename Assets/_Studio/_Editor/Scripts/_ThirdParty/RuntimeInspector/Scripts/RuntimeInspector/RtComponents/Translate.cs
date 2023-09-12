@@ -32,7 +32,7 @@ namespace RuntimeInspectorNamespace
                 speed = Type.data.speed,
                 pauseFor = Type.data.pauseFor,
                 repeatFor = Type.data.repeat,
-                targetPosition = Type.data.moveTo,
+                targetPosition = Type.data.moveBy,
                 startPosition = transform.position,
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
@@ -90,7 +90,7 @@ namespace RuntimeInspectorNamespace
             Type.data.translateType = (int)comp.translateType;
             Type.data.speed = comp.speed;
             Type.data.pauseFor = comp.pauseFor;
-            Type.data.moveTo = comp.targetPosition;
+            Type.data.moveBy = comp.targetPosition;
             Type.data.repeat = comp.repeatFor;
             Type.data.broadcast = comp.Broadcast;
             Type.data.broadcastAt = comp.broadcastAt;
