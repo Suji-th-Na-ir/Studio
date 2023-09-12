@@ -69,13 +69,13 @@ namespace Terra.Studio
 
             var undoButton = undoButtonTr.GetComponent<Button>();
             AddListenerEvent(undoButton, EditorOp.Resolve<IURCommand>().Undo);
-            undoButtonTr.gameObject.SetActive(false);
-            EditorOp.Resolve<IURCommand>().OnUndoStackAvailable += (isPresent) => { undoButtonTr.gameObject.SetActive(isPresent); };
+            undoButton.interactable = false;
+            EditorOp.Resolve<IURCommand>().OnUndoStackAvailable += (isPresent) => { undoButton.interactable = isPresent; };
 
             var redoButton = redoButtonTr.GetComponent<Button>();
             AddListenerEvent(redoButton, EditorOp.Resolve<IURCommand>().Redo);
-            redoButtonTr.gameObject.SetActive(false);
-            EditorOp.Resolve<IURCommand>().OnRedoStackAvailable += (isPresent) => { redoButtonTr.gameObject.SetActive(isPresent); };
+            redoButton.interactable = false;
+            EditorOp.Resolve<IURCommand>().OnRedoStackAvailable += (isPresent) => { redoButton.interactable = isPresent; };
         }
 
         private void AddListenerEvent<T>(Button button, Action<T> callback, T type)
