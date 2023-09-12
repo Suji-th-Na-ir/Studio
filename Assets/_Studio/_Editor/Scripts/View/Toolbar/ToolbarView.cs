@@ -123,9 +123,7 @@ namespace Terra.Studio
             var itemData = ((ResourceDB)SystemOp.Load(ResourceTag.ResourceDB)).GetItemDataForNearestName(name);
             var primitive = RuntimeWrappers.SpawnGameObject(itemData.ResourcePath, itemData);
             primitive.transform.position = spawnPosition;
-            EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Clear();
-            EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);
-            EditorOp.Resolve<SelectionHandler>().SelectObjectInHierarchy(primitive);
+           
             if (name.Equals("CheckPoint"))
             {
                 primitive.AddComponent<Checkpoint>();
@@ -137,6 +135,9 @@ namespace Terra.Studio
                 EditorOp.Resolve<SceneDataHandler>().TimerManagerObj = primitive;
                 EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = primitive, componentType = "InGameTimer" });
             }
+            EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Clear();
+            EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);
+            EditorOp.Resolve<SelectionHandler>().SelectObjectInHierarchy(primitive);
         }
 
         private bool CanSpawn(string name)
