@@ -21,12 +21,12 @@ namespace RuntimeInspectorNamespace
         {
             var component = new CheckpointComponent()
             {
-                canPlaySFX = PlaySFX.data.canPlay,
-                sfxName = PlaySFX.data.clipName,
-                sfxIndex = PlaySFX.data.clipIndex,
-                canPlayVFX = PlayVFX.data.canPlay,
-                vfxName = PlayVFX.data.clipName,
-                vfxIndex = PlayVFX.data.clipIndex,
+                canPlaySFX = PlaySFX.data.CanPlay,
+                sfxName = PlaySFX.data.ClipName,
+                sfxIndex = PlaySFX.data.ClipIndex,
+                canPlayVFX = PlayVFX.data.CanPlay,
+                vfxName = PlayVFX.data.ClipName,
+                vfxIndex = PlayVFX.data.ClipIndex,
                 IsBroadcastable = !string.IsNullOrEmpty(Broadcast),
                 respawnPoint = transform.position,
                 IsConditionAvailable = true,
@@ -43,12 +43,12 @@ namespace RuntimeInspectorNamespace
         {
             var json = data.data;
             var component = JsonConvert.DeserializeObject<CheckpointComponent>(json);
-            PlaySFX.data.canPlay = component.canPlaySFX;
-            PlaySFX.data.clipName = component.sfxName;
-            PlaySFX.data.clipIndex = component.sfxIndex;
-            PlayVFX.data.canPlay = component.canPlayVFX;
-            PlayVFX.data.clipName = component.vfxName;
-            PlayVFX.data.clipIndex = component.vfxIndex;
+            PlaySFX.data.CanPlay = component.canPlaySFX;
+            PlaySFX.data.ClipName = component.sfxName;
+            PlaySFX.data.ClipIndex = component.sfxIndex;
+            PlayVFX.data.CanPlay = component.canPlayVFX;
+            PlayVFX.data.ClipName = component.vfxName;
+            PlayVFX.data.ClipIndex = component.vfxIndex;
             Broadcast = component.Broadcast;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, null);
         }

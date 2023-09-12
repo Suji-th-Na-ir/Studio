@@ -1,107 +1,42 @@
 using System;
-using System.Collections.Generic;
-using PlayShifu.Terra;
 using UnityEngine;
-using UnityEngine.UI;
 using Terra.Studio;
+using PlayShifu.Terra;
+using System.Collections.Generic;
 
 namespace RuntimeInspectorNamespace
 {
-    public class PlayVFXField : InspectorField
+    public class PlayVFXField : BasePlayFXField
     {
-#pragma warning disable 0649
-        [SerializeField]
-        private Image toggleBackground;
-
-        [SerializeField]
-        private Toggle toggleInput;
-
-        [SerializeField]
-        private Dropdown optionsDropdown;
-
-#pragma warning restore 0649
-
-        public override void Initialize()
-        {
-            base.Initialize();
-            toggleInput.onValueChanged.AddListener(OnToggleValueChanged);
-            optionsDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
-            LoadVfxClips();
-            ShowHideOptionsDropdown();
-        }
-
-        private void LoadVfxClips()
-        {
-            optionsDropdown.options.Clear();
-
-            foreach (string clipName in Helper.GetVfxClipNames())
-            {
-                optionsDropdown.options.Add(new Dropdown.OptionData()
-                {
-                    text = clipName
-                });
-            }
-        }
+        protected override string CommentKey => "VFX";
 
         public override bool SupportsType(Type type)
         {
             return type == typeof(Atom.PlayVfx);
         }
 
-        private void OnDropdownValueChanged(int index)
+        protected override string[] GetAllClipNames()
         {
-            Atom.PlayVfx vfx = (Atom.PlayVfx)Value;
-            vfx.data.clipName = Helper.GetVfxClipNameByIndex(index);
-            vfx.data.clipIndex = index;
-            UpdateData(vfx);
+            return Helper.GetVfxClipNames();
         }
 
-        private void OnToggleValueChanged(bool input)
+        protected override string GetClipNameByIndex(int index)
         {
-            LoadVfxClips();
-            if(Inspector) Inspector.RefreshDelayed();
-            Atom.PlayVfx vfx = (Atom.PlayVfx)Value;
-            vfx.data.canPlay = input;
-            
-            if (vfx.data.canPlay)
-            {
-                OnDropdownValueChanged(vfx.data.clipIndex);
-            }
-            ShowHideOptionsDropdown();
-            UpdateData(vfx);
-        }
-        
-        void ShowHideOptionsDropdown()
-        {
-            if (toggleInput.isOn)
-            {
-                optionsDropdown.gameObject.SetActive(true);
-                optionsDropdown.value = 0;
-            }
-            else
-            {
-                optionsDropdown.gameObject.SetActive(false);
-            }
+            return Helper.GetVfxClipNameByIndex(index);
         }
 
-        private void SetOptionsDropdown(bool _value)
+        protected override void OnToggleValueSubmitted(bool _input)
         {
-            optionsDropdown.gameObject.SetActive(_value);
+            base.OnToggleValueSubmitted(_input);
+            var _vfx = (Atom.PlayVfx)Value;
+            UpdateData(_vfx);
         }
 
-
-        protected override void OnSkinChanged()
+        protected override void OnDropdownValueSubmitted(int index)
         {
-            base.OnSkinChanged();
-
-            toggleBackground.color = Skin.InputFieldNormalBackgroundColor;
-            toggleInput.graphic.color = Skin.ToggleCheckmarkColor;
-
-            Vector2 rightSideAnchorMin = new Vector2(Skin.LabelWidthPercentage, 0f);
-            variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
-            ((RectTransform)toggleInput.transform).anchorMin = rightSideAnchorMin;
-
-            optionsDropdown.SetSkinDropDownField(Skin);
+            base.OnDropdownValueSubmitted(index);
+            var _vfx = (Atom.PlayVfx)Value;
+            UpdateData(_vfx);
         }
 
         private void UpdateData(Atom.PlayVfx _vfx)
@@ -126,22 +61,6 @@ namespace RuntimeInspectorNamespace
                         }
                     }
                 }
-            }
-        }
-
-        public override void Refresh()
-        {
-            base.Refresh();
-            LoadData();
-        }
-        
-        private void LoadData()
-        {
-            Atom.PlayVfx vfx = (Atom.PlayVfx)Value;
-            if (vfx != null)
-            {
-                toggleInput.isOn = vfx.data.canPlay;
-                optionsDropdown.value = vfx.data.clipIndex;
             }
         }
     }

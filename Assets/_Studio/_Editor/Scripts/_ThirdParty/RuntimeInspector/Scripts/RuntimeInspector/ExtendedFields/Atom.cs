@@ -1,9 +1,8 @@
 using System;
-using RuntimeInspectorNamespace;
 using UnityEngine;
-using System.Collections.Generic;
-using UnityEngine.Serialization;
 using PlayShifu.Terra;
+using RuntimeInspectorNamespace;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -19,16 +18,16 @@ namespace Terra.Studio
             [HideInInspector] public List<string> StartList = new List<string>();
             [HideInInspector] public string componentType = null;
 
-            public void Setup(GameObject _target, List<string> _list, string _componentType,bool updateListen)
+            public void Setup(GameObject _target, List<string> _list, string _componentType, bool updateListen)
             {
                 StartList = _list;
                 target = _target;
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
                 componentType = _componentType;
-                if(updateListen)
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(data.listenName, ""
-                                , new ComponentDisplayDock() { componentGameObject = _target, componentType = _componentType });
+                if (updateListen)
+                    EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(data.listenName, ""
+                                    , new ComponentDisplayDock() { componentGameObject = _target, componentType = _componentType });
                 data = new();
                 if (StartList.Count >= data.startIndex)
                 {
@@ -38,46 +37,49 @@ namespace Terra.Studio
         }
 
         [Serializable]
-        public class PlaySfx
+        public class BasePlay
         {
-            public static List<PlaySfx> AllInstances = new();
-            [HideInInspector] public PlaySFXField field;
-            [HideInInspector] public PlaySFXData data;
             [HideInInspector] public GameObject target;
+            [HideInInspector] public PlayFXData data;
             public Type componentType = null;
             public string fieldName;
 
-            public void Setup<T>(GameObject _target, string fieldName = null)
+            public virtual void Setup<T>(GameObject _target, string fieldName = null)
             {
                 target = _target;
                 componentType = typeof(T);
                 this.fieldName = fieldName;
-                if (!AllInstances.Contains(this))
-                    AllInstances.Add(this);
                 data = new();
-                data.clipName = Helper.GetSfxClipNameByIndex(data.clipIndex);
             }
         }
 
         [Serializable]
-        public class PlayVfx
+        public class PlaySfx : BasePlay
+        {
+            public static List<PlaySfx> AllInstances = new();
+            [HideInInspector] public PlaySFXField field;
+
+            public override void Setup<T>(GameObject _target, string fieldName = null)
+            {
+                base.Setup<T>(_target, fieldName);
+                if (!AllInstances.Contains(this))
+                    AllInstances.Add(this);
+                data.ClipName = Helper.GetSfxClipNameByIndex(data.ClipIndex);
+            }
+        }
+
+        [Serializable]
+        public class PlayVfx : BasePlay
         {
             public static List<PlayVfx> AllInstances = new();
             [HideInInspector] public PlayVFXField field;
-            [HideInInspector] public PlayVFXData data;
-            [HideInInspector] public GameObject target;
-            public Type componentType = null;
-            public string fieldName;
 
-            public void Setup<T>(GameObject _target, string fieldName = null)
+            public override void Setup<T>(GameObject _target, string fieldName = null)
             {
-                target = _target;
-                componentType = typeof(T);
-                this.fieldName = fieldName;
+                base.Setup<T>(_target, fieldName);
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
-                data = new();
-                data.clipName = Helper.GetSfxClipNameByIndex(data.clipIndex);
+                data.ClipName = Helper.GetVfxClipNameByIndex(data.ClipIndex);
             }
         }
 
@@ -89,7 +91,7 @@ namespace Terra.Studio
             [HideInInspector] public GameObject target;
             [HideInInspector] public string id;
             [HideInInspector] public string componentType = null;
-            
+
             public void Setup(string _id, GameObject _target, string _componentType)
             {
                 target = _target;
@@ -106,7 +108,7 @@ namespace Terra.Studio
             [HideInInspector] public GameObject target;
             [HideInInspector] public string id;
             [HideInInspector] public string componentType = null;
-            
+
             public void Setup(string _id, GameObject _target, string _componentType)
             {
                 target = _target;
@@ -130,30 +132,20 @@ namespace Terra.Studio
         }
     }
 
-    // define component data classes here
     [Serializable]
     public struct StartOnData
     {
         public string startName;
         public int startIndex;
         public string listenName;
-        // public int listenIndex;
     }
 
     [Serializable]
-    public struct PlaySFXData
+    public struct PlayFXData
     {
-        public bool canPlay;
-        public string clipName;
-        public int clipIndex;
-    }
-
-    [Serializable]
-    public struct PlayVFXData
-    {
-        public bool canPlay;
-        public string clipName;
-        public int clipIndex;
+        public bool CanPlay;
+        public string ClipName;
+        public int ClipIndex;
     }
 
     [Serializable]
@@ -168,7 +160,7 @@ namespace Terra.Studio
         public float speed;
         public int repeat;
         public float pauseBetween;
-        
+
         public string broadcast;
         public Listen listen;
         public BroadcastAt broadcastAt;
@@ -182,7 +174,7 @@ namespace Terra.Studio
         public float pauseFor;
         public float speed;
         public int repeat;
-        
+
         public string broadcast;
 
         public string listenTo;

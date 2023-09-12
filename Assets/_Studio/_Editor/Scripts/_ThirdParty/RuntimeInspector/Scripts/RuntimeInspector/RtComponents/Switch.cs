@@ -72,17 +72,17 @@ namespace Terra.Studio
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcastWhenOff, null);
         }
 
-        private SwitchComponentData GetSwitchComponentData(SwitchState state, PlaySFXData playSFXData, PlayVFXData playVFXData, string broadcast)
+        private SwitchComponentData GetSwitchComponentData(SwitchState state, PlayFXData playSFXData, PlayFXData playVFXData, string broadcast)
         {
             return new SwitchComponentData()
             {
                 state = state,
-                canPlaySFX = playSFXData.canPlay,
-                sfxName = playSFXData.clipName,
-                sfxIndex = playSFXData.clipIndex,
-                canPlayVFX = playVFXData.canPlay,
-                vfxName = playVFXData.clipName,
-                vfxIndex = playVFXData.clipIndex,
+                canPlaySFX = playSFXData.CanPlay,
+                sfxName = playSFXData.ClipName,
+                sfxIndex = playSFXData.ClipIndex,
+                canPlayVFX = playVFXData.CanPlay,
+                vfxName = playVFXData.ClipName,
+                vfxIndex = playVFXData.ClipIndex,
                 isBroadcastable = !string.IsNullOrEmpty(broadcast),
                 broadcast = broadcast
             };
@@ -93,23 +93,23 @@ namespace Terra.Studio
             return data.broadcast;
         }
 
-        private PlaySFXData GetPlaySFXData(SwitchComponentData data)
+        private PlayFXData GetPlaySFXData(SwitchComponentData data)
         {
-            return new PlaySFXData()
+            return new PlayFXData()
             {
-                canPlay = data.canPlaySFX,
-                clipIndex = data.sfxIndex,
-                clipName = data.sfxName
+                CanPlay = data.canPlaySFX,
+                ClipIndex = data.sfxIndex,
+                ClipName = data.sfxName
             };
         }
 
-        private PlayVFXData GetPlayVFXData(SwitchComponentData data)
+        private PlayFXData GetPlayVFXData(SwitchComponentData data)
         {
-            return new PlayVFXData()
+            return new PlayFXData()
             {
-                canPlay = data.canPlayVFX,
-                clipIndex = data.vfxIndex,
-                clipName = data.vfxName
+                CanPlay = data.canPlayVFX,
+                ClipIndex = data.vfxIndex,
+                ClipName = data.vfxName
             };
         }
 

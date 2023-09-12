@@ -1,103 +1,44 @@
 using System;
-using System.Collections.Generic;
-using PlayShifu.Terra;
 using UnityEngine;
-using UnityEngine.UI;
 using Terra.Studio;
-
-
+using PlayShifu.Terra;
+using System.Collections.Generic;
 
 namespace RuntimeInspectorNamespace
 {
-    public class PlaySFXField : InspectorField
+    public class PlaySFXField : BasePlayFXField
     {
-#pragma warning disable 0649
-        [SerializeField]
-        private Image toggleBackground;
+        protected override string CommentKey => "SFX";
 
-        [SerializeField]
-        private Toggle toggleInput;
-
-        [SerializeField] 
-        private Dropdown optionsDropdown;
-
-#pragma warning restore 0649
-
-        public override void Initialize()
+        public override bool SupportsType(Type type)
         {
-            base.Initialize();
-            toggleInput.onValueChanged.AddListener( OnToggleValueChanged );
-            optionsDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
-            LoadSfxClips();
-            ShowHideOptionsDropdown();
+            return type == typeof(Atom.PlaySfx);
         }
 
-        private void LoadSfxClips()
+        protected override string[] GetAllClipNames()
         {
-            optionsDropdown.options.Clear();
-            foreach (string clipName in Helper.GetSfxClipNames())
-            {
-                optionsDropdown.options.Add(new Dropdown.OptionData()
-                {
-                    text = clipName
-                });
-            }
+            return Helper.GetSfxClipNames();
         }
 
-        public override bool SupportsType( Type type )
+        protected override string GetClipNameByIndex(int index)
         {
-            return type == typeof( Atom.PlaySfx );
+            return Helper.GetSfxClipNameByIndex(index);
         }
 
-        private void OnDropdownValueChanged(int index)
+        protected override void OnToggleValueSubmitted(bool _input)
         {
-            Atom.PlaySfx sfx = (Atom.PlaySfx)Value;
-            sfx.data.clipName = Helper.GetSfxClipNameByIndex(index);
-            sfx.data.clipIndex = index;
-            UpdateData(sfx);
+            base.OnToggleValueSubmitted(_input);
+            var _sfx = (Atom.PlaySfx)Value;
+            UpdateData(_sfx);
         }
 
-        private void OnToggleValueChanged( bool _input )
+        protected override void OnDropdownValueSubmitted(int index)
         {
-            LoadSfxClips();
-            if(Inspector)  Inspector.RefreshDelayed();
-            Atom.PlaySfx sfx = (Atom.PlaySfx)Value;
-            sfx.data.canPlay = _input;
-            if (sfx.data.canPlay)
-            {
-                OnDropdownValueChanged(sfx.data.clipIndex);
-            }
-            ShowHideOptionsDropdown();
-            UpdateData(sfx);
+            base.OnDropdownValueSubmitted(index);
+            var _sfx = (Atom.PlaySfx)Value;
+            UpdateData(_sfx);
         }
 
-        void ShowHideOptionsDropdown()
-        {
-            if (toggleInput.isOn)
-            {
-                optionsDropdown.gameObject.SetActive(true);
-                optionsDropdown.value = 0;
-            }
-            else
-            {
-                optionsDropdown.gameObject.SetActive(false);
-            }
-        }
-
-        protected override void OnSkinChanged()
-        {
-            base.OnSkinChanged();
-
-            toggleBackground.color = Skin.InputFieldNormalBackgroundColor;
-            toggleInput.graphic.color = Skin.ToggleCheckmarkColor;
-
-            Vector2 rightSideAnchorMin = new Vector2( Skin.LabelWidthPercentage, 0f );
-            variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
-            ( (RectTransform) toggleInput.transform ).anchorMin = rightSideAnchorMin;
-
-            optionsDropdown.SetSkinDropDownField(Skin);
-        }
-        
         private void UpdateData(Atom.PlaySfx _sfx)
         {
             if (_sfx == null)
@@ -124,22 +65,6 @@ namespace RuntimeInspectorNamespace
                         }
                     }
                 }
-            }
-        }
-
-        public override void Refresh()
-        {
-            base.Refresh();
-            LoadData();
-        }
-        
-        private void LoadData()
-        {
-            Atom.PlaySfx sfx = (Atom.PlaySfx)Value;
-            if (sfx != null)
-            {
-                toggleInput.isOn = sfx.data.canPlay;
-                optionsDropdown.value = sfx.data.clipIndex;
             }
         }
     }

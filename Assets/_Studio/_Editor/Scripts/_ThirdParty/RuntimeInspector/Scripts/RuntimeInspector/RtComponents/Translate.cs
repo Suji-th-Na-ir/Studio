@@ -40,12 +40,12 @@ namespace RuntimeInspectorNamespace
                 broadcastAt = Type.data.broadcastAt,
                 IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcast),
                 Broadcast = Type.data.broadcast,
-                canPlaySFX = PlaySFX.data.canPlay,
-                canPlayVFX = PlayVFX.data.canPlay,
-                sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
-                vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName,
-                sfxIndex = PlaySFX.data.clipIndex,
-                vfxIndex = PlayVFX.data.clipIndex,
+                canPlaySFX = PlaySFX.data.CanPlay,
+                canPlayVFX = PlayVFX.data.CanPlay,
+                sfxName = string.IsNullOrEmpty(PlaySFX.data.ClipName) ? null : PlaySFX.data.ClipName,
+                vfxName = string.IsNullOrEmpty(PlayVFX.data.ClipName) ? null : PlayVFX.data.ClipName,
+                sfxIndex = PlaySFX.data.ClipIndex,
+                vfxIndex = PlayVFX.data.ClipIndex,
                 listen = Type.data.listen,
             };
 
@@ -81,12 +81,12 @@ namespace RuntimeInspectorNamespace
         public void Import(EntityBasedComponent cdata)
         {
             TranslateComponent comp = JsonConvert.DeserializeObject<TranslateComponent>(cdata.data);
-            PlaySFX.data.canPlay = comp.canPlaySFX;
-            PlaySFX.data.clipIndex = comp.sfxIndex;
-            PlaySFX.data.clipName = comp.sfxName;
-            PlayVFX.data.canPlay = comp.canPlayVFX;
-            PlayVFX.data.clipIndex = comp.vfxIndex;
-            PlayVFX.data.clipName = comp.vfxName;
+            PlaySFX.data.CanPlay = comp.canPlaySFX;
+            PlaySFX.data.ClipIndex = comp.sfxIndex;
+            PlaySFX.data.ClipName = comp.sfxName;
+            PlayVFX.data.CanPlay = comp.canPlayVFX;
+            PlayVFX.data.ClipIndex = comp.vfxIndex;
+            PlayVFX.data.ClipName = comp.vfxName;
             Type.data.translateType = (int)comp.translateType;
             Type.data.speed = comp.speed;
             Type.data.pauseFor = comp.pauseFor;
