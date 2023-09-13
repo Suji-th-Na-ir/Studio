@@ -75,7 +75,7 @@ namespace Terra.Studio
             if (currentIndex < 0)
             {
                 OnUndoStackAvailable?.Invoke(false);
-                var isRedoStackAvailable = operations.Count > 1;
+                var isRedoStackAvailable = operations.Count > 0;
                 OnRedoStackAvailable?.Invoke(isRedoStackAvailable);
             }
             if (currentIndex >= 0)
