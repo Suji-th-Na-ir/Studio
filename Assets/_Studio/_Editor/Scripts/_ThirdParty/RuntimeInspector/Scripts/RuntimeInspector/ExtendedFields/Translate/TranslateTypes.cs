@@ -11,7 +11,7 @@ namespace RuntimeInspectorNamespace
 {
     public class TranslateTypes : MonoBehaviour
     {
-        public InputField[] moveToInput;
+        public InputField[] movebyInput;
         public InputField speedInput = null;
         public InputField repeatInput = null;
         public InputField pauseForInput = null;
@@ -28,25 +28,25 @@ namespace RuntimeInspectorNamespace
         public void Setup()
         {
             LoadDefaultValues();
-            moveToInput?[0].onValueChanged.AddListener(
+            movebyInput?[0].onValueChanged.AddListener(
                 (value) =>
                 {
-                    field.GetAtom().data.moveTo.x = Helper.StringToFloat(value);
-                    UpdateAllSelectedObjects("moveTo", field.GetAtom().data.moveTo);
+                    field.GetAtom().data.moveBy.x = Helper.StringToFloat(value);
+                    UpdateAllSelectedObjects("moveBy", field.GetAtom().data.moveBy);
                 });
 
-            moveToInput?[1].onValueChanged.AddListener(
+            movebyInput?[1].onValueChanged.AddListener(
                 (value) =>
                 {
-                    field.GetAtom().data.moveTo.y = Helper.StringToFloat(value);
-                    UpdateAllSelectedObjects("moveTo", field.GetAtom().data.moveTo);
+                    field.GetAtom().data.moveBy.y = Helper.StringToFloat(value);
+                    UpdateAllSelectedObjects("moveBy", field.GetAtom().data.moveBy);
                 });
 
-            moveToInput?[2].onValueChanged.AddListener(
+            movebyInput?[2].onValueChanged.AddListener(
                 (value) =>
                 {
-                    field.GetAtom().data.moveTo.z = Helper.StringToFloat(value);
-                    UpdateAllSelectedObjects("moveTo", field.GetAtom().data.moveTo);
+                    field.GetAtom().data.moveBy.z = Helper.StringToFloat(value);
+                    UpdateAllSelectedObjects("moveBy", field.GetAtom().data.moveBy);
                 });
             if (speedInput != null) speedInput.onValueChanged.AddListener((value) =>
             {
@@ -135,9 +135,9 @@ namespace RuntimeInspectorNamespace
             if (pauseForInput != null) pauseForInput.SetTextWithoutNotify(_data.pauseFor.ToString());
             if (speedInput != null) speedInput.SetTextWithoutNotify(_data.speed.ToString());
             if (repeatInput != null) repeatInput.SetTextWithoutNotify(_data.repeat.ToString());
-            if (moveToInput != null) moveToInput[0].SetTextWithoutNotify(_data.moveTo.x.ToString());
-            if (moveToInput != null) moveToInput[1].SetTextWithoutNotify(_data.moveTo.y.ToString());
-            if (moveToInput != null) moveToInput[2].SetTextWithoutNotify(_data.moveTo.z.ToString());
+            if (movebyInput != null) movebyInput[0].SetTextWithoutNotify(_data.moveBy.x.ToString());
+            if (movebyInput != null) movebyInput[1].SetTextWithoutNotify(_data.moveBy.y.ToString());
+            if (movebyInput != null) movebyInput[2].SetTextWithoutNotify(_data.moveBy.z.ToString());
             if (customString) customString.SetTextWithoutNotify( _data.broadcast);
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
@@ -146,9 +146,9 @@ namespace RuntimeInspectorNamespace
         {
             canListenMultipleTimesToggle?.SetupToggeleSkin(skin);
             broadcastAt?.SetSkinDropDownField(skin);
-            for (int i = 0; i < moveToInput.Length; i++)
+            for (int i = 0; i < movebyInput.Length; i++)
             {
-                moveToInput[i]?.SetupInputFieldSkin(skin);
+                movebyInput[i]?.SetupInputFieldSkin(skin);
             }
             speedInput?.SetupInputFieldSkin(skin);
             pauseForInput?.SetupInputFieldSkin(skin);

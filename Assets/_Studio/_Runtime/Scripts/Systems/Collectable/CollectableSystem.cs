@@ -1,4 +1,3 @@
-using UnityEngine;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
@@ -42,7 +41,6 @@ namespace Terra.Studio
             {
                 RuntimeWrappers.AddScore(component.scoreValue);
             }
-            Object.Destroy(component.RefObj);
             EntityAuthorOp.Degenerate(entityID);
         }
 

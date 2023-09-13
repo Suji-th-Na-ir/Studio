@@ -178,7 +178,7 @@ namespace Terra.Studio
     public struct TranslateComponentData
     {
         public int translateType;
-        public Vector3 moveTo;
+        public Vector3 moveBy;
         public float pauseFor;
         public float speed;
         public int repeat;

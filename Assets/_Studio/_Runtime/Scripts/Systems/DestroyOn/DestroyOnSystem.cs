@@ -1,4 +1,3 @@
-using UnityEngine;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
@@ -24,7 +23,6 @@ namespace Terra.Studio
             {
                 RuntimeWrappers.PlayVFX(component.vfxName, component.RefObj.transform.position);
             }
-            Object.Destroy(component.RefObj);
             if (component.IsBroadcastable)
             {
                 RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
