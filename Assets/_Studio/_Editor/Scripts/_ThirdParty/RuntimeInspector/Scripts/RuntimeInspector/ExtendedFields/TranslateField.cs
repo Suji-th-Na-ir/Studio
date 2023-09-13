@@ -20,6 +20,7 @@ namespace RuntimeInspectorNamespace
 
         private TranslateTypes selectedTranslateType;
         TranslateComponentData lastComponentData;
+
         public override void Initialize()
         {
             base.Initialize();
@@ -45,6 +46,25 @@ namespace RuntimeInspectorNamespace
 
         private void OnTranslateTypesValueChanged(int _index)
         {
+            OnTranslateTypesValueSubmitted(_index);
+            var value = (TranslateComponentData)lastSubmittedValue;
+            if (_index != value.translateType)
+            {
+                var newValue = ((Atom.Translate)Value).data;
+                EditorOp.Resolve<IURCommand>().Record(
+                    lastSubmittedValue, newValue,
+                    $"Translate type changed to: {_index}",
+                    (value) =>
+                    {
+                        OnTranslateTypesValueSubmitted(((TranslateComponentData)value).translateType);
+                        lastSubmittedValue = value;
+                    });
+                lastSubmittedValue = newValue;
+            }
+        }
+
+        private void OnTranslateTypesValueSubmitted(int _index)
+        {
             ShowTranslateOptionsMenu(_index, true);
         }
 
@@ -63,8 +83,6 @@ namespace RuntimeInspectorNamespace
             lastComponentData = new();
             if (selectedTranslateType)
             {
-
-
                 if (selectedTranslateType.movebyInput != null)
                     lastComponentData.moveBy = new Vector3(int.Parse(selectedTranslateType.movebyInput[0].text),
                         int.Parse(selectedTranslateType.movebyInput[1].text), (int.Parse(selectedTranslateType.movebyInput[2].text)));
@@ -118,7 +136,7 @@ namespace RuntimeInspectorNamespace
                 lastComponentData.translateType = (int)translateType;
                 var tempValue = lastComponentData;
 
-                if (!selectedTranslateType.speedInput|| lastComponentData.speed == -1)
+                if (!selectedTranslateType.speedInput || lastComponentData.speed == -1)
                     tempValue.speed = preset.speed;
 
                 if (!selectedTranslateType.repeatInput || lastComponentData.repeat == -1)
@@ -143,12 +161,11 @@ namespace RuntimeInspectorNamespace
                 new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)Value).target, componentType = typeof(Atom.Translate).Name });
             }
             LoadData(preset);
-            Atom.Translate rt = (Atom.Translate)Value;
             UpdateTypeForMultiselect(translateType, preset);
         }
 
         private void UpdateTypeForMultiselect(TranslateType _data, TranslateComponentData? componentData = null)
-        { 
+        {
             List<GameObject> selectedObjecs = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
 
             if (selectedObjecs.Count > 1)
@@ -190,23 +207,21 @@ namespace RuntimeInspectorNamespace
                 types.ApplySkin(Skin);
             }
         }
-        
+
         public Atom.Translate GetAtom()
         {
             return (Atom.Translate)Value;
         }
-        
+
         protected override void OnBound(MemberInfo variable)
         {
-            // Debug.Log("translate bound called "+this.gameObject.name);
             base.OnBound(variable);
             Atom.Translate rt = (Atom.Translate)Value;
-            // Debug.Log($"translate atom data x value {rt.data.moveTo}");
-            // translateTypesDD.onValueChanged.AddListener(OnTranslateTypesValueChanged);
-            int translationTypeIndex = (((int)Enum.Parse(typeof(TranslateType), rt.data.translateType.ToString())));
+            int translationTypeIndex = (int)Enum.Parse(typeof(TranslateType), rt.data.translateType.ToString());
             translateTypesDD.SetValueWithoutNotify(translationTypeIndex);
             ShowTranslateOptionsMenu(translationTypeIndex);
             selectedTranslateType.SetData(rt.data);
+            lastSubmittedValue = rt.data;
         }
 
 
@@ -229,6 +244,16 @@ namespace RuntimeInspectorNamespace
             {
                 selectedTranslateType.SetData(rt.data);
             }
+        }
+
+        public object GetLastSubmittedValue()
+        {
+            return lastSubmittedValue;
+        }
+
+        public void SetLastSubmittedValue(object newValue)
+        {
+            lastSubmittedValue = newValue;
         }
     }
 }

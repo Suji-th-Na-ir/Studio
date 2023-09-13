@@ -1,4 +1,3 @@
-using TMPro;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -16,14 +15,11 @@ namespace RuntimeInspectorNamespace
         public InputField repeatInput = null;
         public InputField pauseForInput = null;
         public InputField listenTo = null;
-
         public Dropdown broadcastAt;
-        
         public InputField customString;
-        
         public Toggle canListenMultipleTimesToggle;
-
-        [HideInInspector] public TranslateField field = null;
+        [HideInInspector]
+        public TranslateField field = null;
 
         public void Setup()
         {
@@ -34,71 +30,167 @@ namespace RuntimeInspectorNamespace
                     field.GetAtom().data.moveBy.x = Helper.StringToFloat(value);
                     UpdateAllSelectedObjects("moveBy", field.GetAtom().data.moveBy);
                 });
-
+            movebyInput?[0].onEndEdit.AddListener(
+                (value) =>
+                {
+                    if (Helper.StringToFloat(value) != ((TranslateComponentData)field.GetLastSubmittedValue()).moveBy.x)
+                    {
+                        UpdateUndoRedoStack("MoveBy X", field.GetAtom().data.moveBy);
+                    }
+                });
             movebyInput?[1].onValueChanged.AddListener(
                 (value) =>
                 {
                     field.GetAtom().data.moveBy.y = Helper.StringToFloat(value);
                     UpdateAllSelectedObjects("moveBy", field.GetAtom().data.moveBy);
                 });
-
+            movebyInput?[1].onEndEdit.AddListener(
+                (value) =>
+                {
+                    if (Helper.StringToFloat(value) != ((TranslateComponentData)field.GetLastSubmittedValue()).moveBy.y)
+                    {
+                        UpdateUndoRedoStack("MoveBy Y", field.GetAtom().data.moveBy);
+                    }
+                });
             movebyInput?[2].onValueChanged.AddListener(
                 (value) =>
                 {
                     field.GetAtom().data.moveBy.z = Helper.StringToFloat(value);
                     UpdateAllSelectedObjects("moveBy", field.GetAtom().data.moveBy);
                 });
-            if (speedInput != null) speedInput.onValueChanged.AddListener((value) =>
+            movebyInput?[2].onEndEdit.AddListener(
+                (value) =>
+                {
+                    if (Helper.StringToFloat(value) != ((TranslateComponentData)field.GetLastSubmittedValue()).moveBy.z)
+                    {
+                        UpdateUndoRedoStack("MoveBy Z", field.GetAtom().data.moveBy);
+                    }
+                });
+            if (speedInput != null)
             {
-                field.GetAtom().data.speed = Helper.StringToFloat(value);
-                UpdateAllSelectedObjects("speed", field.GetAtom().data.speed);
-            });
-            if (pauseForInput != null) pauseForInput.onValueChanged.AddListener((value) =>
+                speedInput.onValueChanged.AddListener((value) =>
+                {
+                    field.GetAtom().data.speed = Helper.StringToFloat(value);
+                    UpdateAllSelectedObjects("speed", field.GetAtom().data.speed);
+                });
+                speedInput.onEndEdit.AddListener((value) =>
+                {
+                    if (Helper.StringToFloat(value) != ((TranslateComponentData)field.GetLastSubmittedValue()).speed)
+                    {
+                        UpdateUndoRedoStack("Speed", field.GetAtom().data.speed);
+                    }
+                });
+            }
+            if (pauseForInput != null)
             {
-                field.GetAtom().data.pauseFor = Helper.StringToFloat(value);
-                UpdateAllSelectedObjects("pauseFor", field.GetAtom().data.pauseFor);
-            });
-            if (repeatInput != null) repeatInput.onValueChanged.AddListener((value) =>
+                pauseForInput.onValueChanged.AddListener((value) =>
+                {
+                    field.GetAtom().data.pauseFor = Helper.StringToFloat(value);
+                    UpdateAllSelectedObjects("pauseFor", field.GetAtom().data.pauseFor);
+                });
+                pauseForInput.onEndEdit.AddListener((value) =>
+                {
+                    if (Helper.StringToFloat(value) != ((TranslateComponentData)field.GetLastSubmittedValue()).pauseFor)
+                    {
+                        UpdateUndoRedoStack("PauseFor", field.GetAtom().data.pauseFor);
+                    }
+                });
+            }
+            if (repeatInput != null)
             {
-                field.GetAtom().data.repeat = Helper.StringInInt(value);
-                UpdateAllSelectedObjects("repeat", field.GetAtom().data.repeat);
-            });
-            if(customString != null) customString.onValueChanged.AddListener((value) =>
+                repeatInput.onValueChanged.AddListener((value) =>
+                {
+                    field.GetAtom().data.repeat = Helper.StringInInt(value);
+                    UpdateAllSelectedObjects("repeat", field.GetAtom().data.repeat);
+                });
+                repeatInput.onEndEdit.AddListener((value) =>
+                {
+                    if (Helper.StringInInt(value) != ((TranslateComponentData)field.GetLastSubmittedValue()).repeat)
+                    {
+                        UpdateUndoRedoStack("Repeat", field.GetAtom().data.repeat);
+                    }
+                });
+            }
+            if (customString != null)
             {
-                SetCustomString(value);
-                // UpdateAllSelectedObjects("broadcast", field.GetAtom().data.broadcast);
-            });
-            if (broadcastAt != null) broadcastAt.onValueChanged.AddListener((value) =>
+                customString.onValueChanged.AddListener((value) =>
+                {
+                    SetCustomString(value);
+                });
+                customString.onEndEdit.AddListener((value) =>
+                {
+                    if (value != ((TranslateComponentData)field.GetLastSubmittedValue()).broadcast)
+                    {
+                        UpdateUndoRedoStack("Broadcast", field.GetAtom().data.broadcast);
+                    }
+                });
+            }
+            if (broadcastAt != null)
             {
-                field.GetAtom().data.broadcastAt = GetBroadcastAt(broadcastAt.options[value].text);
-                UpdateAllSelectedObjects("broadcastAt", field.GetAtom().data.broadcastAt);
-            });
-            if (canListenMultipleTimesToggle != null) canListenMultipleTimesToggle.onValueChanged.AddListener((value) =>
+                broadcastAt.onValueChanged.AddListener((value) =>
+                {
+                    var broadcastAtTemp = GetBroadcastAt(broadcastAt.options[value].text);
+                    if (broadcastAtTemp != field.GetAtom().data.broadcastAt)
+                    {
+                        field.GetAtom().data.broadcastAt = broadcastAtTemp;
+                        UpdateAllSelectedObjects("broadcastAt", field.GetAtom().data.broadcastAt);
+                        UpdateUndoRedoStack("BroadcastAt", field.GetAtom().data.broadcastAt);
+                    }
+                });
+            }
+            if (canListenMultipleTimesToggle != null)
             {
-                field.GetAtom().data.listen = value ? Listen.Always : Listen.Once;
-                UpdateAllSelectedObjects("listen", field.GetAtom().data.listen);
-            });
+                canListenMultipleTimesToggle.onValueChanged.AddListener((value) =>
+                {
+                    var listenTemp = value ? Listen.Always : Listen.Once;
+                    if (listenTemp != field.GetAtom().data.listen)
+                    {
+                        field.GetAtom().data.listen = value ? Listen.Always : Listen.Once;
+                        UpdateAllSelectedObjects("listen", field.GetAtom().data.listen);
+                        UpdateUndoRedoStack("Listen", field.GetAtom().data.listen);
+                    }
+                });
+            }
+        }
+
+        private void UpdateUndoRedoStack(string variableName, object value)
+        {
+            Debug.Log($"Updating stack: {variableName} | Value: {value}");
+            EditorOp.Resolve<IURCommand>().Record(
+                    field.GetLastSubmittedValue(), field.GetAtom().data,
+                    $"{variableName} changed to: {value}",
+                    (value) =>
+                    {
+                        field.SetLastSubmittedValue(value);
+                        var newValue = (TranslateComponentData)value;
+                        field.GetAtom().data = newValue;
+                        SetData(newValue);
+                    });
+            field.SetLastSubmittedValue(field.GetAtom().data);
         }
 
         private void SetCustomString(string _newString)
         {
             Atom.Translate atom = field.GetAtom();
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(_newString, 
-                atom.data.broadcast, 
-                new ComponentDisplayDock { componentGameObject = atom.target,
-                    componentType = atom.componentType });
+            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(_newString,
+                atom.data.broadcast,
+                new ComponentDisplayDock
+                {
+                    componentGameObject = atom.target,
+                    componentType = atom.componentType
+                });
             atom.data.broadcast = _newString;
         }
 
         private void UpdateAllSelectedObjects(string varName, object value)
         {
+            var type = typeof(Translate);
+            var typeField = type.GetField("Type", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
             List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
             foreach (var obj in selectedObjects)
             {
                 if (obj.TryGetComponent(out Translate translate))
                 {
-                    var type = typeof(Translate);
-                    var typeField = type.GetField("Type", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
                     var typeValue = (Atom.Translate)typeField.GetValue(translate);
                     var dataField = typeValue.GetType().GetField("data", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
                     var dataValue = (TranslateComponentData)dataField.GetValue(typeValue);
@@ -135,10 +227,10 @@ namespace RuntimeInspectorNamespace
             if (pauseForInput != null) pauseForInput.SetTextWithoutNotify(_data.pauseFor.ToString());
             if (speedInput != null) speedInput.SetTextWithoutNotify(_data.speed.ToString());
             if (repeatInput != null) repeatInput.SetTextWithoutNotify(_data.repeat.ToString());
-            if (movebyInput != null) movebyInput[0].SetTextWithoutNotify(_data.moveBy.x.ToString());
-            if (movebyInput != null) movebyInput[1].SetTextWithoutNotify(_data.moveBy.y.ToString());
-            if (movebyInput != null) movebyInput[2].SetTextWithoutNotify(_data.moveBy.z.ToString());
-            if (customString) customString.SetTextWithoutNotify( _data.broadcast);
+            movebyInput?[0].SetTextWithoutNotify(_data.moveBy.x.ToString());
+            movebyInput?[1].SetTextWithoutNotify(_data.moveBy.y.ToString());
+            movebyInput?[2].SetTextWithoutNotify(_data.moveBy.z.ToString());
+            if (customString) customString.SetTextWithoutNotify(_data.broadcast);
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
 
