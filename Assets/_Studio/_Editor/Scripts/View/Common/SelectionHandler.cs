@@ -292,8 +292,28 @@ public class SelectionHandler : View
 
     public void OnSelectionChanged(GameObject sObject = null)
     {
-        if(_selectedObjects.Count > 0)
+        for (int i = 0; i < prevSelectedObjects.Count; i++)
+        {
+            if (prevSelectedObjects[i]?.GetComponent<Outline>())
+                prevSelectedObjects[i].GetComponent<Outline>().enabled = false;
+        }
+            if (_selectedObjects.Count > 0)
             prevSelectedObjects = _selectedObjects.ToList();
+
+        for (int i = 0; i < _selectedObjects.Count; i++)
+        {
+            if (_selectedObjects[i]?.GetComponent<Outline>() != null)
+            {
+                _selectedObjects[i].GetComponent<Outline>().enabled = true;
+            }
+            else
+            {
+                var comp = _selectedObjects[i]?.AddComponent<Outline>();
+                comp.OutlineWidth = 5f;
+                comp.OutlineColor = Color.yellow;
+                comp.enabled = true;
+            }
+        }
         
         if (sObject != null)
         {
