@@ -7,7 +7,7 @@ using Terra.Studio;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using System.Reflection;
-
+using static RuntimeInspectorNamespace.RuntimeHierarchy;
 
 public class SelectionHandler : View
 {
@@ -20,7 +20,7 @@ public class SelectionHandler : View
     }
 
     [SerializeField] private RuntimeHierarchy runtimeHierarchy;
-    
+
     private ObjectTransformGizmo objectMoveGizmo;
     private ObjectTransformGizmo objectRotationGizmo;
     private ObjectTransformGizmo objectScaleGizmo;
@@ -31,9 +31,11 @@ public class SelectionHandler : View
     private List<GameObject> _selectedObjects = new List<GameObject>();
     private List<GameObject> prevSelectedObjects = new List<GameObject>();
     private GameObject lastPickedGameObject;
+    private Camera mainCamera;
 
-    public  delegate void SelectionChangedDelegate(List<GameObject> gm);
+    public delegate void SelectionChangedDelegate(List<GameObject> gm);
     public SelectionChangedDelegate SelectionChanged;
+
     private void Awake()
     {
         EditorOp.Register(this);
@@ -48,6 +50,95 @@ public class SelectionHandler : View
 
     private void OnHierarchySelectionChanged(System.Collections.ObjectModel.ReadOnlyCollection<Transform> _allTransform)
     {
+        if (_allTransform.Count == 0)
+        {
+            EditorOp.Resolve<IURCommand>().Record(
+                (prevSelectedObjects.ToList(), true),
+                (new List<GameObject>(), false),
+                $"Deselected all",
+                (tuple) =>
+                {
+                    runtimeHierarchy.OnSelectionChanged -= OnHierarchySelectionChanged;
+                    var (stack, isUndo) = ((List<GameObject>, bool))tuple;
+                    prevSelectedObjects = _selectedObjects.ToList();
+                    _selectedObjects = stack.ToList();
+                    runtimeHierarchy.Deselect();
+                    if (isUndo)
+                    {
+                        var option = _selectedObjects.Count == 1 ? SelectOptions.FocusOnSelection : SelectOptions.Additive;
+                        runtimeHierarchy.Select(_selectedObjects.Select(y => y.transform).ToList(), SelectOptions.Additive);
+                    }
+                    runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
+                });
+        }
+        if (_allTransform.Count == 1)
+        {
+            var prevSelected = prevSelectedObjects.Count == 0 ? null : prevSelectedObjects[^1];
+            var selected = _allTransform[0].gameObject;
+            EditorOp.Resolve<IURCommand>().Record(
+                (prevSelected, selected),
+                (prevSelected, selected),
+                $"Selected {selected.name}",
+                (tuple) =>
+                {
+                    runtimeHierarchy.OnSelectionChanged -= OnHierarchySelectionChanged;
+                    var (prev, current) = ((GameObject, GameObject))tuple;
+                    var isPrevAvailable = prev != null;
+                    OnSelectionChanged(current, SelectOptions.FocusOnSelection);
+                    if (prev != null)
+                    {
+                        OnSelectionChanged(prev, SelectOptions.FocusOnSelection);
+                    }
+                    runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
+                });
+        }
+        else
+        {
+            var diff = _allTransform.Count - prevSelectedObjects.Count;
+            if (diff == 1)
+            {
+                var selected = _allTransform[^1].gameObject;
+                EditorOp.Resolve<IURCommand>().Record(
+                    selected,
+                    selected,
+                    $"Multiselected {selected.name}",
+                    (obj) =>
+                    {
+                        runtimeHierarchy.OnSelectionChanged -= OnHierarchySelectionChanged;
+                        var go = (GameObject)obj;
+                        var isUndo = _selectedObjects.Contains(go);
+                        OnSelectionChanged(go, SelectOptions.Additive);
+                        if (isUndo)
+                        {
+                            runtimeHierarchy.Deselect();
+                            runtimeHierarchy.Select(_selectedObjects.Select(y => y.transform).ToList(), SelectOptions.Additive);
+                        }
+                        runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
+                    });
+            }
+            else
+            {
+                EditorOp.Resolve<IURCommand>().Record(
+                    prevSelectedObjects.ToList(),
+                    _allTransform.Select(x => x.gameObject).ToList(),
+                    $"Multiselected {diff} objects",
+                    (obj) =>
+                    {
+                        runtimeHierarchy.OnSelectionChanged -= OnHierarchySelectionChanged;
+                        prevSelectedObjects = _selectedObjects.ToList();
+                        _selectedObjects.Clear();
+                        var newList = (List<GameObject>)obj;
+                        for (int i = 0; i < newList.Count; i++)
+                        {
+                            _selectedObjects.Add(newList[i]);
+                        }
+                        OnSelectionChanged();
+                        runtimeHierarchy.Deselect();
+                        runtimeHierarchy.Select(_selectedObjects.Select(y => y.transform).ToList(), SelectOptions.Additive);
+                        runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
+                    });
+            }
+        }
         if (_allTransform.Count > 0)
         {
             _selectedObjects.Clear();
@@ -67,7 +158,7 @@ public class SelectionHandler : View
         objectUniversalGizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
 
         ResetAllHandles();
-        
+
         objectMoveGizmo.SetTargetObjects(_selectedObjects);
         objectRotationGizmo.SetTargetObjects(_selectedObjects);
         objectScaleGizmo.SetTargetObjects(_selectedObjects);
@@ -112,7 +203,6 @@ public class SelectionHandler : View
                     runtimeHierarchy.Deselect();
                     foreach (GameObject obj in _selectedObjects)
                     {
-                        
                         var comps = obj.GetComponents<IComponent>();
                         foreach (var comp in comps)
                         {
@@ -133,7 +223,6 @@ public class SelectionHandler : View
         {
             if (RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.WasKeyPressedThisFrame(KeyCode.D))
             {
-
                 foreach (GameObject obj in _selectedObjects)
                 {
                     var iObj = Instantiate(obj, obj.transform.position, obj.transform.rotation);
@@ -144,16 +233,14 @@ public class SelectionHandler : View
                         var componentType = components[i].GetType();
                         EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock
                         { componentGameObject = iObj, componentType = componentType.Name });
-
-                        var mInfo = componentType.GetField("Broadcast", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);             
+                        var mInfo = componentType.GetField("Broadcast", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
                         if (mInfo != null)
                         {
                             var oldValue = mInfo?.GetValue(components[i]);
                             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(oldValue.ToString(), ""
                                 , new ComponentDisplayDock() { componentGameObject = iObj, componentType = componentType.Name });
                         }
-                        
-                        var mInfo1 = componentType.GetField("BroadcastListen", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);                    
+                        var mInfo1 = componentType.GetField("BroadcastListen", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
                         if (mInfo1 != null)
                         {
                             var oldValue1 = mInfo1?.GetValue(components[i]);
@@ -167,10 +254,10 @@ public class SelectionHandler : View
             }
         }
     }
-    
+
     bool CheckIfThereIsAnyPopups()
     {
-        if (GameObject.FindObjectOfType<ObjectReferencePicker>() != null)
+        if (EditorOp.Resolve<ObjectReferencePicker>())
             return true;
 
         return false;
@@ -182,32 +269,20 @@ public class SelectionHandler : View
             RTGizmosEngine.Get.HoveredGizmo == null)
         {
             if (CheckIfThereIsAnyPopups()) return;
-
             if (EventSystem.current.IsPointerOverGameObject())
             {
-                return; // Return early if the mouse is over UI
+                return;
             }
-            // Pick a game object
             GameObject pickedObject = PickGameObject();
-
             if (pickedObject != null)
             {
                 if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
                 {
-                    if (_selectedObjects.Contains(pickedObject))
-                        _selectedObjects.Remove(pickedObject);
-                    else 
-                        _selectedObjects.Add(pickedObject);
-                    
-                    runtimeHierarchy.Select(pickedObject.transform, RuntimeHierarchy.SelectOptions.Additive);
-                    OnSelectionChanged();
+                    OnSelectionChanged(pickedObject, SelectOptions.Additive);
                 }
                 else
                 {
-                    runtimeHierarchy.Select(pickedObject.transform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
-                    _selectedObjects.Clear();
-                    _selectedObjects.Add(pickedObject);
-                    OnSelectionChanged();
+                    OnSelectionChanged(pickedObject, SelectOptions.FocusOnSelection);
                 }
             }
             else
@@ -221,7 +296,7 @@ public class SelectionHandler : View
         else if (RTInput.WasKeyPressedThisFrame(KeyCode.R)) SetWorkGizmoId(GizmoId.Scale);
         else if (RTInput.WasKeyPressedThisFrame(KeyCode.T)) SetWorkGizmoId(GizmoId.Universal);
     }
-    
+
     private void ResetAllHandles()
     {
         objectMoveGizmo.Gizmo.SetEnabled(false);
@@ -232,47 +307,47 @@ public class SelectionHandler : View
 
     private GameObject PickGameObject()
     {
-        // Build a ray using the current mouse cursor position
-        Ray ray = Camera.main.ScreenPointToRay(RTInput.MousePosition);
-        Vector3 worldPoint = Camera.main.ScreenToWorldPoint(RTInput.MousePosition);
-        
-        PhysicsScene pScene = SceneManager.GetActiveScene().GetPhysicsScene();
-        if (pScene.Raycast(worldPoint, ray.direction, out var hit, float.MaxValue))
+        var ray = GetCamera().ScreenPointToRay(RTInput.MousePosition);
+        var worldPoint = GetCamera().ScreenToWorldPoint(RTInput.MousePosition);
+        var pScene = SceneManager.GetActiveScene().GetPhysicsScene();
+        if (pScene.Raycast(worldPoint, ray.direction, out var hit, 1000f))
         {
             var hitObject = hit.collider.gameObject;
             var pickedObject = hitObject;
             if (lastPickedGameObject != hitObject)
             {
-                if (hitObject.transform.root != null && lastPickedGameObject!= hitObject.transform.root.gameObject)
+                if (hitObject.transform.root != null && lastPickedGameObject != hitObject.transform.root.gameObject)
                     pickedObject = hitObject.transform.root.gameObject;
-
             }
             lastPickedGameObject = pickedObject;
             return pickedObject;
         }
-
         return null;
     }
 
-    public void SelectObjectInHierarchy(GameObject _obj)
+    private Camera GetCamera()
     {
-        runtimeHierarchy.Select(_obj.transform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
+        if (!mainCamera)
+        {
+            mainCamera = Camera.main;
+        }
+        return mainCamera;
     }
-    
+
     private void SetWorkGizmoId(GizmoId gizmoId)
     {
         // If the specified gizmo id is the same as the current id, there is nothing left to do
         if (gizmoId == _workGizmoId) return;
-    
+
         // Start with a clean slate and disable all gizmos
         ResetAllHandles();
-    
+
         _workGizmoId = gizmoId;
         if (gizmoId == GizmoId.Move) _workGizmo = objectMoveGizmo;
         else if (gizmoId == GizmoId.Rotate) _workGizmo = objectRotationGizmo;
         else if (gizmoId == GizmoId.Scale) _workGizmo = objectScaleGizmo;
         else if (gizmoId == GizmoId.Universal) _workGizmo = objectUniversalGizmo;
-        
+
         if (_selectedObjects.Count != 0)
         {
             _workGizmo.Gizmo.SetEnabled(true);
@@ -280,20 +355,28 @@ public class SelectionHandler : View
         }
     }
 
-    public void OnSelectionChanged(GameObject sObject = null)
+    public void OnSelectionChanged(GameObject sObject = null, SelectOptions selectOption = SelectOptions.FocusOnSelection)
     {
-        if(_selectedObjects.Count > 0)
+        if (_selectedObjects.Count > 0)
+        {
             prevSelectedObjects = _selectedObjects.ToList();
-        
+        }
         if (sObject != null)
         {
-            if (_selectedObjects.Contains(sObject)) _selectedObjects.Remove(sObject);
-            else _selectedObjects.Add(sObject);
+            if (_selectedObjects.Contains(sObject))
+            {
+                _selectedObjects.Remove(sObject);
+            }
+            else
+            {
+                _selectedObjects.Add(sObject);
+                runtimeHierarchy.Select(sObject.transform, selectOption);
+            }
         }
-
         if (_selectedObjects.Count != 0)
         {
             _workGizmo.Gizmo.SetEnabled(true);
+            _workGizmo.SetTargetObjects(_selectedObjects);
             _workGizmo.RefreshPositionAndRotation();
         }
         else
@@ -312,6 +395,7 @@ public class SelectionHandler : View
     {
         return prevSelectedObjects;
     }
+
     public List<GameObject> GetSelectedObjects()
     {
         return _selectedObjects;

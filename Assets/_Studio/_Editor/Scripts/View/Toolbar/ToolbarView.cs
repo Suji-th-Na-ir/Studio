@@ -97,7 +97,6 @@ namespace Terra.Studio
             var primitive = RuntimeWrappers.SpawnGameObject(itemData.ResourcePath, itemData);
             primitive.transform.position = spawnPosition;
             EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);
-            EditorOp.Resolve<SelectionHandler>().SelectObjectInHierarchy(primitive);
             if (name.Equals("CheckPoint"))
             {
                 primitive.AddComponent<Checkpoint>();
