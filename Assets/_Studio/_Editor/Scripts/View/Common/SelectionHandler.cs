@@ -99,6 +99,11 @@ public class SelectionHandler : View
         Scan();
         DuplicateObjects();
         DeleteObjects();
+
+        if(RTInput.IsKeyPressed(KeyCode.LeftCommand)&& RTInput.WasKeyPressedThisFrame(KeyCode.S))
+        {
+            EditorOp.Resolve<SceneDataHandler>().Save();
+        }
     }
 
     private void DeleteObjects()
