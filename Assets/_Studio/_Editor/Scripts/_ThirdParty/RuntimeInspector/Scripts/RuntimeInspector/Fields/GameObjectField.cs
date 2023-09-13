@@ -5,9 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PlayShifu.Terra;
 using UnityEngine;
-using Object = UnityEngine.Object;
 using Terra.Studio;
-using UnityEngine.UI;
 
 namespace RuntimeInspectorNamespace
 {
@@ -89,7 +87,7 @@ namespace RuntimeInspectorNamespace
             for (int i = 0; i < elements.Count; i++)
             {
                 // Don't keep track of non-expandable drawers' or destroyed components' expanded states
-                if (elements[i] is ExpandableInspectorField && (elements[i].Value as Object))
+                if (elements[i] is ExpandableInspectorField && (elements[i].Value as UnityEngine.Object))
                     componentsExpandedStates.Add(((ExpandableInspectorField)elements[i]).IsExpanded);
             }
 
@@ -262,20 +260,56 @@ namespace RuntimeInspectorNamespace
                     // Make sure that RuntimeInspector is still inspecting this GameObject
                     if (type != null && target && Inspector && (Inspector.InspectedObject as GameObject) == target)
                     {
-                        // xcx instead add comp to all selected objects 
-                        //target.AddComponent( (Type) type );
-                        foreach (GameObject tObject in EditorOp.Resolve<SelectionHandler>().GetPrevSelectedObjects())
-                        {
-                            tObject.AddComponent((Type)type);
-                            EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock()
-                            { componentGameObject = tObject, componentType = ((Type)type).Name });
-                        }
+                        // surendran instead add comp to all selected objects 
+                        var cachedType = (Type)type;
+                        Type empty = null;
+                        var selectedObjs = EditorOp.Resolve<SelectionHandler>().GetPrevSelectedObjects();
+                        EditorOp.Resolve<IURCommand>().Record(
+                            (cachedType, selectedObjs.ToList(), true),
+                            (cachedType, selectedObjs.ToList(), false),
+                            $"{cachedType.Name} is added",
+                            (obj) =>
+                            {
+                                var (type, selections, isUndo) = ((Type, List<GameObject>, bool))obj;
+                                if (isUndo)
+                                {
+                                    Detach(selections, type);
+                                }
+                                else
+                                {
+                                    Attach(selections, type);
+                                }
+                            });
+
+                        Attach(selectedObjs, cachedType);
                         Inspector.Refresh();
                     }
                 },
                 (type) => ((Type)type).FullName,
                 (type) => ((Type)type).FullName,
                 addComponentTypes, null, false, "Add Component", Inspector.Canvas);
+        }
+
+        private static void Attach(IEnumerable<GameObject> selections, Type type)
+        {
+            foreach (var tObject in selections)
+            {         
+                if(tObject.GetComponent(type)!=null) Destroy(tObject.GetComponent(type));
+                else tObject.AddComponent(type);
+                EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock()
+                { componentGameObject = tObject, componentType = type.Name });
+            }
+        }
+        
+        private static void Detach(IEnumerable<GameObject> selections, Type type)
+        {
+            foreach (var tObject in selections)
+            {     
+                var component = tObject.GetComponent(type);
+                Destroy(component);
+                EditorOp.Resolve<UILogicDisplayProcessor>().RemoveComponentIcon(new ComponentDisplayDock()
+                    { componentGameObject = tObject, componentType = type.Name });
+            }
         }
 
         [UnityEngine.Scripting.Preserve] // This method is bound to removeComponentMethod
@@ -287,16 +321,29 @@ namespace RuntimeInspectorNamespace
             Component component = componentDrawer.Value as Component;
             if (component && !(component is Transform))
                 componentDrawer.StartCoroutine(RemoveComponentCoroutine(component, componentDrawer.Inspector));
+            
+            // surendran instead add comp to all selected objects 
+            var cachedType = componentDrawer.Value.GetType();
+            Type empty = null;
+            var selectedObjs = EditorOp.Resolve<SelectionHandler>().GetPrevSelectedObjects();
+            EditorOp.Resolve<IURCommand>().Record(
+                (cachedType, selectedObjs.ToList(), true),
+                (cachedType, selectedObjs.ToList(), false),
+                $"{cachedType.Name} is removed",
+                (obj) =>
+                {
+                    var (type, selections, isUndo) = ((Type, List<GameObject>, bool))obj;
+                    if (isUndo)
+                    {
+                        Attach(selections, type);
+                    }
+                    else
+                    {
+                        Detach(selections, type);
+                    }
+                });
 
-            // surendran - destroy same component on other selected objects.
-            List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
-            foreach (var obj in selectedObjects)
-            {
-                EditorOp.Resolve<UILogicDisplayProcessor>().RemoveComponentIcon(new ComponentDisplayDock()
-                { componentGameObject = obj, componentType = componentDrawer.Value.GetType().Name });
-
-                Destroy(obj.GetComponent(componentDrawer.Value.GetType()));
-            }
+            Detach(selectedObjs, cachedType);
         }
 
         private static IEnumerator RemoveComponentCoroutine(Component component, RuntimeInspector inspector)
