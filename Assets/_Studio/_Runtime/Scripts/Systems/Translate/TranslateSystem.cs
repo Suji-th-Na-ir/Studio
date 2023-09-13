@@ -28,6 +28,7 @@ namespace Terra.Studio
             var direction = targetPos - entityRef.startPosition;
             entityRef.pauseDistance = pauseDistance;
             entityRef.direction = direction;
+            entityRef.targetPosition = targetPos;
             if (entityRef.startPosition != tr.position)
             {
                 targetPos = tr.position + direction * pauseDistance;
@@ -174,7 +175,7 @@ namespace Terra.Studio
             var movement = component.direction.normalized * step;
             component.RefObj.transform.position += movement;
             component.remainingDistance -= step;
-            var targetPosition = component.targetPosition + component.startPosition;
+            var targetPosition = component.targetPosition;
             if (component.remainingDistance <= 0.01f)
             {
                 component.loopsFinished++;
