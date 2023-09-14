@@ -25,6 +25,7 @@ namespace RuntimeInspectorNamespace
 
         public void Awake()
         {
+            Score.instanceId = Guid.NewGuid().ToString("N");
             startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>(), GetType().Name,false);
             PlaySFX.Setup<Collectible>(gameObject);
             PlayVFX.Setup<Collectible>(gameObject);
@@ -73,6 +74,7 @@ namespace RuntimeInspectorNamespace
         {
             CollectableComponent comp = JsonConvert.DeserializeObject<CollectableComponent>($"{cdata.data}");
             Score.score = comp.scoreValue;
+            EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(true, Score.instanceId);
             PlaySFX.data.canPlay = comp.canPlaySFX;
             PlaySFX.data.clipIndex = comp.sfxIndex;
             PlaySFX.data.clipName = comp.sfxName;
@@ -87,6 +89,11 @@ namespace RuntimeInspectorNamespace
             startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, null);
+        }
+
+        private void OnDestroy()
+        {
+            EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(false, Score.instanceId);
         }
     }
 }

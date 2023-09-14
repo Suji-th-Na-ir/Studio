@@ -80,54 +80,124 @@ public class Outline : MonoBehaviour {
 
   private bool needsUpdate;
 
-  void Awake() {
+    void Awake()
+    {
 
-    // Cache renderers
-    renderers = GetComponentsInChildren<Renderer>();
+        // Cache renderers
+        renderers = GetComponentsInChildren<Renderer>();
 
-    // Instantiate outline materials
-    outlineMaskMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineMask"));
-    outlineFillMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineFill"));
+        // Load outline materials from resources
+        var mask = Resources.Load<Material>(@"Materials/OutlineMask");
+        var fill = Resources.Load<Material>(@"Materials/OutlineFill");
 
-    outlineMaskMaterial.name = "OutlineMask (Instance)";
-    outlineFillMaterial.name = "OutlineFill (Instance)";
+        foreach (var renderer in renderers)
+        {
+            // Get the current materials list
+            var materials = renderer.sharedMaterials.ToList();
 
-    // Retrieve or generate smooth normals
-    LoadSmoothNormals();
+            // Check if mask material is not present and instantiate if needed
+            if (!MaterialInList(materials, "OutlineMask (Instance)"))
+            {
+                outlineMaskMaterial = Instantiate(mask);
+                outlineMaskMaterial.name = "OutlineMask (Instance)";
 
-    // Apply material properties immediately
-    needsUpdate = true;
-  }
+            }
+            else
+            {
+                outlineMaskMaterial = MaterialInList(materials, "OutlineMask (Instance)");
 
-  void OnEnable() {
-    foreach (var renderer in renderers) {
+            }
 
-      // Append outline shaders
-      var materials = renderer.sharedMaterials.ToList();
+            // Check if fill material is not present and instantiate if needed
+            if (!MaterialInList(materials, "OutlineFill (Instance)"))
+            {
+                outlineFillMaterial = Instantiate(fill);
+                outlineFillMaterial.name = "OutlineFill (Instance)";
+            }
+            else
+            {
+               outlineFillMaterial = MaterialInList(materials, "OutlineFill (Instance)");
+                this.enabled = false;
+            }
+        }
 
-      materials.Add(outlineMaskMaterial);
-      materials.Add(outlineFillMaterial);
+        // Retrieve or generate smooth normals
+        LoadSmoothNormals();
 
-      renderer.materials = materials.ToArray();
+        // Apply material properties immediately
+        needsUpdate = true;
     }
-  }
 
-  void OnValidate() {
-
-    // Update material properties
-    needsUpdate = true;
-
-    // Clear cache when baking is disabled or corrupted
-    if (!precomputeOutline && bakeKeys.Count != 0 || bakeKeys.Count != bakeValues.Count) {
-      bakeKeys.Clear();
-      bakeValues.Clear();
+    Material MaterialInList(List<Material> materials, string materialToCheck)
+    {
+        foreach (var material in materials)
+        {
+            if (material.name == materialToCheck)
+            {
+                return material;
+            }
+        }
+        return null;
     }
 
-    // Generate smooth normals when baking is enabled
-    if (precomputeOutline && bakeKeys.Count == 0) {
-      Bake();
+    void OnEnable()
+    {
+        foreach (var renderer in renderers)
+        {
+
+            // Append outline shaders
+            var materials = renderer.sharedMaterials.ToList();
+
+
+            // Check if the outline materials are already in the list
+            bool maskMaterialFound = false;
+            bool fillMaterialFound = false;
+
+            foreach (var material in materials)
+            {
+                if (material.name == "OutlineMask (Instance)")
+                {
+                    maskMaterialFound = true;
+                }
+                else if (material.name == "OutlineFill (Instance)")
+                {
+                    fillMaterialFound = true;
+                }
+            }
+
+            // Add the outline materials if not found
+            if (!maskMaterialFound)
+            {
+                materials.Add(outlineMaskMaterial);
+            }
+            if (!fillMaterialFound)
+            {
+                materials.Add(outlineFillMaterial);
+            }
+
+            renderer.materials = materials.ToArray();
+        }
     }
-  }
+
+    void OnValidate()
+    {
+
+        // Update material properties
+        needsUpdate = true;
+
+        // Clear cache when baking is disabled or corrupted
+        if (!precomputeOutline && bakeKeys.Count != 0 || bakeKeys.Count != bakeValues.Count)
+        {
+            bakeKeys.Clear();
+            bakeValues.Clear();
+        }
+
+        // Generate smooth normals when baking is enabled
+        if (precomputeOutline && bakeKeys.Count == 0)
+        {
+            Bake();
+        }
+    }
 
   void Update() {
     if (needsUpdate) {
