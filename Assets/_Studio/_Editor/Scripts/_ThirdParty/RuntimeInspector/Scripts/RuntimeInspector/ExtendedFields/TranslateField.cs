@@ -20,7 +20,6 @@ namespace RuntimeInspectorNamespace
 
         private TranslateTypes selectedTranslateType;
         TranslateComponentData lastComponentData;
-
         public override void Initialize()
         {
             base.Initialize();
@@ -83,10 +82,14 @@ namespace RuntimeInspectorNamespace
             lastComponentData = new();
             if (selectedTranslateType)
             {
-                if (selectedTranslateType.movebyInput != null)
-                    lastComponentData.moveBy = new Vector3(int.Parse(selectedTranslateType.movebyInput[0].text),
-                        int.Parse(selectedTranslateType.movebyInput[1].text), (int.Parse(selectedTranslateType.movebyInput[2].text)));
 
+
+                if (selectedTranslateType.movebyInput != null)
+                {
+                    Debug.Log(selectedTranslateType.movebyInput[0].text);
+                    lastComponentData.moveBy = new Vector3(float.Parse(selectedTranslateType.movebyInput[0].text),
+                        float.Parse(selectedTranslateType.movebyInput[1].text), (float.Parse(selectedTranslateType.movebyInput[2].text))); ;
+                }
                 if (selectedTranslateType.speedInput)
                     lastComponentData.speed = float.Parse(selectedTranslateType.speedInput.text);
                 else
@@ -161,6 +164,8 @@ namespace RuntimeInspectorNamespace
                 new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)Value).target, componentType = typeof(Atom.Translate).Name });
             }
             LoadData(preset);
+            UpdateDataInUI(preset);
+            Atom.Translate rt = (Atom.Translate)Value;
             UpdateTypeForMultiselect(translateType, preset);
         }
 
@@ -215,9 +220,12 @@ namespace RuntimeInspectorNamespace
 
         protected override void OnBound(MemberInfo variable)
         {
+            // Debug.Log("translate bound called "+this.gameObject.name);
             base.OnBound(variable);
             Atom.Translate rt = (Atom.Translate)Value;
-            int translationTypeIndex = (int)Enum.Parse(typeof(TranslateType), rt.data.translateType.ToString());
+            // Debug.Log($"translate atom data x value {rt.data.moveTo}");
+            // translateTypesDD.onValueChanged.AddListener(OnTranslateTypesValueChanged);
+            int translationTypeIndex = (((int)Enum.Parse(typeof(TranslateType), rt.data.translateType.ToString())));
             translateTypesDD.SetValueWithoutNotify(translationTypeIndex);
             ShowTranslateOptionsMenu(translationTypeIndex);
             selectedTranslateType.SetData(rt.data);
@@ -237,8 +245,24 @@ namespace RuntimeInspectorNamespace
             translateTypesDD.SetValueWithoutNotify(rt.data.translateType);
             if (componentData != null && componentData.HasValue)
             {
-                selectedTranslateType.SetData(componentData.Value);
+                //selectedTranslateType.SetData(componentData.Value);
                 rt.data = componentData.Value;
+            }
+            else
+            {
+                // selectedTranslateType.SetData(rt.data);
+            }
+        }
+
+        private void UpdateDataInUI(TranslateComponentData? componentData = null)
+        {
+
+            Atom.Translate rt = (Atom.Translate)Value;
+            // translateTypesDD.SetValueWithoutNotify(rt.data.translateType);
+            if (componentData != null && componentData.HasValue)
+            {
+                selectedTranslateType.SetData(componentData.Value);
+                //rt.data = componentData.Value;
             }
             else
             {

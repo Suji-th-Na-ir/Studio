@@ -2963,13 +2963,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8915336841370495667}
   m_TextComponent: {fileID: 3948599030291584050}
   m_Placeholder: {fileID: 8532629999888270343}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
@@ -6805,13 +6805,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4382867968122639347}
   m_TextComponent: {fileID: 11281616995057953}
   m_Placeholder: {fileID: 3002786346256391399}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
@@ -7694,13 +7694,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7867256654377392596}
   m_TextComponent: {fileID: 8052557939895153051}
   m_Placeholder: {fileID: 5576812195271229615}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
@@ -8310,13 +8310,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2511361516662045694}
   m_TextComponent: {fileID: 8282153003654628406}
   m_Placeholder: {fileID: 6887196454106993638}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
@@ -12696,13 +12696,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6037985179759769420}
   m_TextComponent: {fileID: 2223206860304001285}
   m_Placeholder: {fileID: 8539242817608686002}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
@@ -15961,13 +15961,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6236023416525342938}
   m_TextComponent: {fileID: 8777383019268303960}
   m_Placeholder: {fileID: 7351868530526234145}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
@@ -23219,13 +23219,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7769222741439972179}
   m_TextComponent: {fileID: 5638782154388665681}
   m_Placeholder: {fileID: 2410751986634320174}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
@@ -26389,13 +26389,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 450444983059662070}
   m_TextComponent: {fileID: 4043989398703439964}
   m_Placeholder: {fileID: 1033738709793265605}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
@@ -27635,13 +27635,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8122967861237858290}
   m_TextComponent: {fileID: 231568526562737273}
   m_Placeholder: {fileID: 1808101196206532021}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
@@ -29739,13 +29739,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8831383941269616946}
   m_TextComponent: {fileID: 2938318515148810554}
   m_Placeholder: {fileID: 2191778372032437812}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
@@ -35345,13 +35345,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3213879179988098745}
   m_TextComponent: {fileID: 1487073856968843206}
   m_Placeholder: {fileID: 6578890947638755553}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:
@@ -37476,13 +37476,13 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1972815512055950352}
   m_TextComponent: {fileID: 4094135761591419887}
   m_Placeholder: {fileID: 1541369598189896897}
-  m_ContentType: 0
+  m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 0
+  m_KeyboardType: 4
   m_LineType: 0
   m_HideMobileInput: 0
-  m_CharacterValidation: 0
+  m_CharacterValidation: 1
   m_CharacterLimit: 0
   m_OnSubmit:
     m_PersistentCalls:

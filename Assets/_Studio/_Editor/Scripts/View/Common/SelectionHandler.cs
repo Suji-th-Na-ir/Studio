@@ -11,7 +11,7 @@ using static RuntimeInspectorNamespace.RuntimeHierarchy;
 
 public class SelectionHandler : View
 {
-    private enum GizmoId
+    public enum GizmoId
     {
         Move = 1,
         Rotate,
@@ -35,7 +35,6 @@ public class SelectionHandler : View
 
     public delegate void SelectionChangedDelegate(List<GameObject> gm);
     public SelectionChangedDelegate SelectionChanged;
-
     private void Awake()
     {
         EditorOp.Register(this);
@@ -190,6 +189,11 @@ public class SelectionHandler : View
         Scan();
         DuplicateObjects();
         DeleteObjects();
+
+        if (RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.WasKeyPressedThisFrame(KeyCode.S))
+        {
+            EditorOp.Resolve<SceneDataHandler>().Save();
+        }
     }
 
     private void DeleteObjects()
@@ -203,6 +207,7 @@ public class SelectionHandler : View
                     runtimeHierarchy.Deselect();
                     foreach (GameObject obj in _selectedObjects)
                     {
+
                         var comps = obj.GetComponents<IComponent>();
                         foreach (var comp in comps)
                         {
@@ -223,6 +228,7 @@ public class SelectionHandler : View
         {
             if (RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.WasKeyPressedThisFrame(KeyCode.D))
             {
+
                 foreach (GameObject obj in _selectedObjects)
                 {
                     var iObj = Instantiate(obj, obj.transform.position, obj.transform.rotation);
@@ -233,6 +239,7 @@ public class SelectionHandler : View
                         var componentType = components[i].GetType();
                         EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock
                         { componentGameObject = iObj, componentType = componentType.Name });
+
                         var mInfo = componentType.GetField("Broadcast", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
                         if (mInfo != null)
                         {
@@ -240,6 +247,7 @@ public class SelectionHandler : View
                             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(oldValue.ToString(), ""
                                 , new ComponentDisplayDock() { componentGameObject = iObj, componentType = componentType.Name });
                         }
+
                         var mInfo1 = componentType.GetField("BroadcastListen", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
                         if (mInfo1 != null)
                         {
@@ -269,20 +277,32 @@ public class SelectionHandler : View
             RTGizmosEngine.Get.HoveredGizmo == null)
         {
             if (CheckIfThereIsAnyPopups()) return;
+
             if (EventSystem.current.IsPointerOverGameObject())
             {
-                return;
+                return; // Return early if the mouse is over UI
             }
+            // Pick a game object
             GameObject pickedObject = PickGameObject();
+
             if (pickedObject != null)
             {
                 if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
                 {
-                    OnSelectionChanged(pickedObject, SelectOptions.Additive);
+                    if (_selectedObjects.Contains(pickedObject))
+                        _selectedObjects.Remove(pickedObject);
+                    else
+                        _selectedObjects.Add(pickedObject);
+
+                    runtimeHierarchy.Select(pickedObject.transform, RuntimeHierarchy.SelectOptions.Additive);
+                    OnSelectionChanged();
                 }
                 else
                 {
-                    OnSelectionChanged(pickedObject, SelectOptions.FocusOnSelection);
+                    runtimeHierarchy.Select(pickedObject.transform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
+                    _selectedObjects.Clear();
+                    _selectedObjects.Add(pickedObject);
+                    OnSelectionChanged();
                 }
             }
             else
@@ -318,10 +338,12 @@ public class SelectionHandler : View
             {
                 if (hitObject.transform.root != null && lastPickedGameObject != hitObject.transform.root.gameObject)
                     pickedObject = hitObject.transform.root.gameObject;
+
             }
             lastPickedGameObject = pickedObject;
             return pickedObject;
         }
+
         return null;
     }
 
@@ -334,7 +356,17 @@ public class SelectionHandler : View
         return mainCamera;
     }
 
-    private void SetWorkGizmoId(GizmoId gizmoId)
+    public void SelectObjectInHierarchy(GameObject _obj)
+    {
+        runtimeHierarchy.Select(_obj.transform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
+    }
+
+    public void RefreshHierarchy()
+    {
+        runtimeHierarchy.Refresh();
+    }
+
+    public void SetWorkGizmoId(GizmoId gizmoId)
     {
         // If the specified gizmo id is the same as the current id, there is nothing left to do
         if (gizmoId == _workGizmoId) return;
@@ -357,26 +389,38 @@ public class SelectionHandler : View
 
     public void OnSelectionChanged(GameObject sObject = null, SelectOptions selectOption = SelectOptions.FocusOnSelection)
     {
-        if (_selectedObjects.Count > 0)
+        for (int i = 0; i < prevSelectedObjects.Count; i++)
         {
-            prevSelectedObjects = _selectedObjects.ToList();
+            if (prevSelectedObjects[i] != null && prevSelectedObjects[i].GetComponent<Outline>())
+                prevSelectedObjects[i].GetComponent<Outline>().enabled = false;
         }
-        if (sObject != null)
+        if (_selectedObjects.Count > 0)
+            prevSelectedObjects = _selectedObjects.ToList();
+
+        for (int i = 0; i < _selectedObjects.Count; i++)
         {
-            if (_selectedObjects.Contains(sObject))
+            if (_selectedObjects[i] != null && _selectedObjects[i]?.GetComponent<Outline>() != null)
             {
-                _selectedObjects.Remove(sObject);
+                _selectedObjects[i].GetComponent<Outline>().enabled = true;
             }
             else
             {
-                _selectedObjects.Add(sObject);
-                runtimeHierarchy.Select(sObject.transform, selectOption);
+                var comp = _selectedObjects[i]?.AddComponent<Outline>();
+                comp.OutlineWidth = 5f;
+                comp.OutlineColor = Color.yellow;
+                comp.enabled = true;
             }
         }
+
+        if (sObject != null)
+        {
+            if (_selectedObjects.Contains(sObject)) _selectedObjects.Remove(sObject);
+            else _selectedObjects.Add(sObject);
+        }
+
         if (_selectedObjects.Count != 0)
         {
             _workGizmo.Gizmo.SetEnabled(true);
-            _workGizmo.SetTargetObjects(_selectedObjects);
             _workGizmo.RefreshPositionAndRotation();
         }
         else
@@ -395,7 +439,6 @@ public class SelectionHandler : View
     {
         return prevSelectedObjects;
     }
-
     public List<GameObject> GetSelectedObjects()
     {
         return _selectedObjects;
