@@ -13,21 +13,28 @@ namespace RuntimeInspectorNamespace
     {
         public RotationType myType;
         public Dropdown dirDropDown;
-
         public Toggle xAxis;
         public Toggle yAxis;
         public Toggle zAxis;
-
         public InputField degreesInput = null;
         public InputField speedInput = null;
         public InputField pauseInput = null;
         public InputField repeatInput = null;
-
         public Dropdown broadcastAt;
         public InputField customString;
-
-        public InputField listenInput;
         public Toggle canListenMultipleTimesToggle;
+
+        private Action dirAction;
+        private Action xAction;
+        private Action yAction;
+        private Action zAction;
+        private Action degressAction;
+        private Action speedAction;
+        private Action pauseAction;
+        private Action repeatAction;
+        private Action broadcastAtAction;
+        private Action customStringAction;
+        private Action canListenMultipleTimesAction;
 
         [HideInInspector] public RotateField field = null;
 
@@ -50,6 +57,7 @@ namespace RuntimeInspectorNamespace
         public void Setup()
         {
             LoadDefaultValues();
+            SetActions();
             if (xAxis != null)
             {
                 xAxis.onValueChanged.AddListener((value) =>
@@ -57,8 +65,8 @@ namespace RuntimeInspectorNamespace
                     if (value != field.GetAtom().data.Xaxis)
                     {
                         field.GetAtom().data.Xaxis = value;
-                        UpdateVariablesForAll(VariableTypes.X_AXIS, value);
-                        UpdateUndoRedoStack("Rotate In X", value);
+                        xAction?.Invoke();
+                        UpdateUndoRedoStack("Rotate In X", value, xAction);
                     }
                 });
             }
@@ -69,8 +77,8 @@ namespace RuntimeInspectorNamespace
                     if (value != field.GetAtom().data.Yaxis)
                     {
                         field.GetAtom().data.Yaxis = value;
-                        UpdateVariablesForAll(VariableTypes.Y_AXIS, value);
-                        UpdateUndoRedoStack("Rotate In Y", value);
+                        yAction?.Invoke();
+                        UpdateUndoRedoStack("Rotate In Y", value, yAction);
                     }
                 });
             }
@@ -81,8 +89,8 @@ namespace RuntimeInspectorNamespace
                     if (value != field.GetAtom().data.Zaxis)
                     {
                         field.GetAtom().data.Zaxis = value;
-                        UpdateVariablesForAll(VariableTypes.Z_AXIS, value);
-                        UpdateUndoRedoStack("Rotate In Z", value);
+                        zAction?.Invoke();
+                        UpdateUndoRedoStack("Rotate In Z", value, zAction);
                     }
                 });
             }
@@ -94,8 +102,8 @@ namespace RuntimeInspectorNamespace
                     if (dir != field.GetAtom().data.direction)
                     {
                         field.GetAtom().data.direction = dir;
-                        UpdateVariablesForAll(VariableTypes.DIRECTION_DROPDOWN, value);
-                        UpdateUndoRedoStack("Direction", dir);
+                        dirAction?.Invoke();
+                        UpdateUndoRedoStack("Direction", dir, dirAction);
                     }
                 });
             }
@@ -104,13 +112,13 @@ namespace RuntimeInspectorNamespace
                 degreesInput.onValueChanged.AddListener((value) =>
                 {
                     field.GetAtom().data.degrees = Helper.StringToFloat(value);
-                    UpdateVariablesForAll(VariableTypes.DEGREES, Helper.StringToFloat(value));
+                    degressAction?.Invoke();
                 });
                 degreesInput.onEndEdit.AddListener((value) =>
                 {
                     if (Helper.StringToFloat(value) != ((RotateComponentData)field.GetLastSubmittedValue()).degrees)
                     {
-                        UpdateUndoRedoStack("Degrees", field.GetAtom().data.degrees);
+                        UpdateUndoRedoStack("Degrees", field.GetAtom().data.degrees, degressAction);
                     }
                 });
             }
@@ -119,13 +127,13 @@ namespace RuntimeInspectorNamespace
                 speedInput.onValueChanged.AddListener((value) =>
                 {
                     field.GetAtom().data.speed = Helper.StringToFloat(value);
-                    UpdateVariablesForAll(VariableTypes.SPEED, Helper.StringToFloat(value));
+                    speedAction?.Invoke();
                 });
                 speedInput.onEndEdit.AddListener((value) =>
                 {
                     if (Helper.StringToFloat(value) != ((RotateComponentData)field.GetLastSubmittedValue()).speed)
                     {
-                        UpdateUndoRedoStack("Speed", field.GetAtom().data.speed);
+                        UpdateUndoRedoStack("Speed", field.GetAtom().data.speed, speedAction);
                     }
                 });
             }
@@ -134,13 +142,13 @@ namespace RuntimeInspectorNamespace
                 pauseInput.onValueChanged.AddListener((value) =>
                 {
                     field.GetAtom().data.pauseBetween = Helper.StringToFloat(value);
-                    UpdateVariablesForAll(VariableTypes.PAUSE, Helper.StringToFloat(value));
+                    pauseAction?.Invoke();
                 });
                 speedInput.onEndEdit.AddListener((value) =>
                 {
                     if (Helper.StringToFloat(value) != ((RotateComponentData)field.GetLastSubmittedValue()).pauseBetween)
                     {
-                        UpdateUndoRedoStack("Pause between", field.GetAtom().data.pauseBetween);
+                        UpdateUndoRedoStack("Pause between", field.GetAtom().data.pauseBetween, pauseAction);
                     }
                 });
             }
@@ -149,13 +157,13 @@ namespace RuntimeInspectorNamespace
                 repeatInput.onValueChanged.AddListener((value) =>
                 {
                     field.GetAtom().data.repeat = Helper.StringInInt(value);
-                    UpdateVariablesForAll(VariableTypes.REPEAT, Helper.StringInInt(value));
+                    repeatAction?.Invoke();
                 });
                 repeatInput.onEndEdit.AddListener((value) =>
                 {
                     if (Helper.StringToFloat(value) != ((RotateComponentData)field.GetLastSubmittedValue()).repeat)
                     {
-                        UpdateUndoRedoStack("Repeat", field.GetAtom().data.repeat);
+                        UpdateUndoRedoStack("Repeat", field.GetAtom().data.repeat, repeatAction);
                     }
                 });
             }
@@ -164,13 +172,12 @@ namespace RuntimeInspectorNamespace
                 customString.onValueChanged.AddListener((value) =>
                 {
                     SetCustomString(value);
-                    // UpdateAllSelectedObjects("broadcast", field.GetAtom().data.broadcast);
                 });
                 customString.onEndEdit.AddListener((value) =>
                 {
                     if (value != ((RotateComponentData)field.GetLastSubmittedValue()).broadcast)
                     {
-                        UpdateUndoRedoStack("Broadcast", field.GetAtom().data.broadcast);
+                        UpdateUndoRedoStack("Broadcast", field.GetAtom().data.broadcast, customStringAction);
                     }
                 });
             }
@@ -182,8 +189,8 @@ namespace RuntimeInspectorNamespace
                     if (newValue != field.GetAtom().data.broadcastAt)
                     {
                         field.GetAtom().data.broadcastAt = (BroadcastAt)value;
-                        UpdateVariablesForAll(VariableTypes.BROADCAST_AT, (BroadcastAt)value);
-                        UpdateUndoRedoStack("Broadcast At", field.GetAtom().data.broadcastAt);
+                        broadcastAtAction?.Invoke();
+                        UpdateUndoRedoStack("Broadcast At", field.GetAtom().data.broadcastAt, broadcastAtAction);
                     }
                 });
             }
@@ -195,23 +202,32 @@ namespace RuntimeInspectorNamespace
                     if (newValue != field.GetAtom().data.listen)
                     {
                         field.GetAtom().data.listen = newValue;
-                        UpdateVariablesForAll(VariableTypes.CAN_LISTEN_MULTIPLE_TIMES, field.GetAtom().data.listen);
-                        UpdateUndoRedoStack("Can listen multiple times", field.GetAtom().data.listen);
+                        canListenMultipleTimesAction?.Invoke();
+                        UpdateUndoRedoStack("Can listen multiple times", field.GetAtom().data.listen, canListenMultipleTimesAction);
                     }
                 });
             }
         }
 
-        private void UpdateUndoRedoStack(string variableName, object value)
+        private void UpdateUndoRedoStack(string variableName, object value, Action onValueChanged)
         {
             EditorOp.Resolve<IURCommand>().Record(
-                    field.GetLastSubmittedValue(), field.GetAtom().data,
+                    (field.GetLastSubmittedValue(), onValueChanged, variableName), ((object)field.GetAtom().data, onValueChanged, variableName),
                     $"{variableName} changed to: {value}",
-                    (value) =>
+                    (tuple) =>
                     {
+                        var (value, onChanged, varName) = ((object, Action, string))tuple;
                         field.SetLastSubmittedValue(value);
                         var newValue = (RotateComponentData)value;
+                        if (varName.ToLower().Equals("broadcast"))
+                        {
+                            SetCustomString(newValue.broadcast);
+                        }
                         field.GetAtom().data = newValue;
+                        if (!varName.ToLower().Equals("broadcast"))
+                        {
+                            onChanged?.Invoke();
+                        }
                         SetData(newValue);
                     });
             field.SetLastSubmittedValue(field.GetAtom().data);
@@ -228,6 +244,7 @@ namespace RuntimeInspectorNamespace
                     componentType = atom.componentType
                 });
             atom.data.broadcast = _newString;
+            customStringAction?.Invoke();
         }
 
         private void UpdateVariablesForAll(VariableTypes _type, Object _value)
@@ -323,10 +340,24 @@ namespace RuntimeInspectorNamespace
             speedInput?.SetupInputFieldSkin(Skin);
             pauseInput?.SetupInputFieldSkin(Skin);
             repeatInput?.SetupInputFieldSkin(Skin);
-            listenInput?.SetupInputFieldSkin(Skin);
             dirDropDown?.SetSkinDropDownField(Skin);
             broadcastAt?.SetSkinDropDownField(Skin);
             customString?.SetupInputFieldSkin(Skin);
+        }
+
+        private void SetActions()
+        {
+            dirAction = () => { UpdateVariablesForAll(VariableTypes.DIRECTION_DROPDOWN, field.GetAtom().data.direction); };
+            xAction = () => { UpdateVariablesForAll(VariableTypes.X_AXIS, field.GetAtom().data.Xaxis); };
+            yAction = () => { UpdateVariablesForAll(VariableTypes.Y_AXIS, field.GetAtom().data.Yaxis); };
+            zAction = () => { UpdateVariablesForAll(VariableTypes.Z_AXIS, field.GetAtom().data.Zaxis); };
+            degressAction = () => { UpdateVariablesForAll(VariableTypes.DEGREES, field.GetAtom().data.degrees); };
+            speedAction = () => { UpdateVariablesForAll(VariableTypes.SPEED, field.GetAtom().data.speed); };
+            pauseAction = () => { UpdateVariablesForAll(VariableTypes.PAUSE, field.GetAtom().data.pauseBetween); };
+            repeatAction = () => { UpdateVariablesForAll(VariableTypes.REPEAT, field.GetAtom().data.repeat); };
+            broadcastAtAction = () => { UpdateVariablesForAll(VariableTypes.BROADCAST_AT, field.GetAtom().data.broadcastAt); };
+            customStringAction = () => { UpdateVariablesForAll(VariableTypes.BROADCAST_STRING, field.GetAtom().data.broadcast); };
+            canListenMultipleTimesAction = () => { UpdateVariablesForAll(VariableTypes.CAN_LISTEN_MULTIPLE_TIMES, field.GetAtom().data.listen); };
         }
     }
 }
