@@ -321,7 +321,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc33165b90934caa8732814ce0a5bb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveToInput:
+  movebyInput:
   - {fileID: 2057633722866552470}
   - {fileID: 1068987667884325987}
   - {fileID: 2053808383777859244}
@@ -4354,7 +4354,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Move To
+  m_Text: Move By
 --- !u!1 &1072648570297120390
 GameObject:
   m_ObjectHideFlags: 0
@@ -6338,7 +6338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc33165b90934caa8732814ce0a5bb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveToInput:
+  movebyInput:
   - {fileID: 7206003394760734667}
   - {fileID: 7459103484072031530}
   - {fileID: 8427889741595216732}
@@ -6455,7 +6455,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Move To
+  m_Text: Move By
 --- !u!1 &1894618651565236721
 GameObject:
   m_ObjectHideFlags: 0
@@ -19611,7 +19611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc33165b90934caa8732814ce0a5bb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveToInput:
+  movebyInput:
   - {fileID: 3797906663875172173}
   - {fileID: 8312702825938388784}
   - {fileID: 5993206316863103401}
@@ -20198,7 +20198,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Move To
+  m_Text: Move By
 --- !u!1 &4725732979762018412
 GameObject:
   m_ObjectHideFlags: 0
@@ -20874,7 +20874,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Move To
+  m_Text: Move By
 --- !u!1 &4857491721470573205
 GameObject:
   m_ObjectHideFlags: 0
@@ -24803,7 +24803,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Move To
+  m_Text: Move By
 --- !u!1 &6451213536729476494
 GameObject:
   m_ObjectHideFlags: 0
@@ -27303,7 +27303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc33165b90934caa8732814ce0a5bb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveToInput:
+  movebyInput:
   - {fileID: 3302022908685461570}
   - {fileID: 3042991746205620885}
   - {fileID: 4882926349476598698}
@@ -28804,7 +28804,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Move To
+  m_Text: Move By
 --- !u!1 &7604780084339872345
 GameObject:
   m_ObjectHideFlags: 0
@@ -29531,7 +29531,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc33165b90934caa8732814ce0a5bb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveToInput:
+  movebyInput:
   - {fileID: 8013136856345541874}
   - {fileID: 3349175539716533706}
   - {fileID: 7592690214110135434}
@@ -32184,7 +32184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbc33165b90934caa8732814ce0a5bb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveToInput:
+  movebyInput:
   - {fileID: 8006001444478575205}
   - {fileID: 4368332325518642367}
   - {fileID: 7362907068625755852}
@@ -32192,7 +32192,7 @@ MonoBehaviour:
   repeatInput: {fileID: 0}
   pauseForInput: {fileID: 0}
   listenTo: {fileID: 0}
-  broadcastAt: {fileID: 5923789495016023286}
+  broadcastAt: {fileID: 0}
   customString: {fileID: 0}
   canListenMultipleTimesToggle: {fileID: 0}
   field: {fileID: 0}
