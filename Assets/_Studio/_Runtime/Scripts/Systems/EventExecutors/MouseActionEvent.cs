@@ -18,7 +18,6 @@ namespace Terra.Studio
         {
             objectToEvents ??= new();
             toBeRemovedEventIndices ??= new();
-            var mouseEvents = RuntimeOp.Resolve<RuntimeSystem>() as IMouseEvents;
             var foundData = objectToEvents.Find(x => x.objRef == context.goRef &&
             x.componentName == context.componentName);
             if (subscribe)
