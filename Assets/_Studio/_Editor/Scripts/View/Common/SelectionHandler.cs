@@ -121,7 +121,7 @@ public class SelectionHandler : View
                 EditorOp.Resolve<IURCommand>().Record(
                     prevSelectedObjects.ToList(),
                     _allTransform.Select(x => x.gameObject).ToList(),
-                    $"Multiselected {diff} objects",
+                    $"Multiselected {Mathf.Abs(diff)} objects",
                     (obj) =>
                     {
                         runtimeHierarchy.OnSelectionChanged -= OnHierarchySelectionChanged;
