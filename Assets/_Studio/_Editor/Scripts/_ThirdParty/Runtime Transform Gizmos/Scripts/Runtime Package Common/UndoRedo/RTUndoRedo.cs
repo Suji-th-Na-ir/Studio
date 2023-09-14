@@ -19,8 +19,6 @@ namespace RTG
 
     public class RTUndoRedo : MonoSingleton<RTUndoRedo>
     {
-        public event Action<bool> OnRTUndoStackAvailable;
-        public event Action<bool> OnRTRedoStackAvailable;
         public event UndoStartHandler UndoStart;
         public event UndoEndHandler UndoEnd;
         public event RedoStartHandler RedoStart;
@@ -43,10 +41,7 @@ namespace RTG
 
         private List<ActionGroup> _actionGroupStack = new List<ActionGroup>();
         private int _stackPointer = -1;
-        
-        private bool iurUndoStackAvailable = false;
-        private bool iurRedoStackAvailable = false;
-        
+
         public bool IsEnabled { get { return _isEnabled; } }
         public int ActionLimit { get { return _actionLimit; } set { ClearActions(); _actionLimit = Mathf.Max(value, 1); } }
         
@@ -59,13 +54,6 @@ namespace RTG
         {
             RemoveGroups(0, _actionGroupStack.Count);
             _stackPointer = -1;
-        }
-
-        void Start()
-        {
-            Debug.Log("rt undo rem");
-            EditorOp.Resolve<IURCommand>().OnUndoStackAvailable += (isAvailable) => { iurUndoStackAvailable = isAvailable; };
-            EditorOp.Resolve<IURCommand>().OnRedoStackAvailable += (isAvailable) => { iurRedoStackAvailable = isAvailable; };
         }
 
         // public void RecordAction(IUndoRedoAction action)
