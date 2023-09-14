@@ -86,9 +86,14 @@ namespace Terra.Studio
 
         public void CreateObject(string name)
         {
+            Create(name);
+        }
+
+        private GameObject Create(string name)
+        {
             if (!CanSpawn(name))
             {
-                return;
+                return null;
             }
             Transform cameraTransform = Camera.main.transform;
             Vector3 cameraPosition = cameraTransform.position;
@@ -108,6 +113,7 @@ namespace Terra.Studio
                 EditorOp.Resolve<SceneDataHandler>().TimerManagerObj = primitive;
                 EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = primitive, componentType = "InGameTimer" });
             }
+            return primitive;
         }
 
         private bool CanSpawn(string name)

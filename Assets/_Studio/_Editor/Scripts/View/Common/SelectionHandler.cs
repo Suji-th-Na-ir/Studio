@@ -400,4 +400,16 @@ public class SelectionHandler : View
     {
         return _selectedObjects;
     }
+
+    public void ListenForHierarchyChanges(bool listen)
+    {
+        if (listen)
+        {
+            runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
+        }
+        else
+        {
+            runtimeHierarchy.OnSelectionChanged -= OnHierarchySelectionChanged;
+        }
+    }
 }
