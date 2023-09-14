@@ -52,11 +52,9 @@ namespace RuntimeInspectorNamespace
         protected override void OnSkinChanged()
         {
             base.OnSkinChanged();
-
             toggleBackground.color = Skin.InputFieldNormalBackgroundColor;
             input.graphic.color = Skin.ToggleCheckmarkColor;
-
-            Vector2 rightSideAnchorMin = new Vector2(Skin.LabelWidthPercentage, 0f);
+            var rightSideAnchorMin = new Vector2(Skin.LabelWidthPercentage, 0f);
             variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
             ((RectTransform)input.transform).anchorMin = rightSideAnchorMin;
         }
