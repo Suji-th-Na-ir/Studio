@@ -35,6 +35,7 @@ public class SelectionHandler : View
 
     public delegate void SelectionChangedDelegate(List<GameObject> gm);
     public SelectionChangedDelegate SelectionChanged;
+
     private void Awake()
     {
         EditorOp.Register(this);
@@ -84,7 +85,7 @@ public class SelectionHandler : View
                     var (prev, current) = ((GameObject, GameObject))tuple;
                     var isPrevAvailable = prev != null;
                     OnSelectionChanged(current, SelectOptions.FocusOnSelection);
-                    if (prev != null)
+                    if (isPrevAvailable)
                     {
                         OnSelectionChanged(prev, SelectOptions.FocusOnSelection);
                     }
@@ -356,11 +357,6 @@ public class SelectionHandler : View
         return mainCamera;
     }
 
-    public void SelectObjectInHierarchy(GameObject _obj)
-    {
-        runtimeHierarchy.Select(_obj.transform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
-    }
-
     public void RefreshHierarchy()
     {
         runtimeHierarchy.Refresh();
@@ -392,20 +388,25 @@ public class SelectionHandler : View
         for (int i = 0; i < prevSelectedObjects.Count; i++)
         {
             if (prevSelectedObjects[i] != null && prevSelectedObjects[i].GetComponent<Outline>())
+            {
                 prevSelectedObjects[i].GetComponent<Outline>().enabled = false;
+            }
         }
+
         if (_selectedObjects.Count > 0)
+        {
             prevSelectedObjects = _selectedObjects.ToList();
+        }
 
         for (int i = 0; i < _selectedObjects.Count; i++)
         {
-            if (_selectedObjects[i] != null && _selectedObjects[i]?.GetComponent<Outline>() != null)
+            if (_selectedObjects[i] != null && _selectedObjects[i].GetComponent<Outline>() != null)
             {
                 _selectedObjects[i].GetComponent<Outline>().enabled = true;
             }
             else
             {
-                var comp = _selectedObjects[i]?.AddComponent<Outline>();
+                var comp = _selectedObjects[i].AddComponent<Outline>();
                 comp.OutlineWidth = 5f;
                 comp.OutlineColor = Color.yellow;
                 comp.enabled = true;
@@ -414,13 +415,21 @@ public class SelectionHandler : View
 
         if (sObject != null)
         {
-            if (_selectedObjects.Contains(sObject)) _selectedObjects.Remove(sObject);
-            else _selectedObjects.Add(sObject);
+            if (_selectedObjects.Contains(sObject))
+            {
+                _selectedObjects.Remove(sObject);
+            }
+            else
+            {
+                _selectedObjects.Add(sObject);
+                runtimeHierarchy.Select(sObject.transform, selectOption);
+            }
         }
 
         if (_selectedObjects.Count != 0)
         {
             _workGizmo.Gizmo.SetEnabled(true);
+            _workGizmo.SetTargetObjects(_selectedObjects);
             _workGizmo.RefreshPositionAndRotation();
         }
         else
@@ -433,6 +442,13 @@ public class SelectionHandler : View
             objectUniversalGizmo.Gizmo.SetEnabled(false);
         }
         SelectionChanged?.Invoke(_selectedObjects);
+    }
+
+    public void DeselectAll()
+    {
+        RefreshHierarchy();
+        prevSelectedObjects = _selectedObjects.ToList();
+        _selectedObjects.Clear();
     }
 
     public List<GameObject> GetPrevSelectedObjects()
