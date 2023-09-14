@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5277321170047512297}
   - component: {fileID: 9120655873396154700}
   - component: {fileID: 6446871497855948166}
-  - component: {fileID: -5270760557443268942}
+  - component: {fileID: 8250224219565380599}
   m_Layer: 0
   m_Name: TreeStump
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &-5270760557443268942
-MeshCollider:
+--- !u!136 &8250224219565380599
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -94,7 +94,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3309800245106304638, guid: c211d4aa8d9f78a4a99fbfabd437e02c, type: 3}
+  m_Radius: 0.24230865
+  m_Height: 0.31929493
+  m_Direction: 1
+  m_Center: {x: 0.0054594725, y: 0.19, z: -0.029739082}
