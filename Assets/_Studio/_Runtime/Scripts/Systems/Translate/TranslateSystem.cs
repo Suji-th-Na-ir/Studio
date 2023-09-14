@@ -149,10 +149,17 @@ namespace Terra.Studio
         private void PerformTranslation(ref TranslateComponent component, int entity)
         {
             var step = component.speed * Time.deltaTime;
+            if (component.remainingDistance > 0)
+                step = Mathf.Clamp(step, 0.0f, component.remainingDistance);
             var movement = component.direction.normalized * step;
             component.RefObj.transform.position += movement;
             component.remainingDistance -= step;
             component.coveredDistance += step;
+            if (component.remainingDistance <= 0f)
+            {
+                component.loopsFinished++;
+                component.remainingDistance = component.pauseDistance;
+            }
             if (component.shouldPause && component.coveredDistance >= component.pauseDistance)
             {
                 component.isPaused = true;
@@ -161,16 +168,13 @@ namespace Terra.Studio
                 OnTranslateDone(false, entity);
                 return;
             }
-            if (component.remainingDistance <= 0.01f)
-            {
-                component.loopsFinished++;
-                component.remainingDistance = component.pauseDistance;
-            }
         }
 
         private void PerformOscillation(ref TranslateComponent component, int entity)
         {
             var step = component.speed * Time.deltaTime;
+            if (component.remainingDistance > 0)
+                step = Mathf.Clamp(step, 0.0f, component.remainingDistance);
             var movement = component.direction.normalized * step;
             component.RefObj.transform.position += movement;
             component.remainingDistance -= step;
