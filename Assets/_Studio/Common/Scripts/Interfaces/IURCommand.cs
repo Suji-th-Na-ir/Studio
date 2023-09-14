@@ -9,6 +9,5 @@ namespace Terra.Studio
         public void Undo();
         public void Redo();
         public void Record(object lastData, object newData, string comment, Action<object> onExecuted);
-        public void RefreshStackIfNeeded();
     }
 }

@@ -204,7 +204,6 @@ namespace RuntimeInspectorNamespace
 
         private void UpdateUndoRedoStack(string variableName, object value)
         {
-            Debug.Log($"Updating stack: {variableName} | Value: {value}");
             EditorOp.Resolve<IURCommand>().Record(
                     field.GetLastSubmittedValue(), field.GetAtom().data,
                     $"{variableName} changed to: {value}",

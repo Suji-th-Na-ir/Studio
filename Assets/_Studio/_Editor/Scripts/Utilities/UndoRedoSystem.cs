@@ -51,7 +51,7 @@ namespace Terra.Studio
             CheckForStackAvailability();
         }
 
-        public void RefreshStackIfNeeded()
+        private void RefreshStackIfNeeded()
         {
             var stackTopIndex = operations.Count - 1;
             if (currentIndex < stackTopIndex)
