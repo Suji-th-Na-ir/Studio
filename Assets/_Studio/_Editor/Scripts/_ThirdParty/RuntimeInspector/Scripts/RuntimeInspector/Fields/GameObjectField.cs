@@ -6,6 +6,7 @@ using System.Linq;
 using PlayShifu.Terra;
 using UnityEngine;
 using Terra.Studio;
+using Newtonsoft.Json;
 
 namespace RuntimeInspectorNamespace
 {
@@ -262,7 +263,6 @@ namespace RuntimeInspectorNamespace
                     {
                         // surendran instead add comp to all selected objects 
                         var cachedType = (Type)type;
-                        Type empty = null;
                         var selectedObjs = EditorOp.Resolve<SelectionHandler>().GetPrevSelectedObjects();
                         EditorOp.Resolve<IURCommand>().Record(
                             (cachedType, selectedObjs.ToList(), true),
@@ -293,22 +293,41 @@ namespace RuntimeInspectorNamespace
         private static void Attach(IEnumerable<GameObject> selections, Type type)
         {
             foreach (var tObject in selections)
-            {         
-                if(tObject.GetComponent(type)!=null) Destroy(tObject.GetComponent(type));
-                else tObject.AddComponent(type);
+            {
+                tObject.AddComponent(type);
                 EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock()
                 { componentGameObject = tObject, componentType = type.Name });
             }
         }
-        
+
+        private static void AttachAndImport(IEnumerable<(GameObject, EntityBasedComponent)> selections, Type type)
+        {
+            foreach (var (obj, compData) in selections)
+            {
+                var iComp = obj.AddComponent(type) as IComponent;
+                iComp.Import(compData);
+            }
+        }
+
         private static void Detach(IEnumerable<GameObject> selections, Type type)
         {
             foreach (var tObject in selections)
-            {     
+            {
                 var component = tObject.GetComponent(type);
                 Destroy(component);
                 EditorOp.Resolve<UILogicDisplayProcessor>().RemoveComponentIcon(new ComponentDisplayDock()
-                    { componentGameObject = tObject, componentType = type.Name });
+                { componentGameObject = tObject, componentType = type.Name });
+            }
+        }
+
+        private static void Detach(IEnumerable<(GameObject, EntityBasedComponent)> selections, Type type)
+        {
+            foreach (var (obj, _) in selections)
+            {
+                var component = obj.GetComponent(type);
+                Destroy(component);
+                EditorOp.Resolve<UILogicDisplayProcessor>().RemoveComponentIcon(new ComponentDisplayDock()
+                { componentGameObject = obj, componentType = type.Name });
             }
         }
 
@@ -319,23 +338,34 @@ namespace RuntimeInspectorNamespace
                 return;
 
             Component component = componentDrawer.Value as Component;
-            if (component && !(component is Transform))
+            if (component && component is not Transform)
                 componentDrawer.StartCoroutine(RemoveComponentCoroutine(component, componentDrawer.Inspector));
-            
-            // surendran instead add comp to all selected objects 
+
             var cachedType = componentDrawer.Value.GetType();
-            Type empty = null;
             var selectedObjs = EditorOp.Resolve<SelectionHandler>().GetPrevSelectedObjects();
+            var selectedObjsData = new List<(GameObject, EntityBasedComponent)>();
+            for (int i = 0; i < selectedObjs.Count &&
+                selectedObjs[i].TryGetComponent(cachedType, out var extractedComponent); i++)
+            {
+                var templateComponent = extractedComponent as IComponent;
+                var exportedData = templateComponent.Export();
+                var data = new EntityBasedComponent()
+                {
+                    type = exportedData.type,
+                    data = exportedData.data
+                };
+                selectedObjsData.Add((selectedObjs[i], data));
+            }
             EditorOp.Resolve<IURCommand>().Record(
-                (cachedType, selectedObjs.ToList(), true),
-                (cachedType, selectedObjs.ToList(), false),
+                (cachedType, selectedObjsData.ToList(), true),
+                (cachedType, selectedObjsData.ToList(), false),
                 $"{cachedType.Name} is removed",
                 (obj) =>
                 {
-                    var (type, selections, isUndo) = ((Type, List<GameObject>, bool))obj;
+                    var (type, selections, isUndo) = ((Type, List<(GameObject, EntityBasedComponent)>, bool))obj;
                     if (isUndo)
                     {
-                        Attach(selections, type);
+                        AttachAndImport(selections, type);
                     }
                     else
                     {
