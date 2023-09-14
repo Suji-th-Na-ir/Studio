@@ -294,7 +294,7 @@ public class SelectionHandler : View
     {
         for (int i = 0; i < prevSelectedObjects.Count; i++)
         {
-            if (prevSelectedObjects[i]?.GetComponent<Outline>())
+            if (prevSelectedObjects[i]!=null && prevSelectedObjects[i].GetComponent<Outline>())
                 prevSelectedObjects[i].GetComponent<Outline>().enabled = false;
         }
             if (_selectedObjects.Count > 0)
@@ -302,7 +302,7 @@ public class SelectionHandler : View
 
         for (int i = 0; i < _selectedObjects.Count; i++)
         {
-            if (_selectedObjects[i]?.GetComponent<Outline>() != null)
+            if (_selectedObjects[i] != null && _selectedObjects[i]?.GetComponent<Outline>() != null)
             {
                 _selectedObjects[i].GetComponent<Outline>().enabled = true;
             }
