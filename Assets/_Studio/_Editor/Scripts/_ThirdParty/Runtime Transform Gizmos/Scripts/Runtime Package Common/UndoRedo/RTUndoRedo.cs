@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
-using System;
 using System.Collections.Generic;
+using Terra.Studio;
+using System;
 
 namespace RTG
 {
@@ -18,6 +19,8 @@ namespace RTG
 
     public class RTUndoRedo : MonoSingleton<RTUndoRedo>
     {
+        public event Action<bool> OnRTUndoStackAvailable;
+        public event Action<bool> OnRTRedoStackAvailable;
         public event UndoStartHandler UndoStart;
         public event UndoEndHandler UndoEnd;
         public event RedoStartHandler RedoStart;
@@ -40,9 +43,13 @@ namespace RTG
 
         private List<ActionGroup> _actionGroupStack = new List<ActionGroup>();
         private int _stackPointer = -1;
+        
+        private bool iurUndoStackAvailable = false;
+        private bool iurRedoStackAvailable = false;
+        
         public bool IsEnabled { get { return _isEnabled; } }
         public int ActionLimit { get { return _actionLimit; } set { ClearActions(); _actionLimit = Mathf.Max(value, 1); } }
-
+        
         public void SetEnabled(bool isEnabled)
         {
             _isEnabled = isEnabled;
@@ -54,31 +61,44 @@ namespace RTG
             _stackPointer = -1;
         }
 
+        void Start()
+        {
+            Debug.Log("rt undo rem");
+            EditorOp.Resolve<IURCommand>().OnUndoStackAvailable += (isAvailable) => { iurUndoStackAvailable = isAvailable; };
+            EditorOp.Resolve<IURCommand>().OnRedoStackAvailable += (isAvailable) => { iurRedoStackAvailable = isAvailable; };
+        }
+
+        // public void RecordAction(IUndoRedoAction action)
+        // {
+        //     if (!_isEnabled) return;
+        //
+        //     // We must handle a special scenario which can occur when the user has been undoing
+        //     // actions and effectively moving the stack pointer somewhere in the middle of the
+        //     // stack. In that case, when a new action is recorded, this action will invalidate
+        //     // all actions which follow.
+        //     if (_actionGroupStack.Count != 0 && 
+        //         _stackPointer < _actionGroupStack.Count - 1)
+        //     {
+        //         // Calculate the index of the first action to be removed and the number of actions to remove
+        //         // and then use these values to remove the correct range of actions from the stack.
+        //         int removeStartIndex = _stackPointer + 1;
+        //         int removeCount = _actionGroupStack.Count - removeStartIndex;
+        //         RemoveGroups(removeStartIndex, removeCount);
+        //     }
+        //
+        //     _actionGroupStack.Add(new ActionGroup(action));
+        //
+        //     // The last step is to check if the current number of recorded actions is bigger than the
+        //     // allowed maximum. If it is, we need to remove the action from the bottom of the stack. 
+        //     // Finally, we set the stack pointer to point to the last recorded action.
+        //     if (_actionGroupStack.Count > _actionLimit) RemoveGroups(0, 1);
+        //     _stackPointer = _actionGroupStack.Count - 1;
+        // }
+
         public void RecordAction(IUndoRedoAction action)
         {
             if (!_isEnabled) return;
-
-            // We must handle a special scenario which can occur when the user has been undoing
-            // actions and effectively moving the stack pointer somewhere in the middle of the
-            // stack. In that case, when a new action is recorded, this action will invalidate
-            // all actions which follow.
-            if (_actionGroupStack.Count != 0 && 
-                _stackPointer < _actionGroupStack.Count - 1)
-            {
-                // Calculate the index of the first action to be removed and the number of actions to remove
-                // and then use these values to remove the correct range of actions from the stack.
-                int removeStartIndex = _stackPointer + 1;
-                int removeCount = _actionGroupStack.Count - removeStartIndex;
-                RemoveGroups(removeStartIndex, removeCount);
-            }
-
-            _actionGroupStack.Add(new ActionGroup(action));
-
-            // The last step is to check if the current number of recorded actions is bigger than the
-            // allowed maximum. If it is, we need to remove the action from the bottom of the stack. 
-            // Finally, we set the stack pointer to point to the last recorded action.
-            if (_actionGroupStack.Count > _actionLimit) RemoveGroups(0, 1);
-            _stackPointer = _actionGroupStack.Count - 1;
+            // Debug.Log("record action");
         }
 
         public void Update_SystemCall()
@@ -87,58 +107,68 @@ namespace RTG
 
             if (!Application.isEditor)
             {
-                if (RTInput.WasKeyPressedThisFrame(KeyCode.Z) && RTInput.IsKeyPressed(KeyCode.LeftControl)) Undo();
+                if (RTInput.WasKeyPressedThisFrame(KeyCode.LeftCommand) && RTInput.IsKeyPressed(KeyCode.Z)) Undo();
                 else
-                if (RTInput.WasKeyPressedThisFrame(KeyCode.Y) && RTInput.IsKeyPressed(KeyCode.LeftControl)) Redo();
+                if (RTInput.WasKeyPressedThisFrame(KeyCode.LeftCommand) && RTInput.IsKeyPressed(KeyCode.Y)) Redo();
             }
             else
             {
                 // Note: When running inside the editor, it seems that we need to add the LSHIFT key into
                 //       the mix. Otherwise, Undo/Redo does not work.
-                if (RTInput.WasKeyPressedThisFrame(KeyCode.Z) && RTInput.IsKeyPressed(KeyCode.LeftControl) && RTInput.IsKeyPressed(KeyCode.LeftShift)) Undo();
+                if (RTInput.WasKeyPressedThisFrame(KeyCode.Z) && RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.IsKeyPressed(KeyCode.LeftShift)) Undo();
                 else
-                if (RTInput.WasKeyPressedThisFrame(KeyCode.Y) && RTInput.IsKeyPressed(KeyCode.LeftControl) && RTInput.IsKeyPressed(KeyCode.LeftShift)) Redo();
+                if (RTInput.WasKeyPressedThisFrame(KeyCode.Y) && RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.IsKeyPressed(KeyCode.LeftShift)) Redo();
             }
         }
 
         private void Undo()
         {
-            if (!_isEnabled || _stackPointer < 0) return;
-
-            var group = _actionGroupStack[_stackPointer];
-            YesNoAnswer answer = new YesNoAnswer();
-            if (CanUndoRedo != null) CanUndoRedo(UndoRedoOpType.Undo, answer);
-            if (answer.HasNo) return;
-
-            --_stackPointer;
-
-            foreach(var action in group.Actions)
-            {
-                if (UndoStart != null) UndoStart(action);
-                action.Undo();
-                if (UndoEnd != null) UndoEnd(action);
-            }
+            // EditorOp.Resolve<IURCommand>().Undo();
         }
 
         private void Redo()
         {
-            if (!_isEnabled) return;
-            if (_actionGroupStack.Count == 0 || _stackPointer == _actionGroupStack.Count - 1) return;
-
-            var group = _actionGroupStack[_stackPointer + 1];
-            YesNoAnswer answer = new YesNoAnswer();
-            if (CanUndoRedo != null) CanUndoRedo(UndoRedoOpType.Redo, answer);
-            if (answer.HasNo) return;
-
-            ++_stackPointer;
-
-            foreach (var action in group.Actions)
-            {
-                if (RedoStart != null) RedoStart(action);
-                action.Redo();
-                if (RedoEnd != null) RedoEnd(action);
-            }
+            // EditorOp.Resolve<IURCommand>().Redo();
         }
+
+        // private void RTUndo()
+        // {
+        //     if (!_isEnabled || _stackPointer < 0) return;
+        //
+        //     var group = _actionGroupStack[_stackPointer];
+        //     YesNoAnswer answer = new YesNoAnswer();
+        //     if (CanUndoRedo != null) CanUndoRedo(UndoRedoOpType.Undo, answer);
+        //     if (answer.HasNo) return;
+        //
+        //     --_stackPointer;
+        //
+        //     foreach(var action in group.Actions)
+        //     {
+        //         if (UndoStart != null) UndoStart(action);
+        //         action.Undo();
+        //         if (UndoEnd != null) UndoEnd(action);
+        //     }
+        // }
+        //
+        // private void RTRedo()
+        // {
+        //     if (!_isEnabled) return;
+        //     if (_actionGroupStack.Count == 0 || _stackPointer == _actionGroupStack.Count - 1) return;
+        //
+        //     var group = _actionGroupStack[_stackPointer + 1];
+        //     YesNoAnswer answer = new YesNoAnswer();
+        //     if (CanUndoRedo != null) CanUndoRedo(UndoRedoOpType.Redo, answer);
+        //     if (answer.HasNo) return;
+        //
+        //     ++_stackPointer;
+        //
+        //     foreach (var action in group.Actions)
+        //     {
+        //         if (RedoStart != null) RedoStart(action);
+        //         action.Redo();
+        //         if (RedoEnd != null) RedoEnd(action);
+        //     }
+        // }
 
         private void RemoveGroups(int startIndex, int count)
         {

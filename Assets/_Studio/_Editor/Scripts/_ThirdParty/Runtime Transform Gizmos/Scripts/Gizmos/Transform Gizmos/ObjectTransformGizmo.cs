@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
+using Terra.Studio;
 
 namespace RTG
 {
@@ -368,8 +369,23 @@ namespace RTG
         {
             if (_transformableParents.Count != 0)
             {
-                var postObjectTransformChangedAction = new PostObjectTransformsChangedAction(_preTransformSnapshots, LocalTransformSnapshot.GetSnapshotCollection(_targetObjects));
+                var _postTransformSnapshot = LocalTransformSnapshot.GetSnapshotCollection(_targetObjects);
+                var postObjectTransformChangedAction = new PostObjectTransformsChangedAction(_preTransformSnapshots, _postTransformSnapshot);
                 postObjectTransformChangedAction.Execute();
+                
+                EditorOp.Resolve<IURCommand>().Record(
+                    _preTransformSnapshots,
+                    _postTransformSnapshot,
+                    "Moved",
+                    (obj) =>
+                    {
+                        var snapshot = (List<LocalTransformSnapshot>)obj;
+                        for (int i = 0; i < snapshot.Count; i++)
+                        {
+                            snapshot[i].Apply();
+                        }
+                        RefreshPositionAndRotation();
+                    });
             }
 
             RefreshPositionAndRotation();
