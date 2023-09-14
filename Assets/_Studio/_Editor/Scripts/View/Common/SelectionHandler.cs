@@ -11,7 +11,7 @@ using System.Reflection;
 
 public class SelectionHandler : View
 {
-    private enum GizmoId
+    public enum GizmoId
     {
         Move = 1,
         Rotate,
@@ -99,6 +99,11 @@ public class SelectionHandler : View
         Scan();
         DuplicateObjects();
         DeleteObjects();
+
+        if(RTInput.IsKeyPressed(KeyCode.LeftCommand)&& RTInput.WasKeyPressedThisFrame(KeyCode.S))
+        {
+            EditorOp.Resolve<SceneDataHandler>().Save();
+        }
     }
 
     private void DeleteObjects()
@@ -258,8 +263,13 @@ public class SelectionHandler : View
     {
         runtimeHierarchy.Select(_obj.transform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
     }
-    
-    private void SetWorkGizmoId(GizmoId gizmoId)
+
+    public void RefreshHierarchy()
+    {
+        runtimeHierarchy.Refresh();
+    }
+
+    public void SetWorkGizmoId(GizmoId gizmoId)
     {
         // If the specified gizmo id is the same as the current id, there is nothing left to do
         if (gizmoId == _workGizmoId) return;
@@ -282,8 +292,28 @@ public class SelectionHandler : View
 
     public void OnSelectionChanged(GameObject sObject = null)
     {
-        if(_selectedObjects.Count > 0)
+        for (int i = 0; i < prevSelectedObjects.Count; i++)
+        {
+            if (prevSelectedObjects[i]?.GetComponent<Outline>())
+                prevSelectedObjects[i].GetComponent<Outline>().enabled = false;
+        }
+            if (_selectedObjects.Count > 0)
             prevSelectedObjects = _selectedObjects.ToList();
+
+        for (int i = 0; i < _selectedObjects.Count; i++)
+        {
+            if (_selectedObjects[i]?.GetComponent<Outline>() != null)
+            {
+                _selectedObjects[i].GetComponent<Outline>().enabled = true;
+            }
+            else
+            {
+                var comp = _selectedObjects[i]?.AddComponent<Outline>();
+                comp.OutlineWidth = 5f;
+                comp.OutlineColor = Color.yellow;
+                comp.enabled = true;
+            }
+        }
         
         if (sObject != null)
         {

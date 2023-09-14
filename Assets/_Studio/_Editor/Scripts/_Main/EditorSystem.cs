@@ -12,13 +12,13 @@ namespace Terra.Studio
 
         public void Initialize()
         {
+            EditorOp.Resolve<SelectionHandler>().Init();
             EditorOp.Register(new DataProvider());
             EditorOp.Register(new SceneDataHandler());
             EditorOp.Resolve<HierarchyView>().Init();
             EditorOp.Resolve<InspectorView>().Init();
             EditorOp.Resolve<ToolbarView>().Init();
-            EditorOp.Resolve<SceneView>().Init();
-            EditorOp.Resolve<SelectionHandler>().Init();
+            EditorOp.Resolve<SceneView>().Init(); 
             EditorOp.Resolve<UILogicDisplayProcessor>().Init();
             EditorOp.Resolve<SceneDataHandler>().LoadScene();
         }

@@ -137,3 +137,8 @@ MonoBehaviour:
   - ComponentName: SetObjectPosition
     hideAddButton: 0
     hideRemoveButton: 0
+  m_GameEssentials:
+  - InGameTimer
+  - GameScore
+  - PlayerSpawnPoint
+  - Checkpoint

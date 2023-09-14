@@ -57,6 +57,11 @@ namespace RuntimeInspectorNamespace
 			return rootObjects[index];
 		}
 
+		public bool ContainsChild(Transform target)
+		{
+			return rootObjects.Contains(target);
+		}
+
 		public override Transform GetNearestRootOf( Transform target )
 		{
 			Transform result = null;

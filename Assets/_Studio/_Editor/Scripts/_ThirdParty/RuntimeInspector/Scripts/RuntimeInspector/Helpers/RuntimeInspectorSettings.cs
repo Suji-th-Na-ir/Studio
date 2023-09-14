@@ -33,6 +33,9 @@ namespace RuntimeInspectorNamespace
         [SerializeField]
         private ShownComponent[] m_ShowComponents;
         public ShownComponent[] ShowComponents { get { return m_ShowComponents; } }
+        [SerializeField]
+        private string[] m_GameEssentials;
+        public string[] GameEssentials { get { return m_GameEssentials; } }
 #pragma warning restore 0649
     }
 }
