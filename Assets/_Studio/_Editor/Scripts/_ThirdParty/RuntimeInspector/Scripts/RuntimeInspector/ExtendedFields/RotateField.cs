@@ -152,6 +152,7 @@ namespace RuntimeInspectorNamespace
             }
             
             LoadData(preset);
+            UpdateDataInUI(preset);
             UpdateTypeForMultiselect(rotationType, preset);
         }
 
@@ -228,8 +229,23 @@ namespace RuntimeInspectorNamespace
             rotateTypesDD.SetValueWithoutNotify(rt.data.rotateType);
             if (compData != null && compData.HasValue)
             {
-                selectedRotateType.SetData(compData.Value);
+               // selectedRotateType.SetData(compData.Value);
                 rt.data = compData.Value;
+            }
+            else
+            {
+               // selectedRotateType.SetData(rt.data);
+            }
+        }
+
+        private void UpdateDataInUI(RotateComponentData? compData = null)
+        {
+            Atom.Rotate rt = (Atom.Rotate)Value;
+           
+            if (compData != null && compData.HasValue)
+            {
+                selectedRotateType.SetData(compData.Value);
+               // rt.data = compData.Value;
             }
             else
             {
