@@ -22,6 +22,8 @@ namespace Terra.Studio
         private const string PLANE_PRIMITIVE_BUTTON_LOC = "plane_button";
         private const string CHECKPOINT_PRIMITIVE_BUTTON_LOC = "checkpoint_button";
         private const string TIMER_BUTTON_LOC = "timer_button";
+        private const string UNDO_BUTTON_LOC = "UndoButton";
+        private const string REDO_BUTTON_LOC = "RedoButton";
 
         [SerializeField] private GameObject PrimitivePanel;
         private void Awake()
@@ -45,6 +47,8 @@ namespace Terra.Studio
             var moveButtonTr = Helper.FindDeepChild(transform, MOVE_BUTTON_LOC, true);
             var rotateButtonTr = Helper.FindDeepChild(transform, ROTATE_BUTTON_LOC, true);
             var scaleButtonTr = Helper.FindDeepChild(transform, SCALE_BUTTON_LOC, true);
+            var undoButtonTr = Helper.FindDeepChild(transform, UNDO_BUTTON_LOC, true);
+            var redoButtonTr = Helper.FindDeepChild(transform, REDO_BUTTON_LOC, true);
 
             var addButton = addButtonTr.GetComponent<Button>();
             AddListenerEvent(addButton, () =>
@@ -99,7 +103,17 @@ namespace Terra.Studio
             var timerButton = timerTr.GetComponent<Button>();
             AddListenerEvent(timerButton, CreateObject, "InGameTimer");
 
-            EditorOp.Resolve<SelectionHandler>().SelectionChanged += (List<GameObject> gm) =>
+            var undoButton = undoButtonTr.GetComponent<Button>();
+            AddListenerEvent(undoButton, EditorOp.Resolve<IURCommand>().Undo);
+            undoButton.interactable = false;
+            EditorOp.Resolve<IURCommand>().OnUndoStackAvailable += (isPresent) => { undoButton.interactable = isPresent; };
+
+            var redoButton = redoButtonTr.GetComponent<Button>();
+            AddListenerEvent(redoButton, EditorOp.Resolve<IURCommand>().Redo);
+            redoButton.interactable = false;
+            EditorOp.Resolve<IURCommand>().OnRedoStackAvailable += (isPresent) => { redoButton.interactable = isPresent; };
+
+            EditorOp.Resolve<SelectionHandler>().SelectionChanged += (_) =>
             {
                 PrimitivePanel.SetActive(false);
             };
