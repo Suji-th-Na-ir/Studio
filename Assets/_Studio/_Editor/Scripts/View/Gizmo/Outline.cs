@@ -104,8 +104,9 @@ public class Outline : MonoBehaviour {
             }
             else
             {
-                outlineMaskMaterial = MaterialInList(materials, "OutlineMask (Instance)");
-
+                materials.Remove(MaterialInList(materials, "OutlineMask (Instance)"));
+                outlineMaskMaterial = Instantiate(mask);
+                outlineMaskMaterial.name = "OutlineMask (Instance)";
             }
 
             // Check if fill material is not present and instantiate if needed
@@ -116,7 +117,9 @@ public class Outline : MonoBehaviour {
             }
             else
             {
-               outlineFillMaterial = MaterialInList(materials, "OutlineFill (Instance)");
+                materials.Remove(MaterialInList(materials, "OutlineFill (Instance)"));
+                outlineFillMaterial = Instantiate(fill);
+                outlineFillMaterial.name = "OutlineFill (Instance)";
                 this.enabled = false;
             }
         }
@@ -150,30 +153,24 @@ public class Outline : MonoBehaviour {
 
 
             // Check if the outline materials are already in the list
-            bool maskMaterialFound = false;
-            bool fillMaterialFound = false;
 
-            foreach (var material in materials)
+            for (int i = materials.Count - 1; i > 0; i--)
             {
-                if (material.name == "OutlineMask (Instance)")
+                if (materials[i].name == "OutlineMask (Instance)")
                 {
-                    maskMaterialFound = true;
+                    materials.RemoveAt(i);
+
                 }
-                else if (material.name == "OutlineFill (Instance)")
+                else if (materials[i].name == "OutlineFill (Instance)")
                 {
-                    fillMaterialFound = true;
+                    materials.RemoveAt(i);
                 }
             }
-
             // Add the outline materials if not found
-            if (!maskMaterialFound)
-            {
-                materials.Add(outlineMaskMaterial);
-            }
-            if (!fillMaterialFound)
-            {
-                materials.Add(outlineFillMaterial);
-            }
+
+            materials.Add(outlineMaskMaterial);
+            materials.Add(outlineFillMaterial);
+
 
             renderer.materials = materials.ToArray();
         }
