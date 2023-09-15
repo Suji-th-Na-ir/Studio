@@ -133,14 +133,14 @@ namespace RTG
 
         public override void OnAttached()
         {
-            RTUndoRedo.Get.UndoEnd += OnUndoRedoEnd;
-            RTUndoRedo.Get.RedoEnd += OnUndoRedoEnd;
+            //RTUndoRedo.Get.UndoEnd += OnUndoRedoEnd;
+            //RTUndoRedo.Get.RedoEnd += OnUndoRedoEnd;
         }
 
         public override void OnDetached()
         {
-            RTUndoRedo.Get.UndoEnd -= OnUndoRedoEnd;
-            RTUndoRedo.Get.RedoEnd -= OnUndoRedoEnd;
+            //RTUndoRedo.Get.UndoEnd -= OnUndoRedoEnd;
+            //RTUndoRedo.Get.RedoEnd -= OnUndoRedoEnd;
         }
 
         public void MakeTransformSpacePermanent()
@@ -174,7 +174,7 @@ namespace RTG
             if (ContainsRestrictionsForObject(targetObject)) _objectToRestrictions.Remove(targetObject);
         }
 
-        public ObjectTransformGizmo.ObjectRestrictions GetObjectRestrictions(GameObject targetObject)
+        public ObjectRestrictions GetObjectRestrictions(GameObject targetObject)
         {
             if (ContainsRestrictionsForObject(targetObject)) return _objectToRestrictions[targetObject];
             return null;
@@ -253,7 +253,7 @@ namespace RTG
         public void SetObjectCustomLocalPivot(GameObject gameObj, Vector3 pivot)
         {
             if (gameObj == null || _gizmo.IsDragged) return;
- 
+
             if (_objectToCustomLocalPivot.ContainsKey(gameObj)) _objectToCustomLocalPivot[gameObj] = pivot;
             else _objectToCustomLocalPivot.Add(gameObj, pivot);
 
@@ -284,7 +284,7 @@ namespace RTG
 
             var boundsQConfig = GetObjectBoundsQConfig();
             AABB targetGroupAABB = AABB.GetInvalid();
-            foreach(var targetObject in _targetObjects)
+            foreach (var targetObject in _targetObjects)
             {
                 AABB targetAABB = ObjectBounds.CalcWorldAABB(targetObject, boundsQConfig);
                 if (targetGroupAABB.IsValid) targetGroupAABB.Encapsulate(targetAABB);
@@ -302,7 +302,7 @@ namespace RTG
         public void RefreshPosition()
         {
             if (_targetObjects == null || _gizmo.IsDragged) return;
-         
+
             GizmoTransform gizmoTransform = Gizmo.Transform;
             if (_transformPivot == GizmoObjectTransformPivot.ObjectGroupCenter ||
                 _targetPivotObject == null) gizmoTransform.Position3D = GetTargetObjectGroupWorldAABB().Center;
@@ -325,7 +325,7 @@ namespace RTG
             }
             if (_transformPivot == GizmoObjectTransformPivot.CustomWorldPivot) gizmoTransform.Position3D = _customWorldPivot;
             else
-            if(_transformPivot == GizmoObjectTransformPivot.CustomObjectLocalPivot)
+            if (_transformPivot == GizmoObjectTransformPivot.CustomObjectLocalPivot)
             {
                 if (_targetPivotObject == null) gizmoTransform.Position3D = GetTargetObjectGroupWorldAABB().Center;
                 else gizmoTransform.Position3D = _targetPivotObject.transform.TransformPoint(GetObjectCustomLocalPivot(_targetPivotObject));
@@ -372,7 +372,7 @@ namespace RTG
                 var _postTransformSnapshot = LocalTransformSnapshot.GetSnapshotCollection(_targetObjects);
                 var postObjectTransformChangedAction = new PostObjectTransformsChangedAction(_preTransformSnapshots, _postTransformSnapshot);
                 postObjectTransformChangedAction.Execute();
-                
+
                 EditorOp.Resolve<IURCommand>().Record(
                     _preTransformSnapshots,
                     _postTransformSnapshot,
@@ -394,13 +394,13 @@ namespace RTG
         private List<GameObject> GetTransformableParentObjects()
         {
             List<GameObject> targetParents = GameObjectEx.FilterParentsOnly(_targetObjects);
-            List<GameObject> transformableParents = new List<GameObject>();
+            List<GameObject> transformableParents = new();
             foreach (var parent in targetParents)
             {
                 IRTTransformGizmoListener transformGizmoListener = parent.GetComponent<IRTTransformGizmoListener>();
                 if (transformGizmoListener != null && !transformGizmoListener.OnCanBeTransformed(Gizmo)) continue;
 
-                if (Settings.IsLayerTransformable(parent.layer) && 
+                if (Settings.IsLayerTransformable(parent.layer) &&
                     Settings.IsObjectTransformable(parent)) transformableParents.Add(parent);
             }
 
@@ -423,7 +423,7 @@ namespace RTG
 
         private void MoveObject(GameObject gameObject, Vector3 moveVector)
         {
-            ObjectTransformGizmo.ObjectRestrictions restrictions = GetObjectRestrictions(gameObject);
+            var restrictions = GetObjectRestrictions(gameObject);
             if (restrictions != null)
             {
                 if (!restrictions.IsAffectedByHandle(Gizmo.DragHandleId)) return;
@@ -433,7 +433,7 @@ namespace RTG
             gameObject.transform.position += moveVector;
 
             IRTTransformGizmoListener transformGizmoListener = gameObject.GetComponent<IRTTransformGizmoListener>();
-            if (transformGizmoListener != null) transformGizmoListener.OnTransformed(Gizmo);
+            transformGizmoListener?.OnTransformed(Gizmo);
         }
 
         private void RotateObjects(Quaternion rotation)
@@ -485,14 +485,14 @@ namespace RTG
 
         private void RotateObject(GameObject gameObject, Quaternion rotation, Vector3 rotationPivot)
         {
-            ObjectTransformGizmo.ObjectRestrictions restrictions = GetObjectRestrictions(gameObject);
+            ObjectRestrictions restrictions = GetObjectRestrictions(gameObject);
             if (restrictions != null && !restrictions.IsAffectedByHandle(Gizmo.DragHandleId)) return;
 
             Transform objectTransform = gameObject.transform;
             objectTransform.RotateAroundPivot(rotation, rotationPivot);
 
             IRTTransformGizmoListener transformGizmoListener = gameObject.GetComponent<IRTTransformGizmoListener>();
-            if (transformGizmoListener != null) transformGizmoListener.OnTransformed(Gizmo);
+            transformGizmoListener?.OnTransformed(Gizmo);
         }
 
         private void ScaleObjects()
@@ -567,7 +567,7 @@ namespace RTG
             else objectTransform.ScaleFromPivot(scaleFactor, scalePivot);
 
             IRTTransformGizmoListener transformGizmoListener = gameObject.GetComponent<IRTTransformGizmoListener>();
-            if (transformGizmoListener != null) transformGizmoListener.OnTransformed(Gizmo);
+            transformGizmoListener?.OnTransformed(Gizmo);
         }
 
         private ObjectBounds.QueryConfig GetObjectBoundsQConfig()

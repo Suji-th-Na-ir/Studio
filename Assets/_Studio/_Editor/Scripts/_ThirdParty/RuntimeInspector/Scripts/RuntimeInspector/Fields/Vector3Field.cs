@@ -123,6 +123,7 @@ namespace RuntimeInspectorNamespace
                         val.z = value;
 
                     Value = val;
+                    EditorOp.Resolve<SelectionHandler>().RefreshGizmo();
                     return true;
                 }
             }
@@ -138,16 +139,19 @@ namespace RuntimeInspectorNamespace
             {
                 if (Value != lastSubmittedValue)
                 {
-                    EditorOp.Resolve<IURCommand>().Record(
-                        (lastSubmittedValue, GetAxisFromField(source, (Vector3)lastSubmittedValue)), (Value, input),
+                    var lastValue = GetAxisFromField(source, (Vector3)lastSubmittedValue);
+                    EditorOp.Resolve<IURCommand>()?.Record(
+                        (lastSubmittedValue, lastValue, Name), (Value, input, Name),
                         $"Vector3 changed to: {Value}",
                         (value) =>
                         {
-                            var modValue = ((object, string))value;
-                            OnValueChanged(source, $"{modValue.Item2}");
+                            var modValue = ((object, string, string))value;
+                            OnValueChanged(source, modValue.Item2);
                             SetValueIndirectly();
                             lastSubmittedValue = modValue.Item1;
-                        });
+                            EditorOp.Resolve<SelectionHandler>().RefreshGizmo();
+                        }
+                    );
                 }
                 lastSubmittedValue = Value;
             }

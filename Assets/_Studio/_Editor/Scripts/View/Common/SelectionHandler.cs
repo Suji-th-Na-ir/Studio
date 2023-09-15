@@ -455,6 +455,11 @@ public class SelectionHandler : View
         OnSelectionChanged();
     }
 
+    public void RefreshGizmo()
+    {
+        _workGizmo.RefreshPositionAndRotation();
+    }
+
     public List<GameObject> GetPrevSelectedObjects()
     {
         return prevSelectedObjects;
