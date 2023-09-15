@@ -76,7 +76,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layoutElement: {fileID: 114063286651786512}
   ignoreLayout: 1
-  variableNameText: {fileID: 0}
+  variableNameText: {fileID: 1366607720375152101}
   variableNameMask: {fileID: 0}
   visibleArea: {fileID: 0}
   startOn: {fileID: 5402255416815306912}
@@ -1193,7 +1193,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 0
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 0
     m_HorizontalOverflow: 1
@@ -2822,7 +2822,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: -107, y: -0.29999924}
-  m_SizeDelta: {x: 101.8258, y: 30}
+  m_SizeDelta: {x: 101.8258, y: 44.7}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &5764927643443651264
 CanvasRenderer:
@@ -2863,7 +2863,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: Start On
 --- !u!114 &8144051582540105921

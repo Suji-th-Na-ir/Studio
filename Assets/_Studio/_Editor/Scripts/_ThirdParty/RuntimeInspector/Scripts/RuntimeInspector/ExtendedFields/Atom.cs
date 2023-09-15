@@ -18,10 +18,11 @@ namespace Terra.Studio
             [HideInInspector] public GameObject target;
             [HideInInspector] public List<string> StartList = new List<string>();
             [HideInInspector] public string componentType = null;
-
-            public void Setup(GameObject _target, List<string> _list, string _componentType,bool updateListen)
+            [HideInInspector] public List<string> aliasNameList = new List<string>();
+            public void Setup(GameObject _target, List<string> _list,List<String>_aliasStrings, string _componentType,bool updateListen)
             {
                 StartList = _list;
+                aliasNameList = _aliasStrings;
                 target = _target;
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
@@ -168,7 +169,7 @@ namespace Terra.Studio
         public float speed;
         public int repeat;
         public float pauseBetween;
-        
+        [AliasDrawer("Broadcast")]
         public string broadcast;
         public Listen listen;
         public BroadcastAt broadcastAt;
@@ -182,7 +183,7 @@ namespace Terra.Studio
         public float pauseFor;
         public float speed;
         public int repeat;
-        
+        [AliasDrawer("Broadcast")]
         public string broadcast;
 
         public string listenTo;

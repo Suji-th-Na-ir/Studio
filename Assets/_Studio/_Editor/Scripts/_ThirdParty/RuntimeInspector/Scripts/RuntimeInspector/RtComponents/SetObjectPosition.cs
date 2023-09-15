@@ -6,31 +6,35 @@ using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
-    [EditorDrawComponent("Terra.Studio.SetObjectPosition")]
+    [EditorDrawComponent("Terra.Studio.SetObjectPosition"), AliasDrawer("Teleport Self")]
     public class SetObjectPosition : MonoBehaviour, IComponent
     {
         public enum StartOptions
         {
-            [EditorEnumField("Terra.Studio.MouseAction", "OnClick")]
+            [EditorEnumField("Terra.Studio.MouseAction", "OnClick"), AliasDrawer("Clicked")]
             OnClick,
-            [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
+            [EditorEnumField("Terra.Studio.TriggerAction", "Player"), AliasDrawer("Player Touches")]
             OnPlayerCollide,
-            [EditorEnumField("Terra.Studio.TriggerAction", "Any")]
+            [EditorEnumField("Terra.Studio.TriggerAction", "Other"), AliasDrawer("Another Object Touches")]
             OnObjectCollide,
-            [EditorEnumField("Terra.Studio.Listener")]
+            [EditorEnumField("Terra.Studio.Listener"), AliasDrawer("Broadcast Listened")]
             BroadcastListen
         }
 
         private readonly Vector3 INFINITY = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
+
+        [AliasDrawer("TeleportWhen")]
         public Atom.StartOn startOn = new();
+        [AliasDrawer("Target\nPosition")]
         public Vector3 targetPosition = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
+        [AliasDrawer("Broadcast")]
         public string broadcast;
 
         private void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOptions>(), GetType().Name,startOn.data.startIndex==3);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOptions>(), Helper.GetEnumWithAliasNames<StartOptions>(), GetType().Name, startOn.data.startIndex == 3);
             playSFX.Setup<SetObjectPosition>(gameObject);
             playVFX.Setup<SetObjectPosition>(gameObject);
         }
