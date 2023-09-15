@@ -5,6 +5,18 @@ namespace Terra.Studio
 {
     public class TranslateSystem : BaseSystem, IEcsRunSystem
     {
+        public override void Init<T>(int entity)
+        {
+            base.Init<T>(entity);
+            ref var entityRef = ref entity.GetComponent<TranslateComponent>();
+            if (!entityRef.RefObj.TryGetComponent(out Rigidbody rb))
+            {
+                rb = entityRef.RefObj.AddComponent<Rigidbody>();
+            }
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
+
         public override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref entity.GetComponent<TranslateComponent>();
@@ -23,7 +35,7 @@ namespace Terra.Studio
                 return;
             }
             var tr = entityRef.RefObj.transform;
-            var targetPos = tr.parent == null ? entityRef.targetPosition+entityRef.startPosition : entityRef.startPosition + tr.TransformDirection(entityRef.targetPosition);
+            var targetPos = tr.parent == null ? entityRef.targetPosition + entityRef.startPosition : entityRef.startPosition + tr.TransformDirection(entityRef.targetPosition);
             var pauseDistance = Vector3.Distance(entityRef.startPosition, targetPos);
             var direction = targetPos - entityRef.startPosition;
             entityRef.pauseDistance = pauseDistance;
@@ -166,7 +178,6 @@ namespace Terra.Studio
                 component.pauseStartTime = Time.time;
                 component.coveredDistance = 0f;
                 OnTranslateDone(false, entity);
-                return;
             }
         }
 

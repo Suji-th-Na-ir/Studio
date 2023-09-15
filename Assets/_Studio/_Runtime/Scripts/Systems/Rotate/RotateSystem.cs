@@ -5,6 +5,18 @@ namespace Terra.Studio
 {
     public class RotateSystem : BaseSystem, IEcsRunSystem
     {
+        public override void Init<T>(int entity)
+        {
+            base.Init<T>(entity);
+            ref var entityRef = ref entity.GetComponent<RotateComponent>();
+            if (!entityRef.RefObj.TryGetComponent(out Rigidbody rb))
+            {
+                rb = entityRef.RefObj.AddComponent<Rigidbody>();
+            }
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
+
         public override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref entity.GetComponent<RotateComponent>();

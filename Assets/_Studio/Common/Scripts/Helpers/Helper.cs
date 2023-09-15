@@ -634,6 +634,36 @@ namespace PlayShifu.Terra
             return new List<string>(Enum.GetNames(typeof(TEnum)));
         }
 
+        public static List<string> GetEnumWithAliasNames<TEnum>() where TEnum:Enum
+        {
+            var enumType = typeof(TEnum);
+            return GetEnumWithAliasNames(enumType);
+        }
+
+        public static List<string> GetEnumWithAliasNames(Type enumType) 
+        {
+            var enumNamesWithDisplayNames = new List<string>();
+
+            if (!enumType.IsEnum)
+                return null;
+            foreach (var enumValue in Enum.GetValues(enumType))
+            {
+                var fieldInfo = enumType.GetField(enumValue.ToString());
+                var displayNameAttribute = fieldInfo.GetCustomAttribute<AliasDrawerAttribute>();
+
+                if (displayNameAttribute != null)
+                {
+                    enumNamesWithDisplayNames.Add(displayNameAttribute.Alias);
+                }
+                else
+                {
+                    enumNamesWithDisplayNames.Add(enumValue.ToString());
+                }
+            }
+
+            return enumNamesWithDisplayNames;
+        }
+
         public static void DeepCopy<T>(List<T> source, List<T> destination)
         {
             destination.Clear();
