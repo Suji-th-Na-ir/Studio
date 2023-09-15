@@ -1,5 +1,6 @@
 using UnityEngine;
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
@@ -7,10 +8,21 @@ namespace Terra.Studio
     [EditorDrawComponent("Terra.Studio.Collide")]
     public class Collide : MonoBehaviour, IComponent
     {
-        public string broadcast = null;
+        public enum DestroyOnEnum
+        {
+            [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
+            OnPlayerCollide,
+            [EditorEnumField("Terra.Studio.TriggerAction", "Other")]
+            OnObjectCollide
+        }
+
+        public Atom.StartOn startOn = new();
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
-        public bool executeMultipleTimes = true;
+        [AliasDrawer("Broadcast")]
+        public string broadcast = null;
+        //[AliasDrawer("Do\nAlways")]
+        //public bool executeMultipleTimes = true;
 
         public void Awake()
         {
@@ -20,6 +32,7 @@ namespace Terra.Studio
 
         public (string type, string data) Export()
         {
+            var start = Helper.GetEnumValueByIndex<DestroyOnEnum>(startOn.data.startIndex);
             var data = new CollideComponent()
             {
                 canPlaySFX = playSFX.data.canPlay,
@@ -31,9 +44,11 @@ namespace Terra.Studio
                 IsBroadcastable = !string.IsNullOrEmpty(broadcast),
                 Broadcast = broadcast,
                 IsConditionAvailable = true,
-                ConditionType = "Terra.Studio.TriggerAction",
-                ConditionData = "Player",
-                listen = executeMultipleTimes ? Listen.Always : Listen.Once
+                ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(start),
+                ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(start),
+                startIndex = startOn.data.startIndex,
+                startName = startOn.data.startName,
+                listen = Listen.Always
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var json = JsonConvert.SerializeObject(data);
@@ -50,6 +65,9 @@ namespace Terra.Studio
             playVFX.data.clipName = obj.vfxName;
             playVFX.data.clipIndex = obj.vfxIndex;
             broadcast = obj.Broadcast;
+            startOn.data.startIndex = obj.startIndex;
+            startOn.data.startName = obj.startName;
+            //executeMultipleTimes = obj.listen == Listen.Always;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcast, null);
         }
     }
