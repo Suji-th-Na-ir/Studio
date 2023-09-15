@@ -66,8 +66,14 @@ namespace Terra.Studio
             var prevState = SystemOp.Resolve<System>().PreviousStudioState;
             if (prevState != StudioState.Runtime && SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
             {
+#if UNITY_WEBGL
                 var saveFilePath = FileService.GetSavedFilePath(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name);
                 data = SystemOp.Resolve<FileService>().ReadFromFile(saveFilePath);
+#else 
+    var saveFilePath = FileService.GetSavedFilePath(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name);
+                data = SystemOp.Resolve<FileService>().ReadFromFile(saveFilePath);
+#endif
+                
             }
             else
             {

@@ -2,13 +2,11 @@ using System;
 using UnityEngine;
 using PlayShifu.Terra;
 using UnityEngine.SceneManagement;
-using TMPro;
 
 namespace Terra.Studio
 {
     public class System : MonoBehaviour
     {
-        [SerializeField] private TMP_Text levelText;
         private SystemConfigurationSO configData;
         private StudioState previousStudioState;
         private StudioState currentStudioState;
@@ -19,26 +17,39 @@ namespace Terra.Studio
         public StudioState PreviousStudioState { get { return previousStudioState; } }
         public StudioState CurrentStudioState { get { return currentStudioState; } }
 
+        private string levelToLoad;
         private void Awake()
         {
             SystemOp.Register(this);
         }
 
+#if !UNITY_WEBGL || UNITY_EDITOR
         private void Start()
         {
-            //Initialize();
+            Initialize();
         }
+#endif
 
-        public void LoadGame(string _levelName)
+        // this method will be called from javascript for webgl builds
+        public void LoadApp(string _levelName)
         {
-            Debug.Log("loading level "+_levelName);
-            levelText.text = "Loading level " + _levelName;
+            levelToLoad = _levelName;
+            Initialize();
         }
 
         private void Initialize()
         {
             SceneManager.sceneLoaded += OnSceneLoaded;
             configData = (SystemConfigurationSO)SystemOp.Load(ResourceTag.SystemConfig);
+            
+#if UNITY_WEBGL
+            foreach (var sceneAsset in configData.GetAllSceneDatas())
+            {
+                if (sceneAsset.name == levelToLoad)
+                    configData.SceneDataToLoad = sceneAsset;
+            }
+#endif
+            
             currentStudioState = configData.DefaultStudioState;
             previousStudioState = StudioState.Bootstrap;
             sceneLoadParameters = new LoadSceneParameters()

@@ -69,9 +69,8 @@
       );
 
       // Pass parameters to Unity using SendMessage
-      // unityInstance.SendMessage("Bootstrapper", "LoadGame", param1);
       gameInstance.then((unityInstance) => {
-        unityInstance.SendMessage("Bootstrapper", "LoadGame", param1);
+        unityInstance.SendMessage("Bootstrapper", "LoadApp", param1);
       });
     </script>
   </body>
