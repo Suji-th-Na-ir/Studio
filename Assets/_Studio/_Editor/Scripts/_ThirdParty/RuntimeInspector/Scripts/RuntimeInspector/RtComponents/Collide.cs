@@ -11,6 +11,7 @@ namespace Terra.Studio
         public string broadcast = null;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
+        [DisplayName("Do\nAlways")]
         public bool executeMultipleTimes = true;
 
         public void Awake()

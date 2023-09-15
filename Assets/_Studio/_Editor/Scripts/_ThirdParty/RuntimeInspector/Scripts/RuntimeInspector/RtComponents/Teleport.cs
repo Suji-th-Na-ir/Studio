@@ -7,12 +7,13 @@ namespace Terra.Studio
     [EditorDrawComponent("Terra.Studio.Teleport"),DisplayName("Teleport Player")]
     public class Teleport : MonoBehaviour, IComponent
     {
-        [DisplayName("Teleport\nto")]
+        [DisplayName("Teleport\nTo")]
         public Vector3 teleportTo;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
         [DisplayName("Broadcast")]
         public string broadcast = null;
+        [DisplayName("Do\nAlways")]
         public bool executeMultipleTimes = true;
 
         private void Start()
