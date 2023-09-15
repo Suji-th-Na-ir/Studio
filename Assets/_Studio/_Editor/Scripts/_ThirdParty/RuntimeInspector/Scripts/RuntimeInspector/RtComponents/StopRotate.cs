@@ -71,6 +71,10 @@ namespace Terra.Studio
             {
                 return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOn.OnClick);
             }
+            else if (startOn.data.startName.Equals(StartOn.OnObjectCollide.ToString()))
+            {
+                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOn.OnObjectCollide);
+            }
             else
             {
                 return startOn.data.listenName;
@@ -98,11 +102,11 @@ namespace Terra.Studio
 
         private StartOn GetStart(StopRotateComponent comp)
         {
-            if (comp.ConditionType.Equals(EditorOp.Resolve<DataProvider>().GetEnumValue(StartOn.OnClick)))
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
-                return StartOn.OnClick;
+                return (StartOn)result;
             }
-            return StartOn.BroadcastListen;
+            return StartOn.OnClick;
         }
 
         private string GetListenValues(StopRotateComponent comp)

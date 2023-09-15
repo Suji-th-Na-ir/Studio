@@ -19,7 +19,7 @@ namespace RuntimeInspectorNamespace
         {
             guid = GetInstanceID() + "_translate";
             Type.Setup(guid, gameObject, GetType().Name);
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name,startOn.data.startIndex==3);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name, startOn.data.startIndex == 3);
             PlaySFX.Setup<Translate>(gameObject);
             PlayVFX.Setup<Translate>(gameObject);
         }
@@ -98,9 +98,24 @@ namespace RuntimeInspectorNamespace
             Type.data.listen = comp.listen;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
-                startOn.data.startIndex = (int)(StartOn)result;
+                var res = (StartOn)result;
+                if (res == StartOn.OnPlayerCollide)
+                {
+                    if (comp.ConditionData.Equals("Player"))
+                    {
+                        startOn.data.startIndex = (int)res;
+                    }
+                    else
+                    {
+                        startOn.data.startIndex = (int)StartOn.OnObjectCollide;
+                    }
+                }
+                else
+                {
+                    startOn.data.startIndex = (int)(StartOn)result;
+                }
+                startOn.data.startName = res.ToString();
             }
-            startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
             var listenString = "";
             if (startOn.data.startIndex == 3)

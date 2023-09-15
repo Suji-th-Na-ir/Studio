@@ -19,7 +19,7 @@ namespace RuntimeInspectorNamespace
 
         private void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), GetType().Name,startOn.data.startIndex==3);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), GetType().Name, startOn.data.startIndex == 3);
             fromPoint = transform.localPosition;
             Component.fromPoint = fromPoint;
         }
@@ -72,9 +72,24 @@ namespace RuntimeInspectorNamespace
             Loop = comp.loop;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
-                startOn.data.startIndex = (int)(StartOn)result;
+                var res = (StartOn)result;
+                if (res == StartOn.OnPlayerCollide)
+                {
+                    if (comp.ConditionData.Equals("Player"))
+                    {
+                        startOn.data.startIndex = (int)res;
+                    }
+                    else
+                    {
+                        startOn.data.startIndex = (int)StartOn.OnObjectCollide;
+                    }
+                }
+                else
+                {
+                    startOn.data.startIndex = (int)(StartOn)result;
+                }
+                startOn.data.startName = res.ToString();
             }
-            startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
             var listenString = "";
             if (startOn.data.startIndex == 3)
