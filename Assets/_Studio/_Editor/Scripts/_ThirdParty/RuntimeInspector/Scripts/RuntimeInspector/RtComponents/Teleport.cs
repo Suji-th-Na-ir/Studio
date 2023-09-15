@@ -7,7 +7,7 @@ namespace Terra.Studio
     [EditorDrawComponent("Terra.Studio.Teleport"),DisplayName("Teleport Player")]
     public class Teleport : MonoBehaviour, IComponent
     {
-        [DisplayName("Teleport"+"\n"+"to")]
+        [DisplayName("Teleport\nto")]
         public Vector3 teleportTo;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();

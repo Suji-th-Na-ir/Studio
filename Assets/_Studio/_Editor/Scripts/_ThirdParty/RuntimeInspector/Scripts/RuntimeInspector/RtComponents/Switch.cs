@@ -18,6 +18,7 @@ namespace Terra.Studio
         }
         [DisplayName("Switch"+"\n" +"when")]
         public StartOn switchWhen;
+        [DisplayName("Default")]
         public SwitchState defaultState;
         [Header("When Switch is \"On\"")]
         [AliasDrawer("Broadcast")] public string broadcastWhenOn;
