@@ -10,7 +10,7 @@ namespace RuntimeInspectorNamespace
     {
         [HideInInspector]
         public OscillateComponent Component;
-        [DisplayName("Oscillate" +"\n"+ "When")]
+        [DisplayName("OscillateWhen")]
         public Atom.StartOn startOn = new();
         public Vector3 fromPoint;
         public Vector3 toPoint;

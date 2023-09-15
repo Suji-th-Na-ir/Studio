@@ -16,7 +16,7 @@ namespace Terra.Studio
             [EditorEnumField("Terra.Studio.TriggerAction", "Any"),DisplayName("Another Object Touches")]
             OnObjectCollide
         }
-        [DisplayName("Switch"+"\n" +"When")]
+        [DisplayName("Switch"+"\n" +"when")]
         public StartOn switchWhen;
         public SwitchState defaultState;
         [Header("When Switch is \"On\"")]

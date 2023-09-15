@@ -18,7 +18,7 @@ namespace RuntimeInspectorNamespace
     [EditorDrawComponent("Terra.Studio.DestroyOn"),DisplayName("Destroy Self")]
     public class DestroyOn : MonoBehaviour, IComponent
     {
-       const string disName = "Destroy Self" + "\n" + "When";
+       const string disName = "DestroyWhen";
         [DisplayName(disName)]
         public Atom.StartOn startOn = new();
         public Atom.PlaySfx PlaySFX = new();

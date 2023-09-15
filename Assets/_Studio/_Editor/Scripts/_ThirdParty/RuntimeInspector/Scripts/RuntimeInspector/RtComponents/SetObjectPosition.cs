@@ -23,7 +23,7 @@ namespace Terra.Studio
 
         private readonly Vector3 INFINITY = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
 
-        [DisplayName("Teleport" + "\n" + " When")]
+        [DisplayName("Teleport" + "\n" + "when")]
         public Atom.StartOn startOn = new();
         public Vector3 targetPosition = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
         public Atom.PlaySfx playSFX = new();

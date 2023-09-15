@@ -16,7 +16,7 @@ namespace RuntimeInspectorNamespace
             [EditorEnumField("Terra.Studio.MouseAction", "OnClick"),DisplayName("Clicked")]
             OnClick
         }
-        [DisplayName("Collect When")]
+        [DisplayName("CollectWhen")]
         public Atom.StartOn startOn = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();

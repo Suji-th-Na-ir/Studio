@@ -9,7 +9,7 @@ namespace RuntimeInspectorNamespace
     [EditorDrawComponent("Terra.Studio.Translate"),DisplayName("Move")]
     public class Translate : MonoBehaviour, IComponent
     {
-        [DisplayName("Move When")]
+        [DisplayName("MoveWhen")]
         public Atom.StartOn startOn = new();
         public Atom.Translate Type = new();
         public Atom.PlaySfx PlaySFX = new();

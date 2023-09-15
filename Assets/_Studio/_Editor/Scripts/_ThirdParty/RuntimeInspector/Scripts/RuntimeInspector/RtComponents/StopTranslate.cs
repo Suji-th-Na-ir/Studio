@@ -16,7 +16,7 @@ namespace Terra.Studio
             [EditorEnumField("Terra.Studio.Listener"), DisplayName("Broadcast Listened")]
             BroadcastListen
         }
-        [DisplayName("Stop When")]
+        [DisplayName("StopWhen")]
         public Atom.StartOn startOn = new();
         [DisplayName("Broadcast")]
         public string broadcast = null;

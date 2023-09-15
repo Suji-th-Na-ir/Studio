@@ -6,7 +6,7 @@ using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
-    [EditorDrawComponent("Terra.Studio.StopRotate"),DisplayName("Stop Rotate")]
+    [EditorDrawComponent("Terra.Studio.StopRotate"),DisplayName("Stop Move")]
     public class StopRotate : MonoBehaviour, IComponent
     {
         public enum StartOn
@@ -16,7 +16,7 @@ namespace Terra.Studio
             [EditorEnumField("Terra.Studio.Listener"), DisplayName("Broadcast Listened")]
             BroadcastListen
         }
-        [DisplayName("Stop When")]
+        [DisplayName("StopWhen")]
         public Atom.StartOn startOn = new();
         [DisplayName("Broadcast")]
         public string broadcast = null;

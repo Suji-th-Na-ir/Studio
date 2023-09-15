@@ -9,7 +9,7 @@ namespace RuntimeInspectorNamespace
     [EditorDrawComponent("Terra.Studio.Rotate")]
     public class Rotate : MonoBehaviour, IComponent
     {
-        [DisplayName("Rotate When")]
+        [DisplayName("RotateWhen")]
         public Atom.StartOn startOn = new();
         public Atom.Rotate Type = new();
         public Atom.PlaySfx PlaySFX = new();
