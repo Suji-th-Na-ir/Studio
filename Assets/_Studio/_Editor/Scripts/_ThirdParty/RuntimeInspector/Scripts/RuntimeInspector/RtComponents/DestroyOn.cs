@@ -81,9 +81,24 @@ namespace RuntimeInspectorNamespace
             DestroyOnComponent comp = JsonConvert.DeserializeObject<DestroyOnComponent>(cdata.data);
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(DestroyOnEnum), out object result))
             {
-                startOn.data.startIndex = (int)(DestroyOnEnum)result;
+                var res = (DestroyOnEnum)result;
+                if (res == DestroyOnEnum.OnPlayerCollide)
+                {
+                    if (comp.ConditionData.Equals("Player"))
+                    {
+                        startOn.data.startIndex = (int)res;
+                    }
+                    else
+                    {
+                        startOn.data.startIndex = (int)DestroyOnEnum.OnObjectCollide;
+                    }
+                }
+                else
+                {
+                    startOn.data.startIndex = (int)(DestroyOnEnum)result;
+                }
+                startOn.data.startName = res.ToString();
             }
-            startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
             Broadcast = comp.Broadcast;
             PlaySFX.data.canPlay = comp.canPlaySFX;
