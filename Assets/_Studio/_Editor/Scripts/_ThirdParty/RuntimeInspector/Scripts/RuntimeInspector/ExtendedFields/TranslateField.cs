@@ -66,9 +66,11 @@ namespace RuntimeInspectorNamespace
 
 
                 if (selectedTranslateType.movebyInput != null)
-                    lastComponentData.moveBy = new Vector3(int.Parse(selectedTranslateType.movebyInput[0].text),
-                        int.Parse(selectedTranslateType.movebyInput[1].text), (int.Parse(selectedTranslateType.movebyInput[2].text)));
-
+                {
+                    Debug.Log(selectedTranslateType.movebyInput[0].text);
+                    lastComponentData.moveBy = new Vector3(float.Parse(selectedTranslateType.movebyInput[0].text),
+                        float.Parse(selectedTranslateType.movebyInput[1].text), (float.Parse(selectedTranslateType.movebyInput[2].text)));;
+                }
                 if (selectedTranslateType.speedInput)
                     lastComponentData.speed = float.Parse(selectedTranslateType.speedInput.text);
                 else
@@ -143,6 +145,7 @@ namespace RuntimeInspectorNamespace
                 new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)Value).target, componentType = typeof(Atom.Translate).Name });
             }
             LoadData(preset);
+            UpdateDataInUI(preset);
             Atom.Translate rt = (Atom.Translate)Value;
             UpdateTypeForMultiselect(translateType, preset);
         }
@@ -222,8 +225,24 @@ namespace RuntimeInspectorNamespace
             translateTypesDD.SetValueWithoutNotify(rt.data.translateType);
             if (componentData != null && componentData.HasValue)
             {
-                selectedTranslateType.SetData(componentData.Value);
+                //selectedTranslateType.SetData(componentData.Value);
                 rt.data = componentData.Value;
+            }
+            else
+            {
+               // selectedTranslateType.SetData(rt.data);
+            }
+        }
+
+        private void UpdateDataInUI(TranslateComponentData? componentData = null)
+        {
+
+            Atom.Translate rt = (Atom.Translate)Value;
+           // translateTypesDD.SetValueWithoutNotify(rt.data.translateType);
+            if (componentData != null && componentData.HasValue)
+            {
+                selectedTranslateType.SetData(componentData.Value);
+                //rt.data = componentData.Value;
             }
             else
             {
