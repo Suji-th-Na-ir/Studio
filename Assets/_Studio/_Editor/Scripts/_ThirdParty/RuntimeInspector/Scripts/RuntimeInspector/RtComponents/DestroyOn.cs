@@ -29,7 +29,7 @@ namespace RuntimeInspectorNamespace
 
         public void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), Helper.GetEnumWithAliasNames<DestroyOnEnum>(), GetType().Name, startOn.data.startIndex == 2);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), Helper.GetEnumWithAliasNames<DestroyOnEnum>(), GetType().Name, startOn.data.startIndex == 3);
             PlaySFX.Setup<DestroyOn>(gameObject);
             PlayVFX.Setup<DestroyOn>(gameObject);
         }
