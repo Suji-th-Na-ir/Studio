@@ -27,7 +27,7 @@ namespace RuntimeInspectorNamespace
         public void Awake()
         {
             Score.instanceId = Guid.NewGuid().ToString("N");
-            startOn.Setup(gameObject, Helper.GetEnumWithAliasNames<StartOnCollectible>(), GetType().Name,false);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>(), Helper.GetEnumWithAliasNames<StartOnCollectible>(), GetType().Name,false);
             PlaySFX.Setup<Collectible>(gameObject);
             PlayVFX.Setup<Collectible>(gameObject);
         }

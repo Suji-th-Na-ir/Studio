@@ -633,14 +633,18 @@ namespace PlayShifu.Terra
             return new List<string>(Enum.GetNames(typeof(TEnum)));
         }
 
-        public static List<string> GetEnumWithAliasNames<TEnum>()
+        public static List<string> GetEnumWithAliasNames<TEnum>() where TEnum:Enum
         {
             var enumType = typeof(TEnum);
-            if (!enumType.IsEnum)
-                throw new ArgumentException($"{nameof(TEnum)} must be an enum type.");
+            return GetEnumWithAliasNames(enumType);
+        }
 
+        public static List<string> GetEnumWithAliasNames(Type enumType) 
+        {
             var enumNamesWithDisplayNames = new List<string>();
 
+            if (!enumType.IsEnum)
+                return null;
             foreach (var enumValue in Enum.GetValues(enumType))
             {
                 var fieldInfo = enumType.GetField(enumValue.ToString());

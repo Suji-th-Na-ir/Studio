@@ -21,7 +21,7 @@ namespace RuntimeInspectorNamespace
         {
             guid = GetInstanceID() + "_rotate";
             Type.Setup(guid, gameObject, GetType().Name);
-            startOn.Setup(gameObject, Helper.GetEnumWithAliasNames<StartOn>(), this.GetType().Name,startOn.data.startIndex==3);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), Helper.GetEnumWithAliasNames<StartOn>(), this.GetType().Name,startOn.data.startIndex==3);
             PlaySFX.Setup<Rotate>(gameObject);
             PlayVFX.Setup<Rotate>(gameObject);
         }

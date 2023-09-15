@@ -26,7 +26,7 @@ namespace Terra.Studio
         private void Awake()
         {
             startOn.Setup(gameObject,
-                Helper.GetEnumWithAliasNames<StartOn>(),
+                Helper.GetEnumValuesAsStrings<StartOn>(), Helper.GetEnumWithAliasNames<StartOn>(),
                 typeof(StopTranslate).Name,startOn.data.startIndex==1);
             playSFX.Setup<StopTranslate>(gameObject);
             playVFX.Setup<StopTranslate>(gameObject);

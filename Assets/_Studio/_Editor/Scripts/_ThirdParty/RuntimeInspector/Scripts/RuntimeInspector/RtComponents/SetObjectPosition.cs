@@ -34,7 +34,7 @@ namespace Terra.Studio
 
         private void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumWithAliasNames<StartOptions>(), GetType().Name,startOn.data.startIndex==3);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOptions>(), Helper.GetEnumWithAliasNames<StartOptions>(), GetType().Name,startOn.data.startIndex==3);
             playSFX.Setup<SetObjectPosition>(gameObject);
             playVFX.Setup<SetObjectPosition>(gameObject);
         }
