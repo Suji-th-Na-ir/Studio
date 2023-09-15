@@ -6,18 +6,19 @@ using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
-    [EditorDrawComponent("Terra.Studio.StopTranslate")]
+    [EditorDrawComponent("Terra.Studio.StopTranslate"),DisplayName("Stop Translate")]
     public class StopTranslate : MonoBehaviour, IComponent
     {
         public enum StartOn
         {
-            [EditorEnumField("Terra.Studio.MouseAction", "OnClick")]
+            [EditorEnumField("Terra.Studio.MouseAction", "OnClick"),DisplayName("Clicked")]
             OnClick,
-            [EditorEnumField("Terra.Studio.Listener")]
+            [EditorEnumField("Terra.Studio.Listener"), DisplayName("Broadcast Listened")]
             BroadcastListen
         }
-
+        [DisplayName("Stop When")]
         public Atom.StartOn startOn = new();
+        [DisplayName("Broadcast")]
         public string broadcast = null;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
@@ -25,7 +26,7 @@ namespace Terra.Studio
         private void Awake()
         {
             startOn.Setup(gameObject,
-                Helper.GetEnumValuesAsStrings<StartOn>(),
+                Helper.GetEnumWithDisplayNames<StartOn>(),
                 typeof(StopTranslate).Name,startOn.data.startIndex==1);
             playSFX.Setup<StopTranslate>(gameObject);
             playVFX.Setup<StopTranslate>(gameObject);

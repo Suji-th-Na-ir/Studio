@@ -9,14 +9,14 @@ namespace Terra.Studio
     {
         public enum StartOn
         {
-            [EditorEnumField("Terra.Studio.MouseAction", "OnClick")]
+            [EditorEnumField("Terra.Studio.MouseAction", "OnClick"),DisplayName("Clicked")]
             OnClick,
-            [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
+            [EditorEnumField("Terra.Studio.TriggerAction", "Player"),DisplayName("Player Touches")]
             OnPlayerCollide,
-            [EditorEnumField("Terra.Studio.TriggerAction", "Any")]
+            [EditorEnumField("Terra.Studio.TriggerAction", "Any"),DisplayName("Another Object Touches")]
             OnObjectCollide
         }
-
+        [DisplayName("Switch"+"\n" +"When")]
         public StartOn switchWhen;
         public SwitchState defaultState;
         [Header("When Switch is \"On\"")]

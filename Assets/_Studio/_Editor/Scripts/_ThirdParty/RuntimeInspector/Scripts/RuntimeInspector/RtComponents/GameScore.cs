@@ -8,6 +8,7 @@ namespace Terra.Studio
     public class GameScore : MonoBehaviour, IComponent
     {
         public int targetScore = 0;
+        [DisplayName("Broadcast")]
         public string broadcast = "Game Win";
 
         private void Awake()

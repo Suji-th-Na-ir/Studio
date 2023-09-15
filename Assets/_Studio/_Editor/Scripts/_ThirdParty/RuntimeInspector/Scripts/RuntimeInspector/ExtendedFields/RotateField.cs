@@ -31,7 +31,7 @@ namespace RuntimeInspectorNamespace
                 type.Setup();
             }
 
-            List<string> data = Enum.GetNames(typeof(RotationType)).ToList();
+            List<string> data = Helper.GetEnumWithDisplayNames<RotationType>();
             rotateTypesDD.AddOptions(data);
             rotateTypesDD.onValueChanged.AddListener(OnRotateTypesValueChanged);
         }

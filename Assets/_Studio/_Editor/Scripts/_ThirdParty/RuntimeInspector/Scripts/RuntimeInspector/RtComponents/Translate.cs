@@ -6,9 +6,10 @@ using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
 {
-    [EditorDrawComponent("Terra.Studio.Translate")]
+    [EditorDrawComponent("Terra.Studio.Translate"),DisplayName("Move")]
     public class Translate : MonoBehaviour, IComponent
     {
+        [DisplayName("Move When")]
         public Atom.StartOn startOn = new();
         public Atom.Translate Type = new();
         public Atom.PlaySfx PlaySFX = new();
@@ -19,7 +20,7 @@ namespace RuntimeInspectorNamespace
         {
             guid = GetInstanceID() + "_translate";
             Type.Setup(guid, gameObject, GetType().Name);
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name,startOn.data.startIndex==3);
+            startOn.Setup(gameObject, Helper.GetEnumWithDisplayNames<StartOn>(), this.GetType().Name,startOn.data.startIndex==3);
             PlaySFX.Setup<Translate>(gameObject);
             PlayVFX.Setup<Translate>(gameObject);
         }

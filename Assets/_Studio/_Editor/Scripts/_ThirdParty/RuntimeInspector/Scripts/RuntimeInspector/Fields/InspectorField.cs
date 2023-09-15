@@ -154,7 +154,9 @@ namespace RuntimeInspectorNamespace
             m_Component = variable.DeclaringType;
             if (variable is FieldInfo field)
             {
-                variableName ??= field.Name;
+                var displayNameAttribute = field.GetCustomAttribute<DisplayNameAttribute>();
+                string displayName = displayNameAttribute != null ? displayNameAttribute.DisplayName : null;
+                variableName ??= string.IsNullOrEmpty(displayName) ? field.Name : displayName;
 #if UNITY_EDITOR || !NETFX_CORE
                 if (!parent.BoundVariableType.IsValueType)
 #else
@@ -171,7 +173,9 @@ namespace RuntimeInspectorNamespace
             }
             else if (variable is PropertyInfo property)
             {
-                variableName ??= property.Name;
+                var displayNameAttribute = property.GetCustomAttribute<DisplayNameAttribute>();
+                string displayName = displayNameAttribute != null ? displayNameAttribute.DisplayName : null;
+                variableName ??= string.IsNullOrEmpty(displayName) ? property.Name : displayName;
 
 #if UNITY_EDITOR || !NETFX_CORE
                 if (!parent.BoundVariableType.IsValueType)
@@ -603,7 +607,11 @@ namespace RuntimeInspectorNamespace
             if (variableDrawer != null)
             {
                 if (variableName == null)
-                    variableName = component.GetType().Name;
+                {
+                    var displayNameAttribute = component.GetType().GetCustomAttribute<DisplayNameAttribute>();
+                    string displayName = displayNameAttribute != null ? displayNameAttribute.DisplayName : null;
+                    variableName ??= string.IsNullOrEmpty(displayName) ? component.GetType().Name: displayName;
+                }
 
                 variableDrawer.BindTo(component.GetType(), string.Empty, () => component, (value) => { });
                 variableDrawer.NameRaw = variableName;

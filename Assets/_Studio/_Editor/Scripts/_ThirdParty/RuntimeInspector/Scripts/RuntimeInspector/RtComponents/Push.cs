@@ -11,6 +11,7 @@ namespace Terra.Studio
         public bool showResetButton = true;
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
+        [DisplayName("Broadcast")]
         public string Broadcast = null;
 
         public void Awake()

@@ -9,13 +9,13 @@ namespace Terra.Studio
 
     public enum StartOn
     {
-        [EditorEnumField("Terra.Studio.GameStart", "Start")]
+        [EditorEnumField("Terra.Studio.GameStart", "Start"),DisplayName("Game Starts")]
         GameStart,
-        [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
+        [EditorEnumField("Terra.Studio.TriggerAction", "Player"),DisplayName("Player Touches")]
         OnPlayerCollide,
-        [EditorEnumField("Terra.Studio.MouseAction", "OnClick")]
+        [EditorEnumField("Terra.Studio.MouseAction", "OnClick"),DisplayName("Clicked")]
         OnClick,
-        [EditorEnumField("Terra.Studio.Listener")]
+        [EditorEnumField("Terra.Studio.Listener"),DisplayName("Broadcast Listened")]
         BroadcastListen
     }
 
@@ -27,21 +27,30 @@ namespace Terra.Studio
 
     public enum RotationType
     {
+        [DisplayName("Rotate Once")]
         RotateOnce,
+        [DisplayName("Rotate Forever")]
         RotateForever,
         Oscillate,
+        [DisplayName("Oscillate Forever")]
         OscillateForever,
+        [DisplayName("StepWise")]
         IncrementallyRotate,
+        [DisplayName("StepWise Forever")]
         IncrementallyRotateForever
     }
 
     public enum TranslateType
     {
         Move,
+        [DisplayName("Move Forever")]
         MoveForever,
+        [DisplayName("StepWise")]
         MoveIncrementally,
+        [DisplayName("StepWise Forever")]
         MoveIncrementallyForever,
         PingPong,
+        [DisplayName("PingPong Forever")]
         PingPongForever
     }
 
