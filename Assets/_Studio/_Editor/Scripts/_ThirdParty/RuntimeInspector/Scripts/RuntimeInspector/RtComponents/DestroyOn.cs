@@ -9,6 +9,8 @@ namespace RuntimeInspectorNamespace
     {
         [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
         OnPlayerCollide,
+        [EditorEnumField("Terra.Studio.TriggerAction", "Other")]
+        OnObjectCollide,
         [EditorEnumField("Terra.Studio.MouseAction", "OnClick")]
         OnClick,
         [EditorEnumField("Terra.Studio.Listener")]
@@ -25,7 +27,7 @@ namespace RuntimeInspectorNamespace
 
         public void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), GetType().Name,startOn.data.startIndex==2);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), GetType().Name, startOn.data.startIndex == 2);
             PlaySFX.Setup<DestroyOn>(gameObject);
             PlayVFX.Setup<DestroyOn>(gameObject);
         }

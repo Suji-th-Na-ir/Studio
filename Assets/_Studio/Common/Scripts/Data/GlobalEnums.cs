@@ -13,6 +13,8 @@ namespace Terra.Studio
         GameStart,
         [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
         OnPlayerCollide,
+        [EditorEnumField("Terra.Studio.TriggerAction", "Other")]
+        OnObjectCollide,
         [EditorEnumField("Terra.Studio.MouseAction", "OnClick")]
         OnClick,
         [EditorEnumField("Terra.Studio.Listener")]

@@ -1,25 +1,37 @@
 using UnityEngine;
 using Newtonsoft.Json;
 using RuntimeInspectorNamespace;
+using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.Collide")]
     public class Collide : MonoBehaviour, IComponent
     {
-        public string broadcast = null;
+        public enum DestroyOnEnum
+        {
+            [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
+            OnPlayerCollide,
+            [EditorEnumField("Terra.Studio.TriggerAction", "Other")]
+            OnObjectCollide
+        }
+
+        public Atom.StartOn startOn = new();
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
+        public string broadcast = null;
         public bool executeMultipleTimes = true;
 
         public void Awake()
         {
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), GetType().Name, false);
             playSFX.Setup<Collide>(gameObject);
             playVFX.Setup<Collide>(gameObject);
         }
 
         public (string type, string data) Export()
         {
+            var start = Helper.GetEnumValueByIndex<DestroyOnEnum>(startOn.data.startIndex);
             var data = new CollideComponent()
             {
                 canPlaySFX = playSFX.data.canPlay,
@@ -31,8 +43,10 @@ namespace Terra.Studio
                 IsBroadcastable = !string.IsNullOrEmpty(broadcast),
                 Broadcast = broadcast,
                 IsConditionAvailable = true,
-                ConditionType = "Terra.Studio.TriggerAction",
-                ConditionData = "Any",
+                ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(start),
+                ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(start),
+                startIndex = startOn.data.startIndex,
+                startName = startOn.data.startName,
                 listen = executeMultipleTimes ? Listen.Always : Listen.Once
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -50,6 +64,8 @@ namespace Terra.Studio
             playVFX.data.clipName = obj.vfxName;
             playVFX.data.clipIndex = obj.vfxIndex;
             broadcast = obj.Broadcast;
+            startOn.data.startIndex = obj.startIndex;
+            startOn.data.startName = obj.startName;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcast, null);
         }
     }

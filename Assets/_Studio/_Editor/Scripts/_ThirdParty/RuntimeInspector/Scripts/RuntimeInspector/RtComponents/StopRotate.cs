@@ -14,7 +14,9 @@ namespace Terra.Studio
             [EditorEnumField("Terra.Studio.MouseAction", "OnClick")]
             OnClick,
             [EditorEnumField("Terra.Studio.Listener")]
-            BroadcastListen
+            BroadcastListen,
+            [EditorEnumField("Terra.Studio.TriggerAction", "Other")]
+            OnObjectCollide,
         }
 
         public Atom.StartOn startOn = new();
@@ -26,7 +28,7 @@ namespace Terra.Studio
         {
             startOn.Setup(gameObject,
                 Helper.GetEnumValuesAsStrings<StartOn>(),
-                typeof(StopRotate).Name,startOn.data.startIndex==1);
+                typeof(StopRotate).Name, startOn.data.startIndex == 1);
             playSFX.Setup<StopRotate>(gameObject);
             playVFX.Setup<StopRotate>(gameObject);
         }
