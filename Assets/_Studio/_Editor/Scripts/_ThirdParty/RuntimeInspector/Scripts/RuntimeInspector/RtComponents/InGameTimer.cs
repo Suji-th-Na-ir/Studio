@@ -8,6 +8,7 @@ namespace RuntimeInspectorNamespace
     public class InGameTimer : MonoBehaviour, IComponent
     {
         public uint Time = 180;
+        [AliasDrawer("Broadcast")]
         public string Broadcast = "";
 
         public (string type, string data) Export()
