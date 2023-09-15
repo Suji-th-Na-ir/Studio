@@ -11,23 +11,23 @@ namespace RuntimeInspectorNamespace
     {
         public enum StartOnCollectible
         {
-            [EditorEnumField("Terra.Studio.TriggerAction", "Player"),DisplayName("Player Touches")]
+            [EditorEnumField("Terra.Studio.TriggerAction", "Player"), AliasDrawer("Player Touches")]
             OnPlayerCollide,
-            [EditorEnumField("Terra.Studio.MouseAction", "OnClick"),DisplayName("Clicked")]
+            [EditorEnumField("Terra.Studio.MouseAction", "OnClick"), AliasDrawer("Clicked")]
             OnClick
         }
-        [DisplayName("CollectWhen")]
+        [AliasDrawer("CollectWhen")]
         public Atom.StartOn startOn = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
         public Atom.ScoreData Score = new();
-        [DisplayName("Broadcast")]
+        [AliasDrawer("Broadcast")]
         public string Broadcast = null;
 
         public void Awake()
         {
             Score.instanceId = Guid.NewGuid().ToString("N");
-            startOn.Setup(gameObject, Helper.GetEnumWithDisplayNames<StartOnCollectible>(), GetType().Name,false);
+            startOn.Setup(gameObject, Helper.GetEnumWithAliasNames<StartOnCollectible>(), GetType().Name,false);
             PlaySFX.Setup<Collectible>(gameObject);
             PlayVFX.Setup<Collectible>(gameObject);
         }

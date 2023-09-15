@@ -34,16 +34,4 @@ namespace Terra.Studio
         }
     }
 
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property| AttributeTargets.Class|AttributeTargets.Struct, AllowMultiple = false, Inherited = false)]
-    public class DisplayNameAttribute : Attribute
-    {
-        private readonly string displayName;
-
-        public string DisplayName { get { return displayName; } }
-
-        public DisplayNameAttribute(string _displayname)
-        {
-            this.displayName = _displayname;
-        }
-    }
 }

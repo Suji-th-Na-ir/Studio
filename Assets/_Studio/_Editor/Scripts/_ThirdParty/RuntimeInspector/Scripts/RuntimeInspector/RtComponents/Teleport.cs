@@ -4,16 +4,16 @@ using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
-    [EditorDrawComponent("Terra.Studio.Teleport"),DisplayName("Teleport Player")]
+    [EditorDrawComponent("Terra.Studio.Teleport"), AliasDrawer("Teleport Player")]
     public class Teleport : MonoBehaviour, IComponent
     {
-        [DisplayName("Teleport\nTo")]
+        [AliasDrawer("Teleport\nTo")]
         public Vector3 teleportTo;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
-        [DisplayName("Broadcast")]
+        [AliasDrawer("Broadcast")]
         public string broadcast = null;
-        [DisplayName("Do\nAlways")]
+        [AliasDrawer("Do\nAlways")]
         public bool executeMultipleTimes = true;
 
         private void Start()

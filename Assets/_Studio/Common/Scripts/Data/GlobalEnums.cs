@@ -9,13 +9,13 @@ namespace Terra.Studio
 
     public enum StartOn
     {
-        [EditorEnumField("Terra.Studio.GameStart", "Start"),DisplayName("Game Starts")]
+        [EditorEnumField("Terra.Studio.GameStart", "Start"), AliasDrawer("Game Starts")]
         GameStart,
-        [EditorEnumField("Terra.Studio.TriggerAction", "Player"),DisplayName("Player Touches")]
+        [EditorEnumField("Terra.Studio.TriggerAction", "Player"), AliasDrawer("Player Touches")]
         OnPlayerCollide,
-        [EditorEnumField("Terra.Studio.MouseAction", "OnClick"),DisplayName("Clicked")]
+        [EditorEnumField("Terra.Studio.MouseAction", "OnClick"), AliasDrawer("Clicked")]
         OnClick,
-        [EditorEnumField("Terra.Studio.Listener"),DisplayName("Broadcast Listened")]
+        [EditorEnumField("Terra.Studio.Listener"), AliasDrawer("Broadcast Listened")]
         BroadcastListen
     }
 
@@ -27,30 +27,30 @@ namespace Terra.Studio
 
     public enum RotationType
     {
-        [DisplayName("Rotate Once")]
+        [AliasDrawer("Rotate Once")]
         RotateOnce,
-        [DisplayName("Rotate Forever")]
+        [AliasDrawer("Rotate Forever")]
         RotateForever,
         Oscillate,
-        [DisplayName("Oscillate Forever")]
+        [AliasDrawer("Oscillate Forever")]
         OscillateForever,
-        [DisplayName("StepWise")]
+        [AliasDrawer("StepWise")]
         IncrementallyRotate,
-        [DisplayName("StepWise Forever")]
+        [AliasDrawer("StepWise Forever")]
         IncrementallyRotateForever
     }
 
     public enum TranslateType
     {
         Move,
-        [DisplayName("Move Forever")]
+        [AliasDrawer("Move Forever")]
         MoveForever,
-        [DisplayName("StepWise")]
+        [AliasDrawer("StepWise")]
         MoveIncrementally,
-        [DisplayName("StepWise Forever")]
+        [AliasDrawer("StepWise Forever")]
         MoveIncrementallyForever,
         PingPong,
-        [DisplayName("PingPong Forever")]
+        [AliasDrawer("PingPong Forever")]
         PingPongForever
     }
 

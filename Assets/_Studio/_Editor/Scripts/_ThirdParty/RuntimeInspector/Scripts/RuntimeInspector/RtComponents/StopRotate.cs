@@ -6,19 +6,19 @@ using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
-    [EditorDrawComponent("Terra.Studio.StopRotate"),DisplayName("Stop Rotate")]
+    [EditorDrawComponent("Terra.Studio.StopRotate"), AliasDrawer("Stop Rotate")]
     public class StopRotate : MonoBehaviour, IComponent
     {
         public enum StartOn
         {
-            [EditorEnumField("Terra.Studio.MouseAction", "OnClick"),DisplayName("Clicked")]
+            [EditorEnumField("Terra.Studio.MouseAction", "OnClick"), AliasDrawer("Clicked")]
             OnClick,
-            [EditorEnumField("Terra.Studio.Listener"), DisplayName("Broadcast Listened")]
+            [EditorEnumField("Terra.Studio.Listener"), AliasDrawer("Broadcast Listened")]
             BroadcastListen
         }
-        [DisplayName("StopWhen")]
+        [AliasDrawer("StopWhen")]
         public Atom.StartOn startOn = new();
-        [DisplayName("Broadcast")]
+        [AliasDrawer("Broadcast")]
         public string broadcast = null;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
@@ -26,7 +26,7 @@ namespace Terra.Studio
         private void Awake()
         {
             startOn.Setup(gameObject,
-                Helper.GetEnumWithDisplayNames<StartOn>(),
+                Helper.GetEnumWithAliasNames<StartOn>(),
                 typeof(StopRotate).Name,startOn.data.startIndex==1);
             playSFX.Setup<StopRotate>(gameObject);
             playVFX.Setup<StopRotate>(gameObject);

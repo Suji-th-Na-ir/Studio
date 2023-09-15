@@ -168,7 +168,7 @@ namespace Terra.Studio
         public float speed;
         public int repeat;
         public float pauseBetween;
-        [DisplayName("Broadcast")]
+        [AliasDrawer("Broadcast")]
         public string broadcast;
         public Listen listen;
         public BroadcastAt broadcastAt;
@@ -182,7 +182,7 @@ namespace Terra.Studio
         public float pauseFor;
         public float speed;
         public int repeat;
-        [DisplayName("Broadcast")]
+        [AliasDrawer("Broadcast")]
         public string broadcast;
 
         public string listenTo;

@@ -8,11 +8,11 @@ namespace Terra.Studio
     public class Push : MonoBehaviour, IComponent
     {
         public float resistance = 0;
-        [DisplayName("Reset\nButton")]
+        [AliasDrawer("Reset\nButton")]
         public bool showResetButton = true;
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
-        [DisplayName("Broadcast")]
+        [AliasDrawer("Broadcast")]
         public string Broadcast = null;
 
         public void Awake()

@@ -33,7 +33,7 @@ namespace RuntimeInspectorNamespace
                 type.field = this;
                 type.Setup();
             }
-            List<string> data = Helper.GetEnumWithDisplayNames<TranslateType>();
+            List<string> data = Helper.GetEnumWithAliasNames<TranslateType>();
             translateTypesDD.AddOptions(data);
             translateTypesDD.onValueChanged.AddListener(OnTranslateTypesValueChanged);
         }

@@ -7,28 +7,27 @@ namespace RuntimeInspectorNamespace
 {
     public enum DestroyOnEnum
     {
-        [EditorEnumField("Terra.Studio.TriggerAction", "Player"),DisplayName("Player Touches")]
+        [EditorEnumField("Terra.Studio.TriggerAction", "Player"), AliasDrawer("Player Touches")]
         OnPlayerCollide,
-        [EditorEnumField("Terra.Studio.MouseAction", "OnClick"),DisplayName("Clicked")]
+        [EditorEnumField("Terra.Studio.MouseAction", "OnClick"), AliasDrawer("Clicked")]
         OnClick,
-        [EditorEnumField("Terra.Studio.Listener"),DisplayName("Broadcast Listened")]
+        [EditorEnumField("Terra.Studio.Listener"), AliasDrawer("Broadcast Listened")]
         BroadcastListen
     }
 
-    [EditorDrawComponent("Terra.Studio.DestroyOn"),DisplayName("Destroy Self")]
+    [EditorDrawComponent("Terra.Studio.DestroyOn"), AliasDrawer("Destroy Self")]
     public class DestroyOn : MonoBehaviour, IComponent
     {
-       const string disName = "DestroyWhen";
-        [DisplayName(disName)]
+        [AliasDrawer("DestroyWhen")]
         public Atom.StartOn startOn = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
-        [DisplayName("Broadcast")]
+        [AliasDrawer("Broadcast")]
         public string Broadcast = null;
 
         public void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumWithDisplayNames<DestroyOnEnum>(), GetType().Name,startOn.data.startIndex==2);
+            startOn.Setup(gameObject, Helper.GetEnumWithAliasNames<DestroyOnEnum>(), GetType().Name,startOn.data.startIndex==2);
             PlaySFX.Setup<DestroyOn>(gameObject);
             PlayVFX.Setup<DestroyOn>(gameObject);
         }

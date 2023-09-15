@@ -7,7 +7,7 @@ namespace Terra.Studio
     [EditorDrawComponent("Terra.Studio.Click")]
     public class Click : MonoBehaviour, IComponent
     {
-        [DisplayName("Broadcast")]
+        [AliasDrawer("Broadcast")]
         public string broadcast = null;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();

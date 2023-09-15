@@ -7,11 +7,11 @@ namespace Terra.Studio
     [EditorDrawComponent("Terra.Studio.Collide")]
     public class Collide : MonoBehaviour, IComponent
     {
-        [DisplayName("Broadcast")]
+        [AliasDrawer("Broadcast")]
         public string broadcast = null;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
-        [DisplayName("Do\nAlways")]
+        [AliasDrawer("Do\nAlways")]
         public bool executeMultipleTimes = true;
 
         public void Awake()

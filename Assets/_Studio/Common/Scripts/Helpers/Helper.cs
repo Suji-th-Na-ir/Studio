@@ -633,7 +633,7 @@ namespace PlayShifu.Terra
             return new List<string>(Enum.GetNames(typeof(TEnum)));
         }
 
-        public static List<string> GetEnumWithDisplayNames<TEnum>()
+        public static List<string> GetEnumWithAliasNames<TEnum>()
         {
             var enumType = typeof(TEnum);
             if (!enumType.IsEnum)
@@ -644,11 +644,11 @@ namespace PlayShifu.Terra
             foreach (var enumValue in Enum.GetValues(enumType))
             {
                 var fieldInfo = enumType.GetField(enumValue.ToString());
-                var displayNameAttribute = fieldInfo.GetCustomAttribute<DisplayNameAttribute>();
+                var displayNameAttribute = fieldInfo.GetCustomAttribute<AliasDrawerAttribute>();
 
                 if (displayNameAttribute != null)
                 {
-                    enumNamesWithDisplayNames.Add(displayNameAttribute.DisplayName);
+                    enumNamesWithDisplayNames.Add(displayNameAttribute.Alias);
                 }
                 else
                 {

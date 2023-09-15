@@ -276,8 +276,8 @@ namespace RuntimeInspectorNamespace
                 (type) => ((Type)type).FullName,
                 (type) =>
                 {
-                    var displayNameAttribute = ((Type)type).GetCustomAttribute<DisplayNameAttribute>();
-                    string displayName = displayNameAttribute != null ? displayNameAttribute.DisplayName : null;
+                    var displayNameAttribute = ((Type)type).GetCustomAttribute<AliasDrawerAttribute>();
+                    string displayName = displayNameAttribute?.Alias;
                     var name = string.IsNullOrEmpty(displayName) ? ((Type)type).FullName : displayName;
                     return name;
 

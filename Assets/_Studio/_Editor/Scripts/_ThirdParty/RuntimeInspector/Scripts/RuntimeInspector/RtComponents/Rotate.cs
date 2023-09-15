@@ -9,7 +9,7 @@ namespace RuntimeInspectorNamespace
     [EditorDrawComponent("Terra.Studio.Rotate")]
     public class Rotate : MonoBehaviour, IComponent
     {
-        [DisplayName("RotateWhen")]
+        [AliasDrawer("RotateWhen")]
         public Atom.StartOn startOn = new();
         public Atom.Rotate Type = new();
         public Atom.PlaySfx PlaySFX = new();
@@ -21,7 +21,7 @@ namespace RuntimeInspectorNamespace
         {
             guid = GetInstanceID() + "_rotate";
             Type.Setup(guid, gameObject, GetType().Name);
-            startOn.Setup(gameObject, Helper.GetEnumWithDisplayNames<StartOn>(), this.GetType().Name,startOn.data.startIndex==3);
+            startOn.Setup(gameObject, Helper.GetEnumWithAliasNames<StartOn>(), this.GetType().Name,startOn.data.startIndex==3);
             PlaySFX.Setup<Rotate>(gameObject);
             PlayVFX.Setup<Rotate>(gameObject);
         }
