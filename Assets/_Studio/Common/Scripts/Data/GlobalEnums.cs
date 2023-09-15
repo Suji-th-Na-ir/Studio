@@ -9,15 +9,15 @@ namespace Terra.Studio
 
     public enum StartOn
     {
-        [EditorEnumField("Terra.Studio.GameStart", "Start")]
+        [EditorEnumField("Terra.Studio.GameStart", "Start"), AliasDrawer("Game Starts")]
         GameStart,
-        [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
+        [EditorEnumField("Terra.Studio.TriggerAction", "Player"), AliasDrawer("Player Touches")]
         OnPlayerCollide,
-        [EditorEnumField("Terra.Studio.TriggerAction", "Other")]
+        [EditorEnumField("Terra.Studio.TriggerAction", "Other"), AliasDrawer("Other Object Touches")]
         OnObjectCollide,
-        [EditorEnumField("Terra.Studio.MouseAction", "OnClick")]
+        [EditorEnumField("Terra.Studio.MouseAction", "OnClick"), AliasDrawer("Clicked")]
         OnClick,
-        [EditorEnumField("Terra.Studio.Listener")]
+        [EditorEnumField("Terra.Studio.Listener"), AliasDrawer("Broadcast Listened")]
         BroadcastListen
     }
 
@@ -29,21 +29,30 @@ namespace Terra.Studio
 
     public enum RotationType
     {
+        [AliasDrawer("Rotate Once")]
         RotateOnce,
+        [AliasDrawer("Rotate Forever")]
         RotateForever,
         Oscillate,
+        [AliasDrawer("Oscillate Forever")]
         OscillateForever,
+        [AliasDrawer("StepWise")]
         IncrementallyRotate,
+        [AliasDrawer("StepWise Forever")]
         IncrementallyRotateForever
     }
 
     public enum TranslateType
     {
         Move,
+        [AliasDrawer("Move Forever")]
         MoveForever,
+        [AliasDrawer("StepWise")]
         MoveIncrementally,
+        [AliasDrawer("StepWise Forever")]
         MoveIncrementallyForever,
         PingPong,
+        [AliasDrawer("PingPong Forever")]
         PingPongForever
     }
 

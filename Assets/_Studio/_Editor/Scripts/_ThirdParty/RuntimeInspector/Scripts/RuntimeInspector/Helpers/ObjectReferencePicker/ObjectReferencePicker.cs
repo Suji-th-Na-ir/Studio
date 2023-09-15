@@ -251,7 +251,7 @@ namespace RuntimeInspectorNamespace
 			value = value.ToLowerInvariant();
 			for( int i = 0; i < references.Count; i++ )
 			{
-				if( referenceNameGetter( references[i] ).ToLowerInvariant().Contains( value ) )
+				if( referenceDisplayNameGetter( references[i] ).ToLowerInvariant().Contains( value ) )
 					filteredReferences.Add( references[i] );
 			}
 

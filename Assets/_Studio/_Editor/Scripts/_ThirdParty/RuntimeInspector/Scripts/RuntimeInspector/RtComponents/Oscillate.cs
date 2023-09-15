@@ -10,7 +10,7 @@ namespace RuntimeInspectorNamespace
     {
         [HideInInspector]
         public OscillateComponent Component;
-
+        [AliasDrawer("OscillateWhen")]
         public Atom.StartOn startOn = new();
         public Vector3 fromPoint;
         public Vector3 toPoint;
@@ -19,7 +19,7 @@ namespace RuntimeInspectorNamespace
 
         private void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), GetType().Name, startOn.data.startIndex == 3);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), Helper.GetEnumWithAliasNames<StartOn>(), GetType().Name,startOn.data.startIndex==3);
             fromPoint = transform.localPosition;
             Component.fromPoint = fromPoint;
         }

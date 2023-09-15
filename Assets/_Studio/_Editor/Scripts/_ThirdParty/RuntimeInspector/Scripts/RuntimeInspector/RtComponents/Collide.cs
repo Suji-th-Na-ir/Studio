@@ -1,7 +1,7 @@
 using UnityEngine;
 using Newtonsoft.Json;
-using RuntimeInspectorNamespace;
 using PlayShifu.Terra;
+using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
@@ -19,12 +19,13 @@ namespace Terra.Studio
         public Atom.StartOn startOn = new();
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
+        [AliasDrawer("Broadcast")]
         public string broadcast = null;
+        [AliasDrawer("Do\nAlways")]
         public bool executeMultipleTimes = true;
 
         public void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), GetType().Name, false);
             playSFX.Setup<Collide>(gameObject);
             playVFX.Setup<Collide>(gameObject);
         }

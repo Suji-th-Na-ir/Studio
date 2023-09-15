@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Terra.Studio
 {
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false, Inherited = false)]
     public class AliasDrawerAttribute : Attribute
     {
         private readonly string alias;
