@@ -2,7 +2,6 @@ using System;
 using RuntimeInspectorNamespace;
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.Serialization;
 using PlayShifu.Terra;
 
 namespace Terra.Studio
@@ -27,10 +26,11 @@ namespace Terra.Studio
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
                 componentType = _componentType;
-                if(updateListen)
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(data.listenName, ""
+                if (updateListen)
+                {
+                    EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(data.listenName, ""
                                 , new ComponentDisplayDock() { componentGameObject = _target, componentType = _componentType });
-                data = new();
+                }
                 if (StartList.Count >= data.startIndex)
                 {
                     data.startName = StartList[data.startIndex];
@@ -55,7 +55,6 @@ namespace Terra.Studio
                 this.fieldName = fieldName;
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
-                data = new();
                 data.clipName = Helper.GetSfxClipNameByIndex(data.clipIndex);
             }
         }
@@ -77,7 +76,6 @@ namespace Terra.Studio
                 this.fieldName = fieldName;
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
-                data = new();
                 data.clipName = Helper.GetSfxClipNameByIndex(data.clipIndex);
             }
         }
