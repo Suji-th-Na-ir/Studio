@@ -20,9 +20,9 @@ namespace Terra.Studio
         }
 
         public Atom.StartOn startOn = new();
-        public string broadcast = null;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
+        public string broadcast = null;
 
         private void Awake()
         {

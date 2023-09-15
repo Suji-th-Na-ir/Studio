@@ -19,10 +19,10 @@ namespace Terra.Studio
             OnObjectCollide,
         }
 
-        public string broadcast = null;
         public Atom.StartOn startOn = new();
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
+        public string broadcast = null;
 
         private void Awake()
         {
