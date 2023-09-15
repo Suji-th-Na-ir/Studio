@@ -118,7 +118,7 @@ namespace RuntimeInspectorNamespace
             }
             startOn.data.listenName = comp.ConditionData;
             var listenString = "";
-            if (startOn.data.startIndex == 3)
+            if (startOn.data.startIndex == 4)
                 listenString = Type.data.listenTo;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Type.data.broadcast, listenString);
         }
