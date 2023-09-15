@@ -173,7 +173,7 @@ namespace RuntimeInspectorNamespace
 			Data = data;
 
 			contentTransform.anchoredPosition = new Vector2( Skin.IndentAmount * data.Depth + ( MultiSelectionToggleVisible ? Skin.LineHeight * 0.8f : 0f ), 0f );
-			background.sprite = data.Depth == 0 ? Hierarchy.SceneDrawerBackground : Hierarchy.TransformDrawerBackground;
+			//background.sprite = data.Depth == 0 ? Hierarchy.SceneDrawerBackground : Hierarchy.TransformDrawerBackground;
 
 			RefreshName();
 		}
