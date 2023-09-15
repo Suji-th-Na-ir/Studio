@@ -45,7 +45,7 @@
   ],
   "Terra.Studio.SetObjectPosition+StartOptions.OnObjectCollide": [
     "Terra.Studio.TriggerAction",
-    "Any"
+    "Other"
   ],
   "Terra.Studio.SetObjectPosition+StartOptions.BroadcastListen": [
     "Terra.Studio.Listener",
@@ -77,6 +77,6 @@
   ],
   "Terra.Studio.Switch+StartOn.OnObjectCollide": [
     "Terra.Studio.TriggerAction",
-    "Any"
+    "Other"
   ]
 }

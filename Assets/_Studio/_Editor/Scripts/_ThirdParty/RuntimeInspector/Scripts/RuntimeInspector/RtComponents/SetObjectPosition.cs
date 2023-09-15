@@ -15,7 +15,7 @@ namespace Terra.Studio
             OnClick,
             [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
             OnPlayerCollide,
-            [EditorEnumField("Terra.Studio.TriggerAction", "Any")]
+            [EditorEnumField("Terra.Studio.TriggerAction", "Other")]
             OnObjectCollide,
             [EditorEnumField("Terra.Studio.Listener")]
             BroadcastListen
@@ -30,7 +30,7 @@ namespace Terra.Studio
 
         private void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOptions>(), GetType().Name,startOn.data.startIndex==3);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOptions>(), GetType().Name, startOn.data.startIndex == 3);
             playSFX.Setup<SetObjectPosition>(gameObject);
             playVFX.Setup<SetObjectPosition>(gameObject);
         }
