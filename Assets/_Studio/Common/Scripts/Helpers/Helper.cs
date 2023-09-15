@@ -15,7 +15,8 @@ namespace PlayShifu.Terra
         {
             "Checkpoint",
             "GameScore",
-            "InGameTimer"
+            "InGameTimer",
+            "Oscillate"
         };
 
         public static string GetCurrentAppPlatform()
