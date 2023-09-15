@@ -32,7 +32,7 @@ namespace Terra.Studio
                 Broadcast = broadcast,
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.TriggerAction",
-                ConditionData = "Player",
+                ConditionData = "Any",
                 listen = executeMultipleTimes ? Listen.Always : Listen.Once
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
