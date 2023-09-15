@@ -10,7 +10,7 @@ namespace Terra.Studio
         public string broadcast = null;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
-        public bool executeMultipleTimes = true;
+        //public bool executeMultipleTimes = true;
 
         public void Awake()
         {
@@ -33,7 +33,7 @@ namespace Terra.Studio
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.TriggerAction",
                 ConditionData = "Player",
-                listen = executeMultipleTimes ? Listen.Always : Listen.Once
+                listen = Listen.Always
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var json = JsonConvert.SerializeObject(data);
@@ -50,6 +50,7 @@ namespace Terra.Studio
             playVFX.data.clipName = obj.vfxName;
             playVFX.data.clipIndex = obj.vfxIndex;
             broadcast = obj.Broadcast;
+            //executeMultipleTimes = obj.listen == Listen.Always;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcast, null);
         }
     }

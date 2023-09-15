@@ -20,7 +20,7 @@ namespace RuntimeInspectorNamespace
         {
             guid = GetInstanceID() + "_rotate";
             Type.Setup(guid, gameObject, GetType().Name);
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name,startOn.data.startIndex==3);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name, startOn.data.startIndex == 3);
             PlaySFX.Setup<Rotate>(gameObject);
             PlayVFX.Setup<Rotate>(gameObject);
         }
@@ -48,7 +48,7 @@ namespace RuntimeInspectorNamespace
                 vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName,
                 sfxIndex = PlaySFX.data.clipIndex,
                 vfxIndex = PlayVFX.data.clipIndex,
-                listen = Type.data.listen
+                listen = Listen.Always
             };
 
             List<Axis> axes = new List<Axis>();
@@ -131,7 +131,7 @@ namespace RuntimeInspectorNamespace
             var listenString = "";
             if (startOn.data.startIndex == 3)
                 listenString = startOn.data.listenName;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Type.data.broadcast,listenString);
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Type.data.broadcast, listenString);
         }
 
         private void ModifyDataAsPerSelected(ref RotateComponent component)

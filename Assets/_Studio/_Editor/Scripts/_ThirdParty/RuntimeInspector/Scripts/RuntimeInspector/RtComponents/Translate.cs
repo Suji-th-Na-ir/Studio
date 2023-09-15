@@ -19,7 +19,7 @@ namespace RuntimeInspectorNamespace
         {
             guid = GetInstanceID() + "_translate";
             Type.Setup(guid, gameObject, GetType().Name);
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name,startOn.data.startIndex==3);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name, startOn.data.startIndex == 3);
             PlaySFX.Setup<Translate>(gameObject);
             PlayVFX.Setup<Translate>(gameObject);
         }
@@ -46,7 +46,7 @@ namespace RuntimeInspectorNamespace
                 vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName,
                 sfxIndex = PlaySFX.data.clipIndex,
                 vfxIndex = PlayVFX.data.clipIndex,
-                listen = Type.data.listen,
+                listen = Listen.Always,
             };
 
             ModifyDataAsPerGiven(ref comp);
