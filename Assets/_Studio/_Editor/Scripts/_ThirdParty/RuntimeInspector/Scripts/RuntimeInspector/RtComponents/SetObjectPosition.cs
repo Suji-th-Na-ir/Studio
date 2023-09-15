@@ -6,7 +6,7 @@ using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
-    [EditorDrawComponent("Terra.Studio.SetObjectPosition"),DisplayName("Teleport Object")]
+    [EditorDrawComponent("Terra.Studio.SetObjectPosition"),DisplayName("Teleport Self")]
     public class SetObjectPosition : MonoBehaviour, IComponent
     {
         public enum StartOptions

@@ -6,7 +6,7 @@ using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
-    [EditorDrawComponent("Terra.Studio.StopRotate"),DisplayName("Stop Move")]
+    [EditorDrawComponent("Terra.Studio.StopRotate"),DisplayName("Stop Rotate")]
     public class StopRotate : MonoBehaviour, IComponent
     {
         public enum StartOn
