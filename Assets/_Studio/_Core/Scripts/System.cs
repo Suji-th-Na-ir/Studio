@@ -2,11 +2,13 @@ using System;
 using UnityEngine;
 using PlayShifu.Terra;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 namespace Terra.Studio
 {
     public class System : MonoBehaviour
     {
+        [SerializeField] private TMP_Text levelText;
         private SystemConfigurationSO configData;
         private StudioState previousStudioState;
         private StudioState currentStudioState;
@@ -24,7 +26,13 @@ namespace Terra.Studio
 
         private void Start()
         {
-            Initialize();
+            //Initialize();
+        }
+
+        public void LoadGame(string _levelName)
+        {
+            Debug.Log("loading level "+_levelName);
+            levelText.text = "Loading level " + _levelName;
         }
 
         private void Initialize()

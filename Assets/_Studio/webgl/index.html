@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Unity WebGL Player | Better Terra Studio</title>
+  </head>
+  <body
+    style="
+      text-align: center;
+      background-color: black;
+      padding-top: 1.5em;
+      border: 0;
+      margin: 0;
+    "
+  >
+    <canvas
+      id="unity-canvas"
+      width="1536"
+      height="864"
+      style="width: 1536px; height: 864px; background: #231f20"
+    ></canvas>
+    <script src="Build/StudioRT_deeplink.loader.js"></script>
+    <script>
+      // Function to extract URL parameters
+      function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+          results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return "";
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+      }
+
+      // Read parameters from the URL
+      var param1 = getParameterByName("param1");
+      var param2 = getParameterByName("param2");
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+        var meta = document.createElement("meta");
+        meta.name = "viewport";
+        meta.content =
+          "width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes";
+        document.getElementsByTagName("head")[0].appendChild(meta);
+
+        var canvas = document.querySelector("#unity-canvas");
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.position = "fixed";
+
+        document.body.style.textAlign = "left";
+      }
+
+      var gameInstance = createUnityInstance(
+        document.querySelector("#unity-canvas"),
+        {
+          dataUrl: "Build/StudioRT_deeplink.data",
+          frameworkUrl: "Build/StudioRT_deeplink.framework.js",
+          codeUrl: "Build/StudioRT_deeplink.wasm",
+          streamingAssetsUrl: "StreamingAssets",
+          companyName: "TerraByte Inc",
+          productName: "Terra Studio",
+          productVersion: "0.1.0",
+          // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+          // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+        }
+      );
+
+      // Pass parameters to Unity using SendMessage
+      // unityInstance.SendMessage("Bootstrapper", "LoadGame", param1);
+      gameInstance.then((unityInstance) => {
+        unityInstance.SendMessage("Bootstrapper", "LoadGame", param1);
+      });
+    </script>
+  </body>
+</html>
