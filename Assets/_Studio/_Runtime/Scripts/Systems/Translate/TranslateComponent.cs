@@ -51,5 +51,6 @@ namespace Terra.Studio
         [JsonIgnore] public float coveredDistance;
         [JsonIgnore] public float remainingDistance;
         [JsonIgnore] public float pauseStartTime;
+        [JsonIgnore] public bool isInitialProcessDone;
     }
 }
