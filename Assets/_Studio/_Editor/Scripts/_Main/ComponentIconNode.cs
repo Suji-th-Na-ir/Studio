@@ -392,7 +392,8 @@ namespace Terra.Studio
 
 
                     Color c = Color.white;
-                    if (!EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Contains(m_ObjectTarget.componentGameObject))
+                    if (!EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Contains(m_ObjectTarget.componentGameObject)
+                        && !EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Contains(allTargets[j].m_ObjectTarget.componentGameObject))
                     {
                         c.a = GetFadeValue(distanceToTarget, -1, 40);
                         c.a = Mathf.Clamp(c.a, 0.0f, 1.0f);
