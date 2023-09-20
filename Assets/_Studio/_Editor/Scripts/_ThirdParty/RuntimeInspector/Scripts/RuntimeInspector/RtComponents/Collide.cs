@@ -12,7 +12,7 @@ namespace Terra.Studio
         {
             [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
             OnPlayerCollide,
-            [EditorEnumField("Terra.Studio.TriggerAction", "Other")]
+            [EditorEnumField("Terra.Studio.TriggerAction", "Other"), AliasDrawer("Other Object Touches")]
             OnObjectCollide
         }
 
@@ -26,7 +26,7 @@ namespace Terra.Studio
 
         public void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), Helper.GetEnumWithAliasNames<DestroyOnEnum>(), this.GetType().Name,false);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), Helper.GetEnumWithAliasNames<DestroyOnEnum>(), this.GetType().Name, false);
             playSFX.Setup<Collide>(gameObject);
             playVFX.Setup<Collide>(gameObject);
         }

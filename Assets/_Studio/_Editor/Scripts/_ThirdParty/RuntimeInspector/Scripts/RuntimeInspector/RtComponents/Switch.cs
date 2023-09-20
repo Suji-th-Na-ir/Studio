@@ -13,7 +13,7 @@ namespace Terra.Studio
             OnClick,
             [EditorEnumField("Terra.Studio.TriggerAction", "Player"), AliasDrawer("Player Touches")]
             OnPlayerCollide,
-            [EditorEnumField("Terra.Studio.TriggerAction", "Other"), AliasDrawer("Another Object Touches")]
+            [EditorEnumField("Terra.Studio.TriggerAction", "Other"), AliasDrawer("Other Object Touches")]
             OnObjectCollide
         }
         [AliasDrawer("Switch\nWhen")]
