@@ -7,7 +7,7 @@ using Terra.Studio;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using System.Reflection;
-
+using System.Collections.ObjectModel;
 
 public class SelectionHandler : View
 {
@@ -46,7 +46,7 @@ public class SelectionHandler : View
         runtimeHierarchy.OnSelectionChanged -= OnHierarchySelectionChanged;
     }
 
-    private void OnHierarchySelectionChanged(System.Collections.ObjectModel.ReadOnlyCollection<Transform> _allTransform)
+    private void OnHierarchySelectionChanged(ReadOnlyCollection<Transform> _allTransform)
     {
         if (_allTransform.Count > 0)
         {
@@ -138,10 +138,15 @@ public class SelectionHandler : View
         {
             if (RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.WasKeyPressedThisFrame(KeyCode.D))
             {
-
+             
+                List<Transform> duplicatedGms = new List<Transform>();
                 foreach (GameObject obj in _selectedObjects)
                 {
-                    var iObj = Instantiate(obj, obj.transform.position, obj.transform.rotation);
+                    var lastIndex = obj.transform.GetSiblingIndex();
+                    var iObj = Instantiate(obj, obj.transform.position, obj.transform.rotation, obj.transform.parent);
+                    iObj.transform.SetSiblingIndex(lastIndex + 1);
+                    duplicatedGms.Add(iObj.transform);
+
                     var components = iObj.GetComponents<IComponent>();
 
                     for (int i = 0; i < components.Length; i++)
@@ -150,15 +155,15 @@ public class SelectionHandler : View
                         EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock
                         { componentGameObject = iObj, componentType = componentType.Name });
 
-                        var mInfo = componentType.GetField("Broadcast", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);             
+                        var mInfo = componentType.GetField("Broadcast", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
                         if (mInfo != null)
                         {
                             var oldValue = mInfo?.GetValue(components[i]);
                             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(oldValue.ToString(), ""
                                 , new ComponentDisplayDock() { componentGameObject = iObj, componentType = componentType.Name });
                         }
-                        
-                        var mInfo1 = componentType.GetField("BroadcastListen", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);                    
+
+                        var mInfo1 = componentType.GetField("BroadcastListen", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
                         if (mInfo1 != null)
                         {
                             var oldValue1 = mInfo1?.GetValue(components[i]);
@@ -167,12 +172,15 @@ public class SelectionHandler : View
                         }
 
                     }
-                }
 
+                }
+                SelectObjectsInHierarchy(duplicatedGms);
             }
         }
     }
-    
+
+
+
     bool CheckIfThereIsAnyPopups()
     {
         if (GameObject.FindObjectOfType<ObjectReferencePicker>() != null)
@@ -262,6 +270,10 @@ public class SelectionHandler : View
     public void SelectObjectInHierarchy(GameObject _obj)
     {
         runtimeHierarchy.Select(_obj.transform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
+    }
+    public void SelectObjectsInHierarchy(List<Transform> _obj)
+    {
+        runtimeHierarchy.Select(_obj, RuntimeHierarchy.SelectOptions.FocusOnSelection);
     }
 
     public void RefreshHierarchy()
