@@ -1976,6 +1976,150 @@ MonoBehaviour:
     guid: 9c5a37751ab9a49189393f04c5e437be
     isPrimitive: 0
     primitiveType: 0
+  - name: Bounce
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/Bounce.prefab
+    resourcePath: Common/ObbyPrefabs/Bounce
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 07ec32bcd6a21e34d9d0be169af45608
+    isPrimitive: 0
+    primitiveType: 0
+  - name: FallPlat
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/FallPlat.prefab
+    resourcePath: Common/ObbyPrefabs/FallPlat
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: bd117f6e0af0c2942926e61c209b253f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: GroundBlue
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/GroundBlue.prefab
+    resourcePath: Common/ObbyPrefabs/GroundBlue
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 68d22fa9a289044d196832886396738a
+    isPrimitive: 0
+    primitiveType: 0
+  - name: GroundGreen
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/GroundGreen.prefab
+    resourcePath: Common/ObbyPrefabs/GroundGreen
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a17ccf1486dfc4b99829a0dcc7310283
+    isPrimitive: 0
+    primitiveType: 0
+  - name: GroundOrange
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/GroundOrange.prefab
+    resourcePath: Common/ObbyPrefabs/GroundOrange
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 42690477b200d40c5bae7acaad1c0865
+    isPrimitive: 0
+    primitiveType: 0
+  - name: GroundPink
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/GroundPink.prefab
+    resourcePath: Common/ObbyPrefabs/GroundPink
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 302e1802402774a2080d3bb137720bb1
+    isPrimitive: 0
+    primitiveType: 0
+  - name: GroundRed
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/GroundRed.prefab
+    resourcePath: Common/ObbyPrefabs/GroundRed
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 16da601887fb74d8e86b2d34982d5f8a
+    isPrimitive: 0
+    primitiveType: 0
+  - name: GroundYellow
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/GroundYellow.prefab
+    resourcePath: Common/ObbyPrefabs/GroundYellow
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 51b9ad71877684796af9f3b4f730ade7
+    isPrimitive: 0
+    primitiveType: 0
+  - name: kill-block
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/kill-block.prefab
+    resourcePath: Common/ObbyPrefabs/kill-block
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 009e01699aaa8442dad365c7d6af3852
+    isPrimitive: 0
+    primitiveType: 0
+  - name: MovableObs
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/MovableObs.prefab
+    resourcePath: Common/ObbyPrefabs/MovableObs
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1d998f3b2007ad14c900d3cecab26ab4
+    isPrimitive: 0
+    primitiveType: 0
+  - name: MovableWall
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/MovableWall.prefab
+    resourcePath: Common/ObbyPrefabs/MovableWall
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 474c64e7b6302304bb04e77a9e8809dc
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Pendulum
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/Pendulum.prefab
+    resourcePath: Common/ObbyPrefabs/Pendulum
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: de4e8ae22411dba4f971edf49f8738f2
+    isPrimitive: 0
+    primitiveType: 0
+  - name: RBCubes
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/RBCubes.prefab
+    resourcePath: Common/ObbyPrefabs/RBCubes
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a48714e39c2ecc644b62544a3a53c53a
+    isPrimitive: 0
+    primitiveType: 0
+  - name: RotationPlat
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/RotationPlat.prefab
+    resourcePath: Common/ObbyPrefabs/RotationPlat
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a70841853b0e99545a7dc761ea9def4d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: RotationX
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/RotationX.prefab
+    resourcePath: Common/ObbyPrefabs/RotationX
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 7bb56e75164d29c4189de79dd5887e8e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Rotator
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/Rotator.prefab
+    resourcePath: Common/ObbyPrefabs/Rotator
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3925e022072f0474a8dab88c2fdaf0ce
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Sphere
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/Sphere.prefab
+    resourcePath: Common/ObbyPrefabs/Sphere
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a3db52d569ccd3c468777dd8e04f65ce
+    isPrimitive: 0
+    primitiveType: 0
+  - name: WallMovable
+    absolutePath: Assets/_Studio/Resources/Common/ObbyPrefabs/WallMovable.prefab
+    resourcePath: Common/ObbyPrefabs/WallMovable
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1f9416082698e614ebb7003c2d80098b
+    isPrimitive: 0
+    primitiveType: 0
   watchFolders:
   - Assets/_Studio/Resources/Common
   - Assets/_Studio/Resources/Runtime
