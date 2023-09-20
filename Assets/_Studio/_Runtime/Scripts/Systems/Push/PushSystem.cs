@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using PlayShifu.Terra;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
@@ -13,10 +14,7 @@ namespace Terra.Studio
         {
             base.Init<T>(entity);
             ref var entityRef = ref entity.GetComponent<PushComponent>();
-            if (!entityRef.RefObj.TryGetComponent(out Rigidbody rb))
-            {
-                rb = entityRef.RefObj.AddComponent<Rigidbody>();
-            }
+            var rb = entityRef.RefObj.AddRigidbody();
             rb.mass = entityRef.mass;
             rb.freezeRotation = true;
             entityRef.initialPosition = entityRef.RefObj.transform.position;

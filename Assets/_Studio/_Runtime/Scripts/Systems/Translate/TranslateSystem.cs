@@ -1,4 +1,5 @@
 using UnityEngine;
+using PlayShifu.Terra;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
@@ -9,10 +10,7 @@ namespace Terra.Studio
         {
             base.Init<T>(entity);
             ref var entityRef = ref entity.GetComponent<TranslateComponent>();
-            if (!entityRef.RefObj.TryGetComponent(out Rigidbody rb))
-            {
-                rb = entityRef.RefObj.AddComponent<Rigidbody>();
-            }
+            var rb = entityRef.RefObj.AddRigidbody();
             rb.isKinematic = true;
             rb.useGravity = false;
         }

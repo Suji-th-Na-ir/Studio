@@ -673,5 +673,18 @@ namespace PlayShifu.Terra
                 destination.Add(newItem);
             }
         }
+
+        public static Rigidbody AddRigidbody(this GameObject gameObject)
+        {
+            if (!gameObject.TryGetComponent(out Rigidbody rb))
+            {
+                rb = gameObject.AddComponent<Rigidbody>();
+            }
+            if (gameObject.TryGetComponent(out MeshCollider meshCollider))
+            {
+                meshCollider.convex = true;
+            }
+            return rb;
+        }
     }
 }
