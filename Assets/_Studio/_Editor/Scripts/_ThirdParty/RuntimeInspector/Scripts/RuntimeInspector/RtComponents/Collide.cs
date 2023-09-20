@@ -26,6 +26,7 @@ namespace Terra.Studio
 
         public void Awake()
         {
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), Helper.GetEnumWithAliasNames<DestroyOnEnum>(), this.GetType().Name,false);
             playSFX.Setup<Collide>(gameObject);
             playVFX.Setup<Collide>(gameObject);
         }

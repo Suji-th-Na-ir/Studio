@@ -162,9 +162,9 @@ namespace RuntimeInspectorNamespace
 #else
 				if( !parent.BoundVariableType.GetTypeInfo().IsValueType )
 #endif
-                    BindTo(field.FieldType, variableName, () => field.GetValue(parent.Value), (value) => field.SetValue(parent.Value, value), variable);
+                    BindTo(field.FieldType, variableName, field.Name ,() => field.GetValue(parent.Value), (value) => field.SetValue(parent.Value, value), variable);
                 else
-                    BindTo(field.FieldType, variableName, () => field.GetValue(parent.Value), (value) =>
+                    BindTo(field.FieldType, variableName, field.Name, () => field.GetValue(parent.Value), (value) =>
                     {
                         field.SetValue(parent.Value, value);
                         parent.Value = parent.Value;
@@ -182,9 +182,9 @@ namespace RuntimeInspectorNamespace
 #else
 				if( !parent.BoundVariableType.GetTypeInfo().IsValueType )
 #endif
-                    BindTo(property.PropertyType, variableName, () => property.GetValue(parent.Value, null), (value) => property.SetValue(parent.Value, value, null), variable);
+                    BindTo(property.PropertyType, variableName, property.Name, () => property.GetValue(parent.Value, null), (value) => property.SetValue(parent.Value, value, null), variable);
                 else
-                    BindTo(property.PropertyType, variableName, () => property.GetValue(parent.Value, null), (value) =>
+                    BindTo(property.PropertyType, variableName, property.Name, () => property.GetValue(parent.Value, null), (value) =>
                     {
                         property.SetValue(parent.Value, value, null);
                         parent.Value = parent.Value;
@@ -194,7 +194,7 @@ namespace RuntimeInspectorNamespace
                 throw new ArgumentException("Variable can either be a field or a property");
         }
 
-        public void BindTo(Type variableType, string variableName, Getter getter, Setter setter, MemberInfo variable = null)
+        public void BindTo(Type variableType, string variableName,string reflectedName, Getter getter, Setter setter, MemberInfo variable = null)
         {
             if (variable != null && variable is FieldInfo fieldInfo)
             {
@@ -613,7 +613,7 @@ namespace RuntimeInspectorNamespace
                     variableName ??= string.IsNullOrEmpty(displayName) ? component.GetType().Name: displayName;
                 }
 
-                variableDrawer.BindTo(component.GetType(), string.Empty, () => component, (value) => { });
+                variableDrawer.BindTo(component.GetType(), string.Empty,string.Empty, () => component, (value) => { });
                 variableDrawer.NameRaw = variableName;
 
                 elements.Add(variableDrawer);
@@ -669,7 +669,7 @@ namespace RuntimeInspectorNamespace
             InspectorField variableDrawer = Inspector.CreateDrawerForType(variableType, drawArea, Depth + 1, drawObjectsAsFields);
             if (variableDrawer != null)
             {
-                variableDrawer.BindTo(variableType, variableName == null ? null : string.Empty, getter, setter);
+                variableDrawer.BindTo(variableType, variableName == null ? null : string.Empty, variableName == null ? null : string.Empty, getter, setter);
                 if (variableName != null)
                     variableDrawer.NameRaw = variableName;
 
@@ -684,7 +684,7 @@ namespace RuntimeInspectorNamespace
             ExposedMethodField methodDrawer = (ExposedMethodField)Inspector.CreateDrawerForType(typeof(ExposedMethod), drawArea, Depth + 1, false);
             if (methodDrawer != null)
             {
-                methodDrawer.BindTo(typeof(ExposedMethod), string.Empty, getter, setter);
+                methodDrawer.BindTo(typeof(ExposedMethod), string.Empty, string.Empty, getter, setter);
                 methodDrawer.SetBoundMethod(method);
 
                 exposedMethods.Add(methodDrawer);
