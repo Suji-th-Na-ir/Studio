@@ -141,7 +141,7 @@ public class SelectionHandler : View
 
                 foreach (GameObject obj in _selectedObjects)
                 {
-                    var iObj = Instantiate(obj, obj.transform.position, obj.transform.rotation);
+                    var iObj = Instantiate(obj, obj.transform.position, obj.transform.rotation,obj.transform.parent);
                     var components = iObj.GetComponents<IComponent>();
 
                     for (int i = 0; i < components.Length; i++)

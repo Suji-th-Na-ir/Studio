@@ -485,6 +485,15 @@ namespace PlayShifu.Terra
 #endif
         }
 
+        public static bool IsInUnityEditor()
+        {
+#if UNITY_EDITOR
+            return true;
+#else
+            return false;
+#endif
+        }
+
         public static bool IsPrimitive(this GameObject go, out PrimitiveType type)
         {
             type = default;
@@ -619,7 +628,7 @@ namespace PlayShifu.Terra
 
         public static int GetEnumIndexByString<TEnum>(string value) where TEnum : struct, Enum
         {
-            if (Enum.TryParse<TEnum>(value, out TEnum enumValue))
+            if (Enum.TryParse(value, out TEnum enumValue))
             {
                 return Convert.ToInt32(enumValue);
             }
@@ -634,13 +643,13 @@ namespace PlayShifu.Terra
             return new List<string>(Enum.GetNames(typeof(TEnum)));
         }
 
-        public static List<string> GetEnumWithAliasNames<TEnum>() where TEnum:Enum
+        public static List<string> GetEnumWithAliasNames<TEnum>() where TEnum : Enum
         {
             var enumType = typeof(TEnum);
             return GetEnumWithAliasNames(enumType);
         }
 
-        public static List<string> GetEnumWithAliasNames(Type enumType) 
+        public static List<string> GetEnumWithAliasNames(Type enumType)
         {
             var enumNamesWithDisplayNames = new List<string>();
 
