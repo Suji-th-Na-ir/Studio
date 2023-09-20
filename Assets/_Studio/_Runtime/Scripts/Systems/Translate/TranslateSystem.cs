@@ -35,6 +35,12 @@ namespace Terra.Studio
                 return;
             }
             var tr = entityRef.RefObj.transform;
+            if (!entityRef.isInitialProcessDone)
+            {
+                var scaleDelta = new Vector3(tr.lossyScale.x / tr.localScale.x, tr.lossyScale.y / tr.localScale.y, tr.lossyScale.z / tr.localScale.z);
+                entityRef.targetPosition = new Vector3(scaleDelta.x * entityRef.targetPosition.x, scaleDelta.y * entityRef.targetPosition.y, scaleDelta.z * entityRef.targetPosition.z);
+                entityRef.isInitialProcessDone = true;
+            }
             var targetPos = tr.parent == null ? entityRef.targetPosition + entityRef.startPosition : entityRef.startPosition + tr.TransformDirection(entityRef.targetPosition);
             var pauseDistance = Vector3.Distance(entityRef.startPosition, targetPos);
             var direction = targetPos - entityRef.startPosition;
@@ -162,7 +168,9 @@ namespace Terra.Studio
         {
             var step = component.speed * Time.deltaTime;
             if (component.remainingDistance > 0)
+            {
                 step = Mathf.Clamp(step, 0.0f, component.remainingDistance);
+            }
             var movement = component.direction.normalized * step;
             component.RefObj.transform.position += movement;
             component.remainingDistance -= step;
@@ -185,7 +193,9 @@ namespace Terra.Studio
         {
             var step = component.speed * Time.deltaTime;
             if (component.remainingDistance > 0)
+            {
                 step = Mathf.Clamp(step, 0.0f, component.remainingDistance);
+            }
             var movement = component.direction.normalized * step;
             component.RefObj.transform.position += movement;
             component.remainingDistance -= step;

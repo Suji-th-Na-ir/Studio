@@ -24,6 +24,7 @@ namespace Terra.Studio
         private Sprite m_broadcastSprite;
         private Sprite m_broadcastNoListnerSprite;
         private Sprite m_GameWonBroadcastSprite;
+        private Sprite m_GameLooseBroadcastSprite;
         private Sprite m_ListenSprite;
         RuntimeInspector Inspector;
         
@@ -44,6 +45,7 @@ namespace Terra.Studio
         }
 
         public bool m_isBroadcatingGameWon = false;
+        public bool m_isBroadcatingGameLoose = false;
         public int m_componentIndex = 0;
         public bool isTargetSelected;
         List<LineRenderer> m_LineConnectors;
@@ -148,7 +150,7 @@ namespace Terra.Studio
             m_broadcastSprite = iconPresets.GetIcon("Broadcast");
             m_broadcastNoListnerSprite = iconPresets.GetIcon("BroadcastNoListner");
             m_GameWonBroadcastSprite = iconPresets.GetIcon("GameWon");
-
+            m_GameLooseBroadcastSprite = iconPresets.GetIcon("GameLoose");
             //Listen
             GameObject gm2 = new GameObject("Listen_Icon");
             var rectTransform2 = gm2.AddComponent<RectTransform>();
@@ -268,9 +270,14 @@ namespace Terra.Studio
                             m_BroadcastIcon[i].gameObject.SetActive(false);
                         else
                             m_BroadcastIcon[i].gameObject.SetActive(true);
+
                         if (m_isBroadcatingGameWon)
                         {
                             m_BroadcastIcon[i].sprite = m_GameWonBroadcastSprite;
+                        }
+                        else if(m_isBroadcatingGameLoose)
+                        {
+                             m_BroadcastIcon[i].sprite = m_GameLooseBroadcastSprite;
                         }
                         else if (m_LineConnectors != null && m_ListnerTargetNodes?.FindAll(a => a.ListenStrings.Contains(BroadcastingStrings[i])).Count != 0)
                         {
@@ -379,14 +386,21 @@ namespace Terra.Studio
                         points[i] = CalculateBezierPoint(startPoint, controlPoint, endPoint, t);
                     }
                     m_LineConnectors[lineConnectorIndex].gameObject.SetActive(true);
-                   
+
                     m_LineConnectors[lineConnectorIndex].positionCount = points.Length;
                     m_LineConnectors[lineConnectorIndex].SetPositions(points);
 
+
                     Color c = Color.white;
-                    c.a = GetFadeValue(distanceToTarget, -1, 40);
-                    c.a = Mathf.Clamp(c.a, 0.0f, 1.0f);
+                    if (!EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Contains(m_ObjectTarget.componentGameObject)
+                        && !EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Contains(allTargets[j].m_ObjectTarget.componentGameObject))
+                    {
+                        c.a = GetFadeValue(distanceToTarget, -1, 40);
+                        c.a = Mathf.Clamp(c.a, 0.0f, 1.0f);
+                       
+                    }
                     m_LineConnectors[lineConnectorIndex].material.SetColor("_GoodColor", c);
+
                     lineConnectorIndex++;
 
                 }

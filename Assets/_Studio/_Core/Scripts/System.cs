@@ -47,12 +47,7 @@ namespace Terra.Studio
             SystemOp.Register(new FileService());
             if (configData.PickupSavedData)
             {
-                var shouldIgnore =
-#if UNITY_EDITOR
-                false;
-#else
-                true;
-#endif
+                var shouldIgnore = !Helper.IsInUnityEditor();
                 SystemOp.Resolve<FileService>().WriteFile(
                     configData.SceneDataToLoad.text,
                     FileService.GetSavedFilePath(ConfigSO.SceneDataToLoad.name),

@@ -179,9 +179,20 @@ namespace Terra.Studio
                                 broadcastNode.Add(compIcons[j]);
                                 compIcons[j].ListnerTargets = GetTargetIconsForDisplayDock(listners);
                                 if (broadcast.Key == "Game Win")
+                                {
                                     compIcons[j].m_isBroadcatingGameWon = true;
-                                else
+                                    compIcons[j].m_isBroadcatingGameLoose = false;
+                                }
+                                else if (broadcast.Key == "Game Lose")
+                                {
                                     compIcons[j].m_isBroadcatingGameWon = false;
+                                    compIcons[j].m_isBroadcatingGameLoose = true;
+                                }
+                                else
+                                {
+                                    compIcons[j].m_isBroadcatingGameWon = false;
+                                    compIcons[j].m_isBroadcatingGameLoose = false;
+                                }
                                 compIcons[j].BroadcastingStrings = new List<string> { broadcast.Key };
                             }
                         }
