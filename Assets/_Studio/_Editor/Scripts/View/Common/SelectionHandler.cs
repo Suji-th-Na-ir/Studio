@@ -171,6 +171,7 @@ public class SelectionHandler : View
                     }
 
                 }
+                runtimeHierarchy.Refresh();
                 SelectObjectsInHierarchy(duplicatedGms);
             }
         }
