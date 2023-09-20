@@ -142,9 +142,8 @@ public class SelectionHandler : View
                 List<Transform> duplicatedGms = new List<Transform>();
                 foreach (GameObject obj in _selectedObjects)
                 {
-                    var lastIndex = obj.transform.GetSiblingIndex();
                     var iObj = Instantiate(obj, obj.transform.position, obj.transform.rotation, obj.transform.parent);
-                    iObj.transform.SetSiblingIndex(lastIndex + 1);
+                  
                     duplicatedGms.Add(iObj.transform);
 
                     var components = iObj.GetComponents<IComponent>();
