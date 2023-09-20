@@ -386,14 +386,20 @@ namespace Terra.Studio
                         points[i] = CalculateBezierPoint(startPoint, controlPoint, endPoint, t);
                     }
                     m_LineConnectors[lineConnectorIndex].gameObject.SetActive(true);
-                   
+
                     m_LineConnectors[lineConnectorIndex].positionCount = points.Length;
                     m_LineConnectors[lineConnectorIndex].SetPositions(points);
 
+
                     Color c = Color.white;
-                    c.a = GetFadeValue(distanceToTarget, -1, 40);
-                    c.a = Mathf.Clamp(c.a, 0.0f, 1.0f);
+                    if (!EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Contains(m_ObjectTarget.componentGameObject))
+                    {
+                        c.a = GetFadeValue(distanceToTarget, -1, 40);
+                        c.a = Mathf.Clamp(c.a, 0.0f, 1.0f);
+                       
+                    }
                     m_LineConnectors[lineConnectorIndex].material.SetColor("_GoodColor", c);
+
                     lineConnectorIndex++;
 
                 }
