@@ -18,7 +18,7 @@ namespace Terra.Studio
         public SystemConfigurationSO ConfigSO { get { return configData; } }
         public StudioState PreviousStudioState { get { return previousStudioState; } }
         public StudioState CurrentStudioState { get { return currentStudioState; } }
-
+        [SerializeField] private PasswordManager m_refPasswordManager;
         private void Awake()
         {
             SystemOp.Register(this);
@@ -46,7 +46,8 @@ namespace Terra.Studio
                 loadSceneMode = LoadSceneMode.Additive
             };
             LoadSilentServices();
-            LoadSubsystemScene();
+            m_refPasswordManager.OnCorrectPasswordEntered += LoadSubsystemScene;
+            //LoadSubsystemScene ();
         }
 
         private void LoadSilentServices()
@@ -76,6 +77,7 @@ namespace Terra.Studio
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
             SystemOp.Resolve<ISubsystem>().Initialize();
+            m_refPasswordManager.FuckOff ();
         }
 
         public void SwitchState()
