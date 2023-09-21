@@ -11,6 +11,11 @@ public class PasswordManager : MonoBehaviour
 
     public Action OnCorrectPasswordEntered;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+            CheckPassword();
+    }
     public void CheckPassword()
     {
         string enteredPassword = passwordInputField.text;
@@ -19,6 +24,10 @@ public class PasswordManager : MonoBehaviour
         {
             feedbackText.text = "Correct Password!";
             OnCorrectPasswordEntered?.Invoke();
+        }
+        else if(string.IsNullOrEmpty(enteredPassword))
+        {
+            feedbackText.text = "Password Is Empty.";
         }
         else
         {
