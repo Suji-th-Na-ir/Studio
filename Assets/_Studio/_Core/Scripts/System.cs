@@ -80,7 +80,7 @@ namespace Terra.Studio
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
             SystemOp.Resolve<ISubsystem>().Initialize();
-            passwordBg.gameObject.SetActive(false);
+            passwordBg.FuckOff ();
         }
 
         public void SwitchState()
