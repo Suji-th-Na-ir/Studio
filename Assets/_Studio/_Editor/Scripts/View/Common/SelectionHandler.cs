@@ -172,6 +172,11 @@ public class SelectionHandler : View
 
                 }
                 runtimeHierarchy.Refresh();
+                _selectedObjects.Clear();
+                foreach (var d in duplicatedGms)
+                {
+                    OnSelectionChanged();
+                }
                 SelectObjectsInHierarchy(duplicatedGms);
             }
         }
