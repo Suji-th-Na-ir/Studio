@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using PlayShifu.Terra;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System.Collections;
 
 namespace Terra.Studio
 {
@@ -16,7 +18,7 @@ namespace Terra.Studio
         public SystemConfigurationSO ConfigSO { get { return configData; } }
         public StudioState PreviousStudioState { get { return previousStudioState; } }
         public StudioState CurrentStudioState { get { return currentStudioState; } }
-
+        [SerializeField] PasswordManager passwordBg;
         private void Awake()
         {
             SystemOp.Register(this);
@@ -37,6 +39,16 @@ namespace Terra.Studio
             {
                 loadSceneMode = LoadSceneMode.Additive
             };
+
+            passwordBg.OnCorrectPasswordEntered += LoadSystemsAndScene;
+           // LoadSystemsAndScene();
+        }
+
+
+
+        private void LoadSystemsAndScene()
+        {
+
             LoadSilentServices();
             LoadSubsystemScene();
         }
@@ -68,6 +80,7 @@ namespace Terra.Studio
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
             SystemOp.Resolve<ISubsystem>().Initialize();
+            passwordBg.gameObject.SetActive(false);
         }
 
         public void SwitchState()
