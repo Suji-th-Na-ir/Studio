@@ -13,6 +13,38 @@ MonoBehaviour:
   m_Name: ResourceDB
   m_EditorClassIdentifier: 
   itemsData:
+  - name: Bridge_Black_White
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Bridge_Black_White.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Bridge_Black_White
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 471e7d0f2aba74b82a58045c0e562d53
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Bridge_Green_White
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Bridge_Green_White.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Bridge_Green_White
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 4359f70a121d246f2bf39824b7634843
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Bridge_Orange_White
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Bridge_Orange_White.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Bridge_Orange_White
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 80cbc8a0a9595452c8b1eb5ba66cd482
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Bridge_Purple_White
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Bridge_Purple_White.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Bridge_Purple_White
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b4ee9cf11c5b34b3ca7be520d83e6aa9
+    isPrimitive: 0
+    primitiveType: 0
   - name: Apple_tree
     absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/FruitTree/Apple_tree.prefab
     resourcePath: Common/KawaiiLandPrefabs/FruitTree/Apple_tree
@@ -99,6 +131,38 @@ MonoBehaviour:
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: b1052c1c79f144382820247c420ef1a3
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Mushroom_Blue
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Mushroom_Blue.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Mushroom_Blue
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5ab11360c6f8e470cb55683e7bca458f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Mushroom_Red
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Mushroom_Red.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Mushroom_Red
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5f503c021ccca4d08b0caafe62c3f3a6
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Mushroom_White
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Mushroom_White.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Mushroom_White
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 27ce6dc61dd804e98908ba2cd2340d03
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Mushroom_Yellow
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Mushroom_Yellow.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Mushroom_Yellow
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 9c5a37751ab9a49189393f04c5e437be
     isPrimitive: 0
     primitiveType: 0
   - name: Bush_01
@@ -363,6 +427,14 @@ MonoBehaviour:
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: ff0b489afe2240b4bb2e4cf7de961d42
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Teleporter
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Teleporter.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Teleporter
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 20b2b545afc944bbab1e1bb347c546f2
     isPrimitive: 0
     primitiveType: 0
   - name: Cliff_corner_inside
@@ -1632,212 +1704,404 @@ MonoBehaviour:
     guid: 9a1ca7ed0292842b898590ce7344ccc8
     isPrimitive: 0
     primitiveType: 0
-  - name: Flash 2
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Flash 2.prefab
-    resourcePath: Common/vfx/Flash 2
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 99649c5fed10ce848a575f679ff0e303
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Flash 3
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Flash 3.prefab
-    resourcePath: Common/vfx/Flash 3
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 29fec53fa5329e345981c83555fa131e
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Flash 4
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Flash 4.prefab
-    resourcePath: Common/vfx/Flash 4
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: c9e6ddab55c69eb4b81803e860d80c55
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Hit 1
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 1.prefab
-    resourcePath: Common/vfx/Hit 1
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 7e59152fc3be99d4aa2760fb61212ce2
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Hit 13
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 13.prefab
-    resourcePath: Common/vfx/Hit 13
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 3a3ebdd477adb6444969752e68f9e55e
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Hit 16
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 16.prefab
-    resourcePath: Common/vfx/Hit 16
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: f95ef7e849953e2428a605bb742e8b9e
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Hit 17
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 17.prefab
-    resourcePath: Common/vfx/Hit 17
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 953acd63f3feb604da8867d4f55f7351
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Hit 18
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 18.prefab
-    resourcePath: Common/vfx/Hit 18
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: fcb7ef11e81f7264990b58f26051651b
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Hit 19
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 19.prefab
-    resourcePath: Common/vfx/Hit 19
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: e90b0a20dc997ef4c9e67b1c8b6db6c9
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Hit 20
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 20.prefab
-    resourcePath: Common/vfx/Hit 20
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 7e33fe33aff4f49449f51ed88f138e9c
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Hit 22
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 22.prefab
-    resourcePath: Common/vfx/Hit 22
+  - name: Aqua Blast
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Aqua Blast.prefab
+    resourcePath: Common/vfx/Aqua Blast
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: c5a11cdca0c02ec46af89a4f25515b5f
     isPrimitive: 0
     primitiveType: 0
-  - name: Hit 25
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 25.prefab
-    resourcePath: Common/vfx/Hit 25
+  - name: Broken Heart
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Broken Heart.prefab
+    resourcePath: Common/vfx/Broken Heart
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-    guid: 266bfc3979b19d3478e92304dab844d6
+    guid: 7c2a9b83b809a0848915fabd9596b68b
     isPrimitive: 0
     primitiveType: 0
-  - name: Hit 3
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 3.prefab
-    resourcePath: Common/vfx/Hit 3
+  - name: Bubble Blast
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Bubble Blast.prefab
+    resourcePath: Common/vfx/Bubble Blast
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-    guid: df365974c854a33438e5aea62ca4b975
+    guid: 17f4f94f2d680874d952069bcdbcd513
     isPrimitive: 0
     primitiveType: 0
-  - name: Hit 4
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 4.prefab
-    resourcePath: Common/vfx/Hit 4
+  - name: Bubbles
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Bubbles.prefab
+    resourcePath: Common/vfx/Bubbles
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 7f906c77905876d488e88e99d13c3d7d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Cartoon Explosion
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Cartoon Explosion.prefab
+    resourcePath: Common/vfx/Cartoon Explosion
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3ef3ae421f71c5c4e97fe12dc2fc6312
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Crystal Nova Blast
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Crystal Nova Blast.prefab
+    resourcePath: Common/vfx/Crystal Nova Blast
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: fcb7ef11e81f7264990b58f26051651b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Cyan Fireworks
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Cyan Fireworks.prefab
+    resourcePath: Common/vfx/Cyan Fireworks
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: ae07f2a45f14a82428409cfe410e6002
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Death Anim
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Death Anim.prefab
+    resourcePath: Common/vfx/Death Anim
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 463cf9f7af4680240898f6aeba3fe3e6
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Explosion Sparks
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Explosion Sparks.prefab
+    resourcePath: Common/vfx/Explosion Sparks
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c9e6ddab55c69eb4b81803e860d80c55
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Explosion Sparks 2
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Explosion Sparks 2.prefab
+    resourcePath: Common/vfx/Explosion Sparks 2
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: 983ffc7b1f02f0d46a330ab4d104d17d
     isPrimitive: 0
     primitiveType: 0
-  - name: Hit 6
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 6.prefab
-    resourcePath: Common/vfx/Hit 6
+  - name: Flower Power
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Flower Power.prefab
+    resourcePath: Common/vfx/Flower Power
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-    guid: 4754d1c93d0ffde46a4b52472f289725
+    guid: 266bfc3979b19d3478e92304dab844d6
     isPrimitive: 0
     primitiveType: 0
-  - name: Hit 7
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 7.prefab
-    resourcePath: Common/vfx/Hit 7
+  - name: Ice Hit
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Ice Hit.prefab
+    resourcePath: Common/vfx/Ice Hit
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-    guid: c8c637b8f0130b84b8e2d623d873832d
+    guid: 6f34ef0d986e9db4199cf75805f79753
     isPrimitive: 0
     primitiveType: 0
-  - name: Hit 8
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 8.prefab
-    resourcePath: Common/vfx/Hit 8
+  - name: Leaf Confetti
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Leaf Confetti.prefab
+    resourcePath: Common/vfx/Leaf Confetti
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 7e59152fc3be99d4aa2760fb61212ce2
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Lightning Blast
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Lightning Blast.prefab
+    resourcePath: Common/vfx/Lightning Blast
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 29fec53fa5329e345981c83555fa131e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Lightning Sparks
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Lightning Sparks.prefab
+    resourcePath: Common/vfx/Lightning Sparks
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: df365974c854a33438e5aea62ca4b975
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Love Explosion
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Love Explosion.prefab
+    resourcePath: Common/vfx/Love Explosion
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 953acd63f3feb604da8867d4f55f7351
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Magic Poof
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Magic Poof.prefab
+    resourcePath: Common/vfx/Magic Poof
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c4f829cb7dd4b864caf8832ec5b1ee55
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Mystique Explosion
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Mystique Explosion.prefab
+    resourcePath: Common/vfx/Mystique Explosion
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: 245bf6b0acdf9474ca212c5a4f28b2ce
     isPrimitive: 0
     primitiveType: 0
-  - name: Hit 9
-    absolutePath: Assets/_Studio/Resources/Common/vfx/Hit 9.prefab
-    resourcePath: Common/vfx/Hit 9
+  - name: Nature Explosion
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Nature Explosion.prefab
+    resourcePath: Common/vfx/Nature Explosion
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f95ef7e849953e2428a605bb742e8b9e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Nova Blast
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Nova Blast.prefab
+    resourcePath: Common/vfx/Nova Blast
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: 7bb551564a4a9a1498e0624fd34ce7d3
     isPrimitive: 0
     primitiveType: 0
-  - name: vfx_ArrowBlue
-    absolutePath: Assets/_Studio/Resources/Common/vfx/vfx_ArrowBlue.prefab
-    resourcePath: Common/vfx/vfx_ArrowBlue
+  - name: Nova Explosion
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Nova Explosion.prefab
+    resourcePath: Common/vfx/Nova Explosion
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-    guid: a17580581e360e74db460cc3d5dc0396
+    guid: c8c637b8f0130b84b8e2d623d873832d
     isPrimitive: 0
     primitiveType: 0
-  - name: vfx_ArrowFire
-    absolutePath: Assets/_Studio/Resources/Common/vfx/vfx_ArrowFire.prefab
-    resourcePath: Common/vfx/vfx_ArrowFire
+  - name: Purple Blast
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Purple Blast.prefab
+    resourcePath: Common/vfx/Purple Blast
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-    guid: 2a08b3071ec108040959cc25cf08be4b
+    guid: 4754d1c93d0ffde46a4b52472f289725
     isPrimitive: 0
     primitiveType: 0
-  - name: vfx_ArrowGreen
-    absolutePath: Assets/_Studio/Resources/Common/vfx/vfx_ArrowGreen.prefab
-    resourcePath: Common/vfx/vfx_ArrowGreen
+  - name: Purple Explosion
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Purple Explosion.prefab
+    resourcePath: Common/vfx/Purple Explosion
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-    guid: 73a45666000e9ab44a46a4a4da5ff8f1
+    guid: 7ec363c8df426644ea85f8d6d570561c
     isPrimitive: 0
     primitiveType: 0
-  - name: vfx_ArrowPoisoned
-    absolutePath: Assets/_Studio/Resources/Common/vfx/vfx_ArrowPoisoned.prefab
-    resourcePath: Common/vfx/vfx_ArrowPoisoned
+  - name: Red Sparks
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Red Sparks.prefab
+    resourcePath: Common/vfx/Red Sparks
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-    guid: 9a723d60088206e4a86eb5411a8d5df3
+    guid: 99649c5fed10ce848a575f679ff0e303
     isPrimitive: 0
     primitiveType: 0
-  - name: bell_1
-    absolutePath: Assets/_Studio/Resources/Common/sfx/bell_1.mp3
-    resourcePath: Common/sfx/bell_1
+  - name: Smiley
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Smiley.prefab
+    resourcePath: Common/vfx/Smiley
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1bc4a709f24528b40984e62f32e398a0
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Smoke Puff
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Smoke Puff.prefab
+    resourcePath: Common/vfx/Smoke Puff
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 9fe8f8b3288e45a44af36ff8aa04486e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Sun Blast
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Sun Blast.prefab
+    resourcePath: Common/vfx/Sun Blast
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 155a6e65975c2834a85ca6e20ce89621
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Thunderbolt
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Thunderbolt.prefab
+    resourcePath: Common/vfx/Thunderbolt
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e90b0a20dc997ef4c9e67b1c8b6db6c9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Wanda Explosion
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Wanda Explosion.prefab
+    resourcePath: Common/vfx/Wanda Explosion
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 7e33fe33aff4f49449f51ed88f138e9c
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Water Ripples
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Water Ripples.prefab
+    resourcePath: Common/vfx/Water Ripples
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5a8d99fb95262ea458a7b580f2a1611c
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Wow
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Wow.prefab
+    resourcePath: Common/vfx/Wow
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1e54877675f6e4a46ad7ca7c4d7a5bf6
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Yellow Lightning
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Yellow Lightning.prefab
+    resourcePath: Common/vfx/Yellow Lightning
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3a3ebdd477adb6444969752e68f9e55e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Zapdos
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Zapdos.prefab
+    resourcePath: Common/vfx/Zapdos
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 265d3a5ba69981a4698ceabcedf368b0
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Zapdos Ground
+    absolutePath: Assets/_Studio/Resources/Common/vfx/Zapdos Ground.prefab
+    resourcePath: Common/vfx/Zapdos Ground
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 87ee7299dd44ed747af24dbb91bcd33b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Bell
+    absolutePath: Assets/_Studio/Resources/Common/sfx/Bell.mp3
+    resourcePath: Common/sfx/Bell
     type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: b766fe666be0e4705a2dc20adb5dea82
     isPrimitive: 0
     primitiveType: 0
-  - name: bell_2
-    absolutePath: Assets/_Studio/Resources/Common/sfx/bell_2.mp3
-    resourcePath: Common/sfx/bell_2
+  - name: Bell 2
+    absolutePath: Assets/_Studio/Resources/Common/sfx/Bell 2.mp3
+    resourcePath: Common/sfx/Bell 2
     type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: d601a2cf33a3c4486ac8953db8067473
     isPrimitive: 0
     primitiveType: 0
-  - name: collect_1
-    absolutePath: Assets/_Studio/Resources/Common/sfx/collect_1.mp3
-    resourcePath: Common/sfx/collect_1
+  - name: Click
+    absolutePath: Assets/_Studio/Resources/Common/sfx/Click.wav
+    resourcePath: Common/sfx/Click
+    type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3b7a828a646174088aa48ee1db9c439c
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Coin Pickup 8bit
+    absolutePath: Assets/_Studio/Resources/Common/sfx/Coin Pickup 8bit.wav
+    resourcePath: Common/sfx/Coin Pickup 8bit
+    type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: ad03aba1a1583422b87a3966c8f741d3
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Collect
+    absolutePath: Assets/_Studio/Resources/Common/sfx/Collect.mp3
+    resourcePath: Common/sfx/Collect
     type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: 102ddff5bb9314cca9cff1e59869cb44
     isPrimitive: 0
     primitiveType: 0
-  - name: success_1
-    absolutePath: Assets/_Studio/Resources/Common/sfx/success_1.mp3
-    resourcePath: Common/sfx/success_1
+  - name: Explosion 8bit
+    absolutePath: Assets/_Studio/Resources/Common/sfx/Explosion 8bit.wav
+    resourcePath: Common/sfx/Explosion 8bit
+    type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 4a46782b6a4544fa089a35523f50e2a0
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Game Over
+    absolutePath: Assets/_Studio/Resources/Common/sfx/Game Over.wav
+    resourcePath: Common/sfx/Game Over
+    type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1d2f348735857f047b7a5defd60d930a
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Ice Reflect
+    absolutePath: Assets/_Studio/Resources/Common/sfx/Ice Reflect.wav
+    resourcePath: Common/sfx/Ice Reflect
+    type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3c8e1b51a59b6da42b0823020f826bf1
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Laser 8bit
+    absolutePath: Assets/_Studio/Resources/Common/sfx/Laser 8bit.wav
+    resourcePath: Common/sfx/Laser 8bit
+    type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 68afba37b0add4662b322912a5e54259
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Pickup High
+    absolutePath: Assets/_Studio/Resources/Common/sfx/Pickup High.wav
+    resourcePath: Common/sfx/Pickup High
+    type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3445a8b2782c4134985eb470cc656b10
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Pickup Holy
+    absolutePath: Assets/_Studio/Resources/Common/sfx/Pickup Holy.wav
+    resourcePath: Common/sfx/Pickup Holy
+    type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 13b481262ca11bc4cbfa819b6dfe28cc
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Pickup Magic
+    absolutePath: Assets/_Studio/Resources/Common/sfx/Pickup Magic.wav
+    resourcePath: Common/sfx/Pickup Magic
+    type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8ce14858148c08a459f93602337335eb
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Pickup Soft
+    absolutePath: Assets/_Studio/Resources/Common/sfx/Pickup Soft.wav
+    resourcePath: Common/sfx/Pickup Soft
+    type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c952c74dd0dfb5c44b632b0c5564c936
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Powerup 8bit
+    absolutePath: Assets/_Studio/Resources/Common/sfx/Powerup 8bit.wav
+    resourcePath: Common/sfx/Powerup 8bit
+    type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: cc98b8ccdf9a248059887d064e7e5067
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Success
+    absolutePath: Assets/_Studio/Resources/Common/sfx/Success.mp3
+    resourcePath: Common/sfx/Success
     type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: 298df2f553b0747c2a28fe8ee0b8c6f9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Xylo Click
+    absolutePath: Assets/_Studio/Resources/Common/sfx/Xylo Click.wav
+    resourcePath: Common/sfx/Xylo Click
+    type: UnityEngine.AudioClip, UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a22b8c429f521429084d616c68dda19a
     isPrimitive: 0
     primitiveType: 0
   - name: ResetParent
@@ -1886,94 +2150,6 @@ MonoBehaviour:
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: d5aa186d95fc84196922788e1051c643
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Projectile 19
-    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Projectile 19.prefab
-    resourcePath: Common/KawaiiLandPrefabs/Projectile 19
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 5c16c201ada1f4a43965ab102abb63a9
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Projectile 19
-    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Projectile 19.prefab
-    resourcePath: Common/KawaiiLandPrefabs/Projectile 19
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 5c16c201ada1f4a43965ab102abb63a9
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Teleporter
-    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Teleporter.prefab
-    resourcePath: Common/KawaiiLandPrefabs/Teleporter
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 20b2b545afc944bbab1e1bb347c546f2
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Bridge_Black_White
-    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Bridge_Black_White.prefab
-    resourcePath: Common/KawaiiLandPrefabs/Bridge_Black_White
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 471e7d0f2aba74b82a58045c0e562d53
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Bridge_Green_White
-    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Bridge_Green_White.prefab
-    resourcePath: Common/KawaiiLandPrefabs/Bridge_Green_White
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 4359f70a121d246f2bf39824b7634843
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Bridge_Orange_White
-    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Bridge_Orange_White.prefab
-    resourcePath: Common/KawaiiLandPrefabs/Bridge_Orange_White
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 80cbc8a0a9595452c8b1eb5ba66cd482
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Bridge_Purple_White
-    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Bridge_Purple_White.prefab
-    resourcePath: Common/KawaiiLandPrefabs/Bridge_Purple_White
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: b4ee9cf11c5b34b3ca7be520d83e6aa9
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Mushroom_Blue
-    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Mushroom_Blue.prefab
-    resourcePath: Common/KawaiiLandPrefabs/Mushroom_Blue
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 5ab11360c6f8e470cb55683e7bca458f
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Mushroom_Red
-    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Mushroom_Red.prefab
-    resourcePath: Common/KawaiiLandPrefabs/Mushroom_Red
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 5f503c021ccca4d08b0caafe62c3f3a6
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Mushroom_White
-    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Mushroom_White.prefab
-    resourcePath: Common/KawaiiLandPrefabs/Mushroom_White
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 27ce6dc61dd804e98908ba2cd2340d03
-    isPrimitive: 0
-    primitiveType: 0
-  - name: Mushroom_Yellow
-    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Mushroom_Yellow.prefab
-    resourcePath: Common/KawaiiLandPrefabs/Mushroom_Yellow
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 9c5a37751ab9a49189393f04c5e437be
     isPrimitive: 0
     primitiveType: 0
   watchFolders:
