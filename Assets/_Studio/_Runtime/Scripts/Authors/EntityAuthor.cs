@@ -84,20 +84,16 @@ namespace Terra.Studio
 
             public override void Degenerate(int entityID)
             {
-                CoroutineService.RunCoroutine(() =>
+                var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
+                var entities = new int[0];
+                ecsWorld.GetAllEntities(ref entities);
+                if (entities.Length == 0 || entities.Any(x => x == entityID) == false)
                 {
-                    var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
-                    var entities = new int[0];
-                    ecsWorld.GetAllEntities(ref entities);
-                    if (entities.Length == 0 || entities.Any(x => x == entityID) == false)
-                    {
-                        Debug.Log($"Entity {entityID} not found!");
-                        return;
-                    }
-                    CheckAndHandleDestroyTypes(ecsWorld, entityID);
-                    ecsWorld.DelEntity(entityID);
-                },
-                CoroutineService.DelayType.WaitForFrame);
+                    Debug.Log($"Entity {entityID} not found!");
+                    return;
+                }
+                CheckAndHandleDestroyTypes(ecsWorld, entityID);
+                ecsWorld.DelEntity(entityID);
             }
 
             private void CheckAndHandleDestroyTypes(EcsWorld world, int toCheckEntity)

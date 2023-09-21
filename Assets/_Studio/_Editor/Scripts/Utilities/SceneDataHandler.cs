@@ -458,7 +458,7 @@ namespace Terra.Studio
             SystemOp.Resolve<CrossSceneDataHolder>().Set("CameraRot", editorCamera.transform.eulerAngles);
         }
 
-        public void UpdateScoreModifiersCount(bool add, string id)
+        public void UpdateScoreModifiersCount(bool add, string id, bool setupScoreManager = true)
         {
             if (add)
             {
@@ -467,16 +467,20 @@ namespace Terra.Studio
                     return;
                 }
                 modifiers.Add(id);
-                SetupScoreManager(true);
+                if (setupScoreManager)
+                {
+                    SetupScoreManager(true);
+                }
             }
             else
             {
-                if (modifiers.Contains(id))
+                if (!modifiers.Contains(id))
                 {
-                    modifiers.Remove(id);
+                    return;
                 }
+                modifiers.Remove(id);
             }
-            if (modifiers.Count == 0)
+            if (modifiers.Count == 0 && setupScoreManager)
             {
                 SetupScoreManager(false);
             }

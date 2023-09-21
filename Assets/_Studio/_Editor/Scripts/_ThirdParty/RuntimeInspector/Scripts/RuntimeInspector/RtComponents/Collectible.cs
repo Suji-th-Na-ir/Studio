@@ -88,6 +88,10 @@ namespace RuntimeInspectorNamespace
             Broadcast = comp.Broadcast;
             startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
+            if (Score.score != 0)
+            {
+                EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(true, Score.instanceId, false);
+            }
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, null);
         }
 
