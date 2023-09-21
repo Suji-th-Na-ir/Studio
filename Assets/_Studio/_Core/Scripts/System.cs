@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using PlayShifu.Terra;
 using UnityEngine.SceneManagement;
+using mixpanel;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -20,6 +22,12 @@ namespace Terra.Studio
         private void Awake()
         {
             SystemOp.Register(this);
+            if (!PlayerPrefs.HasKey ("ALFT")) {
+                Mixpanel.Track ("AppLaunchFirstTime");
+                PlayerPrefs.SetInt ("ALFT", 1);
+            }
+            Mixpanel.Track ("AppLaunch");
+            Mixpanel.Flush ();
         }
 
         private void Start()
