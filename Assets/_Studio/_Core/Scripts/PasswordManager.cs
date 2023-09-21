@@ -6,7 +6,7 @@ public class PasswordManager : MonoBehaviour {
     public InputField passwordInputField;
     public Text feedbackText;
 
-    private string correctPassword = "Terra@12345";
+    private const string correctPassword = "Terra@12345";
 
     public Action OnCorrectPasswordEntered;
 
@@ -15,16 +15,22 @@ public class PasswordManager : MonoBehaviour {
             CheckPassword ();
     }
 
-    public void CheckPassword () {
+    public void CheckPassword()
+    {
         string enteredPassword = passwordInputField.text;
 
-        if (enteredPassword == correctPassword) {
-            feedbackText.text = "Correct Password!";
-            OnCorrectPasswordEntered?.Invoke ();
-        } else if (string.IsNullOrEmpty (enteredPassword)) {
-            feedbackText.text = "Password Is Empty.";
-        } else {
-            feedbackText.text = "Incorrect Password. Try again.";
+        if (enteredPassword == correctPassword)
+        {
+            feedbackText.text = "<color=green>Correct Password!</color>";
+            OnCorrectPasswordEntered?.Invoke();
+        }
+        else if (string.IsNullOrEmpty(enteredPassword))
+        {
+            feedbackText.text = "<color=red>Password Is Empty.</color>";
+        }
+        else
+        {
+            feedbackText.text = "<color=red>Incorrect Password. Try again.</color>";
         }
     }
 }
