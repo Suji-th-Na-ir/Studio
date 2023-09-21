@@ -73,9 +73,8 @@ namespace RuntimeInspectorNamespace
 
         public void Import(EntityBasedComponent cdata)
         {
-            CollectableComponent comp = JsonConvert.DeserializeObject<CollectableComponent>($"{cdata.data}");
+            CollectableComponent comp = JsonConvert.DeserializeObject<CollectableComponent>(cdata.data);
             Score.score = comp.scoreValue;
-            EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(true, Score.instanceId);
             PlaySFX.data.canPlay = comp.canPlaySFX;
             PlaySFX.data.clipIndex = comp.sfxIndex;
             PlaySFX.data.clipName = comp.sfxName;

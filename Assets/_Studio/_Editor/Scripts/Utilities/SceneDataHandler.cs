@@ -471,11 +471,10 @@ namespace Terra.Studio
             }
             else
             {
-                if (!modifiers.Contains(id))
+                if (modifiers.Contains(id))
                 {
-                    return;
+                    modifiers.Remove(id);
                 }
-                modifiers.Remove(id);
             }
             if (modifiers.Count == 0)
             {
