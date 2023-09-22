@@ -11,6 +11,8 @@ namespace RTG
 
         public static int GetNumDigits(int number)
         {
+            if (number < 0)
+                number = 0;
             return number == 0 ? 1 : Mathf.FloorToInt(Mathf.Log10(Mathf.Abs(number)) + 1);
         }
 
