@@ -8,8 +8,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using System.Reflection;
 using System.Collections.ObjectModel;
-using EasyUI.Toast;
 using PlayShifu.Terra;
+using EasyUI.Helpers;
+using EasyUI.Toast;
 
 public class SelectionHandler : View
 {
@@ -22,6 +23,7 @@ public class SelectionHandler : View
     }
 
     [SerializeField] private RuntimeHierarchy runtimeHierarchy;
+    public ToastUI toastUI;
     
     private ObjectTransformGizmo objectMoveGizmo;
     private ObjectTransformGizmo objectRotationGizmo;

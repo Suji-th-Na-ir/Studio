@@ -37,10 +37,11 @@ namespace EasyUI.Toast {
       private static ToastUI toastUI ;
 
       private static void Prepare () {
-         if (!isLoaded) {
-            GameObject instance = MonoBehaviour.Instantiate (EditorOp.Load<GameObject> ("Prefabs/ToastUI")) ;
-            instance.name = "[ TOAST UI ]" ;
-            toastUI = instance.GetComponent <ToastUI> () ;
+         if (toastUI!=null ||!isLoaded) {
+            //    var parent = GameObject.FindAnyObjectByType<HideInHierarchy>().transform;
+            //GameObject instance = MonoBehaviour.Instantiate (EditorOp.Load<GameObject> ("Prefabs/ToastUI"),parent) ;
+            //instance.name = "[ TOAST UI ]" ;
+            toastUI = EditorOp.Resolve<SelectionHandler>().toastUI;
             isLoaded = true ;
          }
       }
