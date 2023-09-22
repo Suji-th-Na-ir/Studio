@@ -1,22 +1,32 @@
+using PlayShifu.Terra;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
     public class CollideSystem : BaseSystem
     {
+        public override void Init<T>(int entity)
+        {
+            base.Init<T>(entity);
+            ref var entityRef = ref entity.GetComponent<CollideComponent>();
+            var rb = entityRef.RefObj.AddRigidbody();
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
+
         public override void OnConditionalCheck(int entity, object data)
         {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<CollideComponent>(entity);
+            ref var entityRef = ref entity.GetComponent<CollideComponent>();
             if (entityRef.listen != Listen.Always)
             {
                 var compsData = RuntimeOp.Resolve<ComponentsData>();
                 compsData.ProvideEventContext(false, entityRef.EventContext);
                 entityRef.IsExecuted = true;
             }
-            OnDemandRun(in entityRef, entity);
+            OnDemandRun(in entityRef);
         }
 
-        public void OnDemandRun(in CollideComponent component, int entity)
+        public void OnDemandRun(in CollideComponent component)
         {
             if (component.canPlaySFX)
             {

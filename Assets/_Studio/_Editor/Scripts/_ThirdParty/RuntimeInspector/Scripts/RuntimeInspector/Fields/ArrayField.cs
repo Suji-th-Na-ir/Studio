@@ -130,7 +130,7 @@ namespace RuntimeInspectorNamespace
 						break;
 
 					int j = i;
-					elementDrawer.BindTo( elementType, string.Empty, () => ( (Array) Value ).GetValue( j ), ( value ) =>
+					elementDrawer.BindTo( elementType, string.Empty, string.Empty, () => ( (Array) Value ).GetValue( j ), ( value ) =>
 					{
 						Array _array = (Array) Value;
 						_array.SetValue( value, j );
@@ -155,7 +155,7 @@ namespace RuntimeInspectorNamespace
 
 					int j = i;
 					string variableName = Inspector.ArrayIndicesStartAtOne ? ( ( i + 1 ) + ":" ) : ( i + ":" );
-					elementDrawer.BindTo( elementType, variableName, () => ( (IList) Value )[j], ( value ) =>
+					elementDrawer.BindTo( elementType, variableName, variableName, () => ( (IList) Value )[j], ( value ) =>
 					{
 						IList _list = (IList) Value;
 						_list[j] = value;

@@ -2,7 +2,7 @@ using System;
 using RuntimeInspectorNamespace;
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.Serialization;
+using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
@@ -17,16 +17,24 @@ namespace Terra.Studio
             [HideInInspector] public GameObject target;
             [HideInInspector] public List<string> StartList = new List<string>();
             [HideInInspector] public string componentType = null;
-
-            public void Setup(GameObject _target, List<string> _list, string _componentType)
+            [HideInInspector] public List<string> aliasNameList = new List<string>();
+            public void Setup(GameObject _target, List<string> _list,List<String>_aliasStrings, string _componentType,bool updateListen)
             {
                 StartList = _list;
+                aliasNameList = _aliasStrings;
                 target = _target;
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
                 componentType = _componentType;
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(data.listenName, ""
+                if (updateListen)
+                {
+                    EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(data.listenName, ""
                                 , new ComponentDisplayDock() { componentGameObject = _target, componentType = _componentType });
+                }
+                if (StartList.Count >= data.startIndex)
+                {
+                    data.startName = StartList[data.startIndex];
+                }
             }
         }
 
@@ -47,6 +55,7 @@ namespace Terra.Studio
                 this.fieldName = fieldName;
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
+                data.clipName = Helper.GetSfxClipNameByIndex(data.clipIndex);
             }
         }
 
@@ -67,6 +76,7 @@ namespace Terra.Studio
                 this.fieldName = fieldName;
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
+                data.clipName = Helper.GetSfxClipNameByIndex(data.clipIndex);
             }
         }
 
@@ -157,7 +167,7 @@ namespace Terra.Studio
         public float speed;
         public int repeat;
         public float pauseBetween;
-        
+        [AliasDrawer("Broadcast")]
         public string broadcast;
         public Listen listen;
         public BroadcastAt broadcastAt;
@@ -167,11 +177,11 @@ namespace Terra.Studio
     public struct TranslateComponentData
     {
         public int translateType;
-        public Vector3 moveTo;
+        public Vector3 moveBy;
         public float pauseFor;
         public float speed;
         public int repeat;
-        
+        [AliasDrawer("Broadcast")]
         public string broadcast;
 
         public string listenTo;

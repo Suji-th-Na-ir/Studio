@@ -7,11 +7,11 @@ using Terra.Studio;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using System.Reflection;
-
+using System.Collections.ObjectModel;
 
 public class SelectionHandler : View
 {
-    private enum GizmoId
+    public enum GizmoId
     {
         Move = 1,
         Rotate,
@@ -31,6 +31,9 @@ public class SelectionHandler : View
     private List<GameObject> _selectedObjects = new List<GameObject>();
     private List<GameObject> prevSelectedObjects = new List<GameObject>();
     private GameObject lastPickedGameObject;
+
+    public  delegate void SelectionChangedDelegate(List<GameObject> gm);
+    public SelectionChangedDelegate SelectionChanged;
     private void Awake()
     {
         // setting target framerate to 60
@@ -45,7 +48,7 @@ public class SelectionHandler : View
         runtimeHierarchy.OnSelectionChanged -= OnHierarchySelectionChanged;
     }
 
-    private void OnHierarchySelectionChanged(System.Collections.ObjectModel.ReadOnlyCollection<Transform> _allTransform)
+    private void OnHierarchySelectionChanged(ReadOnlyCollection<Transform> _allTransform)
     {
         if (_allTransform.Count > 0)
         {
@@ -98,6 +101,11 @@ public class SelectionHandler : View
         Scan();
         DuplicateObjects();
         DeleteObjects();
+
+        if(RTInput.IsKeyPressed(KeyCode.LeftCommand)&& RTInput.WasKeyPressedThisFrame(KeyCode.S))
+        {
+            EditorOp.Resolve<SceneDataHandler>().Save();
+        }
     }
 
     private void DeleteObjects()
@@ -132,10 +140,12 @@ public class SelectionHandler : View
         {
             if (RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.WasKeyPressedThisFrame(KeyCode.D))
             {
-
+             
+                List<Transform> duplicatedGms = new List<Transform>();
                 foreach (GameObject obj in _selectedObjects)
                 {
-                    var iObj = Instantiate(obj, obj.transform.position, obj.transform.rotation);
+                    var iObj = Instantiate(obj, obj.transform.position, obj.transform.rotation, obj.transform.parent);                
+                    duplicatedGms.Add(iObj.transform);
                     var components = iObj.GetComponents<IComponent>();
 
                     for (int i = 0; i < components.Length; i++)
@@ -144,15 +154,15 @@ public class SelectionHandler : View
                         EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock
                         { componentGameObject = iObj, componentType = componentType.Name });
 
-                        var mInfo = componentType.GetField("Broadcast", BindingFlags.Public | BindingFlags.Instance);             
+                        var mInfo = componentType.GetField("Broadcast", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
                         if (mInfo != null)
                         {
                             var oldValue = mInfo?.GetValue(components[i]);
                             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(oldValue.ToString(), ""
                                 , new ComponentDisplayDock() { componentGameObject = iObj, componentType = componentType.Name });
                         }
-                        
-                        var mInfo1 = componentType.GetField("BroadcastListen", BindingFlags.Public | BindingFlags.Instance);                    
+
+                        var mInfo1 = componentType.GetField("BroadcastListen", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
                         if (mInfo1 != null)
                         {
                             var oldValue1 = mInfo1?.GetValue(components[i]);
@@ -161,12 +171,21 @@ public class SelectionHandler : View
                         }
 
                     }
-                }
 
+                }
+                runtimeHierarchy.Refresh();
+                _selectedObjects.Clear();
+                foreach (var d in duplicatedGms)
+                {
+                    OnSelectionChanged();
+                }
+                SelectObjectsInHierarchy(duplicatedGms);
             }
         }
     }
-    
+
+
+
     bool CheckIfThereIsAnyPopups()
     {
         if (GameObject.FindObjectOfType<ObjectReferencePicker>() != null)
@@ -257,8 +276,17 @@ public class SelectionHandler : View
     {
         runtimeHierarchy.Select(_obj.transform, RuntimeHierarchy.SelectOptions.FocusOnSelection);
     }
-    
-    private void SetWorkGizmoId(GizmoId gizmoId)
+    public void SelectObjectsInHierarchy(List<Transform> _obj)
+    {
+        runtimeHierarchy.Select(_obj, RuntimeHierarchy.SelectOptions.FocusOnSelection);
+    }
+
+    public void RefreshHierarchy()
+    {
+        runtimeHierarchy.Refresh();
+    }
+
+    public void SetWorkGizmoId(GizmoId gizmoId)
     {
         // If the specified gizmo id is the same as the current id, there is nothing left to do
         if (gizmoId == _workGizmoId) return;
@@ -281,8 +309,28 @@ public class SelectionHandler : View
 
     public void OnSelectionChanged(GameObject sObject = null)
     {
-        if(_selectedObjects.Count > 0)
+        for (int i = 0; i < prevSelectedObjects.Count; i++)
+        {
+            if (prevSelectedObjects[i]!=null && prevSelectedObjects[i].GetComponent<Outline>())
+                prevSelectedObjects[i].GetComponent<Outline>().enabled = false;
+        }
+            if (_selectedObjects.Count > 0)
             prevSelectedObjects = _selectedObjects.ToList();
+
+        for (int i = 0; i < _selectedObjects.Count; i++)
+        {
+            if (_selectedObjects[i] != null && _selectedObjects[i]?.GetComponent<Outline>() != null)
+            {
+                _selectedObjects[i].GetComponent<Outline>().enabled = true;
+            }
+            else
+            {
+                var comp = _selectedObjects[i]?.AddComponent<Outline>();
+                comp.OutlineWidth = 5f;
+                comp.OutlineColor = Color.yellow;
+                comp.enabled = true;
+            }
+        }
         
         if (sObject != null)
         {
@@ -304,6 +352,7 @@ public class SelectionHandler : View
             objectScaleGizmo.Gizmo.SetEnabled(false);
             objectUniversalGizmo.Gizmo.SetEnabled(false);
         }
+        SelectionChanged?.Invoke(_selectedObjects);
     }
 
     public List<GameObject> GetPrevSelectedObjects()

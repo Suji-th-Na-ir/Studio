@@ -3,6 +3,10 @@
     "Terra.Studio.TriggerAction",
     "Player"
   ],
+  "RuntimeInspectorNamespace.DestroyOnEnum.OnObjectCollide": [
+    "Terra.Studio.TriggerAction",
+    "Other"
+  ],
   "RuntimeInspectorNamespace.DestroyOnEnum.OnClick": [
     "Terra.Studio.MouseAction",
     "OnClick"
@@ -18,6 +22,10 @@
   "Terra.Studio.StartOn.OnPlayerCollide": [
     "Terra.Studio.TriggerAction",
     "Player"
+  ],
+  "Terra.Studio.StartOn.OnObjectCollide": [
+    "Terra.Studio.TriggerAction",
+    "Other"
   ],
   "Terra.Studio.StartOn.OnClick": [
     "Terra.Studio.MouseAction",
@@ -35,6 +43,30 @@
     "Terra.Studio.MouseAction",
     "OnClick"
   ],
+  "Terra.Studio.Collide+DestroyOnEnum.OnPlayerCollide": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "Terra.Studio.Collide+DestroyOnEnum.OnObjectCollide": [
+    "Terra.Studio.TriggerAction",
+    "Other"
+  ],
+  "Terra.Studio.SetObjectPosition+StartOptions.OnClick": [
+    "Terra.Studio.MouseAction",
+    "OnClick"
+  ],
+  "Terra.Studio.SetObjectPosition+StartOptions.OnPlayerCollide": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "Terra.Studio.SetObjectPosition+StartOptions.OnObjectCollide": [
+    "Terra.Studio.TriggerAction",
+    "Other"
+  ],
+  "Terra.Studio.SetObjectPosition+StartOptions.BroadcastListen": [
+    "Terra.Studio.Listener",
+    null
+  ],
   "Terra.Studio.StopRotate+StartOn.OnClick": [
     "Terra.Studio.MouseAction",
     "OnClick"
@@ -43,6 +75,10 @@
     "Terra.Studio.Listener",
     null
   ],
+  "Terra.Studio.StopRotate+StartOn.OnObjectCollide": [
+    "Terra.Studio.TriggerAction",
+    "Other"
+  ],
   "Terra.Studio.StopTranslate+StartOn.OnClick": [
     "Terra.Studio.MouseAction",
     "OnClick"
@@ -50,6 +86,10 @@
   "Terra.Studio.StopTranslate+StartOn.BroadcastListen": [
     "Terra.Studio.Listener",
     null
+  ],
+  "Terra.Studio.StopTranslate+StartOn.OnObjectCollide": [
+    "Terra.Studio.TriggerAction",
+    "Other"
   ],
   "Terra.Studio.Switch+StartOn.OnClick": [
     "Terra.Studio.MouseAction",
@@ -61,6 +101,6 @@
   ],
   "Terra.Studio.Switch+StartOn.OnObjectCollide": [
     "Terra.Studio.TriggerAction",
-    "Any"
+    "Other"
   ]
 }

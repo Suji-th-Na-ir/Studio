@@ -16,7 +16,7 @@ namespace RuntimeInspectorNamespace
         public RotateTypes[] allRotateTypes;
 #pragma warning restore 0649
         private RotateTypes selectedRotateType;
-
+        RotateComponentData lastComponentData;
         public override void Initialize()
         {
             base.Initialize();
@@ -31,7 +31,7 @@ namespace RuntimeInspectorNamespace
                 type.Setup();
             }
 
-            List<string> data = Enum.GetNames(typeof(RotationType)).ToList();
+            List<string> data = Helper.GetEnumWithAliasNames<RotationType>();
             rotateTypesDD.AddOptions(data);
             rotateTypesDD.onValueChanged.AddListener(OnRotateTypesValueChanged);
         }
@@ -57,28 +57,102 @@ namespace RuntimeInspectorNamespace
         private void ShowRotateOptionsMenu(int _index, bool reset = false)
         {
             HideAllRotateOptionsMenus();
+            bool lastData = false;
+            lastComponentData = new();
+            if (selectedRotateType)
+            {
+
+                lastComponentData.Xaxis = selectedRotateType.xAxis.isOn;
+                lastComponentData.Yaxis = selectedRotateType.yAxis.isOn;
+                lastComponentData.Zaxis = selectedRotateType.zAxis.isOn;
+                if (selectedRotateType.dirDropDown)
+                    lastComponentData.direction = (Direction)selectedRotateType.dirDropDown.value;
+
+                if (selectedRotateType.degreesInput)
+                    lastComponentData.degrees = float.Parse(selectedRotateType.degreesInput.text);
+                else
+                    lastComponentData.degrees = -1;
+
+                if (selectedRotateType.speedInput)
+                    lastComponentData.speed = float.Parse(selectedRotateType.speedInput.text);
+                else
+                    lastComponentData.speed= -1;
+
+                if (selectedRotateType.repeatInput)
+                    lastComponentData.repeat = int.Parse(selectedRotateType.repeatInput.text);
+                else
+                    lastComponentData.repeat = -1;
+
+                if (selectedRotateType.pauseInput)
+                    lastComponentData.pauseBetween = float.Parse(selectedRotateType.pauseInput.text);
+                else
+                    lastComponentData.pauseBetween = -1;
+
+                if (selectedRotateType.customString)
+                    lastComponentData.broadcast = selectedRotateType.customString.text;
+                else
+                    lastComponentData.broadcast = "";
+
+                if (selectedRotateType.canListenMultipleTimesToggle)
+                    lastComponentData.listen = selectedRotateType.canListenMultipleTimesToggle ? Listen.Always : Listen.Once;
+
+                if (selectedRotateType.broadcastAt)
+                    lastComponentData.broadcastAt = (BroadcastAt)selectedRotateType.broadcastAt.value;
+                lastData = true;
+
+            }
             Atom.Rotate rt = (Atom.Rotate)Value;
             rt.data.rotateType = _index;
             allRotateTypes[_index].gameObject.SetActive(true);
+           
+           
             selectedRotateType = allRotateTypes[_index];
             reset = reset || IsDataDefault();
             if (reset)
             {
-                ResetValues();
+                ResetValues(lastData);
             }
         }
 
-        private void ResetValues()
+        private void ResetValues(bool lastDataPresent)
         {
             var value = (Atom.Rotate)Value;
             var rotationType = (RotationType)value.data.rotateType;
             var finalPath = rotationType.GetPresetName("Rotate");
             var preset = ((RotatePreset)EditorOp.Load(ResourceTag.ComponentPresets, finalPath)).Value;
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(
-                string.Empty,
-                value.data.broadcast,
-                new ComponentDisplayDock() { componentGameObject = value.target, componentType = typeof(Atom.Rotate).Name });
+            if (lastDataPresent)
+            {
+                lastComponentData.rotateType = (int)rotationType;
+                var tempValue = lastComponentData;
+
+                if (!selectedRotateType.speedInput|| lastComponentData.speed == -1)
+                    tempValue.speed = preset.speed;
+                if (!selectedRotateType.degreesInput || lastComponentData.degrees == -1)
+                    tempValue.degrees = preset.degrees;
+                if (!selectedRotateType.repeatInput || lastComponentData.repeat == -1)
+                    tempValue.repeat = preset.repeat;
+                if (!selectedRotateType.pauseInput || lastComponentData.pauseBetween == -1)
+                    tempValue.pauseBetween = preset.pauseBetween;
+
+                if (!selectedRotateType.customString)
+                    tempValue.broadcast = "";
+                preset = tempValue;
+
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(
+                    preset.broadcast,
+                   value.data.broadcast,
+                    new ComponentDisplayDock() { componentGameObject = value.target, componentType = typeof(Atom.Rotate).Name });
+            }
+            else
+            {
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(
+                    string.Empty,
+                    value.data.broadcast,
+                    new ComponentDisplayDock() { componentGameObject = value.target, componentType = typeof(Atom.Rotate).Name });
+            }
+            
             LoadData(preset);
+            UpdateDataInUI(preset);
             UpdateTypeForMultiselect(rotationType, preset);
         }
 
@@ -155,8 +229,23 @@ namespace RuntimeInspectorNamespace
             rotateTypesDD.SetValueWithoutNotify(rt.data.rotateType);
             if (compData != null && compData.HasValue)
             {
-                selectedRotateType.SetData(compData.Value);
+               // selectedRotateType.SetData(compData.Value);
                 rt.data = compData.Value;
+            }
+            else
+            {
+               // selectedRotateType.SetData(rt.data);
+            }
+        }
+
+        private void UpdateDataInUI(RotateComponentData? compData = null)
+        {
+            Atom.Rotate rt = (Atom.Rotate)Value;
+           
+            if (compData != null && compData.HasValue)
+            {
+                selectedRotateType.SetData(compData.Value);
+               // rt.data = compData.Value;
             }
             else
             {

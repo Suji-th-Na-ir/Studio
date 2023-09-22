@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using PlayShifu.Terra;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
@@ -12,12 +13,9 @@ namespace Terra.Studio
         public override void Init<T>(int entity)
         {
             base.Init<T>(entity);
-            ref var entityRef = ref EntityAuthorOp.GetComponent<PushComponent>(entity);
-            if (!entityRef.RefObj.TryGetComponent(out Rigidbody rb))
-            {
-                rb = entityRef.RefObj.AddComponent<Rigidbody>();
-            }
-            rb.drag = entityRef.drag;
+            ref var entityRef = ref entity.GetComponent<PushComponent>();
+            var rb = entityRef.RefObj.AddRigidbody();
+            rb.mass = entityRef.mass;
             rb.freezeRotation = true;
             entityRef.initialPosition = entityRef.RefObj.transform.position;
             InitializeUI();
@@ -36,7 +34,7 @@ namespace Terra.Studio
 
         public override void OnConditionalCheck(int entity, object data)
         {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<PushComponent>(entity);
+            ref var entityRef = ref entity.GetComponent<PushComponent>();
             if (data == null)
             {
                 return;

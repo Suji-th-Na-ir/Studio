@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
-
+using PlayShifu.Terra;
 namespace RuntimeInspectorNamespace
 {
 	public class EnumField : InspectorField
@@ -69,7 +69,7 @@ namespace RuntimeInspectorNamespace
 
 			if( !enumNames.TryGetValue( BoundVariableType, out currEnumNames ) || !enumValues.TryGetValue( BoundVariableType, out currEnumValues ) )
 			{
-				string[] names = Enum.GetNames( BoundVariableType );
+				string[] names = Helper.GetEnumWithAliasNames(BoundVariableType).ToArray();
 				Array values = Enum.GetValues( BoundVariableType );
 
 				currEnumNames = new List<string>( names.Length );

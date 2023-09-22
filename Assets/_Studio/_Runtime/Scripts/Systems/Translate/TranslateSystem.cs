@@ -1,29 +1,27 @@
 using UnityEngine;
+using PlayShifu.Terra;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
     public class TranslateSystem : BaseSystem, IEcsRunSystem
     {
+        public override void Init<T>(int entity)
+        {
+            base.Init<T>(entity);
+            ref var entityRef = ref entity.GetComponent<TranslateComponent>();
+            var rb = entityRef.RefObj.AddRigidbody();
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
+
         public override void OnConditionalCheck(int entity, object data)
         {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<TranslateComponent>(entity);
-            if (entityRef.ConditionType.Equals("Terra.Studio.MouseAction"))
-            {
-                if (data == null)
-                {
-                    return;
-                }
-                var selection = (GameObject)data;
-                if (selection != entityRef.RefObj)
-                {
-                    return;
-                }
-            }
+            ref var entityRef = ref entity.GetComponent<TranslateComponent>();
             Init(ref entityRef);
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(false, entityRef.EventContext);
-            OnDemandRun(ref entityRef, entity);
+            OnDemandRun(ref entityRef);
         }
 
         private void Init(ref TranslateComponent entityRef)
@@ -35,7 +33,13 @@ namespace Terra.Studio
                 return;
             }
             var tr = entityRef.RefObj.transform;
-            var targetPos = tr.parent == null ? entityRef.targetPosition : tr.TransformPoint(entityRef.targetPosition);
+            if (!entityRef.isInitialProcessDone)
+            {
+                var scaleDelta = new Vector3(tr.lossyScale.x / tr.localScale.x, tr.lossyScale.y / tr.localScale.y, tr.lossyScale.z / tr.localScale.z);
+                entityRef.targetPosition = new Vector3(scaleDelta.x * entityRef.targetPosition.x, scaleDelta.y * entityRef.targetPosition.y, scaleDelta.z * entityRef.targetPosition.z);
+                entityRef.isInitialProcessDone = true;
+            }
+            var targetPos = tr.parent == null ? entityRef.targetPosition + entityRef.startPosition : entityRef.startPosition + tr.TransformDirection(entityRef.targetPosition);
             var pauseDistance = Vector3.Distance(entityRef.startPosition, targetPos);
             var direction = targetPos - entityRef.startPosition;
             entityRef.pauseDistance = pauseDistance;
@@ -54,7 +58,7 @@ namespace Terra.Studio
             entityRef.repeatForever = entityRef.repeatFor == int.MaxValue;
         }
 
-        public void OnDemandRun(ref TranslateComponent translatable, int _)
+        public void OnDemandRun(ref TranslateComponent translatable)
         {
             if (translatable.canPlaySFX)
             {
@@ -161,39 +165,48 @@ namespace Terra.Studio
         private void PerformTranslation(ref TranslateComponent component, int entity)
         {
             var step = component.speed * Time.deltaTime;
+            if (component.remainingDistance > 0)
+            {
+                step = Mathf.Clamp(step, 0.0f, component.remainingDistance);
+            }
             var movement = component.direction.normalized * step;
             component.RefObj.transform.position += movement;
             component.remainingDistance -= step;
             component.coveredDistance += step;
+            if (component.remainingDistance <= 0f)
+            {
+                component.loopsFinished++;
+                component.remainingDistance = component.pauseDistance;
+            }
             if (component.shouldPause && component.coveredDistance >= component.pauseDistance)
             {
                 component.isPaused = true;
                 component.pauseStartTime = Time.time;
                 component.coveredDistance = 0f;
                 OnTranslateDone(false, entity);
-                return;
-            }
-            if (component.remainingDistance <= 0.01f)
-            {
-                component.loopsFinished++;
-                component.remainingDistance = component.pauseDistance;
             }
         }
 
         private void PerformOscillation(ref TranslateComponent component, int entity)
         {
             var step = component.speed * Time.deltaTime;
+            if (component.remainingDistance > 0)
+            {
+                step = Mathf.Clamp(step, 0.0f, component.remainingDistance);
+            }
             var movement = component.direction.normalized * step;
             component.RefObj.transform.position += movement;
             component.remainingDistance -= step;
+            var targetPosition = component.RefObj.transform.parent == null ? component.targetPosition + component.startPosition :
+                component.startPosition + component.RefObj.transform.TransformDirection(component.targetPosition);
             if (component.remainingDistance <= 0.01f)
             {
                 component.loopsFinished++;
                 component.direction = component.loopsFinished % 2 == 0 ?
-                    (component.targetPosition - component.startPosition).normalized :
-                    (component.startPosition - component.targetPosition).normalized;
+                    (targetPosition - component.startPosition).normalized :
+                    (component.startPosition - targetPosition).normalized;
                 component.remainingDistance = component.pauseDistance;
-                if (component.shouldPause && !component.repeatForever)
+                if (component.shouldPause)
                 {
                     component.isPaused = true;
                     component.pauseStartTime = Time.time;

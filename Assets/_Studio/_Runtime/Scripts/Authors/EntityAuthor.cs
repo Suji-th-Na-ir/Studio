@@ -1,5 +1,6 @@
 using System.Linq;
 using UnityEngine;
+using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
@@ -83,19 +84,39 @@ namespace Terra.Studio
 
             public override void Degenerate(int entityID)
             {
-                CoroutineService.RunCoroutine(() =>
+                var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
+                var entities = new int[0];
+                ecsWorld.GetAllEntities(ref entities);
+                if (entities.Length == 0 || entities.Any(x => x == entityID) == false)
                 {
-                    var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
-                    var entities = new int[0];
-                    ecsWorld.GetAllEntities(ref entities);
-                    if (entities.Length == 0 || entities.Any(x => x == entityID) == false)
+                    Debug.Log($"Entity {entityID} not found!");
+                    return;
+                }
+                CheckAndHandleDestroyTypes(ecsWorld, entityID);
+                ecsWorld.DelEntity(entityID);
+            }
+
+            private void CheckAndHandleDestroyTypes(EcsWorld world, int toCheckEntity)
+            {
+                CheckAndHandleDestroyType<DestroyOnComponent>(world, toCheckEntity);
+                CheckAndHandleDestroyType<CollectableComponent>(world, toCheckEntity);
+            }
+
+            private void CheckAndHandleDestroyType<T>(EcsWorld world, int toCheckEntity) where T : struct, IBaseComponent
+            {
+                var filter = world.Filter<T>().End();
+                foreach (var entity in filter)
+                {
+                    if (entity == toCheckEntity)
                     {
-                        Debug.Log($"Entity {entityID} not found!");
+                        var component = entity.GetComponent<T>();
+                        if (component.RefObj)
+                        {
+                            Object.Destroy(component.RefObj);
+                        }
                         return;
                     }
-                    ecsWorld.DelEntity(entityID);
-                },
-                CoroutineService.DelayType.WaitForFrame);
+                }
             }
         }
     }

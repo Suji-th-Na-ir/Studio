@@ -8,9 +8,11 @@ namespace Terra.Studio
     public class Push : MonoBehaviour, IComponent
     {
         public float resistance = 0;
+        [AliasDrawer("Reset\nButton")]
         public bool showResetButton = true;
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
+        [AliasDrawer("Broadcast")]
         public string Broadcast = null;
 
         public void Awake()
@@ -32,7 +34,7 @@ namespace Terra.Studio
                 canPlayVFX = PlayVFX.data.canPlay,
                 vfxName = PlayVFX.data.clipName,
                 vfxIndex = PlayVFX.data.clipIndex,
-                drag = resistance,
+                mass = resistance,
                 showResetButton = showResetButton,
                 listen = Listen.Always,
                 Broadcast = Broadcast,
@@ -46,7 +48,7 @@ namespace Terra.Studio
         public void Import(EntityBasedComponent data)
         {
             var comp = JsonConvert.DeserializeObject<PushComponent>(data.data);
-            resistance = comp.drag;
+            resistance = comp.mass;
             showResetButton = comp.showResetButton;
             PlaySFX.data.canPlay = comp.canPlaySFX;
             PlaySFX.data.clipIndex = comp.sfxIndex;

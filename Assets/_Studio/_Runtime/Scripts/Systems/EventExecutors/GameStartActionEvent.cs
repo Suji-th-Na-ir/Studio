@@ -1,4 +1,3 @@
-using System;
 using UnityEngine.Scripting;
 
 namespace Terra.Studio
@@ -7,9 +6,9 @@ namespace Terra.Studio
     [EventExecutor("Terra.Studio.GameStart")]
     public struct GameStartActionEvent : IEventExecutor
     {
-        public readonly void Execute(Action<object> onConditionalCheck, bool subscribe, EventConditionalCheckData _)
+        public readonly void Execute(bool subscribe, EventContext context)
         {
-            RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameStart(subscribe, onConditionalCheck);
+            RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameStart(subscribe, context.onConditionMet);
         }
     }
 }

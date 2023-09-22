@@ -77,6 +77,10 @@ MonoBehaviour:
     ComponentName: Terra.Studio.StopTranslateComponent
     SystemName: Terra.Studio.StopTranslateSystem
     DrawerName: Terra.Studio.StopTranslate
+  - Key: Terra.Studio.SetObjectPosition
+    ComponentName: Terra.Studio.SetObjectPositionComponent
+    SystemName: Terra.Studio.SetObjectPositionSystem
+    DrawerName: Terra.Studio.SetObjectPosition
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent

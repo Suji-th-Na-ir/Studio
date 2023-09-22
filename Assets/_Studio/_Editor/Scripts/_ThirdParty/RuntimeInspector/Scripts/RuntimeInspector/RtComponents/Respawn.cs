@@ -6,11 +6,13 @@ using UnityEngine;
 
 namespace RuntimeInspectorNamespace
 {
-    [EditorDrawComponent("Terra.Studio.Respawn")]
+    [EditorDrawComponent("Terra.Studio.Respawn"), AliasDrawer("Kill Player")]
+
     public class Respawn : MonoBehaviour, IComponent
     {
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
+        [AliasDrawer("Broadcast")]
         public string Broadcast = null;
 
         private void Awake()

@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using PlayShifu.Terra;
 using UnityEngine.SceneManagement;
+using mixpanel;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -16,10 +18,16 @@ namespace Terra.Studio
         public SystemConfigurationSO ConfigSO { get { return configData; } }
         public StudioState PreviousStudioState { get { return previousStudioState; } }
         public StudioState CurrentStudioState { get { return currentStudioState; } }
-
+        [SerializeField] private PasswordManager m_refPasswordManager;
         private void Awake()
         {
             SystemOp.Register(this);
+            if (!PlayerPrefs.HasKey ("ALFT")) {
+                Mixpanel.Track ("AppLaunchFirstTime");
+                PlayerPrefs.SetInt ("ALFT", 1);
+            }
+            Mixpanel.Track ("AppLaunch");
+            Mixpanel.Flush ();
         }
 
         private void Start()
@@ -38,7 +46,8 @@ namespace Terra.Studio
                 loadSceneMode = LoadSceneMode.Additive
             };
             LoadSilentServices();
-            LoadSubsystemScene();
+            m_refPasswordManager.OnCorrectPasswordEntered += LoadSubsystemScene;
+            //LoadSubsystemScene ();
         }
 
         private void LoadSilentServices()
@@ -47,12 +56,7 @@ namespace Terra.Studio
             SystemOp.Register(new FileService());
             if (configData.PickupSavedData)
             {
-                var shouldIgnore =
-#if UNITY_EDITOR
-                false;
-#else
-                true;
-#endif
+                var shouldIgnore = !Helper.IsInUnityEditor();
                 SystemOp.Resolve<FileService>().WriteFile(
                     configData.SceneDataToLoad.text,
                     FileService.GetSavedFilePath(ConfigSO.SceneDataToLoad.name),
@@ -73,6 +77,7 @@ namespace Terra.Studio
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
             SystemOp.Resolve<ISubsystem>().Initialize();
+            m_refPasswordManager.FuckOff ();
         }
 
         public void SwitchState()

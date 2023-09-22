@@ -239,8 +239,9 @@ namespace RuntimeInspectorNamespace
 
         public InspectedObjectChangingDelegate OnInspectedObjectChanging;
 
-        public int currentPageIndex = 0;
-
+        public int currentPageIndex = 1;
+        public delegate void PageIndexChangeDelegate(int index);
+        public PageIndexChangeDelegate OnPageIndexChanged;
         private ComponentFilterDelegate m_componentFilter;
         public ComponentFilterDelegate ComponentFilter
         {
@@ -271,8 +272,7 @@ namespace RuntimeInspectorNamespace
         {
             if (initialized)
                 return;
-
-            initialized = true;
+           
 
             drawArea = scrollView.content;
             m_canvas = GetComponentInParent<Canvas>();
@@ -334,6 +334,12 @@ namespace RuntimeInspectorNamespace
             RuntimeInspectorUtils.IgnoredTransformsInHierarchy.Add(drawArea);
             RuntimeInspectorUtils.IgnoredTransformsInHierarchy.Add(poolParent);
 
+            currentPageIndex = 1;
+            behaviourButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
+            designButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
+            OnPageIndexChanged?.Invoke(1);
+            initialized = true;
+
 #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
 			// On new Input System, scroll sensitivity is much higher than legacy Input system
 			scrollView.scrollSensitivity *= 0.25f;
@@ -356,7 +362,7 @@ namespace RuntimeInspectorNamespace
         {
             selected?.Clear();
             selected = new List<Transform>();
-            Helper.DeepCopy<Transform>(EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Where(obj => obj != null).Select(obj => obj.transform).ToList(), selected);
+            Helper.DeepCopy(EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Where(obj => obj != null).Select(obj => obj.transform).ToList(), selected);
             currentPageIndex = 1;
             SystemOp.Resolve<CrossSceneDataHolder>().Set("CurrentPageIndex", 1);
             isDirty = true;
@@ -364,19 +370,21 @@ namespace RuntimeInspectorNamespace
 
             behaviourButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
             designButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
+            OnPageIndexChanged?.Invoke(1);
         }
 
         private void ShowDesignPage()
         {
             selected?.Clear();
             selected = new List<Transform>();
-            Helper.DeepCopy<Transform>(EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Where(obj => obj != null).Select(obj => obj.transform).ToList(), selected);
+            Helper.DeepCopy(EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Where(obj => obj != null).Select(obj => obj.transform).ToList(), selected);
             currentPageIndex = 0;
             SystemOp.Resolve<CrossSceneDataHolder>().Set("CurrentPageIndex", 0);
             isDirty = true;
             StartCoroutine(WaitForRefreshAndSelectAgain());
             designButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
             behaviourButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
+            OnPageIndexChanged?.Invoke(0);
         }
 
         IEnumerator WaitForRefreshAndSelectAgain()
@@ -551,7 +559,7 @@ namespace RuntimeInspectorNamespace
                 InspectorField inspectedObjectDrawer = CreateDrawerForType(obj.GetType(), drawArea, 0, false);
                 if (inspectedObjectDrawer != null)
                 {
-                    inspectedObjectDrawer.BindTo(obj.GetType(), string.Empty, () => m_inspectedObject, (value) => m_inspectedObject = value);
+                    inspectedObjectDrawer.BindTo(obj.GetType(), string.Empty, string.Empty, () => m_inspectedObject, (value) => m_inspectedObject = value);
                     inspectedObjectDrawer.NameRaw = obj.GetNameWithType().Replace("(GameObject)", "");
                     inspectedObjectDrawer.Refresh();
 

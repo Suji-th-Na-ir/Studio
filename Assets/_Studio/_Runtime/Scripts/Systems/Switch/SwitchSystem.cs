@@ -1,4 +1,3 @@
-using UnityEngine;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
@@ -8,18 +7,6 @@ namespace Terra.Studio
         public override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref entity.GetComponent<SwitchComponent>();
-            if (entityRef.ConditionData.Equals("Terra.Studio.MouseAction"))
-            {
-                if (data == null)
-                {
-                    return;
-                }
-                var go = (GameObject)data;
-                if (go != entityRef.RefObj)
-                {
-                    return;
-                }
-            }
             entityRef.UpdateState();
             if (entityRef.listen != Listen.Always)
             {
@@ -27,10 +14,10 @@ namespace Terra.Studio
                 compsData.ProvideEventContext(false, entityRef.EventContext);
                 entityRef.IsExecuted = true;
             }
-            OnDemandRun(in entityRef, entity);
+            OnDemandRun(in entityRef);
         }
 
-        public void OnDemandRun(in SwitchComponent component, int _)
+        public void OnDemandRun(in SwitchComponent component)
         {
             var data = component.GetData();
             if (data.canPlaySFX)

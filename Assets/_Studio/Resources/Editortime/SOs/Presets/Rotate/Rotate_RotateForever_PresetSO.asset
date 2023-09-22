@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   value:
     rotateType: 1
-    axis: 0
+    Xaxis: 0
+    Yaxis: 1
+    Zaxis: 0
     direction: 0
     degrees: 15
     speed: 20
     repeat: 2147483647
     pauseBetween: 0
     broadcast: 
-    listenTo: 
+    listen: 0
     broadcastAt: 0

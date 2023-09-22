@@ -1,4 +1,3 @@
-using UnityEngine;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
@@ -7,26 +6,17 @@ namespace Terra.Studio
     {
         public override void OnConditionalCheck(int entity, object data)
         {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<ClickComponent>(entity);
-            if (data == null)
-            {
-                return;
-            }
-            var selection = (GameObject)data;
-            if (selection != entityRef.RefObj)
-            {
-                return;
-            }
+            ref var entityRef = ref entity.GetComponent<ClickComponent>();
             if (entityRef.listen != Listen.Always)
             {
                 var compsData = RuntimeOp.Resolve<ComponentsData>();
                 compsData.ProvideEventContext(false, entityRef.EventContext);
                 entityRef.IsExecuted = true;
             }
-            OnDemandRun(in entityRef, entity);
+            OnDemandRun(in entityRef);
         }
 
-        public void OnDemandRun(in ClickComponent component, int entity)
+        public void OnDemandRun(in ClickComponent component)
         {
             if (component.canPlaySFX)
             {

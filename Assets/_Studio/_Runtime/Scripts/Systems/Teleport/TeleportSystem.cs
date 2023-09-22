@@ -6,22 +6,19 @@ namespace Terra.Studio
     {
         public override void OnConditionalCheck(int entity, object data)
         {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<TeleportComponent>(entity);
+            ref var entityRef = ref entity.GetComponent<TeleportComponent>();
             if (entityRef.listen != Listen.Always)
             {
                 var compsData = RuntimeOp.Resolve<ComponentsData>();
                 compsData.ProvideEventContext(false, entityRef.EventContext);
                 entityRef.IsExecuted = true;
             }
-            OnDemandRun(in entityRef, entity);
+            OnDemandRun(in entityRef);
         }
 
-        public void OnDemandRun(in TeleportComponent component, int _)
+        public void OnDemandRun(in TeleportComponent component)
         {
-            var refTr = component.RefObj.transform;
-            var oldPosition = component.teleportTo;
-            var newPosition = refTr.parent != null ? refTr.TransformPoint(oldPosition) : oldPosition;
-            RuntimeOp.Resolve<GameData>().PlayerRef.position = newPosition;
+            RuntimeOp.Resolve<GameData>().PlayerRef.position = component.teleportTo;
             if (component.canPlaySFX)
             {
                 RuntimeWrappers.PlaySFX(component.sfxName);

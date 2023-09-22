@@ -19,7 +19,7 @@ namespace RuntimeInspectorNamespace
 #pragma warning restore 0649
 
         private TranslateTypes selectedTranslateType;
-
+        TranslateComponentData lastComponentData;
         public override void Initialize()
         {
             base.Initialize();
@@ -33,7 +33,7 @@ namespace RuntimeInspectorNamespace
                 type.field = this;
                 type.Setup();
             }
-            List<string> data = Enum.GetNames(typeof(TranslateType)).ToList();
+            List<string> data = Helper.GetEnumWithAliasNames<TranslateType>();
             translateTypesDD.AddOptions(data);
             translateTypesDD.onValueChanged.AddListener(OnTranslateTypesValueChanged);
         }
@@ -59,6 +59,43 @@ namespace RuntimeInspectorNamespace
         private void ShowTranslateOptionsMenu(int _index, bool reset = false)
         {
             HideAllTranslateOptionsMenus();
+            bool lastData = false;
+            lastComponentData = new();
+            if (selectedTranslateType)
+            {
+                if (selectedTranslateType.movebyInput != null)
+                {
+                    lastComponentData.moveBy = new Vector3(float.Parse(selectedTranslateType.movebyInput[0].text),
+                        float.Parse(selectedTranslateType.movebyInput[1].text), (float.Parse(selectedTranslateType.movebyInput[2].text)));;
+                }
+                if (selectedTranslateType.speedInput)
+                    lastComponentData.speed = float.Parse(selectedTranslateType.speedInput.text);
+                else
+                    lastComponentData.speed = -1;
+
+                if (selectedTranslateType.repeatInput)
+                    lastComponentData.repeat = int.Parse(selectedTranslateType.repeatInput.text);
+                else
+                    lastComponentData.repeat = -1;
+
+                if (selectedTranslateType.pauseForInput)
+                    lastComponentData.pauseFor = float.Parse(selectedTranslateType.pauseForInput.text);
+                else
+                    lastComponentData.pauseFor = -1;
+
+                if (selectedTranslateType.customString)
+                    lastComponentData.broadcast = selectedTranslateType.customString.text;
+                else
+                    lastComponentData.broadcast = "";
+
+                if (selectedTranslateType.canListenMultipleTimesToggle)
+                    lastComponentData.listen = selectedTranslateType.canListenMultipleTimesToggle ? Listen.Always : Listen.Once;
+
+                if (selectedTranslateType.broadcastAt)
+                    lastComponentData.broadcastAt = (BroadcastAt)selectedTranslateType.broadcastAt.value;
+                lastData = true;
+
+            }
             Atom.Translate rt = (Atom.Translate)Value;
             rt.data.translateType = _index;
             allTranslateTypes[_index].gameObject.SetActive(true);
@@ -66,26 +103,47 @@ namespace RuntimeInspectorNamespace
             reset = reset || IsDataDefault();
             if (reset)
             {
-                ResetValues();
+                ResetValues(lastData);
             }
         }
 
-        private void ResetValues()
+        private void ResetValues(bool lastDataValue)
         {
             var translateType = (TranslateType)((Atom.Translate)Value).data.translateType;
             var finalPath = translateType.GetPresetName("Translate");
             var preset = ((TranslatePreset)EditorOp.Load(ResourceTag.ComponentPresets, finalPath)).Value;
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(
-                string.Empty,
-           ((Atom.Translate)Value).data.broadcast,
-                new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)Value).target, componentType = typeof(Atom.Translate).Name });
-
-            LoadData(preset);
-            Atom.Translate rt = (Atom.Translate)Value;
-            if (rt.data.moveTo == default)
+            if (lastDataValue)
             {
-                rt.data.moveTo = rt.target.transform.localPosition;
+                lastComponentData.translateType = (int)translateType;
+                var tempValue = lastComponentData;
+
+                if (!selectedTranslateType.speedInput|| lastComponentData.speed == -1)
+                    tempValue.speed = preset.speed;
+
+                if (!selectedTranslateType.repeatInput || lastComponentData.repeat == -1)
+                    tempValue.repeat = preset.repeat;
+                if (!selectedTranslateType.pauseForInput || lastComponentData.pauseFor == -1)
+                    tempValue.pauseFor = preset.pauseFor;
+
+                if (!selectedTranslateType.customString)
+                    tempValue.broadcast = "";
+                preset = tempValue;
+
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(
+                    preset.broadcast,
+                ((Atom.Translate)Value).data.broadcast,
+                    new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)Value).target, componentType = typeof(Atom.Translate).Name });
             }
+            else
+            {
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(
+                string.Empty,
+                ((Atom.Translate)Value).data.broadcast,
+                new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)Value).target, componentType = typeof(Atom.Translate).Name });
+            }
+            LoadData(preset);
+            UpdateDataInUI(preset);
+            Atom.Translate rt = (Atom.Translate)Value;
             UpdateTypeForMultiselect(translateType, preset);
         }
 
@@ -102,7 +160,6 @@ namespace RuntimeInspectorNamespace
                         Translate translate = obj.GetComponent<Translate>();
                         translate.Type.data.translateType = (int)_data;
                         translate.Type.data = componentData.Value;
-                        translate.Type.data.moveTo = translate.Type.target.transform.localPosition;
                     }
                 }
             }
@@ -165,8 +222,24 @@ namespace RuntimeInspectorNamespace
             translateTypesDD.SetValueWithoutNotify(rt.data.translateType);
             if (componentData != null && componentData.HasValue)
             {
-                selectedTranslateType.SetData(componentData.Value);
+                //selectedTranslateType.SetData(componentData.Value);
                 rt.data = componentData.Value;
+            }
+            else
+            {
+               // selectedTranslateType.SetData(rt.data);
+            }
+        }
+
+        private void UpdateDataInUI(TranslateComponentData? componentData = null)
+        {
+
+            Atom.Translate rt = (Atom.Translate)Value;
+           // translateTypesDD.SetValueWithoutNotify(rt.data.translateType);
+            if (componentData != null && componentData.HasValue)
+            {
+                selectedTranslateType.SetData(componentData.Value);
+                //rt.data = componentData.Value;
             }
             else
             {

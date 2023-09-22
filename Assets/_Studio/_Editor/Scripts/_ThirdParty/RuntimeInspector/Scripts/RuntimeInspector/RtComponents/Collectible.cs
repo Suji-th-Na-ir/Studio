@@ -11,21 +11,23 @@ namespace RuntimeInspectorNamespace
     {
         public enum StartOnCollectible
         {
-            [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
+            [EditorEnumField("Terra.Studio.TriggerAction", "Player"), AliasDrawer("Player Touches")]
             OnPlayerCollide,
-            [EditorEnumField("Terra.Studio.MouseAction", "OnClick")]
+            [EditorEnumField("Terra.Studio.MouseAction", "OnClick"), AliasDrawer("Clicked")]
             OnClick
         }
-
+        [AliasDrawer("CollectWhen")]
         public Atom.StartOn startOn = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
         public Atom.ScoreData Score = new();
+        [AliasDrawer("Broadcast")]
         public string Broadcast = null;
 
         public void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>(), GetType().Name);
+            Score.instanceId = Guid.NewGuid().ToString("N");
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>(), Helper.GetEnumWithAliasNames<StartOnCollectible>(), GetType().Name,false);
             PlaySFX.Setup<Collectible>(gameObject);
             PlayVFX.Setup<Collectible>(gameObject);
         }
@@ -71,7 +73,7 @@ namespace RuntimeInspectorNamespace
 
         public void Import(EntityBasedComponent cdata)
         {
-            CollectableComponent comp = JsonConvert.DeserializeObject<CollectableComponent>($"{cdata.data}");
+            CollectableComponent comp = JsonConvert.DeserializeObject<CollectableComponent>(cdata.data);
             Score.score = comp.scoreValue;
             PlaySFX.data.canPlay = comp.canPlaySFX;
             PlaySFX.data.clipIndex = comp.sfxIndex;
@@ -86,7 +88,16 @@ namespace RuntimeInspectorNamespace
             Broadcast = comp.Broadcast;
             startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
+            if (Score.score != 0)
+            {
+                EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(true, Score.instanceId, false);
+            }
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, null);
+        }
+
+        private void OnDestroy()
+        {
+            EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(false, Score.instanceId);
         }
     }
 }

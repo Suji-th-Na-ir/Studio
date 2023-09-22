@@ -1,25 +1,23 @@
 using UnityEngine;
+using PlayShifu.Terra;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
     public class StopTranslateSystem : BaseSystem
     {
+        public override void Init<T>(int entity)
+        {
+            base.Init<T>(entity);
+            ref var entityRef = ref entity.GetComponent<StopTranslateComponent>();
+            var rb = entityRef.RefObj.AddRigidbody();
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
+
         public override void OnConditionalCheck(int entity, object data)
         {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<StopTranslateComponent>(entity);
-            if (entityRef.ConditionType.Equals("Terra.Studio.MouseAction"))
-            {
-                if (data == null)
-                {
-                    return;
-                }
-                var selection = (GameObject)data;
-                if (selection != entityRef.RefObj)
-                {
-                    return;
-                }
-            }
+            ref var entityRef = ref entity.GetComponent<StopTranslateComponent>();
             var isTranslateFound = CheckIfRotateComponentExistsOnEntity(entity);
             if (!isTranslateFound)
             {
@@ -32,16 +30,16 @@ namespace Terra.Studio
             {
                 translateRef.IsExecuted = true;
             }
-            else if (!translateRef.isHaltedByEvent)
+            else if (!translateRef.isHaltedByEvent && translateRef.CanExecute)
             {
                 translateRef.CanExecute = false;
                 compsData.ProvideEventContext(true, translateRef.EventContext);
             }
             translateRef.isHaltedByEvent = true;
-            OnDemandRun(in entityRef, entity);
+            OnDemandRun(in entityRef);
         }
 
-        public void OnDemandRun(in StopTranslateComponent component, int _)
+        public void OnDemandRun(in StopTranslateComponent component)
         {
             if (component.canPlaySFX)
             {

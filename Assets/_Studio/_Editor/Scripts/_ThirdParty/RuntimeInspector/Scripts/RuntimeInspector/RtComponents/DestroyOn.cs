@@ -7,25 +7,29 @@ namespace RuntimeInspectorNamespace
 {
     public enum DestroyOnEnum
     {
-        [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
+        [EditorEnumField("Terra.Studio.TriggerAction", "Player"), AliasDrawer("Player Touches")]
         OnPlayerCollide,
-        [EditorEnumField("Terra.Studio.MouseAction", "OnClick")]
+        [EditorEnumField("Terra.Studio.TriggerAction", "Other"), AliasDrawer("Other Object Touches")]
+        OnObjectCollide,
+        [EditorEnumField("Terra.Studio.MouseAction", "OnClick"), AliasDrawer("Clicked")]
         OnClick,
-        [EditorEnumField("Terra.Studio.Listener")]
+        [EditorEnumField("Terra.Studio.Listener"), AliasDrawer("Broadcast Listened")]
         BroadcastListen
     }
 
-    [EditorDrawComponent("Terra.Studio.DestroyOn")]
+    [EditorDrawComponent("Terra.Studio.DestroyOn"), AliasDrawer("Destroy Self")]
     public class DestroyOn : MonoBehaviour, IComponent
     {
+        [AliasDrawer("DestroyWhen")]
         public Atom.StartOn startOn = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
+        [AliasDrawer("Broadcast")]
         public string Broadcast = null;
 
         public void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), GetType().Name);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), Helper.GetEnumWithAliasNames<DestroyOnEnum>(), GetType().Name, startOn.data.startIndex == 3);
             PlaySFX.Setup<DestroyOn>(gameObject);
             PlayVFX.Setup<DestroyOn>(gameObject);
         }
@@ -79,9 +83,24 @@ namespace RuntimeInspectorNamespace
             DestroyOnComponent comp = JsonConvert.DeserializeObject<DestroyOnComponent>(cdata.data);
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(DestroyOnEnum), out object result))
             {
-                startOn.data.startIndex = (int)(DestroyOnEnum)result;
+                var res = (DestroyOnEnum)result;
+                if (res == DestroyOnEnum.OnPlayerCollide)
+                {
+                    if (comp.ConditionData.Equals("Player"))
+                    {
+                        startOn.data.startIndex = (int)res;
+                    }
+                    else
+                    {
+                        startOn.data.startIndex = (int)DestroyOnEnum.OnObjectCollide;
+                    }
+                }
+                else
+                {
+                    startOn.data.startIndex = (int)(DestroyOnEnum)result;
+                }
+                startOn.data.startName = res.ToString();
             }
-            startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
             Broadcast = comp.Broadcast;
             PlaySFX.data.canPlay = comp.canPlaySFX;
@@ -90,7 +109,10 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.canPlay = comp.canPlayVFX;
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, startOn.data.listenName);
+            string listenstring = "";
+            if (startOn.data.startIndex == 3)
+                listenstring = startOn.data.listenName;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, listenstring);
         }
     }
 }

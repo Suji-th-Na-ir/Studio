@@ -6,18 +6,21 @@ using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
-    [EditorDrawComponent("Terra.Studio.StopTranslate")]
+    [EditorDrawComponent("Terra.Studio.StopTranslate"), AliasDrawer("Stop Move")]
     public class StopTranslate : MonoBehaviour, IComponent
     {
         public enum StartOn
         {
-            [EditorEnumField("Terra.Studio.MouseAction", "OnClick")]
+            [EditorEnumField("Terra.Studio.MouseAction", "OnClick"), AliasDrawer("Clicked")]
             OnClick,
-            [EditorEnumField("Terra.Studio.Listener")]
-            BroadcastListen
+            [EditorEnumField("Terra.Studio.Listener"), AliasDrawer("Broadcast Listened")]
+            BroadcastListen,
+            [EditorEnumField("Terra.Studio.TriggerAction", "Other"), AliasDrawer("Other Object Touches")]
+            OnObjectCollide
         }
-
+        [AliasDrawer("StopWhen")]
         public Atom.StartOn startOn = new();
+        [AliasDrawer("Broadcast")]
         public string broadcast = null;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
@@ -25,8 +28,8 @@ namespace Terra.Studio
         private void Awake()
         {
             startOn.Setup(gameObject,
-                Helper.GetEnumValuesAsStrings<StartOn>(),
-                typeof(StopTranslate).Name);
+                Helper.GetEnumValuesAsStrings<StartOn>(), Helper.GetEnumWithAliasNames<StartOn>(),
+                typeof(StopTranslate).Name, startOn.data.startIndex == 1);
             playSFX.Setup<StopTranslate>(gameObject);
             playVFX.Setup<StopTranslate>(gameObject);
         }
@@ -69,6 +72,10 @@ namespace Terra.Studio
             {
                 return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOn.OnClick);
             }
+            else if (startOn.data.startName.Equals(StartOn.OnObjectCollide.ToString()))
+            {
+                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOn.OnObjectCollide);
+            }
             else
             {
                 return startOn.data.listenName;
@@ -88,16 +95,19 @@ namespace Terra.Studio
             playVFX.data.canPlay = obj.canPlayVFX;
             playVFX.data.clipIndex = obj.vfxIndex;
             playVFX.data.clipName = obj.vfxName;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcast, startOn.data.listenName);
+            var listenString = "";
+            if (startOn.data.startIndex == 1)
+                listenString = startOn.data.listenName;
+            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcast, listenString);
         }
 
         private StartOn GetStart(StopTranslateComponent comp)
         {
-            if (comp.ConditionType.Equals(EditorOp.Resolve<DataProvider>().GetEnumValue(StartOn.OnClick)))
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
-                return StartOn.OnClick;
+                return (StartOn)result;
             }
-            return StartOn.BroadcastListen;
+            return StartOn.OnClick;
         }
 
         private string GetListenValues(StopTranslateComponent comp)

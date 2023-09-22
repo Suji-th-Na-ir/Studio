@@ -26,7 +26,7 @@ namespace Terra.Studio
         public bool canPlayVFX;
         public string vfxName;
         public int vfxIndex;
-        public float drag;
+        public float mass;
         public bool showResetButton;
         public Listen listen;
     }

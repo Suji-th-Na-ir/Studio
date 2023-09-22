@@ -1,4 +1,3 @@
-using UnityEngine;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
@@ -8,25 +7,13 @@ namespace Terra.Studio
         public override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref EntityAuthorOp.GetComponent<DestroyOnComponent>(entity);
-            if (entityRef.ConditionType.Equals("Terra.Studio.MouseAction"))
-            {
-                if (data == null)
-                {
-                    return;
-                }
-                var selection = (GameObject)data;
-                if (selection != entityRef.RefObj)
-                {
-                    return;
-                }
-            }
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(false, entityRef.EventContext);
             entityRef.IsExecuted = true;
-            OnDemandRun(entity, in entityRef);
+            OnDemandRun(in entityRef, entity);
         }
 
-        public void OnDemandRun(int entityID, in DestroyOnComponent component)
+        public void OnDemandRun(in DestroyOnComponent component, int entityID)
         {
             if (component.canPlaySFX)
             {
@@ -36,7 +23,6 @@ namespace Terra.Studio
             {
                 RuntimeWrappers.PlayVFX(component.vfxName, component.RefObj.transform.position);
             }
-            Object.Destroy(component.RefObj);
             if (component.IsBroadcastable)
             {
                 RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
