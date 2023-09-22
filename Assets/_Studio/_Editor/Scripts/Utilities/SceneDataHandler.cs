@@ -11,9 +11,10 @@ namespace Terra.Studio
 {
     public class SceneDataHandler : IDisposable
     {
-        public Func<GameObject, string> TryGetAssetPath;
         public Func<string> GetAssetName;
+        public Func<GameObject, string> TryGetAssetPath;
         private Camera editorCamera;
+
         public Vector3 PlayerSpawnPoint { get; private set; }
 
         public SceneDataHandler()
@@ -35,13 +36,26 @@ namespace Terra.Studio
         public void Save()
         {
             var sceneData = ExportSceneData();
+            var filePath = GetFilePath();
             if (!Helper.IsInUnityEditorMode())
             {
-                SystemOp.Resolve<FileService>().WriteFile(sceneData, FileService.GetSavedFilePath(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name));
+                SystemOp.Resolve<FileService>().WriteFileIntoLocal?.Invoke(sceneData, filePath);
             }
             else
             {
-                new FileService().WriteFile(sceneData, FileService.GetSavedFilePath(GetAssetName?.Invoke()));
+                new FileService().WriteFileIntoLocal?.Invoke(sceneData, filePath);
+            }
+        }
+
+        private string GetFilePath()
+        {
+            if (!Helper.IsInUnityEditorMode())
+            {
+                return FileService.GetSavedFilePath(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name);
+            }
+            else
+            {
+                return FileService.GetSavedFilePath(GetAssetName?.Invoke());
             }
         }
 
@@ -62,17 +76,21 @@ namespace Terra.Studio
 
         private void InitializeScene()
         {
-            string data;
             var prevState = SystemOp.Resolve<System>().PreviousStudioState;
             if (prevState != StudioState.Runtime && SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
             {
                 var saveFilePath = FileService.GetSavedFilePath(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name);
-                data = SystemOp.Resolve<FileService>().ReadFromFile(saveFilePath);
+                SystemOp.Resolve<FileService>().ReadFileFromLocal?.Invoke(saveFilePath, OnDataReceived);
             }
             else
             {
-                data = SystemOp.Resolve<CrossSceneDataHolder>().Get();
+                var data = SystemOp.Resolve<CrossSceneDataHolder>().Get();
+                OnDataReceived(data);
             }
+        }
+
+        private void OnDataReceived(string data)
+        {
             if (string.IsNullOrEmpty(data))
             {
                 return;

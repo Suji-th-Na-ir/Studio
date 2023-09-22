@@ -494,6 +494,15 @@ namespace PlayShifu.Terra
 #endif
         }
 
+        public static bool IsPlatformWebGL()
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            return true;
+#else
+            return false;
+#endif
+        }
+
         public static bool IsPrimitive(this GameObject go, out PrimitiveType type)
         {
             type = default;
