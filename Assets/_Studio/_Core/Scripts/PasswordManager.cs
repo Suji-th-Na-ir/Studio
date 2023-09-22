@@ -102,6 +102,6 @@ public class PasswordManager : MonoBehaviour {
             timer += Time.deltaTime * speed;
             yield return new WaitForEndOfFrame ();
         } while (timer <= 1f);
-        this.gameObject.SetActive (false);
+        Destroy (this.gameObject);
     }
 }

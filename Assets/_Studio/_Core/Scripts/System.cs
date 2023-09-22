@@ -77,7 +77,8 @@ namespace Terra.Studio
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
             SystemOp.Resolve<ISubsystem>().Initialize();
-            m_refPasswordManager.FuckOff();
+            if(PreviousStudioState == StudioState.Bootstrap)
+                m_refPasswordManager.FuckOff();
         }
 
         public void SwitchState()
