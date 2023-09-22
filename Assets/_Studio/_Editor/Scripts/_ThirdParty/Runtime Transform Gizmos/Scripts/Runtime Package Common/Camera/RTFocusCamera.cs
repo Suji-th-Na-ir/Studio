@@ -327,7 +327,7 @@ namespace RTG
             _prjSwitchTranstion.TransitionUpdate += OnPrjSwitchTransitionUpate;
             _prjSwitchTranstion.TransitionEnd += OnPrjSwitchTransitionEnd;
 
-#if UNITY_WEBGL
+#if UNITY_WEBGL && !UNITY_EDITOR
             //_panSettings.PanMode = CameraPanMode.Smooth;
             _panSettings.StandardPanSensitivity *= 0.01f;
             //_panSettings.SmoothValue*=2f;

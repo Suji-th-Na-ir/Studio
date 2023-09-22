@@ -21,7 +21,7 @@ namespace CMF
         public float mouseInputMultiplier = 0.01f;
         private void OnEnable()
         {
-#if UNITY_WEBGL
+#if UNITY_WEBGL &&!UNITY_EDITOR
             mouseInputMultiplier *= 0.6f;
 #endif
         }
