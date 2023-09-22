@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using System.Reflection;
 using System.Collections.ObjectModel;
+using EasyUI.Toast;
+using PlayShifu.Terra;
 
 public class SelectionHandler : View
 {
@@ -102,9 +104,25 @@ public class SelectionHandler : View
         DuplicateObjects();
         DeleteObjects();
 
-        if(RTInput.IsKeyPressed(KeyCode.LeftCommand)&& RTInput.WasKeyPressedThisFrame(KeyCode.S))
+        if((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.WasKeyPressedThisFrame(KeyCode.S))
         {
             EditorOp.Resolve<SceneDataHandler>().Save();
+        }
+
+
+        if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.WasKeyPressedThisFrame(KeyCode.Z))
+        {
+            var color = Helper.GetColorFromHex("#0F1115");
+            color.a = 0.8f;
+            Toast.Show("Undo Feature Will Come Soon!", 1.0f, color);
+        }
+
+
+        if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.IsKeyPressed(KeyCode.LeftShift) && RTInput.WasKeyPressedThisFrame(KeyCode.Z))
+        {
+            var color = Helper.GetColorFromHex("#0F1115");
+            color.a = 0.8f;
+            Toast.Show("Redo Feature Will Come Soon!", 1.0f, color);
         }
     }
 
