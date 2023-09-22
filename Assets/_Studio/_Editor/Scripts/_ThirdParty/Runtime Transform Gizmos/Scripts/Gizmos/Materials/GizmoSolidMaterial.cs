@@ -29,7 +29,7 @@ namespace RTG
             SetZTestAlways();
             SetCullModeBack();
             SetLit(true);
-            SetLightIntensity(1.23f);
+            SetLightIntensity(2f);
         }
 
         public void SetLit(bool isLit)
