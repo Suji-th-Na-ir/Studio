@@ -116,7 +116,7 @@ namespace RuntimeInspectorNamespace
 #endif
 
 #if UNITY_WEBGL
-			listView.GetComponent<ScrollRect> ().scrollSensitivity *= 0.25f;
+			listView.GetComponent<ScrollRect> ().scrollSensitivity *= 0.05f;
 #endif
 		}
 

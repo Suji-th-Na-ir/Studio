@@ -327,13 +327,13 @@ namespace RTG
             _prjSwitchTranstion.TransitionUpdate += OnPrjSwitchTransitionUpate;
             _prjSwitchTranstion.TransitionEnd += OnPrjSwitchTransitionEnd;
 
-#if UNITY_WEBGL && !UNITY_EDITOR
-            //_panSettings.PanMode = CameraPanMode.Smooth;
-            _panSettings.StandardPanSensitivity *= 0.01f;
-            //_panSettings.SmoothValue*=2f;
-            _zoomSettings.PerspStandardZoomSensitivity *= 0.01f;
-            _zoomSettings.OrthoStandardZoomSensitivity *= 0.01f;
-#endif
+//#if UNITY_WEBGL && !UNITY_EDITOR
+//            _panSettings.PanMode = CameraPanMode.Smooth;
+//            _panSettings.SmoothPanSensitivity *= 0.01f;
+//            _panSettings.SmoothValue*=2f;
+//            _zoomSettings.PerspStandardZoomSensitivity *= 0.01f;
+//            _zoomSettings.OrthoStandardZoomSensitivity *= 0.01f;
+//#endif
         }
 
         private void Start()

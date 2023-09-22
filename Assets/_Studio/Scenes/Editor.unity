@@ -4684,7 +4684,7 @@ MonoBehaviour:
     _canBeDisplayed: 1
     _isExpanded: 1
     _panMode: 0
-    _standardPanSensitivity: 1
+    _standardPanSensitivity: 0.1
     _smoothPanSensitivity: 0.7
     _smoothValue: 4
     _invertX: 0
@@ -4694,7 +4694,7 @@ MonoBehaviour:
     _canBeDisplayed: 1
     _isExpanded: 1
     _lookAroundMode: 0
-    _standardLookAroundSensitivity: 1
+    _standardLookAroundSensitivity: 0.1
     _smoothLookAroundSensitivity: 5
     smoothValue: 4
     _invertX: 0
@@ -4704,7 +4704,7 @@ MonoBehaviour:
     _canBeDisplayed: 1
     _isExpanded: 1
     _orbitMode: 0
-    _standardOrbitSensitivity: 1
+    _standardOrbitSensitivity: 0.1
     _smoothOrbitSensitivity: 5
     _smoothValue: 8
     _invertX: 0
@@ -4714,8 +4714,8 @@ MonoBehaviour:
     _canBeDisplayed: 1
     _isExpanded: 1
     _zoomMode: 0
-    _orthoStandardZoomSensitivity: 0.3
-    _perspStandardZoomSensitivity: 0.3
+    _orthoStandardZoomSensitivity: 0.015
+    _perspStandardZoomSensitivity: 0.015
     _orthoSmoothZoomSensitivity: 1
     _perspSmoothZoomSensitivity: 1
     _orthoZoomSmoothValue: 1
@@ -4727,13 +4727,13 @@ MonoBehaviour:
     _isExpanded: 1
     _focusMode: 2
     _constantSpeed: 10
-    _smoothTime: 1.5
-    _focusDistanceAdd: 1.2
+    _smoothTime: 0.15
+    _focusDistanceAdd: 0.12
   _rotationSwitchSettings:
     _canBeDisplayed: 1
     _isExpanded: 1
     _switchMode: 1
-    _switchType: 0
+    _switchType: 1
     _constantSwitchDurationInSeconds: 0.3
     _smoothValue: 8
   _projectionSwitchSettings:
@@ -5578,7 +5578,7 @@ PrefabInstance:
     - target: {fileID: 224685037686054822, guid: 4d8c6c9fba0e46f489b21fd7d92d739d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000038146973
+      value: 0.000061035156
       objectReference: {fileID: 0}
     - target: {fileID: 224685037686054822, guid: 4d8c6c9fba0e46f489b21fd7d92d739d,
         type: 3}

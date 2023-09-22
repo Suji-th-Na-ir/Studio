@@ -54,7 +54,10 @@ namespace RuntimeInspectorNamespace
 #endif
 
 #if UNITY_WEBGL
-			templateRoot.GetComponent<ScrollRect> ().scrollSensitivity *= 0.25f;
+			ScrollRect[] a= this.GetComponentsInChildren<ScrollRect> ();
+            foreach (var item in a) {
+				item.scrollSensitivity *= 0.05f;
+			}
 #endif
 		}
 

@@ -499,7 +499,7 @@ namespace RuntimeInspectorNamespace
 #endif
 
 #if UNITY_WEBGL
-            scrollView.scrollSensitivity *= 0.25f;
+            scrollView.scrollSensitivity *= 0.05f;
 #endif
         }
 
