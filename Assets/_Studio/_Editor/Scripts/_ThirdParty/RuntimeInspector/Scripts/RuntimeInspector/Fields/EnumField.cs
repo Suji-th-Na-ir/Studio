@@ -52,6 +52,10 @@ namespace RuntimeInspectorNamespace
 			// On new Input System, scroll sensitivity is much higher than legacy Input system
 			templateRoot.GetComponent<ScrollRect>().scrollSensitivity *= 0.25f;
 #endif
+
+#if UNITY_WEBGL
+			templateRoot.GetComponent<ScrollRect> ().scrollSensitivity *= 0.25f;
+#endif
 		}
 
 		public override bool SupportsType( Type type )
