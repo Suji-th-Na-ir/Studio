@@ -69,13 +69,6 @@ namespace Terra.Studio
 
         public void LoadScene()
         {
-            InitializeScene();
-            SetupSceneDefaultObjects();
-            EditorOp.Resolve<EditorEssentialsLoader>().LoadEssentials();
-        }
-
-        private void InitializeScene()
-        {
             var prevState = SystemOp.Resolve<System>().PreviousStudioState;
             if (prevState != StudioState.Runtime && SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
             {
@@ -104,17 +97,21 @@ namespace Terra.Studio
             void RecreateScene(string data)
         {
             var worldData = JsonConvert.DeserializeObject<WorldData>(data);
+            if (!Helper.IsInUnityEditorMode())
+            {
+                var metaData = worldData.metaData;
+                if (!metaData.Equals(default(WorldMetaData)))
+                {
+                    PlayerSpawnPoint = metaData.playerSpawnPoint;
+                }
+            }
             for (int i = 0; i < worldData.entities.Length; i++)
             {
                 var entity = worldData.entities[i];
                 SpawnObjects(entity);
             }
-            if (!Helper.IsInUnityEditorMode())
-            {
-                var metaData = worldData.metaData;
-                if (metaData.Equals(default(WorldMetaData))) return;
-                PlayerSpawnPoint = metaData.playerSpawnPoint;
-            }
+            SetupSceneDefaultObjects();
+            EditorOp.Resolve<EditorEssentialsLoader>().LoadEssentials();
         }
 
         private void SpawnObjects(VirtualEntity entity)
