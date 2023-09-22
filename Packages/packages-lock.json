@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.mixpanel.unity": {
-      "version": "https://github.com/mixpanel/mixpanel-unity.git#master",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "aa8b9882cca50e07d9fbc307baa6bc496a5c2775"
-    },
     "com.unity.burst": {
       "version": "1.8.2",
       "depth": 1,

@@ -1,9 +1,8 @@
 using System;
+using mixpanel;
 using UnityEngine;
 using PlayShifu.Terra;
 using UnityEngine.SceneManagement;
-using mixpanel;
-using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -19,15 +18,17 @@ namespace Terra.Studio
         public StudioState PreviousStudioState { get { return previousStudioState; } }
         public StudioState CurrentStudioState { get { return currentStudioState; } }
         [SerializeField] private PasswordManager m_refPasswordManager;
+
         private void Awake()
         {
             SystemOp.Register(this);
-            if (!PlayerPrefs.HasKey ("ALFT")) {
-                Mixpanel.Track ("AppLaunchFirstTime");
-                PlayerPrefs.SetInt ("ALFT", 1);
+            if (!PlayerPrefs.HasKey("ALFT"))
+            {
+                Mixpanel.Track("AppLaunchFirstTime");
+                PlayerPrefs.SetInt("ALFT", 1);
             }
-            Mixpanel.Track ("AppLaunch");
-            Mixpanel.Flush ();
+            Mixpanel.Track("AppLaunch");
+            Mixpanel.Flush();
         }
 
         private void Start()
@@ -47,7 +48,6 @@ namespace Terra.Studio
             };
             LoadSilentServices();
             m_refPasswordManager.OnCorrectPasswordEntered += LoadSubsystemScene;
-            //LoadSubsystemScene ();
         }
 
         private void LoadSilentServices()
@@ -77,7 +77,7 @@ namespace Terra.Studio
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
             SystemOp.Resolve<ISubsystem>().Initialize();
-            m_refPasswordManager.FuckOff ();
+            m_refPasswordManager.FuckOff();
         }
 
         public void SwitchState()
