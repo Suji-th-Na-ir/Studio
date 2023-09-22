@@ -45,6 +45,14 @@ MonoBehaviour:
     guid: b4ee9cf11c5b34b3ca7be520d83e6aa9
     isPrimitive: 0
     primitiveType: 0
+  - name: Coin_prefab
+    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/Coin_prefab.prefab
+    resourcePath: Common/KawaiiLandPrefabs/Coin_prefab
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a1f0580542e2c46f894296c36d9f11a7
+    isPrimitive: 0
+    primitiveType: 0
   - name: Apple_tree
     absolutePath: Assets/_Studio/Resources/Common/KawaiiLandPrefabs/FruitTree/Apple_tree.prefab
     resourcePath: Common/KawaiiLandPrefabs/FruitTree/Apple_tree
@@ -923,6 +931,14 @@ MonoBehaviour:
     guid: 4f393b93a0df5194b9f425cadda7ed51
     isPrimitive: 0
     primitiveType: 0
+  - name: CheckPoint
+    absolutePath: Assets/_Studio/Resources/Common/Prefabs/CheckPoint.prefab
+    resourcePath: Common/Prefabs/CheckPoint
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e6b485027f1c24e89b8939930e2b15aa
+    isPrimitive: 0
+    primitiveType: 0
   - name: Cube
     absolutePath: Assets/_Studio/Resources/Common/Prefabs/Cube.prefab
     resourcePath: Common/Prefabs/Cube
@@ -1441,14 +1457,6 @@ MonoBehaviour:
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: d5aa186d95fc84196922788e1051c643
-    isPrimitive: 0
-    primitiveType: 0
-  - name: CheckPoint
-    absolutePath: Assets/_Studio/Resources/Common/Prefabs/CheckPoint.prefab
-    resourcePath: Common/Prefabs/CheckPoint
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: e6b485027f1c24e89b8939930e2b15aa
     isPrimitive: 0
     primitiveType: 0
   watchFolders:
