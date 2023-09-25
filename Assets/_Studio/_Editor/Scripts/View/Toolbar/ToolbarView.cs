@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using PlayShifu.Terra;
 using RuntimeInspectorNamespace;
-using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -25,7 +24,8 @@ namespace Terra.Studio
         private const string UNDO_BUTTON_LOC = "UndoButton";
         private const string REDO_BUTTON_LOC = "RedoButton";
 
-        [SerializeField] private GameObject PrimitivePanel;
+        private GameObject primitivePanel;
+
         private void Awake()
         {
             EditorOp.Register(this);
@@ -33,7 +33,7 @@ namespace Terra.Studio
 
         public override void Init()
         {
-            PrimitivePanel.SetActive(false);
+            SpawnPrimitivePrefab();
             var addButtonTr = Helper.FindDeepChild(transform, ADD_BUTTON_LOC, true);
             var playButtonTr = Helper.FindDeepChild(transform, PLAY_BUTTON_LOC, true);
             var saveButtonTr = Helper.FindDeepChild(transform, SAVE_BUTTON_LOC, true);
@@ -53,8 +53,8 @@ namespace Terra.Studio
             var addButton = addButtonTr.GetComponent<Button>();
             AddListenerEvent(addButton, () =>
             {
-                var currentActiveState = PrimitivePanel.activeSelf;
-                PrimitivePanel.SetActive(!currentActiveState);
+                var currentActiveState = primitivePanel.activeSelf;
+                primitivePanel.SetActive(!currentActiveState);
             });
 
             var playButton = playButtonTr.GetComponent<Button>();
@@ -115,7 +115,7 @@ namespace Terra.Studio
 
             EditorOp.Resolve<SelectionHandler>().SelectionChanged += (_) =>
             {
-                PrimitivePanel.SetActive(false);
+                primitivePanel.SetActive(false);
             };
         }
 
@@ -151,6 +151,13 @@ namespace Terra.Studio
             }
             EditorOp.Resolve<SelectionHandler>().DeselectAll();
             EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);
+        }
+
+        private void SpawnPrimitivePrefab()
+        {
+            var resObj = EditorOp.Load<GameObject>("Prefabs/PrimitivesPanel");
+            primitivePanel = Instantiate(resObj, transform);
+            primitivePanel.SetActive(false);
         }
 
         private bool CanSpawn(string name)
