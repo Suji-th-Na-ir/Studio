@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.285325, g: 0.80665284, b: 0.99856204, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -435,7 +435,7 @@ PrefabInstance:
     - target: {fileID: 224597220361603002, guid: c310b787f758e3a4db55284145e55bc8,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 909.4759
+      value: 975
       objectReference: {fileID: 0}
     - target: {fileID: 224597220361603002, guid: c310b787f758e3a4db55284145e55bc8,
         type: 3}
@@ -4887,7 +4887,7 @@ MonoBehaviour:
     _canBeDisplayed: 1
     _isExpanded: 1
     _panMode: 0
-    _standardPanSensitivity: 0.1
+    _standardPanSensitivity: 1
     _smoothPanSensitivity: 0.7
     _smoothValue: 4
     _invertX: 0
@@ -4897,7 +4897,7 @@ MonoBehaviour:
     _canBeDisplayed: 1
     _isExpanded: 1
     _lookAroundMode: 0
-    _standardLookAroundSensitivity: 0.1
+    _standardLookAroundSensitivity: 1
     _smoothLookAroundSensitivity: 5
     smoothValue: 4
     _invertX: 0
@@ -4907,7 +4907,7 @@ MonoBehaviour:
     _canBeDisplayed: 1
     _isExpanded: 1
     _orbitMode: 0
-    _standardOrbitSensitivity: 0.1
+    _standardOrbitSensitivity: 1
     _smoothOrbitSensitivity: 5
     _smoothValue: 8
     _invertX: 0
@@ -4917,8 +4917,8 @@ MonoBehaviour:
     _canBeDisplayed: 1
     _isExpanded: 1
     _zoomMode: 0
-    _orthoStandardZoomSensitivity: 0.015
-    _perspStandardZoomSensitivity: 0.015
+    _orthoStandardZoomSensitivity: 0.3
+    _perspStandardZoomSensitivity: 0.3
     _orthoSmoothZoomSensitivity: 1
     _perspSmoothZoomSensitivity: 1
     _orthoZoomSmoothValue: 1
@@ -4930,8 +4930,8 @@ MonoBehaviour:
     _isExpanded: 1
     _focusMode: 2
     _constantSpeed: 10
-    _smoothTime: 0.15
-    _focusDistanceAdd: 0.12
+    _smoothTime: 1.5
+    _focusDistanceAdd: 1.2
   _rotationSwitchSettings:
     _canBeDisplayed: 1
     _isExpanded: 1
@@ -5039,15 +5039,15 @@ MonoBehaviour:
         CanHaveMouseButtons: 1
     _pan:
       _isEnabled: 1
-      _key: 32
-      _lCtrl: 0
+      _key: 0
+      _lCtrl: 1
       _lCmd: 0
       _lAlt: 0
       _lShift: 0
       _useStrictModifierCheck: 0
       _lMouseBtn: 0
-      _rMouseBtn: 0
-      _mMouseBtn: 1
+      _rMouseBtn: 1
+      _mMouseBtn: 0
       _useStrictMouseCheck: 0
       _name: Pan
       _staticData:
@@ -5782,7 +5782,7 @@ PrefabInstance:
     - target: {fileID: 224685037686054822, guid: 4d8c6c9fba0e46f489b21fd7d92d739d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000039100647
+      value: 0.0000104904175
       objectReference: {fileID: 0}
     - target: {fileID: 224685037686054822, guid: 4d8c6c9fba0e46f489b21fd7d92d739d,
         type: 3}
