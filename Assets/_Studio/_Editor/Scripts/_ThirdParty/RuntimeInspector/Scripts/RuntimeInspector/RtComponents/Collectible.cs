@@ -39,12 +39,12 @@ namespace RuntimeInspectorNamespace
                 comp.ConditionData = GetStartCondition();
                 comp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
                 comp.Broadcast = Broadcast;
-                comp.canPlaySFX = PlaySFX.data.CanPlay;
-                comp.canPlayVFX = PlayVFX.data.CanPlay;
-                comp.sfxName = string.IsNullOrEmpty(PlaySFX.data.ClipName) ? null : PlaySFX.data.ClipName;
-                comp.vfxName = string.IsNullOrEmpty(PlayVFX.data.ClipName) ? null : PlayVFX.data.ClipName;
-                comp.sfxIndex = PlaySFX.data.ClipIndex;
-                comp.vfxIndex = PlayVFX.data.ClipIndex;
+                comp.canPlaySFX = PlaySFX.data.canPlay;
+                comp.canPlayVFX = PlayVFX.data.canPlay;
+                comp.sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName;
+                comp.vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName;
+                comp.sfxIndex = PlaySFX.data.clipIndex;
+                comp.vfxIndex = PlayVFX.data.clipIndex;
                 comp.canUpdateScore = Score.score != 0;
                 comp.scoreValue = Score.score;
             }
@@ -73,12 +73,12 @@ namespace RuntimeInspectorNamespace
         {
             CollectableComponent comp = JsonConvert.DeserializeObject<CollectableComponent>($"{cdata.data}");
             Score.score = comp.scoreValue;
-            PlaySFX.data.CanPlay = comp.canPlaySFX;
-            PlaySFX.data.ClipIndex = comp.sfxIndex;
-            PlaySFX.data.ClipName = comp.sfxName;
-            PlayVFX.data.CanPlay = comp.canPlayVFX;
-            PlayVFX.data.ClipIndex = comp.vfxIndex;
-            PlayVFX.data.ClipName = comp.vfxName;
+            PlaySFX.data.canPlay = comp.canPlaySFX;
+            PlaySFX.data.clipIndex = comp.sfxIndex;
+            PlaySFX.data.clipName = comp.sfxName;
+            PlayVFX.data.canPlay = comp.canPlayVFX;
+            PlayVFX.data.clipIndex = comp.vfxIndex;
+            PlayVFX.data.clipName = comp.vfxName;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOnCollectible), out object result))
             {
                 startOn.data.startIndex = (int)(StartOnCollectible)result;

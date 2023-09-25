@@ -56,12 +56,12 @@ namespace Terra.Studio
                 Broadcast = broadcast,
                 targetPosition = targetPosition,
                 startIndex = startOn.data.startIndex,
-                canPlaySFX = playSFX.data.CanPlay,
-                sfxIndex = playSFX.data.ClipIndex,
-                sfxName = playSFX.data.ClipName,
-                canPlayVFX = playVFX.data.CanPlay,
-                vfxIndex = playVFX.data.ClipIndex,
-                vfxName = playVFX.data.ClipName,
+                canPlaySFX = playSFX.data.canPlay,
+                sfxIndex = playSFX.data.clipIndex,
+                sfxName = playSFX.data.clipName,
+                canPlayVFX = playVFX.data.canPlay,
+                vfxIndex = playVFX.data.clipIndex,
+                vfxName = playVFX.data.clipName,
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var json = JsonConvert.SerializeObject(data);
@@ -135,12 +135,12 @@ namespace Terra.Studio
 
         private void AssignSFXandVFXData(SetObjectPositionComponent comp)
         {
-            playSFX.data.CanPlay = comp.canPlaySFX;
-            playSFX.data.ClipIndex = comp.sfxIndex;
-            playSFX.data.ClipName = comp.sfxName;
-            playVFX.data.CanPlay = comp.canPlayVFX;
-            playVFX.data.ClipIndex = comp.vfxIndex;
-            playVFX.data.ClipName = comp.vfxName;
+            playSFX.data.canPlay = comp.canPlaySFX;
+            playSFX.data.clipIndex = comp.sfxIndex;
+            playSFX.data.clipName = comp.sfxName;
+            playVFX.data.canPlay = comp.canPlayVFX;
+            playVFX.data.clipIndex = comp.vfxIndex;
+            playVFX.data.clipName = comp.vfxName;
         }
     }
 }

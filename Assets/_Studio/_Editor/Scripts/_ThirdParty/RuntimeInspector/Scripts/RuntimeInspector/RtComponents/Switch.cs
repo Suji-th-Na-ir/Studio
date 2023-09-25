@@ -77,12 +77,12 @@ namespace Terra.Studio
             return new SwitchComponentData()
             {
                 state = state,
-                canPlaySFX = playSFXData.CanPlay,
-                sfxName = playSFXData.ClipName,
-                sfxIndex = playSFXData.ClipIndex,
-                canPlayVFX = playVFXData.CanPlay,
-                vfxName = playVFXData.ClipName,
-                vfxIndex = playVFXData.ClipIndex,
+                canPlaySFX = playSFXData.canPlay,
+                sfxName = playSFXData.clipName,
+                sfxIndex = playSFXData.clipIndex,
+                canPlayVFX = playVFXData.canPlay,
+                vfxName = playVFXData.clipName,
+                vfxIndex = playVFXData.clipIndex,
                 isBroadcastable = !string.IsNullOrEmpty(broadcast),
                 broadcast = broadcast
             };
@@ -97,9 +97,9 @@ namespace Terra.Studio
         {
             return new PlayFXData()
             {
-                CanPlay = data.canPlaySFX,
-                ClipIndex = data.sfxIndex,
-                ClipName = data.sfxName
+                canPlay = data.canPlaySFX,
+                clipIndex = data.sfxIndex,
+                clipName = data.sfxName
             };
         }
 
@@ -107,9 +107,9 @@ namespace Terra.Studio
         {
             return new PlayFXData()
             {
-                CanPlay = data.canPlayVFX,
-                ClipIndex = data.vfxIndex,
-                ClipName = data.vfxName
+                canPlay = data.canPlayVFX,
+                clipIndex = data.vfxIndex,
+                clipName = data.vfxName
             };
         }
 

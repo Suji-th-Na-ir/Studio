@@ -41,12 +41,12 @@ namespace Terra.Studio
                 IsBroadcastable = !string.IsNullOrEmpty(broadcast),
                 Broadcast = broadcast,
                 startIndex = startOn.data.startIndex,
-                canPlaySFX = playSFX.data.CanPlay,
-                sfxName = playSFX.data.ClipName,
-                sfxIndex = playSFX.data.ClipIndex,
-                canPlayVFX = playVFX.data.CanPlay,
-                vfxName = playVFX.data.ClipName,
-                vfxIndex = playVFX.data.ClipIndex
+                canPlaySFX = playSFX.data.canPlay,
+                sfxName = playSFX.data.clipName,
+                sfxIndex = playSFX.data.clipIndex,
+                canPlayVFX = playVFX.data.canPlay,
+                vfxName = playVFX.data.clipName,
+                vfxIndex = playVFX.data.clipIndex
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var json = JsonConvert.SerializeObject(data);
@@ -82,12 +82,12 @@ namespace Terra.Studio
             startOn.data.listenName = GetListenValues(obj);
             startOn.data.startIndex = obj.startIndex;
             broadcast = obj.Broadcast;
-            playSFX.data.CanPlay = obj.canPlaySFX;
-            playSFX.data.ClipIndex = obj.sfxIndex;
-            playSFX.data.ClipName = obj.sfxName;
-            playVFX.data.CanPlay = obj.canPlayVFX;
-            playVFX.data.ClipIndex = obj.vfxIndex;
-            playVFX.data.ClipName = obj.vfxName;
+            playSFX.data.canPlay = obj.canPlaySFX;
+            playSFX.data.clipIndex = obj.sfxIndex;
+            playSFX.data.clipName = obj.sfxName;
+            playVFX.data.canPlay = obj.canPlayVFX;
+            playVFX.data.clipIndex = obj.vfxIndex;
+            playVFX.data.clipName = obj.vfxName;
             var listenString = "";
             if (startOn.data.startIndex == 1)
                 listenString = startOn.data.listenName;

@@ -72,7 +72,7 @@ namespace Terra.Studio
             OnToggleValueSubmitted(_input);
             var data = (Atom.BasePlay)Value;
             var play = (PlayFXData)lastSubmittedValue;
-            if (data.data.CanPlay != play.CanPlay)
+            if (data.data.canPlay != play.canPlay)
             {
                 EditorOp.Resolve<IURCommand>().Record(
                     lastSubmittedValue, data.data,
@@ -81,7 +81,7 @@ namespace Terra.Studio
                     {
                         data.data = (PlayFXData)value;
                         Value = data;
-                        OnToggleValueSubmitted(data.data.CanPlay);
+                        OnToggleValueSubmitted(data.data.canPlay);
                         lastSubmittedValue = value;
                     });
                 lastSubmittedValue = data.data;
@@ -92,10 +92,10 @@ namespace Terra.Studio
         {
             LoadClips();
             var data = (Atom.BasePlay)Value;
-            data.data.CanPlay = _input;
-            if (data.data.CanPlay)
+            data.data.canPlay = _input;
+            if (data.data.canPlay)
             {
-                OnDropdownValueChanged(data.data.ClipIndex);
+                OnDropdownValueChanged(data.data.clipIndex);
             }
             ShowHideOptionsDropdown();
             if (Inspector) Inspector.RefreshDelayed();
@@ -106,7 +106,7 @@ namespace Terra.Studio
             OnDropdownValueSubmitted(_input);
             var data = (Atom.BasePlay)Value;
             var play = (PlayFXData)lastSubmittedValue;
-            if (_input != play.ClipIndex)
+            if (_input != play.clipIndex)
             {
                 EditorOp.Resolve<IURCommand>().Record(
                     lastSubmittedValue, data.data,
@@ -115,7 +115,7 @@ namespace Terra.Studio
                     {
                         data.data = (PlayFXData)value;
                         Value = data;
-                        OnDropdownValueSubmitted(data.data.ClipIndex);
+                        OnDropdownValueSubmitted(data.data.clipIndex);
                         lastSubmittedValue = value;
                     });
                 lastSubmittedValue = data.data;
@@ -125,8 +125,8 @@ namespace Terra.Studio
         protected virtual void OnDropdownValueSubmitted(int index)
         {
             var data = (Atom.BasePlay)Value;
-            data.data.ClipIndex = index;
-            data.data.ClipName = GetClipNameByIndex(index);
+            data.data.clipIndex = index;
+            data.data.clipName = GetClipNameByIndex(index);
         }
 
         protected virtual string[] GetAllClipNames()
@@ -155,10 +155,10 @@ namespace Terra.Studio
             var data = (Atom.BasePlay)Value;
             if (data != null)
             {
-                SetValue(data.data.CanPlay);
-                SetValue(data.data.ClipIndex);
-                if ((data.data.CanPlay && !optionsDropdown.gameObject.activeSelf) ||
-                    (!data.data.CanPlay && optionsDropdown.gameObject.activeSelf))
+                SetValue(data.data.canPlay);
+                SetValue(data.data.clipIndex);
+                if ((data.data.canPlay && !optionsDropdown.gameObject.activeSelf) ||
+                    (!data.data.canPlay && optionsDropdown.gameObject.activeSelf))
                 {
                     ShowHideOptionsDropdown();
                 }

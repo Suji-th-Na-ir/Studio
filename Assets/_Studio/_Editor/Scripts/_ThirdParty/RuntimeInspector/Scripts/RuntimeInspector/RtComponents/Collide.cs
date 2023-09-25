@@ -22,12 +22,12 @@ namespace Terra.Studio
         {
             var data = new CollideComponent()
             {
-                canPlaySFX = playSFX.data.CanPlay,
-                sfxName = playSFX.data.ClipName,
-                sfxIndex = playSFX.data.ClipIndex,
-                canPlayVFX = playVFX.data.CanPlay,
-                vfxName = playVFX.data.ClipName,
-                vfxIndex = playVFX.data.ClipIndex,
+                canPlaySFX = playSFX.data.canPlay,
+                sfxName = playSFX.data.clipName,
+                sfxIndex = playSFX.data.clipIndex,
+                canPlayVFX = playVFX.data.canPlay,
+                vfxName = playVFX.data.clipName,
+                vfxIndex = playVFX.data.clipIndex,
                 IsBroadcastable = !string.IsNullOrEmpty(broadcast),
                 Broadcast = broadcast,
                 IsConditionAvailable = true,
@@ -43,12 +43,12 @@ namespace Terra.Studio
         public void Import(EntityBasedComponent data)
         {
             var obj = JsonConvert.DeserializeObject<CollideComponent>(data.data);
-            playSFX.data.CanPlay = obj.canPlaySFX;
-            playSFX.data.ClipName = obj.sfxName;
-            playSFX.data.ClipIndex = obj.sfxIndex;
-            playVFX.data.CanPlay = obj.canPlayVFX;
-            playVFX.data.ClipName = obj.vfxName;
-            playVFX.data.ClipIndex = obj.vfxIndex;
+            playSFX.data.canPlay = obj.canPlaySFX;
+            playSFX.data.clipName = obj.sfxName;
+            playSFX.data.clipIndex = obj.sfxIndex;
+            playVFX.data.canPlay = obj.canPlayVFX;
+            playVFX.data.clipName = obj.vfxName;
+            playVFX.data.clipIndex = obj.vfxIndex;
             broadcast = obj.Broadcast;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcast, null);
         }

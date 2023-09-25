@@ -26,12 +26,12 @@ namespace Terra.Studio
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.TriggerAction",
                 ConditionData = "Any",
-                canPlaySFX = PlaySFX.data.CanPlay,
-                sfxName = PlaySFX.data.ClipName,
-                sfxIndex = PlaySFX.data.ClipIndex,
-                canPlayVFX = PlayVFX.data.CanPlay,
-                vfxName = PlayVFX.data.ClipName,
-                vfxIndex = PlayVFX.data.ClipIndex,
+                canPlaySFX = PlaySFX.data.canPlay,
+                sfxName = PlaySFX.data.clipName,
+                sfxIndex = PlaySFX.data.clipIndex,
+                canPlayVFX = PlayVFX.data.canPlay,
+                vfxName = PlayVFX.data.clipName,
+                vfxIndex = PlayVFX.data.clipIndex,
                 mass = resistance,
                 showResetButton = showResetButton,
                 listen = Listen.Always,
@@ -48,12 +48,12 @@ namespace Terra.Studio
             var comp = JsonConvert.DeserializeObject<PushComponent>(data.data);
             resistance = comp.mass;
             showResetButton = comp.showResetButton;
-            PlaySFX.data.CanPlay = comp.canPlaySFX;
-            PlaySFX.data.ClipIndex = comp.sfxIndex;
-            PlaySFX.data.ClipName = comp.sfxName;
-            PlayVFX.data.CanPlay = comp.canPlayVFX;
-            PlayVFX.data.ClipIndex = comp.vfxIndex;
-            PlayVFX.data.ClipName = comp.vfxName;
+            PlaySFX.data.canPlay = comp.canPlaySFX;
+            PlaySFX.data.clipIndex = comp.sfxIndex;
+            PlaySFX.data.clipName = comp.sfxName;
+            PlayVFX.data.canPlay = comp.canPlayVFX;
+            PlayVFX.data.clipIndex = comp.vfxIndex;
+            PlayVFX.data.clipName = comp.vfxName;
             Broadcast = comp.Broadcast;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, null);
         }

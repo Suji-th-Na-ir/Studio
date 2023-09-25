@@ -34,12 +34,12 @@ namespace RuntimeInspectorNamespace
         {
             DestroyOnComponent comp = new()
             {
-                canPlaySFX = PlaySFX.data.CanPlay,
-                canPlayVFX = PlayVFX.data.CanPlay,
-                sfxName = Helper.GetSfxClipNameByIndex(PlaySFX.data.ClipIndex),
-                vfxName = Helper.GetVfxClipNameByIndex(PlayVFX.data.ClipIndex),
-                sfxIndex = PlaySFX.data.ClipIndex,
-                vfxIndex = PlayVFX.data.ClipIndex,
+                canPlaySFX = PlaySFX.data.canPlay,
+                canPlayVFX = PlayVFX.data.canPlay,
+                sfxName = Helper.GetSfxClipNameByIndex(PlaySFX.data.clipIndex),
+                vfxName = Helper.GetVfxClipNameByIndex(PlayVFX.data.clipIndex),
+                sfxIndex = PlaySFX.data.clipIndex,
+                vfxIndex = PlayVFX.data.clipIndex,
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
@@ -84,12 +84,12 @@ namespace RuntimeInspectorNamespace
             startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
             Broadcast = comp.Broadcast;
-            PlaySFX.data.CanPlay = comp.canPlaySFX;
-            PlaySFX.data.ClipIndex = comp.sfxIndex;
-            PlaySFX.data.ClipName = comp.sfxName;
-            PlayVFX.data.CanPlay = comp.canPlayVFX;
-            PlayVFX.data.ClipIndex = comp.vfxIndex;
-            PlayVFX.data.ClipName = comp.vfxName;
+            PlaySFX.data.canPlay = comp.canPlaySFX;
+            PlaySFX.data.clipIndex = comp.sfxIndex;
+            PlaySFX.data.clipName = comp.sfxName;
+            PlayVFX.data.canPlay = comp.canPlayVFX;
+            PlayVFX.data.clipIndex = comp.vfxIndex;
+            PlayVFX.data.clipName = comp.vfxName;
             string listenstring = "";
             if (startOn.data.startIndex == 2)
                 listenstring = startOn.data.listenName;

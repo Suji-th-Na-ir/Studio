@@ -28,12 +28,12 @@ namespace RuntimeInspectorNamespace
                 comp.ConditionData = "Player";
                 comp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
                 comp.Broadcast = Broadcast;
-                comp.canPlaySFX = PlaySFX.data.CanPlay;
-                comp.canPlayVFX = PlayVFX.data.CanPlay;
-                comp.sfxName = PlaySFX.data.ClipName;
-                comp.vfxName = PlayVFX.data.ClipName;
-                comp.sfxIndex = PlaySFX.data.ClipIndex;
-                comp.vfxIndex = PlayVFX.data.ClipIndex;
+                comp.canPlaySFX = PlaySFX.data.canPlay;
+                comp.canPlayVFX = PlayVFX.data.canPlay;
+                comp.sfxName = PlaySFX.data.clipName;
+                comp.vfxName = PlayVFX.data.clipName;
+                comp.sfxIndex = PlaySFX.data.clipIndex;
+                comp.vfxIndex = PlayVFX.data.clipIndex;
             }
             gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -45,12 +45,12 @@ namespace RuntimeInspectorNamespace
         {
             RespawnComponent comp = JsonConvert.DeserializeObject<RespawnComponent>(data.data);
             Broadcast = comp.Broadcast;
-            PlaySFX.data.CanPlay = comp.canPlaySFX;
-            PlaySFX.data.ClipIndex = comp.sfxIndex;
-            PlaySFX.data.ClipName = comp.sfxName;
-            PlayVFX.data.CanPlay = comp.canPlayVFX;
-            PlayVFX.data.ClipIndex = comp.vfxIndex;
-            PlayVFX.data.ClipName = comp.vfxName;
+            PlaySFX.data.canPlay = comp.canPlaySFX;
+            PlaySFX.data.clipIndex = comp.sfxIndex;
+            PlaySFX.data.clipName = comp.sfxName;
+            PlayVFX.data.canPlay = comp.canPlayVFX;
+            PlayVFX.data.clipIndex = comp.vfxIndex;
+            PlayVFX.data.clipName = comp.vfxName;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, null);
         }
     }

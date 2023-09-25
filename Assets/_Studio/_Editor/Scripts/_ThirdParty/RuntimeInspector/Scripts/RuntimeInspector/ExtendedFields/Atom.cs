@@ -64,7 +64,7 @@ namespace Terra.Studio
                 base.Setup<T>(_target, fieldName);
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
-                data.ClipName = Helper.GetSfxClipNameByIndex(data.ClipIndex);
+                data.clipName = Helper.GetSfxClipNameByIndex(data.clipIndex);
             }
         }
 
@@ -79,7 +79,7 @@ namespace Terra.Studio
                 base.Setup<T>(_target, fieldName);
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
-                data.ClipName = Helper.GetVfxClipNameByIndex(data.ClipIndex);
+                data.clipName = Helper.GetVfxClipNameByIndex(data.clipIndex);
             }
         }
 
@@ -143,9 +143,9 @@ namespace Terra.Studio
     [Serializable]
     public struct PlayFXData
     {
-        public bool CanPlay;
-        public string ClipName;
-        public int ClipIndex;
+        public bool canPlay;
+        public string clipName;
+        public int clipIndex;
     }
 
     [Serializable]
