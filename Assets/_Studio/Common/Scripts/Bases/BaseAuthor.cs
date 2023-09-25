@@ -20,14 +20,14 @@ namespace Terra.Studio
 
         }
 
-        public struct ComponentGenerateData
+        protected struct ComponentGenerateData
         {
             public int entity;
             public EntityBasedComponent data;
             public GameObject obj;
         }
 
-        public struct ComponentAuthorData
+        protected struct ComponentAuthorData
         {
             public int entity;
             public string type;

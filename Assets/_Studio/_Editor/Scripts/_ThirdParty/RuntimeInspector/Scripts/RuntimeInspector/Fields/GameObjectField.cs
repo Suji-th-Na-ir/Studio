@@ -286,7 +286,14 @@ namespace RuntimeInspectorNamespace
                     }
                 },
                 (type) => ((Type)type).FullName,
-                (type) => ((Type)type).FullName,
+                (type) =>
+                {
+                    var displayNameAttribute = ((Type)type).GetCustomAttribute<AliasDrawerAttribute>();
+                    string displayName = displayNameAttribute?.Alias;
+                    var name = string.IsNullOrEmpty(displayName) ? ((Type)type).FullName : displayName;
+                    return name;
+
+                },
                 addComponentTypes, null, false, "Add Component", Inspector.Canvas);
         }
 

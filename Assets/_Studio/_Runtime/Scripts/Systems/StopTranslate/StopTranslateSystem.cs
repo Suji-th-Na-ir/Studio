@@ -1,10 +1,20 @@
 using UnityEngine;
+using PlayShifu.Terra;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
     public class StopTranslateSystem : BaseSystem
     {
+        public override void Init<T>(int entity)
+        {
+            base.Init<T>(entity);
+            ref var entityRef = ref entity.GetComponent<StopTranslateComponent>();
+            var rb = entityRef.RefObj.AddRigidbody();
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
+
         public override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref entity.GetComponent<StopTranslateComponent>();

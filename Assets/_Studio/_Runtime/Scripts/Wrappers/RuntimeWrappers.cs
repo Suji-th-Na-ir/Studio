@@ -95,9 +95,13 @@ namespace Terra.Studio
 
         public static void PlaySFX(string sfxName)
         {
+            var sfx = RuntimeOp.Load<AudioClip>($"sfx/{sfxName}");
+            if (!sfx)
+            {
+                return;
+            }
             var go = new GameObject("SFX_Holder");
             var audioSource = go.AddComponent<AudioSource>();
-            var sfx = RuntimeOp.Load<AudioClip>($"sfx/{sfxName}");
             audioSource.clip = sfx;
             audioSource.loop = false;
             audioSource.Play();
@@ -108,6 +112,10 @@ namespace Terra.Studio
         public static void PlayVFX(string vfxName, Vector3 position)
         {
             var vfxObj = RuntimeOp.Load<GameObject>($"vfx/{vfxName}");
+            if (!vfxObj)
+            {
+                return;
+            }
             var vfx = Object.Instantiate(vfxObj);
             vfx.transform.position = position;
             var destroyAfter = vfx.AddComponent<DestroyAfter>();

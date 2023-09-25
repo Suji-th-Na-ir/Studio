@@ -98,7 +98,7 @@ namespace RuntimeInspectorNamespace
 			if( str == null || str.Length == 0 )
 				return string.Empty;
 
-			byte lastCharType = 1; // 0 -> lowercase, 1 -> _ (underscore), 2 -> number, 3 -> uppercase
+			byte lastCharType = 1; // 0 -> lowercase, 1 -> _ (underscore), 2 -> number, 3 -> uppercase,4->\n
 			int index = 0;
 			if( str.Length > 1 && str[1] == '_' )
 				index = 2;
@@ -107,9 +107,14 @@ namespace RuntimeInspectorNamespace
 			for( ; index < str.Length; index++ )
 			{
 				char ch = str[index];
-				if( char.IsUpper( ch ) )
+
+				if (ch.Equals('\n'))
+                {
+                    lastCharType = 4; // Reset lastCharType to 0 for the newline character
+                }
+                if ( char.IsUpper( ch ) )
 				{
-					if( ( lastCharType < 2 || ( str.Length > index + 1 && char.IsLower( str[index + 1] ) ) ) && stringBuilder.Length > 0 )
+					if( ( lastCharType < 2 || ( str.Length > index + 1 && char.IsLower( str[index + 1] ) ) ) && stringBuilder.Length > 0 &&lastCharType!=4)
 						stringBuilder.Append( ' ' );
 
 					stringBuilder.Append( ch );
@@ -138,7 +143,7 @@ namespace RuntimeInspectorNamespace
 					}
 					else
 						stringBuilder.Append( ch );
-
+					if(lastCharType!=4)
 					lastCharType = 0;
 				}
 			}

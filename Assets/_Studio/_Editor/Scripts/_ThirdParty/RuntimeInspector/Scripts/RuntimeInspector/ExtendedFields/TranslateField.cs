@@ -33,7 +33,7 @@ namespace RuntimeInspectorNamespace
                 type.field = this;
                 type.Setup();
             }
-            List<string> data = Enum.GetNames(typeof(TranslateType)).ToList();
+            List<string> data = Helper.GetEnumWithAliasNames<TranslateType>();
             translateTypesDD.AddOptions(data);
             translateTypesDD.onValueChanged.AddListener(OnTranslateTypesValueChanged);
         }
@@ -82,11 +82,8 @@ namespace RuntimeInspectorNamespace
             lastComponentData = new();
             if (selectedTranslateType)
             {
-
-
                 if (selectedTranslateType.movebyInput != null)
                 {
-                    Debug.Log(selectedTranslateType.movebyInput[0].text);
                     lastComponentData.moveBy = new Vector3(float.Parse(selectedTranslateType.movebyInput[0].text),
                         float.Parse(selectedTranslateType.movebyInput[1].text), (float.Parse(selectedTranslateType.movebyInput[2].text))); ;
                 }

@@ -326,6 +326,16 @@ namespace RTG
             _prjSwitchTranstion.TransitionBegin += OnPrjSwitchTransitionBegin;
             _prjSwitchTranstion.TransitionUpdate += OnPrjSwitchTransitionUpate;
             _prjSwitchTranstion.TransitionEnd += OnPrjSwitchTransitionEnd;
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+            _panSettings.StandardPanSensitivity = 0.1f;
+            _lookAroundSettings.StandardLookAroundSensitivity = 0.1f;
+            _orbitSettings.StandardOrbitSensitivity = 0.1f;
+            _zoomSettings.PerspStandardZoomSensitivity = 0.015f;
+            _zoomSettings.OrthoStandardZoomSensitivity = 0.015f;
+            _focusSettings.FocusDistanceAdd = 0.12f;
+            _focusSettings.SmoothTime = 0.15f;
+#endif
         }
 
         private void Start()
@@ -479,7 +489,7 @@ namespace RTG
             if (_zoomSettings.InvertZoomAxis) zoomAmount *= -1.0f;
 
             zoomAmount *= _targetCamera.EstimateZoomFactorSpherical(_lastFocusPoint);
-
+            zoomAmount = Mathf.Clamp(zoomAmount, -1000, 1000);
             return zoomAmount;
         }
 

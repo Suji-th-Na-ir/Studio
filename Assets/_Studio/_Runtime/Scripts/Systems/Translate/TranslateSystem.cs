@@ -1,10 +1,20 @@
 using UnityEngine;
+using PlayShifu.Terra;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
     public class TranslateSystem : BaseSystem, IEcsRunSystem
     {
+        public override void Init<T>(int entity)
+        {
+            base.Init<T>(entity);
+            ref var entityRef = ref entity.GetComponent<TranslateComponent>();
+            var rb = entityRef.RefObj.AddRigidbody();
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
+
         public override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref entity.GetComponent<TranslateComponent>();
@@ -23,7 +33,13 @@ namespace Terra.Studio
                 return;
             }
             var tr = entityRef.RefObj.transform;
-            var targetPos = tr.parent == null ? entityRef.targetPosition+entityRef.startPosition : entityRef.startPosition + tr.TransformDirection(entityRef.targetPosition);
+            if (!entityRef.isInitialProcessDone)
+            {
+                var scaleDelta = new Vector3(tr.lossyScale.x / tr.localScale.x, tr.lossyScale.y / tr.localScale.y, tr.lossyScale.z / tr.localScale.z);
+                entityRef.targetPosition = new Vector3(scaleDelta.x * entityRef.targetPosition.x, scaleDelta.y * entityRef.targetPosition.y, scaleDelta.z * entityRef.targetPosition.z);
+                entityRef.isInitialProcessDone = true;
+            }
+            var targetPos = tr.parent == null ? entityRef.targetPosition + entityRef.startPosition : entityRef.startPosition + tr.TransformDirection(entityRef.targetPosition);
             var pauseDistance = Vector3.Distance(entityRef.startPosition, targetPos);
             var direction = targetPos - entityRef.startPosition;
             entityRef.pauseDistance = pauseDistance;
@@ -150,7 +166,9 @@ namespace Terra.Studio
         {
             var step = component.speed * Time.deltaTime;
             if (component.remainingDistance > 0)
+            {
                 step = Mathf.Clamp(step, 0.0f, component.remainingDistance);
+            }
             var movement = component.direction.normalized * step;
             component.RefObj.transform.position += movement;
             component.remainingDistance -= step;
@@ -166,7 +184,6 @@ namespace Terra.Studio
                 component.pauseStartTime = Time.time;
                 component.coveredDistance = 0f;
                 OnTranslateDone(false, entity);
-                return;
             }
         }
 
@@ -174,7 +191,9 @@ namespace Terra.Studio
         {
             var step = component.speed * Time.deltaTime;
             if (component.remainingDistance > 0)
+            {
                 step = Mathf.Clamp(step, 0.0f, component.remainingDistance);
+            }
             var movement = component.direction.normalized * step;
             component.RefObj.transform.position += movement;
             component.remainingDistance -= step;

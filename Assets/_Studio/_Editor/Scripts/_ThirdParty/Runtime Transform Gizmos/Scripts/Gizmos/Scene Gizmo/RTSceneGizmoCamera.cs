@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace RTG
 {
@@ -34,6 +35,7 @@ namespace RTG
         public Vector3 Up { get { return _transform.up; } }
         public Vector3 Look { get { return _transform.forward; } }
         public Vector3 LookAtPoint { get { return _lookAtPoint; } }
+        private UniversalAdditionalCameraData _cameraData;
 
         public void Update_SystemCall()
         {
@@ -44,6 +46,12 @@ namespace RTG
             Camera.fieldOfView = _sceneCamera.fieldOfView;
 
             if (_viewportUpdater != null) _viewportUpdater.Update(this);
+
+            //if (_cameraData == null) {
+            //    _cameraData = Camera.GetComponent<UniversalAdditionalCameraData> ();
+            //    _cameraData.renderType = CameraRenderType.Overlay;
+            //    Camera.main.GetComponent<UniversalAdditionalCameraData> ().cameraStack.Add (Camera);
+            //}
         }
 
         private void Awake()

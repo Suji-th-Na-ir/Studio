@@ -497,6 +497,10 @@ namespace RuntimeInspectorNamespace
 			// On new Input System, scroll sensitivity is much higher than legacy Input system
 			scrollView.scrollSensitivity *= 0.25f;
 #endif
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+            scrollView.scrollSensitivity *= 0.05f;
+#endif
         }
 
         private void Start()

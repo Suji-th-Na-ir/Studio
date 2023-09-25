@@ -4,7 +4,7 @@ using System.Reflection;
 using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
-
+using PlayShifu.Terra;
 namespace RuntimeInspectorNamespace
 {
     public class EnumField : InspectorField
@@ -38,25 +38,32 @@ namespace RuntimeInspectorNamespace
         private Dropdown input;
 #pragma warning restore 0649
 
-        private static readonly Dictionary<Type, List<string>> enumNames = new Dictionary<Type, List<string>>();
-        private static readonly Dictionary<Type, List<object>> enumValues = new Dictionary<Type, List<object>>();
+		private static readonly Dictionary<Type, List<string>> enumNames = new Dictionary<Type, List<string>>();
+		private static readonly Dictionary<Type, List<object>> enumValues = new Dictionary<Type, List<object>>();
 
-        private List<string> currEnumNames;
-        private List<object> currEnumValues;
+		private List<string> currEnumNames;
+		private List<object> currEnumValues;
 
-        public override void Initialize()
-        {
-            base.Initialize();
-            input.onValueChanged.AddListener(OnValueChanged);
+		public override void Initialize()
+		{
+			base.Initialize();
+			input.onValueChanged.AddListener( OnValueChanged );
 
 #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
 			// On new Input System, scroll sensitivity is much higher than legacy Input system
 			templateRoot.GetComponent<ScrollRect>().scrollSensitivity *= 0.25f;
 #endif
-        }
 
-        public override bool SupportsType(Type type)
-        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+			ScrollRect[] a= this.GetComponentsInChildren<ScrollRect> ();
+            foreach (var item in a) {
+				item.scrollSensitivity *= 0.05f;
+			}
+#endif
+		}
+
+		public override bool SupportsType( Type type )
+		{
 #if UNITY_EDITOR || !NETFX_CORE
             return type.IsEnum;
 #else

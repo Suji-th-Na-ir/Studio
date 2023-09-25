@@ -1,9 +1,19 @@
+using PlayShifu.Terra;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
     public class CollideSystem : BaseSystem
     {
+        public override void Init<T>(int entity)
+        {
+            base.Init<T>(entity);
+            ref var entityRef = ref entity.GetComponent<CollideComponent>();
+            var rb = entityRef.RefObj.AddRigidbody();
+            rb.isKinematic = true;
+            rb.useGravity = false;
+        }
+
         public override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref entity.GetComponent<CollideComponent>();

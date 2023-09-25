@@ -33,10 +33,10 @@ namespace RuntimeInspectorNamespace
         private void LoadStartOnOptions()
         {
             Atom.StartOn atom = (Atom.StartOn)Value;
-            if (atom.StartList.Count > 0)
+            if (atom.aliasNameList.Count > 0)
             {
                 startOn.options.Clear();
-                foreach (string item in atom.StartList)
+                foreach (string item in atom.aliasNameList)
                 {
                     startOn.options.Add(new Dropdown.OptionData()
                     {
@@ -44,7 +44,7 @@ namespace RuntimeInspectorNamespace
                     });
                 }
             }
-            startOn.captionText.text = atom.StartList[atom.data.startIndex];
+            startOn.captionText.text = atom.aliasNameList[atom.data.startIndex];
         }
 
         public override bool SupportsType(Type type)

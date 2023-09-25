@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
@@ -6,9 +5,10 @@ using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
 {
-    [EditorDrawComponent("Terra.Studio.Translate")]
+    [EditorDrawComponent("Terra.Studio.Translate"), AliasDrawer("Move")]
     public class Translate : MonoBehaviour, IComponent
     {
+        [AliasDrawer("MoveWhen")]
         public Atom.StartOn startOn = new();
         public Atom.Translate Type = new();
         public Atom.PlaySfx PlaySFX = new();
@@ -19,7 +19,7 @@ namespace RuntimeInspectorNamespace
         {
             guid = GetInstanceID() + "_translate";
             Type.Setup(guid, gameObject, GetType().Name);
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), this.GetType().Name,startOn.data.startIndex==3);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), Helper.GetEnumWithAliasNames<StartOn>(), this.GetType().Name, startOn.data.startIndex == 4);
             PlaySFX.Setup<Translate>(gameObject);
             PlayVFX.Setup<Translate>(gameObject);
         }
@@ -46,7 +46,7 @@ namespace RuntimeInspectorNamespace
                 vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName,
                 sfxIndex = PlaySFX.data.clipIndex,
                 vfxIndex = PlayVFX.data.clipIndex,
-                listen = Type.data.listen,
+                listen = Listen.Always,
             };
 
             ModifyDataAsPerGiven(ref comp);
@@ -98,12 +98,27 @@ namespace RuntimeInspectorNamespace
             Type.data.listen = comp.listen;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
-                startOn.data.startIndex = (int)(StartOn)result;
+                var res = (StartOn)result;
+                if (res == StartOn.OnPlayerCollide)
+                {
+                    if (comp.ConditionData.Equals("Player"))
+                    {
+                        startOn.data.startIndex = (int)res;
+                    }
+                    else
+                    {
+                        startOn.data.startIndex = (int)StartOn.OnObjectCollide;
+                    }
+                }
+                else
+                {
+                    startOn.data.startIndex = (int)(StartOn)result;
+                }
+                startOn.data.startName = res.ToString();
             }
-            startOn.data.startName = comp.ConditionType;
             startOn.data.listenName = comp.ConditionData;
             var listenString = "";
-            if (startOn.data.startIndex == 3)
+            if (startOn.data.startIndex == 4)
                 listenString = Type.data.listenTo;
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Type.data.broadcast, listenString);
         }

@@ -17,9 +17,16 @@ namespace Terra.Studio
         public StudioState PreviousStudioState { get { return previousStudioState; } }
         public StudioState CurrentStudioState { get { return currentStudioState; } }
 
+        private const string FIRST_TIME_LAUNCH_KEY = "ALFT";
+
+        [AnalyticsTrackEvent("AppLaunch")]
         private void Awake()
         {
             SystemOp.Register(this);
+            if (!FIRST_TIME_LAUNCH_KEY.HasKeyInPrefs())
+            {
+                RegisterAppLaunchFirstTimeAnalytics();
+            }
         }
 
         private void Start()
@@ -38,7 +45,7 @@ namespace Terra.Studio
                 loadSceneMode = LoadSceneMode.Additive
             };
             LoadSilentServices();
-            LoadSubsystemScene();
+            SystemOp.Resolve<PasswordManager>().OnCorrectPasswordEntered += LoadSubsystemScene;
         }
 
         private void LoadSilentServices()
@@ -47,12 +54,7 @@ namespace Terra.Studio
             SystemOp.Register(new FileService());
             if (configData.PickupSavedData)
             {
-                var shouldIgnore =
-#if UNITY_EDITOR
-                false;
-#else
-                true;
-#endif
+                var shouldIgnore = !Helper.IsInUnityEditor();
                 SystemOp.Resolve<FileService>().WriteFile(
                     configData.SceneDataToLoad.text,
                     FileService.GetSavedFilePath(ConfigSO.SceneDataToLoad.name),
@@ -73,6 +75,11 @@ namespace Terra.Studio
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
             SystemOp.Resolve<ISubsystem>().Initialize();
+            if (PreviousStudioState == StudioState.Bootstrap &&
+                SystemOp.Resolve<PasswordManager>())
+            {
+                SystemOp.Resolve<PasswordManager>().FuckOff();
+            }
         }
 
         public void SwitchState()
@@ -121,6 +128,12 @@ namespace Terra.Studio
             SystemOp.Flush();
             EditorOp.Flush();
             RuntimeOp.Flush();
+        }
+
+        [AnalyticsTrackEvent("AppLaunchFirstTime")]
+        private void RegisterAppLaunchFirstTimeAnalytics()
+        {
+            FIRST_TIME_LAUNCH_KEY.SetInt(1);
         }
     }
 }

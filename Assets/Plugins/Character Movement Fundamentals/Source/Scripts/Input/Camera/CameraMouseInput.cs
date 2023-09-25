@@ -19,8 +19,14 @@ namespace CMF
         //Use this value to fine-tune mouse movement;
         //All mouse input will be multiplied by this value;
         public float mouseInputMultiplier = 0.01f;
+        private void OnEnable()
+        {
+#if UNITY_WEBGL &&!UNITY_EDITOR
+            mouseInputMultiplier *= 0.6f;
+#endif
+        }
 
-	    public override float GetHorizontalCameraInput()
+        public override float GetHorizontalCameraInput()
         {
             //Get raw mouse input;
             float _input = Input.GetAxisRaw(mouseHorizontalAxis);

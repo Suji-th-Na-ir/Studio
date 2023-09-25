@@ -11,9 +11,10 @@ namespace Terra.Studio
 {
     public class SceneDataHandler : IDisposable
     {
-        public Func<GameObject, string> TryGetAssetPath;
         public Func<string> GetAssetName;
+        public Func<GameObject, string> TryGetAssetPath;
         private Camera editorCamera;
+
         public Vector3 PlayerSpawnPoint { get; private set; }
 
         public SceneDataHandler()
@@ -35,13 +36,26 @@ namespace Terra.Studio
         public void Save()
         {
             var sceneData = ExportSceneData();
+            var filePath = GetFilePath();
             if (!Helper.IsInUnityEditorMode())
             {
-                SystemOp.Resolve<FileService>().WriteFile(sceneData, FileService.GetSavedFilePath(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name));
+                SystemOp.Resolve<FileService>().WriteFileIntoLocal?.Invoke(sceneData, filePath);
             }
             else
             {
-                new FileService().WriteFile(sceneData, FileService.GetSavedFilePath(GetAssetName?.Invoke()));
+                new FileService().WriteFileIntoLocal?.Invoke(sceneData, filePath);
+            }
+        }
+
+        private string GetFilePath()
+        {
+            if (!Helper.IsInUnityEditorMode())
+            {
+                return FileService.GetSavedFilePath(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name);
+            }
+            else
+            {
+                return FileService.GetSavedFilePath(GetAssetName?.Invoke());
             }
         }
 
@@ -55,24 +69,21 @@ namespace Terra.Studio
 
         public void LoadScene()
         {
-            InitializeScene();
-            SetupSceneDefaultObjects();
-            EditorOp.Resolve<EditorEssentialsLoader>().LoadEssentials();
-        }
-
-        private void InitializeScene()
-        {
-            string data;
             var prevState = SystemOp.Resolve<System>().PreviousStudioState;
             if (prevState != StudioState.Runtime && SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
             {
                 var saveFilePath = FileService.GetSavedFilePath(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name);
-                data = SystemOp.Resolve<FileService>().ReadFromFile(saveFilePath);
+                SystemOp.Resolve<FileService>().ReadFileFromLocal?.Invoke(saveFilePath, OnDataReceived);
             }
             else
             {
-                data = SystemOp.Resolve<CrossSceneDataHolder>().Get();
+                var data = SystemOp.Resolve<CrossSceneDataHolder>().Get();
+                OnDataReceived(data);
             }
+        }
+
+        private void OnDataReceived(string data)
+        {
             if (string.IsNullOrEmpty(data))
             {
                 return;
@@ -86,17 +97,21 @@ namespace Terra.Studio
             void RecreateScene(string data)
         {
             var worldData = JsonConvert.DeserializeObject<WorldData>(data);
+            if (!Helper.IsInUnityEditorMode())
+            {
+                var metaData = worldData.metaData;
+                if (!metaData.Equals(default(WorldMetaData)))
+                {
+                    PlayerSpawnPoint = metaData.playerSpawnPoint;
+                }
+            }
             for (int i = 0; i < worldData.entities.Length; i++)
             {
                 var entity = worldData.entities[i];
                 SpawnObjects(entity);
             }
-            if (!Helper.IsInUnityEditorMode())
-            {
-                var metaData = worldData.metaData;
-                if (metaData.Equals(default(WorldMetaData))) return;
-                PlayerSpawnPoint = metaData.playerSpawnPoint;
-            }
+            SetupSceneDefaultObjects();
+            EditorOp.Resolve<EditorEssentialsLoader>().LoadEssentials();
         }
 
         private void SpawnObjects(VirtualEntity entity)
@@ -458,7 +473,7 @@ namespace Terra.Studio
             SystemOp.Resolve<CrossSceneDataHolder>().Set("CameraRot", editorCamera.transform.eulerAngles);
         }
 
-        public void UpdateScoreModifiersCount(bool add, string id)
+        public void UpdateScoreModifiersCount(bool add, string id, bool setupScoreManager = true)
         {
             if (add)
             {
@@ -467,7 +482,10 @@ namespace Terra.Studio
                     return;
                 }
                 modifiers.Add(id);
-                SetupScoreManager(true);
+                if (setupScoreManager)
+                {
+                    SetupScoreManager(true);
+                }
             }
             else
             {
@@ -477,7 +495,7 @@ namespace Terra.Studio
                 }
                 modifiers.Remove(id);
             }
-            if (modifiers.Count == 0)
+            if (modifiers.Count == 0 && setupScoreManager)
             {
                 SetupScoreManager(false);
             }

@@ -8,6 +8,10 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using System.Reflection;
 using static RuntimeInspectorNamespace.RuntimeHierarchy;
+using System.Collections.ObjectModel;
+using PlayShifu.Terra;
+using EasyUI.Helpers;
+using EasyUI.Toast;
 
 public class SelectionHandler : View
 {
@@ -20,7 +24,8 @@ public class SelectionHandler : View
     }
 
     [SerializeField] private RuntimeHierarchy runtimeHierarchy;
-
+    public ToastUI toastUI;
+    
     private ObjectTransformGizmo objectMoveGizmo;
     private ObjectTransformGizmo objectRotationGizmo;
     private ObjectTransformGizmo objectScaleGizmo;
@@ -38,6 +43,8 @@ public class SelectionHandler : View
 
     private void Awake()
     {
+        // setting target framerate to 60
+        Application.targetFrameRate = 60;
         EditorOp.Register(this);
         runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
     }
@@ -48,7 +55,7 @@ public class SelectionHandler : View
         runtimeHierarchy.OnSelectionChanged -= OnHierarchySelectionChanged;
     }
 
-    private void OnHierarchySelectionChanged(System.Collections.ObjectModel.ReadOnlyCollection<Transform> _allTransform)
+    private void OnHierarchySelectionChanged(ReadOnlyCollection<Transform> _allTransform)
     {
         if (_allTransform.Count == 0)
         {
@@ -160,14 +167,14 @@ public class SelectionHandler : View
         objectRotationGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
         objectScaleGizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();
         objectUniversalGizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
-
+        
         ResetAllHandles();
 
         objectMoveGizmo.SetTargetObjects(_selectedObjects);
         objectRotationGizmo.SetTargetObjects(_selectedObjects);
         objectScaleGizmo.SetTargetObjects(_selectedObjects);
         objectUniversalGizmo.SetTargetObjects(_selectedObjects);
-
+        
         _workGizmo = objectMoveGizmo;
         _workGizmoId = GizmoId.Move;
     }
@@ -195,9 +202,25 @@ public class SelectionHandler : View
         DuplicateObjects();
         DeleteObjects();
 
-        if (RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.WasKeyPressedThisFrame(KeyCode.S))
+        if((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.WasKeyPressedThisFrame(KeyCode.S))
         {
             EditorOp.Resolve<SceneDataHandler>().Save();
+        }
+
+
+        if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.WasKeyPressedThisFrame(KeyCode.Z))
+        {
+            var color = Helper.GetColorFromHex("#0F1115");
+            color.a = 0.8f;
+            Toast.Show("Undo Feature Will Come Soon!", 1.0f, color);
+        }
+
+
+        if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.IsKeyPressed(KeyCode.LeftShift) && RTInput.WasKeyPressedThisFrame(KeyCode.Z))
+        {
+            var color = Helper.GetColorFromHex("#0F1115");
+            color.a = 0.8f;
+            Toast.Show("Redo Feature Will Come Soon!", 1.0f, color);
         }
     }
 
@@ -232,10 +255,12 @@ public class SelectionHandler : View
         {
             if (RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.WasKeyPressedThisFrame(KeyCode.D))
             {
-
+             
+                List<Transform> duplicatedGms = new List<Transform>();
                 foreach (GameObject obj in _selectedObjects)
                 {
-                    var iObj = Instantiate(obj, obj.transform.position, obj.transform.rotation);
+                    var iObj = Instantiate(obj, obj.transform.position, obj.transform.rotation, obj.transform.parent);                
+                    duplicatedGms.Add(iObj.transform);
                     var components = iObj.GetComponents<IComponent>();
 
                     for (int i = 0; i < components.Length; i++)
@@ -261,11 +286,20 @@ public class SelectionHandler : View
                         }
 
                     }
-                }
 
+                }
+                runtimeHierarchy.Refresh();
+                _selectedObjects.Clear();
+                foreach (var d in duplicatedGms)
+                {
+                    OnSelectionChanged();
+                }
+                SelectObjectsInHierarchy(duplicatedGms);
             }
         }
     }
+
+
 
     bool CheckIfThereIsAnyPopups()
     {
@@ -358,6 +392,15 @@ public class SelectionHandler : View
             mainCamera = Camera.main;
         }
         return mainCamera;
+    }
+    public void SelectObjectsInHierarchy(List<Transform> _obj)
+    {
+        runtimeHierarchy.Select(_obj, RuntimeHierarchy.SelectOptions.FocusOnSelection);
+    }
+
+    public void RefreshHierarchy()
+    {
+        runtimeHierarchy.Refresh();
     }
 
     public void SetWorkGizmoId(GizmoId gizmoId)
