@@ -1,12 +1,4 @@
 {
-  "RuntimeInspectorNamespace.Collectible+StartOnCollectible.OnPlayerCollide": [
-    "Terra.Studio.TriggerAction",
-    "Player"
-  ],
-  "RuntimeInspectorNamespace.Collectible+StartOnCollectible.OnClick": [
-    "Terra.Studio.MouseAction",
-    "OnClick"
-  ],
   "RuntimeInspectorNamespace.DestroyOnEnum.OnPlayerCollide": [
     "Terra.Studio.TriggerAction",
     "Player"
@@ -42,6 +34,14 @@
   "Terra.Studio.StartOn.BroadcastListen": [
     "Terra.Studio.Listener",
     null
+  ],
+  "RuntimeInspectorNamespace.Collectible+StartOnCollectible.OnPlayerCollide": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "RuntimeInspectorNamespace.Collectible+StartOnCollectible.OnClick": [
+    "Terra.Studio.MouseAction",
+    "OnClick"
   ],
   "Terra.Studio.Collide+DestroyOnEnum.OnPlayerCollide": [
     "Terra.Studio.TriggerAction",
