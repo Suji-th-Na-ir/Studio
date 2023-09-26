@@ -1,4 +1,5 @@
 using System;
+using mixpanel;
 using UnityEngine;
 using PlayShifu.Terra;
 using UnityEngine.SceneManagement;
@@ -19,14 +20,16 @@ namespace Terra.Studio
 
         private const string FIRST_TIME_LAUNCH_KEY = "ALFT";
 
-        [AnalyticsTrackEvent("AppLaunch")]
         private void Awake()
         {
             SystemOp.Register(this);
             if (!FIRST_TIME_LAUNCH_KEY.HasKeyInPrefs())
             {
-                RegisterAppLaunchFirstTimeAnalytics();
+                Mixpanel.Track("AppLaunchFirstTime");
+                FIRST_TIME_LAUNCH_KEY.SetInt(1);
             }
+            Mixpanel.Track("AppLaunch");
+            Mixpanel.Flush();
         }
 
         private void Start()
@@ -128,12 +131,6 @@ namespace Terra.Studio
             SystemOp.Flush();
             EditorOp.Flush();
             RuntimeOp.Flush();
-        }
-
-        [AnalyticsTrackEvent("AppLaunchFirstTime")]
-        private void RegisterAppLaunchFirstTimeAnalytics()
-        {
-            FIRST_TIME_LAUNCH_KEY.SetInt(1);
         }
     }
 }
