@@ -110,8 +110,11 @@ namespace Terra.Studio
                 var entity = worldData.entities[i];
                 SpawnObjects(entity);
             }
-            SetupSceneDefaultObjects();
-            EditorOp.Resolve<EditorEssentialsLoader>().LoadEssentials();
+            if (!Helper.IsInUnityEditorMode())
+            {
+                SetupSceneDefaultObjects();
+                EditorOp.Resolve<EditorEssentialsLoader>().LoadEssentials();
+            }
         }
 
         private void SpawnObjects(VirtualEntity entity)
