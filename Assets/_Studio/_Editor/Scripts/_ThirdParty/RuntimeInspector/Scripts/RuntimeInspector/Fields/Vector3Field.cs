@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using Terra.Studio;
 using UnityEngine;
@@ -32,6 +33,8 @@ namespace RuntimeInspectorNamespace
 #if UNITY_2017_2_OR_NEWER
         private bool isVector3Int;
 #endif
+
+        private readonly string[] TRANSFORM_FIELDS = new[] { "Position", "Rotation", "Scale" };
 
         public override void Initialize()
         {
@@ -127,35 +130,55 @@ namespace RuntimeInspectorNamespace
                     return true;
                 }
             }
-
+            Inspector.RefreshDelayed();
             return false;
         }
 
         private bool OnValueSubmitted(BoundInputField source, string input)
         {
-            Inspector.RefreshDelayed();
-            var isChanged = OnValueChanged(source, input);
-            if (isChanged)
+            HandleUndoRedo(source, input);
+            return true;
+        }
+
+        private void HandleUndoRedo(BoundInputField source, string input)
+        {
+            if (Value != lastSubmittedValue)
             {
-                if (Value != lastSubmittedValue)
-                {
-                    var lastValue = GetAxisFromField(source, (Vector3)lastSubmittedValue);
-                    EditorOp.Resolve<IURCommand>()?.Record(
-                        (lastSubmittedValue, lastValue, Name), (Value, input, Name),
-                        $"Vector3 changed to: {Value}",
-                        (value) =>
+                var message = $"Vector3 changed to: {Value}";
+                var lastValue = GetAxisFromField(source, (Vector3)lastSubmittedValue);
+                EditorOp.Resolve<IURCommand>()?.Record(
+                    (lastSubmittedValue, Name), (Value, Name),
+                    message,
+                    (value) =>
+                    {
+                        var transform = (Transform)virutalObject;
+                        var modValue = ((object, string))value;
+                        if (TRANSFORM_FIELDS.Any(x => x.Equals(modValue.Item2)))
                         {
-                            var modValue = ((object, string, string))value;
-                            OnValueChanged(source, modValue.Item2);
-                            SetValueIndirectly();
-                            lastSubmittedValue = modValue.Item1;
+                            switch (modValue.Item2)
+                            {
+                                case "Position":
+                                    transform.localPosition = (Vector3)modValue.Item1;
+                                    break;
+                                case "Rotation":
+                                    transform.localEulerAngles = (Vector3)modValue.Item1;
+                                    break;
+                                case "Scale":
+                                    transform.localScale = (Vector3)modValue.Item1;
+                                    break;
+                            }
                             EditorOp.Resolve<SelectionHandler>().RefreshGizmo();
                         }
-                    );
-                }
-                lastSubmittedValue = Value;
+                        else
+                        {
+                            OnValueChanged(source, modValue.Item2);
+                            SetValueIndirectly();
+                        }
+                        lastSubmittedValue = modValue.Item1;
+                    }
+                );
             }
-            return isChanged;
+            lastSubmittedValue = Value;
         }
 
         private string GetAxisFromField(BoundInputField source, Vector3 vector)

@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using PlayShifu.Terra;
 using RuntimeInspectorNamespace;
-using System.Collections.Generic;
 
 namespace Terra.Studio
 {

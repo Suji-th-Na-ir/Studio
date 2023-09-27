@@ -153,6 +153,7 @@ namespace RuntimeInspectorNamespace
         public void BindTo(InspectorField parent, MemberInfo variable, string variableName = null)
         {
             m_Component = variable.DeclaringType;
+            virutalObject = parent.Value;
             if (variable is FieldInfo field)
             {
                 var displayNameAttribute = field.GetCustomAttribute<AliasDrawerAttribute>();
@@ -163,14 +164,13 @@ namespace RuntimeInspectorNamespace
 #else
 				if( !parent.BoundVariableType.GetTypeInfo().IsValueType )
 #endif
-                    BindTo(field.FieldType, variableName, field.Name ,() => field.GetValue(parent.Value), (value) => field.SetValue(parent.Value, value), variable);
+                    BindTo(field.FieldType, variableName, field.Name, () => field.GetValue(parent.Value), (value) => field.SetValue(parent.Value, value), variable);
                 else
                     BindTo(field.FieldType, variableName, field.Name, () => field.GetValue(parent.Value), (value) =>
                     {
                         field.SetValue(parent.Value, value);
                         parent.Value = parent.Value;
                     }, variable);
-                virutalObject = parent.Value;
             }
             else if (variable is PropertyInfo property)
             {
@@ -195,7 +195,7 @@ namespace RuntimeInspectorNamespace
                 throw new ArgumentException("Variable can either be a field or a property");
         }
 
-        public void BindTo(Type variableType, string variableName,string reflectedName, Getter getter, Setter setter, MemberInfo variable = null)
+        public void BindTo(Type variableType, string variableName, string reflectedName, Getter getter, Setter setter, MemberInfo variable = null)
         {
             if (variable != null && variable is FieldInfo fieldInfo)
             {
@@ -612,10 +612,10 @@ namespace RuntimeInspectorNamespace
                 {
                     var displayNameAttribute = component.GetType().GetCustomAttribute<AliasDrawerAttribute>();
                     string displayName = displayNameAttribute?.Alias;
-                    variableName ??= string.IsNullOrEmpty(displayName) ? component.GetType().Name: displayName;
+                    variableName ??= string.IsNullOrEmpty(displayName) ? component.GetType().Name : displayName;
                 }
 
-                variableDrawer.BindTo(component.GetType(), string.Empty,string.Empty, () => component, (value) => { });
+                variableDrawer.BindTo(component.GetType(), string.Empty, string.Empty, () => component, (value) => { });
                 variableDrawer.NameRaw = variableName;
 
                 elements.Add(variableDrawer);
