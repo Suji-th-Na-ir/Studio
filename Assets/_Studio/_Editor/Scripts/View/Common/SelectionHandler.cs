@@ -9,9 +9,7 @@ using UnityEngine.EventSystems;
 using System.Reflection;
 using static RuntimeInspectorNamespace.RuntimeHierarchy;
 using System.Collections.ObjectModel;
-using PlayShifu.Terra;
 using EasyUI.Helpers;
-using EasyUI.Toast;
 
 public class SelectionHandler : View
 {
@@ -23,9 +21,10 @@ public class SelectionHandler : View
         Universal
     }
 
-    [SerializeField] private RuntimeHierarchy runtimeHierarchy;
+    [SerializeField]
+    private RuntimeHierarchy runtimeHierarchy;
     public ToastUI toastUI;
-    
+
     private ObjectTransformGizmo objectMoveGizmo;
     private ObjectTransformGizmo objectRotationGizmo;
     private ObjectTransformGizmo objectScaleGizmo;
@@ -43,8 +42,6 @@ public class SelectionHandler : View
 
     private void Awake()
     {
-        // setting target framerate to 60
-        Application.targetFrameRate = 60;
         EditorOp.Register(this);
         runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
     }
@@ -167,60 +164,32 @@ public class SelectionHandler : View
         objectRotationGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
         objectScaleGizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();
         objectUniversalGizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
-        
+
         ResetAllHandles();
 
         objectMoveGizmo.SetTargetObjects(_selectedObjects);
         objectRotationGizmo.SetTargetObjects(_selectedObjects);
         objectScaleGizmo.SetTargetObjects(_selectedObjects);
         objectUniversalGizmo.SetTargetObjects(_selectedObjects);
-        
+
         _workGizmo = objectMoveGizmo;
         _workGizmoId = GizmoId.Move;
     }
 
-    public override void Draw()
-    {
-
-    }
-
-    public override void Flush()
-    {
-
-    }
-
-    public override void Repaint()
-    {
-
-    }
-
     private void Update()
     {
-        if (EventSystem.current.currentSelectedGameObject != null)
+        if (EventSystem.current == null ||
+            EventSystem.current.currentSelectedGameObject != null)
+        {
             return;
+        }
         Scan();
         DuplicateObjects();
         DeleteObjects();
 
-        if((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.WasKeyPressedThisFrame(KeyCode.S))
+        if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.WasKeyPressedThisFrame(KeyCode.S))
         {
             EditorOp.Resolve<SceneDataHandler>().Save();
-        }
-
-
-        if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.WasKeyPressedThisFrame(KeyCode.Z))
-        {
-            var color = Helper.GetColorFromHex("#0F1115");
-            color.a = 0.8f;
-            Toast.Show("Undo Feature Will Come Soon!", 1.0f, color);
-        }
-
-
-        if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.IsKeyPressed(KeyCode.LeftShift) && RTInput.WasKeyPressedThisFrame(KeyCode.Z))
-        {
-            var color = Helper.GetColorFromHex("#0F1115");
-            color.a = 0.8f;
-            Toast.Show("Redo Feature Will Come Soon!", 1.0f, color);
         }
     }
 
@@ -240,8 +209,9 @@ public class SelectionHandler : View
                         {
                             EditorOp.Resolve<UILogicDisplayProcessor>().RemoveComponentIcon(new ComponentDisplayDock() { componentGameObject = obj, componentType = comp.GetType().Name });
                         }
-                        Destroy(obj);
+                        obj.SetActive(false);
                     }
+                    Snapshots.DeleteGameObjectsSnapshot.CreateSnapshot(_selectedObjects);
                     _selectedObjects.Clear();
                     OnSelectionChanged();
                 }
@@ -255,11 +225,10 @@ public class SelectionHandler : View
         {
             if (RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.WasKeyPressedThisFrame(KeyCode.D))
             {
-             
-                List<Transform> duplicatedGms = new List<Transform>();
+                var duplicatedGms = new List<Transform>();
                 foreach (GameObject obj in _selectedObjects)
                 {
-                    var iObj = Instantiate(obj, obj.transform.position, obj.transform.rotation, obj.transform.parent);                
+                    var iObj = Instantiate(obj, obj.transform.position, obj.transform.rotation, obj.transform.parent);
                     duplicatedGms.Add(iObj.transform);
                     var components = iObj.GetComponents<IComponent>();
 
@@ -286,7 +255,6 @@ public class SelectionHandler : View
                         }
 
                     }
-
                 }
                 runtimeHierarchy.Refresh();
                 _selectedObjects.Clear();
@@ -294,6 +262,7 @@ public class SelectionHandler : View
                 {
                     OnSelectionChanged();
                 }
+                Snapshots.SpawnGameObjectsSnapshot.CreateSnapshot(duplicatedGms.Select(x => x.gameObject).ToList());
                 SelectObjectsInHierarchy(duplicatedGms);
             }
         }
@@ -507,9 +476,21 @@ public class SelectionHandler : View
     {
         return prevSelectedObjects;
     }
+
     public List<GameObject> GetSelectedObjects()
     {
         return _selectedObjects;
+    }
+
+    public bool IsSelected(GameObject go)
+    {
+        var result = _selectedObjects.Any(x => x == go);
+        return result;
+    }
+
+    public void Select(GameObject toSelect)
+    {
+        OnSelectionChanged(toSelect, SelectOptions.FocusOnSelection);
     }
 
     public void ListenForHierarchyChanges(bool listen)
@@ -522,5 +503,20 @@ public class SelectionHandler : View
         {
             runtimeHierarchy.OnSelectionChanged -= OnHierarchySelectionChanged;
         }
+    }
+
+    public override void Draw()
+    {
+
+    }
+
+    public override void Flush()
+    {
+
+    }
+
+    public override void Repaint()
+    {
+
     }
 }

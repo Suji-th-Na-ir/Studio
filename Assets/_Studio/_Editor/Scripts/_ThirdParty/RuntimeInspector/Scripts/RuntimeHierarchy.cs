@@ -24,7 +24,7 @@ namespace RuntimeInspectorNamespace
 
 #pragma warning disable 0649
         [SerializeField]
-       public RuntimeInspectorSettings m_internalSettings;
+        public RuntimeInspectorSettings m_internalSettings;
         [SerializeField]
         private float m_refreshInterval = 0f;
         public float RefreshInterval
@@ -565,7 +565,7 @@ namespace RuntimeInspectorNamespace
 
                 for (int i = 0; i < lastSelectedObjects.Count; i++)
                 {
-                    if (lastSelectedObjects[i]!=null)
+                    if (lastSelectedObjects[i] != null)
                     {
                         Deselect(lastSelectedObjects[i].transform);
                     }
@@ -819,27 +819,33 @@ namespace RuntimeInspectorNamespace
                 {
 
                     List<Component> components = new List<Component>();
-                    goo?.GetComponents(components);
-
-
-
+                    if (goo)
+                    {
+                        goo.GetComponents(components);
+                    }
                     bool isessential = false;
                     for (int j = 0; j < components.Count; j++)
                     {
                         if (m_internalSettings.GameEssentials.Any(component => component == components[j].GetType().Name))
                         {
                             if (!GetPseudoScene("Game Essentials", true).ContainsChild(goo.transform))
+                            {
                                 AddToPseudoScene("Game Essentials", goo.transform);
+                            }
                             isessential = true;
                             break;
                         }
                     }
                     if (!isessential && !GetPseudoScene("Game World", true).ContainsChild(goo.transform))
+                    {
                         AddToPseudoScene("Game World", goo.transform);
+                    }
                 }
             }
-            if ( GetPseudoScene("Game Essentials",false)?.ChildCount == 0)
+            if (GetPseudoScene("Game Essentials", false)?.ChildCount == 0)
+            {
                 DeletePseudoScene("Game Essentials");
+            }
         }
 
         private void RefreshListView()
@@ -921,7 +927,7 @@ namespace RuntimeInspectorNamespace
         {
             background.color = Skin.BackgroundColor;
             verticalScrollbar.color = Skin.ScrollbarColor;
-            if(horizontalScrollbar) horizontalScrollbar.color = Skin.ScrollbarColor;
+            if (horizontalScrollbar) horizontalScrollbar.color = Skin.ScrollbarColor;
 
             searchInputField.textComponent.SetSkinInputFieldText(Skin);
             searchInputFieldBackground.color = Skin.BackgroundColor;
@@ -1712,7 +1718,9 @@ namespace RuntimeInspectorNamespace
         {
             HierarchyDataRootPseudoScene pseudoScene = GetPseudoScene(scene, true);
             foreach (Transform transform in transforms)
+            {
                 pseudoScene.AddChild(transform);
+            }
         }
 
         public void RemoveFromPseudoScene(string scene, Transform transform, bool deleteSceneIfEmpty)
@@ -1738,6 +1746,19 @@ namespace RuntimeInspectorNamespace
 
             if (deleteSceneIfEmpty && pseudoScene.ChildCount == 0)
                 DeletePseudoScene(scene);
+        }
+
+        public string GetPseudoSceneName(Transform transform)
+        {
+            foreach (var pseudoScene in pseudoSceneDataLookup)
+            {
+                var foundData = pseudoScene.Value.FindTransform(transform);
+                if (foundData != null)
+                {
+                    return pseudoScene.Value.Name;
+                }
+            }
+            return null;
         }
 
         private HierarchyDataRootPseudoScene GetPseudoScene(string scene, bool createIfNotExists)
@@ -1830,10 +1851,9 @@ namespace RuntimeInspectorNamespace
 
         RecycledListItem IListViewAdapter.CreateItem(Transform parent)
         {
-            HierarchyField result = (HierarchyField)Instantiate(drawerPrefab, parent, false);
+            HierarchyField result = Instantiate(drawerPrefab, parent, false);
             result.Initialize(this);
             result.Skin = Skin;
-
             drawers.Add(result);
             return result;
         }

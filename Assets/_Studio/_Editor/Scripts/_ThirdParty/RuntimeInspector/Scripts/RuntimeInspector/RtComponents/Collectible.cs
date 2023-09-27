@@ -27,7 +27,7 @@ namespace RuntimeInspectorNamespace
         public void Awake()
         {
             Score.instanceId = Guid.NewGuid().ToString("N");
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>(), Helper.GetEnumWithAliasNames<StartOnCollectible>(), GetType().Name,false);
+            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>(), Helper.GetEnumWithAliasNames<StartOnCollectible>(), GetType().Name, false);
             PlaySFX.Setup<Collectible>(gameObject);
             PlayVFX.Setup<Collectible>(gameObject);
         }
@@ -95,7 +95,15 @@ namespace RuntimeInspectorNamespace
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, null);
         }
 
-        private void OnDestroy()
+        private void OnEnable()
+        {
+            if (Score.score != 0)
+            {
+                EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(true, Score.instanceId);
+            }
+        }
+
+        private void OnDisable()
         {
             EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(false, Score.instanceId);
         }

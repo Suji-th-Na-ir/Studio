@@ -505,7 +505,7 @@ namespace Terra.Studio
         {
             if (create)
             {
-                if (ScoreManagerObj)
+                if (ScoreManagerObj || ScoreManagerObj.activeSelf)
                 {
                     return;
                 }

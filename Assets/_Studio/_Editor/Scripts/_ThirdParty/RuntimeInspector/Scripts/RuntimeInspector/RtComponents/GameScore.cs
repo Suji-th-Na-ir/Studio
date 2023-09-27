@@ -16,12 +16,13 @@ namespace Terra.Studio
             var score = EditorOp.Resolve<SceneDataHandler>().ScoreManagerObj;
             if (score)
             {
-                Destroy(gameObject);
+                if (score.activeSelf)
+                {
+                    Destroy(gameObject);
+                    return;
+                }
             }
-            else
-            {
-                EditorOp.Resolve<SceneDataHandler>().ScoreManagerObj = gameObject;
-            }
+            EditorOp.Resolve<SceneDataHandler>().ScoreManagerObj = gameObject;
         }
 
         public (string type, string data) Export()

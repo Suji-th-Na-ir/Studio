@@ -131,6 +131,7 @@ namespace Terra.Studio
             {
                 return;
             }
+
             Transform cameraTransform = Camera.main.transform;
             Vector3 cameraPosition = cameraTransform.position;
             Vector3 spawnPosition = cameraPosition + cameraTransform.forward * 5;
@@ -138,17 +139,18 @@ namespace Terra.Studio
             var primitive = RuntimeWrappers.SpawnGameObject(itemData.ResourcePath, itemData);
             primitive.transform.position = spawnPosition;
 
+            Snapshots.SpawnGameObjectSnapshot.CreateSnapshot(primitive);
+
             if (name.Equals("CheckPoint"))
             {
-                primitive.AddComponent<Checkpoint>();
-                EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = primitive, componentType = "Checkpoint" });
+                AddCheckpointData(primitive);
             }
+
             if (name.Equals("InGameTimer"))
             {
-                primitive.AddComponent<InGameTimer>();
-                EditorOp.Resolve<SceneDataHandler>().TimerManagerObj = primitive;
-                EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = primitive, componentType = "InGameTimer" });
+                AddInGameTimerData(primitive);
             }
+
             EditorOp.Resolve<SelectionHandler>().DeselectAll();
             EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);
         }
@@ -165,7 +167,7 @@ namespace Terra.Studio
             if (name.Equals("InGameTimer"))
             {
                 var timerObj = EditorOp.Resolve<SceneDataHandler>().TimerManagerObj;
-                var canSpawn = !timerObj;
+                var canSpawn = !timerObj || !timerObj.activeSelf;
                 return canSpawn;
             }
             return true;
@@ -184,6 +186,19 @@ namespace Terra.Studio
         public override void Repaint()
         {
             //Nothing to re-paint
+        }
+
+        private void AddCheckpointData(GameObject go)
+        {
+            go.AddComponent<Checkpoint>();
+            EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = go, componentType = "Checkpoint" });
+        }
+
+        private void AddInGameTimerData(GameObject go)
+        {
+            go.AddComponent<InGameTimer>();
+            EditorOp.Resolve<SceneDataHandler>().TimerManagerObj = go;
+            EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = go, componentType = "InGameTimer" });
         }
 
         private void AddListenerEvent(Button button, Action callback)

@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using Terra.Studio;
-using System;
 
 namespace RTG
 {
@@ -44,7 +42,7 @@ namespace RTG
 
         public bool IsEnabled { get { return _isEnabled; } }
         public int ActionLimit { get { return _actionLimit; } set { ClearActions(); _actionLimit = Mathf.Max(value, 1); } }
-        
+
         public void SetEnabled(bool isEnabled)
         {
             _isEnabled = isEnabled;
@@ -161,11 +159,11 @@ namespace RTG
         private void RemoveGroups(int startIndex, int count)
         {
             List<ActionGroup> groupsToRemove = _actionGroupStack.GetRange(startIndex, count);
-        
+
             _actionGroupStack.RemoveRange(startIndex, count);
             foreach (var group in groupsToRemove)
             {
-                foreach(var action in group.Actions)
+                foreach (var action in group.Actions)
                     action.OnRemovedFromUndoRedoStack();
             }
         }
