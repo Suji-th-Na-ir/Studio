@@ -21,16 +21,6 @@ namespace Terra.Studio
             currentIndex = -1;
         }
 
-        public void Record(object oldValue, object newValue, string comment, Action<object> onExecuted, Action onDiscarded = null)
-        {
-            RefreshStackIfNeeded();
-            MaintainMaxStackLimit();
-            var stackData = new Operation(onExecuted, onDiscarded, oldValue, newValue, comment);
-            operations.Add(stackData);
-            currentIndex++;
-            CheckForStackAvailability();
-        }
-
         public void Undo()
         {
             if (currentIndex == -1)
@@ -112,21 +102,65 @@ namespace Terra.Studio
             return operation;
         }
 
+        public void UpdateReference<T>(T instance)
+        {
+            var type = typeof(T);
+            for (int i = currentIndex; i < operations.Count; i++)
+            {
+                var canUpdate = operations[i].CanValidate?.Invoke(type);
+                if (canUpdate != null && canUpdate.Value)
+                {
+                    operations[i].Validate?.Invoke(instance);
+                }
+            }
+        }
+
+        public void Record(object lastData, object newData, string comment, Action<object> onExecuted)
+        {
+            Record(lastData, newData, comment, onExecuted, null, null, null);
+        }
+
+        public void Record(object lastData, object newData, string comment, Action<object> onExecuted, Action onDiscarded)
+        {
+            Record(lastData, newData, comment, onExecuted, onDiscarded, null, null);
+        }
+
+        public void Record(object lastData, object newData, string comment, Action<object> onExecuted, Func<Type, bool> canValidate, Action<object> validate)
+        {
+            Record(lastData, newData, comment, onExecuted, null, canValidate, validate);
+        }
+
+        public void Record(object lastData, object newData, string comment, Action<object> onExecuted, Action onDiscarded, Func<Type, bool> canValidate, Action<object> validate)
+        {
+            RefreshStackIfNeeded();
+            MaintainMaxStackLimit();
+            var stackData = new Operation(onExecuted, onDiscarded, canValidate, validate, lastData, newData, comment);
+            operations.Add(stackData);
+            currentIndex++;
+            CheckForStackAvailability();
+        }
+
         private class Operation
         {
             private readonly Action<object> action;
+            private readonly Action<object> validate;
             private readonly Action onDiscarded;
+            private readonly Func<Type, bool> canValidate;
             private readonly object oldValue;
             private readonly object newValue;
             private readonly string comment;
 
             public string Comment => comment;
             public Action OnDiscarded => onDiscarded;
+            public Func<Type, bool> CanValidate => canValidate;
+            public Action<object> Validate => validate;
 
-            public Operation(Action<object> action, Action onDiscarded, object oldValue, object newValue, string comment)
+            public Operation(Action<object> action, Action onDiscarded, Func<Type, bool> canValidate, Action<object> validate, object oldValue, object newValue, string comment)
             {
                 this.action = action;
                 this.onDiscarded = onDiscarded;
+                this.canValidate = canValidate;
+                this.validate = validate;
                 this.oldValue = oldValue;
                 this.newValue = newValue;
                 this.comment = comment;
@@ -442,6 +476,63 @@ namespace Terra.Studio
                 {
                     snapshot.Discard();
                 }
+            }
+        }
+
+        public sealed class FXModificationSnapshot
+        {
+            private readonly PlayFXData dirtyFXData;
+            private readonly PlayFXData newFXData;
+            private readonly string comment;
+            private readonly Type derivedType;
+            private readonly Action onDataModified;
+            private Atom.BasePlay basePlay;
+
+            public static FXModificationSnapshot CreateSnapshot(Atom.BasePlay basePlay, Type derivedType, PlayFXData dirtyFXData, PlayFXData newFXData, string comment, Action onDataModified)
+            {
+                return new FXModificationSnapshot(basePlay, derivedType, dirtyFXData, newFXData, comment, onDataModified);
+            }
+
+            public FXModificationSnapshot(Atom.BasePlay basePlay, Type derivedType, PlayFXData dirtyFXData, PlayFXData newFXData, string comment, Action onDataModified)
+            {
+                this.basePlay = basePlay;
+                this.dirtyFXData = dirtyFXData;
+                this.newFXData = newFXData;
+                this.comment = comment;
+                this.derivedType = derivedType;
+                this.onDataModified = onDataModified;
+                StackIntoUndoRedo();
+            }
+
+            private void StackIntoUndoRedo()
+            {
+                EditorOp.Resolve<IURCommand>().Record(true, false, comment, (isUndoObj) =>
+                {
+                    var isUndo = (bool)isUndoObj;
+                    if (isUndo)
+                    {
+                        basePlay.data = dirtyFXData;
+                    }
+                    else
+                    {
+                        basePlay.data = newFXData;
+                    }
+                    onDataModified?.Invoke();
+                }, CanValidate, UpdateReference);
+            }
+
+            private bool CanValidate(Type type)
+            {
+                return type == derivedType;
+            }
+
+            private void UpdateReference(object instance)
+            {
+                var baseInstance = (Atom.BasePlay)instance;
+                if (baseInstance.target != basePlay.target) return;
+                if (string.IsNullOrEmpty(basePlay.fieldName) && !string.IsNullOrEmpty(baseInstance.fieldName)) return;
+                if (!string.IsNullOrEmpty(basePlay.fieldName) && !basePlay.fieldName.Equals(baseInstance.fieldName)) return;
+                basePlay = baseInstance;
             }
         }
     }

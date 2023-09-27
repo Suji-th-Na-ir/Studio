@@ -9,10 +9,11 @@ namespace RuntimeInspectorNamespace
     public class PlayVFXField : BasePlayFXField
     {
         protected override string CommentKey => "VFX";
+        protected override Type DerivedType => typeof(Atom.PlayVfx);
 
         public override bool SupportsType(Type type)
         {
-            return type == typeof(Atom.PlayVfx);
+            return type == DerivedType;
         }
 
         protected override string[] GetAllClipNames()
@@ -29,18 +30,18 @@ namespace RuntimeInspectorNamespace
         {
             base.OnToggleValueSubmitted(_input);
             var _vfx = (Atom.PlayVfx)Value;
-            UpdateData(_vfx);
+            UpdateData();
         }
 
         protected override void OnDropdownValueSubmitted(int index)
         {
             base.OnDropdownValueSubmitted(index);
-            var _vfx = (Atom.PlayVfx)Value;
-            UpdateData(_vfx);
+            UpdateData();
         }
 
-        private void UpdateData(Atom.PlayVfx _vfx)
+        protected override void UpdateData()
         {
+            var _vfx = (Atom.PlayVfx)Value;
             List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
             if (selectedObjects.Count <= 1) return;
             foreach (var obj in selectedObjects)

@@ -8,6 +8,10 @@ namespace Terra.Studio
         public event Action<bool> OnRedoStackAvailable;
         public void Undo();
         public void Redo();
-        public void Record(object lastData, object newData, string comment, Action<object> onExecuted, Action onDiscarded = null);
+        public void Record(object lastData, object newData, string comment, Action<object> onExecuted);
+        public void Record(object lastData, object newData, string comment, Action<object> onExecuted, Action onDiscarded);
+        public void Record(object lastData, object newData, string comment, Action<object> onExecuted, Func<Type, bool> canValidate, Action<object> validate);
+        public void Record(object lastData, object newData, string comment, Action<object> onExecuted, Action onDiscarded, Func<Type, bool> canValidate, Action<object> validate);
+        public void UpdateReference<T>(T instance);
     }
 }

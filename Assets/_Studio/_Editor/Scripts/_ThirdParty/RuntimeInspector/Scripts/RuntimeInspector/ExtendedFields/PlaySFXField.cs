@@ -9,10 +9,11 @@ namespace RuntimeInspectorNamespace
     public class PlaySFXField : BasePlayFXField
     {
         protected override string CommentKey => "SFX";
+        protected override Type DerivedType => typeof(Atom.PlaySfx);
 
         public override bool SupportsType(Type type)
         {
-            return type == typeof(Atom.PlaySfx);
+            return type == DerivedType;
         }
 
         protected override string[] GetAllClipNames()
@@ -28,19 +29,18 @@ namespace RuntimeInspectorNamespace
         protected override void OnToggleValueSubmitted(bool _input)
         {
             base.OnToggleValueSubmitted(_input);
-            var _sfx = (Atom.PlaySfx)Value;
-            UpdateData(_sfx);
+            UpdateData();
         }
 
         protected override void OnDropdownValueSubmitted(int index)
         {
             base.OnDropdownValueSubmitted(index);
-            var _sfx = (Atom.PlaySfx)Value;
-            UpdateData(_sfx);
+            UpdateData();
         }
 
-        private void UpdateData(Atom.PlaySfx _sfx)
+        protected override void UpdateData()
         {
+            var _sfx = (Atom.PlaySfx)Value;
             if (_sfx == null)
             {
                 return;

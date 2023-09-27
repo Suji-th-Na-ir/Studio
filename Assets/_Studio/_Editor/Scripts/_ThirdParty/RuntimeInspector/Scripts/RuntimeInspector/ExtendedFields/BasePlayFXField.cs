@@ -22,6 +22,7 @@ namespace Terra.Studio
 #pragma warning restore 0649
 
         protected virtual string CommentKey { get; }
+        protected virtual Type DerivedType { get; }
 
         public override bool SupportsType(Type type)
         {
@@ -74,17 +75,8 @@ namespace Terra.Studio
             var play = (PlayFXData)lastSubmittedValue;
             if (data.data.canPlay != play.canPlay)
             {
-                EditorOp.Resolve<IURCommand>().Record(
-                    lastSubmittedValue, data.data,
-                    $"{CommentKey} toggle changed to: {_input}",
-                    (value) =>
-                    {
-                        data.data = (PlayFXData)value;
-                        Value = data;
-                        OnToggleValueSubmitted(data.data.canPlay);
-                        lastSubmittedValue = value;
-                    });
-                lastSubmittedValue = data.data;
+                var message = $"{CommentKey} toggle changed to: {_input}";
+                GenerateSnapshot(message);
             }
         }
 
@@ -104,22 +96,27 @@ namespace Terra.Studio
         protected virtual void OnDropdownValueChanged(int _input)
         {
             OnDropdownValueSubmitted(_input);
-            var data = (Atom.BasePlay)Value;
             var play = (PlayFXData)lastSubmittedValue;
             if (_input != play.clipIndex)
             {
-                EditorOp.Resolve<IURCommand>().Record(
-                    lastSubmittedValue, data.data,
-                    $"{CommentKey} selection changed to: {_input}",
-                    (value) =>
-                    {
-                        data.data = (PlayFXData)value;
-                        Value = data;
-                        OnDropdownValueSubmitted(data.data.clipIndex);
-                        lastSubmittedValue = value;
-                    });
-                lastSubmittedValue = data.data;
+                var message = $"{CommentKey} selection changed to: {_input}";
+                GenerateSnapshot(message);
             }
+        }
+
+        private void GenerateSnapshot(string message)
+        {
+            var data = (Atom.BasePlay)Value;
+            var play = (PlayFXData)lastSubmittedValue;
+            Snapshots.FXModificationSnapshot.CreateSnapshot(
+                data,
+                DerivedType,
+                play,
+                data.data,
+                message,
+                UpdateData
+                );
+            lastSubmittedValue = data.data;
         }
 
         protected virtual void OnDropdownValueSubmitted(int index)
@@ -174,5 +171,7 @@ namespace Terra.Studio
         {
             optionsDropdown.SetValueWithoutNotify(_input);
         }
+
+        protected virtual void UpdateData() { }
     }
 }

@@ -19,7 +19,7 @@ namespace Terra.Studio
             [HideInInspector] public List<string> StartList = new List<string>();
             [HideInInspector] public string componentType = null;
             [HideInInspector] public List<string> aliasNameList = new List<string>();
-            public void Setup(GameObject _target, List<string> _list,List<String>_aliasStrings, string _componentType,bool updateListen)
+            public void Setup(GameObject _target, List<string> _list, List<String> _aliasStrings, string _componentType, bool updateListen)
             {
                 StartList = _list;
                 aliasNameList = _aliasStrings;
@@ -67,6 +67,7 @@ namespace Terra.Studio
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
                 data.clipName = Helper.GetSfxClipNameByIndex(data.clipIndex);
+                EditorOp.Resolve<IURCommand>().UpdateReference(this);
             }
         }
 
@@ -82,6 +83,7 @@ namespace Terra.Studio
                 if (!AllInstances.Contains(this))
                     AllInstances.Add(this);
                 data.clipName = Helper.GetVfxClipNameByIndex(data.clipIndex);
+                EditorOp.Resolve<IURCommand>().UpdateReference(this);
             }
         }
 
