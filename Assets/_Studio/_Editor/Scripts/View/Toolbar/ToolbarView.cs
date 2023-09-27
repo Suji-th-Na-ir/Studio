@@ -127,11 +127,6 @@ namespace Terra.Studio
 
         public void CreateObject(string name)
         {
-            if (!CanSpawn(name))
-            {
-                return;
-            }
-
             Transform cameraTransform = Camera.main.transform;
             Vector3 cameraPosition = cameraTransform.position;
             Vector3 spawnPosition = cameraPosition + cameraTransform.forward * 5;
@@ -162,17 +157,6 @@ namespace Terra.Studio
             primitivePanel.SetActive(false);
         }
 
-        private bool CanSpawn(string name)
-        {
-            if (name.Equals("InGameTimer"))
-            {
-                var timerObj = EditorOp.Resolve<SceneDataHandler>().TimerManagerObj;
-                var canSpawn = !timerObj || !timerObj.activeSelf;
-                return canSpawn;
-            }
-            return true;
-        }
-
         public override void Draw()
         {
             //Nothing to draw
@@ -191,14 +175,11 @@ namespace Terra.Studio
         private void AddCheckpointData(GameObject go)
         {
             go.AddComponent<Checkpoint>();
-            EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = go, componentType = "Checkpoint" });
         }
 
         private void AddInGameTimerData(GameObject go)
         {
             go.AddComponent<InGameTimer>();
-            EditorOp.Resolve<SceneDataHandler>().TimerManagerObj = go;
-            EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = go, componentType = "InGameTimer" });
         }
 
         private void AddListenerEvent(Button button, Action callback)

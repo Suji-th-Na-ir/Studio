@@ -11,6 +11,25 @@ namespace RuntimeInspectorNamespace
         [AliasDrawer("Broadcast")]
         public string Broadcast = "";
 
+        private void Awake()
+        {
+            var timer = EditorOp.Resolve<SceneDataHandler>().TimerManagerObj;
+            if (timer)
+            {
+                if (timer.activeSelf)
+                {
+                    Destroy(gameObject);
+                    return;
+                }
+            }
+            EditorOp.Resolve<SceneDataHandler>().TimerManagerObj = gameObject;
+        }
+
+        private void Start()
+        {
+            EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = gameObject, componentType = "InGameTimer" });
+        }
+
         public (string type, string data) Export()
         {
             InGameTimerComponent comp = new()

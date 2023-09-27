@@ -16,6 +16,7 @@ namespace RuntimeInspectorNamespace
         {
             PlaySFX.Setup<Checkpoint>(gameObject);
             PlayVFX.Setup<Checkpoint>(gameObject);
+            EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = gameObject, componentType = "Checkpoint" });
         }
 
         public (string type, string data) Export()
