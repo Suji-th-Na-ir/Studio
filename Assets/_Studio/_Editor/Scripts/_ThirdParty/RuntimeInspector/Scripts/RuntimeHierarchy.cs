@@ -146,6 +146,7 @@ namespace RuntimeInspectorNamespace
 
         [SerializeField]
         private bool m_exposeDontDestroyOnLoadScene = true;
+
         public bool ExposeDontDestroyOnLoadScene
         {
             get { return m_exposeDontDestroyOnLoadScene; }
@@ -1836,6 +1837,10 @@ namespace RuntimeInspectorNamespace
 
             drawers.Add(result);
             return result;
+        }
+
+        internal void DuplicateSelectedObject () {
+            EditorOp.Resolve<SelectionHandler> ().DuplicateCurrentSelectedObject ();
         }
     }
 }

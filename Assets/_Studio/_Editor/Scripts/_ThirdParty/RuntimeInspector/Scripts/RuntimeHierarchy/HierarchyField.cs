@@ -32,6 +32,10 @@ namespace RuntimeInspectorNamespace
 
 		[SerializeField]
 		private Image multiSelectionToggleBackground;
+
+		[SerializeField]
+		private PointerEventListener m_refDuplicateIcon;
+
 #pragma warning restore 0649
 
 		private RectTransform rectTransform;
@@ -77,11 +81,14 @@ namespace RuntimeInspectorNamespace
 				{
 					background.color = Skin.SelectedItemBackgroundColor;
 					textColor = Skin.SelectedItemTextColor;
+					m_refDuplicateIcon.gameObject.SetActive (true);
+					m_refDuplicateIcon.GetComponent<Image> ().color = Skin.SelectedItemBackgroundColor;
 				}
 				else
 				{
 					background.color = Data.Depth == 0 ? Skin.BackgroundColor.Tint( 0.075f ) : Color.clear;
 					textColor = Skin.TextColor;
+					m_refDuplicateIcon.gameObject.SetActive (false);
 				}
 
 				textColor.a = m_isActive ? 1f : INACTIVE_ITEM_TEXT_ALPHA;
@@ -166,9 +173,16 @@ namespace RuntimeInspectorNamespace
 			clickListener.PointerClick += ( eventData ) => OnClick();
 			clickListener.PointerDown += OnPointerDown;
 			clickListener.PointerUp += OnPointerUp;
+
+			m_refDuplicateIcon.gameObject.SetActive (false);
+			m_refDuplicateIcon.PointerClick += OnDuplicateIconClicked;
 		}
 
-		public void SetContent( HierarchyData data )
+        private void OnDuplicateIconClicked (PointerEventData eventData) {
+			Hierarchy.DuplicateSelectedObject ();
+		}
+
+        public void SetContent( HierarchyData data )
 		{
 			Data = data;
 

@@ -45,6 +45,7 @@ namespace Terra.Studio
             {
                 new FileService().WriteFileIntoLocal?.Invoke(sceneData, filePath);
             }
+            EasyUI.Toast.Toast.Show ("Saved Successfully!", 3.0f, EasyUI.Toast.ToastColor.Green);
         }
 
         private string GetFilePath()
