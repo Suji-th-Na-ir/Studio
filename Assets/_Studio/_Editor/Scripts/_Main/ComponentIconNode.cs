@@ -13,7 +13,7 @@ namespace Terra.Studio
         public RectTransform RectTransform { get { return m_RectTransform; } }
 
         private Image m_ComponentTypeIcon;
-        private List<Image> m_BroadcastIcon= new List<Image>();
+        private List<Image> m_BroadcastIcon = new List<Image>();
         private Image m_ListenIcon;
         private const float m_MinScalingDistance = 40.0f; // Minimum distance for scaling up
         private const float m_MaxScalingDistance = 0.0f; // Maximum distance for scaling down
@@ -27,11 +27,11 @@ namespace Terra.Studio
         private Sprite m_GameLooseBroadcastSprite;
         private Sprite m_ListenSprite;
         RuntimeInspector Inspector;
-        
+
         private bool ISBroadcasting
         {
-            get { return m_broadcasatingStrings.Count>0; }
-           
+            get { return m_broadcasatingStrings.Count > 0; }
+
         }
 
         private bool m_isListning = false;
@@ -50,9 +50,9 @@ namespace Terra.Studio
         public bool isTargetSelected;
         List<LineRenderer> m_LineConnectors;
 
-        [SerializeField]private List<string> m_broadcasatingStrings=new List<string>();
+        [SerializeField] private List<string> m_broadcasatingStrings = new List<string>();
         public List<string> BroadcastingStrings
-        { 
+        {
             get { return m_broadcasatingStrings; }
             set
             {
@@ -98,7 +98,7 @@ namespace Terra.Studio
                     if (!m_ListnerTargetNodes.Contains(value[i]))
                         m_ListnerTargetNodes.Add(value[i]);
                 }
-              //  m_ListnerTargetNodes = value;
+                //  m_ListnerTargetNodes = value;
             }
         }
 
@@ -122,12 +122,12 @@ namespace Terra.Studio
 
 
         public void RemoveListnerTargets(ComponentIconNode toRemove)
-        {  
-            if(ListnerTargets!=null)
-            m_ListnerTargetNodes.Remove(toRemove);
+        {
+            if (ListnerTargets != null)
+                m_ListnerTargetNodes.Remove(toRemove);
         }
 
-        public void Setup(ComponentIconsPreset iconPresets,  ComponentDisplayDock displayDock)
+        public void Setup(ComponentIconsPreset iconPresets, ComponentDisplayDock displayDock)
         {
             Inspector = FindAnyObjectByType<RuntimeInspector>();
             m_ObjectTarget = displayDock;
@@ -138,15 +138,15 @@ namespace Terra.Studio
             if (GetComponent<Image>() == null)
                 m_ComponentTypeIcon = gameObject.AddComponent<Image>();
             m_ComponentTypeIcon.rectTransform.sizeDelta = new Vector2(50, 50);
-            m_ComponentTypeIcon.sprite = iconPresets.GetIcon(displayDock.componentType);
+            m_ComponentTypeIcon.sprite = iconPresets.GetIcon(displayDock.ComponentType);
             m_ComponentTypeIcon.raycastTarget = false;
             initialWidth = 1.5f;
-            initialHeight =1.5f;
+            initialHeight = 1.5f;
             var canvas = FindAnyObjectByType<SceneView>();
             m_RectTransform.SetParent(canvas.transform, false);
 
             //Broadcast
-           
+
             m_broadcastSprite = iconPresets.GetIcon("Broadcast");
             m_broadcastNoListnerSprite = iconPresets.GetIcon("BroadcastNoListner");
             m_GameWonBroadcastSprite = iconPresets.GetIcon("GameWon");
@@ -181,7 +181,7 @@ namespace Terra.Studio
                 m_BroadcastIcon.Add(pointImage1);
                 rectTransform1.SetParent(this.transform, false);
                 rectTransform1.localScale = new Vector2(initialWidth * 0.5f, initialHeight * 0.5f);
-                PositionAroundCenterImage(rectTransform1,m_BroadcastIcon.IndexOf(pointImage1),m_BroadcastIcon.Count,25,90);
+                PositionAroundCenterImage(rectTransform1, m_BroadcastIcon.IndexOf(pointImage1), m_BroadcastIcon.Count, 25, 90);
             }
         }
 
@@ -218,14 +218,14 @@ namespace Terra.Studio
             {
                 return;
             }
-            Vector3 effectivePos = m_ObjectTarget.componentGameObject.transform.position;
+            Vector3 effectivePos = m_ObjectTarget.ComponentGameObject.transform.position;
             var objectScreenPos = m_MainCamera.WorldToViewportPoint(effectivePos + Vector3.up * 0.3f);
             objectScreenPos = m_MainCamera.ViewportToScreenPoint(objectScreenPos);
             var offset = m_MainCamera.WorldToViewportPoint(effectivePos + Vector3.up * 0.6f);
             offset = m_MainCamera.ViewportToScreenPoint(offset);
             var radius = (objectScreenPos - offset).magnitude;
             Vector3 screenPoint = CalculateCircularPositionAtIndex(objectScreenPos, radius, 3, m_componentIndex);
-            float distanceToTarget = Vector3.Distance(m_ObjectTarget.componentGameObject.transform.position, m_MainCamera.transform.position);
+            float distanceToTarget = Vector3.Distance(m_ObjectTarget.ComponentGameObject.transform.position, m_MainCamera.transform.position);
             float scalingFactor = CalculateScalingFactor(distanceToTarget);
 
             if ((screenPoint.z > 0 &&
@@ -258,7 +258,7 @@ namespace Terra.Studio
 
             for (int i = 0; i < m_BroadcastIcon.Count; i++)
             {
-                if (i > BroadcastingStrings.Count-1)
+                if (i > BroadcastingStrings.Count - 1)
                 {
                     m_BroadcastIcon[i].gameObject.SetActive(false);
                 }
@@ -275,9 +275,9 @@ namespace Terra.Studio
                         {
                             m_BroadcastIcon[i].sprite = m_GameWonBroadcastSprite;
                         }
-                        else if(m_isBroadcatingGameLoose)
+                        else if (m_isBroadcatingGameLoose)
                         {
-                             m_BroadcastIcon[i].sprite = m_GameLooseBroadcastSprite;
+                            m_BroadcastIcon[i].sprite = m_GameLooseBroadcastSprite;
                         }
                         else if (m_LineConnectors != null && m_ListnerTargetNodes?.FindAll(a => a.ListenStrings.Contains(BroadcastingStrings[i])).Count != 0)
                         {
@@ -291,11 +291,11 @@ namespace Terra.Studio
                     else
                     {
                         m_BroadcastIcon[i].gameObject.SetActive(false);
-                        
+
                     }
                 }
             }
-            
+
 
             if (m_ListnerTargetNodes == null)
                 return;
@@ -303,16 +303,16 @@ namespace Terra.Studio
             if (m_LineConnectors == null)
                 m_LineConnectors = new List<LineRenderer>();
 
-            
+
 
             while (m_LineConnectors.Count < m_ListnerTargetNodes.Count)
             {
 
                 GameObject gm = Instantiate(m_LineRenderGO);
                 gm.transform.SetParent(this.transform);
-              
+
                 var uiconnector = gm.GetComponent<LineRenderer>();
-               
+
                 m_LineConnectors.Add(uiconnector);
                 gm.name = $"Line_{m_ListnerTargetNodes[m_LineConnectors.IndexOf(uiconnector)]}";
 
@@ -328,13 +328,13 @@ namespace Terra.Studio
             }
 
             //Update Curves
-           
+
             if (scalingFactor == 0 || !isTargetSelected)
             {
                 for (int i = 0; i < m_LineConnectors.Count; i++)
                 {
                     m_LineConnectors[i].gameObject.SetActive(false);
-                }           
+                }
                 return;
             }
 
@@ -359,7 +359,7 @@ namespace Terra.Studio
 
                     if (!CheckIfInsideScreen(RectTransform) || transform.localScale == Vector3.zero)
                     {
-                        startPoint = m_ObjectTarget.componentGameObject.transform.position;
+                        startPoint = m_ObjectTarget.ComponentGameObject.transform.position;
                     }
                     else
                     {
@@ -367,7 +367,7 @@ namespace Terra.Studio
                     }
                     if (!CheckIfInsideScreen(allTargets[j].RectTransform) || allTargets[j].transform.localScale == Vector3.zero)
                     {
-                        endPoint = allTargets[j].m_ObjectTarget.componentGameObject.transform.position;
+                        endPoint = allTargets[j].m_ObjectTarget.ComponentGameObject.transform.position;
                     }
                     else
                     {
@@ -392,12 +392,12 @@ namespace Terra.Studio
 
 
                     Color c = Color.white;
-                    if (!EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Contains(m_ObjectTarget.componentGameObject)
-                        && !EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Contains(allTargets[j].m_ObjectTarget.componentGameObject))
+                    if (!EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Contains(m_ObjectTarget.ComponentGameObject)
+                        && !EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Contains(allTargets[j].m_ObjectTarget.ComponentGameObject))
                     {
                         c.a = GetFadeValue(distanceToTarget, -1, 40);
                         c.a = Mathf.Clamp(c.a, 0.0f, 1.0f);
-                       
+
                     }
                     m_LineConnectors[lineConnectorIndex].material.SetColor("_GoodColor", c);
 
@@ -432,7 +432,7 @@ namespace Terra.Studio
             return offsetPosition;
         }
 
-        void PositionAroundCenterImage(RectTransform imageToPosition, int index, int totalImages,float radius, float totalAngle)
+        void PositionAroundCenterImage(RectTransform imageToPosition, int index, int totalImages, float radius, float totalAngle)
         {
             float angleIncrement = totalAngle / totalImages;
             float startingAngle = Mathf.PI / 4.0f; // 60 degrees in radians
@@ -445,7 +445,7 @@ namespace Terra.Studio
             Vector2 offsetPosition = new Vector2(xOffset, yOffset);
             imageToPosition.anchoredPosition = offsetPosition;
         }
- 
+
         private bool CheckIfInsideScreen(RectTransform rect)
         {
             Vector2 anchoredPosition = rect.anchoredPosition;
@@ -455,7 +455,7 @@ namespace Terra.Studio
                 screenPosition.x >= 0 && screenPosition.x <= Screen.width &&
                 screenPosition.y >= 0 && screenPosition.y <= Screen.height;
             return isInsideScreen;
-            
+
         }
 
         private Vector3 CalculateBezierPoint(Vector3 p0, Vector3 p1, Vector3 p2, float t)
@@ -471,12 +471,12 @@ namespace Terra.Studio
 
         private bool IsTargetDestroyed()
         {
-            return m_ObjectTarget.componentGameObject == null && !ReferenceEquals(m_ObjectTarget.componentGameObject, null);
+            return !m_ObjectTarget.ComponentGameObject || (m_ObjectTarget.ComponentGameObject && !m_ObjectTarget.ComponentGameObject.activeSelf);
         }
 
         private float GetFadeValue(float distance, float min, float max)
         {
-            return 1- ((distance - min) /( max - min));
+            return 1 - ((distance - min) / (max - min));
         }
 
         float CalculateScalingFactor(float distance)

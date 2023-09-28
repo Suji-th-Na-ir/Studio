@@ -1,11 +1,10 @@
 using System;
-using System.Linq;
 using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayShifu.Terra;
 using System.Reflection;
 using System.Collections.Generic;
-using PlayShifu.Terra;
 
 namespace RuntimeInspectorNamespace
 {
@@ -103,9 +102,9 @@ namespace RuntimeInspectorNamespace
                     lastComponentData.pauseFor = -1;
 
                 if (selectedTranslateType.customString)
-                    lastComponentData.broadcast = selectedTranslateType.customString.text;
+                    lastComponentData.Broadcast = selectedTranslateType.customString.text;
                 else
-                    lastComponentData.broadcast = "";
+                    lastComponentData.Broadcast = "";
 
                 if (selectedTranslateType.canListenMultipleTimesToggle)
                     lastComponentData.listen = selectedTranslateType.canListenMultipleTimesToggle ? Listen.Always : Listen.Once;
@@ -128,6 +127,7 @@ namespace RuntimeInspectorNamespace
 
         private void ResetValues(bool lastDataValue)
         {
+            var translate = (Atom.Translate)Value;
             var translateType = (TranslateType)((Atom.Translate)Value).data.translateType;
             var finalPath = translateType.GetPresetName("Translate");
             var preset = ((TranslatePreset)EditorOp.Load(ResourceTag.ComponentPresets, finalPath)).Value;
@@ -145,24 +145,17 @@ namespace RuntimeInspectorNamespace
                     tempValue.pauseFor = preset.pauseFor;
 
                 if (!selectedTranslateType.customString)
-                    tempValue.broadcast = "";
-                preset = tempValue;
+                    tempValue.Broadcast = "";
 
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(
-                    preset.broadcast,
-                ((Atom.Translate)Value).data.broadcast,
-                    new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)Value).target, componentType = typeof(Atom.Translate).Name });
+                preset = tempValue;
+                translate.OnBroadcastUpdated?.Invoke(preset.Broadcast, translate.data.Broadcast);
             }
             else
             {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(
-                string.Empty,
-                ((Atom.Translate)Value).data.broadcast,
-                new ComponentDisplayDock() { componentGameObject = ((Atom.Translate)Value).target, componentType = typeof(Atom.Translate).Name });
+                translate.OnBroadcastUpdated?.Invoke(string.Empty, translate.data.Broadcast);
             }
             LoadData(preset);
             UpdateDataInUI(preset);
-            Atom.Translate rt = (Atom.Translate)Value;
             UpdateTypeForMultiselect(translateType, preset);
         }
 

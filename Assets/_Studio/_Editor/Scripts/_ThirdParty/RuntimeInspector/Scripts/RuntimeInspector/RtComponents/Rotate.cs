@@ -1,4 +1,3 @@
-using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
@@ -7,26 +6,36 @@ using System.Collections.Generic;
 namespace RuntimeInspectorNamespace
 {
     [EditorDrawComponent("Terra.Studio.Rotate")]
-    public class Rotate : MonoBehaviour, IComponent
+    public class Rotate : BaseBehaviour
     {
         [AliasDrawer("RotateWhen")]
-        public Atom.StartOn startOn = new();
+        public Atom.StartOn StartOn = new();
         public Atom.Rotate Type = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
 
-        private string guid;
-
-        private void Awake()
+        protected override string ComponentName => nameof(Rotate);
+        protected override bool CanBroadcast => true;
+        protected override bool CanListen => true;
+        protected override string[] BroadcasterRefs => new string[]
         {
-            guid = GetInstanceID() + "_rotate";
-            Type.Setup(guid, gameObject, GetType().Name);
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOn>(), Helper.GetEnumWithAliasNames<StartOn>(), this.GetType().Name, startOn.data.startIndex == 4);
+            Type.data.Broadcast
+        };
+        protected override string[] ListenerRefs => new string[]
+        {
+            StartOn.data.listenName
+        };
+
+        protected override void Awake()
+        {
+            base.Awake();
+            Type.Setup(gameObject, OnBroadcastUpdated);
+            StartOn.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated, StartOn.data.startIndex == 4);
             PlaySFX.Setup<Rotate>(gameObject);
             PlayVFX.Setup<Rotate>(gameObject);
         }
 
-        public (string type, string data) Export()
+        public override (string type, string data) Export()
         {
             var comp = new RotateComponent
             {
@@ -41,8 +50,8 @@ namespace RuntimeInspectorNamespace
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
                 broadcastAt = Type.data.broadcastAt,
-                IsBroadcastable = !string.IsNullOrEmpty(Type.data.broadcast),
-                Broadcast = string.IsNullOrEmpty(Type.data.broadcast) ? null : Type.data.broadcast,
+                IsBroadcastable = !string.IsNullOrEmpty(Type.data.Broadcast),
+                Broadcast = string.IsNullOrEmpty(Type.data.Broadcast) ? null : Type.data.Broadcast,
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
@@ -69,7 +78,7 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartEvent()
         {
-            int index = startOn.data.startIndex;
+            int index = StartOn.data.startIndex;
             var value = (StartOn)index;
             var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(value);
             return eventName;
@@ -78,12 +87,12 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartCondition()
         {
-            int index = startOn.data.startIndex;
+            int index = StartOn.data.startIndex;
             var value = (StartOn)index;
             string inputString = value.ToString();
             if (inputString.ToLower().Contains("listen"))
             {
-                return startOn.data.listenName;
+                return StartOn.data.listenName;
             }
             var data = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(value);
             return data;
@@ -96,7 +105,7 @@ namespace RuntimeInspectorNamespace
         }
 
 
-        public void Import(EntityBasedComponent cdata)
+        public override void Import(EntityBasedComponent cdata)
         {
             RotateComponent comp = JsonConvert.DeserializeObject<RotateComponent>(cdata.data);
             PlaySFX.data.canPlay = comp.canPlaySFX;
@@ -121,33 +130,35 @@ namespace RuntimeInspectorNamespace
             Type.data.pauseBetween = comp.pauseFor;
             Type.data.repeat = comp.repeatFor;
             Type.data.broadcastAt = comp.broadcastAt;
-            Type.data.broadcast = comp.Broadcast;
+            Type.data.Broadcast = comp.Broadcast;
             Type.data.listen = comp.listen;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
                 var res = (StartOn)result;
-                if (res == StartOn.OnPlayerCollide)
+                if (res == Terra.Studio.StartOn.OnPlayerCollide)
                 {
                     if (comp.ConditionData.Equals("Player"))
                     {
-                        startOn.data.startIndex = (int)res;
+                        StartOn.data.startIndex = (int)res;
                     }
                     else
                     {
-                        startOn.data.startIndex = (int)StartOn.OnObjectCollide;
+                        StartOn.data.startIndex = (int)Terra.Studio.StartOn.OnObjectCollide;
                     }
                 }
                 else
                 {
-                    startOn.data.startIndex = (int)(StartOn)result;
+                    StartOn.data.startIndex = (int)(StartOn)result;
                 }
-                startOn.data.startName = res.ToString();
+                StartOn.data.startName = res.ToString();
             }
-            startOn.data.listenName = comp.ConditionData;
+            StartOn.data.listenName = comp.ConditionData;
             var listenString = "";
-            if (startOn.data.startIndex == 4)
-                listenString = startOn.data.listenName;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Type.data.broadcast, listenString);
+            if (StartOn.data.startIndex == 4)
+            {
+                listenString = StartOn.data.listenName;
+            }
+            ImportVisualisation(Type.data.Broadcast, listenString);
         }
 
         private void ModifyDataAsPerSelected(ref RotateComponent component)

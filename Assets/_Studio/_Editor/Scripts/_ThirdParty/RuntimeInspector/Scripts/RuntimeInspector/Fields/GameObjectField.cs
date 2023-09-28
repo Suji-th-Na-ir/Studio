@@ -302,8 +302,6 @@ namespace RuntimeInspectorNamespace
             foreach (var tObject in selections)
             {
                 tObject.AddComponent(type);
-                EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock()
-                { componentGameObject = tObject, componentType = type.Name });
             }
         }
 
@@ -322,8 +320,6 @@ namespace RuntimeInspectorNamespace
             {
                 var component = tObject.GetComponent(type);
                 Destroy(component);
-                EditorOp.Resolve<UILogicDisplayProcessor>().RemoveComponentIcon(new ComponentDisplayDock()
-                { componentGameObject = tObject, componentType = type.Name });
             }
         }
 
@@ -333,8 +329,6 @@ namespace RuntimeInspectorNamespace
             {
                 var component = obj.GetComponent(type);
                 Destroy(component);
-                EditorOp.Resolve<UILogicDisplayProcessor>().RemoveComponentIcon(new ComponentDisplayDock()
-                { componentGameObject = obj, componentType = type.Name });
             }
         }
 

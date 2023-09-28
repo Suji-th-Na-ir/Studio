@@ -1,13 +1,11 @@
+using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
-using Terra.Studio;
-using UnityEngine;
-using System;
 
 namespace RuntimeInspectorNamespace
 {
     [EditorDrawComponent("Terra.Studio.Collectable")]
-    public class Collectible : MonoBehaviour, IComponent
+    public class Collectible : BaseBehaviour
     {
         public enum StartOnCollectible
         {
@@ -16,23 +14,33 @@ namespace RuntimeInspectorNamespace
             [EditorEnumField("Terra.Studio.MouseAction", "OnClick"), AliasDrawer("Clicked")]
             OnClick
         }
+
         [AliasDrawer("CollectWhen")]
-        public Atom.StartOn startOn = new();
+        public Atom.StartOn StartOn = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
         public Atom.ScoreData Score = new();
         [AliasDrawer("Broadcast")]
+        [OnValueChanged(UpdateBroadcast = true)]
         public string Broadcast = null;
 
-        public void Awake()
+        protected override string ComponentName => nameof(Collectible);
+        protected override bool CanBroadcast => true;
+        protected override bool CanListen => false;
+        protected override string[] BroadcasterRefs => new string[]
         {
-            Score.instanceId = Guid.NewGuid().ToString("N");
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOnCollectible>(), Helper.GetEnumWithAliasNames<StartOnCollectible>(), GetType().Name, false);
+            Broadcast
+        };
+
+        protected override void Awake()
+        {
+            base.Awake();
+            StartOn.Setup<StartOnCollectible>(gameObject, ComponentName);
             PlaySFX.Setup<Collectible>(gameObject);
             PlayVFX.Setup<Collectible>(gameObject);
         }
 
-        public (string type, string data) Export()
+        public override (string type, string data) Export()
         {
             CollectableComponent comp = new();
             {
@@ -58,7 +66,7 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartEvent()
         {
-            int index = startOn.data.startIndex;
+            int index = StartOn.data.startIndex;
             var value = (StartOnCollectible)index;
             var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(value);
             return eventName;
@@ -66,12 +74,12 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartCondition()
         {
-            int index = startOn.data.startIndex;
+            int index = StartOn.data.startIndex;
             var value = (StartOnCollectible)index;
             return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(value);
         }
 
-        public void Import(EntityBasedComponent cdata)
+        public override void Import(EntityBasedComponent cdata)
         {
             CollectableComponent comp = JsonConvert.DeserializeObject<CollectableComponent>(cdata.data);
             Score.score = comp.scoreValue;
@@ -83,28 +91,30 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.clipName = comp.vfxName;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOnCollectible), out object result))
             {
-                startOn.data.startIndex = (int)(StartOnCollectible)result;
+                StartOn.data.startIndex = (int)(StartOnCollectible)result;
             }
             Broadcast = comp.Broadcast;
-            startOn.data.startName = comp.ConditionType;
-            startOn.data.listenName = comp.ConditionData;
+            StartOn.data.startName = comp.ConditionType;
+            StartOn.data.listenName = comp.ConditionData;
             if (Score.score != 0)
             {
                 EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(true, Score.instanceId, false);
             }
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, null);
+            ImportVisualisation(Broadcast, null);
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             if (Score.score != 0)
             {
                 EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(true, Score.instanceId);
             }
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(false, Score.instanceId);
         }
     }

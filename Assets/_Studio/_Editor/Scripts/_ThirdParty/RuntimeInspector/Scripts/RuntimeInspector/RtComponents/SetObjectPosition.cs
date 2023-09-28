@@ -1,13 +1,11 @@
 using System;
 using UnityEngine;
-using PlayShifu.Terra;
 using Newtonsoft.Json;
-using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.SetObjectPosition"), AliasDrawer("Teleport Self")]
-    public class SetObjectPosition : MonoBehaviour, IComponent
+    public class SetObjectPosition : BaseBehaviour
     {
         public enum StartOptions
         {
@@ -30,11 +28,25 @@ namespace Terra.Studio
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
         [AliasDrawer("Broadcast")]
+        [OnValueChanged(UpdateBroadcast = true)]
         public string broadcast;
 
-        private void Awake()
+        protected override string ComponentName => nameof(SetObjectPosition);
+        protected override bool CanBroadcast => true;
+        protected override bool CanListen => true;
+        protected override string[] BroadcasterRefs => new string[]
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<StartOptions>(), Helper.GetEnumWithAliasNames<StartOptions>(), GetType().Name, startOn.data.startIndex == 3);
+            broadcast
+        };
+        protected override string[] ListenerRefs => new string[]
+        {
+            startOn.data.listenName
+        };
+
+        protected override void Awake()
+        {
+            base.Awake();
+            startOn.Setup<StartOptions>(gameObject, ComponentName, OnListenerUpdated, startOn.data.startIndex == 3);
             playSFX.Setup<SetObjectPosition>(gameObject);
             playVFX.Setup<SetObjectPosition>(gameObject);
         }
@@ -49,7 +61,7 @@ namespace Terra.Studio
             }
         }
 
-        public (string type, string data) Export()
+        public override (string type, string data) Export()
         {
             var data = new SetObjectPositionComponent()
             {
@@ -97,7 +109,7 @@ namespace Terra.Studio
             return start;
         }
 
-        public void Import(EntityBasedComponent data)
+        public override void Import(EntityBasedComponent data)
         {
             var obj = JsonConvert.DeserializeObject<SetObjectPositionComponent>(data.data);
             broadcast = obj.Broadcast;
@@ -107,11 +119,7 @@ namespace Terra.Studio
             var listenString = "";
             if (startOn.data.startIndex == 3)
                 listenString = startOn.data.listenName;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(
-                gameObject,
-                GetType().Name,
-                broadcast,
-                listenString);
+            ImportVisualisation(broadcast, listenString);
         }
 
         private void AssignStartOnData(SetObjectPositionComponent comp)

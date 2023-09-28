@@ -1,13 +1,10 @@
 using System;
-using UnityEngine;
 using Newtonsoft.Json;
-using PlayShifu.Terra;
-using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.StopTranslate"), AliasDrawer("Stop Move")]
-    public class StopTranslate : MonoBehaviour, IComponent
+    public class StopTranslate : BaseBehaviour
     {
         public enum StartOn
         {
@@ -21,20 +18,32 @@ namespace Terra.Studio
         [AliasDrawer("StopWhen")]
         public Atom.StartOn startOn = new();
         [AliasDrawer("Broadcast")]
+        [OnValueChanged(UpdateBroadcast = true)]
         public string broadcast = null;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
 
-        private void Awake()
+        protected override string ComponentName => nameof(StopTranslate);
+        protected override bool CanBroadcast => true;
+        protected override bool CanListen => true;
+        protected override string[] BroadcasterRefs => new string[]
         {
-            startOn.Setup(gameObject,
-                Helper.GetEnumValuesAsStrings<StartOn>(), Helper.GetEnumWithAliasNames<StartOn>(),
-                typeof(StopTranslate).Name, startOn.data.startIndex == 1);
+            broadcast
+        };
+        protected override string[] ListenerRefs => new string[]
+        {
+            startOn.data.listenName
+        };
+
+        protected override void Awake()
+        {
+            base.Awake();
+            startOn.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated, startOn.data.startIndex == 1);
             playSFX.Setup<StopTranslate>(gameObject);
             playVFX.Setup<StopTranslate>(gameObject);
         }
 
-        public (string type, string data) Export()
+        public override (string type, string data) Export()
         {
             var data = new StopTranslateComponent
             {
@@ -82,7 +91,7 @@ namespace Terra.Studio
             }
         }
 
-        public void Import(EntityBasedComponent data)
+        public override void Import(EntityBasedComponent data)
         {
             var obj = JsonConvert.DeserializeObject<StopTranslateComponent>(data.data);
             startOn.data.startName = GetStart(obj).ToString();
@@ -97,8 +106,10 @@ namespace Terra.Studio
             playVFX.data.clipName = obj.vfxName;
             var listenString = "";
             if (startOn.data.startIndex == 1)
+            {
                 listenString = startOn.data.listenName;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcast, listenString);
+            }
+            ImportVisualisation(broadcast, listenString);
         }
 
         private StartOn GetStart(StopTranslateComponent comp)

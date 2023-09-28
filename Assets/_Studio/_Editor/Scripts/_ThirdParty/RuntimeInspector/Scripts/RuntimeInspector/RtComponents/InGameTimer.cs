@@ -1,18 +1,27 @@
-using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
 
 namespace RuntimeInspectorNamespace
 {
     [EditorDrawComponent("Terra.Studio.InGameTimer")]
-    public class InGameTimer : MonoBehaviour, IComponent
+    public class InGameTimer : BaseBehaviour
     {
         public uint Time = 180;
         [AliasDrawer("Broadcast")]
+        [OnValueChanged(UpdateBroadcast = true)]
         public string Broadcast = "";
 
-        private void Awake()
+        protected override string ComponentName => nameof(InGameTimer);
+        protected override bool CanBroadcast => true;
+        protected override bool CanListen => false;
+        protected override string[] BroadcasterRefs => new string[]
         {
+            Broadcast
+        };
+
+        protected override void Awake()
+        {
+            base.Awake();
             var timer = EditorOp.Resolve<SceneDataHandler>().TimerManagerObj;
             if (timer)
             {
@@ -25,12 +34,7 @@ namespace RuntimeInspectorNamespace
             EditorOp.Resolve<SceneDataHandler>().TimerManagerObj = gameObject;
         }
 
-        private void Start()
-        {
-            EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = gameObject, componentType = "InGameTimer" });
-        }
-
-        public (string type, string data) Export()
+        public override (string type, string data) Export()
         {
             InGameTimerComponent comp = new()
             {
@@ -46,12 +50,12 @@ namespace RuntimeInspectorNamespace
             return (type, data);
         }
 
-        public void Import(EntityBasedComponent data)
+        public override void Import(EntityBasedComponent data)
         {
             var comp = JsonConvert.DeserializeObject<InGameTimerComponent>(data.data);
             Time = comp.totalTime;
             Broadcast = comp.Broadcast;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, null);
+            ImportVisualisation(Broadcast, null);
         }
     }
 }

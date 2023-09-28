@@ -29,10 +29,6 @@ MonoBehaviour:
     ComponentName: Terra.Studio.InGameTimerComponent
     SystemName: Terra.Studio.InGameTimerSystem
     DrawerName: RuntimeInspectorNamespace.InGameTimer
-  - Key: Terra.Studio.Oscillate
-    ComponentName: Terra.Studio.OscillateComponent
-    SystemName: Terra.Studio.OscillateSystem
-    DrawerName: RuntimeInspectorNamespace.Oscillate
   - Key: Terra.Studio.Respawn
     ComponentName: Terra.Studio.RespawnComponent
     SystemName: Terra.Studio.RespawnSystem

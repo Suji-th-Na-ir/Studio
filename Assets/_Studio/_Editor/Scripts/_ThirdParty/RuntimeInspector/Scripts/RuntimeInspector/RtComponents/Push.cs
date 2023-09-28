@@ -1,11 +1,10 @@
-using UnityEngine;
 using Newtonsoft.Json;
 using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.Push")]
-    public class Push : MonoBehaviour, IComponent
+    public class Push : BaseBehaviour
     {
         public float resistance = 0;
         [AliasDrawer("Reset\nButton")]
@@ -13,15 +12,25 @@ namespace Terra.Studio
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
         [AliasDrawer("Broadcast")]
+        [OnValueChanged(UpdateBroadcast = true)]
         public string Broadcast = null;
 
-        public void Awake()
+        protected override string ComponentName => nameof(Push);
+        protected override bool CanBroadcast => true;
+        protected override bool CanListen => false;
+        protected override string[] BroadcasterRefs => new string[]
         {
+            Broadcast
+        };
+
+        protected override void Awake()
+        {
+            base.Awake();
             PlaySFX.Setup<DestroyOn>(gameObject);
             PlayVFX.Setup<DestroyOn>(gameObject);
         }
 
-        public (string type, string data) Export()
+        public override (string type, string data) Export()
         {
             var component = new PushComponent()
             {
@@ -45,7 +54,7 @@ namespace Terra.Studio
             return (type, data);
         }
 
-        public void Import(EntityBasedComponent data)
+        public override void Import(EntityBasedComponent data)
         {
             var comp = JsonConvert.DeserializeObject<PushComponent>(data.data);
             resistance = comp.mass;
@@ -57,7 +66,7 @@ namespace Terra.Studio
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
             Broadcast = comp.Broadcast;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, null);
+            ImportVisualisation(Broadcast, null);
         }
     }
 }

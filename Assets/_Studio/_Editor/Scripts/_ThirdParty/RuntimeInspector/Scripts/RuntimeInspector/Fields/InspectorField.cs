@@ -12,6 +12,7 @@ namespace RuntimeInspectorNamespace
     {
         public delegate object Getter();
         public delegate void Setter(object value);
+        protected Action<string, string> onStringUpdated;
 
 #pragma warning disable 0649
         [SerializeField]
@@ -130,8 +131,8 @@ namespace RuntimeInspectorNamespace
 
         protected virtual float HeightMultiplier { get { return 1f; } }
 
-        protected object virutalObject;
-        protected object VirtualObject { get { return virutalObject; } }
+        protected object virtualObject;
+        protected object VirtualObject { get { return virtualObject; } }
 
         private Getter getter;
         private Setter setter;
@@ -153,7 +154,7 @@ namespace RuntimeInspectorNamespace
         public void BindTo(InspectorField parent, MemberInfo variable, string variableName = null)
         {
             m_Component = variable.DeclaringType;
-            virutalObject = parent.Value;
+            virtualObject = parent.Value;
             if (variable is FieldInfo field)
             {
                 var displayNameAttribute = field.GetCustomAttribute<AliasDrawerAttribute>();
@@ -164,13 +165,18 @@ namespace RuntimeInspectorNamespace
 #else
 				if( !parent.BoundVariableType.GetTypeInfo().IsValueType )
 #endif
+                {
+                    InjectToOnValueChangedIfAvailable(field, parent.Value);
                     BindTo(field.FieldType, variableName, field.Name, () => field.GetValue(parent.Value), (value) => field.SetValue(parent.Value, value), variable);
+                }
                 else
+                {
                     BindTo(field.FieldType, variableName, field.Name, () => field.GetValue(parent.Value), (value) =>
                     {
                         field.SetValue(parent.Value, value);
                         parent.Value = parent.Value;
                     }, variable);
+                }
             }
             else if (variable is PropertyInfo property)
             {
@@ -183,16 +189,30 @@ namespace RuntimeInspectorNamespace
 #else
 				if( !parent.BoundVariableType.GetTypeInfo().IsValueType )
 #endif
+                {
                     BindTo(property.PropertyType, variableName, property.Name, () => property.GetValue(parent.Value, null), (value) => property.SetValue(parent.Value, value, null), variable);
+                }
                 else
+                {
                     BindTo(property.PropertyType, variableName, property.Name, () => property.GetValue(parent.Value, null), (value) =>
                     {
                         property.SetValue(parent.Value, value, null);
                         parent.Value = parent.Value;
                     }, variable);
+                }
             }
             else
+            {
                 throw new ArgumentException("Variable can either be a field or a property");
+            }
+        }
+
+        private void InjectToOnValueChangedIfAvailable(FieldInfo fieldInfo, object instance)
+        {
+            var doesHaveOnValueChangedAttribute = fieldInfo.HasAttribute<OnValueChangedAttribute>();
+            if (!doesHaveOnValueChangedAttribute) return;
+            var attribute = fieldInfo.GetAttribute<OnValueChangedAttribute>();
+            onStringUpdated = attribute.OnValueUpdated((BaseBehaviour)instance);
         }
 
         public void BindTo(Type variableType, string variableName, string reflectedName, Getter getter, Setter setter, MemberInfo variable = null)
@@ -228,6 +248,8 @@ namespace RuntimeInspectorNamespace
 
             getter = null;
             setter = null;
+
+            onStringUpdated = null;
 
             OnUnbound();
             Inspector.PoolDrawer(this);
@@ -311,7 +333,7 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        protected void UpdateDataForMultiSelect()
+        private void UpdateDataForMultiSelect()
         {
             List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
             if (selectedObjects.Count > 1)
@@ -322,22 +344,7 @@ namespace RuntimeInspectorNamespace
                     if (component != null)
                     {
                         var mInfo = component.GetType().GetField(ReflectedName, BindingFlags.Public | BindingFlags.Instance);
-                        var oldValue = mInfo?.GetValue(component);
                         mInfo?.SetValue(component, Value);
-
-                        if (mInfo != null)
-                        {
-                            if (NameRaw == "Broadcast")
-                            {
-                                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Value.ToString(), oldValue == null ? "" : oldValue.ToString()
-                                    , new ComponentDisplayDock() { componentGameObject = obj, componentType = ComponentType.Name });
-                            }
-                            else if (NameRaw == "Broadcast Listen")
-                            {
-                                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(Value.ToString(), oldValue == null ? "" : oldValue.ToString(),
-                                 new ComponentDisplayDock() { componentGameObject = obj, componentType = ComponentType.Name });
-                            }
-                        }
                     }
                 }
             }

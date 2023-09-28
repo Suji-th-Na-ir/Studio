@@ -1,12 +1,10 @@
 using System;
-using System.Linq;
 using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayShifu.Terra;
 using System.Reflection;
 using System.Collections.Generic;
-using UnityEngine.Windows;
 
 namespace RuntimeInspectorNamespace
 {
@@ -113,9 +111,9 @@ namespace RuntimeInspectorNamespace
                     lastComponentData.pauseBetween = -1;
 
                 if (selectedRotateType.customString)
-                    lastComponentData.broadcast = selectedRotateType.customString.text;
+                    lastComponentData.Broadcast = selectedRotateType.customString.text;
                 else
-                    lastComponentData.broadcast = "";
+                    lastComponentData.Broadcast = "";
 
                 if (selectedRotateType.canListenMultipleTimesToggle)
                     lastComponentData.listen = selectedRotateType.canListenMultipleTimesToggle ? Listen.Always : Listen.Once;
@@ -155,20 +153,13 @@ namespace RuntimeInspectorNamespace
                 if (!selectedRotateType.pauseInput || lastComponentData.pauseBetween == -1)
                     tempValue.pauseBetween = preset.pauseBetween;
                 if (!selectedRotateType.customString)
-                    tempValue.broadcast = "";
+                    tempValue.Broadcast = "";
                 preset = tempValue;
-
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(
-                    preset.broadcast,
-                   value.data.broadcast,
-                    new ComponentDisplayDock() { componentGameObject = value.target, componentType = typeof(Atom.Rotate).Name });
+                value.OnBroadcastUpdated?.Invoke(preset.Broadcast, value.data.Broadcast);
             }
             else
             {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(
-                    string.Empty,
-                    value.data.broadcast,
-                    new ComponentDisplayDock() { componentGameObject = value.target, componentType = typeof(Atom.Rotate).Name });
+                value.OnBroadcastUpdated?.Invoke(string.Empty, value.data.Broadcast);
             }
 
             LoadData(preset);
@@ -248,23 +239,23 @@ namespace RuntimeInspectorNamespace
             rotateTypesDD.SetValueWithoutNotify(rt.data.rotateType);
             if (compData != null && compData.HasValue)
             {
-               // selectedRotateType.SetData(compData.Value);
+                // selectedRotateType.SetData(compData.Value);
                 rt.data = compData.Value;
             }
             else
             {
-               // selectedRotateType.SetData(rt.data);
+                // selectedRotateType.SetData(rt.data);
             }
         }
 
         private void UpdateDataInUI(RotateComponentData? compData = null)
         {
             Atom.Rotate rt = (Atom.Rotate)Value;
-           
+
             if (compData != null && compData.HasValue)
             {
                 selectedRotateType.SetData(compData.Value);
-               // rt.data = compData.Value;
+                // rt.data = compData.Value;
             }
             else
             {

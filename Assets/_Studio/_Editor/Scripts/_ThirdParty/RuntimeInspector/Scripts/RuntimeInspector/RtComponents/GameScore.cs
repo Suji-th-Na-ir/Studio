@@ -1,17 +1,24 @@
-using UnityEngine;
 using Newtonsoft.Json;
-using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.GameScore")]
-    public class GameScore : MonoBehaviour, IComponent
+    public class GameScore : BaseBehaviour
     {
         public int targetScore = 0;
         [AliasDrawer("Broadcast")]
+        [OnValueChanged(UpdateBroadcast = true)]
         public string broadcast = "Game Win";
 
-        private void Awake()
+        protected override string ComponentName => nameof(GameScore);
+        protected override bool CanBroadcast => true;
+        protected override bool CanListen => false;
+        protected override string[] BroadcasterRefs => new string[]
+        {
+            broadcast
+        };
+
+        protected override void Awake()
         {
             var score = EditorOp.Resolve<SceneDataHandler>().ScoreManagerObj;
             if (score)
@@ -25,7 +32,7 @@ namespace Terra.Studio
             EditorOp.Resolve<SceneDataHandler>().ScoreManagerObj = gameObject;
         }
 
-        public (string type, string data) Export()
+        public override (string type, string data) Export()
         {
             var compData = new InGameScoreComponent()
             {
@@ -38,11 +45,12 @@ namespace Terra.Studio
             return (type, json);
         }
 
-        public void Import(EntityBasedComponent data)
+        public override void Import(EntityBasedComponent data)
         {
             var obj = JsonConvert.DeserializeObject<InGameScoreComponent>(data.data);
             targetScore = obj.targetScore;
             broadcast = obj.Broadcast;
+            ImportVisualisation(broadcast, null);
         }
     }
 }

@@ -459,6 +459,7 @@ namespace RuntimeInspectorNamespace
         {
             base.Awake();
             Initialize();
+            EditorOp.Register(this);
         }
 
         private void Initialize()
@@ -527,6 +528,8 @@ namespace RuntimeInspectorNamespace
                 HierarchyData.ClearPool();
 
             RuntimeInspectorUtils.IgnoredTransformsInHierarchy.Remove(drawArea);
+
+            EditorOp.Unregister(this);
         }
 
         private void OnRectTransformDimensionsChange()

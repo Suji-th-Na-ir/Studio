@@ -49,7 +49,8 @@ namespace RuntimeInspectorNamespace
             if (selectedObjects.Count <= 1) return;
             foreach (var obj in selectedObjects)
             {
-                foreach (Atom.PlaySfx sfx in Atom.PlaySfx.AllInstances)
+                var allInstances = EditorOp.Resolve<Atom>().AllSfxes;
+                foreach (Atom.PlaySfx sfx in allInstances)
                 {
                     if (obj.GetInstanceID() == sfx.target.GetInstanceID())
                     {

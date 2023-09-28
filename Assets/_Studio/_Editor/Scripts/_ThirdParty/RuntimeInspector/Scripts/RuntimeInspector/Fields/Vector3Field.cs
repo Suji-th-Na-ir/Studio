@@ -151,7 +151,7 @@ namespace RuntimeInspectorNamespace
                     message,
                     (value) =>
                     {
-                        var transform = (Transform)virutalObject;
+                        var transform = (Transform)virtualObject;
                         var modValue = ((object, string))value;
                         if (TRANSFORM_FIELDS.Any(x => x.Equals(modValue.Item2)))
                         {

@@ -55,9 +55,9 @@ namespace RuntimeInspectorNamespace
         public void ShowHideListenDD()
         {
             Atom.StartOn atom = (Atom.StartOn)Value;
-            if (atom.StartList.Count > 0)
+            if (atom.startList.Count > 0)
             {
-                string startValue = (atom.StartList[startOn.value]).ToLower();
+                string startValue = (atom.startList[startOn.value]).ToLower();
                 if (startValue.Contains("listen"))
                 {
                     if (!listenOn.gameObject.activeSelf)
@@ -93,7 +93,7 @@ namespace RuntimeInspectorNamespace
         {
             Atom.StartOn atom = (Atom.StartOn)Value;
             atom.data.startIndex = _index;
-            atom.data.startName = atom.StartList[_index];
+            atom.data.startName = atom.startList[_index];
             atom.data.listenName = "";
             UpdateOtherCompData(atom);
             if (Inspector) Inspector.RefreshDelayed();
@@ -102,9 +102,11 @@ namespace RuntimeInspectorNamespace
         private void OnListenValueChanged(string _newString)
         {
             Atom.StartOn atom = (Atom.StartOn)Value;
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(_newString, atom.data.listenName,
-                new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
-            if (Inspector) Inspector.RefreshDelayed();
+            if (Inspector)
+            {
+                Inspector.RefreshDelayed();
+            }
+            atom.OnListenerUpdated?.Invoke(_newString, atom.data.listenName);
             atom.data.listenName = _newString;
             UpdateOtherCompData(atom);
         }
@@ -138,15 +140,15 @@ namespace RuntimeInspectorNamespace
             if (selectedObjects.Count <= 1) return;
             foreach (var obj in selectedObjects)
             {
-                foreach (Atom.StartOn atom in Atom.StartOn.AllInstances)
+                var allInstances = EditorOp.Resolve<Atom>().AllStartOns;
+                foreach (Atom.StartOn atom in allInstances)
                 {
                     if (obj.GetInstanceID() == atom.target.GetInstanceID())
                     {
                         if (_atom.componentType.Equals(atom.componentType))
                         {
-                            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(_atom.data.listenName, atom.data.listenName,
-                            new ComponentDisplayDock() { componentGameObject = atom.target, componentType = atom.componentType });
                             atom.data = Helper.DeepCopy(_atom.data);
+                            atom.OnListenerUpdated?.Invoke(_atom.data.listenName, atom.data.listenName);
                         }
                     }
                 }

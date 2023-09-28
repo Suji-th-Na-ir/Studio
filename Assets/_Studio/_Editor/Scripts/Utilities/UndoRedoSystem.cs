@@ -105,7 +105,7 @@ namespace Terra.Studio
         public void UpdateReference<T>(T instance)
         {
             var type = typeof(T);
-            for (int i = currentIndex; i < operations.Count; i++)
+            for (int i = currentIndex; i >= 0 && i < operations.Count; i++)
             {
                 var canUpdate = operations[i].CanValidate?.Invoke(type);
                 if (canUpdate != null && canUpdate.Value)

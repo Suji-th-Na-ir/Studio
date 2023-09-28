@@ -1,34 +1,42 @@
-using UnityEngine;
 using Newtonsoft.Json;
-using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.Click")]
-    public class Click : MonoBehaviour, IComponent
+    public class Click : BaseBehaviour
     {
         [AliasDrawer("Broadcast")]
+        [OnValueChanged(UpdateBroadcast = true)]
         public string broadcast = null;
-        public Atom.PlaySfx playSFX = new();
-        public Atom.PlayVfx playVFX = new();
+        public Atom.PlaySfx PlaySFX = new();
+        public Atom.PlayVfx PlayVFX = new();
         //public bool executeMultipleTimes = true;
 
-        public void Awake()
+        protected override string ComponentName => nameof(Click);
+        protected override bool CanBroadcast => true;
+        protected override bool CanListen => false;
+        protected override string[] BroadcasterRefs => new string[]
         {
-            playSFX.Setup<Click>(gameObject);
-            playVFX.Setup<Click>(gameObject);
+            broadcast
+        };
+
+        protected override void Awake()
+        {
+            base.Awake();
+            PlaySFX.Setup<Click>(gameObject);
+            PlayVFX.Setup<Click>(gameObject);
         }
 
-        public (string type, string data) Export()
+        public override (string type, string data) Export()
         {
             var data = new ClickComponent()
             {
-                canPlaySFX = playSFX.data.canPlay,
-                sfxName = playSFX.data.clipName,
-                sfxIndex = playSFX.data.clipIndex,
-                canPlayVFX = playVFX.data.canPlay,
-                vfxName = playVFX.data.clipName,
-                vfxIndex = playVFX.data.clipIndex,
+                canPlaySFX = PlaySFX.data.canPlay,
+                sfxName = PlaySFX.data.clipName,
+                sfxIndex = PlaySFX.data.clipIndex,
+                canPlayVFX = PlayVFX.data.canPlay,
+                vfxName = PlayVFX.data.clipName,
+                vfxIndex = PlayVFX.data.clipIndex,
                 IsBroadcastable = !string.IsNullOrEmpty(broadcast),
                 Broadcast = broadcast,
                 IsConditionAvailable = true,
@@ -41,18 +49,18 @@ namespace Terra.Studio
             return (type, json);
         }
 
-        public void Import(EntityBasedComponent data)
+        public override void Import(EntityBasedComponent data)
         {
             var obj = JsonConvert.DeserializeObject<ClickComponent>(data.data);
-            playSFX.data.canPlay = obj.canPlaySFX;
-            playSFX.data.clipName = obj.sfxName;
-            playSFX.data.clipIndex = obj.sfxIndex;
-            playVFX.data.canPlay = obj.canPlayVFX;
-            playVFX.data.clipName = obj.vfxName;
-            playVFX.data.clipIndex = obj.vfxIndex;
+            PlaySFX.data.canPlay = obj.canPlaySFX;
+            PlaySFX.data.clipName = obj.sfxName;
+            PlaySFX.data.clipIndex = obj.sfxIndex;
+            PlayVFX.data.canPlay = obj.canPlayVFX;
+            PlayVFX.data.clipName = obj.vfxName;
+            PlayVFX.data.clipIndex = obj.vfxIndex;
             broadcast = obj.Broadcast;
             //executeMultipleTimes = obj.listen == Listen.Always;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcast, null);
+            ImportVisualisation(broadcast, null);
         }
     }
 }

@@ -1,20 +1,28 @@
 using UnityEngine;
 using Newtonsoft.Json;
-using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.Teleport"), AliasDrawer("Teleport Player")]
-    public class Teleport : MonoBehaviour, IComponent
+    public class Teleport : BaseBehaviour
     {
         [AliasDrawer("Teleport\nTo")]
         public Vector3 teleportTo;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
         [AliasDrawer("Broadcast")]
+        [OnValueChanged(UpdateBroadcast = true)]
         public string broadcast = null;
         //[AliasDrawer("Do\nAlways")]
         //public bool executeMultipleTimes = true;
+
+        protected override string ComponentName => nameof(Teleport);
+        protected override bool CanBroadcast => true;
+        protected override bool CanListen => false;
+        protected override string[] BroadcasterRefs => new string[]
+        {
+            broadcast
+        };
 
         private void Start()
         {
@@ -27,7 +35,7 @@ namespace Terra.Studio
             }
         }
 
-        public (string type, string data) Export()
+        public override (string type, string data) Export()
         {
             var data = new TeleportComponent()
             {
@@ -50,7 +58,7 @@ namespace Terra.Studio
             return (type, json);
         }
 
-        public void Import(EntityBasedComponent data)
+        public override void Import(EntityBasedComponent data)
         {
             var obj = JsonConvert.DeserializeObject<TeleportComponent>(data.data);
             teleportTo = obj.teleportTo;
@@ -62,7 +70,7 @@ namespace Terra.Studio
             playVFX.data.clipIndex = obj.vfxIndex;
             broadcast = obj.Broadcast;
             //executeMultipleTimes = obj.listen == Listen.Always;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcast, null);
+            ImportVisualisation(broadcast, null);
         }
     }
 }

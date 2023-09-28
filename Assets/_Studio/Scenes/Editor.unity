@@ -435,7 +435,7 @@ PrefabInstance:
     - target: {fileID: 224597220361603002, guid: c310b787f758e3a4db55284145e55bc8,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 900.5208
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224597220361603002, guid: c310b787f758e3a4db55284145e55bc8,
         type: 3}
@@ -3744,7 +3744,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b8b4cda14214029bf67299d792f999, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runtimeHierarchy: {fileID: 625497295}
   toastUI: {fileID: 366142243}
 --- !u!114 &792619812
 MonoBehaviour:
@@ -3998,7 +3997,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 16.400024, y: 38.19995}
+  m_AnchoredPosition: {x: 16.399902, y: 38.19995}
   m_SizeDelta: {x: 328.2596, y: 128.568}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &991326943
@@ -5276,7 +5275,7 @@ PrefabInstance:
     - target: {fileID: 224577763670417082, guid: d39ad26c554f1a04d870956f7fac6fd8,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -12
+      value: -11.9999695
       objectReference: {fileID: 0}
     - target: {fileID: 224732714809946368, guid: d39ad26c554f1a04d870956f7fac6fd8,
         type: 3}
@@ -5797,7 +5796,7 @@ PrefabInstance:
     - target: {fileID: 224685037686054822, guid: 4d8c6c9fba0e46f489b21fd7d92d739d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.00002670288
+      value: -0.000015258789
       objectReference: {fileID: 0}
     - target: {fileID: 224685037686054822, guid: 4d8c6c9fba0e46f489b21fd7d92d739d,
         type: 3}

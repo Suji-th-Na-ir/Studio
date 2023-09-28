@@ -1,12 +1,10 @@
-using UnityEngine;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
-using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.Collide")]
-    public class Collide : MonoBehaviour, IComponent
+    public class Collide : BaseBehaviour
     {
         public enum DestroyOnEnum
         {
@@ -20,18 +18,28 @@ namespace Terra.Studio
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
         [AliasDrawer("Broadcast")]
+        [OnValueChanged(UpdateBroadcast = true)]
         public string broadcast = null;
+
+        protected override string ComponentName => nameof(Collide);
+        protected override bool CanBroadcast => true;
+        protected override bool CanListen => false;
+        protected override string[] BroadcasterRefs => new string[]
+        {
+            broadcast
+        };
+
         //[AliasDrawer("Do\nAlways")]
         //public bool executeMultipleTimes = true;
 
-        public void Awake()
+        protected override void Awake()
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), Helper.GetEnumWithAliasNames<DestroyOnEnum>(), this.GetType().Name, false);
+            startOn.Setup<DestroyOnEnum>(gameObject, ComponentName);
             playSFX.Setup<Collide>(gameObject);
             playVFX.Setup<Collide>(gameObject);
         }
 
-        public (string type, string data) Export()
+        public override (string type, string data) Export()
         {
             var start = Helper.GetEnumValueByIndex<DestroyOnEnum>(startOn.data.startIndex);
             var data = new CollideComponent()
@@ -56,7 +64,7 @@ namespace Terra.Studio
             return (type, json);
         }
 
-        public void Import(EntityBasedComponent data)
+        public override void Import(EntityBasedComponent data)
         {
             var obj = JsonConvert.DeserializeObject<CollideComponent>(data.data);
             playSFX.data.canPlay = obj.canPlaySFX;
@@ -69,7 +77,7 @@ namespace Terra.Studio
             startOn.data.startIndex = obj.startIndex;
             startOn.data.startName = obj.startName;
             //executeMultipleTimes = obj.listen == Listen.Always;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcast, null);
+            ImportVisualisation(broadcast, null);
         }
     }
 }

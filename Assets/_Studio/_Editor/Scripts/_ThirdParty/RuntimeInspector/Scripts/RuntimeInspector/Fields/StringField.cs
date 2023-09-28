@@ -32,7 +32,6 @@ namespace RuntimeInspectorNamespace
         public override void Initialize()
         {
             base.Initialize();
-
             input.Initialize();
             input.OnValueChanged += OnValueChanged;
             input.OnValueSubmitted += OnValueSubmitted;
@@ -82,19 +81,12 @@ namespace RuntimeInspectorNamespace
         {
             var oldValue = Value;
             if (m_setterMode == Mode.OnValueChange)
+            {
                 Value = input;
-
-            if (NameRaw.ToLower().Equals("broadcast"))
-            {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(Value == null ? "" : Value.ToString(), oldValue == null ? "" : oldValue.ToString()
-                    , new ComponentDisplayDock() { componentGameObject = ((MonoBehaviour)virutalObject).gameObject, componentType = ComponentType.Name });
             }
-            else if (NameRaw.ToLower().Equals("broadcast listen"))
-            {
-                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(Value == null ? "" : Value.ToString(), oldValue == null ? "" : oldValue.ToString(),
-                 new ComponentDisplayDock() { componentGameObject = ((MonoBehaviour)virutalObject).gameObject, componentType = ComponentType.Name });
-            }
-
+            var newString = Value == null ? string.Empty : Value.ToString();
+            var oldString = oldValue == null ? string.Empty : oldValue.ToString();
+            onStringUpdated?.Invoke(newString, oldString);
             return true;
         }
 

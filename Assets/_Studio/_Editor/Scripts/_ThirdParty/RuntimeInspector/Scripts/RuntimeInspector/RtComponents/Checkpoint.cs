@@ -1,25 +1,33 @@
-using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
 
 namespace RuntimeInspectorNamespace
 {
     [EditorDrawComponent("Terra.Studio.Checkpoint")]
-    public class Checkpoint : MonoBehaviour, IComponent
+    public class Checkpoint : BaseBehaviour
     {
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
         [AliasDrawer("Broadcast")]
+        [OnValueChanged(UpdateBroadcast = true)]
         public string Broadcast = null;
 
-        public void Start()
+        protected override string ComponentName => nameof(Checkpoint);
+        protected override bool CanBroadcast => true;
+        protected override bool CanListen => false;
+        protected override string[] BroadcasterRefs => new string[]
         {
+            Broadcast
+        };
+
+        protected override void Awake()
+        {
+            base.Awake();
             PlaySFX.Setup<Checkpoint>(gameObject);
             PlayVFX.Setup<Checkpoint>(gameObject);
-            EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock { componentGameObject = gameObject, componentType = "Checkpoint" });
         }
 
-        public (string type, string data) Export()
+        public override (string type, string data) Export()
         {
             var component = new CheckpointComponent()
             {
@@ -41,7 +49,7 @@ namespace RuntimeInspectorNamespace
             return (type, data);
         }
 
-        public void Import(EntityBasedComponent data)
+        public override void Import(EntityBasedComponent data)
         {
             var json = data.data;
             var component = JsonConvert.DeserializeObject<CheckpointComponent>(json);
@@ -52,7 +60,7 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.clipName = component.vfxName;
             PlayVFX.data.clipIndex = component.vfxIndex;
             Broadcast = component.Broadcast;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, null);
+            ImportVisualisation(Broadcast, null);
         }
     }
 }

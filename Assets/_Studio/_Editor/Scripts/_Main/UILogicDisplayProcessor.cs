@@ -1,33 +1,28 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using RuntimeInspectorNamespace;
 using UnityEngine;
+using RuntimeInspectorNamespace;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
     [Serializable]
     public struct ComponentDisplayDock
     {
-        public GameObject componentGameObject;
-        public string componentType;
+        public GameObject ComponentGameObject;
+        public string ComponentType;
 
     }
     public class UILogicDisplayProcessor : MonoBehaviour
     {
         private Dictionary<string, List<ComponentDisplayDock>> m_Broadcasters; //key: BroadcastString Value: GameObject/Component
         private Dictionary<string, List<ComponentDisplayDock>> m_Listners;
-        [SerializeField] ComponentIconsPreset iconPresets;
+
+        private ComponentIconsPreset iconPresets;
 
         private Dictionary<GameObject, List<ComponentIconNode>> m_icons;
 
-        private List<ComponentDisplayDock> GetListnersInSceneFor(string broadcastString) => m_Listners.TryGetValue(broadcastString, out var value) ? value :new List<ComponentDisplayDock>();
+        private List<ComponentDisplayDock> GetListnersInSceneFor(string broadcastString) => m_Listners.TryGetValue(broadcastString, out var value) ? value : new List<ComponentDisplayDock>();
         private List<ComponentDisplayDock> GetBroadcastersInSceneFor(string listenString) => m_Broadcasters.TryGetValue(listenString, out var value) ? value : new List<ComponentDisplayDock>();
-
-        private RuntimeHierarchy runtimeHierarchy;
-
-        public RuntimeInspector Inspector { get; private set; }
 
         private void Awake()
         {
@@ -41,19 +36,19 @@ namespace Terra.Studio
 
         public void Init()
         {
-            runtimeHierarchy = FindAnyObjectByType<RuntimeHierarchy>();
-            Inspector = FindAnyObjectByType<RuntimeInspector>();
             EditorOp.Resolve<SelectionHandler>().SelectionChanged += OnSelectionChanged;
-            Inspector.OnPageIndexChanged += OnPageChanged;
+            EditorOp.Resolve<RuntimeInspector>().OnPageIndexChanged += OnPageChanged;
             m_Broadcasters = new Dictionary<string, List<ComponentDisplayDock>>();
             m_Listners = new Dictionary<string, List<ComponentDisplayDock>>();
             m_icons = new Dictionary<GameObject, List<ComponentIconNode>>();
+            iconPresets = EditorOp.Load<ComponentIconsPreset>("SOs/Component_Icon_SO");
         }
 
         private void OnPageChanged(int index)
         {
             OnSelectionChanged(EditorOp.Resolve<SelectionHandler>().GetSelectedObjects());
         }
+
         public void AddComponentIcon(ComponentDisplayDock obj)
         {
             AddIcon(obj);
@@ -68,11 +63,10 @@ namespace Terra.Studio
 
         private void UpdateDictionaryWithNewStringKey(Dictionary<string, List<ComponentDisplayDock>> list, string lastKey, string newKey, ComponentDisplayDock obj)
         {
-            if (lastKey == null)
-                lastKey = "";
+            lastKey ??= "";
             if (list.TryGetValue(lastKey, out List<ComponentDisplayDock> value))
             {
-                if ( !string.IsNullOrEmpty(newKey) && newKey.Equals(lastKey))
+                if (!string.IsNullOrEmpty(newKey) && newKey.Equals(lastKey))
                     return;
                 if (!string.IsNullOrEmpty(newKey))
                 {
@@ -93,7 +87,7 @@ namespace Terra.Studio
                 }
                 else
                 {
-                    if (m_icons.TryGetValue(obj.componentGameObject, out var compIcons))
+                    if (m_icons.TryGetValue(obj.ComponentGameObject, out var compIcons))
                     {
                         for (int j = 0; j < compIcons.Count; j++)
                         {
@@ -131,12 +125,11 @@ namespace Terra.Studio
                     list.Add(newKey, newValueList);
                 }
             }
-           
+
         }
 
         public void UpdateBroadcastString(string newString, string lastString, ComponentDisplayDock obj)
         {
-        
             UpdateDictionaryWithNewStringKey(m_Broadcasters, lastString, newString, obj);
             ValidateBroadcastListen();
         }
@@ -170,7 +163,7 @@ namespace Terra.Studio
                 List<ComponentIconNode> broadcastNode = new List<ComponentIconNode>();
                 for (int i = 0; i < allbroadCastObject.Count; i++)
                 {
-                    if (m_icons.TryGetValue(allbroadCastObject[i].componentGameObject, out var compIcons))
+                    if (m_icons.TryGetValue(allbroadCastObject[i].ComponentGameObject, out var compIcons))
                     {
                         for (int j = 0; j < compIcons.Count; j++)
                         {
@@ -199,7 +192,7 @@ namespace Terra.Studio
                     }
                 }
 
-                
+
             }
 
             foreach (var listner in m_Listners)
@@ -208,7 +201,7 @@ namespace Terra.Studio
                 var allListnerObject = listner.Value;
                 for (int i = 0; i < allListnerObject.Count; i++)
                 {
-                    if (m_icons.TryGetValue(allListnerObject[i].componentGameObject, out var compIcons))
+                    if (m_icons.TryGetValue(allListnerObject[i].ComponentGameObject, out var compIcons))
                     {
                         for (int j = 0; j < compIcons.Count; j++)
                         {
@@ -216,13 +209,13 @@ namespace Terra.Studio
                             {
                                 compIcons[j].BroadcastTargets = GetTargetIconsForDisplayDock(broadcasters);
                                 compIcons[j].IsListning = true;
-                                compIcons[j].ListenStrings= new List<string> { listner.Key };
+                                compIcons[j].ListenStrings = new List<string> { listner.Key };
                             }
                         }
                     }
                 }
             }
-    
+
 
             OnSelectionChanged(EditorOp.Resolve<SelectionHandler>().GetSelectedObjects());
         }
@@ -233,11 +226,11 @@ namespace Terra.Studio
 
             for (int i = 0; i < docks.Count; i++)
             {
-                if (m_icons.ContainsKey(docks[i].componentGameObject))
+                if (m_icons.ContainsKey(docks[i].ComponentGameObject))
                 {
-                    if (m_icons[docks[i].componentGameObject]!=null )
+                    if (m_icons[docks[i].ComponentGameObject] != null)
                     {
-                        var icons=m_icons[docks[i].componentGameObject];
+                        var icons = m_icons[docks[i].ComponentGameObject];
                         for (int j = 0; j < icons.Count; j++)
                         {
                             if (icons[j].GetComponentDisplayDockTarget().Equals(docks[i]))
@@ -253,36 +246,37 @@ namespace Terra.Studio
 
         private void AddIcon(ComponentDisplayDock componentDisplay)
         {
-            GameObject iconGameObject = new GameObject($"Icon{componentDisplay.componentGameObject.name}_{componentDisplay.componentType}");
-         
+            GameObject iconGameObject = new GameObject($"Icon{componentDisplay.ComponentGameObject.name}_{componentDisplay.ComponentType}");
+
             var compIcon = iconGameObject.AddComponent<ComponentIconNode>();
             compIcon.Setup(iconPresets, componentDisplay);
-            if (!m_icons.TryGetValue(componentDisplay.componentGameObject, out List<ComponentIconNode> value))
+            if (!m_icons.TryGetValue(componentDisplay.ComponentGameObject, out List<ComponentIconNode> value))
             {
-                if (m_icons.ContainsKey(componentDisplay.componentGameObject))
-                    m_icons[componentDisplay.componentGameObject].Add(compIcon);
+                if (m_icons.ContainsKey(componentDisplay.ComponentGameObject))
+                    m_icons[componentDisplay.ComponentGameObject].Add(compIcon);
                 else
                 {
                     List<ComponentIconNode> componentIconNodes = new List<ComponentIconNode>() { compIcon, };
-                    m_icons.Add(componentDisplay.componentGameObject, componentIconNodes);
-                   
+                    m_icons.Add(componentDisplay.ComponentGameObject, componentIconNodes);
+
                 }
             }
             else
             {
-                m_icons[componentDisplay.componentGameObject].Add(compIcon);
+                m_icons[componentDisplay.ComponentGameObject].Add(compIcon);
             }
 
-            for (int i = 0; i < m_icons[componentDisplay.componentGameObject].Count; i++)
+            for (int i = 0; i < m_icons[componentDisplay.ComponentGameObject].Count; i++)
             {
-                m_icons[componentDisplay.componentGameObject][i].m_componentIndex = i;
+                m_icons[componentDisplay.ComponentGameObject][i].m_componentIndex = i;
             }
         }
 
         public void ImportVisualisation(GameObject gameObj, string component, string broadcast, string broadcastListen)
         {
             bool newcomponent = true;
-            var compdock = new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component };
+            var compdock = new ComponentDisplayDock() { ComponentGameObject = gameObj, ComponentType = component };
+
             if (m_icons.ContainsKey(gameObj))
             {
                 if (m_icons.TryGetValue(gameObj, out var value))
@@ -290,27 +284,29 @@ namespace Terra.Studio
                     foreach (var v in value)
                     {
                         if (v.GetComponentDisplayDockTarget().Equals(compdock))
-                        { 
+                        {
                             newcomponent = false;
                             break;
-                            }
+                        }
                     }
-                       
+
                 }
             }
 
-            if(newcomponent)
-            AddComponentIcon(new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
+            if (newcomponent)
+            {
+                AddComponentIcon(compdock);
+            }
 
-            UpdateBroadcastString(broadcast, "", new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
-            UpdateListenerString(broadcastListen, "", new ComponentDisplayDock() { componentGameObject = gameObj, componentType = component });
+            UpdateBroadcastString(broadcast, "", compdock);
+            UpdateListenerString(broadcastListen, "", compdock);
         }
 
         private void RemoveIcon(ComponentDisplayDock componentDisplay)
         {
             List<ComponentIconNode> value;
-            List<ComponentIconNode> toRemove=new List<ComponentIconNode>();
-            if (!m_icons.TryGetValue(componentDisplay.componentGameObject, out value))
+            List<ComponentIconNode> toRemove = new List<ComponentIconNode>();
+            if (!m_icons.TryGetValue(componentDisplay.ComponentGameObject, out value))
                 return;
 
             for (int i = 0; i < value.Count; i++)
@@ -318,16 +314,16 @@ namespace Terra.Studio
                 if (value[i].GetComponentDisplayDockTarget().Equals(componentDisplay))
                 {
                     value[i].DestroyThisIcon();
-                    toRemove.Add(value[i]); 
+                    toRemove.Add(value[i]);
                 }
             }
             foreach (var remove in toRemove)
             {
                 value.Remove(remove);
             }
-           
-            if (m_icons[componentDisplay.componentGameObject].Count==0)
-            m_icons.Remove(componentDisplay.componentGameObject);
+
+            if (m_icons[componentDisplay.ComponentGameObject].Count == 0)
+                m_icons.Remove(componentDisplay.ComponentGameObject);
 
 
             //Remove all broadcasters and listner
@@ -337,7 +333,7 @@ namespace Terra.Studio
                     broadcast.Value.Remove(componentDisplay);
             }
 
-            foreach (var listner  in m_Listners)
+            foreach (var listner in m_Listners)
             {
                 if (listner.Value.Contains(componentDisplay))
                     listner.Value.Remove(componentDisplay);
@@ -347,7 +343,7 @@ namespace Terra.Studio
 
         private void OnSelectionChanged(List<GameObject> selection)
         {
-            if (selection==null || selection.Count == 0)
+            if (selection == null || selection.Count == 0)
             {
                 foreach (var item in m_icons)
                 {
@@ -366,13 +362,13 @@ namespace Terra.Studio
                 }
             }
 
-            
+
 
             foreach (var s in selection)
             {
                 if (m_icons.TryGetValue(s.gameObject, out var value))
                 {
-                
+
                     for (int i = 0; i < value.Count; i++)
                     {
                         value[i].isTargetSelected = true;
@@ -392,9 +388,9 @@ namespace Terra.Studio
 
                 }
             }
-           
 
-            
+
+
         }
     }
 }

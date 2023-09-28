@@ -175,9 +175,9 @@ namespace RuntimeInspectorNamespace
                 });
                 customString.onEndEdit.AddListener((value) =>
                 {
-                    if (value != ((RotateComponentData)field.GetLastSubmittedValue()).broadcast)
+                    if (value != ((RotateComponentData)field.GetLastSubmittedValue()).Broadcast)
                     {
-                        UpdateUndoRedoStack("Broadcast", field.GetAtom().data.broadcast, customStringAction);
+                        UpdateUndoRedoStack("Broadcast", field.GetAtom().data.Broadcast, customStringAction);
                     }
                 });
             }
@@ -221,7 +221,7 @@ namespace RuntimeInspectorNamespace
                         var newValue = (RotateComponentData)value;
                         if (varName.ToLower().Equals("broadcast"))
                         {
-                            SetCustomString(newValue.broadcast);
+                            SetCustomString(newValue.Broadcast);
                         }
                         field.GetAtom().data = newValue;
                         if (!varName.ToLower().Equals("broadcast"))
@@ -236,14 +236,7 @@ namespace RuntimeInspectorNamespace
         private void SetCustomString(string _newString)
         {
             Atom.Rotate atom = field.GetAtom();
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(_newString,
-                atom.data.broadcast,
-                new ComponentDisplayDock
-                {
-                    componentGameObject = atom.target,
-                    componentType = atom.componentType
-                });
-            atom.data.broadcast = _newString;
+            atom.data.Broadcast = _newString;
             customStringAction?.Invoke();
         }
 
@@ -254,9 +247,8 @@ namespace RuntimeInspectorNamespace
             {
                 foreach (var obj in selectedObjects)
                 {
-                    if (obj.GetComponent<Rotate>() != null)
+                    if (obj.TryGetComponent(out Rotate comp))
                     {
-                        Rotate comp = obj.GetComponent<Rotate>();
                         switch (_type)
                         {
                             case VariableTypes.X_AXIS:
@@ -287,9 +279,8 @@ namespace RuntimeInspectorNamespace
                                 comp.Type.data.repeat = (int)_value;
                                 break;
                             case VariableTypes.BROADCAST_STRING:
-                                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(
-                                    _value.ToString(), comp.Type.data.broadcast, new ComponentDisplayDock() { componentGameObject = obj, componentType = typeof(Atom.Rotate).Name });
-                                comp.Type.data.broadcast = (string)_value;
+                                comp.OnBroadcastUpdated?.Invoke(_value.ToString(), comp.Type.data.Broadcast);
+                                comp.Type.data.Broadcast = (string)_value;
                                 break;
                             case VariableTypes.CAN_LISTEN_MULTIPLE_TIMES:
                                 comp.Type.data.listen = (Listen)_value;
@@ -326,7 +317,7 @@ namespace RuntimeInspectorNamespace
             if (speedInput) speedInput.SetTextWithoutNotify(_data.speed.ToString());
             if (pauseInput) pauseInput.SetTextWithoutNotify(_data.pauseBetween.ToString());
             if (repeatInput) repeatInput.SetTextWithoutNotify(_data.repeat.ToString());
-            if (customString) customString.SetTextWithoutNotify(_data.broadcast);
+            if (customString) customString.SetTextWithoutNotify(_data.Broadcast);
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
 
@@ -356,7 +347,7 @@ namespace RuntimeInspectorNamespace
             pauseAction = () => { UpdateVariablesForAll(VariableTypes.PAUSE, field.GetAtom().data.pauseBetween); };
             repeatAction = () => { UpdateVariablesForAll(VariableTypes.REPEAT, field.GetAtom().data.repeat); };
             broadcastAtAction = () => { UpdateVariablesForAll(VariableTypes.BROADCAST_AT, field.GetAtom().data.broadcastAt); };
-            customStringAction = () => { UpdateVariablesForAll(VariableTypes.BROADCAST_STRING, field.GetAtom().data.broadcast); };
+            customStringAction = () => { UpdateVariablesForAll(VariableTypes.BROADCAST_STRING, field.GetAtom().data.Broadcast); };
             canListenMultipleTimesAction = () => { UpdateVariablesForAll(VariableTypes.CAN_LISTEN_MULTIPLE_TIMES, field.GetAtom().data.listen); };
         }
     }

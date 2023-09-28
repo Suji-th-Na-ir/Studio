@@ -1,47 +1,70 @@
 using System;
 using UnityEngine;
-using System.Collections.Generic;
 using PlayShifu.Terra;
 using RuntimeInspectorNamespace;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
-    public class Atom
+    public class Atom : IDisposable
     {
+        public List<StartOn> AllStartOns = new();
+        public List<PlaySfx> AllSfxes = new();
+        public List<PlayVfx> AllVfxes = new();
+
         [Serializable]
         public class StartOn
         {
-            public static List<StartOn> AllInstances = new();
-            [HideInInspector] public StartOnField field;
-            [HideInInspector] public StartOnData data;
-            [HideInInspector] public GameObject target;
-            [HideInInspector] public List<string> StartList = new List<string>();
-            [HideInInspector] public string componentType = null;
-            [HideInInspector] public List<string> aliasNameList = new List<string>();
-            public void Setup(GameObject _target, List<string> _list, List<String> _aliasStrings, string _componentType, bool updateListen)
+            public GameObject target;
+            public StartOnField field;
+            public StartOnData data = new();
+            public string componentType = null;
+            public List<string> startList = new();
+            public List<string> aliasNameList = new();
+            public Action<string, string> OnListenerUpdated;
+
+            public void Setup<T>(GameObject target, string componentType) where T : Enum
             {
-                StartList = _list;
-                aliasNameList = _aliasStrings;
-                target = _target;
-                if (!AllInstances.Contains(this))
-                    AllInstances.Add(this);
-                componentType = _componentType;
-                if (updateListen)
-                    EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(data.listenName, ""
-                                    , new ComponentDisplayDock() { componentGameObject = _target, componentType = _componentType });
-                data = new();
-                if (StartList.Count >= data.startIndex)
+                Setup<T>(target, componentType, null, false);
+            }
+
+            public void Setup<T>(GameObject target, string componentType, Action<string, string> OnListenerUpdated, bool updateListenerInstantly) where T : Enum
+            {
+                UpdateInstance();
+                this.target = target;
+                this.componentType = componentType;
+                this.OnListenerUpdated = OnListenerUpdated;
+                startList = Helper.GetEnumValuesAsStrings<T>();
+                aliasNameList = Helper.GetEnumWithAliasNames<T>();
+                RecalibrateStartName();
+                if (updateListenerInstantly)
                 {
-                    data.startName = StartList[data.startIndex];
+                    OnListenerUpdated?.Invoke(data.listenName, string.Empty);
+                }
+            }
+
+            private void RecalibrateStartName()
+            {
+                if (startList.Count >= data.startIndex)
+                {
+                    data.startName = startList[data.startIndex];
+                }
+            }
+
+            private void UpdateInstance()
+            {
+                var allStartOns = EditorOp.Resolve<Atom>().AllStartOns;
+                if (!allStartOns.Contains(this))
+                {
+                    allStartOns.Add(this);
                 }
             }
         }
 
-        [Serializable]
         public class BasePlay
         {
-            [HideInInspector] public GameObject target;
-            [HideInInspector] public PlayFXData data;
+            public GameObject target;
+            public PlayFXData data;
             public Type componentType = null;
             public string fieldName;
 
@@ -57,14 +80,16 @@ namespace Terra.Studio
         [Serializable]
         public class PlaySfx : BasePlay
         {
-            public static List<PlaySfx> AllInstances = new();
-            [HideInInspector] public PlaySFXField field;
+            public PlaySFXField field;
 
             public override void Setup<T>(GameObject _target, string fieldName = null)
             {
                 base.Setup<T>(_target, fieldName);
-                if (!AllInstances.Contains(this))
-                    AllInstances.Add(this);
+                var allSfxes = EditorOp.Resolve<Atom>().AllSfxes;
+                if (!allSfxes.Contains(this))
+                {
+                    allSfxes.Add(this);
+                }
                 data.clipName = Helper.GetSfxClipNameByIndex(data.clipIndex);
                 EditorOp.Resolve<IURCommand>().UpdateReference(this);
             }
@@ -73,65 +98,79 @@ namespace Terra.Studio
         [Serializable]
         public class PlayVfx : BasePlay
         {
-            public static List<PlayVfx> AllInstances = new();
-            [HideInInspector] public PlayVFXField field;
+            public PlayVFXField field;
 
             public override void Setup<T>(GameObject _target, string fieldName = null)
             {
                 base.Setup<T>(_target, fieldName);
-                if (!AllInstances.Contains(this))
-                    AllInstances.Add(this);
+                var allVfxes = EditorOp.Resolve<Atom>().AllVfxes;
+                if (!allVfxes.Contains(this))
+                {
+                    allVfxes.Add(this);
+                }
                 data.clipName = Helper.GetVfxClipNameByIndex(data.clipIndex);
                 EditorOp.Resolve<IURCommand>().UpdateReference(this);
             }
         }
 
-        [Serializable]
-        public class Rotate
+        public class BaseBroadcasterTemplate
         {
-            [HideInInspector] public RotateField field;
-            [HideInInspector] public RotateComponentData data = new();
-            [HideInInspector] public GameObject target;
-            [HideInInspector] public string id;
-            [HideInInspector] public string componentType = null;
+            public string id;
+            public GameObject target;
+            public Action<string, string> OnBroadcastUpdated;
 
-            public void Setup(string _id, GameObject _target, string _componentType)
+            public virtual void Setup(GameObject target, Action<string, string> OnBroadcastUpdated)
             {
-                target = _target;
-                id = _id;
-                componentType = _componentType;
+                this.target = target;
+                id = Guid.NewGuid().ToString("N");
+                this.OnBroadcastUpdated = OnBroadcastUpdated;
             }
         }
 
         [Serializable]
-        public class Translate
+        public class Rotate : BaseBroadcasterTemplate
         {
-            [HideInInspector] public TranslateField field;
-            [HideInInspector] public TranslateComponentData data = new();
-            [HideInInspector] public GameObject target;
-            [HideInInspector] public string id;
-            [HideInInspector] public string componentType = null;
+            public RotateField field;
+            public RotateComponentData data = new();
 
-            public void Setup(string _id, GameObject _target, string _componentType)
+            public override void Setup(GameObject target, Action<string, string> OnBroadcastUpdated)
             {
-                target = _target;
-                id = _id;
-                componentType = _componentType;
+                base.Setup(target, OnBroadcastUpdated);
+                data.onBroadcastValueModified = OnBroadcastUpdated;
+            }
+        }
+
+        [Serializable]
+        public class Translate : BaseBroadcasterTemplate
+        {
+            public TranslateField field;
+            public TranslateComponentData data = new();
+
+            public override void Setup(GameObject target, Action<string, string> OnBroadcastUpdated)
+            {
+                base.Setup(target, OnBroadcastUpdated);
+                data.onBroadcastValueModified = OnBroadcastUpdated;
             }
         }
 
         [Serializable]
         public class ScoreData
         {
-            [HideInInspector] public ScoreField field;
-            [HideInInspector] public int score;
-            [HideInInspector] public string instanceId;
+            public int score;
+            public ScoreField field;
+            public string instanceId;
+
+            public ScoreData()
+            {
+                instanceId = Guid.NewGuid().ToString("N");
+            }
         }
 
-        [Serializable]
-        public class SwitchData
+        public void Dispose()
         {
-            [HideInInspector] public SwitchComponent data;
+            AllStartOns.Clear();
+            AllSfxes.Clear();
+            AllVfxes.Clear();
         }
     }
 
@@ -163,10 +202,22 @@ namespace Terra.Studio
         public float speed;
         public int repeat;
         public float pauseBetween;
-        [AliasDrawer("Broadcast")]
-        public string broadcast;
         public Listen listen;
         public BroadcastAt broadcastAt;
+        public Action<string, string> onBroadcastValueModified;
+        private string broadcast;
+        public string Broadcast
+        {
+            readonly get
+            {
+                return broadcast;
+            }
+            set
+            {
+                onBroadcastValueModified?.Invoke(value, broadcast);
+                broadcast = value;
+            }
+        }
     }
 
     [Serializable]
@@ -177,11 +228,25 @@ namespace Terra.Studio
         public float pauseFor;
         public float speed;
         public int repeat;
-        [AliasDrawer("Broadcast")]
-        public string broadcast;
-
         public string listenTo;
         public Listen listen;
         public BroadcastAt broadcastAt;
+        public Action<string, string> onBroadcastValueModified;
+        private string broadcast;
+        public string Broadcast
+        {
+            readonly get
+            {
+                return broadcast;
+            }
+            set
+            {
+                if (!value.Equals(broadcast))
+                {
+                    onBroadcastValueModified?.Invoke(value, broadcast);
+                    broadcast = value;
+                }
+            }
+        }
     }
 }

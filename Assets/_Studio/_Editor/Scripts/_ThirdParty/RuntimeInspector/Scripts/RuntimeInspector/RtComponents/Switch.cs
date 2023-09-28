@@ -1,11 +1,10 @@
 using UnityEngine;
 using Newtonsoft.Json;
-using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.Switch")]
-    public class Switch : MonoBehaviour, IComponent
+    public class Switch : BaseBehaviour
     {
         public enum StartOn
         {
@@ -16,32 +15,37 @@ namespace Terra.Studio
             [EditorEnumField("Terra.Studio.TriggerAction", "Other"), AliasDrawer("Other Object Touches")]
             OnObjectCollide
         }
-        [AliasDrawer("Switch\nWhen")]
-        public StartOn switchWhen;
-        [AliasDrawer("Default")]
-        public SwitchState defaultState;
+
+        [AliasDrawer("Switch\nWhen")] public StartOn switchWhen;
+        [AliasDrawer("Default")] public SwitchState defaultState;
         [Header("When Switch is \"On\"")]
-        [AliasDrawer("Broadcast")] public string broadcastWhenOn;
+        [AliasDrawer("Broadcast"), OnValueChanged(UpdateBroadcast = true)] public string broadcastWhenOn;
         [AliasDrawer("Play SFX")] public Atom.PlaySfx playSFXWhenOn = new();
         [AliasDrawer("Play VFX")] public Atom.PlayVfx playVFXWhenOn = new();
         [Header("When Switch is \"Off\"")]
-        [AliasDrawer("Broadcast")] public string broadcastWhenOff;
+        [AliasDrawer("Broadcast"), OnValueChanged(UpdateBroadcast = true)] public string broadcastWhenOff;
         [AliasDrawer("Play SFX")] public Atom.PlaySfx playSFXWhenOff = new();
         [AliasDrawer("Play VFX")] public Atom.PlayVfx playVFXWhenOff = new();
 
-        public void Awake()
+        protected override string ComponentName => nameof(Switch);
+        protected override bool CanBroadcast => true;
+        protected override bool CanListen => false;
+        protected override string[] BroadcasterRefs => new string[]
         {
+            broadcastWhenOn,
+            broadcastWhenOff
+        };
+
+        protected override void Awake()
+        {
+            base.Awake();
             playSFXWhenOn.Setup<Switch>(gameObject, nameof(playSFXWhenOn));
             playVFXWhenOn.Setup<Switch>(gameObject, nameof(playVFXWhenOn));
             playSFXWhenOff.Setup<Switch>(gameObject, nameof(playSFXWhenOff));
             playVFXWhenOff.Setup<Switch>(gameObject, nameof(playVFXWhenOff));
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(broadcastWhenOn, ""
-                                 , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = this.GetType().Name });
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(broadcastWhenOff, ""
-                                 , new ComponentDisplayDock() { componentGameObject = gameObject, componentType = this.GetType().Name });
         }
 
-        public (string type, string data) Export()
+        public override (string type, string data) Export()
         {
             var data = new SwitchComponent()
             {
@@ -58,7 +62,7 @@ namespace Terra.Studio
             return (type, json);
         }
 
-        public void Import(EntityBasedComponent data)
+        public override void Import(EntityBasedComponent data)
         {
             var component = JsonConvert.DeserializeObject<SwitchComponent>(data.data);
             defaultState = component.currentState;
@@ -69,8 +73,8 @@ namespace Terra.Studio
             playSFXWhenOff.data = GetPlaySFXData(component.offStateData);
             playVFXWhenOn.data = GetPlayVFXData(component.onStateData);
             playVFXWhenOff.data = GetPlayVFXData(component.offStateData);
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcastWhenOn, null);
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, broadcastWhenOff, null);
+            ImportVisualisation(broadcastWhenOn, null);
+            ImportVisualisation(broadcastWhenOff, null);
         }
 
         private SwitchComponentData GetSwitchComponentData(SwitchState state, PlayFXData playSFXData, PlayFXData playVFXData, string broadcast)

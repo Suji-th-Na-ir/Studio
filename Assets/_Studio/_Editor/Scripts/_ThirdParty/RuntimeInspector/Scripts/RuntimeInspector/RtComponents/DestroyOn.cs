@@ -1,7 +1,6 @@
-using Newtonsoft.Json;
-using PlayShifu.Terra;
 using Terra.Studio;
-using UnityEngine;
+using PlayShifu.Terra;
+using Newtonsoft.Json;
 
 namespace RuntimeInspectorNamespace
 {
@@ -18,23 +17,37 @@ namespace RuntimeInspectorNamespace
     }
 
     [EditorDrawComponent("Terra.Studio.DestroyOn"), AliasDrawer("Destroy Self")]
-    public class DestroyOn : MonoBehaviour, IComponent
+    public class DestroyOn : BaseBehaviour
     {
         [AliasDrawer("DestroyWhen")]
-        public Atom.StartOn startOn = new();
+        public Atom.StartOn StartOn = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
         [AliasDrawer("Broadcast")]
+        [OnValueChanged(UpdateBroadcast = true)]
         public string Broadcast = null;
 
-        public void Awake()
+        protected override string ComponentName => nameof(DestroyOn);
+        protected override bool CanBroadcast => true;
+        protected override bool CanListen => true;
+        protected override string[] BroadcasterRefs => new string[]
         {
-            startOn.Setup(gameObject, Helper.GetEnumValuesAsStrings<DestroyOnEnum>(), Helper.GetEnumWithAliasNames<DestroyOnEnum>(), GetType().Name, startOn.data.startIndex == 3);
+            Broadcast
+        };
+        protected override string[] ListenerRefs => new string[]
+        {
+            StartOn.data.listenName
+        };
+
+        protected override void Awake()
+        {
+            base.Awake();
+            StartOn.Setup<DestroyOnEnum>(gameObject, ComponentName, OnListenerUpdated, StartOn.data.startIndex == 3);
             PlaySFX.Setup<DestroyOn>(gameObject);
             PlayVFX.Setup<DestroyOn>(gameObject);
         }
 
-        public (string type, string data) Export()
+        public override (string type, string data) Export()
         {
             DestroyOnComponent comp = new()
             {
@@ -58,7 +71,7 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartEvent()
         {
-            int index = startOn.data.startIndex;
+            int index = StartOn.data.startIndex;
             var value = (DestroyOnEnum)index;
             var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(value);
             return eventName;
@@ -66,11 +79,11 @@ namespace RuntimeInspectorNamespace
 
         public string GetStartCondition()
         {
-            int index = startOn.data.startIndex;
+            int index = StartOn.data.startIndex;
             var value = (DestroyOnEnum)index;
             if (value.ToString().ToLower().Contains("listen"))
             {
-                return startOn.data.listenName;
+                return StartOn.data.listenName;
             }
             else
             {
@@ -78,7 +91,7 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        public void Import(EntityBasedComponent cdata)
+        public override void Import(EntityBasedComponent cdata)
         {
             DestroyOnComponent comp = JsonConvert.DeserializeObject<DestroyOnComponent>(cdata.data);
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(DestroyOnEnum), out object result))
@@ -88,20 +101,20 @@ namespace RuntimeInspectorNamespace
                 {
                     if (comp.ConditionData.Equals("Player"))
                     {
-                        startOn.data.startIndex = (int)res;
+                        StartOn.data.startIndex = (int)res;
                     }
                     else
                     {
-                        startOn.data.startIndex = (int)DestroyOnEnum.OnObjectCollide;
+                        StartOn.data.startIndex = (int)DestroyOnEnum.OnObjectCollide;
                     }
                 }
                 else
                 {
-                    startOn.data.startIndex = (int)(DestroyOnEnum)result;
+                    StartOn.data.startIndex = (int)(DestroyOnEnum)result;
                 }
-                startOn.data.startName = res.ToString();
+                StartOn.data.startName = res.ToString();
             }
-            startOn.data.listenName = comp.ConditionData;
+            StartOn.data.listenName = comp.ConditionData;
             Broadcast = comp.Broadcast;
             PlaySFX.data.canPlay = comp.canPlaySFX;
             PlaySFX.data.clipIndex = comp.sfxIndex;
@@ -110,9 +123,11 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
             string listenstring = "";
-            if (startOn.data.startIndex == 3)
-                listenstring = startOn.data.listenName;
-            EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, GetType().Name, Broadcast, listenstring);
+            if (StartOn.data.startIndex == 3)
+            {
+                listenstring = StartOn.data.listenName;
+            }
+            ImportVisualisation(Broadcast, listenstring);
         }
     }
 }

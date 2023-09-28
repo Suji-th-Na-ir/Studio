@@ -21,10 +21,9 @@ public class SelectionHandler : View
         Universal
     }
 
-    [SerializeField]
-    private RuntimeHierarchy runtimeHierarchy;
-    public ToastUI toastUI;
+    [SerializeField] private ToastUI toastUI;
 
+    private RuntimeHierarchy runtimeHierarchy;
     private ObjectTransformGizmo objectMoveGizmo;
     private ObjectTransformGizmo objectRotationGizmo;
     private ObjectTransformGizmo objectScaleGizmo;
@@ -43,13 +42,11 @@ public class SelectionHandler : View
     private void Awake()
     {
         EditorOp.Register(this);
-        runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
     }
 
     private void OnDestroy()
     {
         EditorOp.Unregister(this);
-        runtimeHierarchy.OnSelectionChanged -= OnHierarchySelectionChanged;
     }
 
     private void OnHierarchySelectionChanged(ReadOnlyCollection<Transform> _allTransform)
@@ -174,6 +171,9 @@ public class SelectionHandler : View
 
         _workGizmo = objectMoveGizmo;
         _workGizmoId = GizmoId.Move;
+
+        runtimeHierarchy = EditorOp.Resolve<RuntimeHierarchy>();
+        runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
     }
 
     private void Update()
@@ -202,16 +202,11 @@ public class SelectionHandler : View
                 if (RTInput.WasKeyPressedThisFrame(KeyCode.Backspace))
                 {
                     runtimeHierarchy.Deselect();
+                    Snapshots.DeleteGameObjectsSnapshot.CreateSnapshot(_selectedObjects.ToList());
                     foreach (GameObject obj in _selectedObjects)
                     {
-                        var comps = obj.GetComponents<IComponent>();
-                        foreach (var comp in comps)
-                        {
-                            EditorOp.Resolve<UILogicDisplayProcessor>().RemoveComponentIcon(new ComponentDisplayDock() { componentGameObject = obj, componentType = comp.GetType().Name });
-                        }
                         obj.SetActive(false);
                     }
-                    Snapshots.DeleteGameObjectsSnapshot.CreateSnapshot(_selectedObjects);
                     _selectedObjects.Clear();
                     OnSelectionChanged();
                 }
@@ -230,47 +225,23 @@ public class SelectionHandler : View
                 {
                     var iObj = Instantiate(obj, obj.transform.position, obj.transform.rotation, obj.transform.parent);
                     duplicatedGms.Add(iObj.transform);
-                    var components = iObj.GetComponents<IComponent>();
-
-                    for (int i = 0; i < components.Length; i++)
-                    {
-                        var componentType = components[i].GetType();
-                        EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(new ComponentDisplayDock
-                        { componentGameObject = iObj, componentType = componentType.Name });
-
-                        var mInfo = componentType.GetField("Broadcast", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-                        if (mInfo != null)
-                        {
-                            var oldValue = mInfo?.GetValue(components[i]);
-                            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(oldValue.ToString(), ""
-                                , new ComponentDisplayDock() { componentGameObject = iObj, componentType = componentType.Name });
-                        }
-
-                        var mInfo1 = componentType.GetField("BroadcastListen", BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-                        if (mInfo1 != null)
-                        {
-                            var oldValue1 = mInfo1?.GetValue(components[i]);
-                            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(oldValue1.ToString(), "",
-                             new ComponentDisplayDock() { componentGameObject = iObj, componentType = componentType.Name });
-                        }
-
-                    }
                 }
+
                 runtimeHierarchy.Refresh();
                 _selectedObjects.Clear();
+
                 foreach (var d in duplicatedGms)
                 {
                     OnSelectionChanged();
                 }
+
                 Snapshots.SpawnGameObjectsSnapshot.CreateSnapshot(duplicatedGms.Select(x => x.gameObject).ToList());
                 SelectObjectsInHierarchy(duplicatedGms);
             }
         }
     }
 
-
-
-    bool CheckIfThereIsAnyPopups()
+    private bool CheckIfThereIsAnyPopups()
     {
         if (EditorOp.Resolve<ObjectReferencePicker>())
             return true;
@@ -364,7 +335,7 @@ public class SelectionHandler : View
     }
     public void SelectObjectsInHierarchy(List<Transform> _obj)
     {
-        runtimeHierarchy.Select(_obj, RuntimeHierarchy.SelectOptions.FocusOnSelection);
+        runtimeHierarchy.Select(_obj, SelectOptions.FocusOnSelection);
     }
 
     public void RefreshHierarchy()

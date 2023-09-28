@@ -128,9 +128,9 @@ namespace RuntimeInspectorNamespace
                 });
                 customString.onEndEdit.AddListener((value) =>
                 {
-                    if (value != ((TranslateComponentData)field.GetLastSubmittedValue()).broadcast)
+                    if (value != ((TranslateComponentData)field.GetLastSubmittedValue()).Broadcast)
                     {
-                        UpdateUndoRedoStack("Broadcast", field.GetAtom().data.broadcast, customStringAction);
+                        UpdateUndoRedoStack("Broadcast", field.GetAtom().data.Broadcast, customStringAction);
                     }
                 });
             }
@@ -174,7 +174,7 @@ namespace RuntimeInspectorNamespace
                         var newValue = (TranslateComponentData)value;
                         if (varName.ToLower().Equals("broadcast"))
                         {
-                            SetCustomString(newValue.broadcast);
+                            SetCustomString(newValue.Broadcast);
                         }
                         field.GetAtom().data = newValue;
                         if (!varName.ToLower().Equals("broadcast"))
@@ -189,14 +189,7 @@ namespace RuntimeInspectorNamespace
         private void SetCustomString(string _newString)
         {
             Atom.Translate atom = field.GetAtom();
-            EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(_newString,
-                atom.data.broadcast,
-                new ComponentDisplayDock
-                {
-                    componentGameObject = atom.target,
-                    componentType = atom.componentType
-                });
-            atom.data.broadcast = _newString;
+            atom.data.Broadcast = _newString;
             customStringAction?.Invoke();
         }
 
@@ -215,7 +208,7 @@ namespace RuntimeInspectorNamespace
                     var targetValue = dataValue.GetType().GetField(varName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.IgnoreCase);
                     if (varName == "broadcast")
                     {
-                        EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(value.ToString(), targetValue.GetValue(dataValue).ToString(), new ComponentDisplayDock() { componentGameObject = obj, componentType = typeof(Atom.Translate).Name });
+                        translate.OnBroadcastUpdated?.Invoke(value.ToString(), targetValue.GetValue(dataValue).ToString());
                     }
                     targetValue.SetValueDirect(__makeref(dataValue), value);
                     dataField.SetValue(typeValue, dataValue);
@@ -248,7 +241,7 @@ namespace RuntimeInspectorNamespace
             movebyInput?[0].SetTextWithoutNotify(_data.moveBy.x.ToString());
             movebyInput?[1].SetTextWithoutNotify(_data.moveBy.y.ToString());
             movebyInput?[2].SetTextWithoutNotify(_data.moveBy.z.ToString());
-            if (customString) customString.SetTextWithoutNotify(_data.broadcast);
+            if (customString) customString.SetTextWithoutNotify(_data.Broadcast);
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
         }
 
@@ -276,7 +269,7 @@ namespace RuntimeInspectorNamespace
             repeatAction = () => { UpdateAllSelectedObjects("repeat", field.GetAtom().data.repeat); };
             pauseAction = () => { UpdateAllSelectedObjects("pauseFor", field.GetAtom().data.pauseFor); };
             broadcastAtAction = () => { UpdateAllSelectedObjects("broadcastAt", field.GetAtom().data.broadcastAt); };
-            customStringAction = () => { UpdateAllSelectedObjects("broadcast", field.GetAtom().data.broadcast); };
+            customStringAction = () => { UpdateAllSelectedObjects("broadcast", field.GetAtom().data.Broadcast); };
             canListenMultipleAction = () => { UpdateAllSelectedObjects("listen", field.GetAtom().data.listen); };
         }
     }
