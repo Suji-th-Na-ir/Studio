@@ -20,6 +20,7 @@ namespace Terra.Studio
 
         protected override void Awake()
         {
+            base.Awake();
             var score = EditorOp.Resolve<SceneDataHandler>().ScoreManagerObj;
             if (score)
             {

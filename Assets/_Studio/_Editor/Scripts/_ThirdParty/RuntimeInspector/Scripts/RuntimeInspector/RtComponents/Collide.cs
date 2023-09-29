@@ -34,6 +34,7 @@ namespace Terra.Studio
 
         protected override void Awake()
         {
+            base.Awake();
             startOn.Setup<DestroyOnEnum>(gameObject, ComponentName);
             playSFX.Setup<Collide>(gameObject);
             playVFX.Setup<Collide>(gameObject);
