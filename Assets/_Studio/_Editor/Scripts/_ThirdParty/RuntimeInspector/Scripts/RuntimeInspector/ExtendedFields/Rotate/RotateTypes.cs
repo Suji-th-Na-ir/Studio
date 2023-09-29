@@ -279,7 +279,7 @@ namespace RuntimeInspectorNamespace
                                 comp.Type.data.repeat = (int)_value;
                                 break;
                             case VariableTypes.BROADCAST_STRING:
-                                comp.OnBroadcastUpdated?.Invoke(_value.ToString(), comp.Type.data.Broadcast);
+                                comp.OnBroadcastUpdated?.Invoke($"{_value}", comp.Type.data.Broadcast);
                                 comp.Type.data.Broadcast = (string)_value;
                                 break;
                             case VariableTypes.CAN_LISTEN_MULTIPLE_TIMES:

@@ -64,7 +64,7 @@ namespace Terra.Studio
         public class BasePlay
         {
             public GameObject target;
-            public PlayFXData data;
+            public PlayFXData data = new();
             public Type componentType = null;
             public string fieldName;
 
@@ -73,7 +73,6 @@ namespace Terra.Studio
                 target = _target;
                 componentType = typeof(T);
                 this.fieldName = fieldName;
-                data = new();
             }
         }
 

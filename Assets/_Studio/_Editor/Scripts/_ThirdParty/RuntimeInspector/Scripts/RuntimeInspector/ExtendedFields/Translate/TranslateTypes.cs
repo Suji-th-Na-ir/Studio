@@ -176,7 +176,8 @@ namespace RuntimeInspectorNamespace
                         {
                             SetCustomString(newValue.Broadcast);
                         }
-                        field.GetAtom().data = newValue;
+                        var translate = field.GetAtom();
+                        translate.data = newValue;
                         if (!varName.ToLower().Equals("broadcast"))
                         {
                             onChanged?.Invoke();
@@ -202,17 +203,22 @@ namespace RuntimeInspectorNamespace
             {
                 if (obj.TryGetComponent(out Translate translate))
                 {
-                    var typeValue = (Atom.Translate)typeField.GetValue(translate);
-                    var dataField = typeValue.GetType().GetField("data", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-                    var dataValue = (TranslateComponentData)dataField.GetValue(typeValue);
-                    var targetValue = dataValue.GetType().GetField(varName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.IgnoreCase);
-                    if (varName == "broadcast")
+                    if (varName.Equals("broadcast"))
                     {
-                        translate.OnBroadcastUpdated?.Invoke(value.ToString(), targetValue.GetValue(dataValue).ToString());
+                        var newString = value == null ? string.Empty : (string)value;
+                        var oldString = translate.Type.data.Broadcast ?? string.Empty;
+                        translate.OnBroadcastUpdated?.Invoke(newString, oldString);
                     }
-                    targetValue.SetValueDirect(__makeref(dataValue), value);
-                    dataField.SetValue(typeValue, dataValue);
-                    typeField.SetValue(translate, typeValue);
+                    else
+                    {
+                        var typeValue = (Atom.Translate)typeField.GetValue(translate);
+                        var dataField = typeValue.GetType().GetField("data", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                        var dataValue = (TranslateComponentData)dataField.GetValue(typeValue);
+                        var targetValue = dataValue.GetType().GetField(varName, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.IgnoreCase);
+                        targetValue.SetValueDirect(__makeref(dataValue), value);
+                        dataField.SetValue(typeValue, dataValue);
+                        typeField.SetValue(translate, typeValue);
+                    }
                 }
             }
         }
