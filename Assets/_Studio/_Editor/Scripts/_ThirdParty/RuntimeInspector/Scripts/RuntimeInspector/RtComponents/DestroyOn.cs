@@ -27,7 +27,7 @@ namespace RuntimeInspectorNamespace
         [OnValueChanged(UpdateBroadcast = true)]
         public string Broadcast = null;
 
-        protected override string ComponentName => nameof(DestroyOn);
+        public override string ComponentName => nameof(DestroyOn);
         protected override bool CanBroadcast => true;
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]

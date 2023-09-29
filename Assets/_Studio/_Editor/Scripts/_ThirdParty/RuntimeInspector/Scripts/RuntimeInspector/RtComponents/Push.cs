@@ -15,7 +15,7 @@ namespace Terra.Studio
         [OnValueChanged(UpdateBroadcast = true)]
         public string Broadcast = null;
 
-        protected override string ComponentName => nameof(Push);
+        public override string ComponentName => nameof(Push);
         protected override bool CanBroadcast => true;
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]

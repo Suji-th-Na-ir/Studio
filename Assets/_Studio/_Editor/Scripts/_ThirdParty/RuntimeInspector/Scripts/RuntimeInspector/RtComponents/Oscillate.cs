@@ -17,7 +17,7 @@ namespace RuntimeInspectorNamespace
         //public float Speed = 1f;
         //public bool Loop = false;
 
-        //protected override string ComponentName => nameof(Oscillate);
+        //public override string ComponentName => nameof(Oscillate);
         //protected override bool CanBroadcast => true;
         //protected override bool CanListen => true;
 

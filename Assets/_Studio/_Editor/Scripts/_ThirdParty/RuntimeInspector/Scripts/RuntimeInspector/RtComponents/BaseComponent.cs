@@ -11,7 +11,7 @@ namespace Terra.Studio
         public Action<string, string> OnBroadcastUpdated;
         public Action<string, string> OnListenerUpdated;
 
-        protected abstract string ComponentName { get; }
+        public abstract string ComponentName { get; }
         protected abstract bool CanBroadcast { get; }
         protected abstract bool CanListen { get; }
         protected virtual string[] BroadcasterRefs { get; }
@@ -23,11 +23,19 @@ namespace Terra.Studio
             InitializeDisplayDock();
             if (CanBroadcast)
             {
-                OnBroadcastUpdated = OnBroadcastStringUpdated;
+                OnBroadcastUpdated = (newString, oldString) =>
+                {
+                    OnBroadcastStringUpdated(newString, oldString);
+                    UpdateBroadcastForMultiSelected(newString, oldString);
+                };
             }
             if (CanListen)
             {
-                OnListenerUpdated = OnListenerStringUpdated;
+                OnListenerUpdated = (newString, oldString) =>
+                {
+                    OnListenerStringUpdated(newString, oldString);
+                    UpdateListenerForMultiSelected(newString, oldString);
+                };
             }
         }
 
@@ -60,12 +68,12 @@ namespace Terra.Studio
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(newString, string.Empty, DisplayDock);
         }
 
-        private void OnBroadcastStringUpdated(string newString, string oldString)
+        public void OnBroadcastStringUpdated(string newString, string oldString)
         {
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(newString, oldString, DisplayDock);
         }
 
-        private void OnListenerStringUpdated(string newString, string oldString)
+        public void OnListenerStringUpdated(string newString, string oldString)
         {
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(newString, oldString, DisplayDock);
         }
@@ -98,6 +106,38 @@ namespace Terra.Studio
                     if (!string.IsNullOrEmpty(listener))
                     {
                         RegisterListenerToDisplayDock(listener);
+                    }
+                }
+            }
+        }
+
+        private void UpdateBroadcastForMultiSelected(string newString, string oldString)
+        {
+            foreach (var selected in EditorOp.Resolve<SelectionHandler>().GetSelectedObjects())
+            {
+                if (!selected) continue;
+                if (selected == gameObject) continue;
+                if (selected.TryGetComponent(out BaseBehaviour behaviour))
+                {
+                    if (behaviour.ComponentName.Equals(ComponentName))
+                    {
+                        behaviour.OnBroadcastStringUpdated(newString, oldString);
+                    }
+                }
+            }
+        }
+
+        private void UpdateListenerForMultiSelected(string newString, string oldString)
+        {
+            foreach (var selected in EditorOp.Resolve<SelectionHandler>().GetSelectedObjects())
+            {
+                if (!selected) continue;
+                if (selected == gameObject) continue;
+                if (selected.TryGetComponent(out BaseBehaviour behaviour))
+                {
+                    if (behaviour.ComponentName.Equals(ComponentName))
+                    {
+                        behaviour.OnListenerStringUpdated(newString, oldString);
                     }
                 }
             }

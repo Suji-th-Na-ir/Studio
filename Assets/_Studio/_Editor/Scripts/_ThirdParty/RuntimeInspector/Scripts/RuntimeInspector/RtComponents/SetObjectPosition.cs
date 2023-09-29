@@ -31,7 +31,7 @@ namespace Terra.Studio
         [OnValueChanged(UpdateBroadcast = true)]
         public string broadcast;
 
-        protected override string ComponentName => nameof(SetObjectPosition);
+        public override string ComponentName => nameof(SetObjectPosition);
         protected override bool CanBroadcast => true;
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]

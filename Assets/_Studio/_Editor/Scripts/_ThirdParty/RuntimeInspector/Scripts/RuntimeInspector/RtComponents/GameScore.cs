@@ -10,7 +10,7 @@ namespace Terra.Studio
         [OnValueChanged(UpdateBroadcast = true)]
         public string broadcast = "Game Win";
 
-        protected override string ComponentName => nameof(GameScore);
+        public override string ComponentName => nameof(GameScore);
         protected override bool CanBroadcast => true;
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]

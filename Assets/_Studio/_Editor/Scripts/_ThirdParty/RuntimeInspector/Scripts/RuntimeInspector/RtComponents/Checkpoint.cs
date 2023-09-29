@@ -12,7 +12,7 @@ namespace RuntimeInspectorNamespace
         [OnValueChanged(UpdateBroadcast = true)]
         public string Broadcast = null;
 
-        protected override string ComponentName => nameof(Checkpoint);
+        public override string ComponentName => nameof(Checkpoint);
         protected override bool CanBroadcast => true;
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]

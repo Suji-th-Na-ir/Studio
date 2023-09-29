@@ -213,8 +213,11 @@ namespace Terra.Studio
             }
             set
             {
-                onBroadcastValueModified?.Invoke(value, broadcast);
-                broadcast = value;
+                if (value != broadcast)
+                {
+                    onBroadcastValueModified?.Invoke(value, broadcast);
+                    broadcast = value;
+                }
             }
         }
     }
@@ -240,7 +243,7 @@ namespace Terra.Studio
             }
             set
             {
-                if (!value.Equals(broadcast))
+                if (value != broadcast)
                 {
                     onBroadcastValueModified?.Invoke(value, broadcast);
                     broadcast = value;

@@ -12,7 +12,7 @@ namespace Terra.Studio
         public Atom.PlayVfx PlayVFX = new();
         //public bool executeMultipleTimes = true;
 
-        protected override string ComponentName => nameof(Click);
+        public override string ComponentName => nameof(Click);
         protected override bool CanBroadcast => true;
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]

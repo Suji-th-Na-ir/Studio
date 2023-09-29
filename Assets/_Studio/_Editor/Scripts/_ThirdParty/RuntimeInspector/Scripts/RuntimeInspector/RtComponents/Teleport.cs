@@ -16,7 +16,7 @@ namespace Terra.Studio
         //[AliasDrawer("Do\nAlways")]
         //public bool executeMultipleTimes = true;
 
-        protected override string ComponentName => nameof(Teleport);
+        public override string ComponentName => nameof(Teleport);
         protected override bool CanBroadcast => true;
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]

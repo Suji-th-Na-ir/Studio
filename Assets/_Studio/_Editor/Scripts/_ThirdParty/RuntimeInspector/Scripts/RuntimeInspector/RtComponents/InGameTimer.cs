@@ -11,7 +11,7 @@ namespace RuntimeInspectorNamespace
         [OnValueChanged(UpdateBroadcast = true)]
         public string Broadcast = "";
 
-        protected override string ComponentName => nameof(InGameTimer);
+        public override string ComponentName => nameof(InGameTimer);
         protected override bool CanBroadcast => true;
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]
