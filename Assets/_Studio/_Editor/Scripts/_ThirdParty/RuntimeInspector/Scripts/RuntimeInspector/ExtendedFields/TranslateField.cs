@@ -148,11 +148,11 @@ namespace RuntimeInspectorNamespace
                     tempValue.Broadcast = "";
 
                 preset = tempValue;
-                translate.OnBroadcastUpdated?.Invoke(preset.Broadcast, translate.data.Broadcast);
+                translate.behaviour.OnBroadcastStringUpdated(preset.Broadcast, translate.data.Broadcast);
             }
             else
             {
-                translate.OnBroadcastUpdated?.Invoke(string.Empty, translate.data.Broadcast);
+                translate.behaviour.OnBroadcastStringUpdated(string.Empty, translate.data.Broadcast);
             }
             LoadData(preset);
             UpdateDataInUI(preset);

@@ -207,7 +207,8 @@ namespace RuntimeInspectorNamespace
                     {
                         var newString = value == null ? string.Empty : (string)value;
                         var oldString = translate.Type.data.Broadcast ?? string.Empty;
-                        translate.OnBroadcastUpdated?.Invoke(newString, oldString);
+                        translate.OnBroadcastStringUpdated(newString, oldString);
+                        translate.Type.data.Broadcast = newString;
                     }
                     else
                     {

@@ -148,7 +148,6 @@ namespace RuntimeInspectorNamespace
                         if (_atom.componentType.Equals(atom.componentType))
                         {
                             atom.data = Helper.DeepCopy(_atom.data);
-                            atom.OnListenerUpdated?.Invoke(_atom.data.listenName, atom.data.listenName);
                         }
                     }
                 }

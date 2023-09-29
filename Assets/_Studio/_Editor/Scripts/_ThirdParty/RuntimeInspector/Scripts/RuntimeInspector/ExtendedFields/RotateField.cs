@@ -155,11 +155,11 @@ namespace RuntimeInspectorNamespace
                 if (!selectedRotateType.customString)
                     tempValue.Broadcast = "";
                 preset = tempValue;
-                value.OnBroadcastUpdated?.Invoke(preset.Broadcast, value.data.Broadcast);
+                value.behaviour.OnBroadcastStringUpdated(preset.Broadcast, value.data.Broadcast);
             }
             else
             {
-                value.OnBroadcastUpdated?.Invoke(string.Empty, value.data.Broadcast);
+                value.behaviour.OnBroadcastStringUpdated(string.Empty, value.data.Broadcast);
             }
 
             LoadData(preset);

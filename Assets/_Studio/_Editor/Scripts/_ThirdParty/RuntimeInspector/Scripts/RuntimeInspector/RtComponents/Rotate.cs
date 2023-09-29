@@ -29,7 +29,7 @@ namespace RuntimeInspectorNamespace
         protected override void Awake()
         {
             base.Awake();
-            Type.Setup(gameObject, OnBroadcastUpdated);
+            Type.Setup(gameObject, this);
             StartOn.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated, StartOn.data.startIndex == 4);
             PlaySFX.Setup<Rotate>(gameObject);
             PlayVFX.Setup<Rotate>(gameObject);

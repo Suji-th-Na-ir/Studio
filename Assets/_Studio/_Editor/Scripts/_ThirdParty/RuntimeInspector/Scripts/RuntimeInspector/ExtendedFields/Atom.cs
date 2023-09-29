@@ -116,13 +116,13 @@ namespace Terra.Studio
         {
             public string id;
             public GameObject target;
-            public Action<string, string> OnBroadcastUpdated;
+            public BaseBehaviour behaviour;
 
-            public virtual void Setup(GameObject target, Action<string, string> OnBroadcastUpdated)
+            public virtual void Setup(GameObject target, BaseBehaviour behaviour)
             {
                 this.target = target;
+                this.behaviour = behaviour;
                 id = Guid.NewGuid().ToString("N");
-                this.OnBroadcastUpdated = OnBroadcastUpdated;
             }
         }
 
@@ -131,12 +131,6 @@ namespace Terra.Studio
         {
             public RotateField field;
             public RotateComponentData data = new();
-
-            public override void Setup(GameObject target, Action<string, string> OnBroadcastUpdated)
-            {
-                base.Setup(target, OnBroadcastUpdated);
-                data.onBroadcastValueModified = OnBroadcastUpdated;
-            }
         }
 
         [Serializable]
@@ -144,12 +138,6 @@ namespace Terra.Studio
         {
             public TranslateField field;
             public TranslateComponentData data = new();
-
-            public override void Setup(GameObject target, Action<string, string> OnBroadcastUpdated)
-            {
-                base.Setup(target, OnBroadcastUpdated);
-                data.onBroadcastValueModified = OnBroadcastUpdated;
-            }
         }
 
         [Serializable]
@@ -203,7 +191,6 @@ namespace Terra.Studio
         public float pauseBetween;
         public Listen listen;
         public BroadcastAt broadcastAt;
-        public Action<string, string> onBroadcastValueModified;
         private string broadcast;
         public string Broadcast
         {
@@ -215,19 +202,14 @@ namespace Terra.Studio
             {
                 if (value != broadcast)
                 {
-                    onBroadcastValueModified?.Invoke(value, broadcast);
                     broadcast = value;
                 }
             }
         }
 
-        public bool IsEmpty()
+        public readonly bool IsEmpty()
         {
-            var clone = new RotateComponentData()
-            {
-                onBroadcastValueModified = onBroadcastValueModified
-            };
-            if (Equals(clone))
+            if (Equals(default(RotateComponentData)))
             {
                 return true;
             }
@@ -246,7 +228,6 @@ namespace Terra.Studio
         public string listenTo;
         public Listen listen;
         public BroadcastAt broadcastAt;
-        public Action<string, string> onBroadcastValueModified;
         private string broadcast;
         public string Broadcast
         {
@@ -258,19 +239,14 @@ namespace Terra.Studio
             {
                 if (value != broadcast)
                 {
-                    onBroadcastValueModified?.Invoke(value, broadcast);
                     broadcast = value;
                 }
             }
         }
 
-        public bool IsEmpty()
+        public readonly bool IsEmpty()
         {
-            var clone = new TranslateComponentData()
-            {
-                onBroadcastValueModified = onBroadcastValueModified
-            };
-            if (Equals(clone))
+            if (Equals(default(TranslateComponentData)))
             {
                 return true;
             }
