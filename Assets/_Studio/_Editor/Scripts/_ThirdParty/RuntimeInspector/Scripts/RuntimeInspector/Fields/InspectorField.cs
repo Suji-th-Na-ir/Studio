@@ -340,10 +340,14 @@ namespace RuntimeInspectorNamespace
             {
                 foreach (var obj in selectedObjects)
                 {
+                    if (obj.gameObject == ((MonoBehaviour)virtualObject).gameObject)
+                    {
+                        continue;
+                    }
                     var component = obj.GetComponent(ComponentType);
                     if (component != null)
                     {
-                        var mInfo = component.GetType().GetField(ReflectedName, BindingFlags.Public | BindingFlags.Instance);
+                        var mInfo = ComponentType.GetField(ReflectedName, BindingFlags.Public | BindingFlags.Instance);
                         mInfo?.SetValue(component, Value);
                     }
                 }
