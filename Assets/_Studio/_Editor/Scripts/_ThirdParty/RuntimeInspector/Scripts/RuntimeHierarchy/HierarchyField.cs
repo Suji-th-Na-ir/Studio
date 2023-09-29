@@ -189,6 +189,7 @@ namespace RuntimeInspectorNamespace
 
         public void Refresh()
         {
+            if (Data == null) return;
             IsActive = Data.IsActive;
             IsExpanded = Data.CanExpand ? (Data.IsExpanded ? ExpandedState.Expanded : ExpandedState.Collapsed) : ExpandedState.ArrowHidden;
         }

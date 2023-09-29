@@ -435,7 +435,7 @@ PrefabInstance:
     - target: {fileID: 224597220361603002, guid: c310b787f758e3a4db55284145e55bc8,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 900.5208
       objectReference: {fileID: 0}
     - target: {fileID: 224597220361603002, guid: c310b787f758e3a4db55284145e55bc8,
         type: 3}
@@ -3757,7 +3757,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a861e41aabd9c41f0933207bbe22aede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iconPresets: {fileID: 11400000, guid: fc8f8147139de4e3db462b2ec02f2cd5, type: 2}
 --- !u!1001 &878321626
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5275,7 +5274,7 @@ PrefabInstance:
     - target: {fileID: 224577763670417082, guid: d39ad26c554f1a04d870956f7fac6fd8,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -11.9999695
+      value: -12
       objectReference: {fileID: 0}
     - target: {fileID: 224732714809946368, guid: d39ad26c554f1a04d870956f7fac6fd8,
         type: 3}
@@ -5796,7 +5795,7 @@ PrefabInstance:
     - target: {fileID: 224685037686054822, guid: 4d8c6c9fba0e46f489b21fd7d92d739d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.000015258789
+      value: -0.000005722046
       objectReference: {fileID: 0}
     - target: {fileID: 224685037686054822, guid: 4d8c6c9fba0e46f489b21fd7d92d739d,
         type: 3}
