@@ -6,10 +6,11 @@ using RuntimeInspectorNamespace;
 using Terra.Studio;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
-using System.Reflection;
 using static RuntimeInspectorNamespace.RuntimeHierarchy;
 using System.Collections.ObjectModel;
 using EasyUI.Helpers;
+using PlayShifu.Terra;
+using EasyUI.Toast;
 
 public class SelectionHandler : View
 {
@@ -214,11 +215,11 @@ public class SelectionHandler : View
         }
     }
 
-    private void DuplicateObjects()
+    private void DuplicateObjects(bool a_bByPassShortCut = false)
     {
         if (_selectedObjects.Count > 0)
         {
-            if (RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.WasKeyPressedThisFrame(KeyCode.D))
+            if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.WasKeyPressedThisFrame(KeyCode.D)) || a_bByPassShortCut)
             {
                 var duplicatedGms = new List<Transform>();
                 foreach (GameObject obj in _selectedObjects)
@@ -237,6 +238,9 @@ public class SelectionHandler : View
 
                 Snapshots.SpawnGameObjectsSnapshot.CreateSnapshot(duplicatedGms.Select(x => x.gameObject).ToList());
                 SelectObjectsInHierarchy(duplicatedGms);
+                var color = Helper.GetColorFromHex("#0F1115");
+                color.a = 0.8f;
+                Toast.Show("Duplicated Selected Object" + (duplicatedGms.Count > 1 ? "s" : ""), 1.0f, color);
             }
         }
     }
@@ -489,5 +493,10 @@ public class SelectionHandler : View
     public override void Repaint()
     {
 
+    }
+
+    public void DuplicateCurrentSelectedObject()
+    {
+        DuplicateObjects(true);
     }
 }

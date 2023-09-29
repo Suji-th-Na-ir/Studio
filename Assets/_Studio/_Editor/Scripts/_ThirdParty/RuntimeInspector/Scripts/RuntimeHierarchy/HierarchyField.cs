@@ -31,8 +31,12 @@ namespace RuntimeInspectorNamespace
         [SerializeField]
         private Toggle multiSelectionToggle;
 
-        [SerializeField]
-        private Image multiSelectionToggleBackground;
+		[SerializeField]
+		private Image multiSelectionToggleBackground;
+
+		[SerializeField]
+		private PointerEventListener m_refDuplicateIcon;
+
 #pragma warning restore 0649
 
         private RectTransform rectTransform;
@@ -73,17 +77,20 @@ namespace RuntimeInspectorNamespace
             {
                 m_isSelected = value;
 
-                Color textColor;
-                if (m_isSelected)
-                {
-                    background.color = Skin.SelectedItemBackgroundColor;
-                    textColor = Skin.SelectedItemTextColor;
-                }
-                else
-                {
-                    background.color = Data.Depth == 0 ? Skin.BackgroundColor.Tint(0.075f) : Color.clear;
-                    textColor = Skin.TextColor;
-                }
+				Color textColor;
+				if( m_isSelected )
+				{
+					background.color = Skin.SelectedItemBackgroundColor;
+					textColor = Skin.SelectedItemTextColor;
+					m_refDuplicateIcon.gameObject.SetActive (true);
+					m_refDuplicateIcon.GetComponent<Image> ().color = Skin.SelectedItemBackgroundColor;
+				}
+				else
+				{
+					background.color = Data.Depth == 0 ? Skin.BackgroundColor.Tint( 0.075f ) : Color.clear;
+					textColor = Skin.TextColor;
+					m_refDuplicateIcon.gameObject.SetActive (false);
+				}
 
                 textColor.a = m_isActive ? 1f : INACTIVE_ITEM_TEXT_ALPHA;
                 nameText.color = textColor;
@@ -164,23 +171,31 @@ namespace RuntimeInspectorNamespace
             rectTransform = (RectTransform)transform;
             background = clickListener.GetComponent<Image>();
 
-            if (hierarchy.ShowTooltips)
-            {
-                clickListener.gameObject.AddComponent<TooltipArea>().Initialize(hierarchy.TooltipListener, this);
-            }
+			if( hierarchy.ShowTooltips )
+				clickListener.gameObject.AddComponent<TooltipArea>().Initialize( hierarchy.TooltipListener, this );
 
-            expandToggle.PointerClick += (eventData) => ToggleExpandedState();
-            clickListener.PointerClick += (eventData) => OnClick();
-            clickListener.PointerDown += OnPointerDown;
-            clickListener.PointerUp += OnPointerUp;
-        }
+			expandToggle.PointerClick += ( eventData ) => ToggleExpandedState();
+			clickListener.PointerClick += ( eventData ) => OnClick();
+			clickListener.PointerDown += OnPointerDown;
+			clickListener.PointerUp += OnPointerUp;
 
-        public void SetContent(HierarchyData data)
-        {
-            Data = data;
-            contentTransform.anchoredPosition = new Vector2(Skin.IndentAmount * data.Depth + (MultiSelectionToggleVisible ? Skin.LineHeight * 0.8f : 0f), 0f);
-            RefreshName();
-        }
+			m_refDuplicateIcon.gameObject.SetActive (false);
+			m_refDuplicateIcon.PointerClick += OnDuplicateIconClicked;
+		}
+
+        private void OnDuplicateIconClicked (PointerEventData eventData) {
+			Hierarchy.DuplicateSelectedObject ();
+		}
+
+        public void SetContent( HierarchyData data )
+		{
+			Data = data;
+
+			contentTransform.anchoredPosition = new Vector2( Skin.IndentAmount * data.Depth + ( MultiSelectionToggleVisible ? Skin.LineHeight * 0.8f : 0f ), 0f );
+			//background.sprite = data.Depth == 0 ? Hierarchy.SceneDrawerBackground : Hierarchy.TransformDrawerBackground;
+
+			RefreshName();
+		}
 
         private void ToggleExpandedState()
         {

@@ -33,6 +33,6 @@ MonoBehaviour:
   m_sliderThumbColor: {r: 0.76862746, g: 0.76862746, b: 0.76862746, a: 1}
   m_buttonBackgroundColor: {r: 0.49803922, g: 0.4117647, b: 0.9372549, a: 0.33333334}
   m_buttonTextColor: {r: 0.9411765, g: 0.9342561, b: 0.9342561, a: 1}
-  m_selectedItemBackgroundColor: {r: 0.29094398, g: 0.16834284, b: 0.9150943, a: 0.69411767}
+  m_selectedItemBackgroundColor: {r: 0.29094398, g: 0.16834284, b: 0.9150943, a: 1}
   m_selectedItemTextColor: {r: 0.9254902, g: 0.93333334, b: 0.93333334, a: 1}
   m_dropDownItemColor: {r: 0, g: 0, b: 0, a: 1}
