@@ -204,7 +204,7 @@ namespace Terra.Studio
         public Listen listen;
         public BroadcastAt broadcastAt;
         public Action<string, string> OnBroadcastUpdated;
-        private string broadcast;
+        public string broadcast;
         public string Broadcast
         {
             readonly get
@@ -243,7 +243,7 @@ namespace Terra.Studio
         public Listen listen;
         public BroadcastAt broadcastAt;
         public Action<string, string> OnBroadcastUpdated;
-        private string broadcast;
+        public string broadcast;
         public string Broadcast
         {
             readonly get
