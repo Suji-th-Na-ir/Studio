@@ -39,13 +39,14 @@ namespace Terra.Studio
             var filePath = GetFilePath();
             if (!Helper.IsInUnityEditorMode())
             {
+                EasyUI.Toast.Toast.Show ("Saved Successfully!", 3.0f, EasyUI.Toast.ToastColor.Green);
                 SystemOp.Resolve<FileService>().WriteFileIntoLocal?.Invoke(sceneData, filePath);
             }
             else
             {
                 new FileService().WriteFileIntoLocal?.Invoke(sceneData, filePath);
             }
-            EasyUI.Toast.Toast.Show ("Saved Successfully!", 3.0f, EasyUI.Toast.ToastColor.Green);
+                
         }
 
         private string GetFilePath()
