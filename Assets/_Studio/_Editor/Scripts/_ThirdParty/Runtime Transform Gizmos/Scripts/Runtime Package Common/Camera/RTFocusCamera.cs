@@ -117,6 +117,16 @@ namespace RTG
         public CameraProjectionSwitchSettings ProjectionSwitchSettings { get { return _projectionSwitchSettings; } }
         public CameraHotkeys Hotkeys { get { return _hotkeys; } }
 
+        private void OnEnable()
+        {
+            EditorOp.Register(this);
+        }
+
+        private void OnDisable()
+        {
+            EditorOp.Unregister(this);
+        }
+
         public bool IsViewportHoveredByDevice()
         {
             Vector2 devicePos = RTInputDevice.Get.Device.GetPositionYAxisUp();
