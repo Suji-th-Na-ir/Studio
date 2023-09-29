@@ -4,6 +4,8 @@ namespace Terra.Studio
 {
     public class EditorSystem : MonoBehaviour, ISubsystem
     {
+        public bool IsIncognitoEnabled { get; private set; }
+
         private void Awake()
         {
             SystemOp.Register(this as ISubsystem);
@@ -48,6 +50,11 @@ namespace Terra.Studio
         public void RequestSwitchState()
         {
             SystemOp.Resolve<System>().SwitchState();
+        }
+
+        public void RequestIncognitoMode(bool enable)
+        {
+            IsIncognitoEnabled = enable;
         }
     }
 }

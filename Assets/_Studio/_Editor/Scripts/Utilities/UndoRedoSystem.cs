@@ -23,6 +23,7 @@ namespace Terra.Studio
 
         public void Undo()
         {
+            if (IsIncognitoEnabled()) return;
             if (currentIndex == -1)
             {
                 Debug.Log(Messages.NOTHING_TO_UNDO);
@@ -35,6 +36,7 @@ namespace Terra.Studio
 
         public void Redo()
         {
+            if (IsIncognitoEnabled()) return;
             if (currentIndex == operations.Count - 1)
             {
                 Debug.Log(Messages.NOTHING_TO_REDO);
@@ -132,12 +134,19 @@ namespace Terra.Studio
 
         public void Record(object lastData, object newData, string comment, Action<object> onExecuted, Action onDiscarded, Func<Type, bool> canValidate, Action<object> validate)
         {
+            if (IsIncognitoEnabled()) return;
             RefreshStackIfNeeded();
             MaintainMaxStackLimit();
             var stackData = new Operation(onExecuted, onDiscarded, canValidate, validate, lastData, newData, comment);
             operations.Add(stackData);
             currentIndex++;
             CheckForStackAvailability();
+        }
+
+        private bool IsIncognitoEnabled()
+        {
+            var isIncognitoEnabled = EditorOp.Resolve<EditorSystem>().IsIncognitoEnabled;
+            return isIncognitoEnabled;
         }
 
         private class Operation

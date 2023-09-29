@@ -36,6 +36,7 @@ public class SelectionHandler : View
     private List<GameObject> prevSelectedObjects = new List<GameObject>();
     private GameObject lastPickedGameObject;
     private Camera mainCamera;
+    private EditorSystem cachedEditorSystem;
 
     public delegate void SelectionChangedDelegate(List<GameObject> gm);
     public SelectionChangedDelegate SelectionChanged;
@@ -174,11 +175,17 @@ public class SelectionHandler : View
         _workGizmoId = GizmoId.Move;
 
         runtimeHierarchy = EditorOp.Resolve<RuntimeHierarchy>();
+        cachedEditorSystem = EditorOp.Resolve<EditorSystem>();
         runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
     }
 
     private void Update()
     {
+        if (cachedEditorSystem &&
+            cachedEditorSystem.IsIncognitoEnabled)
+        {
+            return;
+        }
         if (EventSystem.current == null ||
             EventSystem.current.currentSelectedGameObject != null)
         {
@@ -440,6 +447,12 @@ public class SelectionHandler : View
         prevSelectedObjects = _selectedObjects.ToList();
         _selectedObjects.Clear();
         OnSelectionChanged();
+    }
+
+    public void OverrideGizmoOntoTarget(GameObject target)
+    {
+        _workGizmo.Gizmo.SetEnabled(true);
+        _workGizmo.SetTargetObject(target);
     }
 
     public void RefreshGizmo()

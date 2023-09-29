@@ -31,6 +31,9 @@ namespace Terra.Studio
         [OnValueChanged(UpdateBroadcast = true)]
         public string broadcast;
 
+        private bool isGhostEnabled;
+        private RecordVisualiser visualiser;
+
         public override string ComponentName => nameof(SetObjectPosition);
         protected override bool CanBroadcast => true;
         protected override bool CanListen => true;
@@ -49,6 +52,12 @@ namespace Terra.Studio
             startOn.Setup<StartOptions>(gameObject, ComponentName, OnListenerUpdated, startOn.data.startIndex == 3);
             playSFX.Setup<SetObjectPosition>(gameObject);
             playVFX.Setup<SetObjectPosition>(gameObject);
+        }
+
+        private void OnGhostDataModified(object data)
+        {
+            var newVector = (Vector3)data;
+            targetPosition = newVector;
         }
 
         private void Start()
