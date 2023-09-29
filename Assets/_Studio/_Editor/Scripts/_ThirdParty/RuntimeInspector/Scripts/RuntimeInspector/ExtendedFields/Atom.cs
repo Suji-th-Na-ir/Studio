@@ -220,6 +220,19 @@ namespace Terra.Studio
                 }
             }
         }
+
+        public bool IsEmpty()
+        {
+            var clone = new RotateComponentData()
+            {
+                onBroadcastValueModified = onBroadcastValueModified
+            };
+            if (Equals(clone))
+            {
+                return true;
+            }
+            return false;
+        }
     }
 
     [Serializable]
@@ -249,6 +262,19 @@ namespace Terra.Studio
                     broadcast = value;
                 }
             }
+        }
+
+        public bool IsEmpty()
+        {
+            var clone = new TranslateComponentData()
+            {
+                onBroadcastValueModified = onBroadcastValueModified
+            };
+            if (Equals(clone))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

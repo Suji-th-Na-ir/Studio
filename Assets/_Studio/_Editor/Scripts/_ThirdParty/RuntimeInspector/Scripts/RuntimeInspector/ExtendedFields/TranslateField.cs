@@ -180,11 +180,7 @@ namespace RuntimeInspectorNamespace
         private bool IsDataDefault()
         {
             var data = ((Atom.Translate)Value).data;
-            if (data.Equals(default(TranslateComponentData)))
-            {
-                return true;
-            }
-            return false;
+            return data.IsEmpty();
         }
 
         protected override void OnSkinChanged()

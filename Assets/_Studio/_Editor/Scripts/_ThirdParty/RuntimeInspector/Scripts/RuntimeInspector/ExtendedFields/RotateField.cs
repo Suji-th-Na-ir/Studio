@@ -188,11 +188,7 @@ namespace RuntimeInspectorNamespace
         private bool IsDataDefault()
         {
             var data = ((Atom.Rotate)Value).data;
-            if (data.Equals(default(RotateComponentData)))
-            {
-                return true;
-            }
-            return false;
+            return data.IsEmpty();
         }
 
         protected override void OnSkinChanged()
