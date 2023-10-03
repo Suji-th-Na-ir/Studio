@@ -19,7 +19,7 @@ namespace Terra.Studio
         private readonly Material ghostMaterial;
         private BaseRecorder baseRecorder;
 
-        public RecordVisualiser(GameObject gameObject, Record recordFor, Action<object> onRecordDataModified)
+        public RecordVisualiser(GameObject gameObject, Record recordFor, Action<object> onRecordDataModified, Vector3 spawnPoint)
         {
             originalObject = gameObject;
             ghostMaterial = EditorOp.Load<Material>(GHOST_MATERIAL_PATH);
@@ -27,7 +27,7 @@ namespace Terra.Studio
             ghost = Object.Instantiate(ghostObj);
             ghost.name = string.Concat(ghost.name, "_", gameObject.name);
             Object.Instantiate(gameObject, ghost.transform);
-            ghost.transform.position = gameObject.transform.position;
+            ghost.transform.position = spawnPoint;
             var child = ghost.transform.GetChild(0);
             child.localPosition = Vector3.zero;
             child.localScale = gameObject.transform.lossyScale;

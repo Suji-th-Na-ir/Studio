@@ -10,6 +10,7 @@ namespace Terra.Studio
         public abstract void Import(EntityBasedComponent data);
         public Action<string, string> OnBroadcastUpdated;
         public Action<string, string> OnListenerUpdated;
+        public Action ToggleGhostMode;
 
         public abstract string ComponentName { get; }
         public virtual Atom.RecordedVector3 RecordedVector3 { get; }
@@ -19,9 +20,6 @@ namespace Terra.Studio
         protected virtual string[] BroadcasterRefs { get; }
         protected virtual string[] ListenerRefs { get; }
         protected virtual ComponentDisplayDock DisplayDock { get; private set; }
-
-        private bool isGhostEnabled;
-        private RecordVisualiser visualiser;
 
         protected virtual void Awake()
         {
@@ -147,20 +145,5 @@ namespace Terra.Studio
                 }
             }
         }
-
-        public void ToggleGhostMode()
-        {
-            isGhostEnabled = !isGhostEnabled;
-            if (isGhostEnabled)
-            {
-                visualiser = new RecordVisualiser(gameObject, RecordVisualiser.Record.Position, OnGhostDataModified);
-            }
-            else
-            {
-                visualiser?.Dispose();
-            }
-        }
-
-        protected virtual void OnGhostDataModified(object data) { }
     }
 }

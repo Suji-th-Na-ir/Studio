@@ -186,6 +186,8 @@ namespace Terra.Studio
             public Type ObscureType => typeof(Vector3);
             public Type DeclaredType => behaviourType;
             public Action ToggleGhostMode => behaviour.ToggleGhostMode;
+            public Func<bool> IsValueModified => IsModified;
+            public Action<bool> OnModified;
 
             public readonly Vector3 INFINITY = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
 
@@ -195,6 +197,7 @@ namespace Terra.Studio
                 behaviour = instance;
                 instanceId = Guid.NewGuid().ToString("N");
                 vector3 = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
+                defaultVector3 = vector3;
             }
 
             public object Get()
@@ -209,6 +212,7 @@ namespace Terra.Studio
                     var vector3 = (Vector3)obj;
                     SetDefault(vector3);
                     this.vector3 = vector3;
+                    HandleResetOption();
                 }
                 catch
                 {
@@ -216,17 +220,45 @@ namespace Terra.Studio
                 }
             }
 
+            public void Reset()
+            {
+                vector3 = defaultVector3;
+            }
+
             private void SetDefault(Vector3 vector3)
             {
-                if (vector3 == INFINITY)
+                if (vector3 != INFINITY && defaultVector3 == INFINITY)
                 {
                     defaultVector3 = vector3;
                 }
             }
 
-            public void Reset()
+            private void HandleResetOption()
             {
-                vector3 = defaultVector3;
+                if (!IsIncognito())
+                {
+                    var isModified = IsModified();
+                    OnModified?.Invoke(isModified);
+                }
+            }
+
+            private bool IsModified()
+            {
+                if (IsIncognito())
+                {
+                    return false;
+                }
+                if (vector3 == INFINITY || vector3 == defaultVector3)
+                {
+                    return false;
+                }
+                return true;
+            }
+
+            private bool IsIncognito()
+            {
+                var isIncognito = EditorOp.Resolve<EditorSystem>().IsIncognitoEnabled;
+                return isIncognito;
             }
         }
     }

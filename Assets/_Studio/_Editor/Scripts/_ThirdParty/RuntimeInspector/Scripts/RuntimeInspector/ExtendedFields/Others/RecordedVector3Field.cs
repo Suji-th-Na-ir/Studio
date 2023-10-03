@@ -11,6 +11,11 @@ namespace Terra.Studio
     {
         [SerializeField] private Button recordButton;
         [SerializeField] private Button resetButton;
+        [SerializeField] private Image recordImageHolder;
+        [SerializeField] private Sprite recordImage;
+        [SerializeField] private Sprite saveImage;
+
+        private bool isRecording;
 
         public override void Initialize()
         {
@@ -27,8 +32,10 @@ namespace Terra.Studio
             BoundVariableType = ObscuredType;
             base.OnBound(variable);
             var recordedObj = (RecordedVector3)ObscuredValue;
-            AddButtonListener(recordButton, recordedObj.ToggleGhostMode);
-            AddButtonListener(resetButton, recordedObj.Reset);
+            AddButtonListener(resetButton, OnResetButtonClicked);
+            AddButtonListener(recordButton, OnRecordButtonClicked);
+            recordedObj.OnModified = ToggleInteractivityOfResetButton;
+            CheckAndToggleInteractivityOfResetButton();
         }
 
         protected override bool OnValueChanged(BoundInputField source, string input)
@@ -68,6 +75,41 @@ namespace Terra.Studio
             if (!button) return;
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => action?.Invoke());
+        }
+
+        private void OnRecordButtonClicked()
+        {
+            var recordedObj = (RecordedVector3)ObscuredValue;
+            recordedObj.ToggleGhostMode?.Invoke();
+            isRecording = !isRecording;
+            if (isRecording)
+            {
+                recordImageHolder.sprite = saveImage;
+            }
+            else
+            {
+                recordImageHolder.sprite = recordImage;
+            }
+            CheckAndToggleInteractivityOfResetButton();
+        }
+
+        private void OnResetButtonClicked()
+        {
+            var recordedObj = (RecordedVector3)ObscuredValue;
+            recordedObj.Reset();
+            ToggleInteractivityOfResetButton(false);
+        }
+
+        private void CheckAndToggleInteractivityOfResetButton()
+        {
+            var recordedObj = (RecordedVector3)ObscuredValue;
+            var isInteractive = recordedObj?.IsValueModified?.Invoke() ?? false;
+            ToggleInteractivityOfResetButton(isInteractive);
+        }
+
+        private void ToggleInteractivityOfResetButton(bool isInteractable)
+        {
+            resetButton.interactable = isInteractable;
         }
     }
 }
