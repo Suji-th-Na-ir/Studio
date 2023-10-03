@@ -200,7 +200,8 @@ namespace RuntimeInspectorNamespace
             float inputFieldWidth = (1f - Skin.LabelWidthPercentage) / 3f;
             Vector2 rightSideAnchorMin = new Vector2(Skin.LabelWidthPercentage, 0f);
             Vector2 rightSideAnchorMax = new Vector2(Skin.LabelWidthPercentage + inputFieldWidth, 1f);
-            variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
+            if(variableNameMask)
+                variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
             ((RectTransform)inputX.transform).SetAnchorMinMaxInputField(labelX.rectTransform, rightSideAnchorMin, rightSideAnchorMax);
 
             rightSideAnchorMin.x += inputFieldWidth;
