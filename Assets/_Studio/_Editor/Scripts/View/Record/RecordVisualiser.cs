@@ -19,7 +19,7 @@ namespace Terra.Studio
         private readonly Material ghostMaterial;
         private BaseRecorder baseRecorder;
 
-        public RecordVisualiser(GameObject gameObject, Record recordFor, Action<object> onRecordDataModified, Vector3 spawnPoint)
+        public RecordVisualiser(GameObject gameObject, Record recordFor, Action<object> onRecordDataModified, Vector3 spawnPoint, bool enableModification)
         {
             originalObject = gameObject;
             ghostMaterial = EditorOp.Load<Material>(GHOST_MATERIAL_PATH);
@@ -34,8 +34,16 @@ namespace Terra.Studio
             Clean();
             AttachRecorder(recordFor, onRecordDataModified);
             ghost.SetActive(true);
-            EditorOp.Resolve<EditorSystem>().RequestIncognitoMode(true);
-            EditorOp.Resolve<SelectionHandler>().OverrideGizmoOntoTarget(ghost);
+            if (enableModification)
+            {
+                EditorOp.Resolve<EditorSystem>().RequestIncognitoMode(true);
+                EditorOp.Resolve<SelectionHandler>().OverrideGizmoOntoTarget(ghost);
+            }
+        }
+
+        public static RecordVisualiser RecordPosition(GameObject gameObject, Action<object> onRecordDataModified, Vector3 spawnPoint, bool enableModification)
+        {
+            return new RecordVisualiser(gameObject, Record.Position, onRecordDataModified, spawnPoint, enableModification);
         }
 
         private void Clean()

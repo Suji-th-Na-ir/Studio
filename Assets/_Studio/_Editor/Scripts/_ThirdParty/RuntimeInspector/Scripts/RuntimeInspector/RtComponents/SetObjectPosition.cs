@@ -165,7 +165,7 @@ namespace Terra.Studio
             isGhostEnabled = !isGhostEnabled;
             if (isGhostEnabled)
             {
-                visualiser = new RecordVisualiser(gameObject, RecordVisualiser.Record.Position, OnGhostDataModified, (Vector3)targetPosition.Get());
+                visualiser = RecordVisualiser.RecordPosition(gameObject, OnGhostDataModified, (Vector3)targetPosition.Get(), true);
             }
             else
             {
