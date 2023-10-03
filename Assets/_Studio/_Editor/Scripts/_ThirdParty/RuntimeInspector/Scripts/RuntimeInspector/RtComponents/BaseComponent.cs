@@ -142,5 +142,15 @@ namespace Terra.Studio
                 }
             }
         }
+
+        public void Import(string data)
+        {
+            var component = new EntityBasedComponent()
+            {
+                type = EditorOp.Resolve<DataProvider>().GetCovariance(this),
+                data = data
+            };
+            Import(component);
+        }
     }
 }

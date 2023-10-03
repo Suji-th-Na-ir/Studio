@@ -6,7 +6,6 @@ using System.Linq;
 using PlayShifu.Terra;
 using UnityEngine;
 using Terra.Studio;
-using Newtonsoft.Json;
 
 namespace RuntimeInspectorNamespace
 {

@@ -56,6 +56,14 @@ namespace Terra.Studio
         PingPongForever
     }
 
+    public enum TransFormCopyValues
+    {
+        Position,
+        Rotation,
+        Scale,
+        All
+    }
+
     /// <summary>
     /// 1. For X default value is 1
     /// 2. For Forever hardcode int.MaxValue
