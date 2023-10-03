@@ -93,7 +93,7 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        private bool OnValueChanged(BoundInputField source, string input)
+        protected virtual bool OnValueChanged(BoundInputField source, string input)
         {
 #if UNITY_2017_2_OR_NEWER
             if (isVector3Int)
@@ -134,13 +134,13 @@ namespace RuntimeInspectorNamespace
             return false;
         }
 
-        private bool OnValueSubmitted(BoundInputField source, string input)
+        protected virtual bool OnValueSubmitted(BoundInputField source, string input)
         {
-            HandleUndoRedo(source, input);
+            HandleUndoRedo(source);
             return true;
         }
 
-        private void HandleUndoRedo(BoundInputField source, string input)
+        private void HandleUndoRedo(BoundInputField source)
         {
             if (Value != lastSubmittedValue)
             {

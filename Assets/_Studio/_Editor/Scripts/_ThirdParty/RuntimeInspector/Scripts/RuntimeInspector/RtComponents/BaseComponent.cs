@@ -12,6 +12,8 @@ namespace Terra.Studio
         public Action<string, string> OnListenerUpdated;
 
         public abstract string ComponentName { get; }
+        public virtual Atom.RecordedVector3 RecordedVector3 { get; }
+
         protected abstract bool CanBroadcast { get; }
         protected abstract bool CanListen { get; }
         protected virtual string[] BroadcasterRefs { get; }

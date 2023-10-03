@@ -153,6 +153,43 @@ namespace Terra.Studio
             }
         }
 
+        [Serializable]
+        public class RecordedVector3 : IObscurer
+        {
+            public Vector3 vector3;
+            public string instanceId;
+            public RecordedVector3Field field;
+            private readonly Type behaviourType;
+
+            public Type ObscureType => typeof(Vector3);
+            public Type DeclaredType => behaviourType;
+
+            public RecordedVector3(Type behaviourType)
+            {
+                this.behaviourType = behaviourType;
+                instanceId = Guid.NewGuid().ToString("N");
+                vector3 = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
+            }
+
+            public object Getter()
+            {
+                return vector3;
+            }
+
+            public void Setter(object obj)
+            {
+                try
+                {
+                    var vector3 = (Vector3)obj;
+                    this.vector3 = vector3;
+                }
+                catch
+                {
+                    Debug.LogError("Type of object passed is incorrected. Expected: Vector3");
+                }
+            }
+        }
+
         public void Dispose()
         {
             AllStartOns.Clear();

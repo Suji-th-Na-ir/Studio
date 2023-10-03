@@ -63,7 +63,32 @@ namespace RuntimeInspectorNamespace
         }
 
         private Type m_boundVariableType;
-        protected Type BoundVariableType { get { return m_boundVariableType; } }
+        protected Type BoundVariableType
+        {
+            get { return m_boundVariableType; }
+            set
+            {
+                m_boundVariableType = value;
+            }
+        }
+
+        private Type m_obscuredType;
+        protected Type ObscuredType
+        {
+            get
+            {
+                return m_obscuredType;
+            }
+        }
+
+        private IObscurer m_obscurer;
+        protected IObscurer Obscurer
+        {
+            get
+            {
+                return m_obscurer;
+            }
+        }
 
         private object m_value;
         public object Value
@@ -167,7 +192,16 @@ namespace RuntimeInspectorNamespace
 #endif
                 {
                     InjectToOnValueChangedIfAvailable(field, parent.Value);
-                    BindTo(field.FieldType, variableName, field.Name, () => field.GetValue(parent.Value), (value) => field.SetValue(parent.Value, value), variable);
+                    var isObscured = IsObscurerTapped(field);
+                    if (!isObscured)
+                    {
+                        BindTo(field.FieldType, variableName, field.Name, () => field.GetValue(parent.Value), (value) => field.SetValue(parent.Value, value), variable);
+                    }
+                    else
+                    {
+                        var value = (IObscurer)field.GetValue(parent.Value);
+                        BindTo(field.FieldType, variableName, field.Name, value, variable);
+                    }
                 }
                 else
                 {
@@ -215,6 +249,12 @@ namespace RuntimeInspectorNamespace
             onStringUpdated = attribute.OnValueUpdated((BaseBehaviour)instance);
         }
 
+        private bool IsObscurerTapped(FieldInfo fieldInfo)
+        {
+            var isInterfacedWithObscurer = typeof(IObscurer).IsAssignableFrom(fieldInfo.FieldType);
+            return isInterfacedWithObscurer;
+        }
+
         public void BindTo(Type variableType, string variableName, string reflectedName, Getter getter, Setter setter, MemberInfo variable = null)
         {
             if (variable != null && variable is FieldInfo fieldInfo)
@@ -240,6 +280,13 @@ namespace RuntimeInspectorNamespace
             this.setter = setter;
 
             OnBound(variable);
+        }
+
+        public void BindTo(Type variableType, string variableName, string reflectedName, IObscurer obscurer, MemberInfo variable = null)
+        {
+            m_obscurer = obscurer;
+            m_obscuredType = obscurer.ObscureType;
+            BindTo(variableType, variableName, reflectedName, obscurer.Getter, obscurer.Setter, variable);
         }
 
         public void Unbind()

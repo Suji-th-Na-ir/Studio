@@ -20,8 +20,10 @@ namespace Terra.Studio
         protected override bool OnValueChanged(BoundInputField source, string input)
         {
             var value = base.OnValueChanged(source, input);
-            if (input == "")
+            if (string.IsNullOrEmpty(input))
+            {
                 input = "0";
+            }
             var score = int.Parse(input);
             InvokeDataChange(score);
             return value;

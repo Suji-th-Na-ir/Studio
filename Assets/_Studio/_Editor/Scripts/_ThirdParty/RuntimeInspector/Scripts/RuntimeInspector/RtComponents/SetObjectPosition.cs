@@ -24,7 +24,7 @@ namespace Terra.Studio
         [AliasDrawer("TeleportWhen")]
         public Atom.StartOn startOn = new();
         [AliasDrawer("Target\nPosition")]
-        public Vector3 targetPosition = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
+        public Atom.RecordedVector3 targetPosition = new(typeof(SetObjectPosition));
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
         [AliasDrawer("Broadcast")]
@@ -35,6 +35,8 @@ namespace Terra.Studio
         private RecordVisualiser visualiser;
 
         public override string ComponentName => nameof(SetObjectPosition);
+        public override Atom.RecordedVector3 RecordedVector3 => targetPosition;
+
         protected override bool CanBroadcast => true;
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]
@@ -57,16 +59,16 @@ namespace Terra.Studio
         private void OnGhostDataModified(object data)
         {
             var newVector = (Vector3)data;
-            targetPosition = newVector;
+            targetPosition.vector3 = newVector;
         }
 
         private void Start()
         {
-            if (targetPosition == INFINITY)
+            if (targetPosition.vector3 == INFINITY)
             {
                 var newTarget = transform.position;
                 newTarget.z += 5f;
-                targetPosition = newTarget;
+                targetPosition.vector3 = newTarget;
             }
         }
 
@@ -79,7 +81,7 @@ namespace Terra.Studio
                 ConditionData = GetConditionData(),
                 IsBroadcastable = !string.IsNullOrEmpty(broadcast),
                 Broadcast = broadcast,
-                targetPosition = targetPosition,
+                targetPosition = targetPosition.vector3,
                 startIndex = startOn.data.startIndex,
                 canPlaySFX = playSFX.data.canPlay,
                 sfxIndex = playSFX.data.clipIndex,
@@ -122,7 +124,7 @@ namespace Terra.Studio
         {
             var obj = JsonConvert.DeserializeObject<SetObjectPositionComponent>(data.data);
             broadcast = obj.Broadcast;
-            targetPosition = obj.targetPosition;
+            targetPosition.vector3 = obj.targetPosition;
             AssignStartOnData(obj);
             AssignSFXandVFXData(obj);
             var listenString = "";
