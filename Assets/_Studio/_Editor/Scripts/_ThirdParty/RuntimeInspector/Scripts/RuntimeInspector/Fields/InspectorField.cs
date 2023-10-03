@@ -90,6 +90,9 @@ namespace RuntimeInspectorNamespace
             }
         }
 
+        private object m_obscuredValue;
+        protected object ObscuredValue => m_obscuredValue;
+
         private object m_value;
         public object Value
         {
@@ -159,8 +162,8 @@ namespace RuntimeInspectorNamespace
         protected object virtualObject;
         protected object VirtualObject { get { return virtualObject; } }
 
-        private Getter getter;
-        private Setter setter;
+        protected Getter getter;
+        protected Setter setter;
         protected object lastSubmittedValue = null;
 
         public virtual void Initialize()
@@ -199,7 +202,7 @@ namespace RuntimeInspectorNamespace
                     }
                     else
                     {
-                        var value = (IObscurer)field.GetValue(parent.Value);
+                        var value = field.GetValue(parent.Value);
                         BindTo(field.FieldType, variableName, field.Name, value, variable);
                     }
                 }
@@ -282,11 +285,13 @@ namespace RuntimeInspectorNamespace
             OnBound(variable);
         }
 
-        public void BindTo(Type variableType, string variableName, string reflectedName, IObscurer obscurer, MemberInfo variable = null)
+        public void BindTo(Type variableType, string variableName, string reflectedName, object value, MemberInfo variable = null)
         {
+            var obscurer = (IObscurer)value;
             m_obscurer = obscurer;
             m_obscuredType = obscurer.ObscureType;
-            BindTo(variableType, variableName, reflectedName, obscurer.Getter, obscurer.Setter, variable);
+            m_obscuredValue = value;
+            BindTo(variableType, variableName, reflectedName, obscurer.Get, obscurer.Set, variable);
         }
 
         public void Unbind()

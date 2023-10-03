@@ -19,20 +19,15 @@ namespace Terra.Studio
             BroadcastListen
         }
 
-        private readonly Vector3 INFINITY = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
-
         [AliasDrawer("TeleportWhen")]
         public Atom.StartOn startOn = new();
         [AliasDrawer("Target\nPosition")]
-        public Atom.RecordedVector3 targetPosition = new(typeof(SetObjectPosition));
+        public Atom.RecordedVector3 targetPosition = new();
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
         [AliasDrawer("Broadcast")]
         [OnValueChanged(UpdateBroadcast = true)]
         public string broadcast;
-
-        private bool isGhostEnabled;
-        private RecordVisualiser visualiser;
 
         public override string ComponentName => nameof(SetObjectPosition);
         public override Atom.RecordedVector3 RecordedVector3 => targetPosition;
@@ -54,22 +49,20 @@ namespace Terra.Studio
             startOn.Setup<StartOptions>(gameObject, ComponentName, OnListenerUpdated, startOn.data.startIndex == 3);
             playSFX.Setup<SetObjectPosition>(gameObject);
             playVFX.Setup<SetObjectPosition>(gameObject);
+            targetPosition.Setup(this);
+            SetupTargetPosition();
         }
 
-        private void OnGhostDataModified(object data)
+        protected override void OnGhostDataModified(object data)
         {
-            var newVector = (Vector3)data;
-            targetPosition.vector3 = newVector;
+            targetPosition.Set(data);
         }
 
-        private void Start()
+        private void SetupTargetPosition()
         {
-            if (targetPosition.vector3 == INFINITY)
-            {
-                var newTarget = transform.position;
-                newTarget.z += 5f;
-                targetPosition.vector3 = newTarget;
-            }
+            var newTarget = transform.position;
+            newTarget.z += 5f;
+            targetPosition.Set(newTarget);
         }
 
         public override (string type, string data) Export()
@@ -81,7 +74,7 @@ namespace Terra.Studio
                 ConditionData = GetConditionData(),
                 IsBroadcastable = !string.IsNullOrEmpty(broadcast),
                 Broadcast = broadcast,
-                targetPosition = targetPosition.vector3,
+                targetPosition = (Vector3)targetPosition.Get(),
                 startIndex = startOn.data.startIndex,
                 canPlaySFX = playSFX.data.canPlay,
                 sfxIndex = playSFX.data.clipIndex,
@@ -124,12 +117,14 @@ namespace Terra.Studio
         {
             var obj = JsonConvert.DeserializeObject<SetObjectPositionComponent>(data.data);
             broadcast = obj.Broadcast;
-            targetPosition.vector3 = obj.targetPosition;
+            targetPosition.Set(obj.targetPosition);
             AssignStartOnData(obj);
             AssignSFXandVFXData(obj);
             var listenString = "";
             if (startOn.data.startIndex == 3)
+            {
                 listenString = startOn.data.listenName;
+            }
             ImportVisualisation(broadcast, listenString);
         }
 

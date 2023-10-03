@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Reflection;
 using static Terra.Studio.Atom;
 using RuntimeInspectorNamespace;
@@ -8,6 +9,14 @@ namespace Terra.Studio
 {
     public class RecordedVector3Field : Vector3Field
     {
+        [SerializeField] private Button recordButton;
+        [SerializeField] private Button resetButton;
+
+        public override void Initialize()
+        {
+            base.Initialize();
+        }
+
         public override bool SupportsType(Type type)
         {
             return type == typeof(RecordedVector3);
@@ -17,6 +26,9 @@ namespace Terra.Studio
         {
             BoundVariableType = ObscuredType;
             base.OnBound(variable);
+            var recordedObj = (RecordedVector3)ObscuredValue;
+            AddButtonListener(recordButton, recordedObj.ToggleGhostMode);
+            AddButtonListener(resetButton, recordedObj.Reset);
         }
 
         protected override bool OnValueChanged(BoundInputField source, string input)
@@ -46,12 +58,16 @@ namespace Terra.Studio
                 {
                     var baseComponent = (BaseBehaviour)component;
                     var recordedField = baseComponent.RecordedVector3;
-                    if (recordedField != null)
-                    {
-                        recordedField.vector3 = vector3;
-                    }
+                    recordedField?.Set(vector3);
                 }
             }
+        }
+
+        private void AddButtonListener(Button button, Action action)
+        {
+            if (!button) return;
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() => action?.Invoke());
         }
     }
 }

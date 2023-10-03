@@ -20,6 +20,9 @@ namespace Terra.Studio
         protected virtual string[] ListenerRefs { get; }
         protected virtual ComponentDisplayDock DisplayDock { get; private set; }
 
+        private bool isGhostEnabled;
+        private RecordVisualiser visualiser;
+
         protected virtual void Awake()
         {
             InitializeDisplayDock();
@@ -144,5 +147,20 @@ namespace Terra.Studio
                 }
             }
         }
+
+        public void ToggleGhostMode()
+        {
+            isGhostEnabled = !isGhostEnabled;
+            if (isGhostEnabled)
+            {
+                visualiser = new RecordVisualiser(gameObject, RecordVisualiser.Record.Position, OnGhostDataModified);
+            }
+            else
+            {
+                visualiser?.Dispose();
+            }
+        }
+
+        protected virtual void OnGhostDataModified(object data) { }
     }
 }

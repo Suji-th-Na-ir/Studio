@@ -12,6 +12,42 @@ namespace Terra.Studio
         public List<PlaySfx> AllSfxes = new();
         public List<PlayVfx> AllVfxes = new();
 
+        public class BasePlay
+        {
+            public GameObject target;
+            public PlayFXData data = new();
+            public Type componentType = null;
+            public string fieldName;
+
+            public virtual void Setup<T>(GameObject _target, string fieldName = null)
+            {
+                target = _target;
+                componentType = typeof(T);
+                this.fieldName = fieldName;
+            }
+        }
+
+        public class BaseBroadcasterTemplate
+        {
+            public string id;
+            public GameObject target;
+            public BaseBehaviour behaviour;
+
+            public virtual void Setup(GameObject target, BaseBehaviour behaviour)
+            {
+                this.target = target;
+                this.behaviour = behaviour;
+                id = Guid.NewGuid().ToString("N");
+            }
+        }
+
+        public void Dispose()
+        {
+            AllStartOns.Clear();
+            AllSfxes.Clear();
+            AllVfxes.Clear();
+        }
+
         [Serializable]
         public class StartOn
         {
@@ -61,21 +97,6 @@ namespace Terra.Studio
             }
         }
 
-        public class BasePlay
-        {
-            public GameObject target;
-            public PlayFXData data = new();
-            public Type componentType = null;
-            public string fieldName;
-
-            public virtual void Setup<T>(GameObject _target, string fieldName = null)
-            {
-                target = _target;
-                componentType = typeof(T);
-                this.fieldName = fieldName;
-            }
-        }
-
         [Serializable]
         public class PlaySfx : BasePlay
         {
@@ -109,20 +130,6 @@ namespace Terra.Studio
                 }
                 data.clipName = Helper.GetVfxClipNameByIndex(data.clipIndex);
                 EditorOp.Resolve<IURCommand>().UpdateReference(this);
-            }
-        }
-
-        public class BaseBroadcasterTemplate
-        {
-            public string id;
-            public GameObject target;
-            public BaseBehaviour behaviour;
-
-            public virtual void Setup(GameObject target, BaseBehaviour behaviour)
-            {
-                this.target = target;
-                this.behaviour = behaviour;
-                id = Guid.NewGuid().ToString("N");
             }
         }
 
@@ -168,31 +175,39 @@ namespace Terra.Studio
         [Serializable]
         public class RecordedVector3 : IObscurer
         {
-            public Vector3 vector3;
             public string instanceId;
             public RecordedVector3Field field;
-            private readonly Type behaviourType;
+
+            private Vector3 vector3;
+            private Vector3 defaultVector3;
+            private Type behaviourType;
+            private BaseBehaviour behaviour;
 
             public Type ObscureType => typeof(Vector3);
             public Type DeclaredType => behaviourType;
+            public Action ToggleGhostMode => behaviour.ToggleGhostMode;
 
-            public RecordedVector3(Type behaviourType)
+            public readonly Vector3 INFINITY = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
+
+            public void Setup<T>(T instance) where T : BaseBehaviour
             {
-                this.behaviourType = behaviourType;
+                behaviourType = typeof(T);
+                behaviour = instance;
                 instanceId = Guid.NewGuid().ToString("N");
                 vector3 = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
             }
 
-            public object Getter()
+            public object Get()
             {
                 return vector3;
             }
 
-            public void Setter(object obj)
+            public void Set(object obj)
             {
                 try
                 {
                     var vector3 = (Vector3)obj;
+                    SetDefault(vector3);
                     this.vector3 = vector3;
                 }
                 catch
@@ -200,13 +215,19 @@ namespace Terra.Studio
                     Debug.LogError("Type of object passed is incorrected. Expected: Vector3");
                 }
             }
-        }
 
-        public void Dispose()
-        {
-            AllStartOns.Clear();
-            AllSfxes.Clear();
-            AllVfxes.Clear();
+            private void SetDefault(Vector3 vector3)
+            {
+                if (vector3 == INFINITY)
+                {
+                    defaultVector3 = vector3;
+                }
+            }
+
+            public void Reset()
+            {
+                vector3 = defaultVector3;
+            }
         }
     }
 
