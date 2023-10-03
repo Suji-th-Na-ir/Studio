@@ -69,11 +69,11 @@ namespace RTG
             RTScene.Get.RegisterHoverableSceneEntityContainer(RTGizmosEngine.Get);
             RTSceneGrid.Get.Initialize_SystemCall();
 
-            // Gizmo engine
-            RTGizmosEngine.Get.CanDoHoverUpdate += OnCanDoGizmoHoverUpdate;
-            //if (_renderPipelineId == RenderPipelineId.Standard)
-            RTGizmosEngine.Get.CreateSceneGizmo(RTFocusCamera.Get.TargetCamera);
-            RTGizmosEngine.Get.AddRenderCamera(RTFocusCamera.Get.TargetCamera);
+            //// Gizmo engine
+            //RTGizmosEngine.Get.CanDoHoverUpdate += OnCanDoGizmoHoverUpdate;
+            ////if (_renderPipelineId == RenderPipelineId.Standard)
+            //RTGizmosEngine.Get.CreateSceneGizmo(RTFocusCamera.Get.TargetCamera);
+            //RTGizmosEngine.Get.AddRenderCamera(RTFocusCamera.Get.TargetCamera);
 
             RTMeshCompiler.CompileEntireScene();
             if (_renderPipelineId != RenderPipelineId.Standard)

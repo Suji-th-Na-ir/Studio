@@ -52,10 +52,10 @@ namespace Terra.Studio
 
             AddListenerEvent(orthoButtonTr, SetOrthographic);
             AddListenerEvent(perspButtonTr, SetPerspective);
-            AddListenerEvent(viewButtons[0], SetView,Vector3.up);
-            AddListenerEvent(viewButtons[1], SetView,-Vector3.up);
-            AddListenerEvent(viewButtons[2], SetView,-Vector3.right);
-            AddListenerEvent(viewButtons[3], SetView,Vector3.right);
+            AddListenerEvent(viewButtons[0], SetView,-Vector3.up);
+            AddListenerEvent(viewButtons[1], SetView,Vector3.up);
+            AddListenerEvent(viewButtons[2], SetView,Vector3.right);
+            AddListenerEvent(viewButtons[3], SetView,-Vector3.right);
             AddListenerEvent(viewButtons[4], SetView,Vector3.forward);
             AddListenerEvent(viewButtons[5], SetView,-Vector3.forward);
 
