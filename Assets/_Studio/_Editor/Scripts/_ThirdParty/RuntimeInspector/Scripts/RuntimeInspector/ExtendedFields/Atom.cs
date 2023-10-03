@@ -131,6 +131,12 @@ namespace Terra.Studio
         {
             public RotateField field;
             public RotateComponentData data = new();
+
+            public override void Setup(GameObject target, BaseBehaviour behaviour)
+            {
+                base.Setup(target, behaviour);
+                data.OnBroadcastUpdated = behaviour.OnBroadcastStringUpdated;
+            }
         }
 
         [Serializable]
@@ -138,6 +144,12 @@ namespace Terra.Studio
         {
             public TranslateField field;
             public TranslateComponentData data = new();
+
+            public override void Setup(GameObject target, BaseBehaviour behaviour)
+            {
+                base.Setup(target, behaviour);
+                data.OnBroadcastUpdated = behaviour.OnBroadcastStringUpdated;
+            }
         }
 
         [Serializable]
@@ -191,7 +203,8 @@ namespace Terra.Studio
         public float pauseBetween;
         public Listen listen;
         public BroadcastAt broadcastAt;
-        private string broadcast;
+        public Action<string, string> OnBroadcastUpdated;
+        public string broadcast;
         public string Broadcast
         {
             readonly get
@@ -202,6 +215,7 @@ namespace Terra.Studio
             {
                 if (value != broadcast)
                 {
+                    OnBroadcastUpdated?.Invoke(value, broadcast);
                     broadcast = value;
                 }
             }
@@ -228,7 +242,8 @@ namespace Terra.Studio
         public string listenTo;
         public Listen listen;
         public BroadcastAt broadcastAt;
-        private string broadcast;
+        public Action<string, string> OnBroadcastUpdated;
+        public string broadcast;
         public string Broadcast
         {
             readonly get
@@ -239,6 +254,7 @@ namespace Terra.Studio
             {
                 if (value != broadcast)
                 {
+                    OnBroadcastUpdated?.Invoke(value, broadcast);
                     broadcast = value;
                 }
             }
