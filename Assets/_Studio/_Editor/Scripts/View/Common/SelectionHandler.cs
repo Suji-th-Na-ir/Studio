@@ -431,14 +431,19 @@ public class SelectionHandler : View
         else
         {
             runtimeHierarchy.Deselect();
-            _workGizmo.Gizmo.SetEnabled(false);
-            objectMoveGizmo.Gizmo.SetEnabled(false);
-            objectRotationGizmo.Gizmo.SetEnabled(false);
-            objectScaleGizmo.Gizmo.SetEnabled(false);
-            objectUniversalGizmo.Gizmo.SetEnabled(false);
+            DisableGizmo();
         }
 
         SelectionChanged?.Invoke(_selectedObjects);
+    }
+
+    private void DisableGizmo()
+    {
+        _workGizmo.Gizmo.SetEnabled(false);
+        objectMoveGizmo.Gizmo.SetEnabled(false);
+        objectRotationGizmo.Gizmo.SetEnabled(false);
+        objectScaleGizmo.Gizmo.SetEnabled(false);
+        objectUniversalGizmo.Gizmo.SetEnabled(false);
     }
 
     public void DeselectAll()
@@ -451,8 +456,11 @@ public class SelectionHandler : View
 
     public void OverrideGizmoOntoTarget(GameObject target)
     {
-        _workGizmo.Gizmo.SetEnabled(true);
+        DisableGizmo();
+        SetWorkGizmoId(GizmoId.Move);
         _workGizmo.SetTargetObject(target);
+        _workGizmo.Gizmo.SetEnabled(true);
+        _workGizmo.RefreshPositionAndRotation();
     }
 
     public void RefreshGizmo()

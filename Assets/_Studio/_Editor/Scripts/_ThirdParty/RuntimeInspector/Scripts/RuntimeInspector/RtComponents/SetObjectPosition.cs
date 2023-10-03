@@ -60,7 +60,7 @@ namespace Terra.Studio
         private void SetupTargetPosition()
         {
             var newTarget = transform.position;
-            newTarget.z += 5f;
+            newTarget.z += 1f;
             targetPosition.Set(newTarget);
         }
 

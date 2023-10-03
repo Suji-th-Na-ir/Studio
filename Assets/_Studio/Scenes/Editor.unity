@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.285325, g: 0.80665284, b: 0.99856204, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -435,7 +435,7 @@ PrefabInstance:
     - target: {fileID: 224597220361603002, guid: c310b787f758e3a4db55284145e55bc8,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 975
+      value: 900.5208
       objectReference: {fileID: 0}
     - target: {fileID: 224597220361603002, guid: c310b787f758e3a4db55284145e55bc8,
         type: 3}
@@ -512,7 +512,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 2663967088716608186}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 966297583}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6000098be4011544882ebd2697b8d610, type: 3}
@@ -3744,7 +3744,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81b8b4cda14214029bf67299d792f999, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runtimeHierarchy: {fileID: 625497295}
   toastUI: {fileID: 366142243}
 --- !u!114 &792619812
 MonoBehaviour:
@@ -3758,7 +3757,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a861e41aabd9c41f0933207bbe22aede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iconPresets: {fileID: 11400000, guid: fc8f8147139de4e3db462b2ec02f2cd5, type: 2}
 --- !u!1001 &878321626
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3914,6 +3912,12 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 22451668, guid: 0abab5bb77339e4428787a870eb31bd3,
     type: 3}
   m_PrefabInstance: {fileID: 878321626}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &966297583 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1292172246486946, guid: 4d8c6c9fba0e46f489b21fd7d92d739d,
+    type: 3}
+  m_PrefabInstance: {fileID: 2663967088716608186}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &985878277
 GameObject:
@@ -4336,6 +4340,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2985935476753167274, guid: 643594b5a49894c658588bb890ff64bb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3087990618279743464, guid: 643594b5a49894c658588bb890ff64bb,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -4726,6 +4735,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isEnabled: 1
   _actionLimit: 50
+--- !u!1 &1497930978 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2985935476753167274, guid: 643594b5a49894c658588bb890ff64bb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1034069743}
+  m_PrefabAsset: {fileID: 0}
+--- !u!225 &1497930981
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497930978}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1566826115
 GameObject:
   m_ObjectHideFlags: 0
@@ -5951,6 +5978,18 @@ MonoBehaviour:
   m_PixelsPerUnitMultiplier: 1
   borderWidth: 0
   falloffDistance: 0
+--- !u!225 &2663967088716608192
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 966297583}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &2663967088772220332
 MonoBehaviour:
   m_ObjectHideFlags: 0

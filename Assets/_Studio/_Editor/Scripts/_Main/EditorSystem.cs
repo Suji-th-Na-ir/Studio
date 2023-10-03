@@ -1,9 +1,11 @@
+using System;
 using UnityEngine;
 
 namespace Terra.Studio
 {
     public class EditorSystem : MonoBehaviour, ISubsystem
     {
+        public event Action<bool> OnIncognitoEnabled;
         public bool IsIncognitoEnabled { get; private set; }
 
         private void Awake()
@@ -55,6 +57,7 @@ namespace Terra.Studio
         public void RequestIncognitoMode(bool enable)
         {
             IsIncognitoEnabled = enable;
+            OnIncognitoEnabled?.Invoke(enable);
         }
     }
 }

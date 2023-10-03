@@ -704,5 +704,12 @@ namespace PlayShifu.Terra
             }
             return rb;
         }
+
+        public static void SetInteractive(this CanvasGroup canvasGroup, bool isInteractable)
+        {
+            canvasGroup.blocksRaycasts = isInteractable;
+            canvasGroup.interactable = isInteractable;
+            canvasGroup.ignoreParentGroups = isInteractable;
+        }
     }
 }

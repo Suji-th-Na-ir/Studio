@@ -110,12 +110,19 @@ namespace RTG
 
         private void Undo()
         {
+            if (IsIncognito()) return;
             EditorOp.Resolve<IURCommand>().Undo();
         }
 
         private void Redo()
         {
+            if (IsIncognito()) return;
             EditorOp.Resolve<IURCommand>().Redo();
+        }
+
+        private bool IsIncognito()
+        {
+            return EditorOp.Resolve<EditorSystem>().IsIncognitoEnabled;
         }
 
         private void RTUndo()
