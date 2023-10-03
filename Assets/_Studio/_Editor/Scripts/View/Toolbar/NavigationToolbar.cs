@@ -58,6 +58,14 @@ namespace Terra.Studio
             AddListenerEvent(viewButtons[3], SetView,Vector3.right);
             AddListenerEvent(viewButtons[4], SetView,Vector3.forward);
             AddListenerEvent(viewButtons[5], SetView,-Vector3.forward);
+
+            EditorOp.Resolve<RTFocusCamera>().OnCameraMoved += ResetSelectedView;
+        }
+
+        private void ResetSelectedView()
+        {
+            for (int i = 0; i < viewButtonsTexts.Count; i++)
+                viewButtonsTexts[i].color = Helper.GetColorFromHex("#F3F3F3");
         }
 
         private void SetView(Vector3 vector,Button button)
@@ -119,7 +127,7 @@ namespace Terra.Studio
 
         public override void Repaint()
         {
-          //No repaint
+            EditorOp.Resolve<RTFocusCamera>().OnCameraMoved -= ResetSelectedView;
         }
 
         private void OnDestroy()

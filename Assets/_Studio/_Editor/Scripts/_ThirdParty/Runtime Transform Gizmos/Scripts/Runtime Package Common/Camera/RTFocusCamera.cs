@@ -117,6 +117,8 @@ namespace RTG
         public CameraProjectionSwitchSettings ProjectionSwitchSettings { get { return _projectionSwitchSettings; } }
         public CameraHotkeys Hotkeys { get { return _hotkeys; } }
 
+        public Action OnCameraMoved;
+
         private void OnEnable()
         {
             EditorOp.Register(this);
@@ -383,6 +385,7 @@ namespace RTG
             {
                 float accelAdd = MoveSettings.AccelerationRate * Mathf.Abs(_targetCamera.EstimateZoomFactor(_lastFocusPoint)) * Time.deltaTime;
                 _currentAcceleration += accelAdd;
+                OnCameraMoved?.Invoke();
             }
             else _currentAcceleration = 0.0f;
 
@@ -410,11 +413,13 @@ namespace RTG
                         {
                             Vector2 rotation = CalculateOrbitRotation(mouseX, mouseY);
                             Orbit(rotation.x, rotation.y);
+                            OnCameraMoved?.Invoke();
                         }
                         else
                         {
                             StopCamTransform();
                             StartCoroutine(_genricCamTransformCrtn = DoSmoothOrbit(mouseX, mouseY));
+                            OnCameraMoved?.Invoke();
                         }
                     }
                     else
@@ -424,11 +429,13 @@ namespace RTG
                         {
                             Vector2 rotation = CalculateLookAroundRotation(mouseX, mouseY);
                             LookAround(rotation.x, rotation.y);
+                            OnCameraMoved?.Invoke();
                         }
                         else
                         {
                             StopCamTransform();
                             StartCoroutine(_genricCamTransformCrtn = DoSmoothLookAround(mouseX, mouseY));
+                            OnCameraMoved?.Invoke();
                         }
                     }
                 }
