@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using RTG;
 using PlayShifu.Terra;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -17,10 +18,12 @@ namespace Terra.Studio
         private const string RIGHT_LOC = "Right";
         private const string BACK_LOC = "Back";
         private const string FRONT_LOC = "Front";
-
-        private int lastSelectedPerp = 1;
+       
         private Button orthoButtonTr;
         private Button perspButtonTr;
+        List<Button> viewButtons = new List<Button>();
+        List<Text> viewButtonsTexts = new List<Text>();
+        private int lastSelectedPerp = 1;
 
         private void Awake()
         {
@@ -31,31 +34,45 @@ namespace Terra.Studio
         {
             orthoButtonTr = Helper.FindDeepChild(transform, ORTHOGRAPHIC_LOC, true).GetComponent<Button>();
             perspButtonTr = Helper.FindDeepChild(transform, PERSPECTIVE_LOC, true).GetComponent<Button>();
-           var topButtonTr = Helper.FindDeepChild(transform, TOP_LOC, true).GetComponent<Button>();
-           var bottomButtonTr = Helper.FindDeepChild(transform, BOTTOM_LOC, true).GetComponent<Button>();
-           var leftButtonTr = Helper.FindDeepChild(transform, LEFT_LOC, true).GetComponent<Button>();
-           var rightButtonTr = Helper.FindDeepChild(transform, RIGHT_LOC, true).GetComponent<Button>();
-           var frontButtonTr = Helper.FindDeepChild(transform, FRONT_LOC, true).GetComponent<Button>();
-           var backButtonTr = Helper.FindDeepChild(transform, BACK_LOC, true).GetComponent<Button>();
 
+            viewButtons.Add( Helper.FindDeepChild(transform, TOP_LOC, true).GetComponent<Button>());
+            viewButtons.Add(Helper.FindDeepChild(transform, BOTTOM_LOC, true).GetComponent<Button>());
+            viewButtons.Add(Helper.FindDeepChild(transform, LEFT_LOC, true).GetComponent<Button>());
+            viewButtons.Add(Helper.FindDeepChild(transform, RIGHT_LOC, true).GetComponent<Button>());
+            viewButtons.Add(Helper.FindDeepChild(transform, FRONT_LOC, true).GetComponent<Button>());
+            viewButtons.Add(Helper.FindDeepChild(transform, BACK_LOC, true).GetComponent<Button>());
 
-
+            for (int i = 0; i < viewButtons.Count; i++)
+            {
+                viewButtonsTexts.Add(viewButtons[i].GetComponentInChildren<Text>());
+            }
 
             lastSelectedPerp = 0;
             SetPerspective();
 
             AddListenerEvent(orthoButtonTr, SetOrthographic);
             AddListenerEvent(perspButtonTr, SetPerspective);
-            AddListenerEvent(topButtonTr, SetView,-Vector3.up);
-            AddListenerEvent(bottomButtonTr, SetView,Vector3.up);
-            AddListenerEvent(leftButtonTr, SetView,Vector3.right);
-            AddListenerEvent(rightButtonTr, SetView,-Vector3.right);
-            AddListenerEvent(frontButtonTr, SetView,Vector3.forward);
-            AddListenerEvent(backButtonTr, SetView,-Vector3.forward);
+            AddListenerEvent(viewButtons[0], SetView,Vector3.up);
+            AddListenerEvent(viewButtons[1], SetView,-Vector3.up);
+            AddListenerEvent(viewButtons[2], SetView,-Vector3.right);
+            AddListenerEvent(viewButtons[3], SetView,Vector3.right);
+            AddListenerEvent(viewButtons[4], SetView,Vector3.forward);
+            AddListenerEvent(viewButtons[5], SetView,-Vector3.forward);
         }
 
-        private void SetView(Vector3 vector)
+        private void SetView(Vector3 vector,Button button)
         {
+            for (int i = 0; i < viewButtons.Count; i++)
+            {
+                if (viewButtons[i]==button)
+                {
+                    viewButtonsTexts[i].color = Helper.GetColorFromHex("#4A2BE9");
+                }
+                else
+                {
+                    viewButtonsTexts[i].color = Helper.GetColorFromHex("#F3F3F3");
+                }
+            }
             Quaternion targetRotation = Quaternion.LookRotation(vector, Vector3.up);
             EditorOp.Resolve<RTFocusCamera>().PerformRotationSwitch(targetRotation);
         }
@@ -94,10 +111,10 @@ namespace Terra.Studio
             button.onClick.AddListener(() => { callback?.Invoke(); });
         }
 
-        private void AddListenerEvent(Button button, Action<Vector3> callback,Vector3 vector)
+        private void AddListenerEvent(Button button, Action<Vector3,Button> callback,Vector3 vector)
         {
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => { callback?.Invoke(vector); });
+            button.onClick.AddListener(() => { callback?.Invoke(vector,button); });
         }
 
         public override void Repaint()
