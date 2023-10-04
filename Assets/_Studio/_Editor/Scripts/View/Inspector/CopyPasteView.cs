@@ -42,6 +42,7 @@ namespace Terra.Studio
             paste.PointerEnter += OpenPastePanel;
             GetComponent<PointerEventListener>().PointerExit += CloseSubPanels;
             EditorOp.Resolve<SelectionHandler>().SelectionChanged += CloseAllPanels;
+            EditorOp.Resolve<RuntimeInspector>().pointerEventListner.PointerDown += CloseAll;
         }
 
         public override void Repaint()
@@ -91,6 +92,11 @@ namespace Terra.Studio
         }
 
         private void CloseAllPanels(List<GameObject> gm)
+        {
+            CloseAll(null);
+        }
+
+        private void CloseAll(PointerEventData eventData)
         {
             gameObject.SetActive(false);
             copyView.gameObject.SetActive(false);
