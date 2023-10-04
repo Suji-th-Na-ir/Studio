@@ -56,14 +56,20 @@ namespace Terra.Studio
             return ResolveTRS(go, itemData, trs);
         }
 
-        private static GameObject ResolveTRS(GameObject go, ResourceDB.ResourceItemData itemData, params Vector3[] trs)
+        public static GameObject DuplicateGameObject(GameObject actualGameObject, Transform parent, params Vector3[] trs)
+        {
+            var go = Object.Instantiate(actualGameObject, parent);
+            return ResolveTRS(go, null, trs);
+        }
+
+        public static GameObject ResolveTRS(GameObject go, ResourceDB.ResourceItemData itemData, params Vector3[] trs)
         {
             AttachPrerequisities(go, itemData);
             if (trs == null || trs.Length == 0)
             {
                 return go;
             }
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < trs.Length; i++)
             {
                 switch (i)
                 {
@@ -83,6 +89,7 @@ namespace Terra.Studio
 
         public static void AttachPrerequisities(GameObject go, ResourceDB.ResourceItemData itemData)
         {
+            if (itemData == null) return;
             if (SystemOp.Resolve<System>() && SystemOp.Resolve<System>().CurrentStudioState == StudioState.Editor)
             {
                 if (!go.TryGetComponent(out StudioGameObject studioGO))

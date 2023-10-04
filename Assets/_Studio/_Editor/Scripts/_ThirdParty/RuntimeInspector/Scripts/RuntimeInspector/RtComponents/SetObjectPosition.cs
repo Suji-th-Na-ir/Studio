@@ -29,9 +29,6 @@ namespace Terra.Studio
         [OnValueChanged(UpdateBroadcast = true)]
         public string broadcast;
 
-        private bool isGhostEnabled;
-        private RecordVisualiser visualiser;
-
         public override string ComponentName => nameof(SetObjectPosition);
         public override Atom.RecordedVector3 RecordedVector3 => targetPosition;
 
@@ -54,7 +51,8 @@ namespace Terra.Studio
             playVFX.Setup<SetObjectPosition>(gameObject);
             targetPosition.Setup(this);
             SetupTargetPosition();
-            ToggleGhostMode = RequestToggleGhostMode;
+            ToggleGhostMode = ToggleGhostModeForSetObjectPos;
+            OnGhostInteracted = OnGhostDataModified;
         }
 
         private void SetupTargetPosition()
@@ -160,17 +158,9 @@ namespace Terra.Studio
             playVFX.data.clipName = comp.vfxName;
         }
 
-        public void RequestToggleGhostMode()
+        private void ToggleGhostModeForSetObjectPos()
         {
-            isGhostEnabled = !isGhostEnabled;
-            if (isGhostEnabled)
-            {
-                visualiser = RecordVisualiser.RecordPosition(gameObject, OnGhostDataModified, (Vector3)targetPosition.Get(), true);
-            }
-            else
-            {
-                visualiser?.Dispose();
-            }
+            EditorOp.Resolve<Recorder>().TrackPosition(this, true, (Vector3)targetPosition.Get());
         }
 
         private void OnGhostDataModified(object data)

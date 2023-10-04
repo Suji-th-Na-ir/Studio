@@ -1,10 +1,39 @@
 using System;
 using UnityEngine;
 using PlayShifu.Terra;
+using System.Collections.Generic;
 using Object = UnityEngine.Object;
 
 namespace Terra.Studio
 {
+    public class Recorder
+    {
+        private Dictionary<BaseBehaviour, RecordVisualiser> activeRecorders = new();
+
+        public void TrackPosition<T>(T instance, bool enableModification, params Vector3[] trs) where T : BaseBehaviour
+        {
+            var isPresent = ToggleGhostMode(instance);
+            if (isPresent) return;
+            var visualiser = new RecordVisualiser(instance.gameObject, RecordVisualiser.Record.Position, instance.OnGhostInteracted, enableModification, trs);
+            activeRecorders[instance] = visualiser;
+        }
+
+        private bool ToggleGhostMode<T>(T instance) where T : BaseBehaviour
+        {
+            var isPresent = activeRecorders.TryGetValue(instance, out var visualiser);
+            if (isPresent)
+            {
+                visualiser.Dispose();
+                activeRecorders.Remove(instance);
+            }
+            else
+            {
+                activeRecorders.Add(instance, null);
+            }
+            return isPresent;
+        }
+    }
+
     public class RecordVisualiser : IDisposable
     {
         public enum Record
@@ -19,31 +48,26 @@ namespace Terra.Studio
         private readonly Material ghostMaterial;
         private BaseRecorder baseRecorder;
 
-        public RecordVisualiser(GameObject gameObject, Record recordFor, Action<object> onRecordDataModified, Vector3 spawnPoint, bool enableModification)
+        public RecordVisualiser(GameObject gameObject, Record recordFor, Action<object> onRecordDataModified, bool enableModification, params Vector3[] trs)
         {
             originalObject = gameObject;
             ghostMaterial = EditorOp.Load<Material>(GHOST_MATERIAL_PATH);
             var ghostObj = EditorOp.Load<GameObject>(GHOST_RESOURCE_PATH);
             ghost = Object.Instantiate(ghostObj);
             ghost.name = string.Concat(ghost.name, "_", gameObject.name);
-            Object.Instantiate(gameObject, ghost.transform);
-            ghost.transform.position = spawnPoint;
+            RuntimeWrappers.DuplicateGameObject(gameObject, ghost.transform, Vector3.zero);
+            RuntimeWrappers.ResolveTRS(ghost, null, trs);
             var child = ghost.transform.GetChild(0);
             child.localPosition = Vector3.zero;
             child.localScale = gameObject.transform.lossyScale;
             Clean();
-            AttachRecorder(recordFor, onRecordDataModified);
             ghost.SetActive(true);
             if (enableModification)
             {
                 EditorOp.Resolve<EditorSystem>().RequestIncognitoMode(true);
                 EditorOp.Resolve<SelectionHandler>().OverrideGizmoOntoTarget(ghost);
+                AttachRecorder(recordFor, onRecordDataModified);
             }
-        }
-
-        public static RecordVisualiser RecordPosition(GameObject gameObject, Action<object> onRecordDataModified, Vector3 spawnPoint, bool enableModification)
-        {
-            return new RecordVisualiser(gameObject, Record.Position, onRecordDataModified, spawnPoint, enableModification);
         }
 
         private void Clean()
