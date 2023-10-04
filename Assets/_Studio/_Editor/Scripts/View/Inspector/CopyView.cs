@@ -14,6 +14,7 @@ namespace Terra.Studio
         private Button copyPos, copyRot, copyScale, copyAll;
         PointerEventListener pointerEventListener;
         public bool pointerEntered;
+
         public override void Draw()
         {
            
@@ -50,7 +51,11 @@ namespace Terra.Studio
 
         public override void Repaint()
         {
-           
+            var selected = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            copyPos.interactable = selected.Count == 1;
+            copyRot.interactable = selected.Count == 1;
+            copyScale.interactable = selected.Count == 1;
+            copyAll.interactable = selected.Count == 1;
         }
 
         private void OnEnable()

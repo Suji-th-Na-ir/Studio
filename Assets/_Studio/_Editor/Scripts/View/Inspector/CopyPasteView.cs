@@ -5,12 +5,14 @@ using PlayShifu.Terra;
 using RuntimeInspectorNamespace;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Terra.Studio
 {
     public class CopyPasteView : View
     {
         private PointerEventListener copy, paste;
+        private Button copyButton;
         CopyView copyView;
         PasteView pasteView;
         public override void Draw()

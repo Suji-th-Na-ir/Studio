@@ -193,23 +193,29 @@ namespace Terra.Studio
             private Vector3 localScale;
             private Transform transform;
             private TransformSnapshot redoSnapshot;
+            private readonly bool shouldStackRecord;
 
             public static TransformSnapshot CreateSnapshot(GameObject go)
             {
                 return new TransformSnapshot(go);
             }
 
-            public TransformSnapshot(GameObject go, bool shouldStackRecord=true)
+            public TransformSnapshot(GameObject go) : this(go, true) { }
+
+            public TransformSnapshot(GameObject go, bool shouldStackRecord)
             {
                 transform = go.transform;
+                this.shouldStackRecord = shouldStackRecord;
                 CreateTransformSnapshot(go);
-                if(shouldStackRecord)
-                StackIntoUndoRedo();
+                if (shouldStackRecord)
+                {
+                    StackIntoUndoRedo();
+                }
             }
 
             public void Undo()
             {
-                redoSnapshot ??= new TransformSnapshot(transform.gameObject);
+                redoSnapshot ??= new TransformSnapshot(transform.gameObject, shouldStackRecord);
                 ApplySnapshot();
             }
 
@@ -282,7 +288,7 @@ namespace Terra.Studio
 
             private void StackIntoUndoRedo()
             {
-                EditorOp.Resolve<IURCommand>().Record(true, false, "Spawned", (isUndoObj) =>
+                EditorOp.Resolve<IURCommand>().Record(true, false, "Transform changed", (isUndoObj) =>
                 {
                     var isUndo = (bool)isUndoObj;
                     if (isUndo)
