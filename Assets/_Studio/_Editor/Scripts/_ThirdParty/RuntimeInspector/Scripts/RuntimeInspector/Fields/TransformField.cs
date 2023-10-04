@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using PlayShifu.Terra;
 using Terra.Studio;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+
 namespace RuntimeInspectorNamespace
 {
     public class TransformField : ExpandableInspectorField
@@ -25,7 +26,7 @@ namespace RuntimeInspectorNamespace
             rotationProp = typeof(Transform).GetProperty("localEulerAngles");
             scaleProp = typeof(Transform).GetProperty("localScale");
             copyPastePanel.SetActive(false);
-            openCopyPaste.onClick.AddListener(() => copyPastePanel.SetActive(!copyPastePanel.activeSelf));
+            openCopyPaste.onClick.AddListener(() => OpenCopyPastePanel());
 
             copyView = Helper.FindDeepChild(transform, "CopyView").GetComponent<CopyView>();
             pasteView = Helper.FindDeepChild(transform, "PasteView").GetComponent<PasteView>();
@@ -36,7 +37,29 @@ namespace RuntimeInspectorNamespace
             pasteView.Init();
             copy.onClick.AddListener(() => OpenPanel(true));
             paste.onClick.AddListener(() => OpenPanel(false));
+
+            EditorOp.Resolve<SelectionHandler>().SelectionChanged += CloseAllPanels;
         }
+
+        private void CloseAllPanels(List<GameObject> gm)
+        {
+            copyPastePanel.SetActive(false);
+            copyView.gameObject.SetActive(false);
+            pasteView.gameObject.SetActive(false);
+        }
+
+        private void OpenCopyPastePanel()
+        {
+            var open =!copyPastePanel.activeSelf;
+            copyPastePanel.SetActive(open);
+            if(!open)
+            {
+                copyView.gameObject.SetActive(false);
+                pasteView.gameObject.SetActive(false);
+            }
+        }
+
+
 
         private void OpenPanel(bool copy)
         {
@@ -56,10 +79,15 @@ namespace RuntimeInspectorNamespace
 
         private void Paste(TransFormCopyValues type)
         {
-            var t = Value as Transform;
-            EditorOp.Resolve<CopyPasteSystem>().PasteTransformData(type, t);
-            copyPastePanel.SetActive(false);
-            pasteView.gameObject.SetActive(false);
+            var selected = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            Snapshots.TransformsSnapshot.CreateSnapshot(selected);
+            foreach (var s in selected)
+            {
+                var t = s.transform;
+                EditorOp.Resolve<CopyPasteSystem>().PasteTransformData(type, t);
+                copyPastePanel.SetActive(false);
+                pasteView.gameObject.SetActive(false);
+            }
         }
 
         public override bool SupportsType(Type type)

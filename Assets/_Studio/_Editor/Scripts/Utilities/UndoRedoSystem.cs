@@ -194,9 +194,17 @@ namespace Terra.Studio
             private Transform transform;
             private TransformSnapshot redoSnapshot;
 
-            public TransformSnapshot(GameObject go)
+            public static TransformSnapshot CreateSnapshot(GameObject go)
             {
-                CreateSnapshot(go);
+                return new TransformSnapshot(go);
+            }
+
+            public TransformSnapshot(GameObject go, bool shouldStackRecord=true)
+            {
+                transform = go.transform;
+                CreateTransformSnapshot(go);
+                if(shouldStackRecord)
+                StackIntoUndoRedo();
             }
 
             public void Undo()
@@ -216,12 +224,12 @@ namespace Terra.Studio
                 transform = go.transform;
             }
 
-            private void CreateSnapshot(GameObject go)
+            private void CreateTransformSnapshot(GameObject go)
             {
                 var transform = go.transform;
                 position = transform.position;
                 eulerAngles = transform.eulerAngles;
-                localScale = transform.localScale;
+                localScale = transform.localScale;    
             }
 
             private void ApplySnapshot()
@@ -229,6 +237,83 @@ namespace Terra.Studio
                 transform.position = position;
                 transform.eulerAngles = eulerAngles;
                 transform.localScale = localScale;
+            }
+
+            private void StackIntoUndoRedo()
+            {
+                EditorOp.Resolve<IURCommand>().Record(true, false, $"{transform.gameObject} modified", (isUndoObj) =>
+                {
+                    var isUndo = (bool)isUndoObj;
+                    if (isUndo)
+                    {
+                        Undo();
+                    }
+                    else
+                    {
+                        Redo();
+                    }
+                });
+            }
+        }
+
+        public sealed class TransformsSnapshot
+        {
+            private TransformSnapshot[] snapshots;
+
+            public static TransformsSnapshot CreateSnapshot(List<GameObject> gos)
+            {
+                return new TransformsSnapshot(gos);
+            }
+
+            public TransformsSnapshot(List<GameObject> gos)
+            {
+                InitializeData(gos);
+                StackIntoUndoRedo();
+            }
+
+            private void InitializeData(List<GameObject> gos)
+            {
+                snapshots = new TransformSnapshot[gos.Count];
+                for (int i = 0; i < gos.Count; i++)
+                {
+                    snapshots[i] = new TransformSnapshot(gos[i], false);
+                }
+            }
+
+            private void StackIntoUndoRedo()
+            {
+                EditorOp.Resolve<IURCommand>().Record(true, false, "Spawned", (isUndoObj) =>
+                {
+                    var isUndo = (bool)isUndoObj;
+                    if (isUndo)
+                    {
+                        Undo();
+                    }
+                    else
+                    {
+                        Redo();
+                    }
+                }, OnDiscarded);
+            }
+
+            private void Undo()
+            {
+                foreach (var snapshot in snapshots)
+                {
+                    snapshot.Undo();
+                }
+            }
+
+            private void Redo()
+            {
+                foreach (var snapshot in snapshots)
+                {
+                    snapshot.Redo();
+                }
+            }
+
+            private void OnDiscarded()
+            {
             }
         }
 
