@@ -14,7 +14,8 @@ namespace Terra.Studio
         public Action<TransFormCopyValues> OnValuePaste;
         private Button pastePos, pasteRot, pasteScale, pasteAll;
         PointerEventListener pointerEventListener;
-        public bool pointerEntered {  get; private set; }
+        public bool PointerEntered { get; private set; }
+        Text pastePosText, pasteRotText, pasteScaleText, pasteAllText;
         public override void Draw()
         {
 
@@ -32,25 +33,51 @@ namespace Terra.Studio
             pasteScale = Helper.FindDeepChild(transform, "PasteScale").GetComponent<Button>();
             pasteAll = Helper.FindDeepChild(transform, "PasteAll").GetComponent<Button>();
 
-            pastePos.onClick.AddListener(() => OnValuePaste?.Invoke(TransFormCopyValues.Position));
-            pasteRot.onClick.AddListener(() => OnValuePaste?.Invoke(TransFormCopyValues.Rotation));
-            pasteScale.onClick.AddListener(() => OnValuePaste?.Invoke(TransFormCopyValues.Scale));
-            pasteAll.onClick.AddListener(() => OnValuePaste?.Invoke(TransFormCopyValues.All));
+            pastePosText = pastePos.GetComponentInChildren<Text>();
+            pasteRotText = pasteRot.GetComponentInChildren<Text>();
+            pasteScaleText = pasteScale.GetComponentInChildren<Text>();
+            pasteAllText = pasteAll.GetComponentInChildren<Text>();
+
+            pastePos.onClick.AddListener(() => Paste(TransFormCopyValues.Position));
+            pasteRot.onClick.AddListener(() => Paste(TransFormCopyValues.Rotation));
+            pasteScale.onClick.AddListener(() => Paste(TransFormCopyValues.Scale));
+            pasteAll.onClick.AddListener(() => Paste(TransFormCopyValues.All));
             gameObject.SetActive(false);
 
             pointerEventListener = GetComponent<PointerEventListener>();
-            pointerEventListener.PointerEnter += (PointerEventData data) => { pointerEntered = true; };
-            pointerEventListener.PointerExit += (PointerEventData data) => { pointerEntered = false; gameObject.SetActive(false); };
+            pointerEventListener.PointerEnter += (PointerEventData data) => { PointerEntered = true; };
+            pointerEventListener.PointerExit += (PointerEventData data) => { PointerEntered = false; gameObject.SetActive(false); };
+        }
+
+        private void Paste(TransFormCopyValues type)
+        {
+            OnValuePaste?.Invoke(type);
+            gameObject.SetActive(false);
         }
 
         public override void Repaint()
         {
             var CopyPasteSystem = EditorOp.Resolve<CopyPasteSystem>();
 
-            pastePos.interactable = CopyPasteSystem.IsLastPositionData;
-            pasteRot.interactable = CopyPasteSystem.IsLastRotationData;
-            pasteScale.interactable = CopyPasteSystem.IsLastScaleData;
-            pasteAll.interactable = CopyPasteSystem.IsLastScaleData && CopyPasteSystem.IsLastRotationData && CopyPasteSystem.IsLastPositionData;
+            SetInteractable(pastePosText, pastePos, CopyPasteSystem.IsLastPositionData);
+            SetInteractable(pasteRotText, pasteRot, CopyPasteSystem.IsLastRotationData);
+            SetInteractable(pasteScaleText, pasteScale, CopyPasteSystem.IsLastScaleData);
+            SetInteractable(pasteAllText, pasteAll, CopyPasteSystem.IsLastScaleData && CopyPasteSystem.IsLastRotationData && CopyPasteSystem.IsLastPositionData);
+        }
+
+        private void SetInteractable(Text text, Button button, bool interactable)
+        {
+            button.interactable = interactable;
+            if (interactable)
+            {
+                text.color = Helper.GetColorFromHex("#FFFFFF");
+            }
+            else
+            {
+                var color = Helper.GetColorFromHex("#C8C8C8");
+                color.a = 0.6f;
+                text.color = color;
+            }
         }
     }
 }
