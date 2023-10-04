@@ -782,17 +782,18 @@ namespace RTG
             Vector3 camStartPos = _targetTransform.position;
             Vector3 camMoveDir = Vector3.Normalize(focusData.CameraWorldPosition - camStartPos);
             float elapsedTime = 0.0f;
+            float startOrthoSize = TargetCamera.orthographicSize;
 
             _isDoingFocus = true;
             while (true)
             {
                 float t = elapsedTime / FocusSettings.SmoothTime;
-                _targetTransform.position = Vector3.Lerp(_targetTransform.position, focusData.CameraWorldPosition, t);
-                TargetCamera.orthographicSize = Mathf.Lerp(TargetCamera.orthographicSize, targetOrthoSize, t);
+                _targetTransform.position = Vector3.Lerp(camStartPos, focusData.CameraWorldPosition, t);
+                TargetCamera.orthographicSize = Mathf.Lerp(startOrthoSize, targetOrthoSize, t);
 
                 elapsedTime += Time.deltaTime;
 
-                if (Vector3.Dot(camMoveDir, focusData.CameraWorldPosition - _targetTransform.position) <= 0.0f)
+                if (Vector3.Dot(camMoveDir, focusData.CameraWorldPosition - _targetTransform.position) <= 0.01f)
                 {
                     _targetTransform.position = focusData.CameraWorldPosition;
                     TargetCamera.orthographicSize = targetOrthoSize;
@@ -800,6 +801,7 @@ namespace RTG
                 }
                 yield return null;
             }
+            Debug.Log ("Lerp ended");
 
             SetFocusPoint(focusData.FocusPoint);
             _lastFocusPoint = focusData.FocusPoint;
