@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using PlayShifu.Terra;
+using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,7 +18,9 @@ namespace RuntimeInspectorNamespace
         private bool elementsInitialized = false;
         private IRuntimeInspectorCustomEditor customEditor;
         private bool didCheckForExpand;
-
+        Button copyButton,pasteButton;
+        GameObject copyPastePanel;
+        private Button openCopyPaste;
         protected override int Length
         {
             get
@@ -46,6 +50,51 @@ namespace RuntimeInspectorNamespace
         {
             base.Initialize();
             initializeObjectButton.onClick.AddListener(InitializeObject);
+            copyPastePanel = Helper.FindDeepChild(transform, "CopyPastePanel").gameObject;
+            copyButton = Helper.FindDeepChild(transform, "CopyButton").GetComponent<Button>();
+            pasteButton = Helper.FindDeepChild(transform, "PasteButton").GetComponent<Button>();
+
+
+            copyPastePanel.SetActive(false);
+            copyButton.onClick.RemoveAllListeners();
+            copyButton.onClick.AddListener(() => CopyBehaviour());
+            pasteButton.onClick.RemoveAllListeners();
+            pasteButton.onClick.AddListener(() => PasteBehaviour());
+
+            openCopyPaste = Helper.FindDeepChild(transform, "OpenCopyPasteBtn").GetComponent<Button>();
+            openCopyPaste.onClick.RemoveAllListeners();
+            openCopyPaste.onClick.AddListener(() => OpenCopyPastePanel());
+            EditorOp.Resolve<SelectionHandler>().SelectionChanged += SelectionChanged;
+
+        }
+
+        private void SelectionChanged(List<GameObject> gm)
+        {
+            copyPastePanel.SetActive(false);
+        }
+
+        private void OpenCopyPastePanel()
+        {
+            var open = !copyPastePanel.activeSelf;
+            copyPastePanel.SetActive(open);
+        }
+
+        private void CopyBehaviour()
+        {
+            if(Value as IComponent!=null)
+            {
+                EditorOp.Resolve<CopyPasteSystem>().CopyBehaviorData(Value as IComponent);
+                copyPastePanel.SetActive(false);
+            }
+        }
+
+        private void PasteBehaviour()
+        {
+            if (Value as IComponent != null)
+            {
+                EditorOp.Resolve<CopyPasteSystem>().PasteBehaviourData(Value as IComponent);
+                copyPastePanel.SetActive(false);
+            }
         }
 
         public override bool SupportsType(Type type)
@@ -102,6 +151,13 @@ namespace RuntimeInspectorNamespace
             {
                 didCheckForExpand = true;
                 IsExpanded = true;
+            }
+
+            var behaviour = Value as IComponent;
+            if (behaviour!=null)
+            {
+                var data = behaviour.Export();
+                pasteButton.interactable = EditorOp.Resolve<CopyPasteSystem>().IsLastBehaviourDataSame(data.type);
             }
         }
 

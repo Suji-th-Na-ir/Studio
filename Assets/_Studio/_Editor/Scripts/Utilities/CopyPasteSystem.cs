@@ -1,14 +1,13 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using RuntimeInspectorNamespace;
 using UnityEngine;
 
 namespace Terra.Studio
 {
     struct ComponentCPData
     {
-        public string Name;
-        public object data;
+        public string type;
+        public string data;
+        public bool copied;
     }
     struct TransformCPData
     {
@@ -28,6 +27,19 @@ namespace Terra.Studio
         public bool IsLastScaleData { get { return clipboardScaleData.copied; } }
 
         private ComponentCPData clipboardComponentData;
+        public bool IsLastBehaviourDataSame(string type) {  return clipboardComponentData.type==type; }
+
+
+        public void CopyBehaviorData(IComponent behaviour)
+        {
+            var export = behaviour.Export();
+            clipboardComponentData = new ComponentCPData { type = export.type, data = export.data, copied = true };
+        }
+
+        public void PasteBehaviourData(IComponent behaviour)
+        {
+            behaviour.Import(clipboardComponentData.data);
+        }
 
         public void CopyTransformData(TransFormCopyValues valueType, Transform transform)
         {

@@ -25,9 +25,9 @@ namespace RuntimeInspectorNamespace
             scaleProp = typeof(Transform).GetProperty("localScale");
 
             openCopyPaste = Helper.FindDeepChild(transform, "OpenCopyPasteBtn").GetComponent<Button>();
+            openCopyPaste.onClick.AddListener(() => OpenCopyPastePanel());
             copyPasteView = Helper.FindDeepChild(transform, "CopyPastePanel").GetComponent<CopyPasteView>();
             copyPasteView.gameObject.SetActive(false);
-            openCopyPaste.onClick.AddListener(() => OpenCopyPastePanel());
             copyPasteView.Init();
             copyPasteView.ApplyCopyPasteAction(Copy, Paste);
         }
