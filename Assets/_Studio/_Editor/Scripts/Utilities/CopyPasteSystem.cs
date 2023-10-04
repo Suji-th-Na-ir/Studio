@@ -35,12 +35,18 @@ namespace Terra.Studio
             {
                 case TransFormCopyValues.Position:
                     clipboardPositionData = new TransformCPData { Name = "localPosition", data = transform.localPosition ,copied=true };
+                    clipboardRotationData = new TransformCPData { Name = "localRotation", data = transform.localPosition ,copied=false };
+                    clipboardScaleData = new TransformCPData { Name = "localScale", data = transform.localPosition ,copied=false };
                     break;
                 case TransFormCopyValues.Rotation:
                     clipboardRotationData = new TransformCPData { Name = "localEulerAngles", data = transform.localEulerAngles, copied = true };
+                    clipboardScaleData = new TransformCPData { Name = "localScale", data = transform.localPosition, copied = false };
+                    clipboardPositionData = new TransformCPData { Name = "localPosition", data = transform.localPosition, copied = false };
                     break;
                 case TransFormCopyValues.Scale:
                     clipboardScaleData = new TransformCPData { Name = "localScale", data = transform.localScale, copied = true };
+                    clipboardRotationData = new TransformCPData { Name = "localEulerAngles", data = transform.localEulerAngles, copied = false };
+                    clipboardPositionData = new TransformCPData { Name = "localPosition", data = transform.localPosition, copied = false };
                     break;
                 case TransFormCopyValues.All:
                     clipboardPositionData = new TransformCPData { Name = "localPosition", data = transform.localPosition, copied = true };

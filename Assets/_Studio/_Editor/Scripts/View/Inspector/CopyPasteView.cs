@@ -34,7 +34,7 @@ namespace Terra.Studio
             paste = Helper.FindDeepChild(transform, "PasteButton").GetComponent<PointerEventListener>();
             copy.PointerEnter += OpenCopyPanel;
             paste.PointerEnter += OpenPastePanel;
-            GetComponent<PointerEventListener>().PointerExit += CloseSubPanel;
+            GetComponent<PointerEventListener>().PointerExit += CloseSubPanels;
             EditorOp.Resolve<SelectionHandler>().SelectionChanged += CloseAllPanels;
         }
 
@@ -56,7 +56,7 @@ namespace Terra.Studio
             pasteView.gameObject.SetActive(true);
         }
 
-        private void CloseSubPanel(PointerEventData eventData)
+        private void CloseSubPanels(PointerEventData eventData)
         {       
             StartCoroutine(ClosePanels());
         }
