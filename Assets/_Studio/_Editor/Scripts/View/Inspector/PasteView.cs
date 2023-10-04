@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using PlayShifu.Terra;
+using RuntimeInspectorNamespace;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Terra.Studio
@@ -11,6 +13,8 @@ namespace Terra.Studio
     {
         public Action<TransFormCopyValues> OnValuePaste;
         private Button pastePos, pasteRot, pasteScale, pasteAll;
+        PointerEventListener pointerEventListener;
+        public bool pointerEntered {  get; private set; }
         public override void Draw()
         {
 
@@ -33,6 +37,10 @@ namespace Terra.Studio
             pasteScale.onClick.AddListener(() => OnValuePaste?.Invoke(TransFormCopyValues.Scale));
             pasteAll.onClick.AddListener(() => OnValuePaste?.Invoke(TransFormCopyValues.All));
             gameObject.SetActive(false);
+
+            pointerEventListener = GetComponent<PointerEventListener>();
+            pointerEventListener.PointerEnter += (PointerEventData data) => { pointerEntered = true; };
+            pointerEventListener.PointerExit += (PointerEventData data) => { pointerEntered = false; gameObject.SetActive(false); };
         }
 
         public override void Repaint()

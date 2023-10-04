@@ -183,10 +183,6 @@ MonoBehaviour:
   isExpandable: 0
   layoutGroup: {fileID: 114810597662585366}
   expandArrow: {fileID: 114337546039104162}
-  openCopyPaste: {fileID: 945470236635300497}
-  copy: {fileID: 8271497078153480400}
-  paste: {fileID: 8271497078371597448}
-  copyPastePanel: {fileID: 8226733025606703846}
 --- !u!1 &1301415271833618
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,8 +218,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 111.5, y: 0}
-  m_SizeDelta: {x: 223, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &114464031924987488
 MonoBehaviour:
@@ -950,6 +946,7 @@ GameObject:
   - component: {fileID: 7613295404750542342}
   - component: {fileID: 4932217566423441887}
   - component: {fileID: 6527584064210325081}
+  - component: {fileID: 3186519065849818418}
   m_Layer: 5
   m_Name: CopyView
   m_TagString: Untagged
@@ -978,8 +975,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -232.8, y: 0}
-  m_SizeDelta: {x: 154.6594, y: 0.000091553}
+  m_AnchoredPosition: {x: -216.65688, y: 0}
+  m_SizeDelta: {x: 144.9662, y: 0.0001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6638255182401175894
 CanvasRenderer:
@@ -1070,6 +1067,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e57df177fbba84c90a019c961c2fcd3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointerEntered: 0
+--- !u!114 &3186519065849818418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2940720499618447495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3502065971f7ef46ad6fc5a1a3385b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3951846192203065531
@@ -1711,6 +1721,7 @@ GameObject:
   - component: {fileID: 460502768708273923}
   - component: {fileID: 2325464174826727080}
   - component: {fileID: 5667339888647896668}
+  - component: {fileID: 3165687615957526439}
   m_Layer: 5
   m_Name: PasteView
   m_TagString: Untagged
@@ -1739,8 +1750,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -232.8, y: 0.000022888184}
-  m_SizeDelta: {x: 154.6594, y: 0.000038147107}
+  m_AnchoredPosition: {x: -216.65689, y: 0.000022888184}
+  m_SizeDelta: {x: 144.9662, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8081897611107641308
 CanvasRenderer:
@@ -1831,6 +1842,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea3814720d5d04c4f8edd11f091edccb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3165687615957526439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7723866611690500502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3502065971f7ef46ad6fc5a1a3385b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8224285137992916629
@@ -2068,9 +2091,9 @@ GameObject:
   - component: {fileID: 8271497078153480405}
   - component: {fileID: 8271497078153480407}
   - component: {fileID: 8271497078153480406}
-  - component: {fileID: 8271497078153480400}
+  - component: {fileID: 4208848790754605713}
   m_Layer: 5
-  m_Name: CopyBtn
+  m_Name: CopyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2094,7 +2117,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 134.66, y: 30}
+  m_SizeDelta: {x: 154.66, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8271497078153480407
 CanvasRenderer:
@@ -2126,19 +2149,19 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 30dc370b164eefc43b95744fc796dad0, type: 3}
-    m_FontSize: 14
+    m_FontSize: 20
     m_FontStyle: 0
-    m_BestFit: 1
-    m_MinSize: 10
+    m_BestFit: 0
+    m_MinSize: 2
     m_MaxSize: 40
-    m_Alignment: 3
+    m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Copy >
---- !u!114 &8271497078153480400
+  m_Text: '   Copy >'
+--- !u!114 &4208848790754605713
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2147,41 +2170,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8271497078153480404}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: c3502065971f7ef46ad6fc5a1a3385b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 8271497078153480406}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &8271497078286846674
 GameObject:
   m_ObjectHideFlags: 0
@@ -2195,6 +2186,8 @@ GameObject:
   - component: {fileID: 8271497078286846686}
   - component: {fileID: 8271497078286846685}
   - component: {fileID: 8271497078286846684}
+  - component: {fileID: 2189068276865156326}
+  - component: {fileID: 1996914272028865691}
   m_Layer: 5
   m_Name: CopyPastePanel
   m_TagString: Untagged
@@ -2290,7 +2283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 20
+    m_Left: 0
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
@@ -2299,10 +2292,34 @@ MonoBehaviour:
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &2189068276865156326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8271497078286846674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cab5cfdc3bdcd42d892f04597d247379, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1996914272028865691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8271497078286846674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3502065971f7ef46ad6fc5a1a3385b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8271497078371597452
 GameObject:
   m_ObjectHideFlags: 0
@@ -2314,7 +2331,7 @@ GameObject:
   - component: {fileID: 8271497078371597453}
   - component: {fileID: 8271497078371597455}
   - component: {fileID: 8271497078371597454}
-  - component: {fileID: 8271497078371597448}
+  - component: {fileID: 4063427760747147654}
   m_Layer: 5
   m_Name: PasteButton
   m_TagString: Untagged
@@ -2340,7 +2357,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 134.66, y: 30}
+  m_SizeDelta: {x: 154.66, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8271497078371597455
 CanvasRenderer:
@@ -2372,19 +2389,19 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 30dc370b164eefc43b95744fc796dad0, type: 3}
-    m_FontSize: 14
+    m_FontSize: 20
     m_FontStyle: 0
-    m_BestFit: 1
-    m_MinSize: 10
+    m_BestFit: 0
+    m_MinSize: 2
     m_MaxSize: 40
-    m_Alignment: 3
+    m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Paste >
---- !u!114 &8271497078371597448
+  m_Text: '   Paste >'
+--- !u!114 &4063427760747147654
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2393,41 +2410,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8271497078371597452}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: c3502065971f7ef46ad6fc5a1a3385b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 8271497078371597454}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &8517009801996509868
 GameObject:
   m_ObjectHideFlags: 0

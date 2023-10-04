@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using PlayShifu.Terra;
 using Terra.Studio;
@@ -14,67 +13,38 @@ namespace RuntimeInspectorNamespace
 
         private PropertyInfo positionProp, rotationProp, scaleProp;
         private bool didCheckForExpand;
-        [SerializeField] private Button openCopyPaste, copy, paste;
-        [SerializeField] private GameObject copyPastePanel;
-        CopyView copyView;
-        PasteView pasteView;
+        private Button openCopyPaste;
+        private CopyPasteView copyPasteView;
+      
         public override void Initialize()
         {
             base.Initialize();
-          
+
             positionProp = typeof(Transform).GetProperty("localPosition");
             rotationProp = typeof(Transform).GetProperty("localEulerAngles");
             scaleProp = typeof(Transform).GetProperty("localScale");
-            copyPastePanel.SetActive(false);
+
+            openCopyPaste = Helper.FindDeepChild(transform, "OpenCopyPasteBtn").GetComponent<Button>();
+            copyPasteView = Helper.FindDeepChild(transform, "CopyPastePanel").GetComponent<CopyPasteView>();
+            copyPasteView.gameObject.SetActive(false);
             openCopyPaste.onClick.AddListener(() => OpenCopyPastePanel());
-
-            copyView = Helper.FindDeepChild(transform, "CopyView").GetComponent<CopyView>();
-            pasteView = Helper.FindDeepChild(transform, "PasteView").GetComponent<PasteView>();
-
-            copyView.OnValueCopy += Copy;
-            pasteView.OnValuePaste += Paste;
-            copyView.Init();
-            pasteView.Init();
-            copy.onClick.AddListener(() => OpenPanel(true));
-            paste.onClick.AddListener(() => OpenPanel(false));
-
-            EditorOp.Resolve<SelectionHandler>().SelectionChanged += CloseAllPanels;
+            copyPasteView.Init();
+            copyPasteView.ApplyCopyPasteAction(Copy, Paste);
         }
 
-        private void CloseAllPanels(List<GameObject> gm)
-        {
-            copyPastePanel.SetActive(false);
-            copyView.gameObject.SetActive(false);
-            pasteView.gameObject.SetActive(false);
-        }
+       
 
         private void OpenCopyPastePanel()
         {
-            var open =!copyPastePanel.activeSelf;
-            copyPastePanel.SetActive(open);
-            if(!open)
-            {
-                copyView.gameObject.SetActive(false);
-                pasteView.gameObject.SetActive(false);
-            }
-        }
-
-
-
-        private void OpenPanel(bool copy)
-        {
-            copyView.gameObject.SetActive(copy);
-            pasteView.gameObject.SetActive(!copy);
+            var open =!copyPasteView.gameObject.activeSelf;
+            copyPasteView.gameObject.SetActive(open);
         }
 
         private void Copy(TransFormCopyValues type)
         {
             var t = Value as Transform;
             EditorOp.Resolve<CopyPasteSystem>().CopyTransformData(type, t);
-            copyPastePanel.SetActive(false);
-            copyView.gameObject.SetActive(false);
-            copyView?.Repaint();
-            pasteView?.Repaint();
+            copyPasteView.gameObject.SetActive(false);
         }
 
         private void Paste(TransFormCopyValues type)
@@ -85,8 +55,7 @@ namespace RuntimeInspectorNamespace
             {
                 var t = s.transform;
                 EditorOp.Resolve<CopyPasteSystem>().PasteTransformData(type, t);
-                copyPastePanel.SetActive(false);
-                pasteView.gameObject.SetActive(false);
+                copyPasteView.gameObject.SetActive(false);
             }
         }
 
@@ -117,8 +86,7 @@ namespace RuntimeInspectorNamespace
 
             }
             base.Refresh();
-            copyView?.Repaint();
-            pasteView?.Repaint();
+            copyPasteView.Repaint();
         }
 
 

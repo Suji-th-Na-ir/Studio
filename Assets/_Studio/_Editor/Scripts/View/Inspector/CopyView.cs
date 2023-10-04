@@ -1,8 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+
 using PlayShifu.Terra;
+using RuntimeInspectorNamespace;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Terra.Studio
@@ -11,6 +12,8 @@ namespace Terra.Studio
     {
         public Action<TransFormCopyValues> OnValueCopy;
         private Button copyPos, copyRot, copyScale, copyAll;
+        PointerEventListener pointerEventListener;
+        public bool pointerEntered;
         public override void Draw()
         {
            
@@ -28,16 +31,31 @@ namespace Terra.Studio
             copyScale = Helper.FindDeepChild(transform, "CopyScale").GetComponent<Button>();
             copyAll = Helper.FindDeepChild(transform, "CopyAll").GetComponent<Button>();
 
-            copyPos.onClick.AddListener(()=>OnValueCopy?.Invoke(TransFormCopyValues.Position));
-            copyRot.onClick.AddListener(()=>OnValueCopy?.Invoke(TransFormCopyValues.Rotation));
-            copyScale.onClick.AddListener(()=>OnValueCopy?.Invoke(TransFormCopyValues.Scale));
-            copyAll.onClick.AddListener(()=>OnValueCopy?.Invoke(TransFormCopyValues.All));
+            copyPos.onClick.AddListener(() => Copy(TransFormCopyValues.Position));
+            copyRot.onClick.AddListener(() => Copy(TransFormCopyValues.Rotation));
+            copyScale.onClick.AddListener(() => Copy(TransFormCopyValues.Scale));
+            copyAll.onClick.AddListener(() => Copy(TransFormCopyValues.All));
+            gameObject.SetActive(false);
+
+            pointerEventListener = GetComponent<PointerEventListener>();
+            pointerEventListener.PointerEnter += (PointerEventData data) => { pointerEntered = true; };
+            pointerEventListener.PointerExit += (PointerEventData data) => { pointerEntered = false; gameObject.SetActive(false); };
+        }
+
+        private void Copy(TransFormCopyValues type)
+        {
+            OnValueCopy?.Invoke(type);
             gameObject.SetActive(false);
         }
 
         public override void Repaint()
         {
            
+        }
+
+        private void OnEnable()
+        {
+            pointerEntered = false;
         }
 
     }
