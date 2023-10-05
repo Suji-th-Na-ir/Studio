@@ -10,8 +10,7 @@ namespace Terra.Studio
         public abstract void Import(EntityBasedComponent data);
         public Action<string, string> OnBroadcastUpdated;
         public Action<string, string> OnListenerUpdated;
-        public Action<object> OnGhostInteracted;
-        public Action ToggleGhostMode;
+        public Recorder.GhostDescription GhostDescription;
 
         public abstract string ComponentName { get; }
         public virtual Atom.RecordedVector3 RecordedVector3 { get; }

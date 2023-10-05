@@ -206,18 +206,15 @@ namespace RuntimeInspectorNamespace
 
         protected override void OnBound(MemberInfo variable)
         {
-            // Debug.Log("translate bound called "+this.gameObject.name);
             base.OnBound(variable);
             Atom.Translate rt = (Atom.Translate)Value;
-            // Debug.Log($"translate atom data x value {rt.data.moveTo}");
-            // translateTypesDD.onValueChanged.AddListener(OnTranslateTypesValueChanged);
             int translationTypeIndex = (((int)Enum.Parse(typeof(TranslateType), rt.data.translateType.ToString())));
             translateTypesDD.SetValueWithoutNotify(translationTypeIndex);
             ShowTranslateOptionsMenu(translationTypeIndex);
             selectedTranslateType.SetData(rt.data);
             lastSubmittedValue = rt.data;
+            rt.ForceRefreshData = () => { selectedTranslateType.SetData(rt.data); };
         }
-
 
         public override void Refresh()
         {
@@ -231,24 +228,16 @@ namespace RuntimeInspectorNamespace
             translateTypesDD.SetValueWithoutNotify(rt.data.translateType);
             if (componentData != null && componentData.HasValue)
             {
-                //selectedTranslateType.SetData(componentData.Value);
                 rt.data = componentData.Value;
-            }
-            else
-            {
-                // selectedTranslateType.SetData(rt.data);
             }
         }
 
         private void UpdateDataInUI(TranslateComponentData? componentData = null)
         {
-
             Atom.Translate rt = (Atom.Translate)Value;
-            // translateTypesDD.SetValueWithoutNotify(rt.data.translateType);
             if (componentData != null && componentData.HasValue)
             {
                 selectedTranslateType.SetData(componentData.Value);
-                //rt.data = componentData.Value;
             }
             else
             {

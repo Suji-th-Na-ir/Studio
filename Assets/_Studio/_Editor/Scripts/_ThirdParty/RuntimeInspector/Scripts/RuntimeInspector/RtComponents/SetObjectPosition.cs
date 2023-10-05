@@ -51,8 +51,32 @@ namespace Terra.Studio
             playVFX.Setup<SetObjectPosition>(gameObject);
             targetPosition.Setup(this);
             SetupTargetPosition();
-            ToggleGhostMode = ToggleGhostModeForSetObjectPos;
-            OnGhostInteracted = OnGhostDataModified;
+            SetupGhost();
+        }
+
+        private void SetupGhost()
+        {
+            GhostDescription = new()
+            {
+                OnGhostInteracted = OnGhostDataModified,
+                SpawnTRS = () => { return new Vector3[] { (Vector3)GhostDescription.GetRecentValue.Invoke() }; },
+                ToggleGhostMode = () =>
+                {
+                    EditorOp.Resolve<Recorder>().TrackPosition_NoGhostOnMultiselect(this, true);
+                },
+                ShowVisualsOnMultiSelect = false,
+                GetLastValue = () => { return targetPosition.LastVector3; },
+                GetRecentValue = () => { return targetPosition.Get(); },
+                OnGhostModeToggled = (state) =>
+                {
+                    if (state)
+                    {
+                        SetLastValue();
+                    }
+                },
+                IsGhostInteractedInLastRecord = true
+            };
+            SetLastValue();
         }
 
         private void SetupTargetPosition()
@@ -71,7 +95,7 @@ namespace Terra.Studio
                 ConditionData = GetConditionData(),
                 IsBroadcastable = !string.IsNullOrEmpty(broadcast),
                 Broadcast = broadcast,
-                targetPosition = (Vector3)targetPosition.Get(),
+                targetPosition = (Vector3)GhostDescription.GetRecentValue.Invoke(),
                 startIndex = startOn.data.startIndex,
                 canPlaySFX = playSFX.data.canPlay,
                 sfxIndex = playSFX.data.clipIndex,
@@ -158,13 +182,19 @@ namespace Terra.Studio
             playVFX.data.clipName = comp.vfxName;
         }
 
-        private void ToggleGhostModeForSetObjectPos()
+        private void SetLastValue()
         {
-            EditorOp.Resolve<Recorder>().TrackPosition(this, true, (Vector3)targetPosition.Get());
+            if (GhostDescription.IsGhostInteractedInLastRecord)
+            {
+                var lastValue = GhostDescription.GetRecentValue.Invoke();
+                targetPosition.LastVector3 = (Vector3)lastValue;
+            }
+            GhostDescription.IsGhostInteractedInLastRecord = false;
         }
 
         private void OnGhostDataModified(object data)
         {
+            GhostDescription.IsGhostInteractedInLastRecord = true;
             targetPosition.Set(data);
         }
     }

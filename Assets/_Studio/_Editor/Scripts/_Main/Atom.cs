@@ -151,6 +151,7 @@ namespace Terra.Studio
         {
             public TranslateField field;
             public TranslateComponentData data = new();
+            public Action ForceRefreshData;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)
             {
@@ -183,11 +184,12 @@ namespace Terra.Studio
             private Type behaviourType;
             private BaseBehaviour behaviour;
 
+            public Vector3 LastVector3;
+            public Action<bool> OnModified;
             public Type ObscureType => typeof(Vector3);
             public Type DeclaredType => behaviourType;
-            public Action ToggleGhostMode => behaviour.ToggleGhostMode;
             public Func<bool> IsValueModified => IsModified;
-            public Action<bool> OnModified;
+            public Action ToggleGhostMode => behaviour.GhostDescription.ToggleGhostMode;
 
             public readonly Vector3 INFINITY = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
 
@@ -333,6 +335,7 @@ namespace Terra.Studio
         public Listen listen;
         public BroadcastAt broadcastAt;
         public Action<string, string> OnBroadcastUpdated;
+        public Vector3 LastVector3;
         public string broadcast;
         public string Broadcast
         {

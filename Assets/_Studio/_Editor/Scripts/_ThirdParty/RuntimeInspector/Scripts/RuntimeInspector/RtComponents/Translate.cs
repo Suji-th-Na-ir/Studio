@@ -1,3 +1,4 @@
+using UnityEngine;
 using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
@@ -32,6 +33,32 @@ namespace RuntimeInspectorNamespace
             StartOn.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated, StartOn.data.startIndex == 4);
             PlaySFX.Setup<Translate>(gameObject);
             PlayVFX.Setup<Translate>(gameObject);
+            SetupGhostDescription();
+        }
+
+        private void SetupGhostDescription()
+        {
+            GhostDescription = new()
+            {
+                OnGhostInteracted = OnGhostDataModified,
+                SpawnTRS = GetCurrentOffsetInWorld,
+                ToggleGhostMode = () =>
+                {
+                    EditorOp.Resolve<Recorder>().TrackPosition_ShowGhostOnMultiselect(this, true);
+                },
+                ShowVisualsOnMultiSelect = true,
+                GetLastValue = () => { return Type.data.LastVector3; },
+                GetRecentValue = () => { return Type.data.moveBy; },
+                OnGhostModeToggled = (state) =>
+                {
+                    if (state)
+                    {
+                        SetLastValue();
+                    }
+                },
+                IsGhostInteractedInLastRecord = true
+            };
+            SetLastValue();
         }
 
         public override (string type, string data) Export()
@@ -148,6 +175,55 @@ namespace RuntimeInspectorNamespace
                     component.repeatFor = Type.data.repeat;
                     break;
             }
+        }
+
+        private void Update()
+        {
+            if ((Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand)) &&
+                (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) &&
+                Input.GetKeyDown(KeyCode.R))
+            {
+                var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+                if (selections.Count > 0 && selections[^1] == gameObject)
+                {
+                    GhostDescription.ToggleGhostMode?.Invoke();
+                }
+            }
+        }
+
+        private Vector3[] GetCurrentOffsetInWorld()
+        {
+            var pos = transform.localPosition + Type.data.moveBy;
+            if (transform.parent != null)
+            {
+                pos = transform.TransformPoint(pos);
+            }
+            return new Vector3[] { pos };
+        }
+
+        private void OnGhostDataModified(object data)
+        {
+            var vector3 = (Vector3)data;
+            if (transform.parent != null)
+            {
+                vector3 = transform.InverseTransformPoint(vector3);
+            }
+            var delta = vector3 - transform.localPosition;
+            if (delta != Type.data.moveBy)
+            {
+                Type.data.moveBy = delta;
+                Type.ForceRefreshData?.Invoke();
+            }
+            GhostDescription.IsGhostInteractedInLastRecord = true;
+        }
+
+        private void SetLastValue()
+        {
+            if (GhostDescription.IsGhostInteractedInLastRecord)
+            {
+                Type.data.LastVector3 = Type.data.moveBy;
+            }
+            GhostDescription.IsGhostInteractedInLastRecord = false;
         }
     }
 }
