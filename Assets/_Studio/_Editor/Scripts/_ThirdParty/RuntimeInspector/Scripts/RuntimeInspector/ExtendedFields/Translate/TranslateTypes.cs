@@ -169,6 +169,7 @@ namespace RuntimeInspectorNamespace
                     }
                 });
             }
+            SetupRecordSections();
         }
 
         private void SetupRecordSections()
@@ -274,15 +275,15 @@ namespace RuntimeInspectorNamespace
 
         public void ApplySkin(UISkin skin)
         {
-            canListenMultipleTimesToggle.SetupToggeleSkin (skin);
-            if (broadcastAt != null) broadcastAt.SetSkinDropDownField (skin);
+            canListenMultipleTimesToggle.SetupToggeleSkin(skin);
+            if (broadcastAt != null) broadcastAt.SetSkinDropDownField(skin);
             for (int i = 0; i < movebyInput.Length; i++)
             {
                 movebyInput[i].SetupInputFieldSkin(skin);
             }
-            if (speedInput != null) speedInput.SetupInputFieldSkin (skin);
-            if (pauseForInput != null) pauseForInput.SetupInputFieldSkin (skin);
-            if (repeatInput != null) repeatInput.SetupInputFieldSkin (skin);
+            if (speedInput != null) speedInput.SetupInputFieldSkin(skin);
+            if (pauseForInput != null) pauseForInput.SetupInputFieldSkin(skin);
+            if (repeatInput != null) repeatInput.SetupInputFieldSkin(skin);
         }
 
         private void SetActions()

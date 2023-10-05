@@ -19,10 +19,10 @@ namespace RuntimeInspectorNamespace
 
         private TranslateTypes selectedTranslateType;
         TranslateComponentData lastComponentData;
+
         public override void Initialize()
         {
             base.Initialize();
-            Setup();
         }
 
         private void Setup()
@@ -85,7 +85,7 @@ namespace RuntimeInspectorNamespace
                 {
                     var vector3 = new Vector3(float.Parse(selectedTranslateType.movebyInput[0].text),
                         float.Parse(selectedTranslateType.movebyInput[1].text), (float.Parse(selectedTranslateType.movebyInput[2].text))); ;
-                    lastComponentData.recordedVector3.Set(vector3);
+                    lastComponentData.recordedVector3?.Set(vector3);
                 }
                 if (selectedTranslateType.speedInput)
                     lastComponentData.speed = float.Parse(selectedTranslateType.speedInput.text);
@@ -208,6 +208,7 @@ namespace RuntimeInspectorNamespace
         protected override void OnBound(MemberInfo variable)
         {
             base.OnBound(variable);
+            Setup();
             Atom.Translate rt = (Atom.Translate)Value;
             int translationTypeIndex = (((int)Enum.Parse(typeof(TranslateType), rt.data.translateType.ToString())));
             translateTypesDD.SetValueWithoutNotify(translationTypeIndex);

@@ -33,6 +33,7 @@ namespace RuntimeInspectorNamespace
             StartOn.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated, StartOn.data.startIndex == 4);
             PlaySFX.Setup<Translate>(gameObject);
             PlayVFX.Setup<Translate>(gameObject);
+            SetupDefaultRecordValue();
             SetupGhostDescription();
         }
 
@@ -211,6 +212,11 @@ namespace RuntimeInspectorNamespace
                 Type.data.LastVector3 = (Vector3)Type.data.recordedVector3.Get();
             }
             GhostDescription.IsGhostInteractedInLastRecord = false;
+        }
+
+        private void SetupDefaultRecordValue()
+        {
+            Type.data.recordedVector3.Set(Vector3.zero);
         }
     }
 }

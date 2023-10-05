@@ -347,7 +347,6 @@ namespace Terra.Studio
     {
         public Atom.RecordedVector3 recordedVector3;
         public int translateType;
-        //public Vector3 moveBy;
         public float pauseFor;
         public float speed;
         public int repeat;
