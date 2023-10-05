@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using RuntimeInspectorNamespace;
 using UnityEngine;
 
@@ -30,15 +31,25 @@ namespace Terra.Studio
         public bool IsLastBehaviourDataSame(string type) {  return clipboardComponentData.type==type; }
 
 
-        public void CopyBehaviorData(IComponent behaviour)
+        public void CopyBehaviorData(BaseBehaviour behaviour)
         {
             var export = behaviour.Export();
             clipboardComponentData = new ComponentCPData { type = export.type, data = export.data, copied = true };
         }
 
-        public void PasteBehaviourData(IComponent behaviour)
+        public void PasteBehaviourData(BaseBehaviour behaviour)
         {
+            Snapshots.ComponentDataSnapshot.CreateSnapshot(behaviour, behaviour.Export().data, clipboardComponentData.data, "Data Modified", null);
             behaviour.Import(clipboardComponentData.data);
+        }
+
+        public void PasteBehaviourData(List<BaseBehaviour> behaviours)
+        {
+            Snapshots.MultipleComponentDataSnapshot.CreateSnapshot(behaviours, clipboardComponentData.data, "Data Modified", null);
+            foreach (var behaviour in behaviours)
+            {
+                behaviour.Import(clipboardComponentData.data);
+            }
         }
 
         public void CopyTransformData(TransFormCopyValues valueType, Transform transform)

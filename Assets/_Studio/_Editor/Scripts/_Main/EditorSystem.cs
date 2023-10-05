@@ -36,7 +36,6 @@ namespace Terra.Studio
             EditorOp.Resolve<SceneDataHandler>().SaveQoFDetails();
             EditorOp.Unregister<SceneDataHandler>();
             EditorOp.Unregister<IURCommand>();
-            EditorOp.Unregister<CopyPasteSystem>();
             EditorOp.Unregister<Atom>();
         }
 

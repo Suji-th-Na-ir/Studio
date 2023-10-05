@@ -58,7 +58,6 @@ namespace Terra.Studio
         public override void Repaint()
         {
             var CopyPasteSystem = EditorOp.Resolve<CopyPasteSystem>();
-
             SetInteractable(pastePosText, pastePos, CopyPasteSystem.IsLastPositionData);
             SetInteractable(pasteRotText, pasteRot, CopyPasteSystem.IsLastRotationData);
             SetInteractable(pasteScaleText, pasteScale, CopyPasteSystem.IsLastScaleData);

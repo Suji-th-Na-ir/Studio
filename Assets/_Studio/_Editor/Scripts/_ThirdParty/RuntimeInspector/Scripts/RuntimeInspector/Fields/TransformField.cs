@@ -83,7 +83,6 @@ namespace RuntimeInspectorNamespace
             {
                 didCheckForExpand = true;
                 IsExpanded = true;
-
             }
             base.Refresh();
             copyPasteView.Repaint();
