@@ -173,7 +173,7 @@ namespace RuntimeInspectorNamespace
                     component.repeatFor = int.MaxValue;
                     break;
                 default:
-                    component.repeatFor = Type.data.repeat;
+                    component.repeatFor = Type.data.repeat != 0 ? Type.data.repeat : 1;
                     break;
             }
         }

@@ -377,8 +377,9 @@ namespace Terra.Studio
         public readonly bool IsEmpty()
         {
             var cloneToTest = this;
-            cloneToTest.recordedVector3 = null;
-            cloneToTest.OnBroadcastUpdated = null;
+            cloneToTest.recordedVector3 = default;
+            cloneToTest.OnBroadcastUpdated = default;
+            cloneToTest.LastVector3 = default;
             if (cloneToTest.Equals(default(TranslateComponentData)))
             {
                 return true;
