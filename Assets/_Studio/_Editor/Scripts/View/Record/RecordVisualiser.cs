@@ -19,6 +19,7 @@ namespace Terra.Studio
             public Func<object> GetLastValue;
             public Func<object> GetRecentValue;
             public bool IsGhostInteractedInLastRecord;
+            public GameObject GhostTo;
         }
 
         private Dictionary<BaseBehaviour, RecordVisualiser> activeRecorders = new();
@@ -33,7 +34,7 @@ namespace Terra.Studio
             }
             else
             {
-                HandleInstance_ShowGhostOnMutliselect(instance, enableModification, true);
+                HandleInstance(instance, enableModification, true);
             }
             HandleSelection();
         }
@@ -47,13 +48,13 @@ namespace Terra.Studio
                 {
                     if (selection.TryGetComponent<T>(out var component))
                     {
-                        HandleInstance_ShowGhostOnMutliselect(component, enableModification, false);
+                        HandleInstance(component, enableModification, false);
                     }
                 }
             }
             else
             {
-                HandleInstance_ShowGhostOnMutliselect(instance, enableModification, true);
+                HandleInstance(instance, enableModification, true);
             }
             HandleSelection();
         }
@@ -70,12 +71,12 @@ namespace Terra.Studio
             }
         }
 
-        private void HandleInstance_ShowGhostOnMutliselect<T>(T instance, bool enableModification, bool isTrulySingleInstance) where T : BaseBehaviour
+        private void HandleInstance<T>(T instance, bool enableModification, bool isTrulySingleInstance) where T : BaseBehaviour
         {
             var isPresent = ToggleGhostMode(instance);
             if (isPresent) return;
             var trs = instance.GhostDescription.SpawnTRS?.Invoke();
-            var visualiser = new RecordVisualiser(instance.gameObject,
+            var visualiser = new RecordVisualiser(instance.GhostDescription.GhostTo,
                 RecordVisualiser.Record.Position,
                 instance.GhostDescription.OnGhostInteracted,
                 () =>
@@ -101,7 +102,7 @@ namespace Terra.Studio
             if (isPresent) return;
             var components = GetAllComponentsForSelected(instance, true);
             var trs = instance.GhostDescription.SpawnTRS?.Invoke();
-            var visualiser = new RecordVisualiser(instance.gameObject,
+            var visualiser = new RecordVisualiser(instance.GhostDescription.GhostTo,
                 RecordVisualiser.Record.Position,
                 (data) =>
                 {
@@ -331,6 +332,15 @@ namespace Terra.Studio
                         renderer.materials = materials;
                     }
                 }
+            }
+            if (child.TryGetComponent(out SkinnedMeshRenderer skinnedMesh))
+            {
+                var materials = new Material[skinnedMesh.materials.Length];
+                for (int i = 0; i < skinnedMesh.materials.Length; i++)
+                {
+                    materials[i] = ghostMaterial;
+                }
+                skinnedMesh.materials = materials;
             }
         }
 

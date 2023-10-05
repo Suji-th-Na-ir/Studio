@@ -74,7 +74,8 @@ namespace Terra.Studio
                         SetLastValue();
                     }
                 },
-                IsGhostInteractedInLastRecord = true
+                IsGhostInteractedInLastRecord = true,
+                GhostTo = gameObject
             };
             SetLastValue();
         }

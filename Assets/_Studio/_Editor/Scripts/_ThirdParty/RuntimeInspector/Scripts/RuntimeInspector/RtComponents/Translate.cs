@@ -56,7 +56,8 @@ namespace RuntimeInspectorNamespace
                         SetLastValue();
                     }
                 },
-                IsGhostInteractedInLastRecord = true
+                IsGhostInteractedInLastRecord = true,
+                GhostTo = gameObject
             };
             SetLastValue();
         }
