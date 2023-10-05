@@ -83,8 +83,10 @@ namespace RuntimeInspectorNamespace
             {
                 if (selectedTranslateType.movebyInput != null)
                 {
-                    var vector3 = new Vector3(float.Parse(selectedTranslateType.movebyInput[0].text),
-                        float.Parse(selectedTranslateType.movebyInput[1].text), (float.Parse(selectedTranslateType.movebyInput[2].text))); ;
+                    var vector3 = new Vector3(
+                        float.Parse(selectedTranslateType.movebyInput[0].text),
+                        float.Parse(selectedTranslateType.movebyInput[1].text),
+                        float.Parse(selectedTranslateType.movebyInput[2].text));
                     lastComponentData.recordedVector3?.Set(vector3);
                 }
                 if (selectedTranslateType.speedInput)
@@ -112,8 +114,8 @@ namespace RuntimeInspectorNamespace
 
                 if (selectedTranslateType.broadcastAt)
                     lastComponentData.broadcastAt = (BroadcastAt)selectedTranslateType.broadcastAt.value;
-                lastData = true;
 
+                lastData = true;
             }
             Atom.Translate rt = (Atom.Translate)Value;
             rt.data.translateType = _index;
@@ -155,6 +157,7 @@ namespace RuntimeInspectorNamespace
             {
                 translate.behaviour.OnBroadcastStringUpdated(string.Empty, translate.data.Broadcast);
             }
+            preset.recordedVector3 = translate.data.recordedVector3;
             LoadData(preset);
             UpdateDataInUI(preset);
             UpdateTypeForMultiselect(translateType, preset);

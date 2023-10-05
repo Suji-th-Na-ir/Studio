@@ -159,6 +159,7 @@ namespace Terra.Studio
                 data.OnBroadcastUpdated = behaviour.OnBroadcastStringUpdated;
                 data.recordedVector3 = new();
                 data.recordedVector3.Setup(behaviour);
+                data.recordedVector3.Set(new Vector3(0f, 1f, 0f));
             }
         }
 
@@ -345,6 +346,7 @@ namespace Terra.Studio
     [Serializable]
     public struct TranslateComponentData
     {
+        [HideInInspector]
         public Atom.RecordedVector3 recordedVector3;
         public int translateType;
         public float pauseFor;
@@ -374,7 +376,10 @@ namespace Terra.Studio
 
         public readonly bool IsEmpty()
         {
-            if (Equals(default(TranslateComponentData)))
+            var cloneToTest = this;
+            cloneToTest.recordedVector3 = null;
+            cloneToTest.OnBroadcastUpdated = null;
+            if (cloneToTest.Equals(default(TranslateComponentData)))
             {
                 return true;
             }
