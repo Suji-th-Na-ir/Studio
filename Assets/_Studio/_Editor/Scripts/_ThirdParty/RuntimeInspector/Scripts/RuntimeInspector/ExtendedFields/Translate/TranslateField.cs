@@ -83,8 +83,9 @@ namespace RuntimeInspectorNamespace
             {
                 if (selectedTranslateType.movebyInput != null)
                 {
-                    lastComponentData.moveBy = new Vector3(float.Parse(selectedTranslateType.movebyInput[0].text),
+                    var vector3 = new Vector3(float.Parse(selectedTranslateType.movebyInput[0].text),
                         float.Parse(selectedTranslateType.movebyInput[1].text), (float.Parse(selectedTranslateType.movebyInput[2].text))); ;
+                    lastComponentData.recordedVector3.Set(vector3);
                 }
                 if (selectedTranslateType.speedInput)
                     lastComponentData.speed = float.Parse(selectedTranslateType.speedInput.text);

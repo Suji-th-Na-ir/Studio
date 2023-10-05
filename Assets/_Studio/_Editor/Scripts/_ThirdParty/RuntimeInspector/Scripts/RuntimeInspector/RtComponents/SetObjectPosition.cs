@@ -51,10 +51,10 @@ namespace Terra.Studio
             playVFX.Setup<SetObjectPosition>(gameObject);
             targetPosition.Setup(this);
             SetupTargetPosition();
-            SetupGhost();
+            SetupGhostDescription();
         }
 
-        private void SetupGhost()
+        private void SetupGhostDescription()
         {
             GhostDescription = new()
             {

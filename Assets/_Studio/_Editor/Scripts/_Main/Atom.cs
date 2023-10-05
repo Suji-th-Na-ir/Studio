@@ -157,6 +157,7 @@ namespace Terra.Studio
             {
                 base.Setup(target, behaviour);
                 data.OnBroadcastUpdated = behaviour.OnBroadcastStringUpdated;
+                data.recordedVector3.Setup(behaviour);
             }
         }
 
@@ -176,7 +177,6 @@ namespace Terra.Studio
         [Serializable]
         public class RecordedVector3 : IObscurer
         {
-            public string instanceId;
             public RecordedVector3Field field;
 
             private Vector3 vector3;
@@ -197,7 +197,6 @@ namespace Terra.Studio
             {
                 behaviourType = typeof(T);
                 behaviour = instance;
-                instanceId = Guid.NewGuid().ToString("N");
                 vector3 = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
                 defaultVector3 = vector3;
             }
@@ -220,6 +219,25 @@ namespace Terra.Studio
                 {
                     Debug.LogError("Type of object passed is incorrected. Expected: Vector3");
                 }
+            }
+
+            public void Set(Axis axis, object obj)
+            {
+                var currentVector = (Vector3)Get();
+                var newValue = (float)obj;
+                switch (axis)
+                {
+                    case Axis.X:
+                        currentVector.x = newValue;
+                        break;
+                    case Axis.Y:
+                        currentVector.y = newValue;
+                        break;
+                    case Axis.Z:
+                        currentVector.z = newValue;
+                        break;
+                }
+                Set(currentVector);
             }
 
             public void Reset()
@@ -326,8 +344,9 @@ namespace Terra.Studio
     [Serializable]
     public struct TranslateComponentData
     {
+        public Atom.RecordedVector3 recordedVector3;
         public int translateType;
-        public Vector3 moveBy;
+        //public Vector3 moveBy;
         public float pauseFor;
         public float speed;
         public int repeat;

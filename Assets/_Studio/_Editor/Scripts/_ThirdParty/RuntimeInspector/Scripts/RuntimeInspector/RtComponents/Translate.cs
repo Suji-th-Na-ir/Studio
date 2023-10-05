@@ -48,7 +48,7 @@ namespace RuntimeInspectorNamespace
                 },
                 ShowVisualsOnMultiSelect = true,
                 GetLastValue = () => { return Type.data.LastVector3; },
-                GetRecentValue = () => { return Type.data.moveBy; },
+                GetRecentValue = () => { return Type.data.recordedVector3.Get(); },
                 OnGhostModeToggled = (state) =>
                 {
                     if (state)
@@ -69,7 +69,7 @@ namespace RuntimeInspectorNamespace
                 speed = Type.data.speed,
                 pauseFor = Type.data.pauseFor,
                 repeatFor = Type.data.repeat,
-                targetPosition = Type.data.moveBy,
+                targetPosition = (Vector3)Type.data.recordedVector3.Get(),
                 startPosition = transform.position,
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
@@ -127,7 +127,7 @@ namespace RuntimeInspectorNamespace
             Type.data.translateType = (int)comp.translateType;
             Type.data.speed = comp.speed;
             Type.data.pauseFor = comp.pauseFor;
-            Type.data.moveBy = comp.targetPosition;
+            Type.data.recordedVector3.Set(comp.targetPosition);
             Type.data.repeat = comp.repeatFor;
             Type.data.Broadcast = comp.Broadcast;
             Type.data.broadcastAt = comp.broadcastAt;
@@ -177,23 +177,9 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        private void Update()
-        {
-            if ((Input.GetKey(KeyCode.LeftCommand) || Input.GetKey(KeyCode.RightCommand)) &&
-                (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) &&
-                Input.GetKeyDown(KeyCode.R))
-            {
-                var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
-                if (selections.Count > 0 && selections[^1] == gameObject)
-                {
-                    GhostDescription.ToggleGhostMode?.Invoke();
-                }
-            }
-        }
-
         private Vector3[] GetCurrentOffsetInWorld()
         {
-            var pos = transform.localPosition + Type.data.moveBy;
+            var pos = transform.localPosition + (Vector3)Type.data.recordedVector3.Get();
             if (transform.parent != null)
             {
                 pos = transform.TransformPoint(pos);
@@ -209,9 +195,9 @@ namespace RuntimeInspectorNamespace
                 vector3 = transform.InverseTransformPoint(vector3);
             }
             var delta = vector3 - transform.localPosition;
-            if (delta != Type.data.moveBy)
+            if (delta != (Vector3)Type.data.recordedVector3.Get())
             {
-                Type.data.moveBy = delta;
+                Type.data.recordedVector3.Set(delta);
                 Type.ForceRefreshData?.Invoke();
             }
             GhostDescription.IsGhostInteractedInLastRecord = true;
@@ -221,7 +207,7 @@ namespace RuntimeInspectorNamespace
         {
             if (GhostDescription.IsGhostInteractedInLastRecord)
             {
-                Type.data.LastVector3 = Type.data.moveBy;
+                Type.data.LastVector3 = (Vector3)Type.data.recordedVector3.Get();
             }
             GhostDescription.IsGhostInteractedInLastRecord = false;
         }
