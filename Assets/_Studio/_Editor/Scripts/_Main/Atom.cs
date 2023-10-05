@@ -157,6 +157,7 @@ namespace Terra.Studio
             {
                 base.Setup(target, behaviour);
                 data.OnBroadcastUpdated = behaviour.OnBroadcastStringUpdated;
+                data.recordedVector3 = new();
                 data.recordedVector3.Setup(behaviour);
             }
         }
