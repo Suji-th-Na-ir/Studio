@@ -5,6 +5,7 @@ using Terra.Studio;
 using UnityEngine.UI;
 using PlayShifu.Terra;
 using System.Collections.Generic;
+using UnityEngine.UI.ProceduralImage;
 
 namespace RuntimeInspectorNamespace
 {
@@ -31,6 +32,12 @@ namespace RuntimeInspectorNamespace
         private Action customStringAction;
         private Action canListenMultipleAction;
         private bool isRecording;
+
+        [SerializeField] private Text m_refBroadcastAtTitleText;
+        [SerializeField] private Text m_refBroadcastTitleText;
+
+        [SerializeField] private Text m_refMoveByTitleText;
+        [SerializeField] private Text[] m_refMoveByAxisLabels;
 
         [HideInInspector]
         public TranslateField field = null;
@@ -280,10 +287,18 @@ namespace RuntimeInspectorNamespace
             for (int i = 0; i < movebyInput.Length; i++)
             {
                 movebyInput[i].SetupInputFieldSkin(skin);
+                movebyInput[i].gameObject.GetComponent<BoundInputField>().Skin = skin;
+                movebyInput [i].GetComponent<ProceduralImage> ().color = skin.InputFieldNormalBackgroundColor;
             }
             if (speedInput != null) speedInput.SetupInputFieldSkin(skin);
             if (pauseForInput != null) pauseForInput.SetupInputFieldSkin(skin);
             if (repeatInput != null) repeatInput.SetupInputFieldSkin(skin);
+            m_refMoveByTitleText.SetSkinText (skin);
+            if (m_refBroadcastTitleText != null) m_refBroadcastTitleText.SetSkinText (skin);
+            if (m_refBroadcastAtTitleText != null) m_refBroadcastAtTitleText.SetSkinText (skin);
+            for (int i = 0; i < m_refMoveByAxisLabels.Length; i++) {
+                    m_refMoveByAxisLabels [i].SetSkinText (skin);
+            }
         }
 
         private void SetActions()
