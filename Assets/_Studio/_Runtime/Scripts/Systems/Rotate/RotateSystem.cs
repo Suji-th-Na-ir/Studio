@@ -6,6 +6,9 @@ namespace Terra.Studio
 {
     public class RotateSystem : BaseSystem, IEcsRunSystem
     {
+        private const float DEFAULT_AXIS_CONST = -1000f;
+        private readonly Vector3 DEFAULT_TARGET_ROTATION = new(DEFAULT_AXIS_CONST, DEFAULT_AXIS_CONST, DEFAULT_AXIS_CONST);
+
         public override void Init<T>(int entity)
         {
             base.Init<T>(entity);
@@ -34,7 +37,7 @@ namespace Terra.Studio
             }
             entityRef.currentRotateCount = 0;
             entityRef.directionFactor = (entityRef.direction == Direction.Clockwise) ? 1 : -1;
-            entityRef.targetRotation = entityRef.currentRotation + (entityRef.rotateBy * entityRef.directionFactor);
+            SetTargetRotation(ref entityRef);
             entityRef.canPause = entityRef.pauseFor > 0f;
             entityRef.shouldPingPong = entityRef.rotationType is RotationType.Oscillate or RotationType.OscillateForever;
             entityRef.rotateForever = entityRef.repeatFor == int.MaxValue;
@@ -90,12 +93,10 @@ namespace Terra.Studio
                     }
                     continue;
                 }
-                if (component.currentRotation * component.directionFactor <
-                    component.targetRotation * component.directionFactor)
+                var targetRotation = CalculateAngleChangePerAxis(ref component);
+                if (targetRotation != DEFAULT_TARGET_ROTATION)
                 {
-                    var rotationThisFrame = component.speed * Time.deltaTime;
-                    component.currentRotation += rotationThisFrame * component.directionFactor;
-                    var targetRotation = GetVector3(rotationThisFrame * component.directionFactor, component.axis);
+                    targetRotation = GetCleanVector(targetRotation);
                     component.RefObj.transform.Rotate(targetRotation);
                     continue;
                 }
@@ -109,8 +110,7 @@ namespace Terra.Studio
                     component.directionFactor *= -1;
                 }
                 component.currentRotateCount++;
-                component.currentRotation = 0f;
-                component.targetRotation = component.rotateBy * component.directionFactor;
+                ResetDirtyValues(ref component);
                 OnRotationDone(false, entity);
             }
             if (totalEntitiesFinishedJob == filter.GetEntitiesCount())
@@ -119,23 +119,57 @@ namespace Terra.Studio
             }
         }
 
-        private Vector3 GetVector3(float newRotation, Axis[] axes)
+        private Vector3 CalculateAngleChangePerAxis(ref RotateComponent component)
         {
-            var vector = Vector3.zero;
-            for (int i = 0; i < axes.Length; i++)
+            var targetRotation = DEFAULT_TARGET_ROTATION;
+            var rotationThisFrame = component.speed * Time.deltaTime;
+            var step = rotationThisFrame * component.directionFactor;
+            if (component.xCurrentRotation * component.directionFactor < component.xTargetRotation * component.directionFactor)
             {
-                switch (axes[i])
-                {
-                    case Axis.X:
-                        vector.x = newRotation;
-                        break;
-                    case Axis.Y:
-                        vector.y = newRotation;
-                        break;
-                    case Axis.Z:
-                        vector.z = newRotation;
-                        break;
-                }
+                component.xCurrentRotation += step;
+                targetRotation.x = step;
+            }
+            if (component.yCurrentRotation * component.directionFactor < component.yTargetRotation * component.directionFactor)
+            {
+                component.yCurrentRotation += step;
+                targetRotation.y = step;
+            }
+            if (component.zCurrentRotation * component.directionFactor < component.zTargetRotation * component.directionFactor)
+            {
+                component.zCurrentRotation += step;
+                targetRotation.z = step;
+            }
+            return targetRotation;
+        }
+
+        private void ResetDirtyValues(ref RotateComponent component)
+        {
+            component.xCurrentRotation = 0f;
+            component.yCurrentRotation = 0f;
+            component.zCurrentRotation = 0f;
+            SetTargetRotation(ref component);
+        }
+
+        private void SetTargetRotation(ref RotateComponent component)
+        {
+            component.xTargetRotation = component.xCurrentRotation + (component.expectedRotateBy.x * component.directionFactor);
+            component.yTargetRotation = component.yCurrentRotation + (component.expectedRotateBy.y * component.directionFactor);
+            component.zTargetRotation = component.zCurrentRotation + (component.expectedRotateBy.z * component.directionFactor);
+        }
+
+        private Vector3 GetCleanVector(Vector3 vector)
+        {
+            if (vector.x == DEFAULT_AXIS_CONST)
+            {
+                vector.x = 0f;
+            }
+            if (vector.y == DEFAULT_AXIS_CONST)
+            {
+                vector.y = 0f;
+            }
+            if (vector.z == DEFAULT_AXIS_CONST)
+            {
+                vector.z = 0f;
             }
             return vector;
         }

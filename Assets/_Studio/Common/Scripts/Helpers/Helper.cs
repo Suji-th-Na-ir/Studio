@@ -711,5 +711,35 @@ namespace PlayShifu.Terra
             canvasGroup.interactable = isInteractable;
             canvasGroup.ignoreParentGroups = isInteractable;
         }
+
+        public static Vector3 GetAbsEulerAngle(this Transform transform)
+        {
+            var currentAngle = transform.eulerAngles;
+            if (currentAngle.x < 0)
+            {
+                currentAngle.x = 360f + currentAngle.x;
+                if (Mathf.Approximately(currentAngle.x, 360f))
+                {
+                    currentAngle.x = 0f;
+                }
+            }
+            if (currentAngle.y < 0)
+            {
+                currentAngle.y = 360f + currentAngle.y;
+                if (Mathf.Approximately(currentAngle.y, 360f))
+                {
+                    currentAngle.y = 0f;
+                }
+            }
+            if (currentAngle.z < 0)
+            {
+                currentAngle.z = 360f + currentAngle.z;
+                if (Mathf.Approximately(currentAngle.z, 360f))
+                {
+                    currentAngle.z = 0f;
+                }
+            }
+            return currentAngle;
+        }
     }
 }

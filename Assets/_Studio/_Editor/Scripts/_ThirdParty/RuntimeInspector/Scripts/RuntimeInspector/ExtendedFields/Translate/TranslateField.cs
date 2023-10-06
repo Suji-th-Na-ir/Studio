@@ -18,7 +18,7 @@ namespace RuntimeInspectorNamespace
 #pragma warning restore 0649
 
         private TranslateTypes selectedTranslateType;
-        TranslateComponentData lastComponentData;
+        private TranslateComponentData lastComponentData;
 
         public override void Initialize()
         {

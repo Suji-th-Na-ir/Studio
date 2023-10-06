@@ -13,18 +13,17 @@ namespace RuntimeInspectorNamespace
 #pragma warning disable 0649
 
         [SerializeField]
-        public Dropdown rotateTypesDD;
+        private Dropdown rotateTypesDD;
         public RotateTypes[] allRotateTypes;
 
 #pragma warning restore 0649
 
         private RotateTypes selectedRotateType;
-        RotateComponentData lastComponentData;
+        private RotateComponentData lastComponentData;
 
         public override void Initialize()
         {
             base.Initialize();
-            Setup();
         }
 
         private void Setup()
@@ -34,7 +33,6 @@ namespace RuntimeInspectorNamespace
                 type.field = this;
                 type.Setup();
             }
-
             List<string> data = Helper.GetEnumWithAliasNames<RotationType>();
             rotateTypesDD.AddOptions(data);
             rotateTypesDD.onValueChanged.AddListener(OnRotateTypesValueChanged);
@@ -84,16 +82,17 @@ namespace RuntimeInspectorNamespace
             lastComponentData = new();
             if (selectedRotateType)
             {
-                lastComponentData.Xaxis = selectedRotateType.xAxis.isOn;
-                lastComponentData.Yaxis = selectedRotateType.yAxis.isOn;
-                lastComponentData.Zaxis = selectedRotateType.zAxis.isOn;
+                if (selectedRotateType.ValuesPerAxis != null)
+                {
+                    var vector3 = new Vector3(
+                        float.Parse(selectedRotateType.ValuesPerAxis[0].text),
+                        float.Parse(selectedRotateType.ValuesPerAxis[1].text),
+                        float.Parse(selectedRotateType.ValuesPerAxis[2].text));
+                    lastComponentData.vector3?.Set(vector3);
+                }
+
                 if (selectedRotateType.dirDropDown)
                     lastComponentData.direction = (Direction)selectedRotateType.dirDropDown.value;
-
-                if (selectedRotateType.degreesInput)
-                    lastComponentData.degrees = float.Parse(selectedRotateType.degreesInput.text);
-                else
-                    lastComponentData.degrees = -1;
 
                 if (selectedRotateType.speedInput)
                     lastComponentData.speed = float.Parse(selectedRotateType.speedInput.text);
@@ -120,8 +119,8 @@ namespace RuntimeInspectorNamespace
 
                 if (selectedRotateType.broadcastAt)
                     lastComponentData.broadcastAt = (BroadcastAt)selectedRotateType.broadcastAt.value;
-                lastData = true;
 
+                lastData = true;
             }
             Atom.Rotate rt = (Atom.Rotate)Value;
             rt.data.rotateType = _index;
@@ -146,8 +145,6 @@ namespace RuntimeInspectorNamespace
                 var tempValue = lastComponentData;
                 if (!selectedRotateType.speedInput || lastComponentData.speed == -1)
                     tempValue.speed = preset.speed;
-                if (!selectedRotateType.degreesInput || lastComponentData.degrees == -1)
-                    tempValue.degrees = preset.degrees;
                 if (!selectedRotateType.repeatInput || lastComponentData.repeat == -1)
                     tempValue.repeat = preset.repeat;
                 if (!selectedRotateType.pauseInput || lastComponentData.pauseBetween == -1)
@@ -161,7 +158,7 @@ namespace RuntimeInspectorNamespace
             {
                 value.behaviour.OnBroadcastStringUpdated(string.Empty, value.data.Broadcast);
             }
-
+            preset.vector3 = value.data.vector3;
             LoadData(preset);
             UpdateDataInUI(preset);
             UpdateTypeForMultiselect(rotationType, preset);
@@ -215,12 +212,14 @@ namespace RuntimeInspectorNamespace
         protected override void OnBound(MemberInfo variable)
         {
             base.OnBound(variable);
+            Setup();
             Atom.Rotate rt = (Atom.Rotate)Value;
             int rotationTypeIndex = (int)Enum.Parse(typeof(RotationType), rt.data.rotateType.ToString());
             rotateTypesDD.SetValueWithoutNotify(rotationTypeIndex);
             ShowRotateOptionsMenu(rotationTypeIndex);
             selectedRotateType.SetData(rt.data);
             lastSubmittedValue = rt.data;
+            rt.ForceRefreshData = () => { selectedRotateType.SetData(rt.data); };
         }
 
         public override void Refresh()
@@ -235,23 +234,16 @@ namespace RuntimeInspectorNamespace
             rotateTypesDD.SetValueWithoutNotify(rt.data.rotateType);
             if (compData != null && compData.HasValue)
             {
-                // selectedRotateType.SetData(compData.Value);
                 rt.data = compData.Value;
-            }
-            else
-            {
-                // selectedRotateType.SetData(rt.data);
             }
         }
 
         private void UpdateDataInUI(RotateComponentData? compData = null)
         {
             Atom.Rotate rt = (Atom.Rotate)Value;
-
             if (compData != null && compData.HasValue)
             {
                 selectedRotateType.SetData(compData.Value);
-                // rt.data = compData.Value;
             }
             else
             {

@@ -454,10 +454,10 @@ public class SelectionHandler : View
         OnSelectionChanged();
     }
 
-    public void OverrideGizmoOntoTarget(List<GameObject> targets)
+    public void OverrideGizmoOntoTarget(List<GameObject> targets, GizmoId gizmoId)
     {
         DisableGizmo();
-        SetWorkGizmoId(GizmoId.Move);
+        SetWorkGizmoId(gizmoId);
         _workGizmo.SetTargetObjects(targets);
         _workGizmo.Gizmo.SetEnabled(true);
         _workGizmo.RefreshPositionAndRotation();

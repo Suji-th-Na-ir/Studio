@@ -18,6 +18,7 @@ namespace Terra.Studio
         [JsonIgnore] public bool IsExecuted { get; set; }
         [JsonIgnore] public EventContext EventContext { get; set; }
         [JsonIgnore] public GameObject RefObj { get; set; }
+        [JsonConverter(typeof(Vector3Converter))] public Vector3 expectedRotateBy;
         public Axis[] axis;
         public Direction direction;
         public RotationType rotationType;
@@ -25,7 +26,6 @@ namespace Terra.Studio
         public BroadcastAt broadcastAt;
         public Listen listen;
         public float speed;
-        public float rotateBy;
         public float pauseFor;
         public int repeatFor;
         public bool canPlaySFX;
@@ -39,13 +39,17 @@ namespace Terra.Studio
 
         [JsonIgnore] public int currentRotateCount;
         [JsonIgnore] public int directionFactor;
-        [JsonIgnore] public float targetRotation;
-        [JsonIgnore] public float currentRotation;
         [JsonIgnore] public float pauseStartTime;
         [JsonIgnore] public bool canPause;
         [JsonIgnore] public bool isPaused;
         [JsonIgnore] public bool shouldPingPong;
         [JsonIgnore] public bool rotateForever;
         [JsonIgnore] public bool isHaltedByEvent;
+        [JsonIgnore] public float xTargetRotation;
+        [JsonIgnore] public float yTargetRotation;
+        [JsonIgnore] public float zTargetRotation;
+        [JsonIgnore] public float xCurrentRotation;
+        [JsonIgnore] public float yCurrentRotation;
+        [JsonIgnore] public float zCurrentRotation;
     }
 }

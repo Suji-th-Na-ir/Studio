@@ -138,11 +138,16 @@ namespace Terra.Studio
         {
             public RotateField field;
             public RotateComponentData data = new();
+            public Action ForceRefreshData;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)
             {
                 base.Setup(target, behaviour);
                 data.OnBroadcastUpdated = behaviour.OnBroadcastStringUpdated;
+                data.vector3 = new();
+                data.vector3.Setup(behaviour);
+                data.vector3.Set(new Vector3(0f, 0f, 0f));
+                data.ghostLastRecordedRotation = Atom.RecordedVector3.INFINITY;
             }
         }
 
@@ -193,7 +198,7 @@ namespace Terra.Studio
             public Func<bool> IsValueModified => IsModified;
             public Action ToggleGhostMode => behaviour.GhostDescription.ToggleGhostMode;
 
-            public readonly Vector3 INFINITY = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
+            public static readonly Vector3 INFINITY = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
 
             public void Setup<T>(T instance) where T : BaseBehaviour
             {
@@ -304,12 +309,11 @@ namespace Terra.Studio
     [Serializable]
     public struct RotateComponentData
     {
+        [HideInInspector] public Atom.RecordedVector3 vector3;
+        [HideInInspector] public Vector3 ghostLastRecordedRotation;
+        [HideInInspector] public Vector3 LastVector3;
         public int rotateType;
-        public bool Xaxis;
-        public bool Yaxis;
-        public bool Zaxis;
         public Direction direction;
-        public float degrees;
         public float speed;
         public int repeat;
         public float pauseBetween;
@@ -335,7 +339,12 @@ namespace Terra.Studio
 
         public readonly bool IsEmpty()
         {
-            if (Equals(default(RotateComponentData)))
+            var clone = this;
+            clone.vector3 = default;
+            clone.OnBroadcastUpdated = default;
+            clone.LastVector3 = default;
+            clone.ghostLastRecordedRotation = default;
+            if (clone.Equals(default(RotateComponentData)))
             {
                 return true;
             }
@@ -346,8 +355,8 @@ namespace Terra.Studio
     [Serializable]
     public struct TranslateComponentData
     {
-        [HideInInspector]
-        public Atom.RecordedVector3 recordedVector3;
+        [HideInInspector] public Atom.RecordedVector3 recordedVector3;
+        [HideInInspector] public Vector3 LastVector3;
         public int translateType;
         public float pauseFor;
         public float speed;
@@ -356,7 +365,6 @@ namespace Terra.Studio
         public Listen listen;
         public BroadcastAt broadcastAt;
         public Action<string, string> OnBroadcastUpdated;
-        public Vector3 LastVector3;
         public string broadcast;
         public string Broadcast
         {

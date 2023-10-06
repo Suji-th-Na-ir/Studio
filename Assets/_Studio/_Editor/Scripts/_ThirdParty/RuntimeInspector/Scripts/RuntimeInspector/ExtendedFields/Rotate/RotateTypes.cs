@@ -13,10 +13,7 @@ namespace RuntimeInspectorNamespace
     {
         public RotationType myType;
         public Dropdown dirDropDown;
-        public Toggle xAxis;
-        public Toggle yAxis;
-        public Toggle zAxis;
-        public InputField degreesInput = null;
+        public InputField[] ValuesPerAxis;
         public InputField speedInput = null;
         public InputField pauseInput = null;
         public InputField repeatInput = null;
@@ -24,76 +21,106 @@ namespace RuntimeInspectorNamespace
         public InputField customString;
         public Toggle canListenMultipleTimesToggle;
 
+        [Header("Recorded Vector3 data")]
+        public Button recordButton;
+        public Button resetButton;
+        public Image recordImageHolder;
+        public Sprite recordImage;
+        public Sprite saveImage;
+
+        private Action[] valuesPerAxisActions;
         private Action dirAction;
-        private Action xAction;
-        private Action yAction;
-        private Action zAction;
-        private Action degressAction;
         private Action speedAction;
         private Action pauseAction;
         private Action repeatAction;
         private Action broadcastAtAction;
         private Action customStringAction;
         private Action canListenMultipleTimesAction;
+        private bool isRecording;
 
-        [HideInInspector] public RotateField field = null;
-
+        [HideInInspector]
+        public RotateField field = null;
 
         private enum VariableTypes
         {
-            X_AXIS,
-            Y_AXIS,
-            Z_AXIS,
             DIRECTION_DROPDOWN,
             BROADCAST_AT,
-            DEGREES,
             SPEED,
             PAUSE,
             REPEAT,
             BROADCAST_STRING,
-            CAN_LISTEN_MULTIPLE_TIMES
+            CAN_LISTEN_MULTIPLE_TIMES,
+            RECORDED_VECTOR3
         }
 
         public void Setup()
         {
             LoadDefaultValues();
             SetActions();
-            if (xAxis != null)
+
+            if (ValuesPerAxis?[0] != null)
             {
-                xAxis.onValueChanged.AddListener((value) =>
+                ValuesPerAxis?[0].onValueChanged.AddListener(
+                (value) =>
                 {
-                    if (value != field.GetAtom().data.Xaxis)
+                    var x = Helper.StringToFloat(value);
+                    field.GetAtom().data.vector3.Set(Axis.X, x);
+                    valuesPerAxisActions?[0]?.Invoke();
+                });
+                ValuesPerAxis?[0].onEndEdit.AddListener(
+                (value) =>
+                {
+                    var x = Helper.StringToFloat(value);
+                    var actualValue = (Vector3)((RotateComponentData)field.GetLastSubmittedValue()).vector3.Get();
+                    if (x != actualValue.x)
                     {
-                        field.GetAtom().data.Xaxis = value;
-                        xAction?.Invoke();
-                        UpdateUndoRedoStack("Rotate In X", value, xAction);
+                        UpdateUndoRedoStack("X In Vector3", actualValue, valuesPerAxisActions?[0]);
                     }
                 });
             }
-            if (yAxis != null)
+
+            if (ValuesPerAxis?[1] != null)
             {
-                yAxis.onValueChanged.AddListener((value) =>
+                ValuesPerAxis?[1].onValueChanged.AddListener(
+                (value) =>
                 {
-                    if (value != field.GetAtom().data.Yaxis)
+                    var y = Helper.StringToFloat(value);
+                    field.GetAtom().data.vector3.Set(Axis.Y, y);
+                    valuesPerAxisActions?[1]?.Invoke();
+                });
+                ValuesPerAxis?[1].onEndEdit.AddListener(
+                (value) =>
+                {
+                    var y = Helper.StringToFloat(value);
+                    var actualValue = (Vector3)((RotateComponentData)field.GetLastSubmittedValue()).vector3.Get();
+                    if (y != actualValue.y)
                     {
-                        field.GetAtom().data.Yaxis = value;
-                        yAction?.Invoke();
-                        UpdateUndoRedoStack("Rotate In Y", value, yAction);
+                        UpdateUndoRedoStack("Y In Vector3", actualValue, valuesPerAxisActions?[1]);
                     }
                 });
             }
-            if (zAxis != null)
+
+            if (ValuesPerAxis?[2] != null)
             {
-                zAxis.onValueChanged.AddListener((value) =>
+                ValuesPerAxis?[2].onValueChanged.AddListener(
+                (value) =>
                 {
-                    if (value != field.GetAtom().data.Zaxis)
+                    var z = Helper.StringToFloat(value);
+                    field.GetAtom().data.vector3.Set(Axis.Z, z);
+                    valuesPerAxisActions?[2]?.Invoke();
+                });
+                ValuesPerAxis?[2].onEndEdit.AddListener(
+                (value) =>
+                {
+                    var z = Helper.StringToFloat(value);
+                    var actualValue = (Vector3)((RotateComponentData)field.GetLastSubmittedValue()).vector3.Get();
+                    if (z != actualValue.z)
                     {
-                        field.GetAtom().data.Zaxis = value;
-                        zAction?.Invoke();
-                        UpdateUndoRedoStack("Rotate In Z", value, zAction);
+                        UpdateUndoRedoStack("Z In Vector3", actualValue, valuesPerAxisActions?[2]);
                     }
                 });
             }
+
             if (dirDropDown != null)
             {
                 dirDropDown.onValueChanged.AddListener((value) =>
@@ -104,21 +131,6 @@ namespace RuntimeInspectorNamespace
                         field.GetAtom().data.direction = dir;
                         dirAction?.Invoke();
                         UpdateUndoRedoStack("Direction", dir, dirAction);
-                    }
-                });
-            }
-            if (degreesInput != null)
-            {
-                degreesInput.onValueChanged.AddListener((value) =>
-                {
-                    field.GetAtom().data.degrees = Helper.StringToFloat(value);
-                    degressAction?.Invoke();
-                });
-                degreesInput.onEndEdit.AddListener((value) =>
-                {
-                    if (Helper.StringToFloat(value) != ((RotateComponentData)field.GetLastSubmittedValue()).degrees)
-                    {
-                        UpdateUndoRedoStack("Degrees", field.GetAtom().data.degrees, degressAction);
                     }
                 });
             }
@@ -207,6 +219,8 @@ namespace RuntimeInspectorNamespace
                     }
                 });
             }
+
+            SetupRecordSections();
         }
 
         private void UpdateUndoRedoStack(string variableName, object value, Action onValueChanged)
@@ -251,23 +265,11 @@ namespace RuntimeInspectorNamespace
                     {
                         switch (_type)
                         {
-                            case VariableTypes.X_AXIS:
-                                comp.Type.data.Xaxis = (bool)_value;
-                                break;
-                            case VariableTypes.Y_AXIS:
-                                comp.Type.data.Yaxis = (bool)_value;
-                                break;
-                            case VariableTypes.Z_AXIS:
-                                comp.Type.data.Zaxis = (bool)_value;
-                                break;
                             case VariableTypes.DIRECTION_DROPDOWN:
                                 comp.Type.data.direction = (Direction)_value;
                                 break;
                             case VariableTypes.BROADCAST_AT:
                                 comp.Type.data.broadcastAt = (BroadcastAt)_value;
-                                break;
-                            case VariableTypes.DEGREES:
-                                comp.Type.data.degrees = (float)_value;
                                 break;
                             case VariableTypes.SPEED:
                                 comp.Type.data.speed = (float)_value;
@@ -284,6 +286,9 @@ namespace RuntimeInspectorNamespace
                                 break;
                             case VariableTypes.CAN_LISTEN_MULTIPLE_TIMES:
                                 comp.Type.data.listen = (Listen)_value;
+                                break;
+                            case VariableTypes.RECORDED_VECTOR3:
+                                comp.Type.data.vector3.Set(_value);
                                 break;
                         }
                     }
@@ -308,47 +313,93 @@ namespace RuntimeInspectorNamespace
 
         public void SetData(RotateComponentData _data)
         {
-            if (xAxis) xAxis.SetIsOnWithoutNotify(_data.Xaxis);
-            if (yAxis) yAxis.SetIsOnWithoutNotify(_data.Yaxis);
-            if (zAxis) zAxis.SetIsOnWithoutNotify(_data.Zaxis);
             if (dirDropDown) dirDropDown.SetValueWithoutNotify((int)Enum.Parse(typeof(Direction), _data.direction.ToString()));
             if (broadcastAt) broadcastAt.SetValueWithoutNotify((int)Enum.Parse(typeof(BroadcastAt), _data.broadcastAt.ToString()));
-            if (degreesInput) degreesInput.SetTextWithoutNotify(_data.degrees.ToString());
             if (speedInput) speedInput.SetTextWithoutNotify(_data.speed.ToString());
             if (pauseInput) pauseInput.SetTextWithoutNotify(_data.pauseBetween.ToString());
             if (repeatInput) repeatInput.SetTextWithoutNotify(_data.repeat.ToString());
             if (customString) customString.SetTextWithoutNotify(_data.Broadcast);
             if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetIsOnWithoutNotify(_data.listen == Listen.Always);
+            ValuesPerAxis?[0].SetTextWithoutNotify(((Vector3)_data.vector3.Get()).x.ToString());
+            ValuesPerAxis?[1].SetTextWithoutNotify(((Vector3)_data.vector3.Get()).y.ToString());
+            ValuesPerAxis?[2].SetTextWithoutNotify(((Vector3)_data.vector3.Get()).z.ToString());
         }
 
         public void ApplySkin(UISkin Skin)
         {
-            xAxis?.SetupToggeleSkin(Skin);
-            yAxis?.SetupToggeleSkin(Skin);
-            zAxis?.SetupToggeleSkin(Skin);
-            canListenMultipleTimesToggle?.SetupToggeleSkin(Skin);
-            degreesInput?.SetupInputFieldSkin(Skin);
-            speedInput?.SetupInputFieldSkin(Skin);
-            pauseInput?.SetupInputFieldSkin(Skin);
-            repeatInput?.SetupInputFieldSkin(Skin);
-            dirDropDown?.SetSkinDropDownField(Skin);
-            broadcastAt?.SetSkinDropDownField(Skin);
-            customString?.SetupInputFieldSkin(Skin);
+            if (canListenMultipleTimesToggle) canListenMultipleTimesToggle.SetupToggeleSkin(Skin);
+            if (speedInput) speedInput.SetupInputFieldSkin(Skin);
+            if (pauseInput) pauseInput.SetupInputFieldSkin(Skin);
+            if (repeatInput) repeatInput.SetupInputFieldSkin(Skin);
+            if (dirDropDown) dirDropDown.SetSkinDropDownField(Skin);
+            if (broadcastAt) broadcastAt.SetSkinDropDownField(Skin);
+            if (customString) customString.SetupInputFieldSkin(Skin);
+            for (int i = 0; i < ValuesPerAxis.Length; i++)
+            {
+                ValuesPerAxis[i].SetupInputFieldSkin(Skin);
+            }
         }
 
         private void SetActions()
         {
             dirAction = () => { UpdateVariablesForAll(VariableTypes.DIRECTION_DROPDOWN, field.GetAtom().data.direction); };
-            xAction = () => { UpdateVariablesForAll(VariableTypes.X_AXIS, field.GetAtom().data.Xaxis); };
-            yAction = () => { UpdateVariablesForAll(VariableTypes.Y_AXIS, field.GetAtom().data.Yaxis); };
-            zAction = () => { UpdateVariablesForAll(VariableTypes.Z_AXIS, field.GetAtom().data.Zaxis); };
-            degressAction = () => { UpdateVariablesForAll(VariableTypes.DEGREES, field.GetAtom().data.degrees); };
             speedAction = () => { UpdateVariablesForAll(VariableTypes.SPEED, field.GetAtom().data.speed); };
             pauseAction = () => { UpdateVariablesForAll(VariableTypes.PAUSE, field.GetAtom().data.pauseBetween); };
             repeatAction = () => { UpdateVariablesForAll(VariableTypes.REPEAT, field.GetAtom().data.repeat); };
             broadcastAtAction = () => { UpdateVariablesForAll(VariableTypes.BROADCAST_AT, field.GetAtom().data.broadcastAt); };
             customStringAction = () => { UpdateVariablesForAll(VariableTypes.BROADCAST_STRING, field.GetAtom().data.Broadcast); };
             canListenMultipleTimesAction = () => { UpdateVariablesForAll(VariableTypes.CAN_LISTEN_MULTIPLE_TIMES, field.GetAtom().data.listen); };
+            valuesPerAxisActions = new Action[3];
+            valuesPerAxisActions[0] = () => { UpdateVariablesForAll(VariableTypes.RECORDED_VECTOR3, field.GetAtom().data.vector3.Get()); };
+            valuesPerAxisActions[1] = () => { UpdateVariablesForAll(VariableTypes.RECORDED_VECTOR3, field.GetAtom().data.vector3.Get()); };
+            valuesPerAxisActions[2] = () => { UpdateVariablesForAll(VariableTypes.RECORDED_VECTOR3, field.GetAtom().data.vector3.Get()); };
+        }
+
+        private void SetupRecordSections()
+        {
+            AddButtonListener(resetButton, OnResetButtonClicked);
+            AddButtonListener(recordButton, OnRecordButtonClicked);
+            field.GetAtom().data.vector3.OnModified = ToggleInteractivityOfResetButton;
+            CheckAndToggleInteractivityOfResetButton();
+        }
+
+        private void AddButtonListener(Button button, Action action)
+        {
+            if (!button) return;
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() => action?.Invoke());
+        }
+
+        private void OnRecordButtonClicked()
+        {
+            field.GetAtom().data.vector3.ToggleGhostMode?.Invoke();
+            isRecording = !isRecording;
+            if (isRecording)
+            {
+                recordImageHolder.sprite = saveImage;
+            }
+            else
+            {
+                recordImageHolder.sprite = recordImage;
+            }
+            CheckAndToggleInteractivityOfResetButton();
+        }
+
+        private void OnResetButtonClicked()
+        {
+            field.GetAtom().data.vector3.Reset();
+            ToggleInteractivityOfResetButton(false);
+        }
+
+        private void CheckAndToggleInteractivityOfResetButton()
+        {
+            var isInteractive = field.GetAtom().data.vector3?.IsValueModified?.Invoke() ?? false;
+            ToggleInteractivityOfResetButton(isInteractive);
+        }
+
+        private void ToggleInteractivityOfResetButton(bool isInteractable)
+        {
+            resetButton.interactable = isInteractable;
         }
     }
 }

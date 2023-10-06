@@ -30,13 +30,13 @@ namespace Terra.Studio
             var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
             if (selections.Count > 1)
             {
-                HandleInstance_NoGhostOnMultiselect(instance, enableModification);
+                HandleInstance_NoGhostOnMultiselect(instance, RecordVisualiser.Record.Position, enableModification);
             }
             else
             {
-                HandleInstance(instance, enableModification, true);
+                HandleInstance(instance, RecordVisualiser.Record.Position, enableModification, true);
             }
-            HandleSelection();
+            HandleSelection(SelectionHandler.GizmoId.Move);
         }
 
         public void TrackPosition_ShowGhostOnMultiselect<T>(T instance, bool enableModification) where T : BaseBehaviour
@@ -48,15 +48,35 @@ namespace Terra.Studio
                 {
                     if (selection.TryGetComponent<T>(out var component))
                     {
-                        HandleInstance(component, enableModification, false);
+                        HandleInstance(component, RecordVisualiser.Record.Position, enableModification, false);
                     }
                 }
             }
             else
             {
-                HandleInstance(instance, enableModification, true);
+                HandleInstance(instance, RecordVisualiser.Record.Position, enableModification, true);
             }
-            HandleSelection();
+            HandleSelection(SelectionHandler.GizmoId.Move);
+        }
+
+        public void TrackRotation_ShowGhostOnMultiselect<T>(T instance, bool enableModification) where T : BaseBehaviour
+        {
+            var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selections.Count > 1)
+            {
+                foreach (var selection in selections)
+                {
+                    if (selection.TryGetComponent<T>(out var component))
+                    {
+                        HandleInstance(component, RecordVisualiser.Record.Rotation, enableModification, false);
+                    }
+                }
+            }
+            else
+            {
+                HandleInstance(instance, RecordVisualiser.Record.Rotation, enableModification, true);
+            }
+            HandleSelection(SelectionHandler.GizmoId.Rotate);
         }
 
         public void TrackGhost(bool isTracking, GameObject ghost)
@@ -71,13 +91,13 @@ namespace Terra.Studio
             }
         }
 
-        private void HandleInstance<T>(T instance, bool enableModification, bool isTrulySingleInstance) where T : BaseBehaviour
+        private void HandleInstance<T>(T instance, RecordVisualiser.Record recorder, bool enableModification, bool isTrulySingleInstance) where T : BaseBehaviour
         {
             var isPresent = ToggleGhostMode(instance);
             if (isPresent) return;
             var trs = instance.GhostDescription.SpawnTRS?.Invoke();
             var visualiser = new RecordVisualiser(instance.GhostDescription.GhostTo,
-                RecordVisualiser.Record.Position,
+                recorder,
                 instance.GhostDescription.OnGhostInteracted,
                 () =>
                 {
@@ -96,14 +116,14 @@ namespace Terra.Studio
             activeRecorders[instance] = visualiser;
         }
 
-        private void HandleInstance_NoGhostOnMultiselect<T>(T instance, bool enableModification) where T : BaseBehaviour
+        private void HandleInstance_NoGhostOnMultiselect<T>(T instance, RecordVisualiser.Record recorder, bool enableModification) where T : BaseBehaviour
         {
             var isPresent = ToggleGhostMode(instance);
             if (isPresent) return;
             var components = GetAllComponentsForSelected(instance, true);
             var trs = instance.GhostDescription.SpawnTRS?.Invoke();
             var visualiser = new RecordVisualiser(instance.GhostDescription.GhostTo,
-                RecordVisualiser.Record.Position,
+                recorder,
                 (data) =>
                 {
                     instance.GhostDescription.OnGhostInteracted?.Invoke(data);
@@ -138,17 +158,17 @@ namespace Terra.Studio
             return isPresent;
         }
 
-        private void HandleSelection()
+        private void HandleSelection(SelectionHandler.GizmoId gizmoId)
         {
             var isGhostPresent = ghosts.Count > 0;
             if (isGhostPresent)
             {
-                EditorOp.Resolve<SelectionHandler>().OverrideGizmoOntoTarget(ghosts);
+                EditorOp.Resolve<SelectionHandler>().OverrideGizmoOntoTarget(ghosts, gizmoId);
             }
             else
             {
                 var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
-                EditorOp.Resolve<SelectionHandler>().OverrideGizmoOntoTarget(selections);
+                EditorOp.Resolve<SelectionHandler>().OverrideGizmoOntoTarget(selections, gizmoId);
             }
         }
 
@@ -247,7 +267,8 @@ namespace Terra.Studio
     {
         public enum Record
         {
-            Position
+            Position,
+            Rotation
         }
 
         private const string GHOST_RESOURCE_PATH = "Prefabs/Ghost";
@@ -349,7 +370,9 @@ namespace Terra.Studio
             var firstChild = ghost.transform.GetChild(0).gameObject;
             baseRecorder = recordFor switch
             {
-                _ => firstChild.AddComponent<PositionRecorder>(),
+                Record.Position => firstChild.AddComponent<PositionRecorder>(),
+                Record.Rotation => firstChild.AddComponent<RotationRecorder>(),
+                _ => throw new NotImplementedException()
             };
             baseRecorder.Init(onRecordDataModified);
         }
@@ -405,6 +428,26 @@ namespace Terra.Studio
                 var didPositionChange = cachedPosition != transform.position;
                 cachedPosition = transform.position;
                 return didPositionChange;
+            }
+        }
+
+        public class RotationRecorder : BaseRecorder
+        {
+            private Vector3 cachedRotation;
+            protected override Func<bool> IsModified => IsDataModified;
+            protected override object Result { get { return GetResult(); } }
+            protected override int FRAMES_INTERVAL_TO_CHECK => 15;
+
+            public bool IsDataModified()
+            {
+                var didRotationChange = cachedRotation != transform.eulerAngles;
+                cachedRotation = transform.eulerAngles;
+                return didRotationChange;
+            }
+
+            private object GetResult()
+            {
+                return transform.GetAbsEulerAngle();
             }
         }
     }
