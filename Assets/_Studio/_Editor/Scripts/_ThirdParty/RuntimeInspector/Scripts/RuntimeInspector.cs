@@ -241,7 +241,6 @@ namespace RuntimeInspectorNamespace
 
         public int currentPageIndex = 1;
         public delegate void PageIndexChangeDelegate(int index);
-        public PointerEventListener pointerEventListner;
         public PageIndexChangeDelegate OnPageIndexChanged;
         private ComponentFilterDelegate m_componentFilter;
         public ComponentFilterDelegate ComponentFilter
