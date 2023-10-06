@@ -75,7 +75,7 @@ namespace RuntimeInspectorNamespace
 
         private void Update()
         {
-            if(Input.GetMouseButtonDown(0) &&!isPointerOverGameObject)
+            if(Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Escape) && !isPointerOverGameObject)
             {
                 copyPastePanel.SetActive(false);
             }

@@ -47,7 +47,7 @@ namespace Terra.Studio
 
         public void Update()
         {
-            if(Input.GetMouseButton(0) &&!isPointerOverGameObject)
+            if(Input.GetMouseButton(0) ||Input.GetKeyDown(KeyCode.Escape) &&!isPointerOverGameObject)
             {
                 CloseAll(null);
             }
