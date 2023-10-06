@@ -17,6 +17,7 @@ namespace Terra.Studio
         PasteView pasteView;
         Text copyText;
         Button copyButton;
+        bool isPointerOverGameObject = false;
         public override void Draw()
         {
 
@@ -41,8 +42,15 @@ namespace Terra.Studio
             copy.PointerEnter += OpenCopyPanel;
             paste.PointerEnter += OpenPastePanel;
             GetComponent<PointerEventListener>().PointerExit += CloseSubPanels;
-            EditorOp.Resolve<SelectionHandler>().SelectionChanged += CloseAllPanels;
-            EditorOp.Resolve<RuntimeInspector>().pointerEventListner.PointerDown += CloseAll;
+            GetComponent<PointerEventListener>().PointerEnter +=(PointerEventData data)=>{ isPointerOverGameObject = true; };
+        }
+
+        public void Update()
+        {
+            if(Input.GetMouseButton(0) &&!isPointerOverGameObject)
+            {
+                CloseAll(null);
+            }
         }
 
         public override void Repaint()
@@ -79,6 +87,7 @@ namespace Terra.Studio
 
         private void CloseSubPanels(PointerEventData eventData)
         {
+            isPointerOverGameObject = false;
             StartCoroutine(ClosePanels());
         }
 
@@ -89,11 +98,6 @@ namespace Terra.Studio
                 yield break;
             copyView.gameObject.SetActive(false);
             pasteView.gameObject.SetActive(false);
-        }
-
-        private void CloseAllPanels(List<GameObject> gm)
-        {
-            CloseAll(null);
         }
 
         private void CloseAll(PointerEventData eventData)

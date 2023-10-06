@@ -23,6 +23,7 @@ namespace RuntimeInspectorNamespace
         GameObject copyPastePanel;
         private Button openCopyPaste;
         Text pasteText;
+        bool isPointerOverGameObject = false;
         protected override int Length
         {
             get
@@ -67,9 +68,17 @@ namespace RuntimeInspectorNamespace
             openCopyPaste = Helper.FindDeepChild(transform, "OpenCopyPasteBtn").GetComponent<Button>();
             openCopyPaste.onClick.RemoveAllListeners();
             openCopyPaste.onClick.AddListener(() => OpenCopyPastePanel());
-            EditorOp.Resolve<SelectionHandler>().SelectionChanged += (List<GameObject> gm) => { copyPastePanel.SetActive(false); };
-            EditorOp.Resolve<RuntimeInspector>().pointerEventListner.PointerDown += (PointerEventData data) => { copyPastePanel.SetActive(false); };
+            copyPastePanel.GetComponent<PointerEventListener>().PointerEnter += (PointerEventData data) => { isPointerOverGameObject = true; };
+            copyPastePanel.GetComponent<PointerEventListener>().PointerExit += (PointerEventData data) => { isPointerOverGameObject = false; };
 
+        }
+
+        private void Update()
+        {
+            if(Input.GetMouseButtonDown(0) &&!isPointerOverGameObject)
+            {
+                copyPastePanel.SetActive(false);
+            }
         }
 
         private void OpenCopyPastePanel()
