@@ -70,6 +70,19 @@ namespace RuntimeInspectorNamespace
         {
             base.OnBound(variable);
             SetValueIndirectly();
+
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(inputX.gameObject);
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(inputY.gameObject);
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(inputZ.gameObject);
+        }
+
+        protected override void OnUnbound()
+        {
+            base.OnUnbound();
+
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(inputX.gameObject);
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(inputY.gameObject);
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(inputZ.gameObject);
         }
 
         private void SetValueIndirectly()

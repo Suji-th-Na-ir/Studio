@@ -96,8 +96,14 @@ namespace RuntimeInspectorNamespace
             input.ClearOptions();
             input.AddOptions(currEnumNames);
             lastSubmittedValue = currEnumNames.IndexOf($"{lastSubmittedValue}");
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(input.gameObject);
         }
 
+        protected override void OnUnbound()
+        {
+            base.OnUnbound();
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(input.gameObject);
+        }
         protected override void OnInspectorChanged()
         {
             base.OnInspectorChanged();

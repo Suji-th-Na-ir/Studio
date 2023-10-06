@@ -430,6 +430,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224605210325885518}
   - component: {fileID: 114536213069398136}
+  - component: {fileID: 4201951113018203844}
   m_Layer: 5
   m_Name: Toggle
   m_TagString: Untagged
@@ -498,7 +499,7 @@ MonoBehaviour:
     m_SelectedTrigger: Highlighted
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 3726341220718204004}
   toggleTransition: 1
   graphic: {fileID: 114035442555116538}
   m_Group: {fileID: 0}
@@ -506,3 +507,15 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 1
+--- !u!114 &4201951113018203844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726676933286592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3502065971f7ef46ad6fc5a1a3385b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

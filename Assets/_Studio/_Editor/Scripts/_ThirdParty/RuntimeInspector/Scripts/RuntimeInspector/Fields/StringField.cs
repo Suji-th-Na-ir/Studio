@@ -69,12 +69,14 @@ namespace RuntimeInspectorNamespace
             }
 
             lastSubmittedValue = Value;
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(input.BackingField.gameObject);
         }
 
         protected override void OnUnbound()
         {
             base.OnUnbound();
             SetterMode = Mode.OnValueChange;
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(input.BackingField.gameObject);
         }
 
         protected virtual bool OnValueChanged(BoundInputField source, string input)
