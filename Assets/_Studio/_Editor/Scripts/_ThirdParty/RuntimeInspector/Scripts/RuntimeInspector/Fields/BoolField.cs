@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,15 +26,6 @@ namespace RuntimeInspectorNamespace
             return type == typeof(bool);
         }
 
-        protected override void OnBound(MemberInfo variable)
-        {
-            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(input.gameObject);
-        }
-
-        protected override void OnUnbound()
-        {
-            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(input.gameObject);
-        }
         private void OnValueChanged(bool input)
         {
             if (input != (bool)lastSubmittedValue)

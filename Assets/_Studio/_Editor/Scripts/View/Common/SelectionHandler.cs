@@ -11,7 +11,6 @@ using System.Collections.ObjectModel;
 using EasyUI.Helpers;
 using PlayShifu.Terra;
 using EasyUI.Toast;
-using UnityEngine.UI;
 
 public class SelectionHandler : View
 {
@@ -180,22 +179,6 @@ public class SelectionHandler : View
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            var dropDown = EditorOp.Resolve<FocusFieldsSystem>().CurrentFocuedGameobject.GetComponent<Dropdown>();
-            if (dropDown)
-                dropDown.Hide();
-            Selectable next = EditorOp.Resolve<FocusFieldsSystem>().NextFocusedGameObject.GetComponent<Selectable>();
-            InputField inputfield = next.GetComponent<InputField>();
-            if (inputfield != null)
-                inputfield.OnPointerClick(new PointerEventData(EventSystem.current));  //if it's an input field, also set the text caret
-
-            if (next != null)
-            {
-                EditorOp.Resolve<FocusFieldsSystem>().SelectFocusedGameObject(next.gameObject);
-            }
-        }
-
         if (EventSystem.current == null ||
             EventSystem.current.currentSelectedGameObject != null)
         {

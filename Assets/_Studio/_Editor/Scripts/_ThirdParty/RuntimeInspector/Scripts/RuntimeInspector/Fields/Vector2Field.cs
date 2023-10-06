@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Reflection;
-using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -72,18 +71,9 @@ namespace RuntimeInspectorNamespace
 				inputX.Text = val.x.ToString( RuntimeInspectorUtils.numberFormat );
 				inputY.Text = val.y.ToString( RuntimeInspectorUtils.numberFormat );
 			}
-			EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(inputX.gameObject);
-			EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(inputY.gameObject);
 		}
 
-        protected override void OnUnbound()
-        {
-            base.OnUnbound();
-            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(inputX.gameObject);
-            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(inputY.gameObject);
-        }
-
-        private bool OnValueChanged( BoundInputField source, string input )
+		private bool OnValueChanged( BoundInputField source, string input )
 		{
 #if UNITY_2017_2_OR_NEWER
 			if( isVector2Int )

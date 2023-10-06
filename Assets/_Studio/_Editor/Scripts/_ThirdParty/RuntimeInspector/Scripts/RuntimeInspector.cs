@@ -243,7 +243,6 @@ namespace RuntimeInspectorNamespace
         public delegate void PageIndexChangeDelegate(int index);
         public PageIndexChangeDelegate OnPageIndexChanged;
         private ComponentFilterDelegate m_componentFilter;
-
         public ComponentFilterDelegate ComponentFilter
         {
             get { return m_componentFilter; }
@@ -268,7 +267,6 @@ namespace RuntimeInspectorNamespace
             base.Awake();
             Initialize();
             EditorOp.Register(this);
-            EditorOp.Register(new FocusFieldsSystem());
         }
 
         private void Initialize()
@@ -417,7 +415,6 @@ namespace RuntimeInspectorNamespace
             }
 
             RuntimeInspectorUtils.IgnoredTransformsInHierarchy.Remove(drawArea);
-            EditorOp.Unregister<FocusFieldsSystem>();
             EditorOp.Unregister(this);
         }
 
@@ -527,6 +524,7 @@ namespace RuntimeInspectorNamespace
         {
             if (inspectLock)
                 return;
+
             isDirty = false;
             Initialize();
 

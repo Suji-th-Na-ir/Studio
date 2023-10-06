@@ -28,13 +28,6 @@ namespace RuntimeInspectorNamespace
             base.OnBound(variable);
             LoadStartOnOptions();
             lastSubmittedValue = ((Atom.StartOn)lastSubmittedValue).data;
-            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(startOn.gameObject);
-        }
-
-        protected override void OnUnbound()
-        {
-            base.OnUnbound();
-            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(startOn.gameObject);
         }
 
         private void LoadStartOnOptions()
