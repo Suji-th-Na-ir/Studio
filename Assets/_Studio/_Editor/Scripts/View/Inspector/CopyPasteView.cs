@@ -17,7 +17,6 @@ namespace Terra.Studio
         PasteView pasteView;
         Text copyText;
         Button copyButton;
-        bool isPointerOverGameObject = false;
         public override void Draw()
         {
 
@@ -42,14 +41,35 @@ namespace Terra.Studio
             copy.PointerEnter += OpenCopyPanel;
             paste.PointerEnter += OpenPastePanel;
             GetComponent<PointerEventListener>().PointerExit += CloseSubPanels;
-            GetComponent<PointerEventListener>().PointerEnter +=(PointerEventData data)=>{ isPointerOverGameObject = true; };
         }
 
         public void Update()
         {
-            if(Input.GetMouseButton(0) ||Input.GetKeyDown(KeyCode.Escape) &&!isPointerOverGameObject)
+            if ((Input.GetMouseButtonDown(0) && !IsMouseInsidePanel(gameObject) && !IsMouseInsidePanel(copyView.gameObject) && !IsMouseInsidePanel(pasteView.gameObject))
+                 || Input.GetKeyDown(KeyCode.Escape))
             {
                 CloseAll(null);
+            }
+        }
+
+        private bool IsMouseInsidePanel(GameObject panel)
+        {
+            if (panel.activeSelf)
+            {
+                if (!RectTransformUtility.RectangleContainsScreenPoint(
+                        panel.GetComponent<RectTransform>(),
+                        Input.mousePosition))
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -87,7 +107,6 @@ namespace Terra.Studio
 
         private void CloseSubPanels(PointerEventData eventData)
         {
-            isPointerOverGameObject = false;
             StartCoroutine(ClosePanels());
         }
 
