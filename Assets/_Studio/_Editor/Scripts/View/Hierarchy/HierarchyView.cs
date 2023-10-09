@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using RuntimeInspectorNamespace;
 using UnityEngine;
+using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
@@ -12,7 +9,7 @@ namespace Terra.Studio
 
         private void Awake()
         {
-            EditorOp.Register<HierarchyView>(this);
+            EditorOp.Register(this);
         }
         public override void Init()
         {

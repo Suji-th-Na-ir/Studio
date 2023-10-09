@@ -193,15 +193,29 @@ namespace Terra.Studio
             private Vector3 localScale;
             private Transform transform;
             private TransformSnapshot redoSnapshot;
+            private readonly bool shouldStackRecord;
 
-            public TransformSnapshot(GameObject go)
+            public static TransformSnapshot CreateSnapshot(GameObject go)
             {
-                CreateSnapshot(go);
+                return new TransformSnapshot(go);
+            }
+
+            public TransformSnapshot(GameObject go) : this(go, true) { }
+
+            public TransformSnapshot(GameObject go, bool shouldStackRecord)
+            {
+                transform = go.transform;
+                this.shouldStackRecord = shouldStackRecord;
+                CreateTransformSnapshot(go);
+                if (shouldStackRecord)
+                {
+                    StackIntoUndoRedo();
+                }
             }
 
             public void Undo()
             {
-                redoSnapshot ??= new TransformSnapshot(transform.gameObject);
+                redoSnapshot ??= new TransformSnapshot(transform.gameObject, shouldStackRecord);
                 ApplySnapshot();
             }
 
@@ -216,12 +230,12 @@ namespace Terra.Studio
                 transform = go.transform;
             }
 
-            private void CreateSnapshot(GameObject go)
+            private void CreateTransformSnapshot(GameObject go)
             {
                 var transform = go.transform;
                 position = transform.position;
                 eulerAngles = transform.eulerAngles;
-                localScale = transform.localScale;
+                localScale = transform.localScale;    
             }
 
             private void ApplySnapshot()
@@ -229,6 +243,83 @@ namespace Terra.Studio
                 transform.position = position;
                 transform.eulerAngles = eulerAngles;
                 transform.localScale = localScale;
+            }
+
+            private void StackIntoUndoRedo()
+            {
+                EditorOp.Resolve<IURCommand>().Record(true, false, $"{transform.gameObject} modified", (isUndoObj) =>
+                {
+                    var isUndo = (bool)isUndoObj;
+                    if (isUndo)
+                    {
+                        Undo();
+                    }
+                    else
+                    {
+                        Redo();
+                    }
+                });
+            }
+        }
+
+        public sealed class TransformsSnapshot
+        {
+            private TransformSnapshot[] snapshots;
+
+            public static TransformsSnapshot CreateSnapshot(List<GameObject> gos)
+            {
+                return new TransformsSnapshot(gos);
+            }
+
+            public TransformsSnapshot(List<GameObject> gos)
+            {
+                InitializeData(gos);
+                StackIntoUndoRedo();
+            }
+
+            private void InitializeData(List<GameObject> gos)
+            {
+                snapshots = new TransformSnapshot[gos.Count];
+                for (int i = 0; i < gos.Count; i++)
+                {
+                    snapshots[i] = new TransformSnapshot(gos[i], false);
+                }
+            }
+
+            private void StackIntoUndoRedo()
+            {
+                EditorOp.Resolve<IURCommand>().Record(true, false, "Transform changed", (isUndoObj) =>
+                {
+                    var isUndo = (bool)isUndoObj;
+                    if (isUndo)
+                    {
+                        Undo();
+                    }
+                    else
+                    {
+                        Redo();
+                    }
+                }, OnDiscarded);
+            }
+
+            private void Undo()
+            {
+                foreach (var snapshot in snapshots)
+                {
+                    snapshot.Undo();
+                }
+            }
+
+            private void Redo()
+            {
+                foreach (var snapshot in snapshots)
+                {
+                    snapshot.Redo();
+                }
+            }
+
+            private void OnDiscarded()
+            {
             }
         }
 
@@ -533,6 +624,135 @@ namespace Terra.Studio
                 if (string.IsNullOrEmpty(basePlay.fieldName) && !string.IsNullOrEmpty(baseInstance.fieldName)) return;
                 if (!string.IsNullOrEmpty(basePlay.fieldName) && !basePlay.fieldName.Equals(baseInstance.fieldName)) return;
                 basePlay = baseInstance;
+            }
+        }
+
+        public sealed class ComponentDataSnapshot
+        {
+            private readonly string dirtyComponentData;
+            private readonly string newComponentData;
+            private  BaseBehaviour behaviour;
+            private readonly string comment;
+            private readonly Action onDataModified;
+            private ComponentDataSnapshot redoSnapshot;
+            private readonly GameObject targetGameObject;
+            private readonly Type behaviourType;
+
+            public static ComponentDataSnapshot CreateSnapshot(BaseBehaviour behaviour, string dirtyComponentData, string newComponentData,string comment, Action onDataModified)
+            {
+                return new ComponentDataSnapshot(behaviour,dirtyComponentData,newComponentData,comment,onDataModified,true);
+            }
+
+            public ComponentDataSnapshot(BaseBehaviour behaviour, string dirtyComponentData, string newComponentData, string comment, Action onDataModified, bool shouldStackRecord)
+            {
+                this.dirtyComponentData = dirtyComponentData;
+                this.newComponentData = newComponentData;
+                this.behaviour = behaviour;
+                this.comment = comment;
+                this.onDataModified = onDataModified;
+                this.targetGameObject = behaviour.gameObject;
+                this.behaviourType = behaviour.GetType();
+                if (shouldStackRecord)
+                {
+                    StackIntoUndoRedo();
+                }
+            }
+
+            public void Undo()
+            {
+                UpdateRefIfMissing();
+                redoSnapshot ??= new ComponentDataSnapshot(behaviour, newComponentData, dirtyComponentData, comment, onDataModified, false);
+                ApplySnapshot();
+            }
+
+            public void UpdateRefIfMissing()
+            {
+                if (behaviour) return;
+                behaviour = targetGameObject.GetComponent(behaviourType) as BaseBehaviour;
+            }
+
+
+            public void Redo()
+            {
+                redoSnapshot?.Undo();
+            }
+
+            private void ApplySnapshot()
+            {
+                behaviour.Import(dirtyComponentData);
+            }
+
+            private void StackIntoUndoRedo()
+            {
+                EditorOp.Resolve<IURCommand>().Record(true, false, $"{behaviour} modified", (isUndoObj) =>
+                {
+                    var isUndo = (bool)isUndoObj;
+                    if (isUndo)
+                    {
+                        Undo();
+                    }
+                    else
+                    {
+                        Redo();
+                    }
+                });
+            }
+        }
+
+        public sealed class MultipleComponentDataSnapshot
+        {
+            private ComponentDataSnapshot[] snapshots;
+
+            public static MultipleComponentDataSnapshot CreateSnapshot(List<BaseBehaviour> behaviours, string newComponentData, string comment, Action onDataModified)
+            {
+                return new MultipleComponentDataSnapshot(behaviours,newComponentData,comment,onDataModified);
+            }
+
+            public MultipleComponentDataSnapshot(List<BaseBehaviour> behaviours, string newComponentData, string comment, Action onDataModified)
+            {
+                InitializeData(behaviours, newComponentData, comment, onDataModified);
+                StackIntoUndoRedo();
+            }
+
+            private void InitializeData(List<BaseBehaviour> behaviours,string newComponentData, string comment, Action onDataModified)
+            {
+                snapshots = new ComponentDataSnapshot[behaviours.Count];
+                for (int i = 0; i < behaviours.Count; i++)
+                {
+                    snapshots[i] = new ComponentDataSnapshot(behaviours[i], behaviours[i].Export().data, newComponentData, comment, onDataModified, false);
+                }
+            }
+
+            private void StackIntoUndoRedo()
+            {
+                EditorOp.Resolve<IURCommand>().Record(true, false, "Component Data changed", (isUndoObj) =>
+                {
+                    var isUndo = (bool)isUndoObj;
+                    if (isUndo)
+                    {
+                        Undo();
+                    }
+                    else
+                    {
+                        Redo();
+                    }
+                });
+            }
+
+            private void Undo()
+            {
+                foreach (var snapshot in snapshots)
+                {
+                    snapshot.Undo();
+                }
+            }
+
+            private void Redo()
+            {
+                foreach (var snapshot in snapshots)
+                {
+                    snapshot.Redo();
+                }
             }
         }
     }
