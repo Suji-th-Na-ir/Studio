@@ -70,7 +70,27 @@ namespace RuntimeInspectorNamespace
         {
             base.OnBound(variable);
             SetValueIndirectly();
+
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(inputX.gameObject,
+                ()=>inputX.BackingField.targetGraphic.color=Skin.SelectedItemBackgroundColor,
+                () => inputX.BackingField.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(inputY.gameObject,
+                () => inputY.BackingField.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => inputY.BackingField.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(inputZ.gameObject,
+                () => inputZ.BackingField.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => inputZ.BackingField.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
         }
+
+        protected override void OnUnbound()
+        {
+            base.OnUnbound();
+
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(inputX.gameObject);
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(inputY.gameObject);
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(inputZ.gameObject);
+        }
+
 
         private void SetValueIndirectly()
         {

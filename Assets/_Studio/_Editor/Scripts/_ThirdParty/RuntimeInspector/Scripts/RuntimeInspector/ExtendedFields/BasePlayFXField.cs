@@ -39,6 +39,15 @@ namespace Terra.Studio
         {
             base.OnBound(variable);
             lastSubmittedValue = ((Atom.BasePlay)lastSubmittedValue).data;
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(toggleInput.gameObject);
+            if (optionsDropdown.gameObject.activeSelf)
+                EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(optionsDropdown.gameObject);
+        }
+
+        protected override void OnUnbound()
+        {
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(toggleInput.gameObject);
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(optionsDropdown.gameObject);
         }
 
         public override void Initialize()
@@ -66,6 +75,15 @@ namespace Terra.Studio
         {
             var isToggledOn = toggleInput.isOn;
             optionsDropdown.gameObject.SetActive(isToggledOn);
+            if (isToggledOn)
+            {
+                EditorOp.Resolve<FocusFieldsSystem>().AddAfterGameObject(toggleInput.gameObject, optionsDropdown.gameObject);
+            }
+            else
+            {
+                EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(optionsDropdown.gameObject);
+            }
+
         }
 
         protected virtual void OnToggleValueChanged(bool _input)

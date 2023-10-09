@@ -69,12 +69,18 @@ namespace RuntimeInspectorNamespace
             }
 
             lastSubmittedValue = Value;
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(input.BackingField.gameObject,
+                () => input.BackingField.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => input.BackingField.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+
         }
 
         protected override void OnUnbound()
         {
             base.OnUnbound();
             SetterMode = Mode.OnValueChange;
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(input.BackingField.gameObject);
+
         }
 
         protected virtual bool OnValueChanged(BoundInputField source, string input)

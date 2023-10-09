@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,6 +25,18 @@ namespace RuntimeInspectorNamespace
         public override bool SupportsType(Type type)
         {
             return type == typeof(bool);
+        }
+
+        protected override void OnBound(MemberInfo variable)
+        {
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(input.gameObject,
+                () => input.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => input.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+        }
+
+        protected override void OnUnbound()
+        {
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(input.gameObject);
         }
 
         private void OnValueChanged(bool input)
