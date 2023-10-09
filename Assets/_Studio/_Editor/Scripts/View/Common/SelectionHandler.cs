@@ -226,7 +226,7 @@ public class SelectionHandler : View
     {
         if (_selectedObjects.Count > 0)
         {
-            if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.WasKeyPressedThisFrame(KeyCode.D)) || a_bByPassShortCut)
+            if (((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.WasKeyPressedThisFrame(KeyCode.D)) || a_bByPassShortCut)
             {
                 var duplicatedGms = new List<Transform>();
                 foreach (GameObject obj in _selectedObjects)
