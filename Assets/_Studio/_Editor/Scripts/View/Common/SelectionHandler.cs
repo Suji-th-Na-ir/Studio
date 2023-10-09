@@ -41,6 +41,8 @@ public class SelectionHandler : View
     public delegate void SelectionChangedDelegate(List<GameObject> gm);
     public SelectionChangedDelegate SelectionChanged;
     PointerEventData pointerEventData;
+    float tabTrailTimer = 0;
+    const float TAB_TRAILTIME =0.5f;
 
     private void Awake()
     {
@@ -190,8 +192,19 @@ public class SelectionHandler : View
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if(Input.GetKeyDown(KeyCode.Tab)||Input.GetKeyUp(KeyCode.Tab))
         {
+            tabTrailTimer = 0.0f;
+        }
+        if(Input.GetKey(KeyCode.Tab))
+        {
+            tabTrailTimer += Time.deltaTime;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab) && tabTrailTimer <= 0.01f || Input.GetKey(KeyCode.Tab) && tabTrailTimer > TAB_TRAILTIME)
+        {
+            if(tabTrailTimer>TAB_TRAILTIME)
+            tabTrailTimer = TAB_TRAILTIME * 0.8f;
 
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
             {

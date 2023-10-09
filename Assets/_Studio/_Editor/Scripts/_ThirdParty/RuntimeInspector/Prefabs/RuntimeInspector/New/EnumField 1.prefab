@@ -91,7 +91,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 224298449390296976}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.7599999
+  m_Size: 0.76
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1174,7 +1174,7 @@ MonoBehaviour:
     m_SelectedTrigger: Highlighted
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 4570413120274697938}
   m_Template: {fileID: 224854286026678716}
   m_CaptionText: {fileID: 114219520815773778}
   m_CaptionImage: {fileID: 0}
