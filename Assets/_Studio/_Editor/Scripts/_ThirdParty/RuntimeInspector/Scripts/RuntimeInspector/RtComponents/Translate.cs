@@ -180,10 +180,11 @@ namespace RuntimeInspectorNamespace
 
         private Vector3[] GetCurrentOffsetInWorld()
         {
-            var pos = transform.localPosition + (Vector3)Type.data.recordedVector3.Get();
+            var pos = transform.position;
+            var localOffset = (Vector3)Type.data.recordedVector3.Get();
             if (transform.parent != null)
             {
-                pos = transform.TransformPoint(pos);
+                pos += transform.TransformVector(localOffset);
             }
             return new Vector3[] { pos };
         }
@@ -191,11 +192,8 @@ namespace RuntimeInspectorNamespace
         private void OnGhostDataModified(object data)
         {
             var vector3 = (Vector3)data;
-            if (transform.parent != null)
-            {
-                vector3 = transform.InverseTransformPoint(vector3);
-            }
-            var delta = vector3 - transform.localPosition;
+            var delta = vector3 - transform.position;
+            delta = transform.InverseTransformVector(delta);
             if (delta != (Vector3)Type.data.recordedVector3.Get())
             {
                 Type.data.recordedVector3.Set(delta);
