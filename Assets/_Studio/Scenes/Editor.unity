@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.285325, g: 0.80665284, b: 0.99856204, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -652,7 +652,7 @@ PrefabInstance:
     - target: {fileID: 224597220361603002, guid: c310b787f758e3a4db55284145e55bc8,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 959.9183
+      value: 975
       objectReference: {fileID: 0}
     - target: {fileID: 224597220361603002, guid: c310b787f758e3a4db55284145e55bc8,
         type: 3}
@@ -1081,7 +1081,7 @@ MonoBehaviour:
       _text: Scale gizmo
     - _tooltip: Allows you to change universal gizmo settings.
       _text: Universal gizmo
-    _activeTabIndex: 1
+    _activeTabIndex: 2
   _settings:
     _canBeDisplayed: 1
     _isExpanded: 1
@@ -1430,7 +1430,7 @@ MonoBehaviour:
       _scaleSensitivity: 1
   _moveGizmoLookAndFeel2D:
     _canBeDisplayed: 1
-    _isExpanded: 1
+    _isExpanded: 0
     _dblSliderLookAndFeel:
       _fillMode: 1
       _planeType: 0
@@ -1610,7 +1610,7 @@ MonoBehaviour:
       _hoveredBorderColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
     _sglSliderVis: 010101000000
     _sglSliderCapVis: 010101000000
-    _dblSliderVis: 000000
+    _dblSliderVis: 010101
     _sglSlidersLookAndFeel:
     - _shadeMode: 0
       _lineType: 2
@@ -1856,8 +1856,8 @@ MonoBehaviour:
     - _planeType: 0
       _scale: 1
       _useZoomFactor: 1
-      _quadWidth: 1
-      _quadHeight: 1
+      _quadWidth: 2
+      _quadHeight: 2
       _raTriangleXLength: 1
       _raTriangleYLength: 1
       _circleRadius: 0.5
@@ -1868,8 +1868,8 @@ MonoBehaviour:
       _borderCylTorusWidth: 0.18
       _borderCylTorusHeight: 0.18
       _shadeMode: 1
-      _color: {r: 0.17065683, g: 0.42009452, b: 0.6132076, a: 0}
-      _hoveredColor: {r: 0.6886792, g: 0.6772101, b: 0.126691, a: 0}
+      _color: {r: 0.17065683, g: 0.42009452, b: 0.6132076, a: 0.2}
+      _hoveredColor: {r: 0.6886792, g: 0.6772101, b: 0.126691, a: 0.2}
       _borderColor: {r: 0.17065683, g: 0.42009452, b: 0.6132076, a: 0.69803923}
       _hoveredBorderColor: {r: 0.6886792, g: 0.6772101, b: 0.126691, a: 0.69803923}
       _borderCircleCullAlphaScale: 0
@@ -1887,8 +1887,8 @@ MonoBehaviour:
     - _planeType: 0
       _scale: 1
       _useZoomFactor: 1
-      _quadWidth: 1
-      _quadHeight: 1
+      _quadWidth: 2
+      _quadHeight: 2
       _raTriangleXLength: 1
       _raTriangleYLength: 1
       _circleRadius: 0.5
@@ -1899,8 +1899,8 @@ MonoBehaviour:
       _borderCylTorusWidth: 0.18
       _borderCylTorusHeight: 0.18
       _shadeMode: 1
-      _color: {r: 0.6226415, g: 0.15566038, b: 0.5393227, a: 0}
-      _hoveredColor: {r: 0.6886792, g: 0.6772101, b: 0.126691, a: 0}
+      _color: {r: 0.6226415, g: 0.15566038, b: 0.5393227, a: 0.2}
+      _hoveredColor: {r: 0.6886792, g: 0.6772101, b: 0.126691, a: 0.2}
       _borderColor: {r: 0.6226415, g: 0.15566038, b: 0.5393227, a: 0.69803923}
       _hoveredBorderColor: {r: 0.6886792, g: 0.6772101, b: 0.126691, a: 0.69803923}
       _borderCircleCullAlphaScale: 0
@@ -1918,8 +1918,8 @@ MonoBehaviour:
     - _planeType: 0
       _scale: 1
       _useZoomFactor: 1
-      _quadWidth: 1
-      _quadHeight: 1
+      _quadWidth: 2
+      _quadHeight: 2
       _raTriangleXLength: 1
       _raTriangleYLength: 1
       _circleRadius: 0.5
@@ -1930,8 +1930,8 @@ MonoBehaviour:
       _borderCylTorusWidth: 0.18
       _borderCylTorusHeight: 0.18
       _shadeMode: 1
-      _color: {r: 0.14177644, g: 0.509434, b: 0.17519982, a: 0}
-      _hoveredColor: {r: 0.6886792, g: 0.6772101, b: 0.126691, a: 0}
+      _color: {r: 0.14177644, g: 0.509434, b: 0.17519982, a: 0.2}
+      _hoveredColor: {r: 0.6886792, g: 0.6772101, b: 0.126691, a: 0.2}
       _borderColor: {r: 0.14177644, g: 0.509434, b: 0.17519982, a: 0.69803923}
       _hoveredBorderColor: {r: 0.6886792, g: 0.6772101, b: 0.126691, a: 0.69803923}
       _borderCircleCullAlphaScale: 0
@@ -8110,7 +8110,7 @@ PrefabInstance:
     - target: {fileID: 224685037686054822, guid: 4d8c6c9fba0e46f489b21fd7d92d739d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.000069618225
+      value: 0.000023841858
       objectReference: {fileID: 0}
     - target: {fileID: 224685037686054822, guid: 4d8c6c9fba0e46f489b21fd7d92d739d,
         type: 3}
