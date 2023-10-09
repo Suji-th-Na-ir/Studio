@@ -117,6 +117,18 @@ namespace RTG
         public CameraProjectionSwitchSettings ProjectionSwitchSettings { get { return _projectionSwitchSettings; } }
         public CameraHotkeys Hotkeys { get { return _hotkeys; } }
 
+        public Action OnCameraMoved;
+
+        private void OnEnable()
+        {
+            EditorOp.Register(this);
+        }
+
+        private void OnDisable()
+        {
+            EditorOp.Unregister(this);
+        }
+
         public bool IsViewportHoveredByDevice()
         {
             Vector2 devicePos = RTInputDevice.Get.Device.GetPositionYAxisUp();
@@ -373,6 +385,7 @@ namespace RTG
             {
                 float accelAdd = MoveSettings.AccelerationRate * Mathf.Abs(_targetCamera.EstimateZoomFactor(_lastFocusPoint)) * Time.deltaTime;
                 _currentAcceleration += accelAdd;
+                OnCameraMoved?.Invoke();
             }
             else _currentAcceleration = 0.0f;
 
@@ -400,11 +413,13 @@ namespace RTG
                         {
                             Vector2 rotation = CalculateOrbitRotation(mouseX, mouseY);
                             Orbit(rotation.x, rotation.y);
+                            OnCameraMoved?.Invoke();
                         }
                         else
                         {
                             StopCamTransform();
                             StartCoroutine(_genricCamTransformCrtn = DoSmoothOrbit(mouseX, mouseY));
+                            OnCameraMoved?.Invoke();
                         }
                     }
                     else
@@ -414,11 +429,13 @@ namespace RTG
                         {
                             Vector2 rotation = CalculateLookAroundRotation(mouseX, mouseY);
                             LookAround(rotation.x, rotation.y);
+                            OnCameraMoved?.Invoke();
                         }
                         else
                         {
                             StopCamTransform();
                             StartCoroutine(_genricCamTransformCrtn = DoSmoothLookAround(mouseX, mouseY));
+                            OnCameraMoved?.Invoke();
                         }
                     }
                 }
@@ -765,17 +782,18 @@ namespace RTG
             Vector3 camStartPos = _targetTransform.position;
             Vector3 camMoveDir = Vector3.Normalize(focusData.CameraWorldPosition - camStartPos);
             float elapsedTime = 0.0f;
+            float startOrthoSize = TargetCamera.orthographicSize;
 
             _isDoingFocus = true;
             while (true)
             {
                 float t = elapsedTime / FocusSettings.SmoothTime;
-                _targetTransform.position = Vector3.Lerp(_targetTransform.position, focusData.CameraWorldPosition, t);
-                TargetCamera.orthographicSize = Mathf.Lerp(TargetCamera.orthographicSize, targetOrthoSize, t);
+                _targetTransform.position = Vector3.Lerp(camStartPos, focusData.CameraWorldPosition, t);
+                TargetCamera.orthographicSize = Mathf.Lerp(startOrthoSize, targetOrthoSize, t);
 
                 elapsedTime += Time.deltaTime;
 
-                if (Vector3.Dot(camMoveDir, focusData.CameraWorldPosition - _targetTransform.position) <= 0.0f)
+                if (Vector3.Dot(camMoveDir, focusData.CameraWorldPosition - _targetTransform.position) <= 0.01f)
                 {
                     _targetTransform.position = focusData.CameraWorldPosition;
                     TargetCamera.orthographicSize = targetOrthoSize;
@@ -783,6 +801,7 @@ namespace RTG
                 }
                 yield return null;
             }
+            Debug.Log ("Lerp ended");
 
             SetFocusPoint(focusData.FocusPoint);
             _lastFocusPoint = focusData.FocusPoint;
