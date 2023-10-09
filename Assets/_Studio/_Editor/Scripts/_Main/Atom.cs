@@ -192,6 +192,7 @@ namespace Terra.Studio
             private BaseBehaviour behaviour;
 
             public Vector3 LastVector3;
+            public Action OnValueReset;
             public Action<bool> OnModified;
             public Action OnPerAxisValueModified;
             public Type ObscureType => typeof(Vector3);
@@ -252,6 +253,7 @@ namespace Terra.Studio
             public void Reset()
             {
                 vector3 = defaultVector3;
+                OnValueReset?.Invoke();
             }
 
             private void SetDefault(Vector3 vector3)

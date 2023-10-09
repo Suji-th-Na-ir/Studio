@@ -65,6 +65,11 @@ namespace RuntimeInspectorNamespace
             {
                 Type.data.ghostLastRecordedRotation = transform.eulerAngles + (Vector3)Type.data.vector3.Get();
             };
+            Type.data.vector3.OnValueReset = () =>
+            {
+                Type.data.vector3.OnPerAxisValueModified?.Invoke();
+                Type.ForceRefreshData?.Invoke();
+            };
         }
 
         public override (string type, string data) Export()
