@@ -96,7 +96,10 @@ namespace RuntimeInspectorNamespace
             input.ClearOptions();
             input.AddOptions(currEnumNames);
             lastSubmittedValue = currEnumNames.IndexOf($"{lastSubmittedValue}");
-            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(input.gameObject);
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(input.gameObject,
+            () => input.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+            () => input.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+         
         }
 
         protected override void OnUnbound()

@@ -39,9 +39,15 @@ namespace Terra.Studio
         {
             base.OnBound(variable);
             lastSubmittedValue = ((Atom.BasePlay)lastSubmittedValue).data;
-            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(toggleInput.gameObject);
-            if (optionsDropdown.gameObject.activeSelf)
-                EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(optionsDropdown.gameObject);
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(toggleInput.gameObject,
+                () => toggleInput.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => toggleInput.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+            if (toggleInput.isOn)
+            {
+                EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(optionsDropdown.gameObject,
+                () => optionsDropdown.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => optionsDropdown.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+            }
         }
 
         protected override void OnUnbound()
@@ -77,7 +83,9 @@ namespace Terra.Studio
             optionsDropdown.gameObject.SetActive(isToggledOn);
             if (isToggledOn)
             {
-                EditorOp.Resolve<FocusFieldsSystem>().AddAfterGameObject(toggleInput.gameObject, optionsDropdown.gameObject);
+                EditorOp.Resolve<FocusFieldsSystem>().AddAfterGameObject(toggleInput.gameObject, optionsDropdown.gameObject,
+                () => optionsDropdown.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => optionsDropdown.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
             }
             else
             {

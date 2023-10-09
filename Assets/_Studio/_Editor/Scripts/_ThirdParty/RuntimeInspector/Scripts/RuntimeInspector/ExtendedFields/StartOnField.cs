@@ -28,7 +28,9 @@ namespace RuntimeInspectorNamespace
             base.OnBound(variable);
             LoadStartOnOptions();
             lastSubmittedValue = ((Atom.StartOn)lastSubmittedValue).data;
-            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(startOn.gameObject);
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(startOn.gameObject,
+                  () => startOn.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => startOn.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
         }
 
         protected override void OnUnbound()

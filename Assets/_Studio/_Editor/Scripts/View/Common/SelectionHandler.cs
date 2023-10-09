@@ -37,9 +37,10 @@ public class SelectionHandler : View
     private List<GameObject> prevSelectedObjects = new List<GameObject>();
     private GameObject lastPickedGameObject;
     private Camera mainCamera;
-
+    private Selectable nextSelecteField;
     public delegate void SelectionChangedDelegate(List<GameObject> gm);
     public SelectionChangedDelegate SelectionChanged;
+    PointerEventData pointerEventData;
 
     private void Awake()
     {
@@ -176,23 +177,35 @@ public class SelectionHandler : View
 
         runtimeHierarchy = EditorOp.Resolve<RuntimeHierarchy>();
         runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
+        pointerEventData = new PointerEventData(EventSystem.current);
     }
 
     private void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (pointerEventData.selectedObject == null)
+            {
+                EditorOp.Resolve<FocusFieldsSystem>().RemoveCurrentSelected();
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            var dropDown = EditorOp.Resolve<FocusFieldsSystem>().CurrentFocuedGameobject.GetComponent<Dropdown>();
-            if (dropDown)
-                dropDown.Hide();
-            Selectable next = EditorOp.Resolve<FocusFieldsSystem>().NextFocusedGameObject.GetComponent<Selectable>();
-            InputField inputfield = next.GetComponent<InputField>();
-            if (inputfield != null)
-                inputfield.OnPointerClick(new PointerEventData(EventSystem.current));  //if it's an input field, also set the text caret
 
-            if (next != null)
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
             {
-                EditorOp.Resolve<FocusFieldsSystem>().SelectFocusedGameObject(next.gameObject);
+                nextSelecteField = EditorOp.Resolve<FocusFieldsSystem>().LastFocusedGameObject?.GetComponent<Selectable>();
+            }
+            else
+            {
+                nextSelecteField = EditorOp.Resolve<FocusFieldsSystem>().NextFocusedGameObject?.GetComponent<Selectable>();
+            }
+
+
+            if (nextSelecteField != null)
+            {
+                EditorOp.Resolve<FocusFieldsSystem>().SelectFocusedGameObject(nextSelecteField.gameObject);
             }
         }
 

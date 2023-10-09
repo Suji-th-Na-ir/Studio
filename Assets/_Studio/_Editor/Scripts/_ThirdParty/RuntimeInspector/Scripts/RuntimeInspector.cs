@@ -267,7 +267,6 @@ namespace RuntimeInspectorNamespace
             base.Awake();
             Initialize();
             EditorOp.Register(this);
-            EditorOp.Register(new FocusFieldsSystem());
         }
 
         private void Initialize()
@@ -416,7 +415,6 @@ namespace RuntimeInspectorNamespace
             }
 
             RuntimeInspectorUtils.IgnoredTransformsInHierarchy.Remove(drawArea);
-            EditorOp.Unregister<FocusFieldsSystem>();
             EditorOp.Unregister(this);
         }
 

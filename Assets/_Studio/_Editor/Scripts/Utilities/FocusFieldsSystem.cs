@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using RuntimeInspectorNamespace;
 using UnityEngine;
@@ -21,16 +20,26 @@ namespace Terra.Studio
         private FocusedGameObject currentFocusedGameobject;
         public GameObject CurrentFocuedGameobject { get { return currentFocusedGameobject.fGameObject; } }
 
-        private FocusedGameObject lastFocusedGameObject;
         public GameObject LastFocusedGameObject
         {
             get
             {
-                if (!lastFocusedGameObject.fGameObject)
+                if (currentFocusedGameobject.fGameObject == null)
+                    return null;
+                var index = focusedGameObjects.IndexOf(currentFocusedGameobject) - 1;
+                if (index >= 0 && index < focusedGameObjects.Count)
                 {
-                    return currentFocusedGameobject.fGameObject;
+                    return focusedGameObjects[index].fGameObject;
                 }
-                return lastFocusedGameObject.fGameObject;
+                else if (index > focusedGameObjects.Count)
+                {
+                    return focusedGameObjects[0].fGameObject;
+                }
+                else
+                {
+                    return focusedGameObjects[focusedGameObjects.Count - 1].fGameObject;
+                }
+
             }
         }
 
@@ -38,6 +47,8 @@ namespace Terra.Studio
         {
             get
             {
+                if (currentFocusedGameobject.fGameObject == null)
+                    return null;
                 var index = focusedGameObjects.IndexOf(currentFocusedGameobject) + 1;
                 if (index < focusedGameObjects.Count)
                 {
@@ -60,8 +71,14 @@ namespace Terra.Studio
                 var pointer = selectable.GetComponent<PointerEventListener>();
                 if (!pointer)
                     pointer = selectable.gameObject.AddComponent<PointerEventListener>();
-                selectable.GetComponent<PointerEventListener>().PointerDown += SetCurrentFocusedGameobject;
+                pointer.PointerDown += SetCurrentFocusedGameobject;
             }
+        }
+
+        public void RemoveCurrentSelected()
+        {
+            currentFocusedGameobject.OnDeSelect?.Invoke();
+            currentFocusedGameobject = default;
         }
 
         public void RemoveFocusedGameObjects(GameObject gm)
@@ -71,6 +88,14 @@ namespace Terra.Studio
 
         public void SelectFocusedGameObject(GameObject gm)
         {
+            if (CurrentFocuedGameobject != null)
+            {
+                var dropDown = CurrentFocuedGameobject.GetComponent<Dropdown>();
+                if (dropDown != null)
+                {
+                    dropDown.Hide();
+                }
+            }
             var pointerData = new PointerEventData(EventSystem.current);
             pointerData.selectedObject = gm;
             SetCurrentFocusedGameobject(pointerData);
@@ -80,10 +105,9 @@ namespace Terra.Studio
         {
             if (CurrentFocuedGameobject == data.selectedObject)
                 return;
-            lastFocusedGameObject = currentFocusedGameobject;
 
             ExecuteEvents.Execute(CurrentFocuedGameobject, data, ExecuteEvents.deselectHandler);
-            lastFocusedGameObject.OnDeSelect?.Invoke();
+            currentFocusedGameobject.OnDeSelect?.Invoke();
 
             currentFocusedGameobject = GetFocusedObjectWithSameGO(data.selectedObject);
             ExecuteEvents.Execute(CurrentFocuedGameobject, data, ExecuteEvents.selectHandler);
@@ -99,7 +123,7 @@ namespace Terra.Studio
                     return focusedGameObjects[i];
                 }
             }
-            return new FocusedGameObject();
+            return default;
         }
 
         public void AddAfterGameObject(GameObject lastGm, GameObject newGm, Action onSelect = null, Action onDeselect = null)
@@ -122,11 +146,6 @@ namespace Terra.Studio
                     pointer = selectable.gameObject.AddComponent<PointerEventListener>();
                 selectable.GetComponent<PointerEventListener>().PointerDown += SetCurrentFocusedGameobject;
             }
-        }
-
-        public void ClearFocusedGameobjects()
-        {
-            focusedGameObjects.Clear();
         }
 
         public void Dispose()
