@@ -35,8 +35,10 @@ namespace Terra.Studio
             var tr = entityRef.RefObj.transform;
             if (!entityRef.isInitialProcessDone)
             {
-                var scaleDelta = new Vector3(tr.lossyScale.x / tr.localScale.x, tr.lossyScale.y / tr.localScale.y, tr.lossyScale.z / tr.localScale.z);
-                entityRef.targetPosition = new Vector3(scaleDelta.x * entityRef.targetPosition.x, scaleDelta.y * entityRef.targetPosition.y, scaleDelta.z * entityRef.targetPosition.z);
+                if (tr.parent != null)
+                {
+                    entityRef.targetPosition = tr.TransformVector(entityRef.targetPosition);
+                }
                 entityRef.isInitialProcessDone = true;
             }
             var targetPos = tr.parent == null ? entityRef.targetPosition + entityRef.startPosition : entityRef.startPosition + tr.TransformDirection(entityRef.targetPosition);
