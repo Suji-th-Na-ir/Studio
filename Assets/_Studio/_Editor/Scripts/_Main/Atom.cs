@@ -147,7 +147,7 @@ namespace Terra.Studio
                 data.vector3 = new();
                 data.vector3.Setup(behaviour);
                 data.vector3.Set(new Vector3(0f, 0f, 0f));
-                data.ghostLastRecordedRotation = Atom.RecordedVector3.INFINITY;
+                data.ghostLastRecordedRotation = RecordedVector3.INFINITY;
             }
         }
 
@@ -193,6 +193,7 @@ namespace Terra.Studio
 
             public Vector3 LastVector3;
             public Action<bool> OnModified;
+            public Action OnPerAxisValueModified;
             public Type ObscureType => typeof(Vector3);
             public Type DeclaredType => behaviourType;
             public Func<bool> IsValueModified => IsModified;
@@ -245,6 +246,7 @@ namespace Terra.Studio
                         break;
                 }
                 Set(currentVector);
+                OnPerAxisValueModified?.Invoke();
             }
 
             public void Reset()

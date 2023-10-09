@@ -741,5 +741,34 @@ namespace PlayShifu.Terra
             }
             return currentAngle;
         }
+
+        public static Vector3 GetAbsEulerAngle(this Vector3 currentAngle)
+        {
+            if (currentAngle.x < 0)
+            {
+                currentAngle.x = 360f + currentAngle.x;
+            }
+            if (Mathf.Abs(currentAngle.x - 360f) < 3)
+            {
+                currentAngle.x = 0f;
+            }
+            if (currentAngle.y < 0)
+            {
+                currentAngle.y = 360f + currentAngle.y;
+            }
+            if (Mathf.Abs(currentAngle.y - 360f) < 3)
+            {
+                currentAngle.y = 0f;
+            }
+            if (currentAngle.z < 0)
+            {
+                currentAngle.z = 360f + currentAngle.z;
+            }
+            if (Mathf.Abs(currentAngle.z - 360f) < 3)
+            {
+                currentAngle.z = 0f;
+            }
+            return currentAngle;
+        }
     }
 }

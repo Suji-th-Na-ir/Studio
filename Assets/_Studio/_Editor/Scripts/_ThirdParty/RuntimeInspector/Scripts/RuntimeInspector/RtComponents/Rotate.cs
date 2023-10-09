@@ -61,6 +61,10 @@ namespace RuntimeInspectorNamespace
                 GhostTo = gameObject
             };
             SetLastValue();
+            Type.data.vector3.OnPerAxisValueModified = () =>
+            {
+                Type.data.ghostLastRecordedRotation = transform.eulerAngles + (Vector3)Type.data.vector3.Get();
+            };
         }
 
         public override (string type, string data) Export()
@@ -87,7 +91,8 @@ namespace RuntimeInspectorNamespace
                 vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName,
                 sfxIndex = PlaySFX.data.clipIndex,
                 vfxIndex = PlayVFX.data.clipIndex,
-                listen = Listen.Always
+                listen = Listen.Always,
+                ghostLastRotation = Type.data.ghostLastRecordedRotation
             };
             var axes = new List<Axis>();
             if (targetVector.x != 0f)
@@ -157,6 +162,7 @@ namespace RuntimeInspectorNamespace
             Type.data.broadcastAt = comp.broadcastAt;
             Type.data.Broadcast = comp.Broadcast;
             Type.data.listen = comp.listen;
+            Type.data.ghostLastRecordedRotation = comp.ghostLastRotation;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
                 var res = (StartOn)result;
@@ -202,8 +208,9 @@ namespace RuntimeInspectorNamespace
         private Vector3[] GetSpawnTRS()
         {
             var position = transform.position;
-            var rotation = Type.data.ghostLastRecordedRotation == Atom.RecordedVector3.INFINITY ?
-                gameObject.transform.eulerAngles :
+            var rotation = Type.data.ghostLastRecordedRotation == Atom.RecordedVector3.INFINITY ||
+                Type.data.ghostLastRecordedRotation == Vector3.zero ?
+                gameObject.transform.rotation.eulerAngles :
                 Type.data.ghostLastRecordedRotation;
             return new Vector3[] { position, rotation };
         }
@@ -212,12 +219,10 @@ namespace RuntimeInspectorNamespace
         {
             GhostDescription.IsGhostInteractedInLastRecord = true;
             var vector3 = (Vector3)data;
+            vector3 = Quaternion.Euler(vector3).eulerAngles;
             Type.data.ghostLastRecordedRotation = vector3;
-            var currentAngle = transform.GetAbsEulerAngle();
-            var delta = Vector3.zero;
-            delta.x = Mathf.Abs(vector3.x - currentAngle.x);
-            delta.y = Mathf.Abs(vector3.y - currentAngle.y);
-            delta.z = Mathf.Abs(vector3.z - currentAngle.z);
+            var delta = vector3 - transform.eulerAngles;
+            delta = delta.GetAbsEulerAngle();
             Type.data.vector3.Set(delta);
             Type.ForceRefreshData?.Invoke();
         }

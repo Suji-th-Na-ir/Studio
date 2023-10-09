@@ -367,11 +367,10 @@ namespace Terra.Studio
 
         private void AttachRecorder(Record recordFor, Action<object> onRecordDataModified)
         {
-            var firstChild = ghost.transform.GetChild(0).gameObject;
             baseRecorder = recordFor switch
             {
-                Record.Position => firstChild.AddComponent<PositionRecorder>(),
-                Record.Rotation => firstChild.AddComponent<RotationRecorder>(),
+                Record.Position => ghost.AddComponent<PositionRecorder>(),
+                Record.Rotation => ghost.AddComponent<RotationRecorder>(),
                 _ => throw new NotImplementedException()
             };
             baseRecorder.Init(onRecordDataModified);
@@ -423,6 +422,12 @@ namespace Terra.Studio
             protected override object Result => transform.position;
             protected override Func<bool> IsModified => IsDataModified;
 
+            public override void Init(Action<object> onDataModified)
+            {
+                base.Init(onDataModified);
+                cachedPosition = transform.position;
+            }
+
             public bool IsDataModified()
             {
                 var didPositionChange = cachedPosition != transform.position;
@@ -435,19 +440,24 @@ namespace Terra.Studio
         {
             private Vector3 cachedRotation;
             protected override Func<bool> IsModified => IsDataModified;
-            protected override object Result { get { return GetResult(); } }
+            protected override object Result => transform.rotation.eulerAngles;
             protected override int FRAMES_INTERVAL_TO_CHECK => 15;
+
+            public override void Init(Action<object> onDataModified)
+            {
+                base.Init(onDataModified);
+                cachedRotation = transform.eulerAngles;
+                if (transform.childCount > 0)
+                {
+                    transform.GetChild(0).localRotation = Quaternion.Euler(Vector3.zero);
+                }
+            }
 
             public bool IsDataModified()
             {
                 var didRotationChange = cachedRotation != transform.eulerAngles;
                 cachedRotation = transform.eulerAngles;
                 return didRotationChange;
-            }
-
-            private object GetResult()
-            {
-                return transform.GetAbsEulerAngle();
             }
         }
     }

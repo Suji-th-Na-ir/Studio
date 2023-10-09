@@ -19,6 +19,7 @@ namespace Terra.Studio
         [JsonIgnore] public EventContext EventContext { get; set; }
         [JsonIgnore] public GameObject RefObj { get; set; }
         [JsonConverter(typeof(Vector3Converter))] public Vector3 expectedRotateBy;
+        [JsonConverter(typeof(Vector3Converter))] public Vector3 ghostLastRotation;
         public Axis[] axis;
         public Direction direction;
         public RotationType rotationType;
