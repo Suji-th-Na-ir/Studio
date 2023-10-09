@@ -37,6 +37,7 @@ public class SelectionHandler : View
     private GameObject lastPickedGameObject;
     private Camera mainCamera;
     private EditorSystem cachedEditorSystem;
+    public bool canUndo, canRedo;
 
     public delegate void SelectionChangedDelegate(List<GameObject> gm);
     public SelectionChangedDelegate SelectionChanged;
@@ -177,6 +178,14 @@ public class SelectionHandler : View
         runtimeHierarchy = EditorOp.Resolve<RuntimeHierarchy>();
         cachedEditorSystem = EditorOp.Resolve<EditorSystem>();
         runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
+
+        EditorOp.Resolve<IURCommand>().OnUndoStackAvailable += (isPresent) => { canUndo = isPresent; };
+        EditorOp.Resolve<IURCommand>().OnRedoStackAvailable += (isPresent) => { canRedo = isPresent; };
+        EditorOp.Resolve<EditorSystem>().OnIncognitoEnabled += (isEnabled) =>
+        {
+            canUndo = !isEnabled;
+            canRedo = !isEnabled;
+        };
     }
 
     private void Update()
@@ -198,6 +207,30 @@ public class SelectionHandler : View
         if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.WasKeyPressedThisFrame(KeyCode.S))
         {
             EditorOp.Resolve<SceneDataHandler>().Save();
+        }
+
+        if (!Application.isEditor)
+        {
+            CheckForSave();
+        }
+    }
+
+    private void CheckForSave()
+    {
+        if (canUndo)
+        {
+            if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.WasKeyPressedThisFrame(KeyCode.Z))
+            {
+                EditorOp.Resolve<IURCommand>().Undo();
+            }
+        }
+
+        if (canRedo)
+        {
+            if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.WasKeyPressedThisFrame(KeyCode.Y))
+            {
+                EditorOp.Resolve<IURCommand>().Redo();
+            }
         }
     }
 
