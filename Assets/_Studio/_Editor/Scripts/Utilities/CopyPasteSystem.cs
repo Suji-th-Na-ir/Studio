@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using RuntimeInspectorNamespace;
 using UnityEngine;
@@ -6,6 +7,7 @@ namespace Terra.Studio
 {
     struct ComponentCPData
     {
+        public Type behaviourType;
         public string type;
         public string data;
         public bool copied;
@@ -28,13 +30,13 @@ namespace Terra.Studio
         public bool IsLastScaleData { get { return clipboardScaleData.copied; } }
 
         private ComponentCPData clipboardComponentData;
-        public bool IsLastBehaviourDataSame(string type) {  return clipboardComponentData.type==type; }
+        public bool IsLastBehaviourDataSame(Type type) { return clipboardComponentData.behaviourType == type; }
 
 
         public void CopyBehaviorData(BaseBehaviour behaviour)
         {
             var export = behaviour.Export();
-            clipboardComponentData = new ComponentCPData { type = export.type, data = export.data, copied = true };
+            clipboardComponentData = new ComponentCPData { behaviourType = behaviour.GetType(), type = export.type, data = export.data, copied = true };
         }
 
         public void PasteBehaviourData(BaseBehaviour behaviour)

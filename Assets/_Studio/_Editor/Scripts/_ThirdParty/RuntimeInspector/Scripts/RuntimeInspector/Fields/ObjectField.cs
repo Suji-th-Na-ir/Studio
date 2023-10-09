@@ -90,6 +90,24 @@ namespace RuntimeInspectorNamespace
         private void OpenCopyPastePanel()
         {
             var open = !copyPastePanel.activeSelf;
+
+            var behaviour = Value as BaseBehaviour;
+            if (behaviour != null)
+            {
+                bool activate = EditorOp.Resolve<CopyPasteSystem>().IsLastBehaviourDataSame(behaviour.GetType());
+                pasteButton.interactable = activate;
+                if (!activate)
+                {
+                    var color = Helper.GetColorFromHex("#C8C8C8");
+                    color.a = 0.6f;
+                    pasteText.color = color;
+                }
+                else
+                {
+                    pasteText.color = Helper.GetColorFromHex("#FFFFFF");
+                }
+            }
+
             copyPastePanel.SetActive(open);
         }
 
@@ -113,8 +131,7 @@ namespace RuntimeInspectorNamespace
                 {
                     if (components[j] != null)
                     {
-                        var exportedData = components[j].Export();
-                        if (EditorOp.Resolve<CopyPasteSystem>().IsLastBehaviourDataSame(exportedData.type))
+                        if (EditorOp.Resolve<CopyPasteSystem>().IsLastBehaviourDataSame(components[j].GetType()))
                         {
                             sameComponents.Add(components[j]);
                         }
@@ -179,24 +196,6 @@ namespace RuntimeInspectorNamespace
             {
                 didCheckForExpand = true;
                 IsExpanded = true;
-            }
-
-            var behaviour = Value as BaseBehaviour;
-            if (behaviour != null)
-            {
-                var data = behaviour.Export();
-                bool activate = EditorOp.Resolve<CopyPasteSystem>().IsLastBehaviourDataSame(data.type);
-                pasteButton.interactable = activate;
-                if (!activate)
-                {
-                    var color = Helper.GetColorFromHex("#C8C8C8");
-                    color.a = 0.6f;
-                    pasteText.color = color;
-                }
-                else
-                {
-                    pasteText.color = Helper.GetColorFromHex("#FFFFFF");
-                }
             }
         }
 

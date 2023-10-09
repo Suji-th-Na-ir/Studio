@@ -94,9 +94,9 @@ namespace RTG
 
             if (!Application.isEditor)
             {
-                if (RTInput.WasKeyPressedThisFrame(KeyCode.LeftCommand) && RTInput.IsKeyPressed(KeyCode.Z)) Undo();
+                if ((RTInput.WasKeyPressedThisFrame(KeyCode.LeftCommand) || RTInput.WasKeyPressedThisFrame(KeyCode.LeftControl)) && RTInput.IsKeyPressed(KeyCode.Z)) Undo();
                 else
-                if (RTInput.WasKeyPressedThisFrame(KeyCode.LeftCommand) && RTInput.IsKeyPressed(KeyCode.Y)) Redo();
+                if ((RTInput.WasKeyPressedThisFrame (KeyCode.LeftCommand) || RTInput.WasKeyPressedThisFrame (KeyCode.LeftControl)) && RTInput.IsKeyPressed(KeyCode.Y)) Redo();
             }
             else
             {
