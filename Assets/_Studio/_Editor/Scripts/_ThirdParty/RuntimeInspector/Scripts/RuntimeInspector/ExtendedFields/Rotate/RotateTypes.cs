@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using PlayShifu.Terra;
 using System.Collections.Generic;
 using Object = System.Object;
+using UnityEngine.UI.ProceduralImage;
 
 namespace RuntimeInspectorNamespace
 {
@@ -40,6 +41,17 @@ namespace RuntimeInspectorNamespace
 
         [HideInInspector]
         public RotateField field = null;
+
+        [SerializeField] private Text m_refBroadcastAtTitleText;
+        [SerializeField] private Text m_refBroadcastTitleText;
+
+        [SerializeField] private Text m_refMoveByTitleText;
+        [SerializeField] private Text [] m_refMoveByAxisLabels;
+
+        [SerializeField] private Text m_refSpeedTitleText;
+        [SerializeField] private Text m_refPauseTitleText;
+        [SerializeField] private Text m_refDirectionTitleText;
+        [SerializeField] private Text m_refRepeatTitleText;
 
         private enum VariableTypes
         {
@@ -337,7 +349,19 @@ namespace RuntimeInspectorNamespace
             for (int i = 0; i < ValuesPerAxis.Length; i++)
             {
                 ValuesPerAxis[i].SetupInputFieldSkin(Skin);
+                ValuesPerAxis [i].gameObject.GetComponent<BoundInputField> ().Skin = Skin;
+                ValuesPerAxis [i].GetComponent<ProceduralImage> ().color = Skin.InputFieldNormalBackgroundColor;
             }
+            m_refMoveByTitleText.SetSkinText (Skin);
+            if (m_refBroadcastTitleText != null) m_refBroadcastTitleText.SetSkinText (Skin);
+            if (m_refBroadcastAtTitleText != null) m_refBroadcastAtTitleText.SetSkinText (Skin);
+            for (int i = 0; i < m_refMoveByAxisLabels.Length; i++) {
+                m_refMoveByAxisLabels [i].SetSkinText (Skin);
+            }
+            if (m_refSpeedTitleText != null) m_refSpeedTitleText.SetSkinText (Skin);
+            if (m_refPauseTitleText != null) m_refPauseTitleText.SetSkinText (Skin);
+            if (m_refDirectionTitleText != null) m_refDirectionTitleText.SetSkinText (Skin);
+            if (m_refRepeatTitleText != null) m_refRepeatTitleText.SetSkinText (Skin);
         }
 
         private void SetActions()
