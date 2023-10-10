@@ -191,6 +191,13 @@ namespace RuntimeInspectorNamespace
                 case RotationType.OscillateForever:
                 case RotationType.IncrementallyRotateForever:
                     component.repeatFor = int.MaxValue;
+                    if (component.rotationType == RotationType.OscillateForever)
+                    {
+                        component.direction = Direction.Clockwise;
+                    }
+                    break;
+                case RotationType.Oscillate:
+                    component.direction = Direction.Clockwise;
                     break;
             }
         }
