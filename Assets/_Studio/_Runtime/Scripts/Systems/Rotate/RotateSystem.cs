@@ -154,11 +154,8 @@ namespace Terra.Studio
                 }
                 else
                 {
-                    component.currentRatio += component.speed * Time.deltaTime;
-                    component.RefObj.transform.rotation = Quaternion.RotateTowards(
-                        component.RefObj.transform.rotation,
-                        component.rotationDirection,
-                        component.speed * Time.deltaTime * component.directionFactor);
+                    var step = component.speed * Time.deltaTime * component.directionFactor;
+                    component.RefObj.transform.rotation *= Quaternion.AngleAxis(step, component.rotationDirection.eulerAngles.normalized);
                 }
                 if (Mathf.Abs(component.currentRatio) < 1)
                 {
