@@ -474,8 +474,11 @@ namespace Terra.Studio
 
         public void SaveQoFDetails()
         {
-            SystemOp.Resolve<CrossSceneDataHolder>().Set("CameraPos", editorCamera.transform.position);
-            SystemOp.Resolve<CrossSceneDataHolder>().Set("CameraRot", editorCamera.transform.eulerAngles);
+            if (editorCamera)
+            {
+                SystemOp.Resolve<CrossSceneDataHolder>().Set("CameraPos", editorCamera.transform.position);
+                SystemOp.Resolve<CrossSceneDataHolder>().Set("CameraRot", editorCamera.transform.eulerAngles);
+            }
         }
 
         public void UpdateScoreModifiersCount(bool add, string id, bool setupScoreManager = true)
