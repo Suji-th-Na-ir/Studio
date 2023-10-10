@@ -81,7 +81,7 @@ namespace RuntimeInspectorNamespace
                 rotationType = (RotationType)Type.data.rotateType,
                 repeatType = GetRepeatType(Type.data.repeat),
                 speed = Type.data.speed,
-                expectedRotateBy = targetVector,
+                rotateTo = targetVector,
                 pauseFor = Type.data.pauseBetween,
                 repeatFor = Type.data.repeat,
                 IsConditionAvailable = true,
@@ -99,20 +99,6 @@ namespace RuntimeInspectorNamespace
                 listen = Listen.Always,
                 ghostLastRotation = Type.data.ghostLastRecordedRotation
             };
-            var axes = new List<Axis>();
-            if (targetVector.x != 0f)
-            {
-                axes.Add(Axis.X);
-            }
-            if (targetVector.y != 0f)
-            {
-                axes.Add(Axis.Y);
-            }
-            if (targetVector.z != 0f)
-            {
-                axes.Add(Axis.Z);
-            }
-            comp.axis = axes.ToArray();
             ModifyDataAsPerSelected(ref comp);
             gameObject.TrySetTrigger(false, true);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -161,7 +147,7 @@ namespace RuntimeInspectorNamespace
             Type.data.direction = comp.direction;
             Type.data.rotateType = (int)comp.rotationType;
             Type.data.speed = comp.speed;
-            Type.data.vector3.Set(comp.expectedRotateBy);
+            Type.data.vector3.Set(comp.rotateTo);
             Type.data.pauseBetween = comp.pauseFor;
             Type.data.repeat = comp.repeatFor;
             Type.data.broadcastAt = comp.broadcastAt;
@@ -207,7 +193,6 @@ namespace RuntimeInspectorNamespace
                     component.repeatFor = int.MaxValue;
                     break;
             }
-            if (component.rotationType == RotationType.RotateForever) component.expectedRotateBy = new Vector3(360f, 360f, 360f);
         }
 
         private Vector3[] GetSpawnTRS()

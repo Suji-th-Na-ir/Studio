@@ -6,9 +6,6 @@ namespace Terra.Studio
 {
     public class RotateSystem : BaseSystem, IEcsRunSystem
     {
-        private const float DEFAULT_AXIS_CONST = -1000f;
-        private readonly Vector3 DEFAULT_TARGET_ROTATION = new(DEFAULT_AXIS_CONST, DEFAULT_AXIS_CONST, DEFAULT_AXIS_CONST);
-
         public override void Init<T>(int entity)
         {
             base.Init<T>(entity);
@@ -24,7 +21,7 @@ namespace Terra.Studio
             Init(ref entityRef);
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(false, entityRef.EventContext);
-            OnDemandRun(in entityRef, entity);
+            OnDemandRun(in entityRef);
         }
 
         private void Init(ref RotateComponent entityRef)
@@ -35,15 +32,62 @@ namespace Terra.Studio
                 entityRef.isHaltedByEvent = false;
                 return;
             }
+            CalculateStartAndTargetRotation(ref entityRef);
             entityRef.currentRotateCount = 0;
-            entityRef.directionFactor = (entityRef.direction == Direction.Clockwise) ? 1 : -1;
-            SetTargetRotation(ref entityRef);
             entityRef.canPause = entityRef.pauseFor > 0f;
             entityRef.shouldPingPong = entityRef.rotationType is RotationType.Oscillate or RotationType.OscillateForever;
             entityRef.rotateForever = entityRef.repeatFor == int.MaxValue;
+            entityRef.directionFactor = (entityRef.direction == Direction.Clockwise) ? 1 : -1;
+            RefreshRotation(ref entityRef);
         }
 
-        public void OnDemandRun(in RotateComponent rotatable, int _)
+        private void RefreshRotation(ref RotateComponent entityRef)
+        {
+            if (entityRef.rotationType == RotationType.IncrementallyRotate ||
+                entityRef.rotationType == RotationType.IncrementallyRotateForever)
+            {
+                CalculateStartAndTargetRotation(ref entityRef);
+            }
+            entityRef.currentStartRotation = Quaternion.Euler(entityRef.startRotation);
+            entityRef.currentTargetRotation = Quaternion.Euler(entityRef.trueRotateTarget);
+            if (entityRef.shouldPingPong)
+            {
+                if (entityRef.currentRotateCount % 2 == 1)
+                {
+                    entityRef.currentStartRotation = Quaternion.Euler(entityRef.trueRotateTarget);
+                    entityRef.currentTargetRotation = Quaternion.Euler(entityRef.startRotation);
+                }
+            }
+            if (IsRotateForeverType(in entityRef))
+            {
+                var direction = entityRef.currentTargetRotation * entityRef.RefObj.transform.forward;
+                entityRef.rotationDirection = Quaternion.LookRotation(direction);
+            }
+            if (entityRef.direction == Direction.AntiClockwise)
+            {
+                var value = Quaternion.Dot(entityRef.currentStartRotation, entityRef.currentTargetRotation);
+                if (value > 0)
+                {
+                    var inverseX = entityRef.rotateTo.x - 360f;
+                    var inverseY = entityRef.rotateTo.y - 360f;
+                    var inverseZ = entityRef.rotateTo.z - 360f;
+                    var newRotateTarget = entityRef.RefObj.transform.eulerAngles + new Vector3(inverseX, inverseY, inverseZ);
+                    entityRef.currentTargetRotation = Quaternion.Euler(newRotateTarget);
+                }
+            }
+            var angle = Quaternion.Angle(entityRef.currentStartRotation, entityRef.currentTargetRotation);
+            entityRef.rotationTime = angle / entityRef.speed;
+            entityRef.currentRatio = 0f;
+            entityRef.elapsedTime = 0f;
+        }
+
+        private void CalculateStartAndTargetRotation(ref RotateComponent entityRef)
+        {
+            entityRef.startRotation = entityRef.RefObj.transform.eulerAngles;
+            entityRef.trueRotateTarget = entityRef.RefObj.transform.eulerAngles + entityRef.rotateTo;
+        }
+
+        public void OnDemandRun(in RotateComponent rotatable)
         {
             if (rotatable.canPlaySFX)
             {
@@ -63,15 +107,18 @@ namespace Terra.Studio
             foreach (var entity in filter)
             {
                 ref var component = ref pool.Get(entity);
+
                 if (!component.CanExecute)
                 {
                     continue;
                 }
+
                 if (component.IsExecuted)
                 {
                     totalEntitiesFinishedJob++;
                     continue;
                 }
+
                 if (!component.rotateForever &&
                     component.currentRotateCount >= component.repeatFor)
                 {
@@ -79,10 +126,12 @@ namespace Terra.Studio
                     OnRotationDone(true, entity);
                     continue;
                 }
+
                 if (component.isHaltedByEvent)
                 {
                     continue;
                 }
+
                 if (component.isPaused)
                 {
                     var delta = Time.time - component.pauseStartTime;
@@ -93,85 +142,52 @@ namespace Terra.Studio
                     }
                     continue;
                 }
-                var targetRotation = CalculateAngleChangePerAxis(ref component);
-                if (targetRotation != DEFAULT_TARGET_ROTATION)
+
+                var isRotateForever = IsRotateForeverType(in component);
+                if (!isRotateForever)
                 {
-                    targetRotation = GetCleanVector(targetRotation);
-                    component.RefObj.transform.Rotate(targetRotation);
+                    component.currentRatio = component.elapsedTime / component.rotationTime;
+                    component.elapsedTime += Time.deltaTime;
+                    var isShortWay = component.direction == Direction.Clockwise;
+                    var newRotation = Helper.Slerp(component.currentStartRotation, component.currentTargetRotation, component.currentRatio, isShortWay);
+                    component.RefObj.transform.rotation = newRotation;
+                }
+                else
+                {
+                    component.currentRatio += component.speed * Time.deltaTime;
+                    component.RefObj.transform.rotation = Quaternion.RotateTowards(
+                        component.RefObj.transform.rotation,
+                        component.rotationDirection,
+                        component.speed * Time.deltaTime * component.directionFactor);
+                }
+                if (Mathf.Abs(component.currentRatio) < 1)
+                {
                     continue;
                 }
+                else if (!isRotateForever)
+                {
+                    component.RefObj.transform.rotation = component.currentTargetRotation;
+                }
+
                 if (component.canPause)
                 {
                     component.pauseStartTime = Time.time;
                     component.isPaused = true;
                 }
-                if (component.shouldPingPong)
-                {
-                    component.directionFactor *= -1;
-                }
+
                 component.currentRotateCount++;
-                ResetDirtyValues(ref component);
+                if (component.rotateForever && component.currentRotateCount == 100)
+                {
+                    component.currentRotateCount = 0;
+                }
+
+                RefreshRotation(ref component);
                 OnRotationDone(false, entity);
             }
             if (totalEntitiesFinishedJob == filter.GetEntitiesCount())
             {
                 RuntimeOp.Resolve<RuntimeSystem>().RemoveRunningInstance(this);
             }
-        }
-
-        private Vector3 CalculateAngleChangePerAxis(ref RotateComponent component)
-        {
-            var targetRotation = DEFAULT_TARGET_ROTATION;
-            var rotationThisFrame = component.speed * Time.deltaTime;
-            var step = rotationThisFrame * component.directionFactor;
-            if (component.xCurrentRotation * component.directionFactor < component.xTargetRotation * component.directionFactor)
-            {
-                component.xCurrentRotation += step;
-                targetRotation.x = step;
-            }
-            if (component.yCurrentRotation * component.directionFactor < component.yTargetRotation * component.directionFactor)
-            {
-                component.yCurrentRotation += step;
-                targetRotation.y = step;
-            }
-            if (component.zCurrentRotation * component.directionFactor < component.zTargetRotation * component.directionFactor)
-            {
-                component.zCurrentRotation += step;
-                targetRotation.z = step;
-            }
-            return targetRotation;
-        }
-
-        private void ResetDirtyValues(ref RotateComponent component)
-        {
-            component.xCurrentRotation = 0f;
-            component.yCurrentRotation = 0f;
-            component.zCurrentRotation = 0f;
-            SetTargetRotation(ref component);
-        }
-
-        private void SetTargetRotation(ref RotateComponent component)
-        {
-            component.xTargetRotation = component.xCurrentRotation + (component.expectedRotateBy.x * component.directionFactor);
-            component.yTargetRotation = component.yCurrentRotation + (component.expectedRotateBy.y * component.directionFactor);
-            component.zTargetRotation = component.zCurrentRotation + (component.expectedRotateBy.z * component.directionFactor);
-        }
-
-        private Vector3 GetCleanVector(Vector3 vector)
-        {
-            if (vector.x == DEFAULT_AXIS_CONST)
-            {
-                vector.x = 0f;
-            }
-            if (vector.y == DEFAULT_AXIS_CONST)
-            {
-                vector.y = 0f;
-            }
-            if (vector.z == DEFAULT_AXIS_CONST)
-            {
-                vector.z = 0f;
-            }
-            return vector;
         }
 
         private void OnRotationDone(bool isDone, int entity)
@@ -211,6 +227,15 @@ namespace Terra.Studio
                 var compsData = RuntimeOp.Resolve<ComponentsData>();
                 compsData.ProvideEventContext(false, rotatable.EventContext);
             }
+        }
+
+        private bool IsRotateForeverType(in RotateComponent component)
+        {
+            if (component.rotationType == RotationType.RotateForever)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -18,9 +18,8 @@ namespace Terra.Studio
         [JsonIgnore] public bool IsExecuted { get; set; }
         [JsonIgnore] public EventContext EventContext { get; set; }
         [JsonIgnore] public GameObject RefObj { get; set; }
-        [JsonConverter(typeof(Vector3Converter))] public Vector3 expectedRotateBy;
+        [JsonConverter(typeof(Vector3Converter))] public Vector3 rotateTo;
         [JsonConverter(typeof(Vector3Converter))] public Vector3 ghostLastRotation;
-        public Axis[] axis;
         public Direction direction;
         public RotationType rotationType;
         public RepeatType repeatType;
@@ -38,19 +37,21 @@ namespace Terra.Studio
         public int listenIndex;
         public int broadcastTypeIndex;
 
+        [JsonIgnore] public Vector3 startRotation;
+        [JsonIgnore] public Vector3 trueRotateTarget;
+        [JsonIgnore] public Quaternion rotationDirection;
+        [JsonIgnore] public Quaternion currentStartRotation;
+        [JsonIgnore] public Quaternion currentTargetRotation;
+        [JsonIgnore] public float currentRatio;
+        [JsonIgnore] public float pauseStartTime;
+        [JsonIgnore] public float rotationTime;
+        [JsonIgnore] public float elapsedTime;
         [JsonIgnore] public int currentRotateCount;
         [JsonIgnore] public int directionFactor;
-        [JsonIgnore] public float pauseStartTime;
         [JsonIgnore] public bool canPause;
         [JsonIgnore] public bool isPaused;
         [JsonIgnore] public bool shouldPingPong;
         [JsonIgnore] public bool rotateForever;
         [JsonIgnore] public bool isHaltedByEvent;
-        [JsonIgnore] public float xTargetRotation;
-        [JsonIgnore] public float yTargetRotation;
-        [JsonIgnore] public float zTargetRotation;
-        [JsonIgnore] public float xCurrentRotation;
-        [JsonIgnore] public float yCurrentRotation;
-        [JsonIgnore] public float zCurrentRotation;
     }
 }
