@@ -1800,13 +1800,12 @@ MonoBehaviour:
   visibleArea: {fileID: 0}
   repeatForeverToggle: {fileID: 2062335113072406665}
   repeatField: {fileID: 1368050020525692580}
-  pauseFor: {fileID: 730762727307264772}
+  pauseForField: {fileID: 730762727307264772}
   repeatType: {fileID: 124287630454832505}
   repeatForeverToggleLabel: {fileID: 2062208714372978049}
   repeatFieldLabel: {fileID: 1368523502645482598}
   pauseForLabel: {fileID: 7831105177883011724}
   repeatTypeLabel: {fileID: 124572933143294043}
-  repeatFieldDrawer: {fileID: 1399568467822106738}
   pauseForFieldDrawer: {fileID: 4974215845825568704}
   repeatTypeFieldDrawer: {fileID: 11494970923033567}
 --- !u!1 &1683096843427427843

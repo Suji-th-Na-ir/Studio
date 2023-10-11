@@ -15,7 +15,7 @@ namespace RuntimeInspectorNamespace
     {
         [SerializeField] Toggle repeatForeverToggle;
         [SerializeField] BoundInputField repeatField;
-        [SerializeField] BoundInputField pauseFor;
+        [SerializeField] BoundInputField pauseForField;
         [SerializeField] Dropdown repeatType;
 
         [SerializeField] Text repeatForeverToggleLabel;
@@ -31,11 +31,28 @@ namespace RuntimeInspectorNamespace
         {
             base.Initialize();
             repeatField.Initialize();
-            pauseFor.Initialize();
+            pauseForField.Initialize();
             
             repeatForeverToggle.onValueChanged.AddListener(OnRepeatForeverValueChanged);
             repeatField.OnValueChanged += OnRepeatValueChanged;
+            pauseForField.OnValueChanged += OnPauseForValueChanged;
+
             elementheight = pauseForFieldDrawer.GetComponent<RectTransform>().rect.height+5;
+        }
+
+        private bool OnPauseForValueChanged(BoundInputField source, string input)
+        {
+            if (int.TryParse(input, out int result))
+            {
+                if (source == pauseForField)
+                {
+                    var val = (Atom.Repeat)Value;
+                    val.pauseFor = result;
+                    Refresh();
+                    return true;
+                }
+            }
+            return false;
         }
 
         private bool OnRepeatValueChanged(BoundInputField source, string input)
@@ -61,9 +78,10 @@ namespace RuntimeInspectorNamespace
             var val = (Atom.Repeat)Value;
             if (isOn)
             {
-                repeatField.BackingField.text = String.Empty;
+                repeatField.BackingField.text = $"{0}";
                 repeatField.BackingField.interactable = false;
                 val.repeat = int.MaxValue;
+                pauseForField.BackingField.text = $"{0}";
             }
             else
             {
@@ -122,7 +140,7 @@ namespace RuntimeInspectorNamespace
             base.OnSkinChanged();
            
             repeatField.SetupBoundInputFieldSkin(Skin);
-            pauseFor.SetupBoundInputFieldSkin(Skin);
+            pauseForField.SetupBoundInputFieldSkin(Skin);
             repeatType.SetSkinDropDownField(Skin);
             repeatForeverToggle.SetupToggeleSkin(Skin);
             repeatFieldLabel.SetSkinText(Skin);
