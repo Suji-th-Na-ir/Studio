@@ -96,7 +96,6 @@ namespace RuntimeInspectorNamespace
             {
                 if (source == pauseForField)
                 {
-                    Debug.Log("changed");
                     var val = (Atom.Repeat)Value;
                     val.pauseFor = result;
                     UpdatebroadcastTypeDropDown();
