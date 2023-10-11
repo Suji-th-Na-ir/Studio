@@ -8,6 +8,7 @@ namespace Terra.Studio
 {
     public class System : MonoBehaviour
     {
+        private const int TARGET_FRAME_RATE = 60;
         private SystemConfigurationSO configData;
         private StudioState previousStudioState;
         private StudioState currentStudioState;
@@ -39,6 +40,7 @@ namespace Terra.Studio
 
         private void Initialize()
         {
+            Application.targetFrameRate = TARGET_FRAME_RATE;
             SceneManager.sceneLoaded += OnSceneLoaded;
             configData = (SystemConfigurationSO)SystemOp.Load(ResourceTag.SystemConfig);
             currentStudioState = configData.DefaultStudioState;

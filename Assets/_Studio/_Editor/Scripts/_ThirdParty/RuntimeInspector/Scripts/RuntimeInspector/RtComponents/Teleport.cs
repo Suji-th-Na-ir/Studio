@@ -37,9 +37,9 @@ namespace Terra.Studio
 
         private void SetupTeleportPosition()
         {
-            var currentPos = transform.localPosition;
-            currentPos.y += 2f;
-            currentPos.z += 2f;
+            var currentPos = transform.position;
+            currentPos.y += 1f;
+            currentPos.z += 1f;
             teleportTo.Set(currentPos);
         }
 

@@ -16,13 +16,13 @@ namespace Terra.Studio
 
         public void Initialize()
         {
-            EditorOp.Resolve<SelectionHandler>().Init();
             EditorOp.Register(new DataProvider());
             EditorOp.Register(new Atom());
             EditorOp.Register(new SceneDataHandler());
             EditorOp.Register(new UndoRedoSystem() as IURCommand);
             EditorOp.Register(new Recorder());
             EditorOp.Register(new CopyPasteSystem());
+            EditorOp.Resolve<SelectionHandler>().Init();
             EditorOp.Resolve<HierarchyView>().Init();
             EditorOp.Resolve<InspectorView>().Init();
             EditorOp.Resolve<ToolbarView>().Init();

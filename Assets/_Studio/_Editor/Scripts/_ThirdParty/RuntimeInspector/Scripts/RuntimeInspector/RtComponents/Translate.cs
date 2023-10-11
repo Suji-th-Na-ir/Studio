@@ -183,8 +183,9 @@ namespace RuntimeInspectorNamespace
             var localOffset = (Vector3)Type.recordedVector3.Get();
             if (transform.parent != null)
             {
-                pos += transform.TransformVector(localOffset);
+                localOffset = transform.TransformVector(localOffset);
             }
+            pos += localOffset;
             return new Vector3[] { pos };
         }
 
@@ -192,7 +193,10 @@ namespace RuntimeInspectorNamespace
         {
             var vector3 = (Vector3)data;
             var delta = vector3 - transform.position;
-            delta = transform.InverseTransformVector(delta);
+            if (transform.parent != null)
+            {
+                delta = transform.InverseTransformVector(delta);
+            }
             if (delta != (Vector3)Type.recordedVector3.Get())
             {
                 Type.recordedVector3.Set(delta);

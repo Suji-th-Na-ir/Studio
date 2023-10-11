@@ -21,8 +21,8 @@ namespace Terra.Studio
         [SerializeField] private Image m_refPasswordInputFieldBorder;
 
         [SerializeField] private Text feedbackText;
-        
-        private const string correctPassword = "Terra@12345";
+
+        private const string correctPassword = "Studio@12345";
 
         private string m_strName;
         private string m_strPassword;
