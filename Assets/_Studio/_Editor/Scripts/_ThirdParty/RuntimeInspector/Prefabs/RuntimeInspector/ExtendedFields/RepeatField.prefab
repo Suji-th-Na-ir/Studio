@@ -1801,7 +1801,7 @@ MonoBehaviour:
   repeatForeverToggle: {fileID: 2062335113072406665}
   repeatField: {fileID: 1368050020525692580}
   pauseForField: {fileID: 730762727307264772}
-  repeatType: {fileID: 124287630454832505}
+  repeatTypeDropdown: {fileID: 124287630454832505}
   repeatForeverToggleLabel: {fileID: 2062208714372978049}
   repeatFieldLabel: {fileID: 1368523502645482598}
   pauseForLabel: {fileID: 7831105177883011724}

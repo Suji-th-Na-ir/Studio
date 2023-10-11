@@ -27,6 +27,12 @@ namespace Terra.Studio
         AntiClockwise
     }
 
+    public enum RepeatDirectionType
+    {
+        SameDirection,
+        PingPong
+    }
+
     public enum RotationType
     {
         [AliasDrawer("Rotate Once")]
@@ -40,20 +46,6 @@ namespace Terra.Studio
         IncrementallyRotate,
         [AliasDrawer("StepWise Forever")]
         IncrementallyRotateForever
-    }
-
-    public enum TranslateType
-    {
-        Move,
-        [AliasDrawer("Move Forever")]
-        MoveForever,
-        [AliasDrawer("StepWise")]
-        MoveIncrementally,
-        [AliasDrawer("StepWise Forever")]
-        MoveIncrementallyForever,
-        PingPong,
-        [AliasDrawer("PingPong Forever")]
-        PingPongForever
     }
 
     public enum TransFormCopyValues

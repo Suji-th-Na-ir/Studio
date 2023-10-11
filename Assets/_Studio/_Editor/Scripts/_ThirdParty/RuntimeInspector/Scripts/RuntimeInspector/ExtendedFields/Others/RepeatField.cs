@@ -2,12 +2,11 @@ using System;
 using UnityEngine;
 using Terra.Studio;
 using UnityEngine.UI;
-using PlayShifu.Terra;
 using System.Reflection;
-using System.Collections.Generic;
 using System.Globalization;
-using UnityEngine.Windows;
-using RTG;
+using System.Linq;
+using UnityEditor;
+using UnityEngine.InputSystem;
 
 namespace RuntimeInspectorNamespace
 {
@@ -16,7 +15,7 @@ namespace RuntimeInspectorNamespace
         [SerializeField] Toggle repeatForeverToggle;
         [SerializeField] BoundInputField repeatField;
         [SerializeField] BoundInputField pauseForField;
-        [SerializeField] Dropdown repeatType;
+        [SerializeField] Dropdown repeatTypeDropdown;
 
         [SerializeField] Text repeatForeverToggleLabel;
         [SerializeField] Text repeatFieldLabel;
@@ -32,12 +31,25 @@ namespace RuntimeInspectorNamespace
             base.Initialize();
             repeatField.Initialize();
             pauseForField.Initialize();
+            repeatTypeDropdown.ClearOptions();
+            repeatTypeDropdown.AddOptions(Enum.GetNames(typeof(RepeatDirectionType)).ToList());  
             
             repeatForeverToggle.onValueChanged.AddListener(OnRepeatForeverValueChanged);
             repeatField.OnValueChanged += OnRepeatValueChanged;
             pauseForField.OnValueChanged += OnPauseForValueChanged;
+            repeatTypeDropdown.onValueChanged.AddListener(OnRepeatTypeValueChanged);
 
             elementheight = pauseForFieldDrawer.GetComponent<RectTransform>().rect.height+5;
+        }
+
+        private void OnRepeatTypeValueChanged(int input)
+        {
+            var enumVal = (RepeatDirectionType)input;
+            var val = (Atom.Repeat)Value;
+            if (Enum.IsDefined(typeof(RepeatDirectionType), input))
+            {
+                val.repeatType = input;
+            }
         }
 
         private bool OnPauseForValueChanged(BoundInputField source, string input)
@@ -81,11 +93,10 @@ namespace RuntimeInspectorNamespace
                 repeatField.BackingField.text = $"{0}";
                 repeatField.BackingField.interactable = false;
                 val.repeat = int.MaxValue;
-                pauseForField.BackingField.text = $"{0}";
             }
             else
             {
-                repeatField.BackingField.text = string.Empty;
+                repeatField.BackingField.text = $"{0}";
                 repeatField.BackingField.interactable = true;
                 val.repeat = 0;
                 Debug.Log(val.repeat);
@@ -105,7 +116,9 @@ namespace RuntimeInspectorNamespace
             var val = (Atom.Repeat)Value;
             if (val != null)
             {
-                repeatForeverToggle.SetIsOnWithoutNotify(val.repeat == int.MaxValue);  
+                repeatForeverToggle.SetIsOnWithoutNotify(val.repeat == int.MaxValue);
+                repeatTypeDropdown.SetValueWithoutNotify(val.repeatType);
+                pauseForField.BackingField.SetTextWithoutNotify(val.pauseFor.ToString());
                 if (!repeatForeverToggle.isOn)
                 {
                     repeatField.BackingField.SetTextWithoutNotify(val.repeat.ToString());
@@ -141,7 +154,7 @@ namespace RuntimeInspectorNamespace
            
             repeatField.SetupBoundInputFieldSkin(Skin);
             pauseForField.SetupBoundInputFieldSkin(Skin);
-            repeatType.SetSkinDropDownField(Skin);
+            repeatTypeDropdown.SetSkinDropDownField(Skin);
             repeatForeverToggle.SetupToggeleSkin(Skin);
             repeatFieldLabel.SetSkinText(Skin);
             pauseForLabel.SetSkinText(Skin);

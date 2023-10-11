@@ -142,7 +142,7 @@ namespace Terra.Studio
         {
             [AliasDrawer("Repeat")] public int repeat;
             [AliasDrawer("Pause For")] public float pauseFor;
-            [AliasDrawer("Repeat Type")] public int repeaType;
+            [AliasDrawer("Repeat Type")] public int repeatType;
 
             public void Set(object obj)
             {
@@ -184,7 +184,6 @@ namespace Terra.Studio
             [AliasDrawer("Move By")] public Atom.RecordedVector3 recordedVector3;
             [HideInInspector] public Vector3 LastVector3;
             [AliasDrawer("Repeat")] public Repeat repeat = new();
-            [HideInInspector] public int translateType;
             [AliasDrawer("Broadcast At")] public BroadcastAt broadcastAt;
             [HideInInspector] public Action<string, string> OnBroadcastUpdated;
             [AliasDrawer("Broadcast")]

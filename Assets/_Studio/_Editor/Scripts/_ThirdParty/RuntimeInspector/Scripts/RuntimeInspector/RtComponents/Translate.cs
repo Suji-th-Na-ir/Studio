@@ -66,7 +66,7 @@ namespace RuntimeInspectorNamespace
         { 
             var comp = new TranslateComponent
             {
-                translateType = (TranslateType)Type.translateType,
+                translateType = (RepeatDirectionType)Type.repeat.repeatType,
                 speed = Type.speed,
                 pauseFor = Type.repeat.pauseFor,
                 repeatFor = Type.repeat.repeat,
@@ -87,7 +87,7 @@ namespace RuntimeInspectorNamespace
                 listen = Listen.Always,
             };
 
-            ModifyDataAsPerGiven(ref comp);
+            //ModifyDataAsPerGiven(ref comp);
             gameObject.TrySetTrigger(false, true);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp, Formatting.Indented);
@@ -125,7 +125,7 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.canPlay = comp.canPlayVFX;
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
-            Type.translateType = (int)comp.translateType;
+            Type.repeat.repeatType = (int)comp.translateType;
             Type.speed = comp.speed;
             Type.repeat.pauseFor = comp.pauseFor;
             Type.recordedVector3.Set(comp.targetPosition);
@@ -162,20 +162,20 @@ namespace RuntimeInspectorNamespace
             ImportVisualisation(Type.Broadcast, listenString);
         }
 
-        private void ModifyDataAsPerGiven(ref TranslateComponent component)
-        {
-            switch (component.translateType)
-            {
-                case TranslateType.MoveForever:
-                case TranslateType.MoveIncrementallyForever:
-                case TranslateType.PingPongForever:
-                    component.repeatFor = int.MaxValue;
-                    break;
-                default:
-                    component.repeatFor = Type.repeat.repeat != 0 ? Type.repeat.repeat : 1;
-                    break;
-            }
-        }
+        //private void ModifyDataAsPerGiven(ref TranslateComponent component)
+        //{
+        //    switch (component.translateType)
+        //    {
+        //        case TranslateType.MoveForever:
+        //        case TranslateType.MoveIncrementallyForever:
+        //        case TranslateType.PingPongForever:
+        //            component.repeatFor = int.MaxValue;
+        //            break;
+        //        default:
+        //            component.repeatFor = Type.repeat.repeat != 0 ? Type.repeat.repeat : 1;
+        //            break;
+        //    }
+        //}
 
         private Vector3[] GetCurrentOffsetInWorld()
         {

@@ -33,7 +33,7 @@ namespace Terra.Studio
 
         [JsonConverter(typeof(Vector3Converter))] public Vector3 startPosition;
         [JsonConverter(typeof(Vector3Converter))] public Vector3 targetPosition;
-        public TranslateType translateType;
+        public RepeatDirectionType translateType;
         public BroadcastAt broadcastAt;
         public Listen listen;
         public float speed;

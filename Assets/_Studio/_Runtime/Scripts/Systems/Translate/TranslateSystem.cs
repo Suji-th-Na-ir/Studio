@@ -53,7 +53,7 @@ namespace Terra.Studio
             entityRef.currentTargetPosition = targetPos;
             entityRef.currentStartPosition = tr.position;
             entityRef.shouldPause = entityRef.pauseFor > 0f;
-            entityRef.shouldPingPong = entityRef.translateType is TranslateType.PingPong or TranslateType.PingPongForever;
+            entityRef.shouldPingPong = entityRef.translateType is RepeatDirectionType.PingPong;
             entityRef.loopsFinished = 0;
             entityRef.coveredDistance = 0f;
             entityRef.remainingDistance = pauseDistance;
