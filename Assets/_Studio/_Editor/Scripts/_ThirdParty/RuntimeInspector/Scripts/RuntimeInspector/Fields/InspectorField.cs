@@ -250,7 +250,7 @@ namespace RuntimeInspectorNamespace
             if (!doesHaveOnValueChangedAttribute) return;
             var attribute = fieldInfo.GetAttribute<OnValueChangedAttribute>();
 
-            if (instance.GetType() == typeof(BaseBehaviour))
+            if (instance as BaseBehaviour!=null)
             {
                 onStringUpdated = attribute.OnValueUpdated((BaseBehaviour)instance);
             }
