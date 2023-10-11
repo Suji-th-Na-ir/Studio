@@ -107,6 +107,7 @@ namespace RuntimeInspectorNamespace
                     });
             }
 
+
             lastSubmittedValue = Value;
             Inspector.RefreshDelayed();
             return true;
