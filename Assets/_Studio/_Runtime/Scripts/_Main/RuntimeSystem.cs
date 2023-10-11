@@ -53,6 +53,10 @@ namespace Terra.Studio
             {
                 RuntimeOp.Resolve<GameStateHandler>().SwitchToNextState();
             }
+            else
+            {
+                canRunSystems = true;
+            }
         }
 
         private void InitializeEcs()
