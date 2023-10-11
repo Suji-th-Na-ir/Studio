@@ -25,6 +25,7 @@ namespace Terra.Studio
             EditorOp.Register(new UndoRedoSystem() as IURCommand);
             EditorOp.Register(new Recorder());
             EditorOp.Register(new CopyPasteSystem());
+            EditorOp.Register(new BehaviourPreview());
             EditorOp.Resolve<SelectionHandler>().Init();
             EditorOp.Resolve<HierarchyView>().Init();
             EditorOp.Resolve<InspectorView>().Init();
@@ -47,6 +48,7 @@ namespace Terra.Studio
             EditorOp.Unregister<IURCommand>();
             EditorOp.Unregister<Atom>();
             EditorOp.Unregister<Recorder>();
+            EditorOp.Unregister<BehaviourPreview>();
         }
 
         public Scene GetScene()

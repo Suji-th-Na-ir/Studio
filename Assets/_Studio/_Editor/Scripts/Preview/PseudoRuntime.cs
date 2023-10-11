@@ -10,6 +10,7 @@ namespace Terra.Studio
     {
         private GameObject originalTarget;
         private ISubsystem cachedsubsystem;
+        private Vector3 cachedPosition; //Temporary
 
         private static string runtimeSceneName;
         private string RuntimeSceneName
@@ -43,8 +44,6 @@ namespace Terra.Studio
             DoExport(baseBehaviour);
             SystemOp.Resolve<System>().SetSimulationState(true);
             SystemOp.Resolve<System>().CanInitiateSubsystemProcess = () => { return false; };
-            EditorOp.Resolve<EditorSystem>().RequestIncognitoMode(true);
-            EditorOp.Resolve<SelectionHandler>().ToggleGizmo(false);
             SystemOp.Unregister(cachedsubsystem);
             LoadRuntime();
         }
@@ -93,7 +92,9 @@ namespace Terra.Studio
             var json = JsonConvert.SerializeObject(worldData);
             SystemOp.Resolve<CrossSceneDataHolder>().Set(json);
             originalTarget = baseBehaviour.gameObject;
-            originalTarget.SetActive(false);
+            cachedPosition = originalTarget.transform.position;
+            originalTarget.transform.position = new Vector3(-100f, -100f, -100f);
+            //originalTarget.SetActive(false);
         }
 
         private void OnRuntimeActive(Scene scene)
@@ -119,10 +120,9 @@ namespace Terra.Studio
             unloadOperation.completed -= OnUnloadDone;
             SystemOp.Resolve<System>().SetSimulationState(false);
             SystemOp.Resolve<System>().CanInitiateSubsystemProcess = () => { return true; };
-            EditorOp.Resolve<EditorSystem>().RequestIncognitoMode(false);
-            EditorOp.Resolve<SelectionHandler>().ToggleGizmo(true);
             SystemOp.Register(cachedsubsystem);
-            originalTarget.SetActive(true);
+            //originalTarget.SetActive(true);
+            originalTarget.transform.position = cachedPosition;
         }
     }
 }

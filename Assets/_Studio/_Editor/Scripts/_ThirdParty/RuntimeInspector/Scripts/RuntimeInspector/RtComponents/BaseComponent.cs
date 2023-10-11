@@ -42,6 +42,28 @@ namespace Terra.Studio
             }
         }
 
+        protected virtual void Update()
+        {
+            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.P))
+            {
+                var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+                if (selections.Count != 1)
+                {
+                    return;
+                }
+                if (selections[0].gameObject != gameObject)
+                {
+                    return;
+                }
+                var components = gameObject.GetComponents<BaseBehaviour>();
+                if (components.Length != 1)
+                {
+                    return;
+                }
+                EditorOp.Resolve<BehaviourPreview>().Preview(this);
+            }
+        }
+
         protected virtual void OnEnable()
         {
             EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(DisplayDock);
