@@ -24,6 +24,8 @@ namespace Terra.Studio
 
         private void Awake()
         {
+            Physics.autoSimulation = true;
+            Physics.autoSyncTransforms = true;
             SystemOp.Register(this as ISubsystem);
             RuntimeOp.Register(this);
         }
