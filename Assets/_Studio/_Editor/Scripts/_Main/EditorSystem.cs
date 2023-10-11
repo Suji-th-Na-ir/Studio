@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Terra.Studio
 {
@@ -7,6 +8,7 @@ namespace Terra.Studio
     {
         public event Action<bool> OnIncognitoEnabled;
         public bool IsIncognitoEnabled { get; private set; }
+        private Scene scene;
 
         private void Awake()
         {
@@ -14,8 +16,9 @@ namespace Terra.Studio
             EditorOp.Register(this);
         }
 
-        public void Initialize()
+        public void Initialize(Scene scene)
         {
+            this.scene = scene;
             EditorOp.Register(new DataProvider());
             EditorOp.Register(new Atom());
             EditorOp.Register(new SceneDataHandler());
@@ -44,6 +47,11 @@ namespace Terra.Studio
             EditorOp.Unregister<IURCommand>();
             EditorOp.Unregister<Atom>();
             EditorOp.Unregister<Recorder>();
+        }
+
+        public Scene GetScene()
+        {
+            return scene;
         }
 
         private void OnDestroy()
