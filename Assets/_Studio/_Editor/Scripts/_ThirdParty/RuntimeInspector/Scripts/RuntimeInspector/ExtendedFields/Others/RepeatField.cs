@@ -5,8 +5,7 @@ using UnityEngine.UI;
 using System.Reflection;
 using System.Globalization;
 using System.Linq;
-using UnityEditor;
-using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 namespace RuntimeInspectorNamespace
 {
@@ -16,14 +15,25 @@ namespace RuntimeInspectorNamespace
         [SerializeField] BoundInputField repeatField;
         [SerializeField] BoundInputField pauseForField;
         [SerializeField] Dropdown repeatTypeDropdown;
+        [SerializeField] Dropdown broadcastTypeDropdown;
+        [SerializeField] BoundInputField broadcastField;
 
+        [Header("Labels"),Space(20)]
         [SerializeField] Text repeatForeverToggleLabel;
         [SerializeField] Text repeatFieldLabel;
         [SerializeField] Text pauseForLabel;
         [SerializeField] Text repeatTypeLabel;
+        [SerializeField] Text broadcastTypeLabel;
+        [SerializeField] Text broadcastLabel;
 
+        [Header("Drawer"), Space(20)]
         [SerializeField] GameObject pauseForFieldDrawer;
         [SerializeField] GameObject repeatTypeFieldDrawer;
+        [SerializeField] GameObject broadcastTypeFieldDrawer;
+        [SerializeField] GameObject broadcastFieldDrawer;
+
+        private Toggle[] toggles;
+
 
         private float elementheight;
         public override void Initialize()
@@ -31,20 +41,48 @@ namespace RuntimeInspectorNamespace
             base.Initialize();
             repeatField.Initialize();
             pauseForField.Initialize();
+            broadcastField.Initialize();
             repeatTypeDropdown.ClearOptions();
-            repeatTypeDropdown.AddOptions(Enum.GetNames(typeof(RepeatDirectionType)).ToList());  
+            repeatTypeDropdown.AddOptions(Enum.GetNames(typeof(RepeatDirectionType)).ToList());
+            broadcastTypeDropdown.ClearOptions();
+            broadcastTypeDropdown.AddOptions(Enum.GetNames(typeof(BroadcastAt)).ToList());
             
             repeatForeverToggle.onValueChanged.AddListener(OnRepeatForeverValueChanged);
             repeatField.OnValueChanged += OnRepeatValueChanged;
             pauseForField.OnValueChanged += OnPauseForValueChanged;
             repeatTypeDropdown.onValueChanged.AddListener(OnRepeatTypeValueChanged);
-
+            broadcastField.OnValueChanged += OnBroadcastValueChanged;
+            broadcastTypeDropdown.onValueChanged.AddListener(OnBroadcastTypeValueChanged);
+            toggles = broadcastTypeDropdown.gameObject.GetComponentsInChildren<Toggle>(true);
             elementheight = pauseForFieldDrawer.GetComponent<RectTransform>().rect.height+5;
+        }
+
+        private void OnBroadcastTypeValueChanged(int input)
+        {
+            var val = (Atom.Repeat)Value;
+            if (Enum.IsDefined(typeof(BroadcastAt), input))
+            {
+                var valueText = broadcastTypeDropdown.options[input].text;
+                BroadcastAt enumValue = (BroadcastAt)Enum.Parse(typeof(BroadcastAt), valueText);
+                val.broadcastAt = enumValue;
+            }
+        }
+
+        private bool OnBroadcastValueChanged(BoundInputField source, string input)
+        {
+            var val = (Atom.Repeat)Value;
+            if (source == broadcastField)
+            {
+                var oldValue = val.broadcast;
+                val.broadcast = input;
+                onStringUpdated?.Invoke(val.broadcast,oldValue);
+                return true;
+            }
+            return false;
         }
 
         private void OnRepeatTypeValueChanged(int input)
         {
-            var enumVal = (RepeatDirectionType)input;
             var val = (Atom.Repeat)Value;
             if (Enum.IsDefined(typeof(RepeatDirectionType), input))
             {
@@ -58,11 +96,13 @@ namespace RuntimeInspectorNamespace
             {
                 if (source == pauseForField)
                 {
+                    Debug.Log("changed");
                     var val = (Atom.Repeat)Value;
                     val.pauseFor = result;
+                    UpdatebroadcastTypeDropDown();
                     Refresh();
-                    return true;
                 }
+                return true;
             }
             return false;
         }
@@ -75,12 +115,12 @@ namespace RuntimeInspectorNamespace
                 {
                     pauseForFieldDrawer.SetActive(result > 1);
                     repeatTypeFieldDrawer.SetActive(result > 1);
+                    var val = (Atom.Repeat)Value;
+                    val.repeat = result;
                 }
-                var val = (Atom.Repeat)Value;
-                val.repeat = result;
+                UpdatebroadcastTypeDropDown();
                 Refresh();
                 return true;
-              
             }
             return false;
         }
@@ -90,19 +130,44 @@ namespace RuntimeInspectorNamespace
             var val = (Atom.Repeat)Value;
             if (isOn)
             {
-                repeatField.BackingField.text = $"{0}";
+                repeatField.BackingField.SetTextWithoutNotify($"{0}");
                 repeatField.BackingField.interactable = false;
                 val.repeat = int.MaxValue;
+                broadcastField.BackingField.text = string.Empty;
             }
             else
             {
-                repeatField.BackingField.text = $"{0}";
+                repeatField.BackingField.SetTextWithoutNotify($"{0}");
                 repeatField.BackingField.interactable = true;
+                pauseForField.BackingField.text=$"{0}";
+                OnPauseForValueChanged(pauseForField, $"{0}");
                 val.repeat = 0;
-                Debug.Log(val.repeat);
             }
             OnRepeatValueChanged(repeatField, val.repeat.ToString());
+            UpdatebroadcastTypeDropDown();
             Refresh();
+        }
+
+        private void UpdatebroadcastTypeDropDown()
+        {
+            List<string> ignoreNames = new List<string>();
+            var val = (Atom.Repeat)Value;
+
+            if(val.repeat==int.MaxValue)
+            {
+                ignoreNames.Add(BroadcastAt.End.ToString());
+            }
+            if(val.repeat<2 &&val.pauseFor==0)
+            {
+                ignoreNames.Add(BroadcastAt.AtEveryInterval.ToString());
+            }
+            if (val.pauseFor == 0)
+            {
+                Debug.Log("PauseFor0");
+                ignoreNames.Add(BroadcastAt.AtEveryInterval.ToString());
+            }
+            broadcastTypeDropdown.ClearOptions();
+            broadcastTypeDropdown.AddOptions(Enum.GetNames(typeof(BroadcastAt)).Where(name => !ignoreNames.Contains(name)).ToList());
         }
 
         public override bool SupportsType(Type type)
@@ -116,8 +181,15 @@ namespace RuntimeInspectorNamespace
             var val = (Atom.Repeat)Value;
             if (val != null)
             {
+                FieldInfo fieldInfo = val.GetType().GetField(nameof(val.broadcast));
+                var attribute = fieldInfo.GetAttribute<OnValueChangedAttribute>();
+                if (attribute!=null)
+                {
+                    onStringUpdated = attribute.OnValueUpdated(val.behaviour);
+                }
                 repeatForeverToggle.SetIsOnWithoutNotify(val.repeat == int.MaxValue);
                 repeatTypeDropdown.SetValueWithoutNotify(val.repeatType);
+                broadcastTypeDropdown.SetValueWithoutNotify((int)val.broadcastAt);
                 pauseForField.BackingField.SetTextWithoutNotify(val.pauseFor.ToString());
                 if (!repeatForeverToggle.isOn)
                 {
@@ -160,7 +232,10 @@ namespace RuntimeInspectorNamespace
             pauseForLabel.SetSkinText(Skin);
             repeatForeverToggleLabel.SetSkinText(Skin);
             repeatTypeLabel.SetSkinText(Skin);
-
+            broadcastTypeDropdown.SetSkinDropDownField(Skin);
+            broadcastField.SetupBoundInputFieldSkin(Skin);
+            broadcastLabel.SetSkinText(Skin);
+            broadcastTypeLabel.SetSkinText(Skin);
         }
 
         public override void Refresh()
@@ -169,7 +244,9 @@ namespace RuntimeInspectorNamespace
 
             var height = elementheight * 2f +
                 (pauseForFieldDrawer.activeSelf ? elementheight : 0) +
-                (repeatTypeFieldDrawer.activeSelf ? elementheight : 0);
+                (repeatTypeFieldDrawer.activeSelf ? elementheight : 0) +
+                (broadcastFieldDrawer.activeSelf ? elementheight : 0) +
+                (broadcastTypeFieldDrawer.activeSelf ? elementheight : 0)+5f;
 
             layoutElement.minHeight = height;
         }

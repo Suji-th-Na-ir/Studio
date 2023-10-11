@@ -69,8 +69,8 @@ namespace Terra.Studio
     public enum BroadcastAt
     {
         Never,
-        AtEveryInterval,
-        End
+        End,
+        AtEveryInterval
     }
 
     public enum BroadcastAtForPushObjects

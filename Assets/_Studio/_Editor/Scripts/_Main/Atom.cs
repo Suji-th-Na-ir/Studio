@@ -3,7 +3,6 @@ using UnityEngine;
 using PlayShifu.Terra;
 using RuntimeInspectorNamespace;
 using System.Collections.Generic;
-using RTG;
 
 namespace Terra.Studio
 {
@@ -138,11 +137,19 @@ namespace Terra.Studio
         }
 
         [Serializable]
-        public class Repeat
+        public class Repeat :BaseBroadcasterTemplate
         {
             [AliasDrawer("Repeat")] public int repeat;
             [AliasDrawer("Pause For")] public float pauseFor;
             [AliasDrawer("Repeat Type")] public int repeatType;
+            [AliasDrawer("Broadcast At")] public BroadcastAt broadcastAt;
+            [AliasDrawer("Broadcast"), OnValueChanged(UpdateBroadcast = true)]
+            public string broadcast;
+
+            public override void Setup(GameObject target, BaseBehaviour behaviour)
+            {
+                base.Setup(target, behaviour); 
+            }
 
             public void Set(object obj)
             {
@@ -184,13 +191,11 @@ namespace Terra.Studio
             [AliasDrawer("Move By")] public Atom.RecordedVector3 recordedVector3;
             [HideInInspector] public Vector3 LastVector3;
             [AliasDrawer("Repeat")] public Repeat repeat = new();
-            [AliasDrawer("Broadcast At")] public BroadcastAt broadcastAt;
-            [AliasDrawer("Broadcast"),OnValueChanged(UpdateBroadcast = true)]
-            public string broadcast;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)
             {
                 base.Setup(target, behaviour);
+                repeat.Setup(target, behaviour);
                 recordedVector3 = new();
                 recordedVector3.Setup(behaviour);
                 recordedVector3.Set(new Vector3(0f, 1f, 0f));
