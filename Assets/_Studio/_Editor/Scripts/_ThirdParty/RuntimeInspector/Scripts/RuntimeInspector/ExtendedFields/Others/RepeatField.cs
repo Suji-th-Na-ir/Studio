@@ -166,6 +166,17 @@ namespace RuntimeInspectorNamespace
            
             broadcastTypeDropdown.ClearOptions();
             broadcastTypeDropdown.AddOptions(Enum.GetNames(typeof(BroadcastAt)).Where(name => !ignoreNames.Contains(name)).ToList());
+
+            if(ignoreNames.Count==2)
+            {
+                broadcastField.BackingField.text = string.Empty;
+                OnBroadcastValueChanged(broadcastField, string.Empty);
+                broadcastFieldDrawer.SetActive(false);
+            }
+            else
+            {
+                broadcastFieldDrawer.SetActive(true);
+            }
         }
 
         public override bool SupportsType(Type type)
