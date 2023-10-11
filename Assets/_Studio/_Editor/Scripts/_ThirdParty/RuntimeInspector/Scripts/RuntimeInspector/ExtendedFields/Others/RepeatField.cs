@@ -156,16 +156,16 @@ namespace RuntimeInspectorNamespace
             if(val.repeat==int.MaxValue)
             {
                 ignoreNames.Add(BroadcastAt.End.ToString());
+                if(val.pauseFor==0)
+                {
+                    ignoreNames.Add(BroadcastAt.AtEveryInterval.ToString());
+                }    
             }
-            if(val.repeat<2 &&val.pauseFor==0)
+            if(val.repeat<2)
             {
                 ignoreNames.Add(BroadcastAt.AtEveryInterval.ToString());
             }
-            if (val.pauseFor == 0)
-            {
-                Debug.Log("PauseFor0");
-                ignoreNames.Add(BroadcastAt.AtEveryInterval.ToString());
-            }
+           
             broadcastTypeDropdown.ClearOptions();
             broadcastTypeDropdown.AddOptions(Enum.GetNames(typeof(BroadcastAt)).Where(name => !ignoreNames.Contains(name)).ToList());
         }
