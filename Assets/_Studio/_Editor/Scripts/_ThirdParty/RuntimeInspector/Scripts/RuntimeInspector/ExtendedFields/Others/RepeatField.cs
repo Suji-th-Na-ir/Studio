@@ -132,7 +132,6 @@ namespace RuntimeInspectorNamespace
                 repeatField.BackingField.SetTextWithoutNotify($"{0}");
                 repeatField.BackingField.interactable = false;
                 val.repeat = int.MaxValue;
-                broadcastField.BackingField.text = string.Empty;
             }
             else
             {
@@ -190,6 +189,8 @@ namespace RuntimeInspectorNamespace
                 repeatTypeDropdown.SetValueWithoutNotify(val.repeatType);
                 broadcastTypeDropdown.SetValueWithoutNotify((int)val.broadcastAt);
                 pauseForField.BackingField.SetTextWithoutNotify(val.pauseFor.ToString());
+
+                broadcastField.BackingField.SetTextWithoutNotify(string.IsNullOrEmpty(val.broadcast) ? "" : val.broadcast);
                 if (!repeatForeverToggle.isOn)
                 {
                     repeatField.BackingField.SetTextWithoutNotify(val.repeat.ToString());

@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using TMPro;
 using PlayShifu.Terra;
+using UnityEngine.InputSystem;
 
 namespace RuntimeInspectorNamespace
 {
@@ -119,6 +120,10 @@ namespace RuntimeInspectorNamespace
             //  inputFieldBackground.color = Skin.InputFieldNormalBackgroundColor;
 
             Text placeholder = inputField.placeholder as Text;
+            if (inputField.targetGraphic)
+            {
+                inputField.targetGraphic.color = Skin.InputFieldNormalBackgroundColor;
+            }
             if (placeholder != null)
             {
                 float placeholderAlpha = placeholder.color.a;
