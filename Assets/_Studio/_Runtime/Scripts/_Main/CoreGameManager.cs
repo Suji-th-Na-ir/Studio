@@ -33,6 +33,8 @@ namespace Terra.Studio
 
         private void SpawnGameUI()
         {
+            var canSpawn = SystemOp.Resolve<System>().CanInitiateSubsystemProcess?.Invoke() ?? true;
+            if (!canSpawn) return;
             var gameUI = RuntimeOp.Load<GameObject>("GameViewCanvas");
             var reference = Object.Instantiate(gameUI);
             if (reference.TryGetComponent(out GameView view)) view.Init();

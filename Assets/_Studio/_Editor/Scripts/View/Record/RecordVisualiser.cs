@@ -306,25 +306,9 @@ namespace Terra.Studio
             for (int i = 0; i < allChildren.Count; i++)
             {
                 var child = allChildren[i];
-                CleanBehaviour(child);
+                RuntimeWrappers.CleanBehaviour(child);
                 CleanCollider(child);
                 CleanMaterial(child);
-            }
-        }
-
-        private void CleanBehaviour(Transform child)
-        {
-            if (child.TryGetComponent(out BaseBehaviour behaviour))
-            {
-                Object.Destroy(behaviour);
-            }
-            if (child.TryGetComponent(out Outline outline))
-            {
-                Object.Destroy(outline);
-            }
-            if (child.TryGetComponent(out StudioGameObject gameObject))
-            {
-                Object.Destroy(gameObject);
             }
         }
 

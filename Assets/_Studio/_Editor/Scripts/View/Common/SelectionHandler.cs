@@ -496,6 +496,11 @@ public class SelectionHandler : View
         _workGizmo.RefreshPositionAndRotation();
     }
 
+    public void ToggleGizmo(bool enable)
+    {
+        _workGizmo.Gizmo.SetEnabled(enable);
+    }
+
     public void RefreshGizmo()
     {
         _workGizmo.RefreshPositionAndRotation();

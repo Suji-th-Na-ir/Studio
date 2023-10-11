@@ -8,27 +8,49 @@ namespace Terra.Studio
     {
         private RTDataManagerSO managerSO;
         private Dictionary<string, IEventExecutor> cachedReferences = new();
+        private List<EventContext> eventContexts = new();
 
         public void ProvideEventContext(bool subscribe, EventContext context)
         {
-            if (cachedReferences.TryGetValue(context.conditionType, out var eventValue))
+            var isSimulating = SystemOp.Resolve<System>().IsSimulating;
+            if (isSimulating)
             {
-                eventValue.Execute(subscribe, context);
+                if (subscribe)
+                {
+                    eventContexts.Add(context);
+                }
             }
             else
             {
-                var isFound = GetManagerSO().TryGetEventForType(context.conditionType, out var type);
-                if (isFound)
+                if (cachedReferences.TryGetValue(context.conditionType, out var eventValue))
                 {
-                    var instance = Activator.CreateInstance(type) as IEventExecutor;
-                    instance.Execute(subscribe, context);
-                    cachedReferences.Add(context.conditionType, instance);
+                    eventValue.Execute(subscribe, context);
                 }
                 else
                 {
-                    Debug.LogError($"Event for type {context.conditionType} is not found!");
+                    var isFound = GetManagerSO().TryGetEventForType(context.conditionType, out var type);
+                    if (isFound)
+                    {
+                        var instance = Activator.CreateInstance(type) as IEventExecutor;
+                        instance.Execute(subscribe, context);
+                        cachedReferences.Add(context.conditionType, instance);
+                    }
+                    else
+                    {
+                        Debug.LogError($"Event for type {context.conditionType} is not found!");
+                    }
                 }
             }
+        }
+
+        public void ExecuteAllInterceptedEvents()
+        {
+            for (int i = 0; i < eventContexts.Count; i++)
+            {
+                var context = eventContexts[i];
+                context.onConditionMet?.Invoke(context.goRef);
+            }
+            eventContexts.Clear();
         }
 
         private RTDataManagerSO GetManagerSO()

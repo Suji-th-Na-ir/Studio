@@ -15,6 +15,8 @@ namespace Terra.Studio
         private Scene currentActiveScene;
         private LoadSceneParameters sceneLoadParameters;
 
+        public bool IsSimulating { get; private set; }
+        public Func<bool> CanInitiateSubsystemProcess { get; set; }
         public SystemConfigurationSO ConfigSO { get { return configData; } }
         public StudioState PreviousStudioState { get { return previousStudioState; } }
         public StudioState CurrentStudioState { get { return currentStudioState; } }
@@ -77,9 +79,13 @@ namespace Terra.Studio
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
         {
+            if (!CanInitiateSubsystemProcess?.Invoke() ?? false)
+            {
+                return;
+            }
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
-            SystemOp.Resolve<ISubsystem>().Initialize();
+            SystemOp.Resolve<ISubsystem>().Initialize(scene);
             if (PreviousStudioState == StudioState.Bootstrap &&
                 SystemOp.Resolve<PasswordManager>())
             {
@@ -92,6 +98,11 @@ namespace Terra.Studio
             DisposeCurrentSubSystem(LoadSubsystemScene);
             currentStudioState = GetNextState();
             previousStudioState = GetOtherState();
+        }
+
+        public void SetSimulationState(bool isEnabled)
+        {
+            IsSimulating = isEnabled;
         }
 
         private void DisposeCurrentSubSystem(Action onUnloadComplete)

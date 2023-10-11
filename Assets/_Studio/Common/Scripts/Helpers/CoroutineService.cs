@@ -10,20 +10,23 @@ namespace Terra.Studio
         {
             WaitForFrame,
             WaitForXFrames,
-            WaitForXSeconds
+            WaitForXSeconds,
+            WaitUntil
         }
 
-        public static void RunCoroutine(Action onCoroutineDone, DelayType delayType, int delay = 0)
+        public static void RunCoroutine(Action onCoroutineDone, DelayType delayType, int delay = 0, Func<bool> predicate = null)
         {
             var coroutineService = new GameObject("CoroutineHelper-Service");
             var coroutine = coroutineService.AddComponent<CoroutineService>();
             coroutine.delayType = delayType;
             coroutine.onPerformed = onCoroutineDone;
             coroutine.delay = delay;
+            coroutine.predicate = predicate;
             coroutine.DoCoroutine();
         }
 
         private DelayType delayType;
+        private Func<bool> predicate;
         private Action onPerformed;
         private int delay;
 
@@ -47,6 +50,12 @@ namespace Terra.Studio
                     break;
                 case DelayType.WaitForXSeconds:
                     yield return new WaitForSeconds(delay);
+                    break;
+                case DelayType.WaitUntil:
+                    if (predicate != null)
+                    {
+                        yield return new WaitUntil(predicate);
+                    }
                     break;
             }
             onPerformed?.Invoke();

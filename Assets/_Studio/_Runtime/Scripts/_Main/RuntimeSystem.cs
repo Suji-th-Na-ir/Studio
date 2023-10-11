@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Linq;
 using Leopotam.EcsLite;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 namespace Terra.Studio
 {
@@ -16,6 +17,7 @@ namespace Terra.Studio
         private Dictionary<Type, IEcsSystems>.Enumerator? customUpdateEnumerator;
         private List<Type> customUpdateSystemToRemove;
         private List<BaseCoroutineRunner> coroutineRunners;
+        private Scene scene;
 
         public EcsWorld World { get { return ecsWorld; } }
         public Action<GameObject> OnClicked { get; set; }
@@ -26,13 +28,14 @@ namespace Terra.Studio
             RuntimeOp.Register(this);
         }
 
-        public void Initialize()
+        public void Initialize(Scene scene)
         {
+            this.scene = scene;
             ResolveEssentials();
             InitializeEcs();
             RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameStart(true, (data) => { canRunSystems = true; });
             RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameEnd(true, (data) => { DestroyEcsSystemsAndWorld(); });
-            RuntimeOp.Resolve<GameStateHandler>().SwitchToNextState();
+            InitializeStateBasedOnSystemCondition();
         }
 
         private void ResolveEssentials()
@@ -41,6 +44,15 @@ namespace Terra.Studio
             RuntimeOp.Register(new ComponentsData());
             RuntimeOp.Register(new CoreGameManager());
             RuntimeOp.Register(new SceneDataHandler());
+        }
+
+        private void InitializeStateBasedOnSystemCondition()
+        {
+            var canSwitch = SystemOp.Resolve<System>().CanInitiateSubsystemProcess?.Invoke() ?? true;
+            if (canSwitch)
+            {
+                RuntimeOp.Resolve<GameStateHandler>().SwitchToNextState();
+            }
         }
 
         private void InitializeEcs()
@@ -189,6 +201,11 @@ namespace Terra.Studio
                 coroutineRunners = null;
             }
             ecsWorld?.Destroy();
+        }
+
+        public Scene GetScene()
+        {
+            return scene;
         }
 
         private void OnDestroy()
