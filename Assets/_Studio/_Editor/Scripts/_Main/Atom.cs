@@ -3,6 +3,7 @@ using UnityEngine;
 using PlayShifu.Terra;
 using RuntimeInspectorNamespace;
 using System.Collections.Generic;
+using RTG;
 
 namespace Terra.Studio
 {
@@ -29,8 +30,11 @@ namespace Terra.Studio
 
         public class BaseBroadcasterTemplate
         {
+            [HideInInspector]
             public string id;
+            [HideInInspector]
             public GameObject target;
+            [HideInInspector]
             public BaseBehaviour behaviour;
 
             public virtual void Setup(GameObject target, BaseBehaviour behaviour)
@@ -134,6 +138,27 @@ namespace Terra.Studio
         }
 
         [Serializable]
+        public class Repeat
+        {
+            [AliasDrawer("Repeat")] public int repeat;
+            [AliasDrawer("Pause For")] public float pauseFor;
+            [AliasDrawer("Repeat Type")] public int repeaType;
+
+            public void Set(object obj)
+            {
+                try
+                {
+                    var repeat = (int)obj;
+                    this.repeat = repeat;
+                }
+                catch
+                {
+                    Debug.LogError("Type of object passed is incorrected. Expected: Int");
+                }
+            }
+        }
+
+        [Serializable]
         public class Rotate : BaseBroadcasterTemplate
         {
             public RotateField field;
@@ -154,17 +179,56 @@ namespace Terra.Studio
         [Serializable]
         public class Translate : BaseBroadcasterTemplate
         {
-            public TranslateField field;
-            public TranslateComponentData data = new();
+
+            [AliasDrawer("Speed")] public float speed;
+            [AliasDrawer("Move By")] public Atom.RecordedVector3 recordedVector3;
+            [HideInInspector] public Vector3 LastVector3;
+            [AliasDrawer("Repeat")] public Repeat repeat = new();
+            [HideInInspector] public int translateType;
+            [AliasDrawer("Broadcast At")] public BroadcastAt broadcastAt;
+            [HideInInspector] public Action<string, string> OnBroadcastUpdated;
+            [AliasDrawer("Broadcast")]
+            public string broadcast;
+
+            public string Broadcast
+            {
+                get
+                {
+                    return broadcast;
+                }
+                set
+                {
+                    if (value != broadcast)
+                    {
+                        OnBroadcastUpdated?.Invoke(value, broadcast);
+                        broadcast = value;
+                    }
+                }   
+            }
+            [HideInInspector]
             public Action ForceRefreshData;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)
             {
                 base.Setup(target, behaviour);
-                data.OnBroadcastUpdated = behaviour.OnBroadcastStringUpdated;
-                data.recordedVector3 = new();
-                data.recordedVector3.Setup(behaviour);
-                data.recordedVector3.Set(new Vector3(0f, 1f, 0f));
+                OnBroadcastUpdated = behaviour.OnBroadcastStringUpdated;
+                recordedVector3 = new();
+                recordedVector3.Setup(behaviour);
+                recordedVector3.Set(new Vector3(0f, 1f, 0f));
+            }
+
+
+            public bool IsEmpty()
+            {
+                var cloneToTest = this;
+                cloneToTest.recordedVector3 = default;
+                cloneToTest.OnBroadcastUpdated = default;
+                cloneToTest.LastVector3 = default;
+                if (cloneToTest.Equals(default(TranslateComponentData)))
+                {
+                    return true;
+                }
+                return false;
             }
         }
 
@@ -321,6 +385,7 @@ namespace Terra.Studio
         public float pauseBetween;
         public Listen listen;
         public BroadcastAt broadcastAt;
+        [HideInInspector]
         public Action<string, string> OnBroadcastUpdated;
         public string broadcast;
         public string Broadcast
@@ -366,6 +431,7 @@ namespace Terra.Studio
         public string listenTo;
         public Listen listen;
         public BroadcastAt broadcastAt;
+
         public Action<string, string> OnBroadcastUpdated;
         public string broadcast;
         public string Broadcast

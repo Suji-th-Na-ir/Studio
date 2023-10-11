@@ -19,7 +19,7 @@ namespace RuntimeInspectorNamespace
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]
         {
-            Type.data.Broadcast
+            Type.Broadcast
         };
         protected override string[] ListenerRefs => new string[]
         {
@@ -47,8 +47,8 @@ namespace RuntimeInspectorNamespace
                     EditorOp.Resolve<Recorder>().TrackPosition_ShowGhostOnMultiselect(this, true);
                 },
                 ShowVisualsOnMultiSelect = true,
-                GetLastValue = () => { return Type.data.LastVector3; },
-                GetRecentValue = () => { return Type.data.recordedVector3.Get(); },
+                GetLastValue = () => { return Type.LastVector3; },
+                GetRecentValue = () => { return Type.recordedVector3.Get(); },
                 OnGhostModeToggled = (state) =>
                 {
                     if (state)
@@ -63,21 +63,21 @@ namespace RuntimeInspectorNamespace
         }
 
         public override (string type, string data) Export()
-        {
+        { 
             var comp = new TranslateComponent
             {
-                translateType = (TranslateType)Type.data.translateType,
-                speed = Type.data.speed,
-                pauseFor = Type.data.pauseFor,
-                repeatFor = Type.data.repeat,
-                targetPosition = (Vector3)Type.data.recordedVector3.Get(),
+                translateType = (TranslateType)Type.translateType,
+                speed = Type.speed,
+                pauseFor = Type.repeat.pauseFor,
+                repeatFor = Type.repeat.repeat,
+                targetPosition = (Vector3)Type.recordedVector3.Get(),
                 startPosition = transform.position,
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
-                broadcastAt = Type.data.broadcastAt,
-                IsBroadcastable = !string.IsNullOrEmpty(Type.data.Broadcast),
-                Broadcast = Type.data.Broadcast,
+                broadcastAt = Type.broadcastAt,
+                IsBroadcastable = !string.IsNullOrEmpty(Type.Broadcast),
+                Broadcast = Type.Broadcast,
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
@@ -125,15 +125,14 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.canPlay = comp.canPlayVFX;
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
-            Type.data.translateType = (int)comp.translateType;
-            Type.data.speed = comp.speed;
-            Type.data.pauseFor = comp.pauseFor;
-            Type.data.recordedVector3.Set(comp.targetPosition);
-            Type.data.repeat = comp.repeatFor;
-            Type.data.Broadcast = comp.Broadcast;
-            Type.data.broadcastAt = comp.broadcastAt;
-            Type.data.listenTo = comp.ConditionData;
-            Type.data.listen = comp.listen;
+            Type.translateType = (int)comp.translateType;
+            Type.speed = comp.speed;
+            Type.repeat.pauseFor = comp.pauseFor;
+            Type.recordedVector3.Set(comp.targetPosition);
+            Type.repeat.Set(comp.repeatFor);
+            Type.Broadcast = comp.Broadcast;
+            Type.broadcastAt = comp.broadcastAt;
+            StartOn.data.listenName = comp.ConditionData;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
                 var res = (StartOn)result;
@@ -158,9 +157,9 @@ namespace RuntimeInspectorNamespace
             var listenString = "";
             if (StartOn.data.startIndex == 4)
             {
-                listenString = Type.data.listenTo;
+                listenString = StartOn.data.listenName;
             }
-            ImportVisualisation(Type.data.Broadcast, listenString);
+            ImportVisualisation(Type.Broadcast, listenString);
         }
 
         private void ModifyDataAsPerGiven(ref TranslateComponent component)
@@ -173,7 +172,7 @@ namespace RuntimeInspectorNamespace
                     component.repeatFor = int.MaxValue;
                     break;
                 default:
-                    component.repeatFor = Type.data.repeat != 0 ? Type.data.repeat : 1;
+                    component.repeatFor = Type.repeat.repeat != 0 ? Type.repeat.repeat : 1;
                     break;
             }
         }
@@ -181,7 +180,7 @@ namespace RuntimeInspectorNamespace
         private Vector3[] GetCurrentOffsetInWorld()
         {
             var pos = transform.position;
-            var localOffset = (Vector3)Type.data.recordedVector3.Get();
+            var localOffset = (Vector3)Type.recordedVector3.Get();
             if (transform.parent != null)
             {
                 pos += transform.TransformVector(localOffset);
@@ -194,9 +193,9 @@ namespace RuntimeInspectorNamespace
             var vector3 = (Vector3)data;
             var delta = vector3 - transform.position;
             delta = transform.InverseTransformVector(delta);
-            if (delta != (Vector3)Type.data.recordedVector3.Get())
+            if (delta != (Vector3)Type.recordedVector3.Get())
             {
-                Type.data.recordedVector3.Set(delta);
+                Type.recordedVector3.Set(delta);
                 Type.ForceRefreshData?.Invoke();
             }
             GhostDescription.IsGhostInteractedInLastRecord = true;
@@ -206,7 +205,7 @@ namespace RuntimeInspectorNamespace
         {
             if (GhostDescription.IsGhostInteractedInLastRecord)
             {
-                Type.data.LastVector3 = (Vector3)Type.data.recordedVector3.Get();
+                Type.LastVector3 = (Vector3)Type.recordedVector3.Get();
             }
             GhostDescription.IsGhostInteractedInLastRecord = false;
         }

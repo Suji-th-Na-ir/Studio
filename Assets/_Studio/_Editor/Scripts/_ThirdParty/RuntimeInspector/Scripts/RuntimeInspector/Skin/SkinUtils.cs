@@ -105,6 +105,12 @@ namespace RuntimeInspectorNamespace
             if (label != null) label.rectTransform.anchorMin = rightSideAnchorMin;
         }
 
+        public static void SetupBoundInputFieldSkin(this BoundInputField inputField, UISkin Skin)
+        {
+            inputField.Skin = Skin;
+            SetupInputFieldSkin(inputField.BackingField, Skin);
+        }
+
         public static void SetupInputFieldSkin(this InputField inputField, UISkin Skin)
         {
             if (!inputField)
