@@ -95,6 +95,11 @@ namespace Terra.Studio
             cachedPosition = originalTarget.transform.position;
             originalTarget.transform.position = new Vector3(-100f, -100f, -100f);
             //originalTarget.SetActive(false);
+            if (originalTarget.TryGetComponent(out StudioGameObject studioGameObject))
+            {
+                var assetPath = studioGameObject.itemData.ResourcePath;
+                SystemOp.Resolve<CrossSceneDataHolder>().Set(assetPath, originalTarget);
+            }
         }
 
         private void OnRuntimeActive(Scene scene)

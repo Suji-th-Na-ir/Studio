@@ -16,7 +16,19 @@ namespace Terra.Studio
                     go = SpawnEmpty(null, trs);
                     break;
                 case AssetType.Prefab:
-                    go = SpawnGameObject(assetPath, ResourceDB.GetItemData(assetPath), trs);
+                    object obj = null;
+                    var doesContainAnyData =
+                        SystemOp.Resolve<System>().IsSimulating &&
+                        SystemOp.Resolve<CrossSceneDataHolder>().Get(assetPath, out obj);
+                    if (!doesContainAnyData)
+                    {
+                        go = SpawnGameObject(assetPath, ResourceDB.GetItemData(assetPath), trs);
+                    }
+                    else
+                    {
+                        go = DuplicateGameObject((GameObject)obj, null, trs);
+                        CleanAllBehaviours(go.transform);
+                    }
                     break;
                 case AssetType.Primitive:
                     go = SpawnPrimitive(primitiveType, ResourceDB.GetDummyItemData(primitiveType), trs);
@@ -24,6 +36,7 @@ namespace Terra.Studio
             }
             return go;
         }
+
         public static GameObject SpawnGameObject(string path, ResourceDB.ResourceItemData itemData, params Vector3[] trs)
         {
             var go = RuntimeOp.Load<GameObject>(path);
@@ -142,6 +155,17 @@ namespace Terra.Studio
         public static void RespawnPlayer(Vector3 position)
         {
             RuntimeOp.Resolve<GameData>().PlayerRef.position = position;
+        }
+
+        public static void CleanAllBehaviours(Transform transform)
+        {
+            CleanBehaviour(transform);
+            var allChildren = Helper.GetChildren(transform, true);
+            for (int i = 0; i < allChildren.Count; i++)
+            {
+                var child = allChildren[i];
+                CleanBehaviour(child);
+            }
         }
 
         public static void CleanBehaviour(Transform child)
