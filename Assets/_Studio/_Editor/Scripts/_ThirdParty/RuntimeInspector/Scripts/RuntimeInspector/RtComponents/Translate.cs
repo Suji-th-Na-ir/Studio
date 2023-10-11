@@ -19,7 +19,7 @@ namespace RuntimeInspectorNamespace
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]
         {
-            Type.Broadcast
+            Type.broadcast
         };
         protected override string[] ListenerRefs => new string[]
         {
@@ -76,8 +76,8 @@ namespace RuntimeInspectorNamespace
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
                 broadcastAt = Type.broadcastAt,
-                IsBroadcastable = !string.IsNullOrEmpty(Type.Broadcast),
-                Broadcast = Type.Broadcast,
+                IsBroadcastable = !string.IsNullOrEmpty(Type.broadcast),
+                Broadcast = Type.broadcast,
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
@@ -130,7 +130,7 @@ namespace RuntimeInspectorNamespace
             Type.repeat.pauseFor = comp.pauseFor;
             Type.recordedVector3.Set(comp.targetPosition);
             Type.repeat.Set(comp.repeatFor);
-            Type.Broadcast = comp.Broadcast;
+            Type.broadcast = comp.Broadcast;
             Type.broadcastAt = comp.broadcastAt;
             StartOn.data.listenName = comp.ConditionData;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
@@ -159,7 +159,7 @@ namespace RuntimeInspectorNamespace
             {
                 listenString = StartOn.data.listenName;
             }
-            ImportVisualisation(Type.Broadcast, listenString);
+            ImportVisualisation(Type.broadcast, listenString);
         }
 
         //private void ModifyDataAsPerGiven(ref TranslateComponent component)
@@ -200,7 +200,6 @@ namespace RuntimeInspectorNamespace
             if (delta != (Vector3)Type.recordedVector3.Get())
             {
                 Type.recordedVector3.Set(delta);
-                Type.ForceRefreshData?.Invoke();
             }
             GhostDescription.IsGhostInteractedInLastRecord = true;
         }

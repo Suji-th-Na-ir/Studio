@@ -185,32 +185,12 @@ namespace Terra.Studio
             [HideInInspector] public Vector3 LastVector3;
             [AliasDrawer("Repeat")] public Repeat repeat = new();
             [AliasDrawer("Broadcast At")] public BroadcastAt broadcastAt;
-            [HideInInspector] public Action<string, string> OnBroadcastUpdated;
-            [AliasDrawer("Broadcast")]
+            [AliasDrawer("Broadcast"),OnValueChanged(UpdateBroadcast = true)]
             public string broadcast;
-
-            public string Broadcast
-            {
-                get
-                {
-                    return broadcast;
-                }
-                set
-                {
-                    if (value != broadcast)
-                    {
-                        OnBroadcastUpdated?.Invoke(value, broadcast);
-                        broadcast = value;
-                    }
-                }   
-            }
-            [HideInInspector]
-            public Action ForceRefreshData;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)
             {
                 base.Setup(target, behaviour);
-                OnBroadcastUpdated = behaviour.OnBroadcastStringUpdated;
                 recordedVector3 = new();
                 recordedVector3.Setup(behaviour);
                 recordedVector3.Set(new Vector3(0f, 1f, 0f));
@@ -221,7 +201,6 @@ namespace Terra.Studio
             {
                 var cloneToTest = this;
                 cloneToTest.recordedVector3 = default;
-                cloneToTest.OnBroadcastUpdated = default;
                 cloneToTest.LastVector3 = default;
                 if (cloneToTest.Equals(default(TranslateComponentData)))
                 {

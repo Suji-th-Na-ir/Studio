@@ -249,7 +249,18 @@ namespace RuntimeInspectorNamespace
             var doesHaveOnValueChangedAttribute = fieldInfo.HasAttribute<OnValueChangedAttribute>();
             if (!doesHaveOnValueChangedAttribute) return;
             var attribute = fieldInfo.GetAttribute<OnValueChangedAttribute>();
-            onStringUpdated = attribute.OnValueUpdated((BaseBehaviour)instance);
+
+            if (instance.GetType() == typeof(BaseBehaviour))
+            {
+                onStringUpdated = attribute.OnValueUpdated((BaseBehaviour)instance);
+            }
+            else
+            {
+                if (instance as Atom.BaseBroadcasterTemplate!=null)
+                {
+                    onStringUpdated = attribute.OnValueUpdated(((Atom.BaseBroadcasterTemplate)instance).behaviour);
+                }
+            }
         }
 
         private bool IsObscurerTapped(FieldInfo fieldInfo)
