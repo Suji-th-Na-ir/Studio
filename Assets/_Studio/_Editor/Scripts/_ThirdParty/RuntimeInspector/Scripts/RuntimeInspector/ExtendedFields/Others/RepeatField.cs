@@ -62,9 +62,22 @@ namespace RuntimeInspectorNamespace
             var val = (Atom.Repeat)Value;
             if (Enum.IsDefined(typeof(BroadcastAt), input))
             {
+               
                 var valueText = broadcastTypeDropdown.options[input].text;
                 BroadcastAt enumValue = (BroadcastAt)Enum.Parse(typeof(BroadcastAt), valueText);
                 val.broadcastAt = enumValue;
+
+                if (enumValue == BroadcastAt.Never)
+                {
+                    broadcastField.BackingField.text = string.Empty;
+                    OnBroadcastValueChanged(broadcastField, string.Empty);
+                    broadcastFieldDrawer.SetActive(false);
+                }
+                else
+                {
+                    broadcastFieldDrawer.SetActive(true);
+                }
+
             }
         }
 
@@ -166,17 +179,7 @@ namespace RuntimeInspectorNamespace
            
             broadcastTypeDropdown.ClearOptions();
             broadcastTypeDropdown.AddOptions(Enum.GetNames(typeof(BroadcastAt)).Where(name => !ignoreNames.Contains(name)).ToList());
-
-            if(ignoreNames.Count==2)
-            {
-                broadcastField.BackingField.text = string.Empty;
-                OnBroadcastValueChanged(broadcastField, string.Empty);
-                broadcastFieldDrawer.SetActive(false);
-            }
-            else
-            {
-                broadcastFieldDrawer.SetActive(true);
-            }
+            OnBroadcastTypeValueChanged(broadcastTypeDropdown.value);
         }
 
         public override bool SupportsType(Type type)
