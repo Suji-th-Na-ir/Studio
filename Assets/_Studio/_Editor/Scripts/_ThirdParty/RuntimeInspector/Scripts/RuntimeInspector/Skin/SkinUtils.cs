@@ -134,5 +134,20 @@ namespace RuntimeInspectorNamespace
                 placeholder.color = placeholderColor;
             }
         }
+
+        public static Color GetInteractableColor(bool isInteractable)
+        {
+            if (isInteractable)
+            {
+                return Color.white;
+            }
+            else
+            {
+                var color = Helper.GetColorFromHex("#C8C8C8");
+                color.a = 0.5f;
+                return color;
+            }
+           
+        }
     }
 }

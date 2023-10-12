@@ -116,6 +116,7 @@ namespace RuntimeInspectorNamespace
         public override void SetInteractable(bool on)
         {
             input.BackingField.interactable = on;
+            input.BackingField.textComponent.color = SkinUtils.GetInteractableColor(on);
         }
     }
 }

@@ -97,7 +97,6 @@ namespace RuntimeInspectorNamespace
             if (isOn)
             {
                 repeatForFieldDrawer.SetInteractable(false);
-                val.repeat = 1;
                 ToggelPauseForAndRepeat(true);  
             }
             else

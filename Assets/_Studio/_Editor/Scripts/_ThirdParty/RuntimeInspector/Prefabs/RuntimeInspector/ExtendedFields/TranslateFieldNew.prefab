@@ -183,6 +183,7 @@ MonoBehaviour:
   isExpandable: 0
   layoutGroup: {fileID: 114810597662585366}
   expandArrow: {fileID: 114337546039104162}
+  ignoreHeadingSpace: 1
 --- !u!1 &1301415271833618
 GameObject:
   m_ObjectHideFlags: 0
