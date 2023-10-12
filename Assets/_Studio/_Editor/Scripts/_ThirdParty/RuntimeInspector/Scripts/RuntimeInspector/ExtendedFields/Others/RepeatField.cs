@@ -164,11 +164,6 @@ namespace RuntimeInspectorNamespace
             return false;
         }
 
-        protected override void OnSkinChanged()
-        {
-            base.OnSkinChanged();
-        }
-
         public override void Refresh()
         {
             if (!didCheckForExpand && Value != null)

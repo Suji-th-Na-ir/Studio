@@ -76,7 +76,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layoutElement: {fileID: 1367989905796473340}
   ignoreLayout: 1
-  variableNameText: {fileID: 0}
+  variableNameText: {fileID: 8208068842229784393}
   variableNameMask: {fileID: 0}
   visibleArea: {fileID: 0}
   drawArea: {fileID: 5765822008214366453}
