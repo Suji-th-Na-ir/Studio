@@ -9,7 +9,6 @@ namespace Terra.Studio
     public class PseudoRuntime<T> : IDisposable where T : BaseBehaviour
     {
         private GameObject originalTarget;
-        private ISubsystem cachedsubsystem;
         private Vector3 cachedPosition; //Temporary
 
         private static string runtimeSceneName;
@@ -44,13 +43,12 @@ namespace Terra.Studio
             DoExport(baseBehaviour);
             SystemOp.Resolve<System>().SetSimulationState(true);
             SystemOp.Resolve<System>().CanInitiateSubsystemProcess = () => { return false; };
-            SystemOp.Unregister(cachedsubsystem);
+            SystemOp.Unregister(EditorOp.Resolve<EditorSystem>() as ISubsystem);
             LoadRuntime();
         }
 
         private void LoadRuntime()
         {
-            cachedsubsystem = SystemOp.Resolve<ISubsystem>();
             var operation = SceneManager.LoadSceneAsync(RuntimeSceneName, LoadSceneMode.Additive);
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
@@ -125,7 +123,7 @@ namespace Terra.Studio
             unloadOperation.completed -= OnUnloadDone;
             SystemOp.Resolve<System>().SetSimulationState(false);
             SystemOp.Resolve<System>().CanInitiateSubsystemProcess = () => { return true; };
-            SystemOp.Register(cachedsubsystem);
+            SystemOp.Register(EditorOp.Resolve<EditorSystem>() as ISubsystem);
             //originalTarget.SetActive(true);
             originalTarget.transform.position = cachedPosition;
         }
