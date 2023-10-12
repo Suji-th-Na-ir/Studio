@@ -10,8 +10,8 @@ using Object = UnityEngine.Object;
 
 namespace RuntimeInspectorNamespace
 {
-	public class ArrayField : ExpandableInspectorField, IDropHandler
-	{
+    public class ArrayField : ExpandableInspectorField, IDropHandler
+    {
 #pragma warning disable 0649
 		[SerializeField]
 		private LayoutElement sizeLayoutElement;
@@ -318,5 +318,10 @@ namespace RuntimeInspectorNamespace
 
 			return template;
 		}
-	}
+
+        public override void SetInteractable(bool on)
+        {
+           sizeInput.BackingField.interactable = on;
+        }
+    }
 }

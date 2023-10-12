@@ -213,5 +213,13 @@ namespace RuntimeInspectorNamespace
 					inputH.Text = val.height.ToString( RuntimeInspectorUtils.numberFormat );
 			}
 		}
-	}
+
+        public override void SetInteractable(bool on)
+        {
+			inputX.BackingField.interactable = on;
+			inputY.BackingField.interactable = on;
+			inputH.BackingField.interactable = on;
+			inputW.BackingField.interactable = on;
+        }
+    }
 }

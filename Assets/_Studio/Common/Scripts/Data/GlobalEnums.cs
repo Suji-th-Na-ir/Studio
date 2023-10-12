@@ -70,7 +70,7 @@ namespace Terra.Studio
     {
         Never,
         End,
-        AtEveryInterval
+        AtEveryPause
     }
 
     public enum BroadcastAtForPushObjects

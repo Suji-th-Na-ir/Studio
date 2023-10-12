@@ -13,6 +13,7 @@ namespace RuntimeInspectorNamespace
         public delegate object Getter();
         public delegate void Setter(object value);
         protected Action<string, string> onStringUpdated;
+        public virtual Action<object> OnValueUpdated { get; set; }
 
 #pragma warning disable 0649
         [SerializeField]
@@ -178,6 +179,10 @@ namespace RuntimeInspectorNamespace
         {
             return true;
         }
+
+        public abstract void SetInteractable(bool on);
+        public virtual void InvokeUpdateDropdown(List<string> dropdowns){ }
+        public virtual void InvokeChangeValueExternal(object value) { }
 
         public void BindTo(InspectorField parent, MemberInfo variable, string variableName = null)
         {
@@ -443,6 +448,8 @@ namespace RuntimeInspectorNamespace
 
         public override bool ShouldRefresh { get { return true; } }
 
+        public bool ignoreHeadingSpace = false;
+
         private bool m_isExpanded = false;
         public bool IsExpanded
         {
@@ -566,7 +573,14 @@ namespace RuntimeInspectorNamespace
 
             if (m_headerVisibility != RuntimeInspector.HeaderVisibility.Hidden)
             {
-                layoutGroup.padding.top = Skin.LineHeight;
+                if (!ignoreHeadingSpace)
+                {
+                    layoutGroup.padding.top = Skin.LineHeight;
+                }
+                else
+                {
+                    layoutGroup.padding.top = (int)(Skin.LineHeight * 0.11f);
+                }
 
                 if (m_headerVisibility == RuntimeInspector.HeaderVisibility.Collapsible)
                 {

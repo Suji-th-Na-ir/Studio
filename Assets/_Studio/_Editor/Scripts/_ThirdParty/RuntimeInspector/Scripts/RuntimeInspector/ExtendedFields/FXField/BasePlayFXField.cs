@@ -173,5 +173,11 @@ namespace Terra.Studio
         }
 
         protected virtual void UpdateData() { }
+
+        public override void SetInteractable(bool on)
+        {
+            toggleInput.interactable = on;
+            optionsDropdown.interactable = on;
+        }
     }
 }

@@ -77,7 +77,7 @@ namespace Terra.Studio
             ref var translatable = ref entity.GetComponent<TranslateComponent>();
             if (translatable.IsBroadcastable)
             {
-                if (translatable.broadcastAt == BroadcastAt.AtEveryInterval && !isDone)
+                if (translatable.broadcastAt == BroadcastAt.AtEveryPause && !isDone)
                 {
                     RuntimeOp.Resolve<Broadcaster>().Broadcast(translatable.Broadcast, false);
                 }

@@ -41,6 +41,7 @@ namespace RuntimeInspectorNamespace
             }
             lastSubmittedValue = input;
             OnValueSubmitted(input);
+            OnValueUpdated?.Invoke(input);
         }
 
         private void OnValueSubmitted(bool input)
@@ -63,6 +64,11 @@ namespace RuntimeInspectorNamespace
         {
             base.Refresh();
             input.isOn = (bool)Value;
+        }
+
+        public override void SetInteractable(bool on)
+        {
+           
         }
     }
 }

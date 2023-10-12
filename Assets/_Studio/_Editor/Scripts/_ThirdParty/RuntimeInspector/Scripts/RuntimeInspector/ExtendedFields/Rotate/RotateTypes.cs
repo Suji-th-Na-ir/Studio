@@ -318,7 +318,7 @@ namespace RuntimeInspectorNamespace
                 broadcastAt.AddOptions(new List<string>()
                 {
                     BroadcastAt.Never.ToString(),
-                    BroadcastAt.AtEveryInterval.ToString()
+                    BroadcastAt.AtEveryPause.ToString()
                 });
             }
         }

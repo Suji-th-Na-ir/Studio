@@ -192,7 +192,7 @@ namespace Terra.Studio
             ref var rotatable = ref entity.GetComponent<RotateComponent>();
             if (rotatable.IsBroadcastable)
             {
-                if (rotatable.broadcastAt == BroadcastAt.AtEveryInterval && !isDone)
+                if (rotatable.broadcastAt == BroadcastAt.AtEveryPause && !isDone)
                 {
                     RuntimeOp.Resolve<Broadcaster>().Broadcast(rotatable.Broadcast, false);
                 }

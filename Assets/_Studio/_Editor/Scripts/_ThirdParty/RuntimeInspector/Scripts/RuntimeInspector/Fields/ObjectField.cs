@@ -270,5 +270,10 @@ namespace RuntimeInspectorNamespace
                 IsExpanded = true;
             }
         }
+
+        public override void SetInteractable(bool on)
+        {
+           
+        }
     }
 }

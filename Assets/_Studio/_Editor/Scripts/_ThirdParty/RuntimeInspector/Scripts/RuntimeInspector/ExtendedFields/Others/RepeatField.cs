@@ -9,154 +9,103 @@ using System.Collections.Generic;
 
 namespace RuntimeInspectorNamespace
 {
-    public class RepeatField : InspectorField
+    public class RepeatField : ExpandableInspectorField
     {
-        [SerializeField] Toggle repeatForeverToggle;
-        [SerializeField] BoundInputField repeatField;
-        [SerializeField] BoundInputField pauseForField;
-        [SerializeField] Dropdown repeatTypeDropdown;
-        [SerializeField] Dropdown broadcastTypeDropdown;
-        [SerializeField] BoundInputField broadcastField;
+        InspectorField repeatForFieldDrawer;
+        InspectorField pauseForFieldDrawer;
+        InspectorField repeatTypeFieldDrawer;
+        InspectorField broadcastTypeFieldDrawer;
+        InspectorField broadcastFieldDrawer;
+        InspectorField repeatFoeverFieldDrawer;
 
-        [Header("Labels"),Space(20)]
-        [SerializeField] Text repeatForeverToggleLabel;
-        [SerializeField] Text repeatFieldLabel;
-        [SerializeField] Text pauseForLabel;
-        [SerializeField] Text repeatTypeLabel;
-        [SerializeField] Text broadcastTypeLabel;
-        [SerializeField] Text broadcastLabel;
+        private FieldInfo[] allFields;
+        protected FieldInfo[] FieldInfos
+        {
+            get
+            {
+                if (allFields == null)
+                {
+                    Type type = typeof(Atom.Repeat);
+                    var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    allFields = fields.Where(field => !field.IsDefined(typeof(HideInInspector), false)).ToArray();
+                }
+                return allFields;
+            }
+        }
 
-        [Header("Drawer"), Space(20)]
-        [SerializeField] GameObject pauseForFieldDrawer;
-        [SerializeField] GameObject repeatTypeFieldDrawer;
-        [SerializeField] GameObject broadcastTypeFieldDrawer;
-        [SerializeField] GameObject broadcastFieldDrawer;
+        protected override int Length { get { return 6; } }
+        private bool didCheckForExpand;
 
-        private Toggle[] toggles;
-
-
-        private float elementheight;
         public override void Initialize()
         {
             base.Initialize();
-            repeatField.Initialize();
-            pauseForField.Initialize();
-            broadcastField.Initialize();
-            repeatTypeDropdown.ClearOptions();
-            repeatTypeDropdown.AddOptions(Enum.GetNames(typeof(RepeatDirectionType)).ToList());
-            broadcastTypeDropdown.ClearOptions();
-            broadcastTypeDropdown.AddOptions(Enum.GetNames(typeof(BroadcastAt)).ToList());
-            
-            repeatForeverToggle.onValueChanged.AddListener(OnRepeatForeverValueChanged);
-            repeatField.OnValueChanged += OnRepeatValueChanged;
-            pauseForField.OnValueChanged += OnPauseForValueChanged;
-            repeatTypeDropdown.onValueChanged.AddListener(OnRepeatTypeValueChanged);
-            broadcastField.OnValueChanged += OnBroadcastValueChanged;
-            broadcastTypeDropdown.onValueChanged.AddListener(OnBroadcastTypeValueChanged);
-            toggles = broadcastTypeDropdown.gameObject.GetComponentsInChildren<Toggle>(true);
-            elementheight = pauseForFieldDrawer.GetComponent<RectTransform>().rect.height+5;
         }
 
-        private void OnBroadcastTypeValueChanged(int input)
+        private void ToggleBroadcastField()
         {
             var val = (Atom.Repeat)Value;
-            if (Enum.IsDefined(typeof(BroadcastAt), input))
-            {
-               
-                var valueText = broadcastTypeDropdown.options[input].text;
-                BroadcastAt enumValue = (BroadcastAt)Enum.Parse(typeof(BroadcastAt), valueText);
-                val.broadcastAt = enumValue;
-
-                if (enumValue == BroadcastAt.Never)
-                {
-                    broadcastField.BackingField.text = string.Empty;
-                    OnBroadcastValueChanged(broadcastField, string.Empty);
-                    broadcastFieldDrawer.SetActive(false);
-                }
-                else
-                {
-                    broadcastFieldDrawer.SetActive(true);
-                }
-
-            }
-        }
-
-        private bool OnBroadcastValueChanged(BoundInputField source, string input)
-        {
-            var val = (Atom.Repeat)Value;
-            if (source == broadcastField)
-            {
-                var oldValue = val.broadcast;
-                val.broadcast = input;
-                onStringUpdated?.Invoke(val.broadcast,oldValue);
-                return true;
-            }
-            return false;
-        }
-
-        private void OnRepeatTypeValueChanged(int input)
-        {
-            var val = (Atom.Repeat)Value;
-            if (Enum.IsDefined(typeof(RepeatDirectionType), input))
-            {
-                val.repeatType = input;
-            }
-        }
-
-        private bool OnPauseForValueChanged(BoundInputField source, string input)
-        {
-            if (int.TryParse(input, out int result))
-            {
-                if (source == pauseForField)
-                {
-                    var val = (Atom.Repeat)Value;
-                    val.pauseFor = result;
-                    UpdatebroadcastTypeDropDown();
-                    Refresh();
-                }
-                return true;
-            }
-            return false;
-        }
-
-        private bool OnRepeatValueChanged(BoundInputField source, string input)
-        {
-            if (int.TryParse(input, out int result))
-            {
-                if (source == repeatField)
-                {
-                    pauseForFieldDrawer.SetActive(result > 1);
-                    repeatTypeFieldDrawer.SetActive(result > 1);
-                    var val = (Atom.Repeat)Value;
-                    val.repeat = result;
-                }
-                UpdatebroadcastTypeDropDown();
-                Refresh();
-                return true;
-            }
-            return false;
-        }
-
-        private void OnRepeatForeverValueChanged(bool isOn)
-        {
-            var val = (Atom.Repeat)Value;
-            if (isOn)
-            {
-                repeatField.BackingField.SetTextWithoutNotify($"{0}");
-                repeatField.BackingField.interactable = false;
-                val.repeat = int.MaxValue;
+            if (val.broadcastAt == BroadcastAt.Never)
+            { 
+                broadcastFieldDrawer.gameObject.SetActive(false);
+                broadcastFieldDrawer.InvokeChangeValueExternal(string.Empty);
             }
             else
             {
-                repeatField.BackingField.SetTextWithoutNotify($"{0}");
-                repeatField.BackingField.interactable = true;
-                pauseForField.BackingField.text=$"{0}";
-                OnPauseForValueChanged(pauseForField, $"{0}");
-                val.repeat = 0;
+                broadcastFieldDrawer.gameObject.SetActive(true);
             }
-            OnRepeatValueChanged(repeatField, val.repeat.ToString());
+        }
+
+        private void OnBroadcastTypeValueChanged(object value)
+        {
+            ToggleBroadcastField();
+        }
+
+
+        private void OnPauseForValueChanged(object value)
+        {
             UpdatebroadcastTypeDropDown();
-            Refresh();
+        }
+
+        private void OnRepeatValueChanged(object value)
+        {
+            var val = (Atom.Repeat)Value;
+
+            if (val.repeat < 1)
+                val.repeat = 1;
+
+            if (val.repeat < 2)
+            {
+                ToggelPauseForAndRepeat(false);
+            }
+            else
+            {
+                ToggelPauseForAndRepeat(true);
+            }
+            UpdatebroadcastTypeDropDown();
+        }
+
+        private void ToggelPauseForAndRepeat(bool on)
+        {
+            pauseForFieldDrawer.gameObject.SetActive(on);
+            repeatTypeFieldDrawer.gameObject.SetActive(on);
+        }
+
+        private void OnRepeatForeverValueChanged(object value)
+        {
+            var val = (Atom.Repeat)Value;
+            var isOn = (bool)value;
+            if (isOn)
+            {
+                repeatForFieldDrawer.SetInteractable(false);
+                val.repeat = 1;
+                ToggelPauseForAndRepeat(true);  
+            }
+            else
+            {
+                repeatForFieldDrawer.SetInteractable(true);
+                OnRepeatValueChanged(val.repeat);
+            }
+            UpdatebroadcastTypeDropDown();
         }
 
         private void UpdatebroadcastTypeDropDown()
@@ -164,22 +113,21 @@ namespace RuntimeInspectorNamespace
             List<string> ignoreNames = new List<string>();
             var val = (Atom.Repeat)Value;
 
-            if(val.repeat==int.MaxValue)
+            if (val.repeatForever)
             {
                 ignoreNames.Add(BroadcastAt.End.ToString());
-                if(val.pauseFor==0)
+                if (val.pauseFor == 0)
                 {
-                    ignoreNames.Add(BroadcastAt.AtEveryInterval.ToString());
-                }    
+                    ignoreNames.Add(BroadcastAt.AtEveryPause.ToString());
+                }
             }
-            if(val.repeat<2)
+            else if (val.repeat < 2)
             {
-                ignoreNames.Add(BroadcastAt.AtEveryInterval.ToString());
+                ignoreNames.Add(BroadcastAt.AtEveryPause.ToString());
             }
            
-            broadcastTypeDropdown.ClearOptions();
-            broadcastTypeDropdown.AddOptions(Enum.GetNames(typeof(BroadcastAt)).Where(name => !ignoreNames.Contains(name)).ToList());
-            OnBroadcastTypeValueChanged(broadcastTypeDropdown.value);
+            broadcastTypeFieldDrawer.InvokeUpdateDropdown(Enum.GetNames(typeof(BroadcastAt)).Where(name => !ignoreNames.Contains(name)).ToList());
+            ToggleBroadcastField();
         }
 
         public override bool SupportsType(Type type)
@@ -191,34 +139,16 @@ namespace RuntimeInspectorNamespace
         {
             base.OnBound(variable);
             var val = (Atom.Repeat)Value;
-            if (val != null)
-            {
-                FieldInfo fieldInfo = val.GetType().GetField(nameof(val.broadcast));
-                var attribute = fieldInfo.GetAttribute<OnValueChangedAttribute>();
-                if (attribute!=null)
-                {
-                    onStringUpdated = attribute.OnValueUpdated(val.behaviour);
-                }
-                repeatForeverToggle.SetIsOnWithoutNotify(val.repeat == int.MaxValue);
-                repeatTypeDropdown.SetValueWithoutNotify(val.repeatType);
-                broadcastTypeDropdown.SetValueWithoutNotify((int)val.broadcastAt);
-                pauseForField.BackingField.SetTextWithoutNotify(val.pauseFor.ToString());
+        }
 
-                broadcastField.BackingField.SetTextWithoutNotify(string.IsNullOrEmpty(val.broadcast) ? "" : val.broadcast);
-                if (!repeatForeverToggle.isOn)
-                {
-                    repeatField.BackingField.SetTextWithoutNotify(val.repeat.ToString());
-                    OnRepeatValueChanged(repeatField, val.repeat.ToString());
-                }
-                else
-                {
-                    OnRepeatForeverValueChanged(repeatForeverToggle.isOn);
-                }
-            }
-            else
-            {
-                Debug.Log("Bounding Value is not of type Repeat");
-            }
+        protected override void OnUnbound()
+        {
+            base.OnUnbound();
+            repeatForFieldDrawer.OnValueUpdated -= OnRepeatValueChanged;
+            repeatFoeverFieldDrawer.OnValueUpdated -= OnRepeatForeverValueChanged;
+            pauseForFieldDrawer.OnValueUpdated -= OnPauseForValueChanged;
+            broadcastTypeFieldDrawer.OnValueUpdated -= OnBroadcastTypeValueChanged;
+
         }
 
         protected virtual bool OnValueChanged(string input)
@@ -237,32 +167,58 @@ namespace RuntimeInspectorNamespace
         protected override void OnSkinChanged()
         {
             base.OnSkinChanged();
-           
-            repeatField.SetupBoundInputFieldSkin(Skin);
-            pauseForField.SetupBoundInputFieldSkin(Skin);
-            repeatTypeDropdown.SetSkinDropDownField(Skin);
-            repeatForeverToggle.SetupToggeleSkin(Skin);
-            repeatFieldLabel.SetSkinText(Skin);
-            pauseForLabel.SetSkinText(Skin);
-            repeatForeverToggleLabel.SetSkinText(Skin);
-            repeatTypeLabel.SetSkinText(Skin);
-            broadcastTypeDropdown.SetSkinDropDownField(Skin);
-            broadcastField.SetupBoundInputFieldSkin(Skin);
-            broadcastLabel.SetSkinText(Skin);
-            broadcastTypeLabel.SetSkinText(Skin);
         }
 
         public override void Refresh()
         {
+            if (!didCheckForExpand && Value != null)
+            {
+                didCheckForExpand = true;
+                IsExpanded = true;
+            }
             base.Refresh();
+        }
+        protected override void ClearElements()
+        {
+            base.ClearElements();
+            didCheckForExpand = false;
+        }
 
-            var height = elementheight * 2f +
-                (pauseForFieldDrawer.activeSelf ? elementheight : 0) +
-                (repeatTypeFieldDrawer.activeSelf ? elementheight : 0) +
-                (broadcastFieldDrawer.activeSelf ? elementheight : 0) +
-                (broadcastTypeFieldDrawer.activeSelf ? elementheight : 0)+5f;
+        protected override void GenerateElements()
+        {
+            var val = (Atom.Repeat)Value;
+            repeatForFieldDrawer = CreateDrawerForField(nameof(val.repeat));
+            repeatForFieldDrawer.OnValueUpdated += OnRepeatValueChanged;
 
-            layoutElement.minHeight = height;
+            repeatFoeverFieldDrawer = CreateDrawerForField(nameof(val.repeatForever));
+            repeatFoeverFieldDrawer.OnValueUpdated += OnRepeatForeverValueChanged; 
+
+            pauseForFieldDrawer = CreateDrawerForField(nameof(val.pauseFor));
+            pauseForFieldDrawer.OnValueUpdated += OnPauseForValueChanged;
+
+            repeatTypeFieldDrawer = CreateDrawerForField(nameof(val.repeatType));
+
+            broadcastTypeFieldDrawer = CreateDrawerForField(nameof(val.broadcastAt));
+            broadcastTypeFieldDrawer.OnValueUpdated += OnBroadcastTypeValueChanged;
+            
+
+            broadcastFieldDrawer = CreateDrawerForField(nameof(val.broadcast));
+           
+            OnRepeatValueChanged(val.repeat);
+            OnRepeatForeverValueChanged(val.repeatForever);
+            ToggleBroadcastField();
+        }
+
+        private InspectorField CreateDrawerForField(string name)
+        {
+            Type type = Value.GetType();
+            FieldInfo fieldInfo = type.GetField(name);
+            return CreateDrawerForVariable(fieldInfo, fieldInfo.Name, true);
+        }
+
+        public override void SetInteractable(bool on)
+        {
+            
         }
     }
 }

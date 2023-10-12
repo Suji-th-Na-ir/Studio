@@ -65,5 +65,10 @@ namespace RuntimeInspectorNamespace
             base.ClearElements();
             didCheckForExpand = false;
         }
+
+        public override void SetInteractable(bool on)
+        {
+           
+        }
     }
 }

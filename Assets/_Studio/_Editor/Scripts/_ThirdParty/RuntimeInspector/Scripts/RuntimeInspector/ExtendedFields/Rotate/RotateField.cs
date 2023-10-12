@@ -260,5 +260,10 @@ namespace RuntimeInspectorNamespace
         {
             lastSubmittedValue = data;
         }
+
+        public override void SetInteractable(bool on)
+        {
+            
+        }
     }
 }

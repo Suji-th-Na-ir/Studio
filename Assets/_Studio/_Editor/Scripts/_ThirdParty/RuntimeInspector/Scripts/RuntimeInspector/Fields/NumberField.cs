@@ -57,6 +57,7 @@ namespace RuntimeInspectorNamespace
             if (numberHandler.TryParse(input, out object value))
             {
                 Value = value;
+                OnValueUpdated?.Invoke(Value);
                 return true;
             }
             return false;
@@ -110,6 +111,11 @@ namespace RuntimeInspectorNamespace
 
             if (!numberHandler.ValuesAreEqual(Value, prevVal))
                 input.Text = numberHandler.ToString(Value);
+        }
+
+        public override void SetInteractable(bool on)
+        {
+            input.BackingField.interactable = on;
         }
     }
 }

@@ -38,6 +38,11 @@ namespace RuntimeInspectorNamespace
             input.DefaultEmptyValue = string.Empty;
         }
 
+        public override void SetInteractable(bool on)
+        {
+            input.BackingField.interactable = on;
+        }
+
         public override bool SupportsType(Type type)
         {
             return type == typeof(string);
@@ -77,6 +82,11 @@ namespace RuntimeInspectorNamespace
             SetterMode = Mode.OnValueChange;
         }
 
+        public override void InvokeChangeValueExternal(object value)
+        {
+            base.InvokeChangeValueExternal(value);
+            OnValueChanged(input, value.ToString());
+        }
         protected virtual bool OnValueChanged(BoundInputField source, string input)
         {
             var oldValue = Value;

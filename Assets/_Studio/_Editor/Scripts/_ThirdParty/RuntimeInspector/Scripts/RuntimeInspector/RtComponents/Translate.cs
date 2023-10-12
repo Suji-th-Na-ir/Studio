@@ -11,6 +11,7 @@ namespace RuntimeInspectorNamespace
         [AliasDrawer("MoveWhen")]
         public Atom.StartOn StartOn = new();
         public Atom.Translate Type = new();
+        [AliasDrawer("Repeat")] public Atom.Repeat repeat = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
 
@@ -19,7 +20,7 @@ namespace RuntimeInspectorNamespace
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]
         {
-            Type.repeat.broadcast
+            repeat.broadcast
         };
         protected override string[] ListenerRefs => new string[]
         {
@@ -30,6 +31,7 @@ namespace RuntimeInspectorNamespace
         {
             base.Awake();
             Type.Setup(gameObject, this);
+            repeat.Setup(gameObject, this);
             StartOn.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated, StartOn.data.startIndex == 4);
             PlaySFX.Setup<Translate>(gameObject);
             PlayVFX.Setup<Translate>(gameObject);
@@ -63,21 +65,21 @@ namespace RuntimeInspectorNamespace
         }
 
         public override (string type, string data) Export()
-        { 
+        {
             var comp = new TranslateComponent
             {
-                translateType = (RepeatDirectionType)Type.repeat.repeatType,
+                translateType = (RepeatDirectionType)repeat.repeatType,
                 speed = Type.speed,
-                pauseFor = Type.repeat.pauseFor,
-                repeatFor = Type.repeat.repeat,
+                pauseFor = (repeat.repeat <= 1 && !repeat.repeatForever) ? 0 : repeat.pauseFor,
+                repeatFor = repeat.repeatForever ? int.MaxValue : repeat.repeat,
                 targetPosition = (Vector3)Type.recordedVector3.Get(),
                 startPosition = transform.position,
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
-                broadcastAt = Type.repeat.broadcastAt,
-                IsBroadcastable = !string.IsNullOrEmpty(Type.repeat.broadcast),
-                Broadcast = Type.repeat.broadcast,
+                broadcastAt = repeat.broadcastAt,
+                IsBroadcastable = !string.IsNullOrEmpty(repeat.broadcast),
+                Broadcast = repeat.broadcast,
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
@@ -125,13 +127,14 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.canPlay = comp.canPlayVFX;
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
-            Type.repeat.repeatType = (int)comp.translateType;
+            repeat.repeatType = comp.translateType;
             Type.speed = comp.speed;
-            Type.repeat.pauseFor = comp.pauseFor;
+            repeat.pauseFor = comp.pauseFor;
+            repeat.repeatForever = comp.repeatFor == int.MaxValue;
             Type.recordedVector3.Set(comp.targetPosition);
-            Type.repeat.Set(comp.repeatFor);
-            Type.repeat.broadcast = comp.Broadcast;
-            Type.repeat.broadcastAt = comp.broadcastAt;
+            repeat.repeat = comp.repeatFor == int.MaxValue? 1 :comp.repeatFor;
+            repeat.broadcast = comp.Broadcast;
+            repeat.broadcastAt = comp.broadcastAt;
             StartOn.data.listenName = comp.ConditionData;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
@@ -159,23 +162,8 @@ namespace RuntimeInspectorNamespace
             {
                 listenString = StartOn.data.listenName;
             }
-            ImportVisualisation(Type.repeat.broadcast, listenString);
+            ImportVisualisation(repeat.broadcast, listenString);
         }
-
-        //private void ModifyDataAsPerGiven(ref TranslateComponent component)
-        //{
-        //    switch (component.translateType)
-        //    {
-        //        case TranslateType.MoveForever:
-        //        case TranslateType.MoveIncrementallyForever:
-        //        case TranslateType.PingPongForever:
-        //            component.repeatFor = int.MaxValue;
-        //            break;
-        //        default:
-        //            component.repeatFor = Type.repeat.repeat != 0 ? Type.repeat.repeat : 1;
-        //            break;
-        //    }
-        //}
 
         private Vector3[] GetCurrentOffsetInWorld()
         {
