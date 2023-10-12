@@ -187,9 +187,8 @@ namespace Terra.Studio
         [Serializable]
         public class Translate : BaseBroadcasterTemplate
         {
-
-            [AliasDrawer("Speed")] public float speed;
             [AliasDrawer("Move By")] public Atom.RecordedVector3 recordedVector3;
+            [AliasDrawer("Speed")] public float speed;
             [HideInInspector] public Vector3 LastVector3;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)
