@@ -44,24 +44,33 @@ namespace Terra.Studio
 
         protected virtual void Update()
         {
-            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.P))
+            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.P) && CanPerformShortcut())
             {
-                var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
-                if (selections.Count != 1)
-                {
-                    return;
-                }
-                if (selections[0].gameObject != gameObject)
-                {
-                    return;
-                }
-                var components = gameObject.GetComponents<BaseBehaviour>();
-                if (components.Length != 1)
-                {
-                    return;
-                }
                 EditorOp.Resolve<BehaviourPreview>().Preview(this);
             }
+            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.R) && CanPerformShortcut())
+            {
+                EditorOp.Resolve<BehaviourPreview>().Restart(this);
+            }
+        }
+
+        private bool CanPerformShortcut()
+        {
+            var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selections.Count != 1)
+            {
+                return false;
+            }
+            if (selections[0].gameObject != gameObject)
+            {
+                return false;
+            }
+            var components = gameObject.GetComponents<BaseBehaviour>();
+            if (components.Length != 1)
+            {
+                return false;
+            }
+            return true;
         }
 
         protected virtual void OnEnable()

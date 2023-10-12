@@ -44,6 +44,7 @@ namespace Terra.Studio
             RuntimeOp.Register(new ComponentsData());
             RuntimeOp.Register(new CoreGameManager());
             RuntimeOp.Register(new SceneDataHandler());
+            RuntimeOp.Register(new EntitiesGraphics());
         }
 
         private void InitializeStateBasedOnSystemCondition()
@@ -167,12 +168,14 @@ namespace Terra.Studio
 
         public void Dispose()
         {
+            DestroyEcsSystemsAndWorld();
+            RuntimeOp.Resolve<EntitiesGraphics>().FlushAllTrackedVisuals();
             WorldAuthorOp.Flush();
             ComponentAuthorOp.Flush();
             EntityAuthorOp.Flush();
             RuntimeOp.Unregister<CoreGameManager>();
             RuntimeOp.Unregister<SceneDataHandler>();
-            DestroyEcsSystemsAndWorld();
+            RuntimeOp.Unregister<EntitiesGraphics>();
         }
 
         private void DestroyEcsSystemsAndWorld()
@@ -212,10 +215,15 @@ namespace Terra.Studio
             return scene;
         }
 
-        private void OnDestroy()
+        public void UnstageAll()
         {
             RuntimeOp.Unregister<Broadcaster>();
             RuntimeOp.Unregister<ComponentsData>();
+        }
+
+        private void OnDestroy()
+        {
+            UnstageAll();
             SystemOp.Unregister(this as ISubsystem);
             RuntimeOp.Unregister(this);
         }

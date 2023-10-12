@@ -10,6 +10,7 @@ namespace Terra.Studio
     {
         private GameObject originalTarget;
         private Vector3 cachedPosition; //Temporary
+        private Scene cachedRuntimeScene;
 
         private static string runtimeSceneName;
         private string RuntimeSceneName
@@ -93,6 +94,11 @@ namespace Terra.Studio
             cachedPosition = originalTarget.transform.position;
             originalTarget.transform.position = new Vector3(-100f, -100f, -100f);
             //originalTarget.SetActive(false);
+            SetObjectPathData();
+        }
+
+        private void SetObjectPathData()
+        {
             if (originalTarget.TryGetComponent(out StudioGameObject studioGameObject))
             {
                 var assetPath = studioGameObject.itemData.ResourcePath;
@@ -102,6 +108,7 @@ namespace Terra.Studio
 
         private void OnRuntimeActive(Scene scene)
         {
+            cachedRuntimeScene = scene;
             SystemOp.Resolve<ISubsystem>().Initialize(scene);
             CoroutineService.RunCoroutine(InitiateConditionalEvents, CoroutineService.DelayType.WaitForFrame);
         }
@@ -126,6 +133,15 @@ namespace Terra.Studio
             SystemOp.Register(EditorOp.Resolve<EditorSystem>() as ISubsystem);
             //originalTarget.SetActive(true);
             originalTarget.transform.position = cachedPosition;
+        }
+
+        public void OnRestartRequested()
+        {
+            SetObjectPathData();
+            var system = RuntimeOp.Resolve<RuntimeSystem>();
+            system.Dispose();
+            system.UnstageAll();
+            OnRuntimeActive(cachedRuntimeScene);
         }
     }
 }

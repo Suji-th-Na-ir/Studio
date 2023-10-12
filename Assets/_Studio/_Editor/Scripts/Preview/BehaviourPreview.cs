@@ -28,6 +28,20 @@ namespace Terra.Studio
             EditorOp.Resolve<SceneView>().OnAnimationDone = () => { ToggleState(instance); };
         }
 
+        public void Restart<T>(T instance) where T : BaseBehaviour
+        {
+            if (!currentState)
+            {
+                return;
+            }
+            if (instance.GetType() != currentType)
+            {
+                Debug.Log($"Cannot restart because the last preview is still in progress");
+                return;
+            }
+            SystemOp.Resolve<PseudoRuntime<T>>().OnRestartRequested();
+        }
+
         private void SwapState()
         {
             currentState = !currentState;
