@@ -197,7 +197,7 @@ namespace RuntimeInspectorNamespace
         public override void InvokeUpdateDropdown(List<string> names)
         {
             base.InvokeUpdateDropdown(names);
-           
+            var lastValue = currEnumNames[input.value];
             currEnumNames = new List<string>(names.Count);
             currEnumValues = new List<object>(names.Count);
 
@@ -208,9 +208,17 @@ namespace RuntimeInspectorNamespace
             }
             enumNames[BoundVariableType] = currEnumNames;
             enumValues[BoundVariableType] = currEnumValues;
+            
             input.ClearOptions();
             input.AddOptions(names);
-            Value = currEnumNames[input.value];
+            if (names.Contains(lastValue))
+            {
+                input.value = currEnumNames.IndexOf(lastValue);
+            }
+            else
+            {
+                OnValueChanged(input.value);
+            }
         }
     }
 }
