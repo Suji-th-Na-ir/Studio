@@ -182,7 +182,11 @@ namespace RuntimeInspectorNamespace
                                 atom.repeatType = _atom.repeatType;
                                 break;
                             case RepeatData.PauseFor:
-                                if(!atom.repeatForever &&atom.repeat>1)
+                                if(!atom.repeatForever && atom.repeat >1)
+                                {
+                                    _atom.pauseFor = atom.pauseFor;
+                                }
+                                else if(atom.repeatForever)
                                 {
                                     _atom.pauseFor = atom.pauseFor;
                                 }
