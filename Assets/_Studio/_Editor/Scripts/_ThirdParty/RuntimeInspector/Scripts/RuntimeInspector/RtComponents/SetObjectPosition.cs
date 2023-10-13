@@ -214,10 +214,10 @@ namespace Terra.Studio
                 properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFX.data.clipName);
             }
             var index = startOn.data.startIndex;
-            var enumValue = (StartOn)index;
+            var enumValue = (StartOptions)index;
             var name = enumValue.ToString();
             var listenTo = string.Empty;
-            if (enumValue == StartOn.BroadcastListen)
+            if (enumValue == StartOptions.BroadcastListen)
             {
                 listenTo = startOn.data.listenName;
             }
