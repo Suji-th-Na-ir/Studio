@@ -81,6 +81,12 @@ namespace RuntimeInspectorNamespace
 
         private void OnRepeatValueChanged(object value)
         {
+            Atom.Repeat val = ValidateRepeatValue();
+            UpdateOtherCompData(val, RepeatData.RepeatFor);
+        }
+
+        private Atom.Repeat ValidateRepeatValue()
+        {
             var val = (Atom.Repeat)Value;
 
             if (val.repeat < 1)
@@ -95,7 +101,7 @@ namespace RuntimeInspectorNamespace
                 ToggelPauseForAndRepeat(true);
             }
             UpdatebroadcastTypeDropDown();
-            UpdateOtherCompData(val, RepeatData.RepeatFor);
+            return val;
         }
 
         private void ToggelPauseForAndRepeat(bool on)
@@ -106,20 +112,27 @@ namespace RuntimeInspectorNamespace
 
         private void OnRepeatForeverValueChanged(object value)
         {
+            Atom.Repeat val = ValidateRepeatForeverValue(value);
+            UpdatebroadcastTypeDropDown();
+            UpdateOtherCompData(val, RepeatData.RepeatForever);
+        }
+
+        private Atom.Repeat ValidateRepeatForeverValue(object value)
+        {
             var val = (Atom.Repeat)Value;
             var isOn = (bool)value;
             if (isOn)
             {
                 repeatForFieldDrawer.SetInteractable(false);
-                ToggelPauseForAndRepeat(true);  
+                ToggelPauseForAndRepeat(true);
             }
             else
             {
                 repeatForFieldDrawer.SetInteractable(true);
                 OnRepeatValueChanged(val.repeat);
             }
-            UpdatebroadcastTypeDropDown();
-            UpdateOtherCompData(val, RepeatData.RepeatForever);
+
+            return val;
         }
 
         private void UpdatebroadcastTypeDropDown()
@@ -264,8 +277,8 @@ namespace RuntimeInspectorNamespace
             broadcastFieldDrawer = CreateDrawerForField(nameof(val.broadcast));
             broadcastFieldDrawer.OnValueUpdated += OnBroadcastValueChanged;
 
-            OnRepeatValueChanged(val.repeat);
-            OnRepeatForeverValueChanged(val.repeatForever);
+            ValidateRepeatValue();
+            ValidateRepeatForeverValue(val.repeatForever);
             ToggleBroadcastField();
         }
 

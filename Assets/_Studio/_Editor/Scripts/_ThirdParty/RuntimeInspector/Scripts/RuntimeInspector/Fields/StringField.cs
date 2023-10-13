@@ -98,6 +98,7 @@ namespace RuntimeInspectorNamespace
             var newString = Value == null ? string.Empty : Value.ToString();
             var oldString = oldValue == null ? string.Empty : oldValue.ToString();
             onStringUpdated?.Invoke(newString, oldString);
+            OnValueUpdated?.Invoke(newString);
             return true;
         }
 
@@ -118,7 +119,7 @@ namespace RuntimeInspectorNamespace
                     });
             }
 
-
+            OnValueUpdated?.Invoke(lastSubmittedValue);
             lastSubmittedValue = Value;
             Inspector.RefreshDelayed();
             return true;
