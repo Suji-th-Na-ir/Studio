@@ -118,5 +118,12 @@ namespace Terra.Studio
                 SystemOp.Resolve<PseudoRuntime<T>>().OnBroadcastExecuted -= previewUI.ToggleToBroadcastGroup;
             }
         }
+
+        public class Constants
+        {
+            public const string SFX_PREVIEW_NAME = "SFX";
+            public const string VFX_PREVIEW_NAME = "VFX";
+            public const string BROADCAST_PREVIEW_KEY = "Broadcast_Key";
+        }
     }
 }

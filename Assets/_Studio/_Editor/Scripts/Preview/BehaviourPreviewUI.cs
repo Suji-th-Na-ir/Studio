@@ -85,7 +85,9 @@ namespace Terra.Studio
             var leftGroup = Helper.FindDeepChild(eventGroup, LEFT_GROUP_LOC);
             var headingText = Helper.FindDeepChild<TextMeshProUGUI>(leftGroup, HEADING_TEXT_LOC);
             var iconImage = Helper.FindDeepChild<Image>(leftGroup, ICON_IMAGE_LOC);
-            var (name, icon) = instance.GetEventConditionDisplayData();
+            var name = instance.GetEventConditionalName();
+            var preset = EditorOp.Resolve<EditorSystem>().ComponentIconsPreset;
+            var icon = preset.GetIcon(name);
             headingText.text = name;
             iconImage.sprite = icon;
         }
@@ -98,8 +100,10 @@ namespace Terra.Studio
             headingText.text = instance.GetDisplayName();
             propertiesActionCanvasGroup = propertiesGroup.GetComponent<CanvasGroup>();
             var properites = instance.GetPreviewProperties();
-            var doesContainBroadcast = properites != null && properites.ContainsKey("Broadcast");
-            PrepareBroadcastGroup(false, "xyz");
+            var broadcast = string.Empty;
+            var doesContainBroadcast = properites != null && properites.ContainsKey(BehaviourPreview.Constants.BROADCAST_PREVIEW_KEY);
+            if (doesContainBroadcast) broadcast = (string)properites[BehaviourPreview.Constants.BROADCAST_PREVIEW_KEY];
+            PrepareBroadcastGroup(doesContainBroadcast, broadcast);
         }
 
         private void PrepareBroadcastGroup(bool isAvailable, string broadcast)

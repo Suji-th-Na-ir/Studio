@@ -168,9 +168,9 @@ namespace Terra.Studio
             return "NOT_FOUND_TYPE";
         }
 
-        public virtual (string, Sprite) GetEventConditionDisplayData()
+        public virtual string GetEventConditionalName()
         {
-            return ("NOT_FOUND", null);
+            return default;
         }
 
         public virtual Dictionary<string, object> GetPreviewProperties()

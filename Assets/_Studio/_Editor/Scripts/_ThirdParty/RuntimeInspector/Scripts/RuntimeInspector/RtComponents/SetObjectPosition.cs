@@ -200,14 +200,12 @@ namespace Terra.Studio
             targetPosition.Set(data);
         }
 
-        public override (string, Sprite) GetEventConditionDisplayData()
+        public override string GetEventConditionalName()
         {
             var index = startOn.data.startIndex;
             var enumValue = (StartOn)index;
             var name = enumValue.ToString();
-            var preset = EditorOp.Resolve<EditorSystem>().ComponentIconsPreset;
-            var icon = preset.GetIcon(name);
-            return (name, icon);
+            return name;
         }
 
         public override Dictionary<string, object> GetPreviewProperties()
@@ -215,16 +213,16 @@ namespace Terra.Studio
             var dict = new Dictionary<string, object>();
             if (playSFX.data.canPlay)
             {
-                dict.Add("SFX", playSFX.data.clipName);
+                dict.Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFX.data.clipName);
             }
             if (playVFX.data.canPlay)
             {
-                dict.Add("VFX", playVFX.data.clipName);
+                dict.Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFX.data.clipName);
             }
             var canBroadcast = !string.IsNullOrEmpty(broadcast);
             if (canBroadcast)
             {
-                dict.Add("Broadcast", broadcast);
+                dict.Add(BehaviourPreview.Constants.BROADCAST_PREVIEW_KEY, broadcast);
             }
             return dict;
         }
