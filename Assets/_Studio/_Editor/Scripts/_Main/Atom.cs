@@ -169,7 +169,7 @@ namespace Terra.Studio
         [Serializable]
         public class Rotate : BaseBroadcasterTemplate
         {
-            [AliasDrawer("Move To")] public Atom.RecordedVector3 vector3;
+            [AliasDrawer("Rotate By")] public Atom.RecordedVector3 vector3;
             [HideInInspector] public Vector3 ghostLastRecordedRotation;
             [HideInInspector] public Vector3 LastVector3;
             [AliasDrawer("Speed")] public float speed;

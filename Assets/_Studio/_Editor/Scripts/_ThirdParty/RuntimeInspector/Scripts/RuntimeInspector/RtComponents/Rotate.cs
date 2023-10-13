@@ -140,7 +140,8 @@ namespace RuntimeInspectorNamespace
             Type.speed = comp.speed;
             Type.vector3.Set(comp.rotateTo);
             repeat.pauseFor = comp.pauseFor;
-            repeat.repeat = comp.repeatFor;
+            repeat.repeat = comp.repeatFor == int.MaxValue ? 1 : comp.repeatFor;
+            repeat.repeatForever= comp.repeatFor == int.MaxValue;
             repeat.broadcastAt = comp.broadcastAt;
             repeat.broadcast = comp.Broadcast;
 
