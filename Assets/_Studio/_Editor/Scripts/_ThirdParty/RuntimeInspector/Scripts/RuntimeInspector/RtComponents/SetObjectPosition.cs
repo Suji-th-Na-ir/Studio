@@ -200,31 +200,36 @@ namespace Terra.Studio
             targetPosition.Set(data);
         }
 
-        public override string GetEventConditionalName()
+        public override BehaviourPreviewUI.PreviewData GetPreviewData()
         {
-            var index = startOn.data.startIndex;
-            var enumValue = (StartOn)index;
-            var name = enumValue.ToString();
-            return name;
-        }
-
-        public override Dictionary<string, object> GetPreviewProperties()
-        {
-            var dict = new Dictionary<string, object>();
+            var properties = new Dictionary<string, object>[1];
+            var broadcastValues = new string[] { broadcast };
+            properties[0] = new();
             if (playSFX.data.canPlay)
             {
-                dict.Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFX.data.clipName);
+                properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFX.data.clipName);
             }
             if (playVFX.data.canPlay)
             {
-                dict.Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFX.data.clipName);
+                properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFX.data.clipName);
             }
-            var canBroadcast = !string.IsNullOrEmpty(broadcast);
-            if (canBroadcast)
+            var index = startOn.data.startIndex;
+            var enumValue = (StartOn)index;
+            var name = enumValue.ToString();
+            var listenTo = string.Empty;
+            if (enumValue == StartOn.BroadcastListen)
             {
-                dict.Add(BehaviourPreview.Constants.BROADCAST_PREVIEW_KEY, broadcast);
+                listenTo = startOn.data.listenName;
             }
-            return dict;
+            var previewData = new BehaviourPreviewUI.PreviewData()
+            {
+                DisplayName = GetDisplayName(),
+                Broadcast = broadcastValues,
+                Properties = properties,
+                EventName = name,
+                Listen = listenTo
+            };
+            return previewData;
         }
     }
 }

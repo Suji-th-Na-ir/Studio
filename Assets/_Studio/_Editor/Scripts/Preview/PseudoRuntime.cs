@@ -11,6 +11,7 @@ namespace Terra.Studio
         public event Action OnRuntimeInitialized;
         public event Action OnEventsExecuted;
         public event Action OnBroadcastExecuted;
+        public Action ForceInitiateConditionalEvent => OnRuntimeDataInitialized;
 
         private GameObject originalTarget;
         private Vector3 cachedPosition; //Temporary
@@ -115,6 +116,11 @@ namespace Terra.Studio
             cachedRuntimeScene = scene;
             SystemOp.Resolve<ISubsystem>().Initialize(scene);
             RuntimeOp.Resolve<Broadcaster>().OnToBroadcastRequestReceived = OnBroadcastExecuted;
+            OnRuntimeDataInitialized();
+        }
+
+        private void OnRuntimeDataInitialized()
+        {
             OnRuntimeInitialized?.Invoke();
             CoroutineService.RunCoroutine(InitiateConditionalEvents, CoroutineService.DelayType.WaitForXSeconds, BehaviourPreview.CUSTOM_TIME_DELATION);
         }

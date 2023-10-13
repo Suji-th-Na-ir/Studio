@@ -49,7 +49,6 @@ namespace Terra.Studio
                 var context = eventContexts[i];
                 context.onConditionMet?.Invoke(context.goRef);
             }
-            eventContexts.Clear();
         }
     }
 }

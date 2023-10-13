@@ -168,16 +168,6 @@ namespace Terra.Studio
             return "NOT_FOUND_TYPE";
         }
 
-        public virtual string GetEventConditionalName()
-        {
-            return default;
-        }
-
-        public virtual Dictionary<string, object> GetPreviewProperties()
-        {
-            return default;
-        }
-
         protected virtual void Update()
         {
             if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.P) && CanPerformShortcut())
@@ -203,6 +193,11 @@ namespace Terra.Studio
                 return false;
             }
             return true;
+        }
+
+        public virtual BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            return default;
         }
     }
 }
