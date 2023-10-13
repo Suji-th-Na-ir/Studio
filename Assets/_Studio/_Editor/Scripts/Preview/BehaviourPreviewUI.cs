@@ -49,6 +49,10 @@ namespace Terra.Studio
 
         public void ToggleToBroadcastGroup()
         {
+            if (!broadcastActionGroup.gameObject.activeSelf)
+            {
+                return;
+            }
             eventActionCanvasGroup.alpha = 0.5f;
             propertiesActionCanvasGroup.alpha = 0.5f;
             broadcastActionGroup.alpha = 1f;
@@ -59,7 +63,6 @@ namespace Terra.Studio
             PrepareHeadingGroup(instance);
             PrepareEventGroup(instance);
             PreparePropertiesGroup(instance);
-            PrepareBroadcastGroup(instance);
         }
 
         private void PrepareHeadingGroup<T>(T instance) where T : BaseBehaviour
@@ -70,6 +73,7 @@ namespace Terra.Studio
             var rightGroup = Helper.FindDeepChild(transform, RIGHT_GROUP_LOC);
             var restartBtn = Helper.FindDeepChild<Button>(rightGroup, RESTART_BUTTON_LOC);
             var closeBtn = Helper.FindDeepChild<Button>(rightGroup, CLOSE_BUTTON_LOC);
+            headingText.text = instance.GetDisplayName();
             AddListenerToButton(restartBtn, () => { EditorOp.Resolve<BehaviourPreview>().Restart(instance); });
             AddListenerToButton(closeBtn, () => { EditorOp.Resolve<BehaviourPreview>().Preview(instance); });
         }
@@ -81,27 +85,34 @@ namespace Terra.Studio
             var leftGroup = Helper.FindDeepChild(eventGroup, LEFT_GROUP_LOC);
             var headingText = Helper.FindDeepChild<TextMeshProUGUI>(leftGroup, HEADING_TEXT_LOC);
             var iconImage = Helper.FindDeepChild<Image>(leftGroup, ICON_IMAGE_LOC);
-            var eventName = instance.GetEventCondition();
-            var dataManagerSO = SystemOp.Load<RTDataManagerSO>("DataManagerSO");
-            var foundData = dataManagerSO.GetEventData(eventName);
-            headingText.text = "Clicked";//foundData.DisplayName;
-            var componentIconSO = EditorOp.Load<ComponentIconsPreset>("SOs/Component_Icon_SO");
-            //var foundIcon = componentIconSO.GetIcon(eventName);
-            //iconImage.sprite = foundIcon;
+            var (name, icon) = instance.GetEventConditionDisplayData();
+            headingText.text = name;
+            iconImage.sprite = icon;
         }
 
         private void PreparePropertiesGroup<T>(T instance) where T : BaseBehaviour
         {
             var propertiesGroup = Helper.FindDeepChild(transform, PROPERTIES_GROUP_LOC);
+            var leftGroup = Helper.FindDeepChild(propertiesGroup, LEFT_GROUP_LOC);
+            var headingText = Helper.FindDeepChild<TextMeshProUGUI>(leftGroup, HEADING_TEXT_LOC);
+            headingText.text = instance.GetDisplayName();
             propertiesActionCanvasGroup = propertiesGroup.GetComponent<CanvasGroup>();
             var properites = instance.GetPreviewProperties();
+            var doesContainBroadcast = properites != null && properites.ContainsKey("Broadcast");
+            PrepareBroadcastGroup(false, "xyz");
         }
 
-        private void PrepareBroadcastGroup<T>(T instance) where T : BaseBehaviour
+        private void PrepareBroadcastGroup(bool isAvailable, string broadcast)
         {
             var broadcastGroup = Helper.FindDeepChild(transform, BROADCAST_GROUP_LOC);
             broadcastActionGroup = broadcastGroup.GetComponent<CanvasGroup>();
-            var broadcastString = "xyz";
+            if (!isAvailable)
+            {
+                broadcastGroup.gameObject.SetActive(false);
+                return;
+            }
+            Debug.Log($"broadcasting: {broadcast}");
+            //Implement a child which has the broadcast string in it
         }
 
         private void AddListenerToButton(Button button, Action action)

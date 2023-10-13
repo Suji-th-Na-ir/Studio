@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -197,6 +198,35 @@ namespace Terra.Studio
         {
             GhostDescription.IsGhostInteractedInLastRecord = true;
             targetPosition.Set(data);
+        }
+
+        public override (string, Sprite) GetEventConditionDisplayData()
+        {
+            var index = startOn.data.startIndex;
+            var enumValue = (StartOn)index;
+            var name = enumValue.ToString();
+            var preset = EditorOp.Resolve<EditorSystem>().ComponentIconsPreset;
+            var icon = preset.GetIcon(name);
+            return (name, icon);
+        }
+
+        public override Dictionary<string, object> GetPreviewProperties()
+        {
+            var dict = new Dictionary<string, object>();
+            if (playSFX.data.canPlay)
+            {
+                dict.Add("SFX", playSFX.data.clipName);
+            }
+            if (playVFX.data.canPlay)
+            {
+                dict.Add("VFX", playVFX.data.clipName);
+            }
+            var canBroadcast = !string.IsNullOrEmpty(broadcast);
+            if (canBroadcast)
+            {
+                dict.Add("Broadcast", broadcast);
+            }
+            return dict;
         }
     }
 }

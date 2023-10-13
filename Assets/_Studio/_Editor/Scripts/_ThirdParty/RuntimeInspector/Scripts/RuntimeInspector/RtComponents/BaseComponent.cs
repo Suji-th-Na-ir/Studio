@@ -157,9 +157,20 @@ namespace Terra.Studio
             Import(component);
         }
 
-        public virtual string GetEventCondition()
+        public virtual string GetDisplayName()
         {
-            return default;
+            var type = GetType();
+            var isFound = SystemOp.Resolve<System>().SystemData.TryGetSystemDisplayName(type.FullName, out var displayName);
+            if (isFound)
+            {
+                return displayName;
+            }
+            return "NOT_FOUND_TYPE";
+        }
+
+        public virtual (string, Sprite) GetEventConditionDisplayData()
+        {
+            return ("NOT_FOUND", null);
         }
 
         public virtual Dictionary<string, object> GetPreviewProperties()

@@ -128,7 +128,9 @@ namespace Terra.Studio
         [StringValue("SOs/Presets/", typeof(UnityEngine.Object))]
         ComponentPresets,
         [StringValue("ResourceDB", typeof(ResourceDB))]
-        ResourceDB
+        ResourceDB,
+        [StringValue("DataManagerSO", typeof(RTDataManagerSO))]
+        SystemData
     }
 
     public enum EditorObjectType

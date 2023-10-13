@@ -6,7 +6,7 @@ namespace Terra.Studio
 {
     public class BehaviourPreview
     {
-        public const float CUSTOM_TIME_DELATION = 2f;
+        public const float CUSTOM_TIME_DELATION = 1f;
         private const string PREVIEW_PREFAB_RESOURCE_PATH = "Prefabs/PreviewCanvas";
 
         private bool currentState;
@@ -109,19 +109,14 @@ namespace Terra.Studio
             {
                 SystemOp.Resolve<PseudoRuntime<T>>().OnRuntimeInitialized += previewUI.ToggleToEventActionGroup;
                 SystemOp.Resolve<PseudoRuntime<T>>().OnEventsExecuted += previewUI.ToggleToPropertiesGroup;
-                SystemOp.Resolve<PseudoRuntime<T>>().OnBroadcastExecuted += HandleBroadcastUpdateWithDelay;
+                SystemOp.Resolve<PseudoRuntime<T>>().OnBroadcastExecuted += previewUI.ToggleToBroadcastGroup;
             }
             else
             {
                 SystemOp.Resolve<PseudoRuntime<T>>().OnRuntimeInitialized -= previewUI.ToggleToEventActionGroup;
                 SystemOp.Resolve<PseudoRuntime<T>>().OnEventsExecuted -= previewUI.ToggleToPropertiesGroup;
-                SystemOp.Resolve<PseudoRuntime<T>>().OnBroadcastExecuted -= HandleBroadcastUpdateWithDelay;
+                SystemOp.Resolve<PseudoRuntime<T>>().OnBroadcastExecuted -= previewUI.ToggleToBroadcastGroup;
             }
-        }
-
-        private void HandleBroadcastUpdateWithDelay()
-        {
-            CoroutineService.RunCoroutine(EditorOp.Resolve<BehaviourPreviewUI>().ToggleToBroadcastGroup, CoroutineService.DelayType.WaitForXSeconds, CUSTOM_TIME_DELATION);
         }
     }
 }

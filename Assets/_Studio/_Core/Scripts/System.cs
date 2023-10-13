@@ -10,6 +10,7 @@ namespace Terra.Studio
     {
         private const int TARGET_FRAME_RATE = 60;
         private SystemConfigurationSO configData;
+        private RTDataManagerSO systemData;
         private StudioState previousStudioState;
         private StudioState currentStudioState;
         private Scene currentActiveScene;
@@ -17,6 +18,7 @@ namespace Terra.Studio
 
         public bool IsSimulating { get; private set; }
         public Func<bool> CanInitiateSubsystemProcess { get; set; }
+        public RTDataManagerSO SystemData { get { return systemData; } }
         public SystemConfigurationSO ConfigSO { get { return configData; } }
         public StudioState PreviousStudioState { get { return previousStudioState; } }
         public StudioState CurrentStudioState { get { return currentStudioState; } }
@@ -45,6 +47,7 @@ namespace Terra.Studio
             Application.targetFrameRate = TARGET_FRAME_RATE;
             SceneManager.sceneLoaded += OnSceneLoaded;
             configData = (SystemConfigurationSO)SystemOp.Load(ResourceTag.SystemConfig);
+            systemData = (RTDataManagerSO)SystemOp.Load(ResourceTag.SystemData);
             currentStudioState = configData.DefaultStudioState;
             previousStudioState = StudioState.Bootstrap;
             sceneLoadParameters = new LoadSceneParameters()

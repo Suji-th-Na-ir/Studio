@@ -8,7 +8,10 @@ namespace Terra.Studio
     {
         public event Action<bool> OnIncognitoEnabled;
         public bool IsIncognitoEnabled { get; private set; }
+        public ComponentIconsPreset ComponentIconsPreset { get { return componentIconsPreset; } }
+
         private Scene scene;
+        private ComponentIconsPreset componentIconsPreset;
 
         private void Awake()
         {
@@ -19,6 +22,7 @@ namespace Terra.Studio
         public void Initialize(Scene scene)
         {
             this.scene = scene;
+            GetComponentData();
             EditorOp.Register(new DataProvider());
             EditorOp.Register(new Atom());
             EditorOp.Register(new SceneDataHandler());
@@ -72,6 +76,11 @@ namespace Terra.Studio
         {
             IsIncognitoEnabled = enable;
             OnIncognitoEnabled?.Invoke(enable);
+        }
+
+        private void GetComponentData()
+        {
+            componentIconsPreset = EditorOp.Load<ComponentIconsPreset>("SOs/Component_Icon_SO");
         }
     }
 }

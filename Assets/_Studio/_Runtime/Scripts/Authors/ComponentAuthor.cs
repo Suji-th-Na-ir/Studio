@@ -32,7 +32,6 @@ namespace Terra.Studio
 
         private class ComponentAuthor : BaseAuthor
         {
-            private RTDataManagerSO managerSO;
             private Dictionary<Type, MethodInfo> cachedMethodForTypes = new();
 
             public override void Generate(object data)
@@ -43,7 +42,7 @@ namespace Terra.Studio
                 {
                     return;
                 }
-                var isDataPresent = GetManagerSO().TryGetComponentAndSystemForType(generatedData.data.type, out var component, out var system);
+                var isDataPresent = SystemOp.Resolve<System>().SystemData.TryGetComponentAndSystemForType(generatedData.data.type, out var component, out var system);
                 if (!isDataPresent)
                 {
                     return;
@@ -72,15 +71,6 @@ namespace Terra.Studio
                 ((IBaseComponent)component).Clone(component, ref compRef, authorData.obj);
                 var instance = RuntimeOp.Resolve<RuntimeSystem>().AddRunningInstance<T2>();
                 instance.Init<T1>(authorData.entity);
-            }
-
-            private RTDataManagerSO GetManagerSO()
-            {
-                if (managerSO == null)
-                {
-                    managerSO = SystemOp.Load<RTDataManagerSO>("DataManagerSO");
-                }
-                return managerSO;
             }
 
             private MethodInfo GetMethodForTypes(Type componentType, Type systemType)

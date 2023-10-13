@@ -14,6 +14,7 @@ namespace Terra.Studio
             [ComponentList] public string ComponentName;
             [SystemList] public string SystemName;
             [EditorDrawerList] public string DrawerName;
+            public string DisplayName;
         }
 
         [Serializable]
@@ -121,6 +122,39 @@ namespace Terra.Studio
                 cachedEventTypes.Add(type);
             }
             return type;
+        }
+
+        public bool TryGetEventDisplayName(string key, string value, out string displayName)
+        {
+            displayName = null;
+            var foundData = eventData.FindAll(x => x.Key.Equals(key));
+            if (foundData != null && foundData.Count > 0)
+            {
+                if (foundData.Count == 1)
+                {
+                    displayName = foundData[0].DisplayName;
+                }
+                else
+                {
+                    var shortListedData = foundData.Find(x => x.DefaultData.Equals(value));
+                    if (shortListedData != null)
+                    {
+                        displayName = shortListedData.DisplayName;
+                    }
+                }
+            }
+            return !string.IsNullOrEmpty(displayName);
+        }
+
+        public bool TryGetSystemDisplayName(string key, out string displayName)
+        {
+            displayName = null;
+            var foundData = systemData.Find(x => x.Key.Equals(key));
+            if (foundData != null)
+            {
+                displayName = foundData.DisplayName;
+            }
+            return !string.IsNullOrEmpty(displayName);
         }
     }
 }

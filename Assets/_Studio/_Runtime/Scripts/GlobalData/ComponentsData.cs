@@ -6,7 +6,6 @@ namespace Terra.Studio
 {
     public class ComponentsData
     {
-        private RTDataManagerSO managerSO;
         private Dictionary<string, IEventExecutor> cachedReferences = new();
         private List<EventContext> eventContexts = new();
 
@@ -28,7 +27,7 @@ namespace Terra.Studio
                 }
                 else
                 {
-                    var isFound = GetManagerSO().TryGetEventForType(context.conditionType, out var type);
+                    var isFound = SystemOp.Resolve<System>().SystemData.TryGetEventForType(context.conditionType, out var type);
                     if (isFound)
                     {
                         var instance = Activator.CreateInstance(type) as IEventExecutor;
@@ -51,15 +50,6 @@ namespace Terra.Studio
                 context.onConditionMet?.Invoke(context.goRef);
             }
             eventContexts.Clear();
-        }
-
-        private RTDataManagerSO GetManagerSO()
-        {
-            if (managerSO == null)
-            {
-                managerSO = SystemOp.Load<RTDataManagerSO>("DataManagerSO");
-            }
-            return managerSO;
         }
     }
 }
