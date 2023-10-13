@@ -33,37 +33,12 @@ namespace Terra.Studio
         PingPong
     }
 
-    public enum RotationType
-    {
-        [AliasDrawer("Rotate Once")]
-        RotateOnce,
-        [AliasDrawer("Rotate Forever")]
-        RotateForever,
-        Oscillate,
-        [AliasDrawer("Oscillate Forever")]
-        OscillateForever,
-        [AliasDrawer("StepWise")]
-        IncrementallyRotate,
-        [AliasDrawer("StepWise Forever")]
-        IncrementallyRotateForever
-    }
-
     public enum TransFormCopyValues
     {
         Position,
         Rotation,
         Scale,
         All
-    }
-
-    /// <summary>
-    /// 1. For X default value is 1
-    /// 2. For Forever hardcode int.MaxValue
-    /// </summary>
-    public enum RepeatType
-    {
-        XTimes,
-        Forever
     }
 
     public enum BroadcastAt

@@ -169,18 +169,20 @@ namespace Terra.Studio
         [Serializable]
         public class Rotate : BaseBroadcasterTemplate
         {
-            public RotateField field;
-            public RotateComponentData data = new();
-            public Action ForceRefreshData;
+            [AliasDrawer("Move To")] public Atom.RecordedVector3 vector3;
+            [HideInInspector] public Vector3 ghostLastRecordedRotation;
+            [HideInInspector] public Vector3 LastVector3;
+            [AliasDrawer("Speed")] public float speed;
+            [HideInInspector] public Action ForceRefreshData;
+            [AliasDrawer("Direction")]
+            public Direction direction;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)
             {
                 base.Setup(target, behaviour);
-                data.OnBroadcastUpdated = behaviour.OnBroadcastStringUpdated;
-                data.vector3 = new();
-                data.vector3.Setup(behaviour);
-                data.vector3.Set(new Vector3(0f, 0f, 0f));
-                data.ghostLastRecordedRotation = RecordedVector3.INFINITY;
+                vector3 = new();
+                vector3.Setup(behaviour);
+                vector3.Set(new Vector3(0f, 15f, 0f));
             }
         }
 
@@ -197,19 +199,6 @@ namespace Terra.Studio
                 recordedVector3 = new();
                 recordedVector3.Setup(behaviour);
                 recordedVector3.Set(new Vector3(0f, 1f, 0f));
-            }
-
-
-            public bool IsEmpty()
-            {
-                var cloneToTest = this;
-                cloneToTest.recordedVector3 = default;
-                cloneToTest.LastVector3 = default;
-                if (cloneToTest.Equals(default(TranslateComponentData)))
-                {
-                    return true;
-                }
-                return false;
             }
         }
 

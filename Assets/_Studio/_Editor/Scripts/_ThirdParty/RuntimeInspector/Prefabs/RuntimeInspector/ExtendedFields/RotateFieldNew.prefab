@@ -91,9 +91,9 @@ GameObject:
   - component: {fileID: 224526477923251334}
   - component: {fileID: 114810597662585366}
   - component: {fileID: 114144096220550954}
-  - component: {fileID: 7698717305135177176}
+  - component: {fileID: 4771121075117461859}
   m_Layer: 5
-  m_Name: TranslateFieldNew
+  m_Name: RotateFieldNew
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 0
---- !u!114 &7698717305135177176
+--- !u!114 &4771121075117461859
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,7 +170,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1165314373957364}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 169d359fae8314f8c9e4b0604a8d551a, type: 3}
+  m_Script: {fileID: 11500000, guid: 3c69d3e3360ad4d3c97b9d587d40c017, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   layoutElement: {fileID: 0}
@@ -217,8 +217,8 @@ RectTransform:
   m_Father: {fileID: 224526477923251334}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 111.5, y: 0}
   m_SizeDelta: {x: 223, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
