@@ -144,7 +144,7 @@ namespace RuntimeInspectorNamespace
             repeat.repeatForever= comp.repeatFor == int.MaxValue;
             repeat.broadcastAt = comp.broadcastAt;
             repeat.broadcast = comp.Broadcast;
-
+            repeat.repeatType = comp.repeatType;
             Type.ghostLastRecordedRotation = comp.ghostLastRotation;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {

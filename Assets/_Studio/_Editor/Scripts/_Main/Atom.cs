@@ -3,6 +3,7 @@ using UnityEngine;
 using PlayShifu.Terra;
 using RuntimeInspectorNamespace;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Terra.Studio
 {
@@ -11,6 +12,7 @@ namespace Terra.Studio
         public List<StartOn> AllStartOns = new();
         public List<PlaySfx> AllSfxes = new();
         public List<PlayVfx> AllVfxes = new();
+        public List<Repeat> AllRepeats = new();
 
         public class BasePlay
         {
@@ -49,6 +51,7 @@ namespace Terra.Studio
             AllStartOns.Clear();
             AllSfxes.Clear();
             AllVfxes.Clear();
+            AllRepeats.Clear();
         }
 
         [Serializable]
@@ -150,18 +153,10 @@ namespace Terra.Studio
             public override void Setup(GameObject target, BaseBehaviour behaviour)
             {
                 base.Setup(target, behaviour);
-            }
-
-            public void Set(object obj)
-            {
-                try
+                var allrepeats = EditorOp.Resolve<Atom>().AllRepeats;
+                if (!allrepeats.Contains(this))
                 {
-                    var repeat = (int)obj;
-                    this.repeat = repeat;
-                }
-                catch
-                {
-                    Debug.LogError("Type of object passed is incorrected. Expected: Int");
+                    allrepeats.Add(this);
                 }
             }
         }
