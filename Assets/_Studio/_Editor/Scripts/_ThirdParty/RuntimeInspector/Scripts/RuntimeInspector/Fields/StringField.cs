@@ -83,11 +83,6 @@ namespace RuntimeInspectorNamespace
             SetterMode = Mode.OnValueChange;
         }
 
-        public override void InvokeChangeValueExternal(object value)
-        {
-            base.InvokeChangeValueExternal(value);
-            OnValueChanged(input, value.ToString());
-        }
         protected virtual bool OnValueChanged(BoundInputField source, string input)
         {
             var oldValue = Value;

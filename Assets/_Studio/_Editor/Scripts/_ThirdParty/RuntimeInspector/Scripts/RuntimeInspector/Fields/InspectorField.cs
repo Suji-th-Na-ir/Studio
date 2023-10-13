@@ -182,7 +182,6 @@ namespace RuntimeInspectorNamespace
 
         public abstract void SetInteractable(bool on);
         public virtual void InvokeUpdateDropdown(List<string> dropdowns){ }
-        public virtual void InvokeChangeValueExternal(object value) { }
 
         public void BindTo(InspectorField parent, MemberInfo variable, string variableName = null)
         {

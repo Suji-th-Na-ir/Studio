@@ -55,9 +55,12 @@ namespace RuntimeInspectorNamespace
         {
             var val = (Atom.Repeat)Value;
             if (val.broadcastAt == BroadcastAt.Never)
-            { 
+            {
+                Debug.Log("removing broadcast field");
                 broadcastFieldDrawer.gameObject.SetActive(false);
-                broadcastFieldDrawer.InvokeChangeValueExternal(string.Empty);
+                var oldString = val.broadcast;
+                val.broadcast = string.Empty;
+                val.behaviour.OnBroadcastStringUpdated(val.broadcast, oldString);
             }
             else
             {
@@ -65,24 +68,40 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        private void OnBroadcastTypeValueChanged(object value)
-        {
-            ToggleBroadcastField();
-            var val = (Atom.Repeat)Value;
-            UpdateOtherCompData(val, RepeatData.BroadcastType);
-        }
-
-
-        private void OnPauseForValueChanged(object value)
-        {
-            UpdatebroadcastTypeDropDown();
-            UpdateOtherCompData((Atom.Repeat)Value, RepeatData.PauseFor);
-        }
-
         private void OnRepeatValueChanged(object value)
         {
             Atom.Repeat val = ValidateRepeatValue();
             UpdateOtherCompData(val, RepeatData.RepeatFor);
+            UpdatebroadcastTypeDropDown();
+        }
+
+        private void OnRepeatTypeValueChanged(object obj)
+        {
+            UpdateOtherCompData((Atom.Repeat)Value, RepeatData.RepeatType);
+        }
+
+        private void OnRepeatForeverValueChanged(object value)
+        {
+            Atom.Repeat val = ValidateRepeatForeverValue(value);
+            UpdateOtherCompData(val, RepeatData.RepeatForever);
+            UpdatebroadcastTypeDropDown();
+        }
+
+        private void OnPauseForValueChanged(object value)
+        {
+            UpdateOtherCompData((Atom.Repeat)Value, RepeatData.PauseFor);
+            UpdatebroadcastTypeDropDown();
+        }
+
+        private void OnBroadcastTypeValueChanged(object value)
+        {
+            ToggleBroadcastField();
+            UpdateOtherCompData((Atom.Repeat)Value, RepeatData.BroadcastType);
+        }
+
+        private void OnBroadcastValueChanged(object obj)
+        {
+            UpdateOtherCompData((Atom.Repeat)Value, RepeatData.Broadcast);
         }
 
         private Atom.Repeat ValidateRepeatValue()
@@ -100,7 +119,6 @@ namespace RuntimeInspectorNamespace
             {
                 ToggelPauseForAndRepeat(true);
             }
-            UpdatebroadcastTypeDropDown();
             return val;
         }
 
@@ -110,12 +128,6 @@ namespace RuntimeInspectorNamespace
             repeatTypeFieldDrawer.gameObject.SetActive(on);
         }
 
-        private void OnRepeatForeverValueChanged(object value)
-        {
-            Atom.Repeat val = ValidateRepeatForeverValue(value);
-            UpdatebroadcastTypeDropDown();
-            UpdateOtherCompData(val, RepeatData.RepeatForever);
-        }
 
         private Atom.Repeat ValidateRepeatForeverValue(object value)
         {
@@ -129,7 +141,8 @@ namespace RuntimeInspectorNamespace
             else
             {
                 repeatForFieldDrawer.SetInteractable(true);
-                OnRepeatValueChanged(val.repeat);
+                ValidateRepeatValue();
+                UpdatebroadcastTypeDropDown();
             }
 
             return val;
@@ -155,7 +168,6 @@ namespace RuntimeInspectorNamespace
            
             broadcastTypeFieldDrawer.InvokeUpdateDropdown(Enum.GetNames(typeof(BroadcastAt)).Where(name => !ignoreNames.Contains(name)).ToList());
             ToggleBroadcastField();
-            UpdateOtherCompData(val, RepeatData.BroadcastType);
         }
 
         private void UpdateOtherCompData(Atom.Repeat _atom, RepeatData data)
@@ -167,7 +179,9 @@ namespace RuntimeInspectorNamespace
                 var allInstances = EditorOp.Resolve<Atom>().AllRepeats;
                 foreach (Atom.Repeat atom in allInstances)
                 {
-                    if (obj.GetInstanceID() == atom.target.GetInstanceID() &&
+                    if (atom == _atom)
+                        continue;
+                    if (obj  == atom.target &&
                         _atom.behaviour.GetType().Equals(atom.behaviour.GetType()))
                     {
                         switch (data)
@@ -182,22 +196,22 @@ namespace RuntimeInspectorNamespace
                                 atom.repeatType = _atom.repeatType;
                                 break;
                             case RepeatData.PauseFor:
-                                if(!atom.repeatForever && atom.repeat >1)
+                                if (!atom.repeatForever && atom.repeat > 1)
                                 {
                                     atom.pauseFor = _atom.pauseFor;
                                 }
-                                else if(atom.repeatForever)
+                                else if (atom.repeatForever)
                                 {
                                     atom.pauseFor = _atom.pauseFor;
                                 }
                                 break;
                             case RepeatData.BroadcastType:
                                 atom.broadcastAt = _atom.broadcastAt;
-                                break;
-                            case RepeatData.Broadcast:
-                                if (atom.broadcastAt != BroadcastAt.Never)
+                                if (atom.broadcastAt == BroadcastAt.Never)
                                 {
-                                    atom.broadcast = _atom.broadcast;
+                                    var old = atom.broadcast;
+                                    atom.broadcast = String.Empty;
+                                    atom.behaviour.OnBroadcastStringUpdated(atom.broadcast, old);
                                 }
                                 break;
                         }
@@ -225,12 +239,10 @@ namespace RuntimeInspectorNamespace
             pauseForFieldDrawer.OnValueUpdated -= OnPauseForValueChanged;
             broadcastTypeFieldDrawer.OnValueUpdated -= OnBroadcastTypeValueChanged;
             broadcastFieldDrawer.OnValueUpdated -= OnBroadcastValueChanged;
+            repeatTypeFieldDrawer.OnValueUpdated -= OnRepeatTypeValueChanged;
         }
 
-        private void OnBroadcastValueChanged(object obj)
-        {
-            UpdateOtherCompData((Atom.Repeat)Value, RepeatData.Broadcast);
-        }
+       
 
         protected virtual bool OnValueChanged(string input)
         {
@@ -273,6 +285,7 @@ namespace RuntimeInspectorNamespace
             pauseForFieldDrawer.OnValueUpdated += OnPauseForValueChanged;
 
             repeatTypeFieldDrawer = CreateDrawerForField(nameof(val.repeatType));
+            repeatTypeFieldDrawer.OnValueUpdated += OnRepeatTypeValueChanged;
 
             broadcastTypeFieldDrawer = CreateDrawerForField(nameof(val.broadcastAt));
             broadcastTypeFieldDrawer.OnValueUpdated += OnBroadcastTypeValueChanged;

@@ -63,7 +63,7 @@ namespace RuntimeInspectorNamespace
         public override void Refresh()
         {
             base.Refresh();
-            input.isOn = (bool)Value;
+            input.SetIsOnWithoutNotify((bool)Value);
         }
 
         public override void SetInteractable(bool on)

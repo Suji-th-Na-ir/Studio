@@ -105,6 +105,12 @@ namespace RuntimeInspectorNamespace
             return (type, data);
         }
 
+        public override void OnBroadcastStringUpdated(string newString, string oldString)
+        {
+            if (repeat.broadcastAt != BroadcastAt.Never && newString != string.Empty)
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(newString, oldString, DisplayDock);
+        }
+
         public string GetStartEvent()
         {
             int index = StartOn.data.startIndex;
