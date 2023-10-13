@@ -57,6 +57,8 @@ namespace Terra.Studio
         {
             SystemOp.Register(new CrossSceneDataHolder());
             SystemOp.Register(new FileService());
+            SystemOp.Resolve<CrossSceneDataHolder> ().Set ("CameraPos", new Vector3(-9.472117f, 25.32292f, -34.41209f));
+            SystemOp.Resolve<CrossSceneDataHolder> ().Set ("CameraRot", new Vector3 (14.96f, 22.152f, 0f));
             if (configData.PickupSavedData)
             {
                 var shouldIgnore = !Helper.IsInUnityEditor();

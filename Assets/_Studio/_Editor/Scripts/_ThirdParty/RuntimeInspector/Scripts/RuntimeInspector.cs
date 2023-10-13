@@ -239,7 +239,7 @@ namespace RuntimeInspectorNamespace
 
         public InspectedObjectChangingDelegate OnInspectedObjectChanging;
 
-        public int currentPageIndex = 1;
+        public int currentPageIndex = 0;
         public delegate void PageIndexChangeDelegate(int index);
         public PageIndexChangeDelegate OnPageIndexChanged;
         private ComponentFilterDelegate m_componentFilter;
@@ -335,10 +335,10 @@ namespace RuntimeInspectorNamespace
             RuntimeInspectorUtils.IgnoredTransformsInHierarchy.Add(drawArea);
             RuntimeInspectorUtils.IgnoredTransformsInHierarchy.Add(poolParent);
 
-            currentPageIndex = 1;
+           
             behaviourButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
             designButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
-            OnPageIndexChanged?.Invoke(1);
+            OnPageIndexChanged?.Invoke(0);
             initialized = true;
 
 #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
@@ -356,6 +356,7 @@ namespace RuntimeInspectorNamespace
             yield return new WaitForSeconds(Time.deltaTime * 2);
             if (SystemOp.Resolve<CrossSceneDataHolder>().Get("CurrentPageIndex", out var data))
             {
+               
                 if ((int)(data) == 0)
                     ShowDesignPage();
                 else

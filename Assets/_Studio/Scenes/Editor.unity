@@ -20,11 +20,11 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.5764706, g: 0.5764706, b: 0.5764706, a: 1}
-  m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
-  m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
+  m_AmbientSkyColor: {r: 0.6784314, g: 0.6784314, b: 0.6784314, a: 1}
+  m_AmbientEquatorColor: {r: 0.3764706, g: 0.3764706, b: 0.3764706, a: 1}
+  m_AmbientGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 3
+  m_AmbientMode: 1
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: d168c0162d579834493612b46a8d2640, type: 2}
   m_HaloStrength: 0.5
@@ -457,8 +457,8 @@ Camera:
   m_GameObject: {fileID: 330585543}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.73333335, g: 0.8696001, b: 1, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -4248,6 +4248,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toastUI: {fileID: 366142243}
+  canUndo: 0
+  canRedo: 0
 --- !u!114 &792619812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4671,7 +4673,7 @@ PrefabInstance:
     - target: {fileID: 373490005720611439, guid: 643594b5a49894c658588bb890ff64bb,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 209
       objectReference: {fileID: 0}
     - target: {fileID: 390538596134579279, guid: 643594b5a49894c658588bb890ff64bb,
         type: 3}
@@ -7573,8 +7575,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 224300308784953800, guid: d39ad26c554f1a04d870956f7fac6fd8,
         type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0.00012207
+      objectReference: {fileID: 0}
+    - target: {fileID: 224300308784953800, guid: d39ad26c554f1a04d870956f7fac6fd8,
+        type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -22.704102
+      value: -0.000061035
       objectReference: {fileID: 0}
     - target: {fileID: 224577763670417082, guid: d39ad26c554f1a04d870956f7fac6fd8,
         type: 3}
@@ -7589,7 +7596,7 @@ PrefabInstance:
     - target: {fileID: 224577763670417082, guid: d39ad26c554f1a04d870956f7fac6fd8,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -12
+      value: -11.999939
       objectReference: {fileID: 0}
     - target: {fileID: 224732714809946368, guid: d39ad26c554f1a04d870956f7fac6fd8,
         type: 3}
@@ -7819,7 +7826,7 @@ PrefabInstance:
     - target: {fileID: 5533454911119117037, guid: d39ad26c554f1a04d870956f7fac6fd8,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -22.704102
+      value: 106
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d39ad26c554f1a04d870956f7fac6fd8, type: 3}
@@ -8110,7 +8117,7 @@ PrefabInstance:
     - target: {fileID: 224685037686054822, guid: 4d8c6c9fba0e46f489b21fd7d92d739d,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000023841858
+      value: 0.000015258789
       objectReference: {fileID: 0}
     - target: {fileID: 224685037686054822, guid: 4d8c6c9fba0e46f489b21fd7d92d739d,
         type: 3}
