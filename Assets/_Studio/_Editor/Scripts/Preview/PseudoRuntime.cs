@@ -8,6 +8,10 @@ namespace Terra.Studio
 {
     public class PseudoRuntime<T> : IDisposable where T : BaseBehaviour
     {
+        public event Action OnRuntimeInitialized;
+        public event Action OnEventsExecuted;
+        public event Action OnBroadcastExecuted;
+
         private GameObject originalTarget;
         private Vector3 cachedPosition; //Temporary
         private Scene cachedRuntimeScene;
@@ -110,16 +114,20 @@ namespace Terra.Studio
         {
             cachedRuntimeScene = scene;
             SystemOp.Resolve<ISubsystem>().Initialize(scene);
-            CoroutineService.RunCoroutine(InitiateConditionalEvents, CoroutineService.DelayType.WaitForFrame);
+            RuntimeOp.Resolve<Broadcaster>().OnToBroadcastRequestReceived = OnBroadcastExecuted;
+            OnRuntimeInitialized?.Invoke();
+            CoroutineService.RunCoroutine(InitiateConditionalEvents, CoroutineService.DelayType.WaitForXSeconds, BehaviourPreview.CUSTOM_TIME_DELATION);
         }
 
         private void InitiateConditionalEvents()
         {
+            OnEventsExecuted?.Invoke();
             RuntimeOp.Resolve<ComponentsData>().ExecuteAllInterceptedEvents();
         }
 
         public void Dispose()
         {
+            RuntimeOp.Resolve<Broadcaster>().OnToBroadcastRequestReceived = null;
             SystemOp.Resolve<ISubsystem>().Dispose();
             var unloadOperation = SceneManager.UnloadSceneAsync(RuntimeSceneName, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
             unloadOperation.completed += OnUnloadDone;

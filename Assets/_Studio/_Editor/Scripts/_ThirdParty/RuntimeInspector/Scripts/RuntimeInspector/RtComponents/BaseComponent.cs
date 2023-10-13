@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using RuntimeInspectorNamespace;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -40,37 +41,6 @@ namespace Terra.Studio
                     UpdateListenerForMultiSelected(newString, oldString);
                 };
             }
-        }
-
-        protected virtual void Update()
-        {
-            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.P) && CanPerformShortcut())
-            {
-                EditorOp.Resolve<BehaviourPreview>().Preview(this);
-            }
-            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.R) && CanPerformShortcut())
-            {
-                EditorOp.Resolve<BehaviourPreview>().Restart(this);
-            }
-        }
-
-        private bool CanPerformShortcut()
-        {
-            var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
-            if (selections.Count != 1)
-            {
-                return false;
-            }
-            if (selections[0].gameObject != gameObject)
-            {
-                return false;
-            }
-            var components = gameObject.GetComponents<BaseBehaviour>();
-            if (components.Length != 1)
-            {
-                return false;
-            }
-            return true;
         }
 
         protected virtual void OnEnable()
@@ -185,6 +155,43 @@ namespace Terra.Studio
                 data = data
             };
             Import(component);
+        }
+
+        public virtual string GetEventCondition()
+        {
+            return default;
+        }
+
+        public virtual Dictionary<string, object> GetPreviewProperties()
+        {
+            return default;
+        }
+
+        protected virtual void Update()
+        {
+            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.P) && CanPerformShortcut())
+            {
+                EditorOp.Resolve<BehaviourPreview>().Preview(this);
+            }
+        }
+
+        private bool CanPerformShortcut()
+        {
+            var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selections.Count != 1)
+            {
+                return false;
+            }
+            if (selections[0].gameObject != gameObject)
+            {
+                return false;
+            }
+            var components = gameObject.GetComponents<BaseBehaviour>();
+            if (components.Length != 1)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

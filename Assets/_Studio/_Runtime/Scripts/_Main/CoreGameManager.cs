@@ -17,10 +17,15 @@ namespace Terra.Studio
 
         private void Initialize()
         {
-            RuntimeOp.Register(new GameData());
-            RuntimeOp.Register(new GameStateHandler());
+            IntializeDataManagers();
             SpawnGameUI();
             RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameStart(true, (data) => { SpawnPlayer(); });
+        }
+
+        public void IntializeDataManagers()
+        {
+            RuntimeOp.Register(new GameData());
+            RuntimeOp.Register(new GameStateHandler());
         }
 
         public void SpawnPlayer()

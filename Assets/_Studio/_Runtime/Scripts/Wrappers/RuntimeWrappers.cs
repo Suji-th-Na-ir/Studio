@@ -152,11 +152,6 @@ namespace Terra.Studio
             RuntimeOp.Resolve<ScoreHandler>().AddScore((int)addBy);
         }
 
-        public static void RespawnPlayer(Vector3 position)
-        {
-            RuntimeOp.Resolve<GameData>().PlayerRef.position = position;
-        }
-
         public static void CleanAllBehaviours(Transform transform)
         {
             CleanBehaviour(transform);

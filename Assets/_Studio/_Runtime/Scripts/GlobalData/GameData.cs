@@ -19,5 +19,13 @@ namespace Terra.Studio
                 EndState = GameEndState.Lose;
             }
         }
+
+        public void SetPlayerPosition(Vector3 position)
+        {
+            if (PlayerRef)
+            {
+                PlayerRef.position = position;
+            }
+        }
     }
 }

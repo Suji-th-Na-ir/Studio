@@ -14,7 +14,7 @@ namespace Terra.Studio
             WaitUntil
         }
 
-        public static void RunCoroutine(Action onCoroutineDone, DelayType delayType, int delay = 0, Func<bool> predicate = null)
+        public static void RunCoroutine(Action onCoroutineDone, DelayType delayType, float delay = 0, Func<bool> predicate = null)
         {
             var coroutineService = new GameObject("CoroutineHelper-Service");
             var coroutine = coroutineService.AddComponent<CoroutineService>();
@@ -28,7 +28,7 @@ namespace Terra.Studio
         private DelayType delayType;
         private Func<bool> predicate;
         private Action onPerformed;
-        private int delay;
+        private float delay;
 
         public void DoCoroutine()
         {
@@ -43,7 +43,7 @@ namespace Terra.Studio
                     yield return null;
                     break;
                 case DelayType.WaitForXFrames:
-                    for (int i = 0; i < delay; i++)
+                    for (int i = 0; i < (int)delay; i++)
                     {
                         yield return null;
                     }

@@ -24,6 +24,7 @@ namespace Terra.Studio
             public string EventName;
             public StartOn EventValue;
             public string DefaultData;
+            public string DisplayName;
         }
 
         private struct CachedSystemData
@@ -103,6 +104,12 @@ namespace Terra.Studio
                 cachedSystemData.Add(foundData);
             }
             return (foundData.ComponentType, foundData.SystemType);
+        }
+
+        public EventData GetEventData(string conditionalKey)
+        {
+            var foundData = eventData.Find(x => x.Key.Equals(conditionalKey));
+            return foundData;
         }
 
         private Type GetEventTypeFromName(string name)
