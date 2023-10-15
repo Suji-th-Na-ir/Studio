@@ -1,6 +1,7 @@
 using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
+using System.Collections.Generic;
 
 namespace RuntimeInspectorNamespace
 {
@@ -61,6 +62,29 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
             ImportVisualisation(Broadcast, null);
+        }
+
+        public override BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            var properties = new Dictionary<string, object>[1];
+            properties[0] = new();
+            if (PlaySFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, PlaySFX.data.clipName);
+            }
+            if (PlayVFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, PlayVFX.data.clipName);
+            }
+            var startOnName = StartOn.OnPlayerCollide.ToString();
+            var previewData = new BehaviourPreviewUI.PreviewData()
+            {
+                DisplayName = GetDisplayName(),
+                EventName = startOnName,
+                Properties = properties,
+                Broadcast = new string[0]
+            };
+            return previewData;
         }
     }
 }

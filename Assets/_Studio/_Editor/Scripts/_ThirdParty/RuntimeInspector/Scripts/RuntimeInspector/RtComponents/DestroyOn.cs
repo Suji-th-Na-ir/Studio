@@ -1,6 +1,7 @@
 using Terra.Studio;
 using PlayShifu.Terra;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace RuntimeInspectorNamespace
 {
@@ -128,6 +129,38 @@ namespace RuntimeInspectorNamespace
                 listenstring = StartOn.data.listenName;
             }
             ImportVisualisation(Broadcast, listenstring);
+        }
+
+        public override BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            var properties = new Dictionary<string, object>[1];
+            properties[0] = new();
+            if (PlaySFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, PlaySFX.data.clipName);
+            }
+            if (PlayVFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, PlayVFX.data.clipName);
+            }
+            var broadcasts = new string[] { Broadcast };
+            var eventIndex = StartOn.data.startIndex;
+            var eventEnum = (DestroyOnEnum)eventIndex;
+            var eventName = eventEnum.ToString();
+            var listenTo = string.Empty;
+            if (eventEnum == DestroyOnEnum.BroadcastListen)
+            {
+                listenTo = StartOn.data.listenName;
+            }
+            var previewData = new BehaviourPreviewUI.PreviewData()
+            {
+                DisplayName = GetDisplayName(),
+                Properties = properties,
+                Broadcast = broadcasts,
+                EventName = eventName,
+                Listen = listenTo
+            };
+            return previewData;
         }
     }
 }

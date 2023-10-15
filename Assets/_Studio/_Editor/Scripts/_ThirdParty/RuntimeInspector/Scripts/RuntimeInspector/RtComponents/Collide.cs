@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using PlayShifu.Terra;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -79,6 +80,29 @@ namespace Terra.Studio
             startOn.data.startName = obj.startName;
             //executeMultipleTimes = obj.listen == Listen.Always;
             ImportVisualisation(broadcast, null);
+        }
+
+        public override BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            var properties = new Dictionary<string, object>[1];
+            properties[0] = new();
+            if (playSFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFX.data.clipName);
+            }
+            if (playVFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFX.data.clipName);
+            }
+            var startOnName = StartOn.OnPlayerCollide.ToString();
+            var previewData = new BehaviourPreviewUI.PreviewData()
+            {
+                DisplayName = GetDisplayName(),
+                EventName = startOnName,
+                Properties = properties,
+                Broadcast = new string[] { broadcast }
+            };
+            return previewData;
         }
     }
 }

@@ -232,6 +232,35 @@ namespace RuntimeInspectorNamespace
             }
             GhostDescription.IsGhostInteractedInLastRecord = false;
         }
+
+        public override BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            var properties = new Dictionary<string, object>[1];
+            properties[0] = new()
+            {
+                { "Speed", Type.data.speed },
+                { "Repeat", Type.data.repeat },
+                { "Pause", Type.data.pauseBetween }
+            };
+            if (PlaySFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, PlaySFX.data.clipName);
+            }
+            if (PlayVFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, PlayVFX.data.clipName);
+            }
+            var startOnIndex = StartOn.data.startIndex;
+            var startOnName = (StartOn)startOnIndex;
+            var previewData = new BehaviourPreviewUI.PreviewData()
+            {
+                DisplayName = GetDisplayName(),
+                EventName = startOnName.ToString(),
+                Properties = properties,
+                Broadcast = new string[] { Type.data.broadcast },
+                Listen = StartOn.data.listenName
+            };
+            return previewData;
+        }
     }
 }
-
