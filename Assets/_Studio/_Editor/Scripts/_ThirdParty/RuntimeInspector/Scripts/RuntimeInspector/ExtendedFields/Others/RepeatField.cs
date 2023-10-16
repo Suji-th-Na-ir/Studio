@@ -57,7 +57,6 @@ namespace RuntimeInspectorNamespace
             var val = (Atom.Repeat)Value;
             if (val.broadcastAt == BroadcastAt.Never)
             {
-                Debug.Log(val.broadcast);
                 broadcastFieldDrawer.gameObject.SetActive(false);
                 val.broadcast = string.Empty;
                 val.behaviour.OnBroadcastStringUpdated(val.broadcast, lastBroadcastString);
