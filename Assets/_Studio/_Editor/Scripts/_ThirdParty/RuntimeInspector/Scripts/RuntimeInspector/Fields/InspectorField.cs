@@ -292,7 +292,7 @@ namespace RuntimeInspectorNamespace
                 Name = variableName;
             }
             m_boundVariableType = variableType;
-            ReflectedName = variableName;
+            ReflectedName = reflectedName;
 
             this.getter = getter;
             this.setter = setter;

@@ -11,6 +11,7 @@ namespace RuntimeInspectorNamespace
         [AliasDrawer("MoveWhen")]
         public Atom.StartOn StartOn = new();
         public Atom.Translate Type = new();
+        [AliasDrawer("Speed")] public float speed;
         [AliasDrawer("Repeat")] public Atom.Repeat repeat = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
@@ -69,7 +70,7 @@ namespace RuntimeInspectorNamespace
             var comp = new TranslateComponent
             {
                 translateType = (RepeatDirectionType)repeat.repeatType,
-                speed = Type.speed,
+                speed = speed,
                 pauseFor = (repeat.repeat <= 1 && !repeat.repeatForever) ? 0 : repeat.pauseFor,
                 repeatFor = repeat.repeatForever ? int.MaxValue : repeat.repeat,
                 targetPosition = (Vector3)Type.recordedVector3.Get(),
@@ -140,7 +141,7 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
             repeat.repeatType = comp.translateType;
-            Type.speed = comp.speed;
+            speed = comp.speed;
             repeat.pauseFor = comp.pauseFor;
             repeat.repeatForever = comp.repeatFor == int.MaxValue;
             Type.recordedVector3.Set(comp.targetPosition);

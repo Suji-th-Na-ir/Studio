@@ -167,7 +167,6 @@ namespace Terra.Studio
             [AliasDrawer("Rotate By")] public Atom.RecordedVector3 vector3;
             [HideInInspector] public Vector3 ghostLastRecordedRotation;
             [HideInInspector] public Vector3 LastVector3;
-            [AliasDrawer("Speed")] public float speed;
             [HideInInspector] public Action ForceRefreshData;
             [AliasDrawer("Direction")]
             public Direction direction;
@@ -185,7 +184,6 @@ namespace Terra.Studio
         public class Translate : BaseBroadcasterTemplate
         {
             [AliasDrawer("Move By")] public Atom.RecordedVector3 recordedVector3;
-            [AliasDrawer("Speed")] public float speed;
             [HideInInspector] public Vector3 LastVector3;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)

@@ -45,6 +45,7 @@ namespace RuntimeInspectorNamespace
 
         protected override int Length { get { return 6; } }
         private bool didCheckForExpand;
+        private string lastBroadcastString;
 
         public override void Initialize()
         {
@@ -56,11 +57,10 @@ namespace RuntimeInspectorNamespace
             var val = (Atom.Repeat)Value;
             if (val.broadcastAt == BroadcastAt.Never)
             {
-                Debug.Log("removing broadcast field");
+                Debug.Log(val.broadcast);
                 broadcastFieldDrawer.gameObject.SetActive(false);
-                var oldString = val.broadcast;
                 val.broadcast = string.Empty;
-                val.behaviour.OnBroadcastStringUpdated(val.broadcast, oldString);
+                val.behaviour.OnBroadcastStringUpdated(val.broadcast, lastBroadcastString);
             }
             else
             {
@@ -101,7 +101,9 @@ namespace RuntimeInspectorNamespace
 
         private void OnBroadcastValueChanged(object obj)
         {
-            UpdateOtherCompData((Atom.Repeat)Value, RepeatData.Broadcast);
+            var val = (Atom.Repeat)Value;
+            lastBroadcastString = val.broadcast;
+            UpdateOtherCompData(val, RepeatData.Broadcast);
         }
 
         private Atom.Repeat ValidateRepeatValue()
@@ -141,9 +143,9 @@ namespace RuntimeInspectorNamespace
             else
             {
                 repeatForFieldDrawer.SetInteractable(true);
-                ValidateRepeatValue();
-                UpdatebroadcastTypeDropDown();
+                ValidateRepeatValue(); 
             }
+            UpdatebroadcastTypeDropDown();
 
             return val;
         }
@@ -152,22 +154,28 @@ namespace RuntimeInspectorNamespace
         {
             List<string> ignoreNames = new List<string>();
             var val = (Atom.Repeat)Value;
+            ignoreNames = GetIgnoredNamesOfDropDown(val);
 
+            broadcastTypeFieldDrawer.InvokeUpdateDropdown(Enum.GetNames(typeof(BroadcastAt)).Where(name => !ignoreNames.Contains(name)).ToList());
+            ToggleBroadcastField();
+        }
+
+        private List<String> GetIgnoredNamesOfDropDown( Atom.Repeat val)
+        {
+            List<string> ignore = new List<string>();
             if (val.repeatForever)
             {
-                ignoreNames.Add(BroadcastAt.End.ToString());
+                ignore.Add(BroadcastAt.End.ToString());
                 if (val.pauseFor == 0)
                 {
-                    ignoreNames.Add(BroadcastAt.AtEveryPause.ToString());
+                    ignore.Add(BroadcastAt.AtEveryPause.ToString());
                 }
             }
             else if (val.repeat < 2)
             {
-                ignoreNames.Add(BroadcastAt.AtEveryPause.ToString());
+                ignore.Add(BroadcastAt.AtEveryPause.ToString());
             }
-           
-            broadcastTypeFieldDrawer.InvokeUpdateDropdown(Enum.GetNames(typeof(BroadcastAt)).Where(name => !ignoreNames.Contains(name)).ToList());
-            ToggleBroadcastField();
+            return ignore;
         }
 
         private void UpdateOtherCompData(Atom.Repeat _atom, RepeatData data)
@@ -206,12 +214,17 @@ namespace RuntimeInspectorNamespace
                                 }
                                 break;
                             case RepeatData.BroadcastType:
-                                atom.broadcastAt = _atom.broadcastAt;
+                                var ignore = GetIgnoredNamesOfDropDown(atom);
+                                var name = Enum.GetName(typeof(BroadcastAt), _atom.broadcastAt);
+                                if (!ignore.Contains(name))
+                                {
+                                    atom.broadcastAt = _atom.broadcastAt;
+                                }
                                 if (atom.broadcastAt == BroadcastAt.Never)
                                 {
                                     var old = atom.broadcast;
                                     atom.broadcast = String.Empty;
-                                    atom.behaviour.OnBroadcastStringUpdated(atom.broadcast, old);
+                                    atom.behaviour.OnBroadcastStringUpdated(atom.broadcast, lastBroadcastString);
                                 }
                                 break;
                         }

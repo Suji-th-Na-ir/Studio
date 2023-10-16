@@ -11,6 +11,7 @@ namespace RuntimeInspectorNamespace
         [AliasDrawer("RotateWhen")]
         public Atom.StartOn StartOn = new();
         public Atom.Rotate Type = new();
+        [AliasDrawer("Speed")] public float speed;
         [AliasDrawer("Repeat")] public Atom.Repeat repeat = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
@@ -80,7 +81,7 @@ namespace RuntimeInspectorNamespace
             {
                 direction = repeat.repeatType == RepeatDirectionType.PingPong ? Direction.Clockwise : Type.direction,
                 repeatType = repeat.repeatType,
-                speed = Type.speed,
+                speed = speed,
                 rotateTo = targetVector,
                 pauseFor = repeat.pauseFor,
                 repeatFor = repeat.repeatForever ? int.MaxValue : repeat.repeat,
@@ -149,7 +150,7 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
             Type.direction = comp.direction;
-            Type.speed = comp.speed;
+            speed = comp.speed;
             Type.vector3.Set(comp.rotateTo);
             repeat.pauseFor = comp.pauseFor;
             repeat.repeat = comp.repeatFor == int.MaxValue ? 1 : comp.repeatFor;
