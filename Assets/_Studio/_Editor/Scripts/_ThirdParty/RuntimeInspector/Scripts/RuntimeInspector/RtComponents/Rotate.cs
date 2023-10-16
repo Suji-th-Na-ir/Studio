@@ -15,6 +15,7 @@ namespace RuntimeInspectorNamespace
         [AliasDrawer("Repeat")] public Atom.Repeat repeat = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
+        public override Atom.RecordedVector3 RecordedVector3 { get { return Type.vector3; } }
 
         public override string ComponentName => nameof(Rotate);
         protected override bool CanBroadcast => true;

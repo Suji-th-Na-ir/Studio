@@ -19,6 +19,7 @@ namespace RuntimeInspectorNamespace
         public override string ComponentName => nameof(Translate);
         protected override bool CanBroadcast => true;
         protected override bool CanListen => true;
+        public override Atom.RecordedVector3 RecordedVector3 { get { return Type.recordedVector3; } }
         protected override string[] BroadcasterRefs => new string[]
         {
             repeat.broadcast
