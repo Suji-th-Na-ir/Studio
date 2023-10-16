@@ -144,7 +144,7 @@ namespace Terra.Studio
         {
             [AliasDrawer("Repeat")] public int repeat;
             [AliasDrawer("Pause For")] public float pauseFor;
-            [AliasDrawer("Repeat Type")] public RepeatDirectionType repeatType;
+            [AliasDrawer("Repeat\nType")] public RepeatDirectionType repeatType;
             [AliasDrawer("Repeat\nForever")] public bool repeatForever;
             [AliasDrawer("Broadcast At")] public BroadcastAt broadcastAt;
             [AliasDrawer("Broadcast"), OnValueChanged(UpdateBroadcast = true)]
