@@ -7,6 +7,7 @@ namespace Terra.Studio
 {
     public class Broadcaster
     {
+        public Action OnToBroadcastRequestReceived;
         private readonly string[] CORE_BROADCAST_KEYS = new[] { "Game Win", "Game Lose" };
         private Dictionary<string, List<Action<object>>> broadcastDict = new();
 
@@ -38,6 +39,12 @@ namespace Terra.Studio
 
         public void Broadcast(string broadcastData, bool removeOnceBroadcasted = false)
         {
+            var canBroadcast = SystemOp.Resolve<System>().CanInitiateSubsystemProcess?.Invoke() ?? true;
+            if (!canBroadcast)
+            {
+                OnToBroadcastRequestReceived?.Invoke();
+                return;
+            }
             if (CORE_BROADCAST_KEYS.Any(x => x.Equals(broadcastData)))
             {
                 PerformCoreAction(broadcastData);

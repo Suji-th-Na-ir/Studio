@@ -17,10 +17,15 @@ namespace Terra.Studio
 
         private void Initialize()
         {
-            RuntimeOp.Register(new GameData());
-            RuntimeOp.Register(new GameStateHandler());
+            IntializeDataManagers();
             SpawnGameUI();
             RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameStart(true, (data) => { SpawnPlayer(); });
+        }
+
+        public void IntializeDataManagers()
+        {
+            RuntimeOp.Register(new GameData());
+            RuntimeOp.Register(new GameStateHandler());
         }
 
         public void SpawnPlayer()
@@ -33,6 +38,8 @@ namespace Terra.Studio
 
         private void SpawnGameUI()
         {
+            var canSpawn = SystemOp.Resolve<System>().CanInitiateSubsystemProcess?.Invoke() ?? true;
+            if (!canSpawn) return;
             var gameUI = RuntimeOp.Load<GameObject>("GameViewCanvas");
             var reference = Object.Instantiate(gameUI);
             if (reference.TryGetComponent(out GameView view)) view.Init();

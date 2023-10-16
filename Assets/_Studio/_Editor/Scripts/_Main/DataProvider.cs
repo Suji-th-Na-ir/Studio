@@ -18,11 +18,12 @@ namespace Terra.Studio
             EnumTargets = JsonConvert.DeserializeObject<Dictionary<string, string[]>>(enumFileData);
         }
 
-        public string GetCovariance<T>(T _)
+        public string GetCovariance<T>(T instance)
         {
+            var type = instance.GetType().FullName;
             foreach (var target in ComponentTargets)
             {
-                if (target.Value.Equals(typeof(T).FullName))
+                if (target.Value.Equals(type))
                 {
                     return target.Key;
                 }
