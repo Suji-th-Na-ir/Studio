@@ -142,6 +142,11 @@ namespace Terra.Studio
 
         private void OnBroadcastExecuted()
         {
+            if (!EditorOp.Resolve<BehaviourPreviewUI>())
+            {
+                return;
+            }
+            EditorOp.Resolve<BehaviourPreviewUI>().ToggleToBroadcastGroup();
             if (IsMultiStateComponent())
             {
                 CheckForNextStateInMultiStateComponent();
@@ -162,6 +167,10 @@ namespace Terra.Studio
 
         private void InvokeNextStateInMultiStateComponent()
         {
+            if (!EditorOp.Resolve<BehaviourPreviewUI>())
+            {
+                return;
+            }
             EditorOp.Resolve<BehaviourPreviewUI>().ToggleToNextPropertyState();
             cachedForceExecuteAction?.Invoke();
         }

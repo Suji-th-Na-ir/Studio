@@ -24,6 +24,8 @@ namespace Terra.Studio
         private const string VALUE_FIELD_LOC = "ValueText";
         private const string LISTENTING_FIELD_LOC = "ListeningTo";
         private const string BROADCAST_FIELD_LOC = "Broadcasting";
+        private const float ACTIVE_EVENT_ALPHA_VALUE = 1f;
+        private const float INACTIVE_EVENT_ALPHA_VALUE = 0.5f;
 
         private CanvasGroup eventActionCanvasGroup;
         private CanvasGroup broadcastActionGroup;
@@ -43,18 +45,26 @@ namespace Terra.Studio
 
         public void ToggleToEventActionGroup()
         {
-            eventActionCanvasGroup.alpha = 1f;
-            broadcastActionGroup.alpha = 0.5f;
+            eventActionCanvasGroup.alpha = ACTIVE_EVENT_ALPHA_VALUE;
+            broadcastActionGroup.alpha = INACTIVE_EVENT_ALPHA_VALUE;
         }
 
         public void ToggleToBroadcastGroup()
         {
-            eventActionCanvasGroup.alpha = 0.5f;
+            eventActionCanvasGroup.alpha = INACTIVE_EVENT_ALPHA_VALUE;
             if (!broadcastActionGroup.gameObject.activeSelf)
             {
                 return;
             }
-            broadcastActionGroup.alpha = 1f;
+            broadcastActionGroup.alpha = ACTIVE_EVENT_ALPHA_VALUE;
+            CoroutineService.RunCoroutine(() =>
+            {
+                if (broadcastActionGroup)
+                {
+                    broadcastActionGroup.alpha = INACTIVE_EVENT_ALPHA_VALUE;
+                }
+            },
+            CoroutineService.DelayType.WaitForXSeconds, BehaviourPreview.CUSTOM_TIME_DELATION);
         }
 
         public void ToggleToNextPropertyState()
@@ -65,6 +75,11 @@ namespace Terra.Studio
                 return;
             }
             data.IterateState();
+            RefreshUIData();
+        }
+
+        private void RefreshUIData()
+        {
             ToggleToEventActionGroup();
             PrepareProperties();
             PrepareBroadcastGroup();
@@ -91,11 +106,25 @@ namespace Terra.Studio
             var preset = EditorOp.Resolve<EditorSystem>().ComponentIconsPreset;
             var sprite = preset.GetIcon(instance.GetType().Name);
             icon.sprite = sprite;
-            AddListenerToButton(closeBtn, () => { EditorOp.Resolve<BehaviourPreview>().Preview(instance); });
+            AddListenerToButton(closeBtn, () =>
+            {
+                closeBtn.interactable = false;
+                EditorOp.Resolve<BehaviourPreview>().Preview(instance);
+            });
             AddListenerToButton(restartBtn, () =>
             {
                 data.Init();
+                RefreshUIData();
+                restartBtn.interactable = false;
                 EditorOp.Resolve<BehaviourPreview>().Restart(instance);
+                CoroutineService.RunCoroutine(() =>
+                {
+                    if (restartBtn)
+                    {
+                        restartBtn.interactable = true;
+                    }
+                },
+                CoroutineService.DelayType.WaitForXSeconds, 1f);
             });
             PrepareProperties();
         }
