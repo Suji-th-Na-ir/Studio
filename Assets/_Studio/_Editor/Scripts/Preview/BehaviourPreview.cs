@@ -127,7 +127,6 @@ namespace Terra.Studio
 
         private void OnPropertyExecuted()
         {
-            EditorOp.Resolve<BehaviourPreviewUI>().ToggleToBroadcastGroup();
             if (IsMultiStateComponent())
             {
                 var data = EditorOp.Resolve<BehaviourPreviewUI>().CurrentPreviewData;
