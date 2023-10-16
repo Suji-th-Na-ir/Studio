@@ -137,13 +137,12 @@ namespace Terra.Studio
 
         public override BehaviourPreviewUI.PreviewData GetPreviewData()
         {
-            var properties = new Dictionary<string, object>[2];
+            var properties = new Dictionary<string, object>[] { new(), new() };
             var broadcastValues = new string[2];
             if (defaultState == SwitchState.Off)
             {
                 broadcastValues[0] = broadcastWhenOff;
                 broadcastValues[1] = broadcastWhenOn;
-                properties[0] = new();
                 if (playSFXWhenOff.data.canPlay)
                 {
                     properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFXWhenOff.data.clipName);
@@ -152,12 +151,6 @@ namespace Terra.Studio
                 {
                     properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFXWhenOff.data.clipName);
                 }
-            }
-            else
-            {
-                broadcastValues[0] = broadcastWhenOn;
-                broadcastValues[1] = broadcastWhenOff;
-                properties[1] = new();
                 if (playSFXWhenOn.data.canPlay)
                 {
                     properties[1].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFXWhenOn.data.clipName);
@@ -165,6 +158,27 @@ namespace Terra.Studio
                 if (playVFXWhenOn.data.canPlay)
                 {
                     properties[1].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFXWhenOn.data.clipName);
+                }
+            }
+            else
+            {
+                broadcastValues[0] = broadcastWhenOn;
+                broadcastValues[1] = broadcastWhenOff;
+                if (playSFXWhenOn.data.canPlay)
+                {
+                    properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFXWhenOn.data.clipName);
+                }
+                if (playVFXWhenOn.data.canPlay)
+                {
+                    properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFXWhenOn.data.clipName);
+                }
+                if (playSFXWhenOff.data.canPlay)
+                {
+                    properties[1].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFXWhenOff.data.clipName);
+                }
+                if (playVFXWhenOff.data.canPlay)
+                {
+                    properties[1].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFXWhenOff.data.clipName);
                 }
             }
             var previewData = new BehaviourPreviewUI.PreviewData()

@@ -127,7 +127,7 @@ namespace Terra.Studio
 
         private void OnPropertyExecuted()
         {
-            EditorOp.Resolve<BehaviourPreviewUI>().ToggleToPropertiesGroup();
+            EditorOp.Resolve<BehaviourPreviewUI>().ToggleToBroadcastGroup();
             if (IsMultiStateComponent())
             {
                 var data = EditorOp.Resolve<BehaviourPreviewUI>().CurrentPreviewData;
@@ -142,7 +142,6 @@ namespace Terra.Studio
 
         private void OnBroadcastExecuted()
         {
-            EditorOp.Resolve<BehaviourPreviewUI>().ToggleToBroadcastGroup();
             if (IsMultiStateComponent())
             {
                 CheckForNextStateInMultiStateComponent();

@@ -11,17 +11,21 @@ namespace Terra.Studio
     {
         private const string LEFT_GROUP_LOC = "LeftGroup";
         private const string RIGHT_GROUP_LOC = "RightGroup";
+        private const string BOTTOM_GROUP_LOC = "BottomGroup";
         private const string HEADING_GROUP_LOC = "HeadingGroup";
         private const string CLOSE_BUTTON_LOC = "Close";
         private const string RESTART_BUTTON_LOC = "Restart";
         private const string EVENT_GROUP_LOC = "EventActionGroup";
-        private const string PROPERTIES_GROUP_LOC = "PropertiesGroup";
         private const string BROADCAST_GROUP_LOC = "BroadcastGroup";
         private const string HEADING_TEXT_LOC = "Heading";
         private const string ICON_IMAGE_LOC = "Icon";
+        private const string PROPERTY_GROUP_LOC = "Property";
+        private const string NAME_FIELD_LOC = "NameText";
+        private const string VALUE_FIELD_LOC = "ValueText";
+        private const string LISTENTING_FIELD_LOC = "ListeningTo";
+        private const string BROADCAST_FIELD_LOC = "Broadcasting";
 
         private CanvasGroup eventActionCanvasGroup;
-        private CanvasGroup propertiesActionCanvasGroup;
         private CanvasGroup broadcastActionGroup;
         private PreviewData data;
 
@@ -40,25 +44,16 @@ namespace Terra.Studio
         public void ToggleToEventActionGroup()
         {
             eventActionCanvasGroup.alpha = 1f;
-            propertiesActionCanvasGroup.alpha = 0.5f;
-            broadcastActionGroup.alpha = 0.5f;
-        }
-
-        public void ToggleToPropertiesGroup()
-        {
-            eventActionCanvasGroup.alpha = 0.5f;
-            propertiesActionCanvasGroup.alpha = 1f;
             broadcastActionGroup.alpha = 0.5f;
         }
 
         public void ToggleToBroadcastGroup()
         {
+            eventActionCanvasGroup.alpha = 0.5f;
             if (!broadcastActionGroup.gameObject.activeSelf)
             {
                 return;
             }
-            eventActionCanvasGroup.alpha = 0.5f;
-            propertiesActionCanvasGroup.alpha = 0.5f;
             broadcastActionGroup.alpha = 1f;
         }
 
@@ -70,8 +65,9 @@ namespace Terra.Studio
                 return;
             }
             data.IterateState();
-            PreparePropertiesGroup();
             ToggleToEventActionGroup();
+            PrepareProperties();
+            PrepareBroadcastGroup();
         }
 
         public void Init<T>(T instance) where T : BaseBehaviour
@@ -80,7 +76,6 @@ namespace Terra.Studio
             data.Init();
             PrepareHeadingGroup(instance);
             PrepareEventGroup();
-            PreparePropertiesGroup();
         }
 
         private void PrepareHeadingGroup<T>(T instance) where T : BaseBehaviour
@@ -88,7 +83,7 @@ namespace Terra.Studio
             var headingGroup = Helper.FindDeepChild(transform, HEADING_GROUP_LOC);
             var leftGroup = Helper.FindDeepChild(headingGroup, LEFT_GROUP_LOC);
             var headingText = Helper.FindDeepChild<TextMeshProUGUI>(leftGroup, HEADING_TEXT_LOC);
-            var rightGroup = Helper.FindDeepChild(transform, RIGHT_GROUP_LOC);
+            var rightGroup = Helper.FindDeepChild(headingGroup, RIGHT_GROUP_LOC);
             var restartBtn = Helper.FindDeepChild<Button>(rightGroup, RESTART_BUTTON_LOC);
             var closeBtn = Helper.FindDeepChild<Button>(rightGroup, CLOSE_BUTTON_LOC);
             headingText.text = data.DisplayName;
@@ -98,6 +93,37 @@ namespace Terra.Studio
                 data.Init();
                 EditorOp.Resolve<BehaviourPreview>().Restart(instance);
             });
+            PrepareProperties();
+        }
+
+        private void PrepareProperties()
+        {
+            var properties = data.GetProperty();
+            var headingGroup = Helper.FindDeepChild(transform, HEADING_GROUP_LOC);
+            var bottomGroup = Helper.FindDeepChild(headingGroup, BOTTOM_GROUP_LOC);
+            var propertyField = Helper.FindDeepChild(bottomGroup, PROPERTY_GROUP_LOC);
+            ClearAllFieldsExceptFirstChild(bottomGroup);
+            if (properties.Count == 0)
+            {
+                Destroy(propertyField.gameObject);
+                return;
+            }
+            var fields = new GameObject[properties.Count];
+            fields[0] = propertyField.gameObject;
+            for (int i = 1; i < properties.Count; i++)
+            {
+                var newInstance = Instantiate(propertyField.gameObject, bottomGroup);
+                fields[i] = newInstance;
+            }
+            var index = -1;
+            foreach (var property in properties)
+            {
+                var field = fields[++index];
+                var nameField = Helper.FindDeepChild<TextMeshProUGUI>(field.transform, NAME_FIELD_LOC);
+                var valueField = Helper.FindDeepChild<TextMeshProUGUI>(field.transform, VALUE_FIELD_LOC);
+                nameField.text = property.Key;
+                valueField.text = $"{property.Value}";
+            }
         }
 
         private void PrepareEventGroup()
@@ -111,38 +137,47 @@ namespace Terra.Studio
             var icon = preset.GetIcon(data.EventName);
             headingText.text = data.EventName;
             iconImage.sprite = icon;
+            var bottomGroup = Helper.FindDeepChild(eventGroup, BOTTOM_GROUP_LOC);
+            var isListening = !string.IsNullOrEmpty(data.Listen);
+            bottomGroup.gameObject.SetActive(isListening);
+            if (isListening)
+            {
+                var listenField = Helper.FindDeepChild<TextMeshProUGUI>(bottomGroup, LISTENTING_FIELD_LOC);
+                listenField.text = data.Listen;
+            }
+            PrepareBroadcastGroup();
         }
 
-        private void PreparePropertiesGroup()
+        private void PrepareBroadcastGroup()
         {
-            var propertiesGroup = Helper.FindDeepChild(transform, PROPERTIES_GROUP_LOC);
-            var leftGroup = Helper.FindDeepChild(propertiesGroup, LEFT_GROUP_LOC);
-            var headingText = Helper.FindDeepChild<TextMeshProUGUI>(leftGroup, HEADING_TEXT_LOC);
-            headingText.text = data.DisplayName;
-            propertiesActionCanvasGroup = propertiesGroup.GetComponent<CanvasGroup>();
-            //var properites = data.GetProperty();
             var broadcast = data.GetBroadcast();
             var isBroadcasting = !string.IsNullOrEmpty(broadcast);
-            PrepareBroadcastGroup(isBroadcasting, broadcast);
-        }
-
-        private void PrepareBroadcastGroup(bool isAvailable, string broadcast)
-        {
             var broadcastGroup = Helper.FindDeepChild(transform, BROADCAST_GROUP_LOC);
             broadcastActionGroup = broadcastGroup.GetComponent<CanvasGroup>();
-            if (!isAvailable)
+            if (!isBroadcasting)
             {
                 broadcastGroup.gameObject.SetActive(false);
                 return;
             }
-            Debug.Log($"broadcasting: {broadcast}");
-            //Implement a child which has the broadcast string in it
+            var bottomGroup = Helper.FindDeepChild(broadcastGroup, BOTTOM_GROUP_LOC);
+            var broadcastField = Helper.FindDeepChild<TextMeshProUGUI>(bottomGroup, BROADCAST_FIELD_LOC);
+            broadcastField.text = broadcast;
         }
 
         private void AddListenerToButton(Button button, Action action)
         {
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() => action?.Invoke());
+        }
+
+        private void ClearAllFieldsExceptFirstChild(Transform transform)
+        {
+            var childCount = transform.childCount;
+            if (childCount <= 1) return;
+            for (int i = 1; i < childCount; i++)
+            {
+                Destroy(transform.GetChild(i).gameObject);
+            }
         }
 
         public struct PreviewData
