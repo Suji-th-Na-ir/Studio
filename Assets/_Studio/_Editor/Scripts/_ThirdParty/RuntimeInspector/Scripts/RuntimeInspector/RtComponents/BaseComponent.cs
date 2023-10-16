@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using RuntimeInspectorNamespace;
-using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -159,8 +158,8 @@ namespace Terra.Studio
 
         public virtual string GetDisplayName()
         {
-            var type = GetType();
-            var isFound = SystemOp.Resolve<System>().SystemData.TryGetSystemDisplayName(type.FullName, out var displayName);
+            var type = GetType().FullName;
+            var isFound = SystemOp.Resolve<System>().SystemData.TryGetSystemDisplayName(type, out var displayName);
             if (isFound)
             {
                 return displayName;
