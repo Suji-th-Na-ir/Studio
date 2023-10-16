@@ -74,5 +74,10 @@ namespace RuntimeInspectorNamespace
 			else
 				colorImg.color = (Color) Value;
 		}
-	}
+
+        public override void SetInteractable(bool on)
+        {
+           
+        }
+    }
 }

@@ -27,33 +27,10 @@ namespace Terra.Studio
         AntiClockwise
     }
 
-    public enum RotationType
+    public enum RepeatDirectionType
     {
-        [AliasDrawer("Rotate Once")]
-        RotateOnce,
-        [AliasDrawer("Rotate Forever")]
-        RotateForever,
-        Oscillate,
-        [AliasDrawer("Oscillate Forever")]
-        OscillateForever,
-        [AliasDrawer("StepWise")]
-        IncrementallyRotate,
-        [AliasDrawer("StepWise Forever")]
-        IncrementallyRotateForever
-    }
-
-    public enum TranslateType
-    {
-        Move,
-        [AliasDrawer("Move Forever")]
-        MoveForever,
-        [AliasDrawer("StepWise")]
-        MoveIncrementally,
-        [AliasDrawer("StepWise Forever")]
-        MoveIncrementallyForever,
-        PingPong,
-        [AliasDrawer("PingPong Forever")]
-        PingPongForever
+        SameDirection,
+        PingPong
     }
 
     public enum TransFormCopyValues
@@ -64,21 +41,11 @@ namespace Terra.Studio
         All
     }
 
-    /// <summary>
-    /// 1. For X default value is 1
-    /// 2. For Forever hardcode int.MaxValue
-    /// </summary>
-    public enum RepeatType
-    {
-        XTimes,
-        Forever
-    }
-
     public enum BroadcastAt
     {
         Never,
-        AtEveryInterval,
-        End
+        End,
+        AtEveryPause
     }
 
     public enum BroadcastAtForPushObjects

@@ -72,7 +72,7 @@ namespace Terra.Studio
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(newString, string.Empty, DisplayDock);
         }
 
-        public void OnBroadcastStringUpdated(string newString, string oldString)
+        public virtual void OnBroadcastStringUpdated(string newString, string oldString)
         {
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(newString, oldString, DisplayDock);
         }

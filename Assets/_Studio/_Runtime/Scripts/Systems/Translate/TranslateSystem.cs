@@ -53,11 +53,10 @@ namespace Terra.Studio
             entityRef.currentTargetPosition = targetPos;
             entityRef.currentStartPosition = tr.position;
             entityRef.shouldPause = entityRef.pauseFor > 0f;
-            entityRef.shouldPingPong = entityRef.translateType is TranslateType.PingPong or TranslateType.PingPongForever;
+            entityRef.shouldPingPong = entityRef.translateType is RepeatDirectionType.PingPong;
             entityRef.loopsFinished = 0;
             entityRef.coveredDistance = 0f;
             entityRef.remainingDistance = pauseDistance;
-            entityRef.repeatForever = entityRef.repeatFor == int.MaxValue;
         }
 
         public void OnDemandRun(ref TranslateComponent translatable)
@@ -77,7 +76,7 @@ namespace Terra.Studio
             ref var translatable = ref entity.GetComponent<TranslateComponent>();
             if (translatable.IsBroadcastable)
             {
-                if (translatable.broadcastAt == BroadcastAt.AtEveryInterval && !isDone)
+                if (translatable.broadcastAt == BroadcastAt.AtEveryPause && !isDone)
                 {
                     RuntimeOp.Resolve<Broadcaster>().Broadcast(translatable.Broadcast, false);
                 }

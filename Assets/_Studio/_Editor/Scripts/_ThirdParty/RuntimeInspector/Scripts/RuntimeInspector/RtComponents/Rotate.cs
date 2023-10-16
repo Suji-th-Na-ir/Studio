@@ -11,8 +11,11 @@ namespace Terra.Studio
         [AliasDrawer("RotateWhen")]
         public Atom.StartOn StartOn = new();
         public Atom.Rotate Type = new();
+        [AliasDrawer("Speed")] public float speed;
+        [AliasDrawer("Repeat")] public Atom.Repeat repeat = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
+        public override Atom.RecordedVector3 RecordedVector3 { get { return Type.vector3; } }
 
         public override string ComponentName => nameof(Rotate);
         public override bool CanPreview => true;
@@ -20,7 +23,7 @@ namespace Terra.Studio
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]
         {
-            Type.data.Broadcast
+            repeat.broadcast
         };
         protected override string[] ListenerRefs => new string[]
         {
@@ -31,6 +34,7 @@ namespace Terra.Studio
         {
             base.Awake();
             Type.Setup(gameObject, this);
+            repeat.Setup(gameObject, this);
             StartOn.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated, StartOn.data.startIndex == 4);
             PlaySFX.Setup<Rotate>(gameObject);
             PlayVFX.Setup<Rotate>(gameObject);
@@ -48,8 +52,8 @@ namespace Terra.Studio
                     EditorOp.Resolve<Recorder>().TrackRotation_ShowGhostOnMultiselect(this, true);
                 },
                 ShowVisualsOnMultiSelect = true,
-                GetLastValue = () => { return Type.data.LastVector3; },
-                GetRecentValue = () => { return Type.data.vector3.Get(); },
+                GetLastValue = () => { return Type.LastVector3; },
+                GetRecentValue = () => { return Type.vector3.Get(); },
                 OnGhostModeToggled = (state) =>
                 {
                     if (state)
@@ -61,35 +65,35 @@ namespace Terra.Studio
                 GhostTo = gameObject
             };
             SetLastValue();
-            Type.data.vector3.OnPerAxisValueModified = () =>
+            Type.vector3.OnPerAxisValueModified = () =>
             {
-                Type.data.ghostLastRecordedRotation = transform.eulerAngles + (Vector3)Type.data.vector3.Get();
+                Type.ghostLastRecordedRotation = transform.eulerAngles + (Vector3)Type.vector3.Get();
             };
-            Type.data.vector3.OnValueReset = () =>
+            Type.vector3.OnValueReset = () =>
             {
-                Type.data.vector3.OnPerAxisValueModified?.Invoke();
+                Type.vector3.OnPerAxisValueModified?.Invoke();
                 Type.ForceRefreshData?.Invoke();
             };
         }
 
         public override (string type, string data) Export()
         {
-            var targetVector = (Vector3)Type.data.vector3.Get();
+            var targetVector = (Vector3)Type.vector3.Get();
             var comp = new RotateComponent
             {
-                direction = Type.data.direction,
-                rotationType = (RotationType)Type.data.rotateType,
-                repeatType = GetRepeatType(Type.data.repeat),
-                speed = Type.data.speed,
+                direction = repeat.repeatType == RepeatDirectionType.PingPong ? Direction.Clockwise : Type.direction,
+                repeatType = repeat.repeatType,
+                speed = speed,
                 rotateTo = targetVector,
-                pauseFor = Type.data.pauseBetween,
-                repeatFor = Type.data.repeat,
+                pauseFor = repeat.pauseFor,
+                repeatFor = repeat.repeat,
+                repeatForever = repeat.repeatForever,
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
-                broadcastAt = Type.data.broadcastAt,
-                IsBroadcastable = !string.IsNullOrEmpty(Type.data.Broadcast),
-                Broadcast = string.IsNullOrEmpty(Type.data.Broadcast) ? null : Type.data.Broadcast,
+                broadcastAt = repeat.broadcastAt,
+                IsBroadcastable = !string.IsNullOrEmpty(repeat.broadcast),
+                Broadcast = string.IsNullOrEmpty(repeat.broadcast) ? null : repeat.broadcast,
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
@@ -97,13 +101,24 @@ namespace Terra.Studio
                 sfxIndex = PlaySFX.data.clipIndex,
                 vfxIndex = PlayVFX.data.clipIndex,
                 listen = Listen.Always,
-                ghostLastRotation = Type.data.ghostLastRecordedRotation
+                ghostLastRotation = Type.ghostLastRecordedRotation
             };
-            ModifyDataAsPerSelected(ref comp);
             gameObject.TrySetTrigger(false, true);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp, Formatting.Indented);
             return (type, data);
+        }
+
+        public override void OnBroadcastStringUpdated(string newString, string oldString)
+        {
+            if (repeat.broadcastAt != BroadcastAt.Never)
+            {
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(newString, oldString, DisplayDock);
+            }
+            else if (repeat.broadcastAt == BroadcastAt.Never && newString == string.Empty)
+            {
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(newString, oldString, DisplayDock);
+            }
         }
 
         public string GetStartEvent()
@@ -128,13 +143,6 @@ namespace Terra.Studio
             return data;
         }
 
-        private RepeatType GetRepeatType(float _value)
-        {
-            if (_value == 0) return RepeatType.Forever;
-            else return RepeatType.XTimes;
-        }
-
-
         public override void Import(EntityBasedComponent cdata)
         {
             RotateComponent comp = JsonConvert.DeserializeObject<RotateComponent>(cdata.data);
@@ -144,16 +152,16 @@ namespace Terra.Studio
             PlayVFX.data.canPlay = comp.canPlayVFX;
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
-            Type.data.direction = comp.direction;
-            Type.data.rotateType = (int)comp.rotationType;
-            Type.data.speed = comp.speed;
-            Type.data.vector3.Set(comp.rotateTo);
-            Type.data.pauseBetween = comp.pauseFor;
-            Type.data.repeat = comp.repeatFor;
-            Type.data.broadcastAt = comp.broadcastAt;
-            Type.data.Broadcast = comp.Broadcast;
-            Type.data.listen = comp.listen;
-            Type.data.ghostLastRecordedRotation = comp.ghostLastRotation;
+            Type.direction = comp.direction;
+            speed = comp.speed;
+            Type.vector3.Set(comp.rotateTo);
+            repeat.pauseFor = comp.pauseFor;
+            repeat.repeat = comp.repeatFor;
+            repeat.repeatForever = comp.repeatForever;
+            repeat.broadcastAt = comp.broadcastAt;
+            repeat.broadcast = comp.Broadcast;
+            repeat.repeatType = comp.repeatType;
+            Type.ghostLastRecordedRotation = comp.ghostLastRotation;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
                 var res = (StartOn)result;
@@ -180,35 +188,16 @@ namespace Terra.Studio
             {
                 listenString = StartOn.data.listenName;
             }
-            ImportVisualisation(Type.data.Broadcast, listenString);
-        }
-
-        private void ModifyDataAsPerSelected(ref RotateComponent component)
-        {
-            switch (component.rotationType)
-            {
-                case RotationType.RotateForever:
-                case RotationType.OscillateForever:
-                case RotationType.IncrementallyRotateForever:
-                    component.repeatFor = int.MaxValue;
-                    if (component.rotationType == RotationType.OscillateForever)
-                    {
-                        component.direction = Direction.Clockwise;
-                    }
-                    break;
-                case RotationType.Oscillate:
-                    component.direction = Direction.Clockwise;
-                    break;
-            }
+            ImportVisualisation(repeat.broadcast, listenString);
         }
 
         private Vector3[] GetSpawnTRS()
         {
             var position = transform.position;
-            var rotation = Type.data.ghostLastRecordedRotation == Atom.RecordedVector3.INFINITY ||
-                Type.data.ghostLastRecordedRotation == Vector3.zero ?
+            var rotation = Type.ghostLastRecordedRotation == Atom.RecordedVector3.INFINITY ||
+                Type.ghostLastRecordedRotation == Vector3.zero ?
                 gameObject.transform.rotation.eulerAngles :
-                Type.data.ghostLastRecordedRotation;
+                Type.ghostLastRecordedRotation;
             return new Vector3[] { position, rotation };
         }
 
@@ -217,10 +206,10 @@ namespace Terra.Studio
             GhostDescription.IsGhostInteractedInLastRecord = true;
             var vector3 = (Vector3)data;
             vector3 = Quaternion.Euler(vector3).eulerAngles;
-            Type.data.ghostLastRecordedRotation = vector3;
+            Type.ghostLastRecordedRotation = vector3;
             var delta = vector3 - transform.eulerAngles;
             delta = delta.GetAbsEulerAngle();
-            Type.data.vector3.Set(delta);
+            Type.vector3.Set(delta);
             Type.ForceRefreshData?.Invoke();
         }
 
@@ -228,7 +217,7 @@ namespace Terra.Studio
         {
             if (GhostDescription.IsGhostInteractedInLastRecord)
             {
-                Type.data.LastVector3 = (Vector3)Type.data.vector3.Get();
+                Type.LastVector3 = (Vector3)Type.vector3.Get();
             }
             GhostDescription.IsGhostInteractedInLastRecord = false;
         }
@@ -236,11 +225,12 @@ namespace Terra.Studio
         public override BehaviourPreviewUI.PreviewData GetPreviewData()
         {
             var properties = new Dictionary<string, object>[1];
+            var repeatString = repeat.repeatForever ? "Forever" : repeat.repeat.ToString();
             properties[0] = new()
             {
-                { "Speed", Type.data.speed },
-                { "Repeat", Type.data.repeat },
-                { "Pause", Type.data.pauseBetween }
+                { "Speed", speed },
+                { "Repeat", repeatString },
+                { "Pause", repeat.pauseFor }
             };
             if (PlaySFX.data.canPlay)
             {
@@ -257,7 +247,7 @@ namespace Terra.Studio
                 DisplayName = GetDisplayName(),
                 EventName = startOnName.ToString(),
                 Properties = properties,
-                Broadcast = new string[] { Type.data.broadcast },
+                Broadcast = new string[] { repeat.broadcast },
                 Listen = StartOn.data.listenName
             };
             return previewData;

@@ -35,16 +35,15 @@ namespace Terra.Studio
             CalculateStartAndTargetRotation(ref entityRef);
             entityRef.currentRotateCount = 0;
             entityRef.canPause = entityRef.pauseFor > 0f;
-            entityRef.shouldPingPong = entityRef.rotationType is RotationType.Oscillate or RotationType.OscillateForever;
-            entityRef.rotateForever = entityRef.repeatFor == int.MaxValue;
+            entityRef.shouldPingPong = entityRef.repeatType == RepeatDirectionType.PingPong;
+            entityRef.rotateForever = entityRef.repeatForever;
             entityRef.directionFactor = (entityRef.direction == Direction.Clockwise) ? 1 : -1;
             RefreshRotation(ref entityRef);
         }
 
         private void RefreshRotation(ref RotateComponent entityRef)
         {
-            if (entityRef.rotationType == RotationType.IncrementallyRotate ||
-                entityRef.rotationType == RotationType.IncrementallyRotateForever)
+            if (!entityRef.shouldPingPong && entityRef.repeatFor > 1)
             {
                 CalculateStartAndTargetRotation(ref entityRef);
             }
@@ -192,7 +191,7 @@ namespace Terra.Studio
             ref var rotatable = ref entity.GetComponent<RotateComponent>();
             if (rotatable.IsBroadcastable)
             {
-                if (rotatable.broadcastAt == BroadcastAt.AtEveryInterval && !isDone)
+                if (rotatable.broadcastAt == BroadcastAt.AtEveryPause && !isDone)
                 {
                     RuntimeOp.Resolve<Broadcaster>().Broadcast(rotatable.Broadcast, false);
                 }
@@ -228,7 +227,7 @@ namespace Terra.Studio
 
         private bool IsRotateForeverType(in RotateComponent component)
         {
-            if (component.rotationType == RotationType.RotateForever)
+            if (component.pauseFor == 0 && !component.shouldPingPong && component.rotateForever)
             {
                 return true;
             }

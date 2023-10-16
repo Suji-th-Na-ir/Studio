@@ -277,5 +277,10 @@ namespace RuntimeInspectorNamespace
             }
             previewButton.onClick.AddListener(behaviour.DoPreview);
         }
+        
+        public override void SetInteractable(bool on)
+        {
+           
+        }
     }
 }

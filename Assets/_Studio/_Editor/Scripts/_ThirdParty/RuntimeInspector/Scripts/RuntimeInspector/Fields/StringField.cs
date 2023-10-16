@@ -38,6 +38,12 @@ namespace RuntimeInspectorNamespace
             input.DefaultEmptyValue = string.Empty;
         }
 
+        public override void SetInteractable(bool on)
+        {
+            input.BackingField.interactable = on;
+            input.BackingField.textComponent.color = SkinUtils.GetInteractableColor(on);
+        }
+
         public override bool SupportsType(Type type)
         {
             return type == typeof(string);
@@ -87,6 +93,7 @@ namespace RuntimeInspectorNamespace
             var newString = Value == null ? string.Empty : Value.ToString();
             var oldString = oldValue == null ? string.Empty : oldValue.ToString();
             onStringUpdated?.Invoke(newString, oldString);
+            OnValueUpdated?.Invoke(newString);
             return true;
         }
 
@@ -107,6 +114,7 @@ namespace RuntimeInspectorNamespace
                     });
             }
 
+            OnValueUpdated?.Invoke(lastSubmittedValue);
             lastSubmittedValue = Value;
             Inspector.RefreshDelayed();
             return true;

@@ -244,5 +244,12 @@ namespace RuntimeInspectorNamespace
                     inputZ.Text = val.z.ToString(RuntimeInspectorUtils.numberFormat);
             }
         }
+
+        public override void SetInteractable(bool on)
+        {
+            inputX.BackingField.interactable = on;
+            inputY.BackingField.interactable = on;
+            inputZ.BackingField.interactable = on;
+        }
     }
 }

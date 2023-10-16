@@ -51,5 +51,10 @@ namespace RuntimeInspectorNamespace
 			else
 				boundMethod.Call( Value );
 		}
-	}
+
+        public override void SetInteractable(bool on)
+        {
+			invokeButton.interactable = on;
+        }
+    }
 }

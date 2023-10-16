@@ -128,5 +128,10 @@ namespace RuntimeInspectorNamespace
 			if( lastValue != Value )
 				OnReferenceChanged( (Object) Value );
 		}
-	}
+
+        public override void SetInteractable(bool on)
+        {
+         
+        }
+    }
 }

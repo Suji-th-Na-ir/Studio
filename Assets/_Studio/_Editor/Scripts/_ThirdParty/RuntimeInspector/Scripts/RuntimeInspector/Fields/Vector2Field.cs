@@ -165,5 +165,11 @@ namespace RuntimeInspectorNamespace
 					inputY.Text = val.y.ToString( RuntimeInspectorUtils.numberFormat );
 			}
 		}
-	}
+
+        public override void SetInteractable(bool on)
+        {
+			inputX.BackingField.interactable = on;
+			inputY.BackingField.interactable = on;
+        }
+    }
 }

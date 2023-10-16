@@ -21,13 +21,13 @@ namespace Terra.Studio
         [JsonConverter(typeof(Vector3Converter))] public Vector3 rotateTo;
         [JsonConverter(typeof(Vector3Converter))] public Vector3 ghostLastRotation;
         public Direction direction;
-        public RotationType rotationType;
-        public RepeatType repeatType;
+        public RepeatDirectionType repeatType;
         public BroadcastAt broadcastAt;
         public Listen listen;
         public float speed;
         public float pauseFor;
         public int repeatFor;
+        public bool repeatForever;
         public bool canPlaySFX;
         public string sfxName;
         public int sfxIndex;

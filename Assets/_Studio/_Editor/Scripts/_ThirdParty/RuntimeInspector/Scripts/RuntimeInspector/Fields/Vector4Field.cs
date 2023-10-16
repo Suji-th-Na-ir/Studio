@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 namespace RuntimeInspectorNamespace
 {
-	public class Vector4Field : InspectorField
-	{
+    public class Vector4Field : InspectorField
+    {
 #pragma warning disable 0649
 		[SerializeField]
 		private BoundInputField inputX;
@@ -197,5 +197,14 @@ namespace RuntimeInspectorNamespace
 					inputW.Text = val.w.ToString( RuntimeInspectorUtils.numberFormat );
 			}
 		}
-	}
+
+        public override void SetInteractable(bool on)
+        {
+            inputX.BackingField.interactable = on;
+            inputY.BackingField.interactable = on;
+            inputZ.BackingField.interactable = on;
+            inputW.BackingField.interactable = on;
+
+        }
+    }
 }

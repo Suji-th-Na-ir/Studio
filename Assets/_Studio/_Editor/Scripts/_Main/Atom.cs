@@ -3,6 +3,7 @@ using UnityEngine;
 using PlayShifu.Terra;
 using RuntimeInspectorNamespace;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Terra.Studio
 {
@@ -11,6 +12,7 @@ namespace Terra.Studio
         public List<StartOn> AllStartOns = new();
         public List<PlaySfx> AllSfxes = new();
         public List<PlayVfx> AllVfxes = new();
+        public List<Repeat> AllRepeats = new();
 
         public class BasePlay
         {
@@ -29,8 +31,11 @@ namespace Terra.Studio
 
         public class BaseBroadcasterTemplate
         {
+            [HideInInspector]
             public string id;
+            [HideInInspector]
             public GameObject target;
+            [HideInInspector]
             public BaseBehaviour behaviour;
 
             public virtual void Setup(GameObject target, BaseBehaviour behaviour)
@@ -46,6 +51,7 @@ namespace Terra.Studio
             AllStartOns.Clear();
             AllSfxes.Clear();
             AllVfxes.Clear();
+            AllRepeats.Clear();
         }
 
         [Serializable]
@@ -134,37 +140,59 @@ namespace Terra.Studio
         }
 
         [Serializable]
-        public class Rotate : BaseBroadcasterTemplate
+        public class Repeat : BaseBroadcasterTemplate
         {
-            public RotateField field;
-            public RotateComponentData data = new();
-            public Action ForceRefreshData;
+            [AliasDrawer("Repeat")] public int repeat;
+            [AliasDrawer("Pause For")] public float pauseFor;
+            [AliasDrawer("Repeat\nType")] public RepeatDirectionType repeatType;
+            [AliasDrawer("Repeat\nForever")] public bool repeatForever;
+            [AliasDrawer("Broadcast At")] public BroadcastAt broadcastAt;
+            [AliasDrawer("Broadcast"), OnValueChanged(UpdateBroadcast = true)]
+            public string broadcast;
+            [HideInInspector] public string lastEnteredBroadcast;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)
             {
                 base.Setup(target, behaviour);
-                data.OnBroadcastUpdated = behaviour.OnBroadcastStringUpdated;
-                data.vector3 = new();
-                data.vector3.Setup(behaviour);
-                data.vector3.Set(new Vector3(0f, 0f, 0f));
-                data.ghostLastRecordedRotation = RecordedVector3.INFINITY;
+                var allrepeats = EditorOp.Resolve<Atom>().AllRepeats;
+                if (!allrepeats.Contains(this))
+                {
+                    allrepeats.Add(this);
+                }
+            }
+        }
+
+        [Serializable]
+        public class Rotate : BaseBroadcasterTemplate
+        {
+            [AliasDrawer("Rotate By")] public Atom.RecordedVector3 vector3;
+            [HideInInspector] public Vector3 ghostLastRecordedRotation;
+            [HideInInspector] public Vector3 LastVector3;
+            [HideInInspector] public Action ForceRefreshData;
+            [AliasDrawer("Direction")]
+            public Direction direction;
+
+            public override void Setup(GameObject target, BaseBehaviour behaviour)
+            {
+                base.Setup(target, behaviour);
+                vector3 = new();
+                vector3.Setup(behaviour);
+                vector3.Set(new Vector3(0f, 15f, 0f));
             }
         }
 
         [Serializable]
         public class Translate : BaseBroadcasterTemplate
         {
-            public TranslateField field;
-            public TranslateComponentData data = new();
-            public Action ForceRefreshData;
+            [AliasDrawer("Move By")] public Atom.RecordedVector3 recordedVector3;
+            [HideInInspector] public Vector3 LastVector3;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)
             {
                 base.Setup(target, behaviour);
-                data.OnBroadcastUpdated = behaviour.OnBroadcastStringUpdated;
-                data.recordedVector3 = new();
-                data.recordedVector3.Setup(behaviour);
-                data.recordedVector3.Set(new Vector3(0f, 1f, 0f));
+                recordedVector3 = new();
+                recordedVector3.Setup(behaviour);
+                recordedVector3.Set(new Vector3(0f, 1f, 0f));
             }
         }
 
@@ -323,6 +351,7 @@ namespace Terra.Studio
         public float pauseBetween;
         public Listen listen;
         public BroadcastAt broadcastAt;
+        [HideInInspector]
         public Action<string, string> OnBroadcastUpdated;
         public string broadcast;
         public string Broadcast
@@ -368,6 +397,7 @@ namespace Terra.Studio
         public string listenTo;
         public Listen listen;
         public BroadcastAt broadcastAt;
+
         public Action<string, string> OnBroadcastUpdated;
         public string broadcast;
         public string Broadcast

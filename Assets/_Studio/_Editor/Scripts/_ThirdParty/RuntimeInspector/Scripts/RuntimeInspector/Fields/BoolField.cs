@@ -47,6 +47,7 @@ namespace RuntimeInspectorNamespace
         {
             Value = input;
             Inspector.RefreshDelayed();
+            OnValueUpdated?.Invoke(input);
         }
 
         protected override void OnSkinChanged()
@@ -62,7 +63,12 @@ namespace RuntimeInspectorNamespace
         public override void Refresh()
         {
             base.Refresh();
-            input.isOn = (bool)Value;
+            input.SetIsOnWithoutNotify((bool)Value);
+        }
+
+        public override void SetInteractable(bool on)
+        {
+           
         }
     }
 }

@@ -88,6 +88,9 @@ namespace RuntimeInspectorNamespace
             copyPasteView.Repaint();
         }
 
-
+        public override void SetInteractable(bool on)
+        {
+           
+        }
     }
 }

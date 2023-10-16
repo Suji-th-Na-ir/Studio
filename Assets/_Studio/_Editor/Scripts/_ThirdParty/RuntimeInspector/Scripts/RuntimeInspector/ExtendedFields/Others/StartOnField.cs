@@ -170,5 +170,11 @@ namespace RuntimeInspectorNamespace
                 ShowHideListenDD();
             }
         }
+
+        public override void SetInteractable(bool on)
+        {
+            startOn.interactable = on;
+            listenOn.interactable = on;
+        }
     }
 }

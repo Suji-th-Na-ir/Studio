@@ -13,6 +13,7 @@ namespace RuntimeInspectorNamespace
         public delegate object Getter();
         public delegate void Setter(object value);
         protected Action<string, string> onStringUpdated;
+        public virtual Action<object> OnValueUpdated { get; set; }
 
 #pragma warning disable 0649
         [SerializeField]
@@ -179,6 +180,9 @@ namespace RuntimeInspectorNamespace
             return true;
         }
 
+        public abstract void SetInteractable(bool on);
+        public virtual void InvokeUpdateDropdown(List<string> dropdowns){ }
+
         public void BindTo(InspectorField parent, MemberInfo variable, string variableName = null)
         {
             m_Component = variable.DeclaringType;
@@ -187,7 +191,7 @@ namespace RuntimeInspectorNamespace
             {
                 var displayNameAttribute = field.GetCustomAttribute<AliasDrawerAttribute>();
                 string displayName = displayNameAttribute?.Alias;
-                variableName ??= string.IsNullOrEmpty(displayName) ? field.Name : displayName;
+                variableName = string.IsNullOrEmpty(displayName) ? field.Name : displayName;
 #if UNITY_EDITOR || !NETFX_CORE
                 if (!parent.BoundVariableType.IsValueType)
 #else
@@ -219,7 +223,7 @@ namespace RuntimeInspectorNamespace
             {
                 var displayNameAttribute = property.GetCustomAttribute<AliasDrawerAttribute>();
                 string displayName = displayNameAttribute?.Alias;
-                variableName ??= string.IsNullOrEmpty(displayName) ? property.Name : displayName;
+                variableName = string.IsNullOrEmpty(displayName) ? property.Name : displayName;
 
 #if UNITY_EDITOR || !NETFX_CORE
                 if (!parent.BoundVariableType.IsValueType)
@@ -249,7 +253,18 @@ namespace RuntimeInspectorNamespace
             var doesHaveOnValueChangedAttribute = fieldInfo.HasAttribute<OnValueChangedAttribute>();
             if (!doesHaveOnValueChangedAttribute) return;
             var attribute = fieldInfo.GetAttribute<OnValueChangedAttribute>();
-            onStringUpdated = attribute.OnValueUpdated((BaseBehaviour)instance);
+
+            if (instance as BaseBehaviour!=null)
+            {
+                onStringUpdated = attribute.OnValueUpdated((BaseBehaviour)instance);
+            }
+            else
+            {
+                if (instance as Atom.BaseBroadcasterTemplate!=null)
+                {
+                    onStringUpdated = attribute.OnValueUpdated(((Atom.BaseBroadcasterTemplate)instance).behaviour);
+                }
+            }
         }
 
         private bool IsObscurerTapped(FieldInfo fieldInfo)
@@ -277,7 +292,7 @@ namespace RuntimeInspectorNamespace
                 Name = variableName;
             }
             m_boundVariableType = variableType;
-            ReflectedName = variableName;
+            ReflectedName = reflectedName;
 
             this.getter = getter;
             this.setter = setter;
@@ -432,6 +447,8 @@ namespace RuntimeInspectorNamespace
 
         public override bool ShouldRefresh { get { return true; } }
 
+        public bool ignoreHeadingSpace = false;
+
         private bool m_isExpanded = false;
         public bool IsExpanded
         {
@@ -503,21 +520,23 @@ namespace RuntimeInspectorNamespace
             base.Initialize();
 
             expandToggleTransform = (RectTransform)expandToggle.transform;
-            if (isExpandable)
-            {
-                expandArrow.gameObject.SetActive(true);
-                expandToggle.PointerClick += (_) =>
-                {
-                    CheckAndExpand();
-                };
-            }
-            else
+            if (!isExpandable)
             {
                 expandArrow.gameObject.SetActive(false);
+                IsExpanded = m_isExpanded;
+                return;
             }
-
+            expandArrow.gameObject.SetActive(true);
+            expandToggle.PointerClick += (_) =>
+            {
+                CheckAndExpand();
+            };
             IsExpanded = m_isExpanded;
         }
+
+
+
+    
 
         protected void CheckAndExpand()
         {
@@ -553,7 +572,14 @@ namespace RuntimeInspectorNamespace
 
             if (m_headerVisibility != RuntimeInspector.HeaderVisibility.Hidden)
             {
-                layoutGroup.padding.top = Skin.LineHeight;
+                if (!ignoreHeadingSpace)
+                {
+                    layoutGroup.padding.top = Skin.LineHeight;
+                }
+                else
+                {
+                    layoutGroup.padding.top = (int)(Skin.LineHeight * 0.11f);
+                }
 
                 if (m_headerVisibility == RuntimeInspector.HeaderVisibility.Collapsible)
                 {
@@ -687,24 +713,32 @@ namespace RuntimeInspectorNamespace
             return variableDrawer;
         }
 
-        public InspectorField CreateDrawerForVariable(MemberInfo variable, string variableName = null)
+        public InspectorField CreateDrawerForVariable(MemberInfo variable, string variableName = null,bool takeOriginalDepth=false)
         {
             // xnx 
             if (variable.Name.ToLower() == "enabled")
                 return null;
             // xnx
+            var displayNameAttribute = variable.GetCustomAttribute<AliasDrawerAttribute>();
+            string displayName = displayNameAttribute?.Alias;
+            variableName = string.IsNullOrEmpty(displayName) ? variableName : displayName;
 
+            int depth = Depth;
+            if(!takeOriginalDepth)
+            {
+                depth += 1;
+            }
             Type variableType = variable is FieldInfo ? ((FieldInfo)variable).FieldType : ((PropertyInfo)variable).PropertyType;
             if (variable is FieldInfo fi && TryGetHeaderField(fi, out var header))
             {
-                var headerDrawer = Inspector.CreateDrawerForType(typeof(HeaderAttribute), drawArea, Depth + 1, true, variable);
+                var headerDrawer = Inspector.CreateDrawerForType(typeof(HeaderAttribute), drawArea, depth, true, variable);
                 if (headerDrawer != null)
                 {
                     headerDrawer.NameRaw = header;
                 }
                 elements.Add(headerDrawer);
             }
-            InspectorField variableDrawer = Inspector.CreateDrawerForType(variableType, drawArea, Depth + 1, true, variable);
+            InspectorField variableDrawer = Inspector.CreateDrawerForType(variableType, drawArea, depth, true, variable);
             if (variableDrawer != null)
             {
                 variableDrawer.BindTo(this, variable, variableName == null ? null : string.Empty);
