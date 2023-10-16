@@ -226,6 +226,13 @@ namespace RuntimeInspectorNamespace
                                     atom.behaviour.OnBroadcastStringUpdated(atom.broadcast, lastBroadcastString);
                                 }
                                 break;
+
+                            case RepeatData.Broadcast:
+                                if (atom.broadcastAt != BroadcastAt.Never)
+                                {
+                                    atom.broadcast = _atom.broadcast;
+                                }
+                                break;
                         }
                     }
                 }
