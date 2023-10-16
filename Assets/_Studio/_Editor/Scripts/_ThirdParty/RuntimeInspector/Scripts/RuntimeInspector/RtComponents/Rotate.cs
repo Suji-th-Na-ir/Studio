@@ -1,10 +1,9 @@
 using UnityEngine;
-using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
 using System.Collections.Generic;
 
-namespace RuntimeInspectorNamespace
+namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.Rotate")]
     public class Rotate : BaseBehaviour
@@ -16,6 +15,7 @@ namespace RuntimeInspectorNamespace
         public Atom.PlayVfx PlayVFX = new();
 
         public override string ComponentName => nameof(Rotate);
+        public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]

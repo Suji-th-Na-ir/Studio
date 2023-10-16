@@ -29,6 +29,7 @@ namespace Terra.Studio
         [AliasDrawer("Play VFX")] public Atom.PlayVfx playVFXWhenOff = new();
 
         public override string ComponentName => nameof(Switch);
+        public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]

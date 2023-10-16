@@ -101,12 +101,12 @@ MonoBehaviour:
     DisplayName: Game Started
   - Key: Terra.Studio.Listener
     EventName: Terra.Studio.ListenerActionEvent
-    EventValue: 3
+    EventValue: 4
     DefaultData: 
     DisplayName: Broadcast Listened
   - Key: Terra.Studio.MouseAction
     EventName: Terra.Studio.MouseActionEvent
-    EventValue: 2
+    EventValue: 3
     DefaultData: OnClick
     DisplayName: Clicked
   - Key: Terra.Studio.TriggerAction

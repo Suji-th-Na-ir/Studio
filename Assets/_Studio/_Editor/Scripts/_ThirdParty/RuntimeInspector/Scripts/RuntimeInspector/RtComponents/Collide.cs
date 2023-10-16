@@ -7,7 +7,7 @@ namespace Terra.Studio
     [EditorDrawComponent("Terra.Studio.Collide")]
     public class Collide : BaseBehaviour
     {
-        public enum DestroyOnEnum
+        public enum StartOn
         {
             [EditorEnumField("Terra.Studio.TriggerAction", "Player")]
             OnPlayerCollide,
@@ -23,6 +23,7 @@ namespace Terra.Studio
         public string broadcast = null;
 
         public override string ComponentName => nameof(Collide);
+        public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]
@@ -36,14 +37,14 @@ namespace Terra.Studio
         protected override void Awake()
         {
             base.Awake();
-            startOn.Setup<DestroyOnEnum>(gameObject, ComponentName);
+            startOn.Setup<StartOn>(gameObject, ComponentName);
             playSFX.Setup<Collide>(gameObject);
             playVFX.Setup<Collide>(gameObject);
         }
 
         public override (string type, string data) Export()
         {
-            var start = Helper.GetEnumValueByIndex<DestroyOnEnum>(startOn.data.startIndex);
+            var start = Helper.GetEnumValueByIndex<StartOn>(startOn.data.startIndex);
             var data = new CollideComponent()
             {
                 canPlaySFX = playSFX.data.canPlay,
@@ -94,7 +95,7 @@ namespace Terra.Studio
             {
                 properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFX.data.clipName);
             }
-            var startOnName = StartOn.OnPlayerCollide.ToString();
+            var startOnName = Studio.StartOn.OnPlayerCollide.ToString();
             var previewData = new BehaviourPreviewUI.PreviewData()
             {
                 DisplayName = GetDisplayName(),

@@ -83,10 +83,14 @@ namespace Terra.Studio
             var headingGroup = Helper.FindDeepChild(transform, HEADING_GROUP_LOC);
             var leftGroup = Helper.FindDeepChild(headingGroup, LEFT_GROUP_LOC);
             var headingText = Helper.FindDeepChild<TextMeshProUGUI>(leftGroup, HEADING_TEXT_LOC);
+            var icon = Helper.FindDeepChild<Image>(leftGroup, ICON_IMAGE_LOC);
             var rightGroup = Helper.FindDeepChild(headingGroup, RIGHT_GROUP_LOC);
             var restartBtn = Helper.FindDeepChild<Button>(rightGroup, RESTART_BUTTON_LOC);
             var closeBtn = Helper.FindDeepChild<Button>(rightGroup, CLOSE_BUTTON_LOC);
             headingText.text = data.DisplayName;
+            var preset = EditorOp.Resolve<EditorSystem>().ComponentIconsPreset;
+            var sprite = preset.GetIcon(instance.GetType().Name);
+            icon.sprite = sprite;
             AddListenerToButton(closeBtn, () => { EditorOp.Resolve<BehaviourPreview>().Preview(instance); });
             AddListenerToButton(restartBtn, () =>
             {
@@ -99,7 +103,6 @@ namespace Terra.Studio
         private void PrepareProperties()
         {
             var properties = data.GetProperty();
-            var headingGroup = Helper.FindDeepChild(transform, HEADING_GROUP_LOC);
             var bottomGroup = Helper.FindDeepChild(transform, BOTTOM_GROUP_LOC);
             var propertyField = Helper.FindDeepChild(bottomGroup, PROPERTY_GROUP_LOC);
             ClearAllFieldsExceptFirstChild(bottomGroup);
@@ -135,7 +138,12 @@ namespace Terra.Studio
             var iconImage = Helper.FindDeepChild<Image>(leftGroup, ICON_IMAGE_LOC);
             var preset = EditorOp.Resolve<EditorSystem>().ComponentIconsPreset;
             var icon = preset.GetIcon(data.EventName);
-            headingText.text = data.EventName;
+            var isAvailable = SystemOp.Resolve<System>().SystemData.TryGetEventDisplayName(data.EventName, out var displayName);
+            if (!isAvailable)
+            {
+                displayName = data.EventName;
+            }
+            headingText.text = displayName;
             iconImage.sprite = icon;
             var bottomGroup = Helper.FindDeepChild(eventGroup, BOTTOM_GROUP_LOC);
             var isListening = !string.IsNullOrEmpty(data.Listen);

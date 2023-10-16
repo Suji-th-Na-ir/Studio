@@ -25,6 +25,7 @@ namespace Terra.Studio
         public Atom.PlayVfx playVFX = new();
 
         public override string ComponentName => nameof(StopRotate);
+        public override bool CanPreview => false;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]

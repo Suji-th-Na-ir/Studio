@@ -31,6 +31,7 @@ namespace Terra.Studio
         public string broadcast;
 
         public override string ComponentName => nameof(SetObjectPosition);
+        public override bool CanPreview => true;
         public override Atom.RecordedVector3 RecordedVector3 => targetPosition;
 
         protected override bool CanBroadcast => true;

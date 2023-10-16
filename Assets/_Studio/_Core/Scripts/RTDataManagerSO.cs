@@ -124,24 +124,13 @@ namespace Terra.Studio
             return type;
         }
 
-        public bool TryGetEventDisplayName(string key, string value, out string displayName)
+        public bool TryGetEventDisplayName(string enumKey, out string displayName)
         {
             displayName = null;
-            var foundData = eventData.FindAll(x => x.Key.Equals(key));
-            if (foundData != null && foundData.Count > 0)
+            var foundData = eventData.Find(x => x.EventValue.ToString().Equals(enumKey));
+            if (foundData != null)
             {
-                if (foundData.Count == 1)
-                {
-                    displayName = foundData[0].DisplayName;
-                }
-                else
-                {
-                    var shortListedData = foundData.Find(x => x.DefaultData.Equals(value));
-                    if (shortListedData != null)
-                    {
-                        displayName = shortListedData.DisplayName;
-                    }
-                }
+                displayName = foundData.DisplayName;
             }
             return !string.IsNullOrEmpty(displayName);
         }

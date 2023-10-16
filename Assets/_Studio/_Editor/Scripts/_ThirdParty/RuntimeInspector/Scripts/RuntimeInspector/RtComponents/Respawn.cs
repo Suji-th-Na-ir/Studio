@@ -1,9 +1,8 @@
-using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
 using System.Collections.Generic;
 
-namespace RuntimeInspectorNamespace
+namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.Respawn"), AliasDrawer("Kill Player")]
     public class Respawn : BaseBehaviour
@@ -15,6 +14,7 @@ namespace RuntimeInspectorNamespace
         public string Broadcast = null;
 
         public override string ComponentName => nameof(Respawn);
+        public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]

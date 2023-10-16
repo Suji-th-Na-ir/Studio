@@ -18,6 +18,7 @@ namespace Terra.Studio
         //public bool executeMultipleTimes = true;
 
         public override string ComponentName => nameof(Teleport);
+        public override bool CanPreview => true;
         public override Atom.RecordedVector3 RecordedVector3 => teleportTo;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => false;

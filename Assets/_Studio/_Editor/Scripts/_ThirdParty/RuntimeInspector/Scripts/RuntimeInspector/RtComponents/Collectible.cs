@@ -1,9 +1,8 @@
-using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
 using System.Collections.Generic;
 
-namespace RuntimeInspectorNamespace
+namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.Collectable")]
     public class Collectible : BaseBehaviour
@@ -26,6 +25,7 @@ namespace RuntimeInspectorNamespace
         public string Broadcast = null;
 
         public override string ComponentName => nameof(Collectible);
+        public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]

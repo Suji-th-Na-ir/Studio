@@ -13,6 +13,7 @@ namespace Terra.Studio
         public Recorder.GhostDescription GhostDescription;
 
         public abstract string ComponentName { get; }
+        public abstract bool CanPreview { get; }
         public virtual Atom.RecordedVector3 RecordedVector3 { get; }
 
         protected abstract bool CanBroadcast { get; }
@@ -164,34 +165,13 @@ namespace Terra.Studio
             {
                 return displayName;
             }
+            Debug.Log($"Did not find name for: {type}");
             return "NOT_FOUND_TYPE";
         }
 
-        protected virtual void Update()
+        public void DoPreview()
         {
-            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.P) && CanPerformShortcut())
-            {
-                EditorOp.Resolve<BehaviourPreview>().Preview(this);
-            }
-        }
-
-        private bool CanPerformShortcut()
-        {
-            var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
-            if (selections.Count != 1)
-            {
-                return false;
-            }
-            if (selections[0].gameObject != gameObject)
-            {
-                return false;
-            }
-            var components = gameObject.GetComponents<BaseBehaviour>();
-            if (components.Length != 1)
-            {
-                return false;
-            }
-            return true;
+            EditorOp.Resolve<BehaviourPreview>().Preview(this);
         }
 
         public virtual BehaviourPreviewUI.PreviewData GetPreviewData()

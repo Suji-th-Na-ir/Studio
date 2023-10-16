@@ -1,25 +1,24 @@
-using Terra.Studio;
 using PlayShifu.Terra;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace RuntimeInspectorNamespace
+namespace Terra.Studio
 {
-    public enum DestroyOnEnum
-    {
-        [EditorEnumField("Terra.Studio.TriggerAction", "Player"), AliasDrawer("Player Touches")]
-        OnPlayerCollide,
-        [EditorEnumField("Terra.Studio.TriggerAction", "Other"), AliasDrawer("Other Object Touches")]
-        OnObjectCollide,
-        [EditorEnumField("Terra.Studio.MouseAction", "OnClick"), AliasDrawer("Clicked")]
-        OnClick,
-        [EditorEnumField("Terra.Studio.Listener"), AliasDrawer("Broadcast Listened")]
-        BroadcastListen
-    }
-
     [EditorDrawComponent("Terra.Studio.DestroyOn"), AliasDrawer("Destroy Self")]
     public class DestroyOn : BaseBehaviour
     {
+        public enum DestroyOnEnum
+        {
+            [EditorEnumField("Terra.Studio.TriggerAction", "Player"), AliasDrawer("Player Touches")]
+            OnPlayerCollide,
+            [EditorEnumField("Terra.Studio.TriggerAction", "Other"), AliasDrawer("Other Object Touches")]
+            OnObjectCollide,
+            [EditorEnumField("Terra.Studio.MouseAction", "OnClick"), AliasDrawer("Clicked")]
+            OnClick,
+            [EditorEnumField("Terra.Studio.Listener"), AliasDrawer("Broadcast Listened")]
+            BroadcastListen
+        }
+
         [AliasDrawer("DestroyWhen")]
         public Atom.StartOn StartOn = new();
         public Atom.PlaySfx PlaySFX = new();
@@ -29,6 +28,7 @@ namespace RuntimeInspectorNamespace
         public string Broadcast = null;
 
         public override string ComponentName => nameof(DestroyOn);
+        public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]

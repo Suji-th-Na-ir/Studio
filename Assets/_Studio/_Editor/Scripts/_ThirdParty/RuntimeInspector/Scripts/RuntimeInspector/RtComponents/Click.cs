@@ -14,6 +14,7 @@ namespace Terra.Studio
         //public bool executeMultipleTimes = true;
 
         public override string ComponentName => nameof(Click);
+        public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]
