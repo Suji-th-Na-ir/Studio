@@ -59,10 +59,15 @@ namespace RuntimeInspectorNamespace
             {
                 broadcastFieldDrawer.gameObject.SetActive(false);
                 val.broadcast = string.Empty;
-                val.behaviour.OnBroadcastStringUpdated(val.broadcast, lastBroadcastString);
+                val.behaviour.OnBroadcastStringUpdated(val.broadcast, val.lastEnteredBroadcast);
             }
             else
             {
+                if(!string.IsNullOrEmpty( val.lastEnteredBroadcast))
+                {
+                    val.broadcast = val.lastEnteredBroadcast;
+                    val.behaviour.OnBroadcastStringUpdated(val.lastEnteredBroadcast, string.Empty);
+                }
                 broadcastFieldDrawer.gameObject.SetActive(true);
             }
         }
@@ -101,6 +106,7 @@ namespace RuntimeInspectorNamespace
         private void OnBroadcastValueChanged(object obj)
         {
             var val = (Atom.Repeat)Value;
+            val.lastEnteredBroadcast = lastBroadcastString;
             lastBroadcastString = val.broadcast;
             UpdateOtherCompData(val, RepeatData.Broadcast);
         }
@@ -218,19 +224,26 @@ namespace RuntimeInspectorNamespace
                                 if (!ignore.Contains(name))
                                 {
                                     atom.broadcastAt = _atom.broadcastAt;
+                                    if (string.IsNullOrEmpty(atom.broadcast))
+                                    {
+                                        atom.behaviour.OnBroadcastStringUpdated(atom.lastEnteredBroadcast, string.Empty);
+                                    }
                                 }
                                 if (atom.broadcastAt == BroadcastAt.Never)
                                 {
                                     var old = atom.broadcast;
+                                    atom.lastEnteredBroadcast = atom.broadcast;
                                     atom.broadcast = String.Empty;
-                                    atom.behaviour.OnBroadcastStringUpdated(atom.broadcast, lastBroadcastString);
+                                    atom.behaviour.OnBroadcastStringUpdated(atom.broadcast, old);
                                 }
                                 break;
 
                             case RepeatData.Broadcast:
                                 if (atom.broadcastAt != BroadcastAt.Never)
                                 {
+                                    atom.lastEnteredBroadcast = atom.broadcast;
                                     atom.broadcast = _atom.broadcast;
+                                    atom.behaviour.OnBroadcastStringUpdated(atom.broadcast, atom.lastEnteredBroadcast);
                                 }
                                 break;
                         }

@@ -149,6 +149,7 @@ namespace Terra.Studio
             [AliasDrawer("Broadcast At")] public BroadcastAt broadcastAt;
             [AliasDrawer("Broadcast"), OnValueChanged(UpdateBroadcast = true)]
             public string broadcast;
+            [HideInInspector] public string lastEnteredBroadcast;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)
             {
