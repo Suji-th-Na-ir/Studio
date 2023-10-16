@@ -307,6 +307,7 @@ namespace RuntimeInspectorNamespace
             broadcastFieldDrawer = CreateDrawerForField(nameof(val.broadcast));
             broadcastFieldDrawer.OnValueUpdated += OnBroadcastValueChanged;
 
+            lastBroadcastString = val.broadcast;
             ValidateRepeatValue();
             ValidateRepeatForeverValue(val.repeatForever);
             ToggleBroadcastField();
