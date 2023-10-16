@@ -74,6 +74,7 @@ namespace Terra.Studio
         public static GameObject DuplicateGameObject(GameObject actualGameObject, Transform parent, params Vector3[] trs)
         {
             var go = Object.Instantiate(actualGameObject, parent);
+            if (!go.activeSelf) go.SetActive(true);
             return ResolveTRS(go, null, trs);
         }
 

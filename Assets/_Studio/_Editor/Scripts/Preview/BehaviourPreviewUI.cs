@@ -105,18 +105,29 @@ namespace Terra.Studio
             var properties = data.GetProperty();
             var bottomGroup = Helper.FindDeepChild(transform, BOTTOM_GROUP_LOC);
             var propertyField = Helper.FindDeepChild(bottomGroup, PROPERTY_GROUP_LOC);
-            ClearAllFieldsExceptFirstChild(bottomGroup);
             if (properties.Count == 0)
             {
+                ClearAllFieldsExceptFirstChild(bottomGroup);
                 Destroy(propertyField.gameObject);
                 return;
             }
             var fields = new GameObject[properties.Count];
             fields[0] = propertyField.gameObject;
-            for (int i = 1; i < properties.Count; i++)
+            if (bottomGroup.transform.childCount != properties.Count)
             {
-                var newInstance = Instantiate(propertyField.gameObject, bottomGroup);
-                fields[i] = newInstance;
+                ClearAllFieldsExceptFirstChild(bottomGroup);
+                for (int i = 1; i < properties.Count; i++)
+                {
+                    var newInstance = Instantiate(propertyField.gameObject, bottomGroup);
+                    fields[i] = newInstance;
+                }
+            }
+            else
+            {
+                for (int i = 1; i < properties.Count; i++)
+                {
+                    fields[i] = bottomGroup.GetChild(i).gameObject;
+                }
             }
             var index = -1;
             foreach (var property in properties)

@@ -14,7 +14,6 @@ namespace Terra.Studio
         public Action ForceInitiateConditionalEvent => OnRuntimeDataInitialized;
 
         private GameObject originalTarget;
-        private Vector3 cachedPosition; //Temporary
         private Scene cachedRuntimeScene;
 
         private static string runtimeSceneName;
@@ -96,10 +95,8 @@ namespace Terra.Studio
             var json = JsonConvert.SerializeObject(worldData);
             SystemOp.Resolve<CrossSceneDataHolder>().Set(json);
             originalTarget = baseBehaviour.gameObject;
-            cachedPosition = originalTarget.transform.position;
-            originalTarget.transform.position = new Vector3(-100f, -100f, -100f);
-            //originalTarget.SetActive(false);
             SetObjectPathData();
+            originalTarget.SetActive(false);
         }
 
         private void SetObjectPathData()
@@ -145,8 +142,7 @@ namespace Terra.Studio
             SystemOp.Resolve<System>().SetSimulationState(false);
             SystemOp.Resolve<System>().CanInitiateSubsystemProcess = () => { return true; };
             SystemOp.Register(EditorOp.Resolve<EditorSystem>() as ISubsystem);
-            //originalTarget.SetActive(true);
-            originalTarget.transform.position = cachedPosition;
+            originalTarget.SetActive(true);
         }
 
         public void OnRestartRequested()
