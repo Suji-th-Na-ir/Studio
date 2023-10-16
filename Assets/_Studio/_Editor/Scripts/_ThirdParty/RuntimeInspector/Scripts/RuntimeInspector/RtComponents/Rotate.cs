@@ -78,7 +78,7 @@ namespace RuntimeInspectorNamespace
             var targetVector = (Vector3)Type.vector3.Get();
             var comp = new RotateComponent
             {
-                direction = Type.direction,
+                direction = repeat.repeatType == RepeatDirectionType.PingPong ? Direction.Clockwise : Type.direction,
                 repeatType = repeat.repeatType,
                 speed = Type.speed,
                 rotateTo = targetVector,
