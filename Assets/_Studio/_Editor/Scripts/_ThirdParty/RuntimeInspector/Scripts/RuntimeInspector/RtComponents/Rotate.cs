@@ -19,7 +19,7 @@ namespace RuntimeInspectorNamespace
 
         public override string ComponentName => nameof(Rotate);
         protected override bool CanBroadcast => true;
-        protected override bool CanListen => true;
+        protected override bool CanListen => StartOn.data.startIndex == 4;
         protected override string[] BroadcasterRefs => new string[]
         {
             repeat.broadcast
