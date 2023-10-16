@@ -120,15 +120,12 @@ namespace RuntimeInspectorNamespace
 
         public override void OnBroadcastStringUpdated(string newString, string oldString)
         {
-            Debug.Log($"New{newString}   OLd{oldString}");
             if (repeat.broadcastAt != BroadcastAt.Never)
             {
-                Debug.Log("Updaing broacast");
                 EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(newString, oldString, DisplayDock);
             }
             else if (repeat.broadcastAt == BroadcastAt.Never && newString == string.Empty)
             {
-                Debug.Log("Updaing broacast");
                 EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(newString, oldString, DisplayDock);
             }
         }
