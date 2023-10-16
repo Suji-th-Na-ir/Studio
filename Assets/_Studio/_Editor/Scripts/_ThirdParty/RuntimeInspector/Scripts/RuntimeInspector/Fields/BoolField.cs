@@ -41,13 +41,13 @@ namespace RuntimeInspectorNamespace
             }
             lastSubmittedValue = input;
             OnValueSubmitted(input);
-            OnValueUpdated?.Invoke(input);
         }
 
         private void OnValueSubmitted(bool input)
         {
             Value = input;
             Inspector.RefreshDelayed();
+            OnValueUpdated?.Invoke(input);
         }
 
         protected override void OnSkinChanged()
