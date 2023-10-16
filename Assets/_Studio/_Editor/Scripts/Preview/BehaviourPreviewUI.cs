@@ -100,7 +100,7 @@ namespace Terra.Studio
         {
             var properties = data.GetProperty();
             var headingGroup = Helper.FindDeepChild(transform, HEADING_GROUP_LOC);
-            var bottomGroup = Helper.FindDeepChild(headingGroup, BOTTOM_GROUP_LOC);
+            var bottomGroup = Helper.FindDeepChild(transform, BOTTOM_GROUP_LOC);
             var propertyField = Helper.FindDeepChild(bottomGroup, PROPERTY_GROUP_LOC);
             ClearAllFieldsExceptFirstChild(bottomGroup);
             if (properties.Count == 0)
