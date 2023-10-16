@@ -72,7 +72,8 @@ namespace RuntimeInspectorNamespace
                 translateType = (RepeatDirectionType)repeat.repeatType,
                 speed = speed,
                 pauseFor = (repeat.repeat <= 1 && !repeat.repeatForever) ? 0 : repeat.pauseFor,
-                repeatFor = repeat.repeatForever ? int.MaxValue : repeat.repeat,
+                repeatForever = repeat.repeatForever,
+                repeatFor = repeat.repeat,
                 targetPosition = (Vector3)Type.recordedVector3.Get(),
                 startPosition = transform.position,
                 IsConditionAvailable = true,
@@ -143,9 +144,9 @@ namespace RuntimeInspectorNamespace
             repeat.repeatType = comp.translateType;
             speed = comp.speed;
             repeat.pauseFor = comp.pauseFor;
-            repeat.repeatForever = comp.repeatFor == int.MaxValue;
+            repeat.repeatForever = comp.repeatForever;
             Type.recordedVector3.Set(comp.targetPosition);
-            repeat.repeat = comp.repeatFor == int.MaxValue? 1 :comp.repeatFor;
+            repeat.repeat = comp.repeatFor;
             repeat.broadcast = comp.Broadcast;
             repeat.broadcastAt = comp.broadcastAt;
             StartOn.data.listenName = comp.ConditionData;

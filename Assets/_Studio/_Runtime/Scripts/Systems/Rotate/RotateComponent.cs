@@ -27,6 +27,7 @@ namespace Terra.Studio
         public float speed;
         public float pauseFor;
         public int repeatFor;
+        public bool repeatForever;
         public bool canPlaySFX;
         public string sfxName;
         public int sfxIndex;

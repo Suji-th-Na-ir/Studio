@@ -84,7 +84,8 @@ namespace RuntimeInspectorNamespace
                 speed = speed,
                 rotateTo = targetVector,
                 pauseFor = repeat.pauseFor,
-                repeatFor = repeat.repeatForever ? int.MaxValue : repeat.repeat,
+                repeatFor = repeat.repeat,
+                repeatForever = repeat.repeatForever,
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
@@ -153,8 +154,8 @@ namespace RuntimeInspectorNamespace
             speed = comp.speed;
             Type.vector3.Set(comp.rotateTo);
             repeat.pauseFor = comp.pauseFor;
-            repeat.repeat = comp.repeatFor == int.MaxValue ? 1 : comp.repeatFor;
-            repeat.repeatForever= comp.repeatFor == int.MaxValue;
+            repeat.repeat = comp.repeatFor;
+            repeat.repeatForever= comp.repeatForever;
             repeat.broadcastAt = comp.broadcastAt;
             repeat.broadcast = comp.Broadcast;
             repeat.repeatType = comp.repeatType;

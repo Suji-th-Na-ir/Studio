@@ -57,7 +57,6 @@ namespace Terra.Studio
             entityRef.loopsFinished = 0;
             entityRef.coveredDistance = 0f;
             entityRef.remainingDistance = pauseDistance;
-            entityRef.repeatForever = entityRef.repeatFor == int.MaxValue;
         }
 
         public void OnDemandRun(ref TranslateComponent translatable)

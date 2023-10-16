@@ -36,7 +36,7 @@ namespace Terra.Studio
             entityRef.currentRotateCount = 0;
             entityRef.canPause = entityRef.pauseFor > 0f;
             entityRef.shouldPingPong = entityRef.repeatType == RepeatDirectionType.PingPong;
-            entityRef.rotateForever = entityRef.repeatFor == int.MaxValue;
+            entityRef.rotateForever = entityRef.repeatForever;
             entityRef.directionFactor = (entityRef.direction == Direction.Clockwise) ? 1 : -1;
             RefreshRotation(ref entityRef);
         }
