@@ -240,8 +240,11 @@ namespace RuntimeInspectorNamespace
                                 atom.lastEnteredBroadcast = atom.Broadcast;
                                 break;
                             case RepeatData.RevertToOldValues:
-                                if(!string.IsNullOrEmpty( atom.lastEnteredBroadcast))
-                                atom.Broadcast = atom.lastEnteredBroadcast;
+                                if (!string.IsNullOrEmpty(atom.lastEnteredBroadcast))
+                                {
+                                    atom.Broadcast = string.Empty;
+                                    atom.Broadcast = atom.lastEnteredBroadcast;
+                                }
                                 break;
 
                         }
