@@ -78,8 +78,8 @@ namespace Terra.Studio
         {
             var covariance = EditorOp.Resolve<DataProvider>().GetCovariance(baseBehaviour);
             var virtualEntity = EditorOp.Resolve<SceneDataHandler>().GetVirtualEntity(baseBehaviour.gameObject, 0, true);
-            var components = new EntityBasedComponent[1];
             var cherryPickedComponent = virtualEntity.components.Where(x => x.type.Equals(covariance)).First();
+            virtualEntity.components = new EntityBasedComponent[] { cherryPickedComponent };
             if (virtualEntity.children != null)
             {
                 for (int i = 0; i < virtualEntity.children.Length; i++)
