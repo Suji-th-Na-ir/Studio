@@ -25,6 +25,7 @@ namespace Terra.Studio
         private const string REDO_BUTTON_LOC = "RedoButton";
 
         private GameObject primitivePanel;
+        private CanvasGroup canvasGroup;
 
         private void Awake()
         {
@@ -117,6 +118,9 @@ namespace Terra.Studio
             {
                 primitivePanel.SetActive(false);
             };
+
+            canvasGroup = GetComponentInChildren<CanvasGroup>();
+            EditorOp.Resolve<EditorSystem>().OnIncognitoEnabled += (isEnabled) => { canvasGroup.SetInteractive(!isEnabled); };
         }
 
         private void AddListenerEvent<T>(Button button, Action<T> callback, T type)
@@ -148,6 +152,12 @@ namespace Terra.Studio
 
             EditorOp.Resolve<SelectionHandler>().DeselectAll();
             EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);
+        }
+
+        private bool IsIncognito()
+        {
+            var isIncognito = EditorOp.Resolve<EditorSystem>().IsIncognitoEnabled;
+            return isIncognito;
         }
 
         private void SpawnPrimitivePrefab()

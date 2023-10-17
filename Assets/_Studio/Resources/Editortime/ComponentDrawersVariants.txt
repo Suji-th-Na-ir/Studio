@@ -1,18 +1,18 @@
 {
-  "Terra.Studio.Checkpoint": "RuntimeInspectorNamespace.Checkpoint",
-  "Terra.Studio.Collectable": "RuntimeInspectorNamespace.Collectible",
-  "Terra.Studio.DestroyOn": "RuntimeInspectorNamespace.DestroyOn",
-  "Terra.Studio.InGameTimer": "RuntimeInspectorNamespace.InGameTimer",
-  "Terra.Studio.Respawn": "RuntimeInspectorNamespace.Respawn",
-  "Terra.Studio.Rotate": "RuntimeInspectorNamespace.Rotate",
-  "Terra.Studio.Translate": "RuntimeInspectorNamespace.Translate",
+  "Terra.Studio.Checkpoint": "Terra.Studio.Checkpoint",
   "Terra.Studio.Click": "Terra.Studio.Click",
+  "Terra.Studio.Collectable": "Terra.Studio.Collectible",
   "Terra.Studio.Collide": "Terra.Studio.Collide",
+  "Terra.Studio.DestroyOn": "Terra.Studio.DestroyOn",
   "Terra.Studio.GameScore": "Terra.Studio.GameScore",
+  "Terra.Studio.InGameTimer": "Terra.Studio.InGameTimer",
   "Terra.Studio.Push": "Terra.Studio.Push",
+  "Terra.Studio.Respawn": "Terra.Studio.Respawn",
+  "Terra.Studio.Rotate": "Terra.Studio.Rotate",
   "Terra.Studio.SetObjectPosition": "Terra.Studio.SetObjectPosition",
   "Terra.Studio.StopRotate": "Terra.Studio.StopRotate",
   "Terra.Studio.StopTranslate": "Terra.Studio.StopTranslate",
   "Terra.Studio.Switch": "Terra.Studio.Switch",
-  "Terra.Studio.Teleport": "Terra.Studio.Teleport"
+  "Terra.Studio.Teleport": "Terra.Studio.Teleport",
+  "Terra.Studio.Translate": "Terra.Studio.Translate"
 }

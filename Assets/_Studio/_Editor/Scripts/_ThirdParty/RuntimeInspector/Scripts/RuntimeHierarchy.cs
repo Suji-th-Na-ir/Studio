@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using PlayShifu.Terra;
 using Terra.Studio;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -23,8 +24,8 @@ namespace RuntimeInspectorNamespace
         public delegate bool GameObjectFilterDelegate(Transform transform);
 
 #pragma warning disable 0649
-        [SerializeField]
-        public RuntimeInspectorSettings m_internalSettings;
+        [SerializeField] public RuntimeInspectorSettings m_internalSettings;
+
         [SerializeField]
         private float m_refreshInterval = 0f;
         public float RefreshInterval
@@ -456,6 +457,8 @@ namespace RuntimeInspectorNamespace
         int IListViewAdapter.Count { get { return totalItemCount; } }
         float IListViewAdapter.ItemHeight { get { return Skin.LineHeight; } }
 
+        private CanvasGroup canvasGroup;
+
         protected override void Awake()
         {
             base.Awake();
@@ -518,6 +521,8 @@ namespace RuntimeInspectorNamespace
 
             if (ExposeDontDestroyOnLoadScene)
                 OnSceneLoaded(GetDontDestroyOnLoadScene(), LoadSceneMode.Single);
+
+            EditorOp.Resolve<EditorSystem>().OnIncognitoEnabled += (isEnabled) => { ToggleInteractivity(!isEnabled); };
         }
 
         private void OnDestroy()
@@ -1853,6 +1858,15 @@ namespace RuntimeInspectorNamespace
             }
         }
 
+        public void ToggleInteractivity(bool isInteractable)
+        {
+            if (!canvasGroup && !TryGetComponent(out canvasGroup))
+            {
+                return;
+            }
+            canvasGroup.SetInteractive(isInteractable);
+        }
+
         RecycledListItem IListViewAdapter.CreateItem(Transform parent)
         {
             HierarchyField result = Instantiate(drawerPrefab, parent, false);
@@ -1862,8 +1876,9 @@ namespace RuntimeInspectorNamespace
             return result;
         }
 
-        internal void DuplicateSelectedObject () {
-            EditorOp.Resolve<SelectionHandler> ().DuplicateCurrentSelectedObject ();
+        internal void DuplicateSelectedObject()
+        {
+            EditorOp.Resolve<SelectionHandler>().DuplicateCurrentSelectedObject();
         }
     }
 }

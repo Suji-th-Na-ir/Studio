@@ -373,7 +373,9 @@ namespace RTG
                 var postObjectTransformChangedAction = new PostObjectTransformsChangedAction(_preTransformSnapshots, _postTransformSnapshot);
                 postObjectTransformChangedAction.Execute();
 
-                EditorOp.Resolve<IURCommand>().Record(
+                if (!EditorOp.Resolve<EditorSystem>().IsIncognitoEnabled)
+                {
+                    EditorOp.Resolve<IURCommand>().Record(
                     _preTransformSnapshots,
                     _postTransformSnapshot,
                     "Moved",
@@ -386,6 +388,7 @@ namespace RTG
                         }
                         RefreshPositionAndRotation();
                     });
+                }
             }
 
             RefreshPositionAndRotation();

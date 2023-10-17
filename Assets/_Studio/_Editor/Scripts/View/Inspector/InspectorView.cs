@@ -38,6 +38,7 @@ namespace Terra.Studio
         private void OnDestroy()
         {
             EditorOp.Unregister<InspectorView>(this);
+            EditorOp.Unregister<CopyPasteSystem>();
         }
     }
 }

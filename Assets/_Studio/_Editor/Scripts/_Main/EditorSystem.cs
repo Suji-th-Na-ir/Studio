@@ -1,23 +1,37 @@
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Terra.Studio
 {
     public class EditorSystem : MonoBehaviour, ISubsystem
     {
+        public event Action<bool> OnIncognitoEnabled;
+        public bool IsIncognitoEnabled { get; private set; }
+        public ComponentIconsPreset ComponentIconsPreset { get { return componentIconsPreset; } }
+
+        private Scene scene;
+        private ComponentIconsPreset componentIconsPreset;
+
         private void Awake()
         {
             SystemOp.Register(this as ISubsystem);
             EditorOp.Register(this);
         }
 
-        public void Initialize()
+        public void Initialize(Scene scene)
         {
-            EditorOp.Resolve<SelectionHandler>().Init();
+            this.scene = scene;
+            GetComponentData();
             EditorOp.Register(new DataProvider());
             EditorOp.Register(new Atom());
             EditorOp.Register(new SceneDataHandler());
             EditorOp.Register(new UndoRedoSystem() as IURCommand);
             EditorOp.Register(new FocusFieldsSystem());
+            EditorOp.Register(new Recorder());
+            EditorOp.Register(new CopyPasteSystem());
+            EditorOp.Register(new BehaviourPreview());
+            EditorOp.Resolve<SelectionHandler>().Init();
             EditorOp.Resolve<HierarchyView>().Init();
             EditorOp.Resolve<InspectorView>().Init();
             EditorOp.Resolve<ToolbarView>().Init();
@@ -39,6 +53,13 @@ namespace Terra.Studio
             EditorOp.Unregister<SceneDataHandler>();
             EditorOp.Unregister<IURCommand>();
             EditorOp.Unregister<Atom>();
+            EditorOp.Unregister<Recorder>();
+            EditorOp.Unregister<BehaviourPreview>();
+        }
+
+        public Scene GetScene()
+        {
+            return scene;
         }
 
         private void OnDestroy()
@@ -51,6 +72,17 @@ namespace Terra.Studio
         public void RequestSwitchState()
         {
             SystemOp.Resolve<System>().SwitchState();
+        }
+
+        public void RequestIncognitoMode(bool enable)
+        {
+            IsIncognitoEnabled = enable;
+            OnIncognitoEnabled?.Invoke(enable);
+        }
+
+        private void GetComponentData()
+        {
+            componentIconsPreset = EditorOp.Load<ComponentIconsPreset>("SOs/Component_Icon_SO");
         }
     }
 }

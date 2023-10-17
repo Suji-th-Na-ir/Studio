@@ -140,6 +140,7 @@ namespace RuntimeInspectorNamespace
                     });
             }
             OnValueSubmitted(input);
+            OnValueUpdated?.Invoke(Value);
         }
 
         private void OnValueSubmitted(int input)
@@ -197,6 +198,38 @@ namespace RuntimeInspectorNamespace
             int valueIndex = currEnumValues.IndexOf(Value);
             if (valueIndex != -1)
                 input.value = valueIndex;
+        }
+
+        public override void SetInteractable(bool on)
+        {
+            input.interactable = on;
+        }
+
+        public override void InvokeUpdateDropdown(List<string> names)
+        {
+            base.InvokeUpdateDropdown(names);
+            var lastValue = currEnumNames[input.value];
+            currEnumNames = new List<string>(names.Count);
+            currEnumValues = new List<object>(names.Count);
+
+            for (int i = 0; i < names.Count; i++)
+            {
+                currEnumNames.Add(names[i]);
+                currEnumValues.Add(Enum.Parse(BoundVariableType, names[i]));
+            }
+            enumNames[BoundVariableType] = currEnumNames;
+            enumValues[BoundVariableType] = currEnumValues;
+            
+            input.ClearOptions();
+            input.AddOptions(names);
+            if (names.Contains(lastValue))
+            {
+                input.value = currEnumNames.IndexOf(lastValue);
+            }
+            else
+            {
+                OnValueChanged(input.value);
+            }
         }
     }
 }

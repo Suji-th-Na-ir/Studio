@@ -15,6 +15,7 @@ namespace Terra.Studio
             [EditorEnumField("Terra.Studio.TriggerAction", "Other"), AliasDrawer("Other Object Touches")]
             OnObjectCollide
         }
+
         [AliasDrawer("StopWhen")]
         public Atom.StartOn startOn = new();
         [AliasDrawer("Broadcast")]
@@ -24,6 +25,7 @@ namespace Terra.Studio
         public Atom.PlayVfx playVFX = new();
 
         public override string ComponentName => nameof(StopTranslate);
+        public override bool CanPreview => false;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]

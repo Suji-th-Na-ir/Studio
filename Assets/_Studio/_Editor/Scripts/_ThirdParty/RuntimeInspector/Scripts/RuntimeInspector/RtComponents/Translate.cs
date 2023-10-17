@@ -1,8 +1,9 @@
-using Terra.Studio;
+using UnityEngine;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
+using System.Collections.Generic;
 
-namespace RuntimeInspectorNamespace
+namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.Translate"), AliasDrawer("Move")]
     public class Translate : BaseBehaviour
@@ -10,15 +11,19 @@ namespace RuntimeInspectorNamespace
         [AliasDrawer("MoveWhen")]
         public Atom.StartOn StartOn = new();
         public Atom.Translate Type = new();
+        [AliasDrawer("Speed")] public float speed = 5f;
+        [AliasDrawer("Repeat")] public Atom.Repeat repeat = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
 
         public override string ComponentName => nameof(Translate);
+        public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
-        protected override bool CanListen => true;
+        protected override bool CanListen => StartOn.data.startIndex == 4;
+        public override Atom.RecordedVector3 RecordedVector3 { get { return Type.recordedVector3; } }
         protected override string[] BroadcasterRefs => new string[]
         {
-            Type.data.Broadcast
+            repeat.Broadcast
         };
         protected override string[] ListenerRefs => new string[]
         {
@@ -29,27 +34,56 @@ namespace RuntimeInspectorNamespace
         {
             base.Awake();
             Type.Setup(gameObject, this);
+            repeat.Setup(gameObject, this);
             StartOn.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated, StartOn.data.startIndex == 4);
             PlaySFX.Setup<Translate>(gameObject);
             PlayVFX.Setup<Translate>(gameObject);
+            SetupGhostDescription();
+        }
+
+        private void SetupGhostDescription()
+        {
+            GhostDescription = new()
+            {
+                OnGhostInteracted = OnGhostDataModified,
+                SpawnTRS = GetCurrentOffsetInWorld,
+                ToggleGhostMode = () =>
+                {
+                    EditorOp.Resolve<Recorder>().TrackPosition_ShowGhostOnMultiselect(this, true);
+                },
+                ShowVisualsOnMultiSelect = true,
+                GetLastValue = () => { return Type.LastVector3; },
+                GetRecentValue = () => { return Type.recordedVector3.Get(); },
+                OnGhostModeToggled = (state) =>
+                {
+                    if (state)
+                    {
+                        SetLastValue();
+                    }
+                },
+                IsGhostInteractedInLastRecord = true,
+                GhostTo = gameObject
+            };
+            SetLastValue();
         }
 
         public override (string type, string data) Export()
         {
             var comp = new TranslateComponent
             {
-                translateType = (TranslateType)Type.data.translateType,
-                speed = Type.data.speed,
-                pauseFor = Type.data.pauseFor,
-                repeatFor = Type.data.repeat,
-                targetPosition = Type.data.moveBy,
+                translateType = (RepeatDirectionType)repeat.repeatType,
+                speed = speed,
+                pauseFor = (repeat.repeat <= 1 && !repeat.repeatForever) ? 0 : repeat.pauseFor,
+                repeatForever = repeat.repeatForever,
+                repeatFor = repeat.repeat,
+                targetPosition = (Vector3)Type.recordedVector3.Get(),
                 startPosition = transform.position,
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
-                broadcastAt = Type.data.broadcastAt,
-                IsBroadcastable = !string.IsNullOrEmpty(Type.data.Broadcast),
-                Broadcast = Type.data.Broadcast,
+                broadcastAt = repeat.broadcastAt,
+                IsBroadcastable = !string.IsNullOrEmpty(repeat.Broadcast),
+                Broadcast = repeat.Broadcast,
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
@@ -59,7 +93,7 @@ namespace RuntimeInspectorNamespace
                 listen = Listen.Always,
             };
 
-            ModifyDataAsPerGiven(ref comp);
+            //ModifyDataAsPerGiven(ref comp);
             gameObject.TrySetTrigger(false, true);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp, Formatting.Indented);
@@ -88,6 +122,18 @@ namespace RuntimeInspectorNamespace
             return data;
         }
 
+        public override void OnBroadcastStringUpdated(string newString, string oldString)
+        {
+            if (repeat.broadcastAt != BroadcastAt.Never)
+            {
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(newString, oldString, DisplayDock);
+            }
+            else if (repeat.broadcastAt == BroadcastAt.Never && newString == string.Empty)
+            {
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(newString, oldString, DisplayDock);
+            }
+        }
+
         public override void Import(EntityBasedComponent cdata)
         {
             var comp = JsonConvert.DeserializeObject<TranslateComponent>(cdata.data);
@@ -97,15 +143,15 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.canPlay = comp.canPlayVFX;
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
-            Type.data.translateType = (int)comp.translateType;
-            Type.data.speed = comp.speed;
-            Type.data.pauseFor = comp.pauseFor;
-            Type.data.moveBy = comp.targetPosition;
-            Type.data.repeat = comp.repeatFor;
-            Type.data.Broadcast = comp.Broadcast;
-            Type.data.broadcastAt = comp.broadcastAt;
-            Type.data.listenTo = comp.ConditionData;
-            Type.data.listen = comp.listen;
+            repeat.repeatType = comp.translateType;
+            speed = comp.speed;
+            repeat.pauseFor = comp.pauseFor;
+            repeat.repeatForever = comp.repeatForever;
+            Type.recordedVector3.Set(comp.targetPosition);
+            repeat.repeat = comp.repeatFor;
+            repeat.Broadcast = comp.Broadcast;
+            repeat.broadcastAt = comp.broadcastAt;
+            StartOn.data.listenName = comp.ConditionData;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
                 var res = (StartOn)result;
@@ -130,24 +176,76 @@ namespace RuntimeInspectorNamespace
             var listenString = "";
             if (StartOn.data.startIndex == 4)
             {
-                listenString = Type.data.listenTo;
+                listenString = StartOn.data.listenName;
             }
-            ImportVisualisation(Type.data.Broadcast, listenString);
+            ImportVisualisation(repeat.Broadcast, listenString);
         }
 
-        private void ModifyDataAsPerGiven(ref TranslateComponent component)
+        private Vector3[] GetCurrentOffsetInWorld()
         {
-            switch (component.translateType)
+            var pos = transform.position;
+            var localOffset = (Vector3)Type.recordedVector3.Get();
+            if (transform.parent != null)
             {
-                case TranslateType.MoveForever:
-                case TranslateType.MoveIncrementallyForever:
-                case TranslateType.PingPongForever:
-                    component.repeatFor = int.MaxValue;
-                    break;
-                default:
-                    component.repeatFor = Type.data.repeat;
-                    break;
+                localOffset = transform.TransformVector(localOffset);
             }
+            pos += localOffset;
+            return new Vector3[] { pos };
+        }
+
+        private void OnGhostDataModified(object data)
+        {
+            var vector3 = (Vector3)data;
+            var delta = vector3 - transform.position;
+            if (transform.parent != null)
+            {
+                delta = transform.InverseTransformVector(delta);
+            }
+            if (delta != (Vector3)Type.recordedVector3.Get())
+            {
+                Type.recordedVector3.Set(delta);
+            }
+            GhostDescription.IsGhostInteractedInLastRecord = true;
+        }
+
+        private void SetLastValue()
+        {
+            if (GhostDescription.IsGhostInteractedInLastRecord)
+            {
+                Type.LastVector3 = (Vector3)Type.recordedVector3.Get();
+            }
+            GhostDescription.IsGhostInteractedInLastRecord = false;
+        }
+
+        public override BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            var properties = new Dictionary<string, object>[1];
+            var repeatString = repeat.repeatForever ? "Forever" : repeat.repeat.ToString();
+            properties[0] = new()
+            {
+                { "Speed", speed },
+                { "Repeat", repeatString },
+                { "Pause", repeat.pauseFor }
+            };
+            if (PlaySFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, PlaySFX.data.clipName);
+            }
+            if (PlayVFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, PlayVFX.data.clipName);
+            }
+            var startOnIndex = StartOn.data.startIndex;
+            var startOnName = (StartOn)startOnIndex;
+            var previewData = new BehaviourPreviewUI.PreviewData()
+            {
+                DisplayName = GetDisplayName(),
+                EventName = startOnName.ToString(),
+                Properties = properties,
+                Broadcast = new string[] { repeat.Broadcast },
+                Listen = StartOn.data.listenName
+            };
+            return previewData;
         }
     }
 }

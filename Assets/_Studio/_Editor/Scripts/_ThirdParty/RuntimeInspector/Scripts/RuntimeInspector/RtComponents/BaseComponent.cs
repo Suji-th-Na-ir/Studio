@@ -10,8 +10,12 @@ namespace Terra.Studio
         public abstract void Import(EntityBasedComponent data);
         public Action<string, string> OnBroadcastUpdated;
         public Action<string, string> OnListenerUpdated;
+        public Recorder.GhostDescription GhostDescription;
 
         public abstract string ComponentName { get; }
+        public abstract bool CanPreview { get; }
+        public virtual Atom.RecordedVector3 RecordedVector3 { get; }
+
         protected abstract bool CanBroadcast { get; }
         protected abstract bool CanListen { get; }
         protected virtual string[] BroadcasterRefs { get; }
@@ -68,7 +72,7 @@ namespace Terra.Studio
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateListenerString(newString, string.Empty, DisplayDock);
         }
 
-        public void OnBroadcastStringUpdated(string newString, string oldString)
+        public virtual void OnBroadcastStringUpdated(string newString, string oldString)
         {
             EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(newString, oldString, DisplayDock);
         }
@@ -141,6 +145,38 @@ namespace Terra.Studio
                     }
                 }
             }
+        }
+
+        public void Import(string data)
+        {
+            var component = new EntityBasedComponent()
+            {
+                type = EditorOp.Resolve<DataProvider>().GetCovariance(this),
+                data = data
+            };
+            Import(component);
+        }
+
+        public virtual string GetDisplayName()
+        {
+            var type = GetType().FullName;
+            var isFound = SystemOp.Resolve<System>().SystemData.TryGetSystemDisplayName(type, out var displayName);
+            if (isFound)
+            {
+                return displayName;
+            }
+            Debug.Log($"Did not find name for: {type}");
+            return "NOT_FOUND_TYPE";
+        }
+
+        public void DoPreview()
+        {
+            EditorOp.Resolve<BehaviourPreview>().Preview(this);
+        }
+
+        public virtual BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            return default;
         }
     }
 }

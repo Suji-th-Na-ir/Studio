@@ -193,7 +193,10 @@ namespace Terra.Studio
 
         private void Update()
         {
-
+            if (!Inspector)
+            {
+                return;
+            }
             if (Inspector.currentPageIndex == 0)
             {
                 foreach (var b in m_BroadcastIcon)

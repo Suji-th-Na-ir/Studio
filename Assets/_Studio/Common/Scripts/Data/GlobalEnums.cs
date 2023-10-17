@@ -27,50 +27,25 @@ namespace Terra.Studio
         AntiClockwise
     }
 
-    public enum RotationType
+    public enum RepeatDirectionType
     {
-        [AliasDrawer("Rotate Once")]
-        RotateOnce,
-        [AliasDrawer("Rotate Forever")]
-        RotateForever,
-        Oscillate,
-        [AliasDrawer("Oscillate Forever")]
-        OscillateForever,
-        [AliasDrawer("StepWise")]
-        IncrementallyRotate,
-        [AliasDrawer("StepWise Forever")]
-        IncrementallyRotateForever
+        SameDirection,
+        PingPong
     }
 
-    public enum TranslateType
+    public enum TransFormCopyValues
     {
-        Move,
-        [AliasDrawer("Move Forever")]
-        MoveForever,
-        [AliasDrawer("StepWise")]
-        MoveIncrementally,
-        [AliasDrawer("StepWise Forever")]
-        MoveIncrementallyForever,
-        PingPong,
-        [AliasDrawer("PingPong Forever")]
-        PingPongForever
-    }
-
-    /// <summary>
-    /// 1. For X default value is 1
-    /// 2. For Forever hardcode int.MaxValue
-    /// </summary>
-    public enum RepeatType
-    {
-        XTimes,
-        Forever
+        Position,
+        Rotation,
+        Scale,
+        All
     }
 
     public enum BroadcastAt
     {
         Never,
-        AtEveryInterval,
-        End
+        End,
+        AtEveryPause
     }
 
     public enum BroadcastAtForPushObjects
@@ -120,7 +95,9 @@ namespace Terra.Studio
         [StringValue("SOs/Presets/", typeof(UnityEngine.Object))]
         ComponentPresets,
         [StringValue("ResourceDB", typeof(ResourceDB))]
-        ResourceDB
+        ResourceDB,
+        [StringValue("DataManagerSO", typeof(RTDataManagerSO))]
+        SystemData
     }
 
     public enum EditorObjectType

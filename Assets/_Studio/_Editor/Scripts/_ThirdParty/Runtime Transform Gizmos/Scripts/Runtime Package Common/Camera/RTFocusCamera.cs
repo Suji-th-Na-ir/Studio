@@ -78,8 +78,8 @@ namespace RTG
         public float PrjSwitchProgress { get { return _prjSwitchTranstion.Progress; } }
         public float PrjSwitchDurationInSeconds { get { return _projectionSwitchSettings.TransitionDurationInSeconds; } }
         public bool IsDoingFocus { get { return _isDoingFocus; } }
-        public Vector3 WorldPosition 
-        { 
+        public Vector3 WorldPosition
+        {
             get { return _targetTransform.position; }
             set
             {
@@ -88,9 +88,9 @@ namespace RTG
                 SetFocusPoint(focusPt);
             }
         }
-        public Quaternion WorldRotation 
-        { 
-            get { return _targetTransform.rotation; } 
+        public Quaternion WorldRotation
+        {
+            get { return _targetTransform.rotation; }
             set
             {
                 _targetTransform.rotation = value;
@@ -154,7 +154,7 @@ namespace RTG
 
                 _isObjectVisibilityDirty = true;
             }
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             else
             {
                 if (GameObjectEx.IsSceneObject(camera.gameObject))
@@ -163,7 +163,7 @@ namespace RTG
                     _fieldOfView = camera.fieldOfView;
                 }
             }
-            #endif
+#endif
         }
 
         public void SetFieldOfView(float fov)
@@ -196,7 +196,7 @@ namespace RTG
 
             StopCamTransform();
             StopFocus();
-        
+
             if (RotationSwitchSettings.SwitchMode == CameraRotationSwitchMode.Constant) StartCoroutine(_genricCamTransformCrtn = DoConstantRotationSwitch(targetRotation));
             else
             if (RotationSwitchSettings.SwitchMode == CameraRotationSwitchMode.Smooth) StartCoroutine(_genricCamTransformCrtn = DoSmoothRotationSwitch(targetRotation));
@@ -231,14 +231,14 @@ namespace RTG
             else PerformInstantProjectionSwitch();
         }
 
-        GameObject lastFocusedObject=null;
+        GameObject lastFocusedObject = null;
         bool focusPivotViewSwitch;
         public void Focus(List<GameObject> gameObjects)
         {
 
             var boundsQConfig = new ObjectBounds.QueryConfig();
             boundsQConfig.NoVolumeSize = Vector3.one * 0.01f;
-            boundsQConfig.ObjectTypes = GameObjectType.Mesh | GameObjectType.Sprite | GameObjectType.Terrain|GameObjectType.Empty;
+            boundsQConfig.ObjectTypes = GameObjectType.Mesh | GameObjectType.Sprite | GameObjectType.Terrain | GameObjectType.Empty;
 
 
 
@@ -277,22 +277,22 @@ namespace RTG
                 AABB focusAABB = ObjectBounds.CalcObjectCollectionWorldAABB(gameObjects, boundsQConfig);
                 if (focusAABB.IsValid) Focus(focusAABB);
             }
-            
-//             var parents = GameObjectEx.FilterParentsOnly(gameObjects);
-//             if (parents.Count != 0)
-//             {
-//                 AABB focusAABB = ObjectBounds.CalcHierarchyCollectionWorldAABB(parents, boundsQConfig);
-//                 if (focusAABB.IsValid) Focus(focusAABB);
-//             }       
+
+            //             var parents = GameObjectEx.FilterParentsOnly(gameObjects);
+            //             if (parents.Count != 0)
+            //             {
+            //                 AABB focusAABB = ObjectBounds.CalcHierarchyCollectionWorldAABB(parents, boundsQConfig);
+            //                 if (focusAABB.IsValid) Focus(focusAABB);
+            //             }       
         }
 
         public void Focus(AABB focusAABB)
         {
-            if ( IsDoingProjectionSwitch || IsDoingRotationSwitch) return;
+            if (IsDoingProjectionSwitch || IsDoingRotationSwitch) return;
             if (_focusCrtn != null)
             {
                 StopCoroutine(_focusCrtn);
-                _isDoingFocus =false;
+                _isDoingFocus = false;
             }
             if (focusAABB.IsValid)
             {
@@ -325,7 +325,7 @@ namespace RTG
 
         private void Awake()
         {
-            if(TargetCamera == null)
+            if (TargetCamera == null)
             {
                 Debug.Break();
                 Debug.LogError("RTCamera: No target camera was specified.");
@@ -354,11 +354,11 @@ namespace RTG
         {
             _lastFocusPoint = _targetTransform.position + _targetTransform.forward * _focusPointOffset;
             SetFocusPoint(_lastFocusPoint);
-            AdjustOrthoSizeForFocusPt(); 
+            AdjustOrthoSizeForFocusPt();
         }
 
         private void HandleMouseAndKeyboardInput()
-        {    
+        {
             float moveAmount = (_moveSettings.MoveSpeed + _currentAcceleration) * Time.deltaTime;
 
             Vector3 moveVector = Vector3.zero;
@@ -379,7 +379,7 @@ namespace RTG
             else if (IsMovingDown) moveVector -= _targetTransform.up * moveAmount;
 
             bool needsToMove = moveVector.sqrMagnitude != 0.0f;
-            if (needsToMove)  _targetTransform.position += moveVector;
+            if (needsToMove) _targetTransform.position += moveVector;
 
             if (needsToMove || wasZoomed)
             {
@@ -392,13 +392,13 @@ namespace RTG
             // Get the mouse axes values. We need these for panning and rotation.
             float mouseX = RTInput.MouseAxisX();
             float mouseY = RTInput.MouseAxisY();
-           
+
             // Only proceed if at least one mouse axis value is != 0
             if (mouseX != 0.0f || mouseY != 0.0f)
             {
                 if (_panSettings.IsPanningEnabled && Hotkeys.Pan.IsActive())
                 {
-                    if(_panSettings.PanMode == CameraPanMode.Standard) Pan(CalculatePanAmount(mouseX, mouseY));
+                    if (_panSettings.PanMode == CameraPanMode.Standard) Pan(CalculatePanAmount(mouseX, mouseY));
                     else
                     {
                         StopCamTransform();
@@ -548,9 +548,9 @@ namespace RTG
         {
             Vector2 rotation = Vector2.zero;
             rotation.x = -deviceAxisY * _lookAroundSettings.Sensitivity;
-            if (_lookAroundSettings.InvertY) rotation.x *= -1.0f;       
+            if (_lookAroundSettings.InvertY) rotation.x *= -1.0f;
             rotation.y = deviceAxisX * _lookAroundSettings.Sensitivity;
-            if (_lookAroundSettings.InvertX) rotation.y *= -1.0f;       
+            if (_lookAroundSettings.InvertX) rotation.y *= -1.0f;
 
             return rotation;
         }
@@ -559,9 +559,9 @@ namespace RTG
         {
             Vector2 rotation = Vector2.zero;
             rotation.x = -deviceAxisY * _orbitSettings.OrbitSensitivity;
-            if (_orbitSettings.InvertY) rotation.x *= -1.0f;       
+            if (_orbitSettings.InvertY) rotation.x *= -1.0f;
             rotation.y = deviceAxisX * _orbitSettings.OrbitSensitivity;
-            if (_orbitSettings.InvertX) rotation.y *= -1.0f;      
+            if (_orbitSettings.InvertX) rotation.y *= -1.0f;
 
             return rotation;
         }
@@ -570,7 +570,7 @@ namespace RTG
         {
             Vector2 panAmount = Vector2.zero;
             panAmount.x = -deviceAxisX * _panSettings.Sensitivity;
-            if (_panSettings.InvertX) panAmount.x *= -1.0f;         
+            if (_panSettings.InvertX) panAmount.x *= -1.0f;
             panAmount.y = -deviceAxisY * _panSettings.Sensitivity;
             if (_panSettings.InvertY) panAmount.y *= -1.0f;
 
@@ -590,7 +590,7 @@ namespace RTG
 
         private void StopFocus()
         {
-            if(_focusCrtn != null)
+            if (_focusCrtn != null)
             {
                 StopCoroutine(_focusCrtn);
                 _focusCrtn = null;
@@ -611,7 +611,7 @@ namespace RTG
         {
             Vector2 panAmount = CalculatePanAmount(deviceAxisX, deviceAxisY);
 
-            while(true)
+            while (true)
             {
                 Pan(panAmount);
                 panAmount = Vector2.Lerp(panAmount, Vector2.zero, _panSettings.SmoothValue * Time.deltaTime);
@@ -653,7 +653,7 @@ namespace RTG
         {
             float zoomAmount = CalculateScrollZoomAmount(deviceScroll);
 
-            while(true)
+            while (true)
             {
                 Zoom(zoomAmount);
                 zoomAmount = Mathf.Lerp(zoomAmount, 0.0f, _zoomSettings.GetZoomSmoothValue(TargetCamera) * Time.deltaTime);
@@ -755,7 +755,7 @@ namespace RTG
             float initialCamOrthoSize = TargetCamera.orthographicSize;
 
             _isDoingFocus = true;
-            while(true)
+            while (true)
             {
                 _targetTransform.position += camMoveDir * FocusSettings.ConstantSpeed * Time.deltaTime;
                 float t = 1.0f - (_targetTransform.position - focusData.CameraWorldPosition).magnitude / distanceToTravel;
@@ -801,8 +801,6 @@ namespace RTG
                 }
                 yield return null;
             }
-            Debug.Log ("Lerp ended");
-
             SetFocusPoint(focusData.FocusPoint);
             _lastFocusPoint = focusData.FocusPoint;
             _isDoingFocus = false;

@@ -35,8 +35,10 @@ namespace Terra.Studio
             var tr = entityRef.RefObj.transform;
             if (!entityRef.isInitialProcessDone)
             {
-                var scaleDelta = new Vector3(tr.lossyScale.x / tr.localScale.x, tr.lossyScale.y / tr.localScale.y, tr.lossyScale.z / tr.localScale.z);
-                entityRef.targetPosition = new Vector3(scaleDelta.x * entityRef.targetPosition.x, scaleDelta.y * entityRef.targetPosition.y, scaleDelta.z * entityRef.targetPosition.z);
+                if (tr.parent != null)
+                {
+                    entityRef.targetPosition = tr.TransformVector(entityRef.targetPosition);
+                }
                 entityRef.isInitialProcessDone = true;
             }
             var targetPos = tr.parent == null ? entityRef.targetPosition + entityRef.startPosition : entityRef.startPosition + tr.TransformDirection(entityRef.targetPosition);
@@ -51,11 +53,10 @@ namespace Terra.Studio
             entityRef.currentTargetPosition = targetPos;
             entityRef.currentStartPosition = tr.position;
             entityRef.shouldPause = entityRef.pauseFor > 0f;
-            entityRef.shouldPingPong = entityRef.translateType is TranslateType.PingPong or TranslateType.PingPongForever;
+            entityRef.shouldPingPong = entityRef.translateType is RepeatDirectionType.PingPong;
             entityRef.loopsFinished = 0;
             entityRef.coveredDistance = 0f;
             entityRef.remainingDistance = pauseDistance;
-            entityRef.repeatForever = entityRef.repeatFor == int.MaxValue;
         }
 
         public void OnDemandRun(ref TranslateComponent translatable)
@@ -75,7 +76,7 @@ namespace Terra.Studio
             ref var translatable = ref entity.GetComponent<TranslateComponent>();
             if (translatable.IsBroadcastable)
             {
-                if (translatable.broadcastAt == BroadcastAt.AtEveryInterval && !isDone)
+                if (translatable.broadcastAt == BroadcastAt.AtEveryPause && !isDone)
                 {
                     RuntimeOp.Resolve<Broadcaster>().Broadcast(translatable.Broadcast, false);
                 }

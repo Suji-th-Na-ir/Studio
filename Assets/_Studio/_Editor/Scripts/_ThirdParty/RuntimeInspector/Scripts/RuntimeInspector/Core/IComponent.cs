@@ -7,5 +7,6 @@ namespace RuntimeInspectorNamespace
         (string type, string data) Export();
 
         void Import(EntityBasedComponent data);
+        void Import(string data);
     }
 }

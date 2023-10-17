@@ -113,7 +113,7 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        private bool OnValueChanged(BoundInputField source, string input)
+        protected virtual bool OnValueChanged(BoundInputField source, string input)
         {
 #if UNITY_2017_2_OR_NEWER
             if (isVector3Int)
@@ -154,45 +154,31 @@ namespace RuntimeInspectorNamespace
             return false;
         }
 
-        private bool OnValueSubmitted(BoundInputField source, string input)
+        protected virtual bool OnValueSubmitted(BoundInputField _, string __)
         {
-            HandleUndoRedo(source, input);
+            HandleUndoRedo();
             return true;
         }
 
-        private void HandleUndoRedo(BoundInputField source, string input)
+        protected void HandleUndoRedo()
         {
             if (Value != lastSubmittedValue)
             {
                 var message = $"Vector3 changed to: {Value}";
-                var lastValue = GetAxisFromField(source, (Vector3)lastSubmittedValue);
                 EditorOp.Resolve<IURCommand>()?.Record(
                     (lastSubmittedValue, Name), (Value, Name),
                     message,
                     (value) =>
                     {
-                        var transform = (Transform)virtualObject;
                         var modValue = ((object, string))value;
                         if (TRANSFORM_FIELDS.Any(x => x.Equals(modValue.Item2)))
                         {
-                            switch (modValue.Item2)
-                            {
-                                case "Position":
-                                    transform.localPosition = (Vector3)modValue.Item1;
-                                    break;
-                                case "Rotation":
-                                    transform.localEulerAngles = (Vector3)modValue.Item1;
-                                    break;
-                                case "Scale":
-                                    transform.localScale = (Vector3)modValue.Item1;
-                                    break;
-                            }
-                            EditorOp.Resolve<SelectionHandler>().RefreshGizmo();
+                            SetTRS((Vector3)modValue.Item1, modValue.Item2);
                         }
                         else
                         {
-                            OnValueChanged(source, modValue.Item2);
-                            SetValueIndirectly();
+                            setter(modValue.Item1);
+                            Refresh();
                         }
                         lastSubmittedValue = modValue.Item1;
                     }
@@ -201,20 +187,22 @@ namespace RuntimeInspectorNamespace
             lastSubmittedValue = Value;
         }
 
-        private string GetAxisFromField(BoundInputField source, Vector3 vector)
+        private void SetTRS(Vector3 value, string key)
         {
-            if (source == inputX)
+            var transform = (Transform)virtualObject;
+            switch (key)
             {
-                return vector.x.ToString();
+                case "Position":
+                    transform.localPosition = value;
+                    break;
+                case "Rotation":
+                    transform.localEulerAngles = value;
+                    break;
+                case "Scale":
+                    transform.localScale = value;
+                    break;
             }
-            else if (source == inputY)
-            {
-                return vector.y.ToString();
-            }
-            else
-            {
-                return vector.z.ToString();
-            }
+            EditorOp.Resolve<SelectionHandler>().RefreshGizmo();
         }
 
         protected override void OnSkinChanged()
@@ -232,7 +220,8 @@ namespace RuntimeInspectorNamespace
             float inputFieldWidth = (1f - Skin.LabelWidthPercentage) / 3f;
             Vector2 rightSideAnchorMin = new Vector2(Skin.LabelWidthPercentage, 0f);
             Vector2 rightSideAnchorMax = new Vector2(Skin.LabelWidthPercentage + inputFieldWidth, 1f);
-            variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
+            if(variableNameMask)
+                variableNameMask.rectTransform.anchorMin = rightSideAnchorMin;
             ((RectTransform)inputX.transform).SetAnchorMinMaxInputField(labelX.rectTransform, rightSideAnchorMin, rightSideAnchorMax);
 
             rightSideAnchorMin.x += inputFieldWidth;
@@ -274,6 +263,13 @@ namespace RuntimeInspectorNamespace
                 if (val.z != prevVal.z)
                     inputZ.Text = val.z.ToString(RuntimeInspectorUtils.numberFormat);
             }
+        }
+
+        public override void SetInteractable(bool on)
+        {
+            inputX.BackingField.interactable = on;
+            inputY.BackingField.interactable = on;
+            inputZ.BackingField.interactable = on;
         }
     }
 }

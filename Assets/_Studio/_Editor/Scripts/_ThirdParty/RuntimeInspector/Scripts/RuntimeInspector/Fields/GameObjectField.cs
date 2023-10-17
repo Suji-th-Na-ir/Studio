@@ -6,7 +6,6 @@ using System.Linq;
 using PlayShifu.Terra;
 using UnityEngine;
 using Terra.Studio;
-using Newtonsoft.Json;
 
 namespace RuntimeInspectorNamespace
 {
@@ -386,6 +385,11 @@ namespace RuntimeInspectorNamespace
 
             inspector.Refresh();
             inspector.EnsureScrollViewIsWithinBounds(); // Scroll view's contents can get out of bounds after removing a component
+        }
+
+        public override void SetInteractable(bool on)
+        {
+           
         }
     }
 }

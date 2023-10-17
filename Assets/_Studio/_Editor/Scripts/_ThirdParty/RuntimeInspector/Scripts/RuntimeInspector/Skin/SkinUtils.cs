@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using TMPro;
 using PlayShifu.Terra;
+using UnityEngine.InputSystem;
 
 namespace RuntimeInspectorNamespace
 {
@@ -105,6 +106,12 @@ namespace RuntimeInspectorNamespace
             if (label != null) label.rectTransform.anchorMin = rightSideAnchorMin;
         }
 
+        public static void SetupBoundInputFieldSkin(this BoundInputField inputField, UISkin Skin)
+        {
+            inputField.Skin = Skin;
+            SetupInputFieldSkin(inputField.BackingField, Skin);
+        }
+
         public static void SetupInputFieldSkin(this InputField inputField, UISkin Skin)
         {
             if (!inputField)
@@ -113,6 +120,10 @@ namespace RuntimeInspectorNamespace
             //  inputFieldBackground.color = Skin.InputFieldNormalBackgroundColor;
 
             Text placeholder = inputField.placeholder as Text;
+            if (inputField.targetGraphic)
+            {
+                inputField.targetGraphic.color = Skin.InputFieldNormalBackgroundColor;
+            }
             if (placeholder != null)
             {
                 float placeholderAlpha = placeholder.color.a;
@@ -122,6 +133,21 @@ namespace RuntimeInspectorNamespace
                 placeholderColor.a = placeholderAlpha;
                 placeholder.color = placeholderColor;
             }
+        }
+
+        public static Color GetInteractableColor(bool isInteractable)
+        {
+            if (isInteractable)
+            {
+                return Color.white;
+            }
+            else
+            {
+                var color = Helper.GetColorFromHex("#C8C8C8");
+                color.a = 0.5f;
+                return color;
+            }
+           
         }
     }
 }

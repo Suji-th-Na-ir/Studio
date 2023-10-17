@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -19,12 +20,10 @@ namespace Terra.Studio
             BroadcastListen
         }
 
-        private readonly Vector3 INFINITY = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
-
         [AliasDrawer("TeleportWhen")]
         public Atom.StartOn startOn = new();
         [AliasDrawer("Target\nPosition")]
-        public Vector3 targetPosition = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
+        public Atom.RecordedVector3 targetPosition = new();
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
         [AliasDrawer("Broadcast")]
@@ -32,6 +31,9 @@ namespace Terra.Studio
         public string broadcast;
 
         public override string ComponentName => nameof(SetObjectPosition);
+        public override bool CanPreview => true;
+        public override Atom.RecordedVector3 RecordedVector3 => targetPosition;
+
         protected override bool CanBroadcast => true;
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]
@@ -49,16 +51,42 @@ namespace Terra.Studio
             startOn.Setup<StartOptions>(gameObject, ComponentName, OnListenerUpdated, startOn.data.startIndex == 3);
             playSFX.Setup<SetObjectPosition>(gameObject);
             playVFX.Setup<SetObjectPosition>(gameObject);
+            targetPosition.Setup(this);
+            SetupTargetPosition();
+            SetupGhostDescription();
         }
 
-        private void Start()
+        private void SetupGhostDescription()
         {
-            if (targetPosition == INFINITY)
+            GhostDescription = new()
             {
-                var newTarget = transform.position;
-                newTarget.z += 5f;
-                targetPosition = newTarget;
-            }
+                OnGhostInteracted = OnGhostDataModified,
+                SpawnTRS = () => { return new Vector3[] { (Vector3)GhostDescription.GetRecentValue.Invoke() }; },
+                ToggleGhostMode = () =>
+                {
+                    EditorOp.Resolve<Recorder>().TrackPosition_NoGhostOnMultiselect(this, true);
+                },
+                ShowVisualsOnMultiSelect = false,
+                GetLastValue = () => { return targetPosition.LastVector3; },
+                GetRecentValue = () => { return targetPosition.Get(); },
+                OnGhostModeToggled = (state) =>
+                {
+                    if (state)
+                    {
+                        SetLastValue();
+                    }
+                },
+                IsGhostInteractedInLastRecord = true,
+                GhostTo = gameObject
+            };
+            SetLastValue();
+        }
+
+        private void SetupTargetPosition()
+        {
+            var newTarget = transform.position;
+            newTarget.z += 1f;
+            targetPosition.Set(newTarget);
         }
 
         public override (string type, string data) Export()
@@ -70,7 +98,7 @@ namespace Terra.Studio
                 ConditionData = GetConditionData(),
                 IsBroadcastable = !string.IsNullOrEmpty(broadcast),
                 Broadcast = broadcast,
-                targetPosition = targetPosition,
+                targetPosition = (Vector3)GhostDescription.GetRecentValue.Invoke(),
                 startIndex = startOn.data.startIndex,
                 canPlaySFX = playSFX.data.canPlay,
                 sfxIndex = playSFX.data.clipIndex,
@@ -113,12 +141,14 @@ namespace Terra.Studio
         {
             var obj = JsonConvert.DeserializeObject<SetObjectPositionComponent>(data.data);
             broadcast = obj.Broadcast;
-            targetPosition = obj.targetPosition;
+            targetPosition.Set(obj.targetPosition);
             AssignStartOnData(obj);
             AssignSFXandVFXData(obj);
             var listenString = "";
             if (startOn.data.startIndex == 3)
+            {
                 listenString = startOn.data.listenName;
+            }
             ImportVisualisation(broadcast, listenString);
         }
 
@@ -153,6 +183,54 @@ namespace Terra.Studio
             playVFX.data.canPlay = comp.canPlayVFX;
             playVFX.data.clipIndex = comp.vfxIndex;
             playVFX.data.clipName = comp.vfxName;
+        }
+
+        private void SetLastValue()
+        {
+            if (GhostDescription.IsGhostInteractedInLastRecord)
+            {
+                var lastValue = GhostDescription.GetRecentValue.Invoke();
+                targetPosition.LastVector3 = (Vector3)lastValue;
+            }
+            GhostDescription.IsGhostInteractedInLastRecord = false;
+        }
+
+        private void OnGhostDataModified(object data)
+        {
+            GhostDescription.IsGhostInteractedInLastRecord = true;
+            targetPosition.Set(data);
+        }
+
+        public override BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            var properties = new Dictionary<string, object>[1];
+            var broadcastValues = new string[] { broadcast };
+            properties[0] = new();
+            if (playSFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFX.data.clipName);
+            }
+            if (playVFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFX.data.clipName);
+            }
+            var index = startOn.data.startIndex;
+            var enumValue = (StartOptions)index;
+            var name = enumValue.ToString();
+            var listenTo = string.Empty;
+            if (enumValue == StartOptions.BroadcastListen)
+            {
+                listenTo = startOn.data.listenName;
+            }
+            var previewData = new BehaviourPreviewUI.PreviewData()
+            {
+                DisplayName = GetDisplayName(),
+                Broadcast = broadcastValues,
+                Properties = properties,
+                EventName = name,
+                Listen = listenTo
+            };
+            return previewData;
         }
     }
 }

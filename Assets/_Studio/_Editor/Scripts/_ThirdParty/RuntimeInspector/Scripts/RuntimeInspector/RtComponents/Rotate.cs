@@ -1,9 +1,9 @@
-using Terra.Studio;
+using UnityEngine;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
 using System.Collections.Generic;
 
-namespace RuntimeInspectorNamespace
+namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.Rotate")]
     public class Rotate : BaseBehaviour
@@ -11,15 +11,21 @@ namespace RuntimeInspectorNamespace
         [AliasDrawer("RotateWhen")]
         public Atom.StartOn StartOn = new();
         public Atom.Rotate Type = new();
+        [AliasDrawer("Speed")] public float speed = 20f;
+        [AliasDrawer("Direction")]
+        public Direction direction;
+        [AliasDrawer("Repeat")] public Atom.Repeat repeat = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
+        public override Atom.RecordedVector3 RecordedVector3 { get { return Type.vector3; } }
 
         public override string ComponentName => nameof(Rotate);
+        public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
-        protected override bool CanListen => true;
+        protected override bool CanListen => StartOn.data.startIndex == 4;
         protected override string[] BroadcasterRefs => new string[]
         {
-            Type.data.Broadcast
+          repeat.Broadcast
         };
         protected override string[] ListenerRefs => new string[]
         {
@@ -30,50 +36,91 @@ namespace RuntimeInspectorNamespace
         {
             base.Awake();
             Type.Setup(gameObject, this);
+            repeat.Setup(gameObject, this);
             StartOn.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated, StartOn.data.startIndex == 4);
             PlaySFX.Setup<Rotate>(gameObject);
             PlayVFX.Setup<Rotate>(gameObject);
+            SetupGhostDescription();
+        }
+
+        private void SetupGhostDescription()
+        {
+            GhostDescription = new()
+            {
+                OnGhostInteracted = OnGhostDataModified,
+                SpawnTRS = GetSpawnTRS,
+                ToggleGhostMode = () =>
+                {
+                    EditorOp.Resolve<Recorder>().TrackRotation_ShowGhostOnMultiselect(this, true);
+                },
+                ShowVisualsOnMultiSelect = true,
+                GetLastValue = () => { return Type.LastVector3; },
+                GetRecentValue = () => { return Type.vector3.Get(); },
+                OnGhostModeToggled = (state) =>
+                {
+                    if (state)
+                    {
+                        SetLastValue();
+                    }
+                },
+                IsGhostInteractedInLastRecord = true,
+                GhostTo = gameObject
+            };
+            SetLastValue();
+            Type.vector3.OnPerAxisValueModified = () =>
+            {
+                Type.ghostLastRecordedRotation = transform.eulerAngles + (Vector3)Type.vector3.Get();
+            };
+            Type.vector3.OnValueReset = () =>
+            {
+                Type.vector3.OnPerAxisValueModified?.Invoke();
+                Type.ForceRefreshData?.Invoke();
+            };
         }
 
         public override (string type, string data) Export()
         {
+            var targetVector = (Vector3)Type.vector3.Get();
             var comp = new RotateComponent
             {
-                direction = Type.data.direction,
-                rotationType = (RotationType)Type.data.rotateType,
-                repeatType = GetRepeatType(Type.data.repeat),
-                speed = Type.data.speed,
-                rotateBy = Type.data.degrees,
-                pauseFor = Type.data.pauseBetween,
-                repeatFor = Type.data.repeat,
+                direction = repeat.repeatType == RepeatDirectionType.PingPong ? Direction.Clockwise : direction,
+                repeatType = repeat.repeatType,
+                speed = speed,
+                rotateTo = targetVector,
+                pauseFor = repeat.pauseFor,
+                repeatFor = repeat.repeat,
+                repeatForever = repeat.repeatForever,
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
-                broadcastAt = Type.data.broadcastAt,
-                IsBroadcastable = !string.IsNullOrEmpty(Type.data.Broadcast),
-                Broadcast = string.IsNullOrEmpty(Type.data.Broadcast) ? null : Type.data.Broadcast,
+                broadcastAt = repeat.broadcastAt,
+                IsBroadcastable = !string.IsNullOrEmpty(repeat.Broadcast),
+                Broadcast = string.IsNullOrEmpty(repeat.Broadcast) ? null : repeat.Broadcast,
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
                 vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName,
                 sfxIndex = PlaySFX.data.clipIndex,
                 vfxIndex = PlayVFX.data.clipIndex,
-                listen = Listen.Always
+                listen = Listen.Always,
+                ghostLastRotation = Type.ghostLastRecordedRotation
             };
-
-            List<Axis> axes = new List<Axis>();
-            if (Type.data.Xaxis)
-                axes.Add(Axis.X);
-            if (Type.data.Yaxis)
-                axes.Add(Axis.Y);
-            if (Type.data.Zaxis)
-                axes.Add(Axis.Z);
-            comp.axis = axes.ToArray();
-            ModifyDataAsPerSelected(ref comp);
             gameObject.TrySetTrigger(false, true);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp, Formatting.Indented);
             return (type, data);
+        }
+
+        public override void OnBroadcastStringUpdated(string newString, string oldString)
+        {
+            if (repeat.broadcastAt != BroadcastAt.Never)
+            {
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(newString, oldString, DisplayDock);
+            }
+            else if (repeat.broadcastAt == BroadcastAt.Never && newString == string.Empty)
+            {
+                EditorOp.Resolve<UILogicDisplayProcessor>().UpdateBroadcastString(newString, oldString, DisplayDock);
+            }
         }
 
         public string GetStartEvent()
@@ -98,13 +145,6 @@ namespace RuntimeInspectorNamespace
             return data;
         }
 
-        private RepeatType GetRepeatType(float _value)
-        {
-            if (_value == 0) return RepeatType.Forever;
-            else return RepeatType.XTimes;
-        }
-
-
         public override void Import(EntityBasedComponent cdata)
         {
             RotateComponent comp = JsonConvert.DeserializeObject<RotateComponent>(cdata.data);
@@ -114,24 +154,16 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.canPlay = comp.canPlayVFX;
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
-            for (int i = 0; i < comp.axis.Length; i++)
-            {
-                if (comp.axis[i] == Axis.X)
-                    Type.data.Xaxis = true;
-                if (comp.axis[i] == Axis.Y)
-                    Type.data.Yaxis = true;
-                if (comp.axis[i] == Axis.Z)
-                    Type.data.Zaxis = true;
-            }
-            Type.data.direction = comp.direction;
-            Type.data.rotateType = (int)comp.rotationType;
-            Type.data.speed = comp.speed;
-            Type.data.degrees = comp.rotateBy;
-            Type.data.pauseBetween = comp.pauseFor;
-            Type.data.repeat = comp.repeatFor;
-            Type.data.broadcastAt = comp.broadcastAt;
-            Type.data.Broadcast = comp.Broadcast;
-            Type.data.listen = comp.listen;
+            direction = comp.direction;
+            speed = comp.speed;
+            Type.vector3.Set(comp.rotateTo);
+            repeat.pauseFor = comp.pauseFor;
+            repeat.repeat = comp.repeatFor;
+            repeat.repeatForever = comp.repeatForever;
+            repeat.broadcastAt = comp.broadcastAt;
+            repeat.Broadcast = comp.Broadcast;
+            repeat.repeatType = comp.repeatType;
+            Type.ghostLastRecordedRotation = comp.ghostLastRotation;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
                 var res = (StartOn)result;
@@ -158,21 +190,69 @@ namespace RuntimeInspectorNamespace
             {
                 listenString = StartOn.data.listenName;
             }
-            ImportVisualisation(Type.data.Broadcast, listenString);
+            ImportVisualisation(repeat.Broadcast, listenString);
         }
 
-        private void ModifyDataAsPerSelected(ref RotateComponent component)
+        private Vector3[] GetSpawnTRS()
         {
-            switch (component.rotationType)
+            var position = transform.position;
+            var rotation = Type.ghostLastRecordedRotation == Atom.RecordedVector3.INFINITY ||
+                Type.ghostLastRecordedRotation == Vector3.zero ?
+                gameObject.transform.rotation.eulerAngles :
+                Type.ghostLastRecordedRotation;
+            return new Vector3[] { position, rotation };
+        }
+
+        private void OnGhostDataModified(object data)
+        {
+            GhostDescription.IsGhostInteractedInLastRecord = true;
+            var vector3 = (Vector3)data;
+            vector3 = Quaternion.Euler(vector3).eulerAngles;
+            Type.ghostLastRecordedRotation = vector3;
+            var delta = vector3 - transform.eulerAngles;
+            delta = delta.GetAbsEulerAngle();
+            Type.vector3.Set(delta);
+            Type.ForceRefreshData?.Invoke();
+        }
+
+        private void SetLastValue()
+        {
+            if (GhostDescription.IsGhostInteractedInLastRecord)
             {
-                case RotationType.RotateForever:
-                case RotationType.OscillateForever:
-                case RotationType.IncrementallyRotateForever:
-                    component.repeatFor = int.MaxValue;
-                    break;
+                Type.LastVector3 = (Vector3)Type.vector3.Get();
             }
-            if (component.rotationType == RotationType.RotateForever) component.rotateBy = 360f;
+            GhostDescription.IsGhostInteractedInLastRecord = false;
+        }
+
+        public override BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            var properties = new Dictionary<string, object>[1];
+            var repeatString = repeat.repeatForever ? "Forever" : repeat.repeat.ToString();
+            properties[0] = new()
+            {
+                { "Speed", speed },
+                { "Repeat", repeatString },
+                { "Pause", repeat.pauseFor }
+            };
+            if (PlaySFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, PlaySFX.data.clipName);
+            }
+            if (PlayVFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, PlayVFX.data.clipName);
+            }
+            var startOnIndex = StartOn.data.startIndex;
+            var startOnName = (StartOn)startOnIndex;
+            var previewData = new BehaviourPreviewUI.PreviewData()
+            {
+                DisplayName = GetDisplayName(),
+                EventName = startOnName.ToString(),
+                Properties = properties,
+                Broadcast = new string[] { repeat.Broadcast },
+                Listen = StartOn.data.listenName
+            };
+            return previewData;
         }
     }
 }
-

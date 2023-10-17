@@ -21,7 +21,7 @@ namespace Terra.Studio
             Init(ref entityRef);
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(false, entityRef.EventContext);
-            OnDemandRun(in entityRef, entity);
+            OnDemandRun(in entityRef);
         }
 
         private void Init(ref RotateComponent entityRef)
@@ -32,15 +32,61 @@ namespace Terra.Studio
                 entityRef.isHaltedByEvent = false;
                 return;
             }
+            CalculateStartAndTargetRotation(ref entityRef);
             entityRef.currentRotateCount = 0;
-            entityRef.directionFactor = (entityRef.direction == Direction.Clockwise) ? 1 : -1;
-            entityRef.targetRotation = entityRef.currentRotation + (entityRef.rotateBy * entityRef.directionFactor);
             entityRef.canPause = entityRef.pauseFor > 0f;
-            entityRef.shouldPingPong = entityRef.rotationType is RotationType.Oscillate or RotationType.OscillateForever;
-            entityRef.rotateForever = entityRef.repeatFor == int.MaxValue;
+            entityRef.shouldPingPong = entityRef.repeatType == RepeatDirectionType.PingPong;
+            entityRef.rotateForever = entityRef.repeatForever;
+            entityRef.directionFactor = (entityRef.direction == Direction.Clockwise) ? 1 : -1;
+            RefreshRotation(ref entityRef);
         }
 
-        public void OnDemandRun(in RotateComponent rotatable, int _)
+        private void RefreshRotation(ref RotateComponent entityRef)
+        {
+            if (!entityRef.shouldPingPong && entityRef.repeatFor > 1 || entityRef.repeatForever)
+            {
+                CalculateStartAndTargetRotation(ref entityRef);
+            }
+            entityRef.currentStartRotation = Quaternion.Euler(entityRef.startRotation);
+            entityRef.currentTargetRotation = Quaternion.Euler(entityRef.trueRotateTarget);
+            if (entityRef.shouldPingPong)
+            {
+                if (entityRef.currentRotateCount % 2 == 1)
+                {
+                    entityRef.currentStartRotation = Quaternion.Euler(entityRef.trueRotateTarget);
+                    entityRef.currentTargetRotation = Quaternion.Euler(entityRef.startRotation);
+                }
+            }
+            if (IsRotateForeverType(in entityRef))
+            {
+                var direction = entityRef.currentTargetRotation * entityRef.RefObj.transform.forward;
+                entityRef.rotationDirection = Quaternion.LookRotation(direction);
+            }
+            if (entityRef.direction == Direction.AntiClockwise)
+            {
+                var value = Quaternion.Dot(entityRef.currentStartRotation, entityRef.currentTargetRotation);
+                if (value > 0)
+                {
+                    var inverseX = entityRef.rotateTo.x - 360f;
+                    var inverseY = entityRef.rotateTo.y - 360f;
+                    var inverseZ = entityRef.rotateTo.z - 360f;
+                    var newRotateTarget = entityRef.RefObj.transform.eulerAngles + new Vector3(inverseX, inverseY, inverseZ);
+                    entityRef.currentTargetRotation = Quaternion.Euler(newRotateTarget);
+                }
+            }
+            var angle = Quaternion.Angle(entityRef.currentStartRotation, entityRef.currentTargetRotation);
+            entityRef.rotationTime = angle / entityRef.speed;
+            entityRef.currentRatio = 0f;
+            entityRef.elapsedTime = 0f;
+        }
+
+        private void CalculateStartAndTargetRotation(ref RotateComponent entityRef)
+        {
+            entityRef.startRotation = entityRef.RefObj.transform.eulerAngles;
+            entityRef.trueRotateTarget = entityRef.RefObj.transform.eulerAngles + entityRef.rotateTo;
+        }
+
+        public void OnDemandRun(in RotateComponent rotatable)
         {
             if (rotatable.canPlaySFX)
             {
@@ -60,15 +106,18 @@ namespace Terra.Studio
             foreach (var entity in filter)
             {
                 ref var component = ref pool.Get(entity);
+
                 if (!component.CanExecute)
                 {
                     continue;
                 }
+
                 if (component.IsExecuted)
                 {
                     totalEntitiesFinishedJob++;
                     continue;
                 }
+
                 if (!component.rotateForever &&
                     component.currentRotateCount >= component.repeatFor)
                 {
@@ -76,10 +125,12 @@ namespace Terra.Studio
                     OnRotationDone(true, entity);
                     continue;
                 }
+
                 if (component.isHaltedByEvent)
                 {
                     continue;
                 }
+
                 if (component.isPaused)
                 {
                     var delta = Time.time - component.pauseStartTime;
@@ -90,27 +141,43 @@ namespace Terra.Studio
                     }
                     continue;
                 }
-                if (component.currentRotation * component.directionFactor <
-                    component.targetRotation * component.directionFactor)
+
+                var isRotateForever = IsRotateForeverType(in component);
+                if (!isRotateForever)
                 {
-                    var rotationThisFrame = component.speed * Time.deltaTime;
-                    component.currentRotation += rotationThisFrame * component.directionFactor;
-                    var targetRotation = GetVector3(rotationThisFrame * component.directionFactor, component.axis);
-                    component.RefObj.transform.Rotate(targetRotation);
+                    component.currentRatio = component.elapsedTime / component.rotationTime;
+                    component.elapsedTime += Time.deltaTime;
+                    var isShortWay = component.direction == Direction.Clockwise;
+                    var newRotation = Helper.Slerp(component.currentStartRotation, component.currentTargetRotation, component.currentRatio, isShortWay);
+                    component.RefObj.transform.rotation = newRotation;
+                }
+                else
+                {
+                    var step = component.speed * Time.deltaTime * component.directionFactor;
+                    component.RefObj.transform.rotation *= Quaternion.AngleAxis(step, component.rotationDirection.eulerAngles.normalized);
+                }
+                if (Mathf.Abs(component.currentRatio) < 1)
+                {
                     continue;
                 }
+                else if (!isRotateForever)
+                {
+                    component.RefObj.transform.rotation = component.currentTargetRotation;
+                }
+
                 if (component.canPause)
                 {
                     component.pauseStartTime = Time.time;
                     component.isPaused = true;
                 }
-                if (component.shouldPingPong)
-                {
-                    component.directionFactor *= -1;
-                }
+
                 component.currentRotateCount++;
-                component.currentRotation = 0f;
-                component.targetRotation = component.rotateBy * component.directionFactor;
+                if (component.rotateForever && component.currentRotateCount == 100)
+                {
+                    component.currentRotateCount = 0;
+                }
+
+                RefreshRotation(ref component);
                 OnRotationDone(false, entity);
             }
             if (totalEntitiesFinishedJob == filter.GetEntitiesCount())
@@ -119,33 +186,12 @@ namespace Terra.Studio
             }
         }
 
-        private Vector3 GetVector3(float newRotation, Axis[] axes)
-        {
-            var vector = Vector3.zero;
-            for (int i = 0; i < axes.Length; i++)
-            {
-                switch (axes[i])
-                {
-                    case Axis.X:
-                        vector.x = newRotation;
-                        break;
-                    case Axis.Y:
-                        vector.y = newRotation;
-                        break;
-                    case Axis.Z:
-                        vector.z = newRotation;
-                        break;
-                }
-            }
-            return vector;
-        }
-
         private void OnRotationDone(bool isDone, int entity)
         {
             ref var rotatable = ref entity.GetComponent<RotateComponent>();
             if (rotatable.IsBroadcastable)
             {
-                if (rotatable.broadcastAt == BroadcastAt.AtEveryInterval && !isDone)
+                if (rotatable.broadcastAt == BroadcastAt.AtEveryPause && !isDone)
                 {
                     RuntimeOp.Resolve<Broadcaster>().Broadcast(rotatable.Broadcast, false);
                 }
@@ -177,6 +223,15 @@ namespace Terra.Studio
                 var compsData = RuntimeOp.Resolve<ComponentsData>();
                 compsData.ProvideEventContext(false, rotatable.EventContext);
             }
+        }
+
+        private bool IsRotateForeverType(in RotateComponent component)
+        {
+            if (component.pauseFor == 0 && !component.shouldPingPong && component.rotateForever)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

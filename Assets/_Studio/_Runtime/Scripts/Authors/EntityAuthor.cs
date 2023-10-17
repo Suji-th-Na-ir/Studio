@@ -8,11 +8,6 @@ namespace Terra.Studio
     {
         public static IAuthor Author => Author<EntityAuthor>.Current;
 
-        public static void Generate()
-        {
-            Author.Generate();
-        }
-
         public static void Generate(object data)
         {
             Author.Generate(data);
@@ -69,6 +64,7 @@ namespace Terra.Studio
                 if (virtualEntity.components != null && virtualEntity.components.Length > 0)
                 {
                     var entity = ecsWorld.NewEntity();
+                    RuntimeOp.Resolve<EntitiesGraphics>().TrackEntityVisual(entity, go);
                     foreach (var component in virtualEntity.components)
                     {
                         ComponentAuthorOp.Generate(new ComponentGenerateData()

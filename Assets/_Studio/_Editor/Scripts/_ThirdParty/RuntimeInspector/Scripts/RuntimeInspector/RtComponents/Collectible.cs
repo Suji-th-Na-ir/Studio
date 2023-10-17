@@ -1,8 +1,8 @@
-using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
+using System.Collections.Generic;
 
-namespace RuntimeInspectorNamespace
+namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.Collectable")]
     public class Collectible : BaseBehaviour
@@ -25,6 +25,7 @@ namespace RuntimeInspectorNamespace
         public string Broadcast = null;
 
         public override string ComponentName => nameof(Collectible);
+        public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]
@@ -116,6 +117,32 @@ namespace RuntimeInspectorNamespace
         {
             base.OnDisable();
             EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(false, Score.instanceId);
+        }
+
+        public override BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            var properties = new Dictionary<string, object>[1];
+            properties[0] = new();
+            if (PlaySFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, PlaySFX.data.clipName);
+            }
+            if (PlayVFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, PlayVFX.data.clipName);
+            }
+            properties[0].Add("Score", Score.score);
+            var broadcastArray = new string[] { Broadcast };
+            var index = StartOn.data.startIndex;
+            var startName = (StartOnCollectible)index;
+            var previewData = new BehaviourPreviewUI.PreviewData()
+            {
+                DisplayName = GetDisplayName(),
+                Properties = properties,
+                Broadcast = broadcastArray,
+                EventName = startName.ToString()
+            };
+            return previewData;
         }
     }
 }

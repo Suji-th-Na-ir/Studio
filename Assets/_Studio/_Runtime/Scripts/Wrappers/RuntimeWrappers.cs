@@ -1,4 +1,6 @@
 using UnityEngine;
+using PlayShifu.Terra;
+using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
 namespace Terra.Studio
@@ -14,7 +16,19 @@ namespace Terra.Studio
                     go = SpawnEmpty(null, trs);
                     break;
                 case AssetType.Prefab:
-                    go = SpawnGameObject(assetPath, ResourceDB.GetItemData(assetPath), trs);
+                    object obj = null;
+                    var doesContainAnyData =
+                        SystemOp.Resolve<System>().IsSimulating &&
+                        SystemOp.Resolve<CrossSceneDataHolder>().Get(assetPath, out obj);
+                    if (!doesContainAnyData)
+                    {
+                        go = SpawnGameObject(assetPath, ResourceDB.GetItemData(assetPath), trs);
+                    }
+                    else
+                    {
+                        go = DuplicateGameObject((GameObject)obj, null, trs);
+                        CleanAllBehaviours(go.transform);
+                    }
                     break;
                 case AssetType.Primitive:
                     go = SpawnPrimitive(primitiveType, ResourceDB.GetDummyItemData(primitiveType), trs);
@@ -22,6 +36,7 @@ namespace Terra.Studio
             }
             return go;
         }
+
         public static GameObject SpawnGameObject(string path, ResourceDB.ResourceItemData itemData, params Vector3[] trs)
         {
             var go = RuntimeOp.Load<GameObject>(path);
@@ -56,14 +71,23 @@ namespace Terra.Studio
             return ResolveTRS(go, itemData, trs);
         }
 
-        private static GameObject ResolveTRS(GameObject go, ResourceDB.ResourceItemData itemData, params Vector3[] trs)
+        public static GameObject DuplicateGameObject(GameObject actualGameObject, Transform parent, params Vector3[] trs)
+        {
+            var go = Object.Instantiate(actualGameObject, parent);
+            if (SystemOp.Resolve<System>().CurrentStudioState == StudioState.Editor) CleanAllBehaviours(go.transform);
+            if (!go.activeSelf) go.SetActive(true);
+            return ResolveTRS(go, null, trs);
+        }
+
+        public static GameObject ResolveTRS(GameObject go, ResourceDB.ResourceItemData itemData, params Vector3[] trs)
         {
             AttachPrerequisities(go, itemData);
+            MoveGameObjectToActiveScene(go);
             if (trs == null || trs.Length == 0)
             {
                 return go;
             }
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < trs.Length; i++)
             {
                 switch (i)
                 {
@@ -83,6 +107,7 @@ namespace Terra.Studio
 
         public static void AttachPrerequisities(GameObject go, ResourceDB.ResourceItemData itemData)
         {
+            if (itemData == null) return;
             if (SystemOp.Resolve<System>() && SystemOp.Resolve<System>().CurrentStudioState == StudioState.Editor)
             {
                 if (!go.TryGetComponent(out StudioGameObject studioGO))
@@ -107,6 +132,7 @@ namespace Terra.Studio
             audioSource.Play();
             var destroyAfter = go.AddComponent<DestroyAfter>();
             destroyAfter.seconds = 2f;
+            MoveGameObjectToActiveScene(go);
         }
 
         public static void PlayVFX(string vfxName, Vector3 position)
@@ -120,6 +146,7 @@ namespace Terra.Studio
             vfx.transform.position = position;
             var destroyAfter = vfx.AddComponent<DestroyAfter>();
             destroyAfter.seconds = 2f;
+            MoveGameObjectToActiveScene(vfx);
         }
 
         public static void AddScore(float addBy)
@@ -127,9 +154,44 @@ namespace Terra.Studio
             RuntimeOp.Resolve<ScoreHandler>().AddScore((int)addBy);
         }
 
-        public static void RespawnPlayer(Vector3 position)
+        public static void CleanAllBehaviours(Transform transform)
         {
-            RuntimeOp.Resolve<GameData>().PlayerRef.position = position;
+            CleanBehaviour(transform);
+            var allChildren = Helper.GetChildren(transform, true);
+            for (int i = 0; i < allChildren.Count; i++)
+            {
+                var child = allChildren[i];
+                CleanBehaviour(child);
+            }
+        }
+
+        public static void CleanBehaviour(Transform child)
+        {
+            if (child.TryGetComponent(out BaseBehaviour behaviour))
+            {
+                Object.Destroy(behaviour);
+            }
+            if (child.TryGetComponent(out Outline outline))
+            {
+                Object.Destroy(outline);
+            }
+            if (child.TryGetComponent(out StudioGameObject gameObject))
+            {
+                Object.Destroy(gameObject);
+            }
+        }
+
+        public static void MoveGameObjectToActiveScene(GameObject go)
+        {
+            if (Helper.IsInUnityEditorMode())
+            {
+                return;
+            }
+            var scene = SystemOp.Resolve<ISubsystem>().GetScene();
+            if (go.scene != scene)
+            {
+                SceneManager.MoveGameObjectToScene(go, scene);
+            }
         }
     }
 }

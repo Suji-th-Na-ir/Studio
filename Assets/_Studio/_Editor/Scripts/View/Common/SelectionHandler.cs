@@ -38,11 +38,13 @@ public class SelectionHandler : View
     private GameObject lastPickedGameObject;
     private Camera mainCamera;
     private Selectable nextSelecteField;
+    private EditorSystem cachedEditorSystem;
+    public bool canUndo, canRedo;
     public delegate void SelectionChangedDelegate(List<GameObject> gm);
     public SelectionChangedDelegate SelectionChanged;
     PointerEventData pointerEventData;
     float tabTrailTimer = 0;
-    const float TAB_TRAILTIME =0.5f;
+    const float TAB_TRAILTIME = 0.5f;
 
     private void Awake()
     {
@@ -178,11 +180,48 @@ public class SelectionHandler : View
         _workGizmoId = GizmoId.Move;
 
         runtimeHierarchy = EditorOp.Resolve<RuntimeHierarchy>();
+        cachedEditorSystem = EditorOp.Resolve<EditorSystem>();
         runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
         pointerEventData = new PointerEventData(EventSystem.current);
+        EditorOp.Resolve<IURCommand>().OnUndoStackAvailable += (isPresent) => { canUndo = isPresent; };
+        EditorOp.Resolve<IURCommand>().OnRedoStackAvailable += (isPresent) => { canRedo = isPresent; };
+        EditorOp.Resolve<EditorSystem>().OnIncognitoEnabled += (isEnabled) =>
+        {
+            canUndo = !isEnabled;
+            canRedo = !isEnabled;
+        };
     }
 
     private void Update()
+    {
+        if (cachedEditorSystem &&
+            cachedEditorSystem.IsIncognitoEnabled)
+        {
+            return;
+        }
+        TabToFocus();
+
+        if (EventSystem.current == null ||
+            EventSystem.current.currentSelectedGameObject != null)
+        {
+            return;
+        }
+        Scan();
+        DuplicateObjects();
+        DeleteObjects();
+
+        if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.WasKeyPressedThisFrame(KeyCode.S))
+        {
+            EditorOp.Resolve<SceneDataHandler>().Save();
+        }
+
+        if (!Application.isEditor)
+        {
+            CheckForSave();
+        }
+    }
+
+    private void TabToFocus()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -192,19 +231,16 @@ public class SelectionHandler : View
             }
         }
 
-        if(Input.GetKeyDown(KeyCode.Tab)||Input.GetKeyUp(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyUp(KeyCode.Tab))
         {
             tabTrailTimer = 0.0f;
         }
-        if(Input.GetKey(KeyCode.Tab))
-        {
-            tabTrailTimer += Time.deltaTime;
-        }
+
 
         if (Input.GetKeyDown(KeyCode.Tab) && tabTrailTimer <= 0.01f || Input.GetKey(KeyCode.Tab) && tabTrailTimer > TAB_TRAILTIME)
         {
-            if(tabTrailTimer>TAB_TRAILTIME)
-            tabTrailTimer = TAB_TRAILTIME * 0.8f;
+            if (tabTrailTimer > TAB_TRAILTIME)
+                tabTrailTimer = TAB_TRAILTIME * 0.8f;
 
             if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
             {
@@ -221,19 +257,28 @@ public class SelectionHandler : View
                 EditorOp.Resolve<FocusFieldsSystem>().SelectFocusedGameObject(nextSelecteField.gameObject);
             }
         }
-
-        if (EventSystem.current == null ||
-            EventSystem.current.currentSelectedGameObject != null)
+        if (Input.GetKey(KeyCode.Tab))
         {
-            return;
+            tabTrailTimer += Time.deltaTime;
         }
-        Scan();
-        DuplicateObjects();
-        DeleteObjects();
+    }
 
-        if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.WasKeyPressedThisFrame(KeyCode.S))
+    private void CheckForSave()
+    {
+        if (canUndo)
         {
-            EditorOp.Resolve<SceneDataHandler>().Save();
+            if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.WasKeyPressedThisFrame(KeyCode.Z))
+            {
+                EditorOp.Resolve<IURCommand>().Undo();
+            }
+        }
+
+        if (canRedo)
+        {
+            if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.WasKeyPressedThisFrame(KeyCode.Y))
+            {
+                EditorOp.Resolve<IURCommand>().Redo();
+            }
         }
     }
 
@@ -262,7 +307,7 @@ public class SelectionHandler : View
     {
         if (_selectedObjects.Count > 0)
         {
-            if ((RTInput.IsKeyPressed(KeyCode.LeftCommand) && RTInput.WasKeyPressedThisFrame(KeyCode.D)) || a_bByPassShortCut)
+            if (((RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)) && RTInput.WasKeyPressedThisFrame(KeyCode.D)) || a_bByPassShortCut)
             {
                 var duplicatedGms = new List<Transform>();
                 foreach (GameObject obj in _selectedObjects)
@@ -467,14 +512,19 @@ public class SelectionHandler : View
         else
         {
             runtimeHierarchy.Deselect();
-            _workGizmo.Gizmo.SetEnabled(false);
-            objectMoveGizmo.Gizmo.SetEnabled(false);
-            objectRotationGizmo.Gizmo.SetEnabled(false);
-            objectScaleGizmo.Gizmo.SetEnabled(false);
-            objectUniversalGizmo.Gizmo.SetEnabled(false);
+            DisableGizmo();
         }
 
         SelectionChanged?.Invoke(_selectedObjects);
+    }
+
+    private void DisableGizmo()
+    {
+        _workGizmo.Gizmo.SetEnabled(false);
+        objectMoveGizmo.Gizmo.SetEnabled(false);
+        objectRotationGizmo.Gizmo.SetEnabled(false);
+        objectScaleGizmo.Gizmo.SetEnabled(false);
+        objectUniversalGizmo.Gizmo.SetEnabled(false);
     }
 
     public void DeselectAll()
@@ -483,6 +533,20 @@ public class SelectionHandler : View
         prevSelectedObjects = _selectedObjects.ToList();
         _selectedObjects.Clear();
         OnSelectionChanged();
+    }
+
+    public void OverrideGizmoOntoTarget(List<GameObject> targets, GizmoId gizmoId)
+    {
+        DisableGizmo();
+        SetWorkGizmoId(gizmoId);
+        _workGizmo.SetTargetObjects(targets);
+        _workGizmo.Gizmo.SetEnabled(true);
+        _workGizmo.RefreshPositionAndRotation();
+    }
+
+    public void ToggleGizmo(bool enable)
+    {
+        _workGizmo.Gizmo.SetEnabled(enable);
     }
 
     public void RefreshGizmo()
