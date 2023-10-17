@@ -2,7 +2,7 @@ using System;
 
 namespace Terra.Studio
 {
-    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class OnValueChangedAttribute : Attribute
     {
         public bool UpdateBroadcast;

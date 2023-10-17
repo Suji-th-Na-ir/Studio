@@ -22,7 +22,7 @@ namespace RuntimeInspectorNamespace
         public override Atom.RecordedVector3 RecordedVector3 { get { return Type.recordedVector3; } }
         protected override string[] BroadcasterRefs => new string[]
         {
-            repeat.broadcast
+            repeat.Broadcast
         };
         protected override string[] ListenerRefs => new string[]
         {
@@ -81,8 +81,8 @@ namespace RuntimeInspectorNamespace
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
                 broadcastAt = repeat.broadcastAt,
-                IsBroadcastable = !string.IsNullOrEmpty(repeat.broadcast),
-                Broadcast = repeat.broadcast,
+                IsBroadcastable = !string.IsNullOrEmpty(repeat.Broadcast),
+                Broadcast = repeat.Broadcast,
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
@@ -148,7 +148,7 @@ namespace RuntimeInspectorNamespace
             repeat.repeatForever = comp.repeatForever;
             Type.recordedVector3.Set(comp.targetPosition);
             repeat.repeat = comp.repeatFor;
-            repeat.broadcast = comp.Broadcast;
+            repeat.Broadcast = comp.Broadcast;
             repeat.broadcastAt = comp.broadcastAt;
             StartOn.data.listenName = comp.ConditionData;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
@@ -177,7 +177,7 @@ namespace RuntimeInspectorNamespace
             {
                 listenString = StartOn.data.listenName;
             }
-            ImportVisualisation(repeat.broadcast, listenString);
+            ImportVisualisation(repeat.Broadcast, listenString);
         }
 
         private Vector3[] GetCurrentOffsetInWorld()

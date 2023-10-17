@@ -147,8 +147,22 @@ namespace Terra.Studio
             [AliasDrawer("Repeat\nType")] public RepeatDirectionType repeatType;
             [AliasDrawer("Repeat\nForever")] public bool repeatForever;
             [AliasDrawer("Broadcast At")] public BroadcastAt broadcastAt;
+            private string broadcast;
             [AliasDrawer("Broadcast"), OnValueChanged(UpdateBroadcast = true)]
-            public string broadcast;
+            public string Broadcast
+            {
+                get
+                {
+                    return broadcast;
+                }
+                set
+                {
+                    var last = broadcast;
+                    broadcast = value;
+                    Debug.Log($"LAST  {last}  New {value}");
+                    behaviour.OnBroadcastStringUpdated(value, last);
+                }
+            }
             [HideInInspector] public string lastEnteredBroadcast;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)

@@ -22,7 +22,7 @@ namespace RuntimeInspectorNamespace
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]
         {
-            repeat.broadcast
+          repeat.Broadcast
         };
         protected override string[] ListenerRefs => new string[]
         {
@@ -91,8 +91,8 @@ namespace RuntimeInspectorNamespace
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
                 broadcastAt = repeat.broadcastAt,
-                IsBroadcastable = !string.IsNullOrEmpty(repeat.broadcast),
-                Broadcast = string.IsNullOrEmpty(repeat.broadcast) ? null : repeat.broadcast,
+                IsBroadcastable = !string.IsNullOrEmpty(repeat.Broadcast),
+                Broadcast = string.IsNullOrEmpty(repeat.Broadcast) ? null : repeat.Broadcast,
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
@@ -158,7 +158,7 @@ namespace RuntimeInspectorNamespace
             repeat.repeat = comp.repeatFor;
             repeat.repeatForever= comp.repeatForever;
             repeat.broadcastAt = comp.broadcastAt;
-            repeat.broadcast = comp.Broadcast;
+            repeat.Broadcast = comp.Broadcast;
             repeat.repeatType = comp.repeatType;
             Type.ghostLastRecordedRotation = comp.ghostLastRotation;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
@@ -187,7 +187,7 @@ namespace RuntimeInspectorNamespace
             {
                 listenString = StartOn.data.listenName;
             }
-            ImportVisualisation(repeat.broadcast, listenString);
+            ImportVisualisation(repeat.Broadcast, listenString);
         }
 
         private Vector3[] GetSpawnTRS()
