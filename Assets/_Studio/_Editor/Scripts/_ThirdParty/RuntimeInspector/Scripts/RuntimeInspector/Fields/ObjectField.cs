@@ -275,6 +275,7 @@ namespace RuntimeInspectorNamespace
                 previewButton.gameObject.SetActive(false);
                 return;
             }
+            previewButton.gameObject.SetActive(true);
             previewButton.onClick.AddListener(behaviour.DoPreview);
         }
         
