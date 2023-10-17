@@ -131,6 +131,7 @@ namespace Terra.Studio
             {
                 properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, PlayVFX.data.clipName);
             }
+            properties[0].Add("Score", Score.score);
             var broadcastArray = new string[] { Broadcast };
             var index = StartOn.data.startIndex;
             var startName = (StartOnCollectible)index;
