@@ -43,7 +43,7 @@ namespace Terra.Studio
 
         private void RefreshRotation(ref RotateComponent entityRef)
         {
-            if (!entityRef.shouldPingPong && entityRef.repeatFor > 1)
+            if (!entityRef.shouldPingPong && entityRef.repeatFor > 1 || entityRef.repeatForever)
             {
                 CalculateStartAndTargetRotation(ref entityRef);
             }

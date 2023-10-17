@@ -11,10 +11,9 @@ namespace Terra.Studio
         [AliasDrawer("RotateWhen")]
         public Atom.StartOn StartOn = new();
         public Atom.Rotate Type = new();
-        [AliasDrawer("Speed")] public float speed;
+        [AliasDrawer("Speed")] public float speed = 20f;
         [AliasDrawer("Direction")]
         public Direction direction;
-        [AliasDrawer("Speed")] public float speed = 20f;
         [AliasDrawer("Repeat")] public Atom.Repeat repeat = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
@@ -250,7 +249,7 @@ namespace Terra.Studio
                 DisplayName = GetDisplayName(),
                 EventName = startOnName.ToString(),
                 Properties = properties,
-                Broadcast = new string[] { repeat.broadcast },
+                Broadcast = new string[] { repeat.Broadcast },
                 Listen = StartOn.data.listenName
             };
             return previewData;
