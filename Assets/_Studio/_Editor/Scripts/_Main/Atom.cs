@@ -159,7 +159,6 @@ namespace Terra.Studio
                 {
                     var last = broadcast;
                     broadcast = value;
-                    Debug.Log($"LAST  {last}  New {value}");
                     behaviour.OnBroadcastStringUpdated(value, last);
                 }
             }

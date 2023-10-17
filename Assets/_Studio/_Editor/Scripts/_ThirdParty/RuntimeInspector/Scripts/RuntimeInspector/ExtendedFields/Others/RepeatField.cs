@@ -331,7 +331,6 @@ namespace RuntimeInspectorNamespace
         private InspectorField CreateDrawerForField(string name)
         {
             Type type = Value.GetType();
-            Debug.Log(name);
             FieldInfo fieldInfo = type.GetField(name);
             if (fieldInfo != null)
             {
