@@ -11,7 +11,7 @@ namespace Terra.Studio
         [AliasDrawer("RotateWhen")]
         public Atom.StartOn StartOn = new();
         public Atom.Rotate Type = new();
-        [AliasDrawer("Speed")] public float speed;
+        [AliasDrawer("Speed")] public float speed = 20f;
         [AliasDrawer("Repeat")] public Atom.Repeat repeat = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
