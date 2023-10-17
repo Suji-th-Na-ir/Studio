@@ -1,22 +1,21 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
     [Serializable]
     public struct IconData
     {
-       public string type;
-       public Sprite icon;
+        public string type;
+        public Sprite icon;
     }
-
 
     [CreateAssetMenu(fileName = "Component_Icon_SO", menuName = "Terra/Presets/Component Icons")]
     public class ComponentIconsPreset : ScriptableObject
     {
-        public List<IconData> allIcons = new List<IconData>();
+        [SerializeField]
+        private List<IconData> allIcons = new List<IconData>();
 
         public Sprite GetIcon(string key)
         {

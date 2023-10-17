@@ -13,6 +13,7 @@ namespace Terra.Studio
         public Recorder.GhostDescription GhostDescription;
 
         public abstract string ComponentName { get; }
+        public abstract bool CanPreview { get; }
         public virtual Atom.RecordedVector3 RecordedVector3 { get; }
 
         protected abstract bool CanBroadcast { get; }
@@ -154,6 +155,28 @@ namespace Terra.Studio
                 data = data
             };
             Import(component);
+        }
+
+        public virtual string GetDisplayName()
+        {
+            var type = GetType().FullName;
+            var isFound = SystemOp.Resolve<System>().SystemData.TryGetSystemDisplayName(type, out var displayName);
+            if (isFound)
+            {
+                return displayName;
+            }
+            Debug.Log($"Did not find name for: {type}");
+            return "NOT_FOUND_TYPE";
+        }
+
+        public void DoPreview()
+        {
+            EditorOp.Resolve<BehaviourPreview>().Preview(this);
+        }
+
+        public virtual BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            return default;
         }
     }
 }

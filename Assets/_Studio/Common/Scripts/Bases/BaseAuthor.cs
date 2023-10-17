@@ -5,20 +5,11 @@ namespace Terra.Studio
 {
     public abstract class BaseAuthor : IAuthor
     {
-        public virtual void Generate()
-        {
+        public virtual void Generate() { }
 
-        }
+        public virtual void Generate(object data) { }
 
-        public virtual void Generate(object data)
-        {
-
-        }
-
-        public virtual void Degenerate(int entityID)
-        {
-
-        }
+        public virtual void Degenerate(int entityID) { }
 
         protected struct ComponentGenerateData
         {

@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -30,6 +31,7 @@ namespace Terra.Studio
         public string broadcast;
 
         public override string ComponentName => nameof(SetObjectPosition);
+        public override bool CanPreview => true;
         public override Atom.RecordedVector3 RecordedVector3 => targetPosition;
 
         protected override bool CanBroadcast => true;
@@ -197,6 +199,38 @@ namespace Terra.Studio
         {
             GhostDescription.IsGhostInteractedInLastRecord = true;
             targetPosition.Set(data);
+        }
+
+        public override BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            var properties = new Dictionary<string, object>[1];
+            var broadcastValues = new string[] { broadcast };
+            properties[0] = new();
+            if (playSFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFX.data.clipName);
+            }
+            if (playVFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFX.data.clipName);
+            }
+            var index = startOn.data.startIndex;
+            var enumValue = (StartOptions)index;
+            var name = enumValue.ToString();
+            var listenTo = string.Empty;
+            if (enumValue == StartOptions.BroadcastListen)
+            {
+                listenTo = startOn.data.listenName;
+            }
+            var previewData = new BehaviourPreviewUI.PreviewData()
+            {
+                DisplayName = GetDisplayName(),
+                Broadcast = broadcastValues,
+                Properties = properties,
+                EventName = name,
+                Listen = listenTo
+            };
+            return previewData;
         }
     }
 }

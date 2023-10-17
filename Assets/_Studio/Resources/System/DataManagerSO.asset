@@ -16,81 +16,106 @@ MonoBehaviour:
   - Key: Terra.Studio.Checkpoint
     ComponentName: Terra.Studio.CheckpointComponent
     SystemName: Terra.Studio.CheckpointSystem
-    DrawerName: RuntimeInspectorNamespace.Checkpoint
+    DrawerName: Terra.Studio.Checkpoint
+    DisplayName: Checkpoint
   - Key: Terra.Studio.Collectable
     ComponentName: Terra.Studio.CollectableComponent
     SystemName: Terra.Studio.CollectableSystem
-    DrawerName: RuntimeInspectorNamespace.Collectible
+    DrawerName: Terra.Studio.Collectible
+    DisplayName: Collectable
   - Key: Terra.Studio.DestroyOn
     ComponentName: Terra.Studio.DestroyOnComponent
     SystemName: Terra.Studio.DestroyOnSystem
-    DrawerName: RuntimeInspectorNamespace.DestroyOn
+    DrawerName: Terra.Studio.DestroyOn
+    DisplayName: Destroy Self
   - Key: Terra.Studio.InGameTimer
     ComponentName: Terra.Studio.InGameTimerComponent
     SystemName: Terra.Studio.InGameTimerSystem
-    DrawerName: RuntimeInspectorNamespace.InGameTimer
+    DrawerName: Terra.Studio.InGameTimer
+    DisplayName: Game Timer
   - Key: Terra.Studio.Respawn
     ComponentName: Terra.Studio.RespawnComponent
     SystemName: Terra.Studio.RespawnSystem
-    DrawerName: RuntimeInspectorNamespace.Respawn
+    DrawerName: Terra.Studio.Respawn
+    DisplayName: Kill Player
   - Key: Terra.Studio.Rotate
     ComponentName: Terra.Studio.RotateComponent
     SystemName: Terra.Studio.RotateSystem
-    DrawerName: RuntimeInspectorNamespace.Rotate
+    DrawerName: Terra.Studio.Rotate
+    DisplayName: Rotate
   - Key: Terra.Studio.Translate
     ComponentName: Terra.Studio.TranslateComponent
     SystemName: Terra.Studio.TranslateSystem
-    DrawerName: RuntimeInspectorNamespace.Translate
+    DrawerName: Terra.Studio.Translate
+    DisplayName: Move
   - Key: Terra.Studio.GameScore
     ComponentName: Terra.Studio.InGameScoreComponent
     SystemName: Terra.Studio.InGameScoreSystem
     DrawerName: Terra.Studio.GameScore
+    DisplayName: Game Score
   - Key: Terra.Studio.Push
     ComponentName: Terra.Studio.PushComponent
     SystemName: Terra.Studio.PushSystem
     DrawerName: Terra.Studio.Push
+    DisplayName: Push
   - Key: Terra.Studio.Switch
     ComponentName: Terra.Studio.SwitchComponent
     SystemName: Terra.Studio.SwitchSystem
     DrawerName: Terra.Studio.Switch
+    DisplayName: Switch
   - Key: Terra.Studio.Teleport
     ComponentName: Terra.Studio.TeleportComponent
     SystemName: Terra.Studio.TeleportSystem
     DrawerName: Terra.Studio.Teleport
+    DisplayName: Teleport Player
   - Key: Terra.Studio.Collide
     ComponentName: Terra.Studio.CollideComponent
     SystemName: Terra.Studio.CollideSystem
     DrawerName: Terra.Studio.Collide
+    DisplayName: Collide
   - Key: Terra.Studio.Click
     ComponentName: Terra.Studio.ClickComponent
     SystemName: Terra.Studio.ClickSystem
     DrawerName: Terra.Studio.Click
+    DisplayName: Click
   - Key: Terra.Studio.StopRotate
     ComponentName: Terra.Studio.StopRotateComponent
     SystemName: Terra.Studio.StopRotateSystem
     DrawerName: Terra.Studio.StopRotate
+    DisplayName: Stop Rotate
   - Key: Terra.Studio.StopTranslate
     ComponentName: Terra.Studio.StopTranslateComponent
     SystemName: Terra.Studio.StopTranslateSystem
     DrawerName: Terra.Studio.StopTranslate
+    DisplayName: Stop Translate
   - Key: Terra.Studio.SetObjectPosition
     ComponentName: Terra.Studio.SetObjectPositionComponent
     SystemName: Terra.Studio.SetObjectPositionSystem
     DrawerName: Terra.Studio.SetObjectPosition
+    DisplayName: Teleport Self
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent
     EventValue: 0
     DefaultData: OnStart
+    DisplayName: Game Started
   - Key: Terra.Studio.Listener
     EventName: Terra.Studio.ListenerActionEvent
-    EventValue: 3
+    EventValue: 4
     DefaultData: 
+    DisplayName: Broadcast Listened
   - Key: Terra.Studio.MouseAction
     EventName: Terra.Studio.MouseActionEvent
-    EventValue: 2
+    EventValue: 3
     DefaultData: OnClick
+    DisplayName: Clicked
   - Key: Terra.Studio.TriggerAction
     EventName: Terra.Studio.TriggerActionEvent
     EventValue: 1
     DefaultData: Player
+    DisplayName: Player Touched
+  - Key: Terra.Studio.TriggerAction
+    EventName: Terra.Studio.TriggerActionEvent
+    EventValue: 2
+    DefaultData: Other
+    DisplayName: Object Touched

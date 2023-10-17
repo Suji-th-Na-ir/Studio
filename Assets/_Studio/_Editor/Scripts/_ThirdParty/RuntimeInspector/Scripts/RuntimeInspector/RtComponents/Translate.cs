@@ -1,9 +1,9 @@
 using UnityEngine;
-using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
+using System.Collections.Generic;
 
-namespace RuntimeInspectorNamespace
+namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.Translate"), AliasDrawer("Move")]
     public class Translate : BaseBehaviour
@@ -11,14 +11,15 @@ namespace RuntimeInspectorNamespace
         [AliasDrawer("MoveWhen")]
         public Atom.StartOn StartOn = new();
         public Atom.Translate Type = new();
-        [AliasDrawer("Speed")] public float speed;
+        [AliasDrawer("Speed")] public float speed = 5f;
         [AliasDrawer("Repeat")] public Atom.Repeat repeat = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
 
         public override string ComponentName => nameof(Translate);
+        public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
-        protected override bool CanListen => true;
+        protected override bool CanListen => StartOn.data.startIndex == 4;
         public override Atom.RecordedVector3 RecordedVector3 { get { return Type.recordedVector3; } }
         protected override string[] BroadcasterRefs => new string[]
         {
@@ -214,6 +215,37 @@ namespace RuntimeInspectorNamespace
                 Type.LastVector3 = (Vector3)Type.recordedVector3.Get();
             }
             GhostDescription.IsGhostInteractedInLastRecord = false;
+        }
+
+        public override BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            var properties = new Dictionary<string, object>[1];
+            var repeatString = repeat.repeatForever ? "Forever" : repeat.repeat.ToString();
+            properties[0] = new()
+            {
+                { "Speed", speed },
+                { "Repeat", repeatString },
+                { "Pause", repeat.pauseFor }
+            };
+            if (PlaySFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, PlaySFX.data.clipName);
+            }
+            if (PlayVFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, PlayVFX.data.clipName);
+            }
+            var startOnIndex = StartOn.data.startIndex;
+            var startOnName = (StartOn)startOnIndex;
+            var previewData = new BehaviourPreviewUI.PreviewData()
+            {
+                DisplayName = GetDisplayName(),
+                EventName = startOnName.ToString(),
+                Properties = properties,
+                Broadcast = new string[] { repeat.broadcast },
+                Listen = StartOn.data.listenName
+            };
+            return previewData;
         }
     }
 }

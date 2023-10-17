@@ -10,11 +10,15 @@ namespace Terra.Studio
     {
         private const int TARGET_FRAME_RATE = 60;
         private SystemConfigurationSO configData;
+        private RTDataManagerSO systemData;
         private StudioState previousStudioState;
         private StudioState currentStudioState;
         private Scene currentActiveScene;
         private LoadSceneParameters sceneLoadParameters;
 
+        public bool IsSimulating { get; private set; }
+        public Func<bool> CanInitiateSubsystemProcess { get; set; }
+        public RTDataManagerSO SystemData { get { return systemData; } }
         public SystemConfigurationSO ConfigSO { get { return configData; } }
         public StudioState PreviousStudioState { get { return previousStudioState; } }
         public StudioState CurrentStudioState { get { return currentStudioState; } }
@@ -43,6 +47,7 @@ namespace Terra.Studio
             Application.targetFrameRate = TARGET_FRAME_RATE;
             SceneManager.sceneLoaded += OnSceneLoaded;
             configData = (SystemConfigurationSO)SystemOp.Load(ResourceTag.SystemConfig);
+            systemData = (RTDataManagerSO)SystemOp.Load(ResourceTag.SystemData);
             currentStudioState = configData.DefaultStudioState;
             previousStudioState = StudioState.Bootstrap;
             sceneLoadParameters = new LoadSceneParameters()
@@ -77,9 +82,13 @@ namespace Terra.Studio
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
         {
+            if (!CanInitiateSubsystemProcess?.Invoke() ?? false)
+            {
+                return;
+            }
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
-            SystemOp.Resolve<ISubsystem>().Initialize();
+            SystemOp.Resolve<ISubsystem>().Initialize(scene);
             if (PreviousStudioState == StudioState.Bootstrap &&
                 SystemOp.Resolve<PasswordManager>())
             {
@@ -92,6 +101,11 @@ namespace Terra.Studio
             DisposeCurrentSubSystem(LoadSubsystemScene);
             currentStudioState = GetNextState();
             previousStudioState = GetOtherState();
+        }
+
+        public void SetSimulationState(bool isEnabled)
+        {
+            IsSimulating = isEnabled;
         }
 
         private void DisposeCurrentSubSystem(Action onUnloadComplete)

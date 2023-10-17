@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -13,6 +14,7 @@ namespace Terra.Studio
         //public bool executeMultipleTimes = true;
 
         public override string ComponentName => nameof(Click);
+        public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]
@@ -61,6 +63,29 @@ namespace Terra.Studio
             broadcast = obj.Broadcast;
             //executeMultipleTimes = obj.listen == Listen.Always;
             ImportVisualisation(broadcast, null);
+        }
+
+        public override BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            var properties = new Dictionary<string, object>[1];
+            properties[0] = new();
+            if (PlaySFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, PlaySFX.data.clipName);
+            }
+            if (PlayVFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, PlayVFX.data.clipName);
+            }
+            var startOnName = StartOn.OnClick.ToString();
+            var previewData = new BehaviourPreviewUI.PreviewData()
+            {
+                DisplayName = GetDisplayName(),
+                EventName = startOnName,
+                Properties = properties,
+                Broadcast = new string[] { broadcast }
+            };
+            return previewData;
         }
     }
 }

@@ -1,9 +1,9 @@
 using UnityEngine;
-using Terra.Studio;
 using Newtonsoft.Json;
 using PlayShifu.Terra;
+using System.Collections.Generic;
 
-namespace RuntimeInspectorNamespace
+namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.Rotate")]
     public class Rotate : BaseBehaviour
@@ -11,18 +11,19 @@ namespace RuntimeInspectorNamespace
         [AliasDrawer("RotateWhen")]
         public Atom.StartOn StartOn = new();
         public Atom.Rotate Type = new();
+        [AliasDrawer("Speed")] public float speed;
         [AliasDrawer("Direction")]
         public Direction direction;
-        [AliasDrawer("Speed")] public float speed;
+        [AliasDrawer("Speed")] public float speed = 20f;
         [AliasDrawer("Repeat")] public Atom.Repeat repeat = new();
-
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
         public override Atom.RecordedVector3 RecordedVector3 { get { return Type.vector3; } }
 
         public override string ComponentName => nameof(Rotate);
+        public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
-        protected override bool CanListen => true;
+        protected override bool CanListen => StartOn.data.startIndex == 4;
         protected override string[] BroadcasterRefs => new string[]
         {
           repeat.Broadcast
@@ -159,7 +160,7 @@ namespace RuntimeInspectorNamespace
             Type.vector3.Set(comp.rotateTo);
             repeat.pauseFor = comp.pauseFor;
             repeat.repeat = comp.repeatFor;
-            repeat.repeatForever= comp.repeatForever;
+            repeat.repeatForever = comp.repeatForever;
             repeat.broadcastAt = comp.broadcastAt;
             repeat.Broadcast = comp.Broadcast;
             repeat.repeatType = comp.repeatType;
@@ -223,6 +224,36 @@ namespace RuntimeInspectorNamespace
             }
             GhostDescription.IsGhostInteractedInLastRecord = false;
         }
+
+        public override BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            var properties = new Dictionary<string, object>[1];
+            var repeatString = repeat.repeatForever ? "Forever" : repeat.repeat.ToString();
+            properties[0] = new()
+            {
+                { "Speed", speed },
+                { "Repeat", repeatString },
+                { "Pause", repeat.pauseFor }
+            };
+            if (PlaySFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, PlaySFX.data.clipName);
+            }
+            if (PlayVFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, PlayVFX.data.clipName);
+            }
+            var startOnIndex = StartOn.data.startIndex;
+            var startOnName = (StartOn)startOnIndex;
+            var previewData = new BehaviourPreviewUI.PreviewData()
+            {
+                DisplayName = GetDisplayName(),
+                EventName = startOnName.ToString(),
+                Properties = properties,
+                Broadcast = new string[] { repeat.broadcast },
+                Listen = StartOn.data.listenName
+            };
+            return previewData;
+        }
     }
 }
-

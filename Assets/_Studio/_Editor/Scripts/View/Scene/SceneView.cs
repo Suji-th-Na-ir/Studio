@@ -1,11 +1,15 @@
+using System;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Terra.Studio
 {
     public class SceneView : View
     {
+        public Action OnAnimationDone;
+        private const string TOGGLE_OUT_STATE_KEY = "Sine Out";
+        private const string TOGGLE_IN_STATE_KEY = "Sine In";
+        private Animator previewToggleAnim;
+
         private void Awake()
         {
             EditorOp.Register(this);
@@ -13,7 +17,7 @@ namespace Terra.Studio
 
         public override void Init()
         {
-            //Initialize gizmo manager
+            previewToggleAnim = GetComponent<Animator>();
         }
 
         public override void Draw()
@@ -29,6 +33,12 @@ namespace Terra.Studio
         public override void Repaint()
         {
 
+        }
+
+        public void TogglePreviewAnim(bool sineOut)
+        {
+            var clipName = sineOut ? TOGGLE_OUT_STATE_KEY : TOGGLE_IN_STATE_KEY;
+            previewToggleAnim.Play(clipName);
         }
 
         private void OnDestroy()

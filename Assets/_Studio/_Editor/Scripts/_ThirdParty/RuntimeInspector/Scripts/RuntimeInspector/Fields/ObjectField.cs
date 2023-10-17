@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using PlayShifu.Terra;
-using Terra.Studio;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using Terra.Studio;
 using UnityEngine.UI;
+using PlayShifu.Terra;
+using System.Reflection;
+using System.Collections.Generic;
 
 namespace RuntimeInspectorNamespace
 {
     public class ObjectField : ExpandableInspectorField
     {
 #pragma warning disable 0649
-        [SerializeField]
-        private Button initializeObjectButton;
+        [SerializeField] private Button initializeObjectButton;
+        [SerializeField] private Button previewButton;
 #pragma warning restore 0649
 
         private bool elementsInitialized = false;
@@ -55,15 +54,12 @@ namespace RuntimeInspectorNamespace
             copyPastePanel = Helper.FindDeepChild(transform, "CopyPastePanel").gameObject;
             copyButton = Helper.FindDeepChild(transform, "CopyButton").GetComponent<Button>();
             pasteButton = Helper.FindDeepChild(transform, "PasteButton").GetComponent<Button>();
-
-
             copyPastePanel.SetActive(false);
             copyButton.onClick.RemoveAllListeners();
             copyButton.onClick.AddListener(() => CopyBehaviour());
             pasteButton.onClick.RemoveAllListeners();
             pasteButton.onClick.AddListener(() => PasteBehaviour());
             pasteText = pasteButton.GetComponentInChildren<Text>();
-
             openCopyPaste = Helper.FindDeepChild(transform, "OpenCopyPasteBtn").GetComponent<Button>();
             openCopyPaste.onClick.RemoveAllListeners();
             openCopyPaste.onClick.AddListener(() => OpenCopyPastePanel());
@@ -90,7 +86,6 @@ namespace RuntimeInspectorNamespace
         private void OpenCopyPastePanel()
         {
             var open = !copyPastePanel.activeSelf;
-
             var behaviour = Value as BaseBehaviour;
             if (behaviour != null)
             {
@@ -107,7 +102,6 @@ namespace RuntimeInspectorNamespace
                     pasteText.color = Helper.GetColorFromHex("#FFFFFF");
                 }
             }
-
             copyPastePanel.SetActive(open);
         }
 
@@ -151,6 +145,7 @@ namespace RuntimeInspectorNamespace
         {
             elementsInitialized = false;
             base.OnBound(variable);
+            SetupPreview();
         }
 
         protected override void GenerateElements()
@@ -271,6 +266,18 @@ namespace RuntimeInspectorNamespace
             }
         }
 
+        private void SetupPreview()
+        {
+            previewButton.onClick.RemoveAllListeners();
+            var behaviour = (BaseBehaviour)Value;
+            if (!behaviour.CanPreview)
+            {
+                previewButton.gameObject.SetActive(false);
+                return;
+            }
+            previewButton.onClick.AddListener(behaviour.DoPreview);
+        }
+        
         public override void SetInteractable(bool on)
         {
            

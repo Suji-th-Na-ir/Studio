@@ -19,7 +19,8 @@ namespace Terra.Studio
 
         public SceneDataHandler()
         {
-            if (!Helper.IsInUnityEditorMode())
+            if (!Helper.IsInUnityEditorMode() &&
+                EditorOp.Resolve<EditorEssentialsLoader>() == null)
             {
                 EditorOp.Register(new EditorEssentialsLoader());
             }
@@ -27,10 +28,15 @@ namespace Terra.Studio
 
         public void Dispose()
         {
-            if (!Helper.IsInUnityEditorMode())
+            if (!Helper.IsInUnityEditorMode() && IsEditorState())
             {
                 EditorOp.Unregister<EditorEssentialsLoader>();
             }
+        }
+
+        public bool IsEditorState()
+        {
+            return SystemOp.Resolve<System>().CurrentStudioState == StudioState.Editor;
         }
 
         public void Save()
@@ -39,14 +45,14 @@ namespace Terra.Studio
             var filePath = GetFilePath();
             if (!Helper.IsInUnityEditorMode())
             {
-                EasyUI.Toast.Toast.Show ("Saved Successfully!", 3.0f, EasyUI.Toast.ToastColor.Green);
+                EasyUI.Toast.Toast.Show("Saved Successfully!", 3.0f, EasyUI.Toast.ToastColor.Green);
                 SystemOp.Resolve<FileService>().WriteFileIntoLocal?.Invoke(sceneData, filePath);
             }
             else
             {
                 new FileService().WriteFileIntoLocal?.Invoke(sceneData, filePath);
             }
-                
+
         }
 
         private string GetFilePath()
@@ -230,7 +236,7 @@ namespace Terra.Studio
             return json;
         }
 
-        private VirtualEntity GetVirtualEntity(GameObject go, int index, bool shouldCheckForAssetPath)
+        public VirtualEntity GetVirtualEntity(GameObject go, int index, bool shouldCheckForAssetPath)
         {
             var newEntity = new VirtualEntity
             {

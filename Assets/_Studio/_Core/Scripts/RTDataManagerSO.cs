@@ -14,6 +14,7 @@ namespace Terra.Studio
             [ComponentList] public string ComponentName;
             [SystemList] public string SystemName;
             [EditorDrawerList] public string DrawerName;
+            public string DisplayName;
         }
 
         [Serializable]
@@ -24,6 +25,7 @@ namespace Terra.Studio
             public string EventName;
             public StartOn EventValue;
             public string DefaultData;
+            public string DisplayName;
         }
 
         private struct CachedSystemData
@@ -105,6 +107,12 @@ namespace Terra.Studio
             return (foundData.ComponentType, foundData.SystemType);
         }
 
+        public EventData GetEventData(string conditionalKey)
+        {
+            var foundData = eventData.Find(x => x.Key.Equals(conditionalKey));
+            return foundData;
+        }
+
         private Type GetEventTypeFromName(string name)
         {
             var type = cachedEventTypes.Find(x => x.FullName.Equals(name));
@@ -114,6 +122,28 @@ namespace Terra.Studio
                 cachedEventTypes.Add(type);
             }
             return type;
+        }
+
+        public bool TryGetEventDisplayName(string enumKey, out string displayName)
+        {
+            displayName = null;
+            var foundData = eventData.Find(x => x.EventValue.ToString().Equals(enumKey));
+            if (foundData != null)
+            {
+                displayName = foundData.DisplayName;
+            }
+            return !string.IsNullOrEmpty(displayName);
+        }
+
+        public bool TryGetSystemDisplayName(string key, out string displayName)
+        {
+            displayName = null;
+            var foundData = systemData.Find(x => x.DrawerName.Equals(key));
+            if (foundData != null)
+            {
+                displayName = foundData.DisplayName;
+            }
+            return !string.IsNullOrEmpty(displayName);
         }
     }
 }

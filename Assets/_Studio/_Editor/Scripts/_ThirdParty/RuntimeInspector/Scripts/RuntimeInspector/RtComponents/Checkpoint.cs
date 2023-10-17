@@ -1,7 +1,6 @@
-using Terra.Studio;
 using Newtonsoft.Json;
 
-namespace RuntimeInspectorNamespace
+namespace Terra.Studio
 {
     [EditorDrawComponent("Terra.Studio.Checkpoint")]
     public class Checkpoint : BaseBehaviour
@@ -13,6 +12,7 @@ namespace RuntimeInspectorNamespace
         public string Broadcast = null;
 
         public override string ComponentName => nameof(Checkpoint);
+        public override bool CanPreview => false;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]
