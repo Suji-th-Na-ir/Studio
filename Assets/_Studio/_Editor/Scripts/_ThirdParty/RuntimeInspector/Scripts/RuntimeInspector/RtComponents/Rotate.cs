@@ -11,8 +11,11 @@ namespace RuntimeInspectorNamespace
         [AliasDrawer("RotateWhen")]
         public Atom.StartOn StartOn = new();
         public Atom.Rotate Type = new();
+        [AliasDrawer("Direction")]
+        public Direction direction;
         [AliasDrawer("Speed")] public float speed;
         [AliasDrawer("Repeat")] public Atom.Repeat repeat = new();
+
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
         public override Atom.RecordedVector3 RecordedVector3 { get { return Type.vector3; } }
@@ -80,7 +83,7 @@ namespace RuntimeInspectorNamespace
             var targetVector = (Vector3)Type.vector3.Get();
             var comp = new RotateComponent
             {
-                direction = repeat.repeatType == RepeatDirectionType.PingPong ? Direction.Clockwise : Type.direction,
+                direction = repeat.repeatType == RepeatDirectionType.PingPong ? Direction.Clockwise : direction,
                 repeatType = repeat.repeatType,
                 speed = speed,
                 rotateTo = targetVector,
@@ -151,7 +154,7 @@ namespace RuntimeInspectorNamespace
             PlayVFX.data.canPlay = comp.canPlayVFX;
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
-            Type.direction = comp.direction;
+            direction = comp.direction;
             speed = comp.speed;
             Type.vector3.Set(comp.rotateTo);
             repeat.pauseFor = comp.pauseFor;

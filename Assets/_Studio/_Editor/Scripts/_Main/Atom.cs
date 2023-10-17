@@ -182,8 +182,6 @@ namespace Terra.Studio
             [HideInInspector] public Vector3 ghostLastRecordedRotation;
             [HideInInspector] public Vector3 LastVector3;
             [HideInInspector] public Action ForceRefreshData;
-            [AliasDrawer("Direction")]
-            public Direction direction;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)
             {
