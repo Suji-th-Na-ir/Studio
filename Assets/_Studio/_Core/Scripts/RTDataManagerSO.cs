@@ -138,7 +138,7 @@ namespace Terra.Studio
         public bool TryGetSystemDisplayName(string key, out string displayName)
         {
             displayName = null;
-            var foundData = systemData.Find(x => x.Key.Equals(key));
+            var foundData = systemData.Find(x => x.DrawerName.Equals(key));
             if (foundData != null)
             {
                 displayName = foundData.DisplayName;

@@ -8,6 +8,8 @@ namespace Terra.Studio
 {
     public class PseudoRuntime<T> : IDisposable where T : BaseBehaviour
     {
+        private static readonly Vector3 FIXED_INFINITE_POSITION = new(-1000f, -1000f, -1000f);
+
         public event Action OnRuntimeInitialized;
         public event Action OnEventsExecuted;
         public event Action OnBroadcastExecuted;
@@ -15,6 +17,7 @@ namespace Terra.Studio
 
         private GameObject originalTarget;
         private Scene cachedRuntimeScene;
+        private Vector3 cachedPosition;
 
         private static string runtimeSceneName;
         private string RuntimeSceneName
@@ -96,7 +99,8 @@ namespace Terra.Studio
             SystemOp.Resolve<CrossSceneDataHolder>().Set(json);
             originalTarget = baseBehaviour.gameObject;
             SetObjectPathData();
-            originalTarget.SetActive(false);
+            cachedPosition = originalTarget.transform.position;
+            originalTarget.transform.position = FIXED_INFINITE_POSITION;
         }
 
         private void SetObjectPathData()
@@ -142,7 +146,7 @@ namespace Terra.Studio
             SystemOp.Resolve<System>().SetSimulationState(false);
             SystemOp.Resolve<System>().CanInitiateSubsystemProcess = () => { return true; };
             SystemOp.Register(EditorOp.Resolve<EditorSystem>() as ISubsystem);
-            originalTarget.SetActive(true);
+            originalTarget.transform.position = cachedPosition;
         }
 
         public void OnRestartRequested()

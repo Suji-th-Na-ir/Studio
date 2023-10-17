@@ -16,37 +16,37 @@ MonoBehaviour:
   - Key: Terra.Studio.Checkpoint
     ComponentName: Terra.Studio.CheckpointComponent
     SystemName: Terra.Studio.CheckpointSystem
-    DrawerName: RuntimeInspectorNamespace.Checkpoint
+    DrawerName: Terra.Studio.Checkpoint
     DisplayName: Checkpoint
   - Key: Terra.Studio.Collectable
     ComponentName: Terra.Studio.CollectableComponent
     SystemName: Terra.Studio.CollectableSystem
-    DrawerName: RuntimeInspectorNamespace.Collectible
+    DrawerName: Terra.Studio.Collectible
     DisplayName: Collectable
   - Key: Terra.Studio.DestroyOn
     ComponentName: Terra.Studio.DestroyOnComponent
     SystemName: Terra.Studio.DestroyOnSystem
-    DrawerName: RuntimeInspectorNamespace.DestroyOn
+    DrawerName: Terra.Studio.DestroyOn
     DisplayName: Destroy Self
   - Key: Terra.Studio.InGameTimer
     ComponentName: Terra.Studio.InGameTimerComponent
     SystemName: Terra.Studio.InGameTimerSystem
-    DrawerName: RuntimeInspectorNamespace.InGameTimer
+    DrawerName: Terra.Studio.InGameTimer
     DisplayName: Game Timer
   - Key: Terra.Studio.Respawn
     ComponentName: Terra.Studio.RespawnComponent
     SystemName: Terra.Studio.RespawnSystem
-    DrawerName: RuntimeInspectorNamespace.Respawn
+    DrawerName: Terra.Studio.Respawn
     DisplayName: Kill Player
   - Key: Terra.Studio.Rotate
     ComponentName: Terra.Studio.RotateComponent
     SystemName: Terra.Studio.RotateSystem
-    DrawerName: RuntimeInspectorNamespace.Rotate
+    DrawerName: Terra.Studio.Rotate
     DisplayName: Rotate
   - Key: Terra.Studio.Translate
     ComponentName: Terra.Studio.TranslateComponent
     SystemName: Terra.Studio.TranslateSystem
-    DrawerName: RuntimeInspectorNamespace.Translate
+    DrawerName: Terra.Studio.Translate
     DisplayName: Move
   - Key: Terra.Studio.GameScore
     ComponentName: Terra.Studio.InGameScoreComponent
