@@ -242,7 +242,7 @@ namespace Terra.Studio
                 DisplayName = GetDisplayName(),
                 EventName = startOnName.ToString(),
                 Properties = properties,
-                Broadcast = new string[] { repeat.broadcast },
+                Broadcast = new string[] { repeat.Broadcast },
                 Listen = StartOn.data.listenName
             };
             return previewData;
