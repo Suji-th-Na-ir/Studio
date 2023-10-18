@@ -717,6 +717,22 @@ namespace RuntimeInspectorNamespace
             return variableDrawer;
         }
 
+
+        public InspectorField CreateDrawerForField(string name)
+        {
+            Type type = Value.GetType();
+            FieldInfo fieldInfo = type.GetField(name);
+            if (fieldInfo != null)
+            {
+                return CreateDrawerForVariable(fieldInfo, fieldInfo.Name, true);
+            }
+            else
+            {
+                var propertyInfo = type.GetProperty(name);
+                return CreateDrawerForVariable(propertyInfo, propertyInfo.Name, true);
+            }
+        }
+
         public InspectorField CreateDrawerForVariable(MemberInfo variable, string variableName = null,bool takeOriginalDepth=false)
         {
             // xnx 

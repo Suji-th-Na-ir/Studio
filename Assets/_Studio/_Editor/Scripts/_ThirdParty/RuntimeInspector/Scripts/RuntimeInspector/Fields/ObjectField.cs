@@ -288,10 +288,5 @@ namespace RuntimeInspectorNamespace
             previewButton.gameObject.SetActive(true);
             previewButton.onClick.AddListener(behaviour.DoPreview);
         }
-
-        public override void SetInteractable(bool on , bool disableAlso=false)
-        {
-           
-        }
     }
 }

@@ -330,26 +330,5 @@ namespace RuntimeInspectorNamespace
             ValidateRepeatValue();
             ValidateRepeatForeverValue(val.repeatForever);
         }
-
-        private InspectorField CreateDrawerForField(string name)
-        {
-            Type type = Value.GetType();
-            FieldInfo fieldInfo = type.GetField(name);
-            if (fieldInfo != null)
-            {
-                return CreateDrawerForVariable(fieldInfo, fieldInfo.Name, true);
-            }
-            else
-            {
-                var propertyInfo = type.GetProperty(name);
-                return CreateDrawerForVariable(propertyInfo, propertyInfo.Name, true);
-            }
-         
-        }
-
-        public override void SetInteractable(bool on , bool disableAlso=false)
-        {
-            
-        }
     }
 }
