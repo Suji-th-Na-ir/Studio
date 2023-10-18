@@ -29,6 +29,7 @@ namespace RuntimeInspectorNamespace
 
         protected override void OnBound(MemberInfo variable)
         {
+            base.OnBound(variable);
             EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(input.gameObject,
                 () => input.targetGraphic.color = Skin.SelectedItemBackgroundColor,
                 () => input.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
@@ -36,6 +37,7 @@ namespace RuntimeInspectorNamespace
 
         protected override void OnUnbound()
         {
+            base.OnUnbound();
             EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(input.gameObject);
         }
 
@@ -79,9 +81,9 @@ namespace RuntimeInspectorNamespace
             input.SetIsOnWithoutNotify((bool)Value);
         }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
-           
+            base.SetInteractable(on, disableAlso);
         }
     }
 }

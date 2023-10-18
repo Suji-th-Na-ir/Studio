@@ -58,7 +58,7 @@ namespace RuntimeInspectorNamespace
             var val = (Atom.Repeat)Value;
             if (val.broadcastAt == BroadcastAt.Never)
             {
-                broadcastFieldDrawer.gameObject.SetActive(false);
+                broadcastFieldDrawer.SetInteractable(false, true);
                 val.Broadcast = string.Empty;
                 UpdateOtherCompData(val, RepeatData.Broadcast);
             }
@@ -68,7 +68,7 @@ namespace RuntimeInspectorNamespace
                 {
                     val.Broadcast = val.lastEnteredBroadcast;
                 }
-                broadcastFieldDrawer.gameObject.SetActive(true);
+                broadcastFieldDrawer.SetInteractable(true, true);
                 UpdateOtherCompData(val, RepeatData.RevertToOldValues);
             }
         }
@@ -133,8 +133,8 @@ namespace RuntimeInspectorNamespace
 
         private void ToggelPauseForAndRepeat(bool on)
         {
-            pauseForFieldDrawer.gameObject.SetActive(on);
-            repeatTypeFieldDrawer.gameObject.SetActive(on);
+            pauseForFieldDrawer.SetInteractable(on,true);
+            repeatTypeFieldDrawer.SetInteractable(on, true);
         }
 
 
@@ -305,7 +305,7 @@ namespace RuntimeInspectorNamespace
             didCheckForExpand = false;
         }
 
-        protected override void GenerateElements()
+        public override void GenerateElements()
         {
             var val = (Atom.Repeat)Value;
             repeatForFieldDrawer = CreateDrawerForField(nameof(val.repeat));
@@ -347,7 +347,7 @@ namespace RuntimeInspectorNamespace
          
         }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
             
         }

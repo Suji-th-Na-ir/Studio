@@ -200,8 +200,9 @@ namespace RuntimeInspectorNamespace
                 input.value = valueIndex;
         }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
+            base.SetInteractable(on, disableAlso);
             input.interactable = on;
         }
 

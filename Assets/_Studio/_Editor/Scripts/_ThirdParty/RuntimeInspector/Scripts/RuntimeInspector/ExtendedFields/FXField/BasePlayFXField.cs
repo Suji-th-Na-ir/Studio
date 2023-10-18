@@ -42,12 +42,11 @@ namespace Terra.Studio
             EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(toggleInput.gameObject,
                 () => toggleInput.targetGraphic.color = Skin.SelectedItemBackgroundColor,
                 () => toggleInput.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
-            if (toggleInput.isOn)
-            {
-                EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(optionsDropdown.gameObject,
-                () => optionsDropdown.targetGraphic.color = Skin.SelectedItemBackgroundColor,
-                () => optionsDropdown.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
-            }
+
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(optionsDropdown.gameObject,
+            () => optionsDropdown.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+            () => optionsDropdown.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+
         }
 
         protected override void OnUnbound()
@@ -81,17 +80,6 @@ namespace Terra.Studio
         {
             var isToggledOn = toggleInput.isOn;
             optionsDropdown.gameObject.SetActive(isToggledOn);
-            if (isToggledOn)
-            {
-                EditorOp.Resolve<FocusFieldsSystem>().AddAfterGameObject(toggleInput.gameObject, optionsDropdown.gameObject,
-                () => optionsDropdown.targetGraphic.color = Skin.SelectedItemBackgroundColor,
-                () => optionsDropdown.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
-            }
-            else
-            {
-                EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(optionsDropdown.gameObject);
-            }
-
         }
 
         protected virtual void OnToggleValueChanged(bool _input)
@@ -200,8 +188,9 @@ namespace Terra.Studio
 
         protected virtual void UpdateData() { }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
+            base.SetInteractable(on, disableAlso);
             toggleInput.interactable = on;
             optionsDropdown.interactable = on;
         }

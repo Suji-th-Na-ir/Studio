@@ -37,7 +37,7 @@ namespace RuntimeInspectorNamespace
             return type == typeof(Atom.Rotate);
         }
 
-        protected override void GenerateElements()
+        public override void GenerateElements()
         {
             for (int i = 0; i < allFields.Length; i++)
             {
@@ -66,7 +66,7 @@ namespace RuntimeInspectorNamespace
             didCheckForExpand = false;
         }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
 
         }

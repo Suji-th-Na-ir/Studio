@@ -148,7 +148,7 @@ namespace RuntimeInspectorNamespace
             SetupPreview();
         }
 
-        protected override void GenerateElements()
+        public override void GenerateElements()
         {
             if (Value.IsNull())
             {
@@ -200,11 +200,11 @@ namespace RuntimeInspectorNamespace
             {
                 foreach (MemberInfo variable in Inspector.GetExposedVariablesForType(Value.GetType()))
                 {
-                   var Ifield= CreateDrawerForVariable(variable);
+                    var Ifield = CreateDrawerForVariable(variable);
                     var ExpandField = Ifield as ExpandableInspectorField;
                     if (ExpandField != null)
                     {
-                        ExpandField.Refresh();
+                        ExpandField.GenerateElements();
                     }
                 }
             }
@@ -288,8 +288,8 @@ namespace RuntimeInspectorNamespace
             previewButton.gameObject.SetActive(true);
             previewButton.onClick.AddListener(behaviour.DoPreview);
         }
-        
-        public override void SetInteractable(bool on)
+
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
            
         }

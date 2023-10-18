@@ -64,7 +64,7 @@ namespace RuntimeInspectorNamespace
             return type == typeof(Transform);
         }
 
-        protected override void GenerateElements()
+        public override void GenerateElements()
         {
             CreateDrawerForVariable(positionProp, "Position");
             CreateDrawerForVariable(rotationProp, "Rotation");
@@ -88,7 +88,7 @@ namespace RuntimeInspectorNamespace
             copyPasteView.Repaint();
         }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
            
         }

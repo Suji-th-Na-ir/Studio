@@ -181,7 +181,7 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
             startOn.interactable = on;
             listenOn.interactable = on;

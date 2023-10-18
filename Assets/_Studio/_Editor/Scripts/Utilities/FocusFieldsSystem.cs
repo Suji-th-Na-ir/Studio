@@ -49,7 +49,13 @@ namespace Terra.Studio
             {
                 if (currentFocusedGameobject.fGameObject == null)
                     return null;
+
                 var index = focusedGameObjects.IndexOf(currentFocusedGameobject) + 1;
+                while (index < focusedGameObjects.Count && focusedGameObjects[index].fGameObject.activeInHierarchy == false)
+                {
+                    index = index + 1;
+                }
+
                 if (index < focusedGameObjects.Count)
                 {
                     return focusedGameObjects[index].fGameObject;

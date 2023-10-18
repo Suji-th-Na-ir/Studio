@@ -28,7 +28,6 @@ namespace RuntimeInspectorNamespace
 
         private int lineCount = 1;
         protected override float HeightMultiplier { get { return lineCount; } }
-
         public override void Initialize()
         {
             base.Initialize();
@@ -38,8 +37,9 @@ namespace RuntimeInspectorNamespace
             input.DefaultEmptyValue = string.Empty;
         }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on, bool disableAlso = false)
         {
+            base.SetInteractable(on, disableAlso);
             input.BackingField.interactable = on;
             input.BackingField.textComponent.color = SkinUtils.GetInteractableColor(on);
         }
@@ -75,9 +75,9 @@ namespace RuntimeInspectorNamespace
             }
 
             lastSubmittedValue = Value;
-            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(input.BackingField.gameObject,
-                () => input.BackingField.targetGraphic.color = Skin.SelectedItemBackgroundColor,
-                () => input.BackingField.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(input.gameObject,
+                   () => input.BackingField.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                   () => input.BackingField.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
 
         }
 
@@ -85,8 +85,7 @@ namespace RuntimeInspectorNamespace
         {
             base.OnUnbound();
             SetterMode = Mode.OnValueChange;
-            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(input.BackingField.gameObject);
-
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(input.gameObject);
         }
 
         protected virtual bool OnValueChanged(BoundInputField source, string input)

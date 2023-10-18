@@ -70,7 +70,6 @@ namespace RuntimeInspectorNamespace
         {
             base.OnBound(variable);
             SetValueIndirectly();
-
             EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(inputX.gameObject,
                 ()=>inputX.BackingField.targetGraphic.color=Skin.SelectedItemBackgroundColor,
                 () => inputX.BackingField.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
@@ -265,8 +264,9 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
+            base.SetInteractable(on, disableAlso);
             inputX.BackingField.interactable = on;
             inputY.BackingField.interactable = on;
             inputZ.BackingField.interactable = on;

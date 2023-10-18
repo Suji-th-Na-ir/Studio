@@ -37,11 +37,11 @@ namespace RuntimeInspectorNamespace
             return type == typeof(Atom.Translate);
         }
 
-        protected override void GenerateElements()
+        public override void GenerateElements()
         {
-            for (int i = 0; i < allFields.Length; i++)
+            for (int i = 0; i < FieldInfos.Length; i++)
             {
-                CreateDrawerForVariable(allFields[i], allFields[i].Name,true);
+                CreateDrawerForVariable(FieldInfos[i], FieldInfos[i].Name, true);
             }
         }
 
@@ -66,7 +66,7 @@ namespace RuntimeInspectorNamespace
             didCheckForExpand = false;
         }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
            
         }

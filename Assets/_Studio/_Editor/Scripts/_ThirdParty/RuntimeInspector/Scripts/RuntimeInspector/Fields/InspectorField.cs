@@ -180,7 +180,13 @@ namespace RuntimeInspectorNamespace
             return true;
         }
 
-        public abstract void SetInteractable(bool on);
+        public virtual void SetInteractable(bool on,bool disableAlso=false)
+        {
+            if(disableAlso)
+            {
+                gameObject.SetActive(on);
+            }
+        }
         public virtual void InvokeUpdateDropdown(List<string> dropdowns){ }
 
         public void BindTo(InspectorField parent, MemberInfo variable, string variableName = null)
@@ -298,6 +304,7 @@ namespace RuntimeInspectorNamespace
             this.setter = setter;
 
             OnBound(variable);
+            SetInteractable(true, true);
         }
 
         public void BindTo(Type variableType, string variableName, string reflectedName, object value, MemberInfo variable = null)
@@ -535,9 +542,6 @@ namespace RuntimeInspectorNamespace
         }
 
 
-
-    
-
         protected void CheckAndExpand()
         {
             if (m_headerVisibility == RuntimeInspector.HeaderVisibility.Collapsible)
@@ -628,7 +632,7 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        protected abstract void GenerateElements();
+        public abstract void GenerateElements();
 
         private void GenerateExposedMethodButtons()
         {

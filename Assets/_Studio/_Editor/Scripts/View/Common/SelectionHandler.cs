@@ -251,7 +251,6 @@ public class SelectionHandler : View
                 nextSelecteField = EditorOp.Resolve<FocusFieldsSystem>().NextFocusedGameObject?.GetComponent<Selectable>();
             }
 
-
             if (nextSelecteField != null)
             {
                 EditorOp.Resolve<FocusFieldsSystem>().SelectFocusedGameObject(nextSelecteField.gameObject);
