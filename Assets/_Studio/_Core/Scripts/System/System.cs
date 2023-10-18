@@ -28,18 +28,14 @@ namespace Terra.Studio
         private void Awake()
         {
             SystemOp.Register(this);
-            if (!FIRST_TIME_LAUNCH_KEY.HasKeyInPrefs())
-            {
-                Mixpanel.Track("AppLaunchFirstTime");
-                FIRST_TIME_LAUNCH_KEY.SetInt(1);
-            }
-            Mixpanel.Track("AppLaunch");
-            Mixpanel.Flush();
+            TrackOnStartEvent();
         }
 
         private void Start()
         {
             Initialize();
+            SystemOp.Register(new User());
+            SystemOp.Resolve<LoginScreenView>().Init();
         }
 
         private void Initialize()
@@ -55,13 +51,18 @@ namespace Terra.Studio
                 loadSceneMode = LoadSceneMode.Additive
             };
             LoadSilentServices();
-            SystemOp.Resolve<PasswordManager>().OnCorrectPasswordEntered += LoadSubsystemScene;
+            SystemOp.Resolve<LoginScreenView>().OnLoginSuccessful += LoadSubsystemScene;
         }
 
         private void LoadSilentServices()
         {
             SystemOp.Register(new CrossSceneDataHolder());
             SystemOp.Register(new FileService());
+            LoadTemplate();
+        }
+
+        private void LoadTemplate()
+        {
             if (configData.PickupSavedData)
             {
                 var shouldIgnore = !Helper.IsInUnityEditor();
@@ -90,9 +91,9 @@ namespace Terra.Studio
             SceneManager.SetActiveScene(scene);
             SystemOp.Resolve<ISubsystem>().Initialize(scene);
             if (PreviousStudioState == StudioState.Bootstrap &&
-                SystemOp.Resolve<PasswordManager>())
+                SystemOp.Resolve<LoginScreenView>())
             {
-                SystemOp.Resolve<PasswordManager>().FuckOff();
+                SystemOp.Resolve<LoginScreenView>().FuckOff();
             }
         }
 
@@ -147,6 +148,17 @@ namespace Terra.Studio
             SystemOp.Flush();
             EditorOp.Flush();
             RuntimeOp.Flush();
+        }
+
+        private void TrackOnStartEvent()
+        {
+            if (!FIRST_TIME_LAUNCH_KEY.HasKeyInPrefs())
+            {
+                Mixpanel.Track("AppLaunchFirstTime");
+                FIRST_TIME_LAUNCH_KEY.SetInt(1);
+            }
+            Mixpanel.Track("AppLaunch");
+            Mixpanel.Flush();
         }
     }
 }
