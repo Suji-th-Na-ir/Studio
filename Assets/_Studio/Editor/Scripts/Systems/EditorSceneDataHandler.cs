@@ -18,7 +18,7 @@ namespace Terra.Studio.RTEditor
         private static void OnPlayModeStateChanged(bool didEnterPlayMode)
         {
             var asset = AssetDatabase.LoadAssetAtPath<SystemConfigurationSO>(SOPATH);
-            if (!asset.PickupSavedData)
+            if (!asset.PickupSavedData || asset.LoadFromCloud)
             {
                 return;
             }

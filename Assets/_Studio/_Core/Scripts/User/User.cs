@@ -4,17 +4,22 @@ namespace Terra.Studio
 {
     public class User
     {
+        public string UserName { get { return userName; } }
+        public string ProjectName { get { return projectName; } }
+
         private const string CORRECT_PASSWORD = "Studio@12345";
         private const string USER_NAME_PREF = "UserName";
         private const string PASSWORD_PREF = "Password";
 
         private string userName;
         private string password;
+        private readonly string projectName;
 
         public User()
         {
             USER_NAME_PREF.TryGetPrefString(out userName);
             PASSWORD_PREF.TryGetPrefString(out password);
+            projectName = SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name;
         }
 
         public User UpdateUserName(string userName)

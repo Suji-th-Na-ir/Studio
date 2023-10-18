@@ -14,7 +14,6 @@ namespace Terra.Studio
         private StudioState previousStudioState;
         private StudioState currentStudioState;
         private Scene currentActiveScene;
-        private LoadSceneParameters sceneLoadParameters;
 
         public bool IsSimulating { get; private set; }
         public Func<bool> CanInitiateSubsystemProcess { get; set; }
@@ -34,8 +33,7 @@ namespace Terra.Studio
         private void Start()
         {
             Initialize();
-            SystemOp.Register(new User());
-            SystemOp.Resolve<LoginScreenView>().Init();
+            LoadSilentServices();
         }
 
         private void Initialize()
@@ -46,22 +44,19 @@ namespace Terra.Studio
             systemData = (RTDataManagerSO)SystemOp.Load(ResourceTag.SystemData);
             currentStudioState = configData.DefaultStudioState;
             previousStudioState = StudioState.Bootstrap;
-            sceneLoadParameters = new LoadSceneParameters()
-            {
-                loadSceneMode = LoadSceneMode.Additive
-            };
-            LoadSilentServices();
-            SystemOp.Resolve<LoginScreenView>().OnLoginSuccessful += LoadSubsystemScene;
+            SystemOp.Resolve<LoginScreenView>().OnLoginSuccessful += LoadSceneData;
         }
 
         private void LoadSilentServices()
         {
             SystemOp.Register(new CrossSceneDataHolder());
             SystemOp.Register(new FileService());
-            LoadTemplate();
+            SystemOp.Register(new User());
+            SystemOp.Register(new SaveSystem());
+            SystemOp.Resolve<LoginScreenView>().Init();
         }
 
-        private void LoadTemplate()
+        private void LoadSceneData()
         {
             if (configData.PickupSavedData)
             {
@@ -78,7 +73,7 @@ namespace Terra.Studio
             var sceneToLoad = currentStudioState == StudioState.Editor
                 ? configData.EditorSceneName
                 : configData.RuntimeSceneName;
-            SceneManager.LoadSceneAsync(sceneToLoad, sceneLoadParameters);
+            SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)

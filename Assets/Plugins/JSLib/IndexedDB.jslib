@@ -90,5 +90,27 @@ mergeInto(LibraryManager.library,
         {
             Module['dynCall_vi'](functionPtr, [emptyBuffer]);
         };
+    },
+
+    RemoveData: function (key, functionPtr) {
+        var dbName = "StudioEditorDB";
+        var storeName = "StudioStore";
+        var newKey = UTF8ToString(key);
+        var request = window.indexedDB.open(dbName, 1);
+        request.onsuccess = function (event) {
+            var db = event.target.result;
+            var transaction = db.transaction([storeName], "readwrite");
+            var objectStore = transaction.objectStore(storeName);
+            var deleteRequest = objectStore.delete(newKey);
+            deleteRequest.onsuccess = function (event) {
+                Module['dynCall_vi'](functionPtr, 1); // 1 indicates success
+            };
+            deleteRequest.onerror = function (event) {
+                Module['dynCall_vi'](functionPtr, 0); // 0 indicates failure
+            };
+        };
+        request.onerror = function (event) {
+            Module['dynCall_vi'](functionPtr, 0); // 0 indicates failure
+        };
     }
 });

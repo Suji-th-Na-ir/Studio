@@ -8,8 +8,9 @@ namespace Terra.Studio
     public class FileService
     {
         public Action<string, Action<bool>> DoesFileExist;
-        public Action<string, string> WriteFileIntoLocal;
         public Action<string, Action<string>> ReadFileFromLocal;
+        public Action<string, Action<bool>> RemoveFileFromLocal;
+        private readonly Action<string, string> WriteFileIntoLocal;
 
         public FileService()
         {
@@ -18,12 +19,14 @@ namespace Terra.Studio
                 DoesFileExist = SystemOp.Resolve<WebGLHandler>().DoesStoreHasData;
                 WriteFileIntoLocal = SystemOp.Resolve<WebGLHandler>().WriteDataIntoStore;
                 ReadFileFromLocal = SystemOp.Resolve<WebGLHandler>().ReadDataFromStore;
+                RemoveFileFromLocal = SystemOp.Resolve<WebGLHandler>().RemoveDataFromStore;
             }
             else
             {
                 DoesFileExist = CheckIfFileExists;
                 WriteFileIntoLocal = WriteFile;
                 ReadFileFromLocal = ReadFromFile;
+                RemoveFileFromLocal = RemoveFile;
             }
         }
 
@@ -64,6 +67,17 @@ namespace Terra.Studio
             }
             var data = File.ReadAllText(filePath);
             callback?.Invoke(data);
+        }
+
+        private void RemoveFile(string filePath, Action<bool> callback)
+        {
+            if (!File.Exists(filePath))
+            {
+                callback?.Invoke(false);
+                return;
+            }
+            File.Delete(filePath);
+            callback?.Invoke(true);
         }
 
         public void BackupFile(string fullFilePath)

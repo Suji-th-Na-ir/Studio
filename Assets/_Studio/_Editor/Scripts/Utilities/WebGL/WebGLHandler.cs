@@ -49,6 +49,14 @@ namespace Terra.Studio
 #endif
         }
 
+        public void RemoveDataFromStore(string fullFilePath, Action<bool> callback)
+        {
+#if ENABLE_WEBGL_HANDLER
+            var fileName = Path.GetFileNameWithoutExtension(fullFilePath);
+            SystemOp.Resolve<IndexedDBManager>().RemoveDataFromIndexedDB(fileName, callback);
+#endif
+        }
+
         public void Dispose()
         {
 #if ENABLE_WEBGL_HANDLER

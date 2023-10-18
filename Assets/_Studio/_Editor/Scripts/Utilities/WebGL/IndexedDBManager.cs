@@ -10,6 +10,7 @@ namespace Terra.Studio
     public class IndexedDBManager
     {
         private static Action<bool> saveCallback;
+        private static Action<bool> removeCallback;
         private static Action<string> onFetchedData;
 
         [DllImport("__Internal")]
@@ -20,6 +21,9 @@ namespace Terra.Studio
 
         [DllImport("__Internal")]
         public static extern void GetData(string key, Action<string> callback);
+
+        [DllImport("__Internal")]
+        public static extern void RemoveData(string key, Action<int> callback);
 
         public IndexedDBManager()
         {
@@ -34,8 +38,14 @@ namespace Terra.Studio
 
         public void GetDataFromIndexedDB(string key, Action<string> callback)
         {
-            GetData(key, GetDataCallback);
             onFetchedData = callback;
+            GetData(key, GetDataCallback);
+        }
+
+        public void RemoveDataFromIndexedDB(string key, Action<bool> callback)
+        {
+            removeCallback = callback;
+            RemoveData(key, RemoveDataCallback);
         }
 
         [MonoPInvokeCallback(typeof(Action<int>))]
@@ -51,6 +61,14 @@ namespace Terra.Studio
         {
             onFetchedData?.Invoke(value);
             onFetchedData = null;
+        }
+
+        [MonoPInvokeCallback(typeof(Action<int>))]
+        public static void RemoveDataCallback(int value)
+        {
+            var res = value == 1;
+            removeCallback?.Invoke(res);
+            removeCallback = null;
         }
     }
 }
