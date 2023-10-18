@@ -238,20 +238,20 @@ public class SelectionHandler : View
     {
         if (_selectedObjects.Count > 0)
         {
-            if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
+            //if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
+            //{
+            if (RTInput.WasKeyPressedThisFrame(KeyCode.Backspace) || RTInput.WasKeyPressedThisFrame(KeyCode.Delete))
             {
-                if (RTInput.WasKeyPressedThisFrame(KeyCode.Backspace))
+                runtimeHierarchy.Deselect();
+                Snapshots.DeleteGameObjectsSnapshot.CreateSnapshot(_selectedObjects.ToList());
+                foreach (GameObject obj in _selectedObjects)
                 {
-                    runtimeHierarchy.Deselect();
-                    Snapshots.DeleteGameObjectsSnapshot.CreateSnapshot(_selectedObjects.ToList());
-                    foreach (GameObject obj in _selectedObjects)
-                    {
-                        obj.SetActive(false);
-                    }
-                    _selectedObjects.Clear();
-                    OnSelectionChanged();
+                    obj.SetActive(false);
                 }
+                _selectedObjects.Clear();
+                OnSelectionChanged();
             }
+            //}
         }
     }
 
