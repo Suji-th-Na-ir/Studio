@@ -31,12 +31,16 @@ namespace RuntimeInspectorNamespace
             EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(startOn.gameObject,
                   () => startOn.targetGraphic.color = Skin.SelectedItemBackgroundColor,
                 () => startOn.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(listenOn.gameObject,
+           () => listenOn.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+         () => listenOn.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
         }
 
         protected override void OnUnbound()
         {
             base.OnUnbound();
             EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(startOn.gameObject);
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(listenOn.gameObject);
         }
 
 
