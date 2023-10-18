@@ -39,9 +39,9 @@ namespace RuntimeInspectorNamespace
 
         public override void GenerateElements()
         {
-            for (int i = 0; i < allFields.Length; i++)
+            for (int i = 0; i < FieldInfos.Length; i++)
             {
-                CreateDrawerForVariable(allFields[i], allFields[i].Name, true);
+                CreateDrawerForVariable(FieldInfos[i], FieldInfos[i].Name, true);
             }
         }
 
