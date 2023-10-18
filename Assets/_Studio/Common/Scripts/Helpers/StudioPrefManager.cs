@@ -9,12 +9,12 @@ namespace Terra.Studio
             return PlayerPrefs.HasKey(key);
         }
 
-        public static void SetInt(this string key, int value)
+        public static void SetPref(this string key, int value)
         {
             PlayerPrefs.SetInt(key, value);
         }
 
-        public static void SetString(this string key, string value)
+        public static void SetPref(this string key, string value)
         {
             PlayerPrefs.SetString(key, value);
         }

@@ -37,8 +37,8 @@ namespace Terra.Studio
                 isLoginSuccessful?.Invoke(false);
                 return;
             }
-            USER_NAME_PREF.SetString(userName);
-            PASSWORD_PREF.SetString(password);
+            USER_NAME_PREF.SetPref(userName);
+            PASSWORD_PREF.SetPref(password);
             isLoginSuccessful?.Invoke(true);
         }
     }

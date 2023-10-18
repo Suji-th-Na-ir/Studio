@@ -23,7 +23,7 @@ namespace Terra.Studio
         public StudioState PreviousStudioState { get { return previousStudioState; } }
         public StudioState CurrentStudioState { get { return currentStudioState; } }
 
-        private const string FIRST_TIME_LAUNCH_KEY = "ALFT";
+        private const string FIRST_TIME_LAUNCH_PREF_KEY = "ALFT";
 
         private void Awake()
         {
@@ -152,10 +152,10 @@ namespace Terra.Studio
 
         private void TrackOnStartEvent()
         {
-            if (!FIRST_TIME_LAUNCH_KEY.HasKeyInPrefs())
+            if (!FIRST_TIME_LAUNCH_PREF_KEY.HasKeyInPrefs())
             {
                 Mixpanel.Track("AppLaunchFirstTime");
-                FIRST_TIME_LAUNCH_KEY.SetInt(1);
+                FIRST_TIME_LAUNCH_PREF_KEY.SetPref(1);
             }
             Mixpanel.Track("AppLaunch");
             Mixpanel.Flush();
