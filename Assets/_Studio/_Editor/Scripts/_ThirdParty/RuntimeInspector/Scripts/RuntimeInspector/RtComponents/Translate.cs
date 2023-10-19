@@ -19,7 +19,7 @@ namespace Terra.Studio
         public override string ComponentName => nameof(Translate);
         public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
-        protected override bool CanListen => StartOn.data.startIndex == 4;
+        protected override bool CanListen =>true;
         public override Atom.RecordedVector3 RecordedVector3 { get { return Type.recordedVector3; } }
         protected override string[] BroadcasterRefs => new string[]
         {
