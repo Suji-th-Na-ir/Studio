@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using PlayShifu.Terra;
 using RuntimeInspectorNamespace;
 using UnityEngine;
@@ -141,7 +142,7 @@ namespace Terra.Studio
 
             //Setting up behaviour Icon
             behaviourIcon = Instantiate(iconPrefab);
-            behaviourIcon.Setup(new Vector2(20, 20), "Circle", displayDock.ComponentType, transform, false);
+            behaviourIcon.Setup(new Vector2(13, 13), "Circle", displayDock.ComponentType, transform, false);
 
             initialWidth = 1.5f;
             initialHeight = 1.5f;
@@ -149,8 +150,8 @@ namespace Terra.Studio
             //Setting Up listner Icon
             listenIcon = Instantiate(iconPrefab);
             listenIcon.name = "Listen_Icon";
-            listenIcon.Setup(new Vector2(10, 10), "OutlineCircle", "Listen", transform, false);
-            PositionAroundCenterImage(listenIcon.RectTransform, 0, 1, 15, 90, false);
+            listenIcon.Setup(new Vector2(8, 8), "OutlineCircle", "Listen", transform, false);
+            PositionAroundCenterImage(listenIcon.RectTransform, 0, 1, 12, 90, false);
 
             m_LineRenderGO = EditorOp.Load<GameObject>("Prefabs/Line");
         }
@@ -162,10 +163,10 @@ namespace Terra.Studio
             for (int i = 0; i < remaing; i++)
             {
                 var newIcon = Instantiate(iconPrefab);
-                newIcon.Setup(new Vector2(10, 10), "OutlineCircle", "Broadcast", transform, false);
+                newIcon.Setup(new Vector2(8, 8), "OutlineCircle", "Broadcast", transform, false);
                 newIcon.name = $"BroadcatIcon_{i}";
                 broadcasticons.Add(newIcon);
-                PositionAroundCenterImage(newIcon.RectTransform, broadcasticons.IndexOf(newIcon), broadcasticons.Count, 15, 90, true);
+                PositionAroundCenterImage(newIcon.RectTransform, broadcasticons.IndexOf(newIcon), broadcasticons.Count, 12, 90, true);
             }
         }
 
@@ -232,27 +233,54 @@ namespace Terra.Studio
 
             if (IsListning)
             {
-                listenIcon.gameObject.SetActive(true);
+                listenIcon.Show();
+                if (BroadcastingStrings == null && BroadcastingStrings.Count == 0)
+                {
+                    listenIcon.SetIconImage("NoOneBroadcasting");
+                    listenIcon.SetBackgroundColor(Helper.GetColorFromHex("#FF413B"));
+                }
+
+                bool broadcaterPresent = false;
+                for (int j = 0; j < ListenStrings.Count; j++)
+                {
+                    var allbrodcasters = m_BroadcastTargetNodes?.FindAll(a => a.BroadcastingStrings.Contains(m_listeningStrings[j]));
+                    if (allbrodcasters.Count > 0)
+                    {
+                        broadcaterPresent = true;
+                        break;
+                    }
+                }
+                if (broadcaterPresent)
+                {
+                    listenIcon.SetIconImage("Listen");
+                    listenIcon.SetBackgroundColor(Color.white);
+                }
+                else
+                {
+                    listenIcon.SetIconImage("NoOneBroadcasting");
+                    listenIcon.SetBackgroundColor(Helper.GetColorFromHex("#FF413B"));
+                }
+
             }
             else
             {
-                listenIcon.gameObject.SetActive(false);
+                listenIcon.Hide();
             }
 
             for (int i = 0; i < broadcasticons.Count; i++)
             {
                 if (i > BroadcastingStrings.Count - 1)
                 {
-                    broadcasticons[i].Show();
+                    broadcasticons[i].Hide();
                 }
                 else
                 {
                     if (ISBroadcasting)
                     {
                         if (scalingFactor == 0)
-                            broadcasticons[i].gameObject.SetActive(false);
+                            broadcasticons[i].Hide();
                         else
-                            broadcasticons[i].gameObject.SetActive(true);
+                            broadcasticons[i].Show();
 
                         if (m_isBroadcatingGameWon)
                         {
@@ -278,7 +306,6 @@ namespace Terra.Studio
                     else
                     {
                         broadcasticons[i].Hide();
-
                     }
                 }
             }
