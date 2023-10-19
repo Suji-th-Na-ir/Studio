@@ -4,6 +4,8 @@ using System.Reflection;
 using UnityEngine.UI;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Windows;
+using RTG;
 
 namespace RuntimeInspectorNamespace
 {
@@ -38,12 +40,17 @@ namespace RuntimeInspectorNamespace
                     onStringUpdated = attribute.OnValueUpdated(val.behaviour);
                 }
             }
+
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(broadcastDropdown.gameObject,
+           () => broadcastDropdown.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+           () => broadcastDropdown.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
         }
 
         protected override void OnUnbound()
         {
             base.OnUnbound();
             onStringUpdated = null;
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(broadcastDropdown.gameObject);
         }
 
         public override void Refresh()
