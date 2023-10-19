@@ -6,11 +6,9 @@ namespace Terra.Studio
     [EditorDrawComponent("Terra.Studio.Click")]
     public class Click : BaseBehaviour
     {
-        [AliasDrawer("Broadcast")]
-        [OnValueChanged(UpdateBroadcast = true)]
-        public string broadcast = null;
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
+        public Atom.Broadcast broadcastData = new();
         //public bool executeMultipleTimes = true;
 
         public override string ComponentName => nameof(Click);
@@ -19,7 +17,7 @@ namespace Terra.Studio
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]
         {
-            broadcast
+            broadcastData.broadcast
         };
 
         protected override void Awake()
@@ -27,6 +25,7 @@ namespace Terra.Studio
             base.Awake();
             PlaySFX.Setup<Click>(gameObject);
             PlayVFX.Setup<Click>(gameObject);
+            broadcastData.Setup(gameObject, this);
         }
 
         public override (string type, string data) Export()
@@ -39,8 +38,8 @@ namespace Terra.Studio
                 canPlayVFX = PlayVFX.data.canPlay,
                 vfxName = PlayVFX.data.clipName,
                 vfxIndex = PlayVFX.data.clipIndex,
-                IsBroadcastable = !string.IsNullOrEmpty(broadcast),
-                Broadcast = broadcast,
+                IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
+                Broadcast = broadcastData.broadcast,
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.MouseAction",
                 ConditionData = "OnClick",
@@ -60,9 +59,9 @@ namespace Terra.Studio
             PlayVFX.data.canPlay = obj.canPlayVFX;
             PlayVFX.data.clipName = obj.vfxName;
             PlayVFX.data.clipIndex = obj.vfxIndex;
-            broadcast = obj.Broadcast;
+            broadcastData.broadcast = obj.Broadcast;
             //executeMultipleTimes = obj.listen == Listen.Always;
-            ImportVisualisation(broadcast, null);
+            ImportVisualisation(broadcastData.broadcast, null);
         }
 
         public override BehaviourPreviewUI.PreviewData GetPreviewData()
@@ -83,7 +82,7 @@ namespace Terra.Studio
                 DisplayName = GetDisplayName(),
                 EventName = startOnName,
                 Properties = properties,
-                Broadcast = new string[] { broadcast }
+                Broadcast = new string[] { broadcastData.broadcast }
             };
             return previewData;
         }

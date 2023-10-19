@@ -322,9 +322,8 @@ namespace RuntimeInspectorNamespace
 
             broadcastTypeFieldDrawer = CreateDrawerForField(nameof(val.broadcastAt));
             broadcastTypeFieldDrawer.OnValueUpdated += OnBroadcastTypeValueChanged;
-            
 
-            broadcastFieldDrawer = CreateDrawerForField(nameof(val.Broadcast));
+            broadcastFieldDrawer = CreateDrawerForField(nameof(val.broadcastData));
             broadcastFieldDrawer.OnValueUpdated += OnBroadcastValueChanged;
 
             ValidateRepeatValue();

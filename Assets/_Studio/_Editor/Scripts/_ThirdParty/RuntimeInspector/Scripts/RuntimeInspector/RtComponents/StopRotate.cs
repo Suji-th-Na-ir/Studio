@@ -18,9 +18,7 @@ namespace Terra.Studio
         }
         [AliasDrawer("StopWhen")]
         public Atom.StartOn startOn = new();
-        [AliasDrawer("Broadcast")]
-        [OnValueChanged(UpdateBroadcast = true)]
-        public string broadcast = null;
+        public Atom.Broadcast broadcastData = new();
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
 
@@ -30,7 +28,7 @@ namespace Terra.Studio
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]
         {
-            broadcast
+            broadcastData.broadcast
         };
         protected override string[] ListenerRefs => new string[]
         {
@@ -43,6 +41,7 @@ namespace Terra.Studio
             startOn.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated, startOn.data.startIndex == 1);
             playSFX.Setup<StopRotate>(gameObject);
             playVFX.Setup<StopRotate>(gameObject);
+            broadcastData.Setup(gameObject, this);
         }
 
         public override (string type, string data) Export()
@@ -52,8 +51,8 @@ namespace Terra.Studio
                 IsConditionAvailable = true,
                 ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(GetEnum(startOn.data.startName)),
                 ConditionData = GetConditionValue(),
-                IsBroadcastable = !string.IsNullOrEmpty(broadcast),
-                Broadcast = broadcast,
+                IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
+                Broadcast = broadcastData.broadcast,
                 startIndex = startOn.data.startIndex,
                 canPlaySFX = playSFX.data.canPlay,
                 sfxName = playSFX.data.clipName,
@@ -99,7 +98,7 @@ namespace Terra.Studio
             startOn.data.startName = GetStart(obj).ToString();
             startOn.data.listenName = GetListenValues(obj);
             startOn.data.startIndex = obj.startIndex;
-            broadcast = obj.Broadcast;
+            broadcastData.broadcast = obj.Broadcast;
             playSFX.data.canPlay = obj.canPlaySFX;
             playSFX.data.clipIndex = obj.sfxIndex;
             playSFX.data.clipName = obj.sfxName;
@@ -109,7 +108,7 @@ namespace Terra.Studio
             var listenString = "";
             if (startOn.data.startIndex == 1)
                 listenString = startOn.data.listenName;
-            ImportVisualisation(broadcast, listenString);
+            ImportVisualisation(broadcastData.broadcast, listenString);
         }
 
         private StartOn GetStart(StopRotateComponent comp)

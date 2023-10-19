@@ -16,7 +16,6 @@ namespace RuntimeInspectorNamespace
         public override void Initialize()
         {
             base.Initialize();
-            broadcastDropdown.onValueChanged.AddListener((val) => OnBroadcastDropdownValueChanged(val));
         }
 
         public override bool SupportsType(Type type)
@@ -29,7 +28,7 @@ namespace RuntimeInspectorNamespace
             base.OnBound(variable);
 
             var val = (Atom.Broadcast)Value;
-
+            broadcastDropdown.onValueChanged.AddListener((val) => OnBroadcastDropdownValueChanged(val));
             FieldInfo fInfo = Value.GetType().GetField(nameof(val.broadcast));
             var attribute = fInfo.GetAttribute<OnValueChangedAttribute>();
             if (attribute != null)
@@ -68,47 +67,26 @@ namespace RuntimeInspectorNamespace
             var val = (Atom.Broadcast)Value;
             BroadcastFieldDrawer = CreateDrawerForField(nameof(val.broadcast));
             BroadcastFieldDrawer.OnStringValueSubmitted +=OnBroadcastValueChanged;
-            
-            AddDropDownOptionsInOrder(EditorOp.Resolve<BroadcastListenStringValidator>().BroadcastStrings);
-            OnBroadcastDropdownValueChanged(broadcastDropdown.value);
+            BroadcastFieldDrawer.SetInteractable(false, true);
+
+            AddDropDownOptionsInOrder(SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings);
+            SetBroadcastDropdownCurrentValue(val.broadcast, true);
         }
 
-        private void AddDropDownOptionsInOrder(List<string>names)
+        private void AddDropDownOptionsInOrder(IEnumerable<string>names)
         {
             broadcastDropdown.ClearOptions();
             List<string> options = new List<string>();
             if(names!=null)
             {
-                for (int i = 0; i < names.Count; i++)
+                foreach (var item in names)
                 {
-                    options.Add(names[i]);
+                    options.Add(item);
                 }
             }
 
             options.Add("Custom");
             broadcastDropdown.AddOptions(options);
-        }
-
-        private void OnBroadcastValueChanged(string newValue)
-        {
-            if (newValue == null)
-                return;
-
-            EditorOp.Resolve<BroadcastListenStringValidator>().UpdateNewBroadcast(newValue);
-
-
-            List<string> names = EditorOp.Resolve<BroadcastListenStringValidator>().BroadcastStrings;
-            AddDropDownOptionsInOrder(names);
-
-            for (int i = 0; i < broadcastDropdown.options.Count; i++)
-            {
-                if (broadcastDropdown.options[i].text == newValue)
-                {
-                    broadcastDropdown.value = i;
-                    break;
-                }
-            }
-            OnBroadcastDropdownValueChanged(broadcastDropdown.value);
         }
 
         private void OnBroadcastDropdownValueChanged(int value)
@@ -122,9 +100,8 @@ namespace RuntimeInspectorNamespace
             }
             else if (broadcastDropdown.options[value].text == "Custom")
             {
-
                 val.broadcast = String.Empty;
-                BroadcastFieldDrawer.SetInteractable(true, true);
+                BroadcastFieldDrawer?.SetInteractable(true, true);
             }
             else
             {
@@ -134,7 +111,44 @@ namespace RuntimeInspectorNamespace
             var newString = val.broadcast == null ? string.Empty : val.broadcast;
             var oldString = oldValue == null ? string.Empty : oldValue.ToString();
             onStringUpdated?.Invoke(newString, oldString);
+            OnValueUpdated.Invoke(newString);
         }
+
+        private void OnBroadcastValueChanged(string newValue)
+        {
+            if (newValue == null)
+                return;
+
+            SystemOp.Resolve<CrossSceneDataHolder>().UpdateNewBroadcast(newValue);
+
+            IEnumerable<string> names = SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings;
+            AddDropDownOptionsInOrder(names);
+            SetBroadcastDropdownCurrentValue(newValue);
+            BroadcastFieldDrawer.SetInteractable(false, true);
+        }
+
+        private void SetBroadcastDropdownCurrentValue(string newValue, bool withoutnotify = false)
+        {
+            if (string.IsNullOrEmpty(newValue))
+                newValue = "None";
+
+            for (int i = 0; i < broadcastDropdown.options.Count; i++)
+            {
+                if (broadcastDropdown.options[i].text == newValue)
+                {
+                    if (withoutnotify)
+                    {
+                        broadcastDropdown.SetValueWithoutNotify(i);
+                    }
+                    else
+                    {
+                        broadcastDropdown.value = i;
+                    }
+                    break;
+                }
+            }
+        }
+
         protected override void OnSkinChanged()
         {
             base.OnSkinChanged();

@@ -25,7 +25,7 @@ namespace Terra.Studio
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]
         {
-          repeat.Broadcast
+          repeat.broadcastData.broadcast
         };
         protected override string[] ListenerRefs => new string[]
         {
@@ -94,8 +94,8 @@ namespace Terra.Studio
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
                 broadcastAt = repeat.broadcastAt,
-                IsBroadcastable = !string.IsNullOrEmpty(repeat.Broadcast),
-                Broadcast = string.IsNullOrEmpty(repeat.Broadcast) ? null : repeat.Broadcast,
+                IsBroadcastable = !string.IsNullOrEmpty(repeat.broadcastData.broadcast),
+                Broadcast = string.IsNullOrEmpty(repeat.broadcastData.broadcast) ? null : repeat.broadcastData.broadcast,
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
@@ -161,7 +161,7 @@ namespace Terra.Studio
             repeat.repeat = comp.repeatFor;
             repeat.repeatForever = comp.repeatForever;
             repeat.broadcastAt = comp.broadcastAt;
-            repeat.Broadcast = comp.Broadcast;
+            repeat.broadcastData.broadcast = comp.Broadcast;
             repeat.repeatType = comp.repeatType;
             Type.ghostLastRecordedRotation = comp.ghostLastRotation;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
@@ -190,7 +190,7 @@ namespace Terra.Studio
             {
                 listenString = StartOn.data.listenName;
             }
-            ImportVisualisation(repeat.Broadcast, listenString);
+            ImportVisualisation(repeat.broadcastData.broadcast, listenString);
         }
 
         private Vector3[] GetSpawnTRS()
@@ -249,7 +249,7 @@ namespace Terra.Studio
                 DisplayName = GetDisplayName(),
                 EventName = startOnName.ToString(),
                 Properties = properties,
-                Broadcast = new string[] { repeat.Broadcast },
+                Broadcast = new string[] { repeat.broadcastData.broadcast },
                 Listen = StartOn.data.listenName
             };
             return previewData;

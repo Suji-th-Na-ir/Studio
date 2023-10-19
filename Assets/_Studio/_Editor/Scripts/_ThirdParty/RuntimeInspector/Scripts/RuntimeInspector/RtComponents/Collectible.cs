@@ -20,9 +20,7 @@ namespace Terra.Studio
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
         public Atom.ScoreData Score = new();
-        [AliasDrawer("Broadcast")]
-        [OnValueChanged(UpdateBroadcast = true)]
-        public string Broadcast = null;
+        public Atom.Broadcast broadcastData = new();
 
         public override string ComponentName => nameof(Collectible);
         public override bool CanPreview => true;
@@ -30,7 +28,7 @@ namespace Terra.Studio
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]
         {
-            Broadcast
+            broadcastData.broadcast
         };
 
         protected override void Awake()
@@ -39,6 +37,7 @@ namespace Terra.Studio
             StartOn.Setup<StartOnCollectible>(gameObject, ComponentName);
             PlaySFX.Setup<Collectible>(gameObject);
             PlayVFX.Setup<Collectible>(gameObject);
+            broadcastData.Setup(gameObject, this);
         }
 
         public override (string type, string data) Export()
@@ -48,8 +47,8 @@ namespace Terra.Studio
                 comp.IsConditionAvailable = true;
                 comp.ConditionType = GetStartEvent();
                 comp.ConditionData = GetStartCondition();
-                comp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
-                comp.Broadcast = Broadcast;
+                comp.IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast);
+                comp.Broadcast = broadcastData.broadcast;
                 comp.canPlaySFX = PlaySFX.data.canPlay;
                 comp.canPlayVFX = PlayVFX.data.canPlay;
                 comp.sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName;
@@ -94,14 +93,14 @@ namespace Terra.Studio
             {
                 StartOn.data.startIndex = (int)(StartOnCollectible)result;
             }
-            Broadcast = comp.Broadcast;
+            broadcastData.broadcast = comp.Broadcast;
             StartOn.data.startName = comp.ConditionType;
             StartOn.data.listenName = comp.ConditionData;
             if (Score.score != 0)
             {
                 EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(true, Score.instanceId, false);
             }
-            ImportVisualisation(Broadcast, null);
+            ImportVisualisation(broadcastData.broadcast, null);
         }
 
         protected override void OnEnable()
@@ -132,7 +131,7 @@ namespace Terra.Studio
                 properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, PlayVFX.data.clipName);
             }
             properties[0].Add("Score", Score.score);
-            var broadcastArray = new string[] { Broadcast };
+            var broadcastArray = new string[] { broadcastData.broadcast };
             var index = StartOn.data.startIndex;
             var startName = (StartOnCollectible)index;
             var previewData = new BehaviourPreviewUI.PreviewData()

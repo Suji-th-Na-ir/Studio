@@ -9,9 +9,7 @@ namespace Terra.Studio
     {
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
-        [AliasDrawer("Broadcast")]
-        [OnValueChanged(UpdateBroadcast = true)]
-        public string Broadcast = null;
+        public Atom.Broadcast broadcastData = new();
 
         public override string ComponentName => nameof(Respawn);
         public override bool CanPreview => true;
@@ -19,12 +17,13 @@ namespace Terra.Studio
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]
         {
-            Broadcast
+            broadcastData.broadcast
         };
 
         protected override void Awake()
         {
             base.Awake();
+            broadcastData.Setup(gameObject, this);
             PlaySFX.Setup<Respawn>(gameObject);
             PlayVFX.Setup<Respawn>(gameObject);
         }
@@ -36,8 +35,8 @@ namespace Terra.Studio
                 comp.IsConditionAvailable = true;
                 comp.ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(StartOn.OnPlayerCollide);
                 comp.ConditionData = "Player";
-                comp.IsBroadcastable = !string.IsNullOrEmpty(Broadcast);
-                comp.Broadcast = Broadcast;
+                comp.IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast);
+                comp.Broadcast = broadcastData.broadcast;
                 comp.canPlaySFX = PlaySFX.data.canPlay;
                 comp.canPlayVFX = PlayVFX.data.canPlay;
                 comp.sfxName = PlaySFX.data.clipName;
@@ -54,14 +53,14 @@ namespace Terra.Studio
         public override void Import(EntityBasedComponent data)
         {
             RespawnComponent comp = JsonConvert.DeserializeObject<RespawnComponent>(data.data);
-            Broadcast = comp.Broadcast;
+            broadcastData.broadcast = comp.Broadcast;
             PlaySFX.data.canPlay = comp.canPlaySFX;
             PlaySFX.data.clipIndex = comp.sfxIndex;
             PlaySFX.data.clipName = comp.sfxName;
             PlayVFX.data.canPlay = comp.canPlayVFX;
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
-            ImportVisualisation(Broadcast, null);
+            ImportVisualisation(broadcastData.broadcast, null);
         }
 
         public override BehaviourPreviewUI.PreviewData GetPreviewData()

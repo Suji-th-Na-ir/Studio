@@ -31,7 +31,6 @@ namespace Terra.Studio
             EditorOp.Register(new Recorder());
             EditorOp.Register(new CopyPasteSystem());
             EditorOp.Register(new BehaviourPreview());
-            EditorOp.Register(new BroadcastListenStringValidator());
             EditorOp.Resolve<SelectionHandler>().Init();
             EditorOp.Resolve<HierarchyView>().Init();
             EditorOp.Resolve<InspectorView>().Init();
@@ -57,7 +56,6 @@ namespace Terra.Studio
             EditorOp.Unregister<Atom>();
             EditorOp.Unregister<Recorder>();
             EditorOp.Unregister<BehaviourPreview>();
-            EditorOp.Unregister<BroadcastListenStringValidator>();
         }
 
         public Scene GetScene()

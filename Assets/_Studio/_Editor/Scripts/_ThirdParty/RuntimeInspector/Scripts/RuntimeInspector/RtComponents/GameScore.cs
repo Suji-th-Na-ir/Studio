@@ -6,9 +6,7 @@ namespace Terra.Studio
     public class GameScore : BaseBehaviour
     {
         public int targetScore = 0;
-        [AliasDrawer("Broadcast")]
-        [OnValueChanged(UpdateBroadcast = true)]
-        public string broadcast = "Game Win";
+        public Atom.Broadcast broadcastData = new();
 
         public override string ComponentName => nameof(GameScore);
         public override bool CanPreview => false;
@@ -16,12 +14,14 @@ namespace Terra.Studio
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]
         {
-            broadcast
+            broadcastData.broadcast
         };
 
         protected override void Awake()
         {
             base.Awake();
+            broadcastData.broadcast = "Game Win";
+            broadcastData.Setup(gameObject, this);
             var score = EditorOp.Resolve<SceneDataHandler>().ScoreManagerObj;
             if (score)
             {
@@ -39,8 +39,8 @@ namespace Terra.Studio
             var compData = new InGameScoreComponent()
             {
                 targetScore = targetScore,
-                IsBroadcastable = !string.IsNullOrEmpty(broadcast) && targetScore != 0,
-                Broadcast = broadcast
+                IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast) && targetScore != 0,
+                Broadcast = broadcastData.broadcast
             };
             var json = JsonConvert.SerializeObject(compData);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -51,8 +51,8 @@ namespace Terra.Studio
         {
             var obj = JsonConvert.DeserializeObject<InGameScoreComponent>(data.data);
             targetScore = obj.targetScore;
-            broadcast = obj.Broadcast;
-            ImportVisualisation(broadcast, null);
+            broadcastData.broadcast = obj.Broadcast;
+            ImportVisualisation(broadcastData.broadcast, null);
         }
     }
 }

@@ -11,9 +11,7 @@ namespace Terra.Studio
         public Atom.RecordedVector3 teleportTo = new();
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
-        [AliasDrawer("Broadcast")]
-        [OnValueChanged(UpdateBroadcast = true)]
-        public string broadcast = null;
+        public Atom.Broadcast broadcastData = new();
         //[AliasDrawer("Do\nAlways")]
         //public bool executeMultipleTimes = true;
 
@@ -24,7 +22,7 @@ namespace Terra.Studio
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]
         {
-            broadcast
+            broadcastData.broadcast
         };
 
         protected override void Awake()
@@ -32,6 +30,7 @@ namespace Terra.Studio
             base.Awake();
             playSFX.Setup<Teleport>(gameObject);
             playVFX.Setup<Teleport>(gameObject);
+            broadcastData.Setup(gameObject, this);
             teleportTo.Setup(this);
             SetupTeleportPosition();
             SetupGhostDescription();
@@ -82,8 +81,8 @@ namespace Terra.Studio
                 canPlayVFX = playVFX.data.canPlay,
                 vfxName = playVFX.data.clipName,
                 vfxIndex = playVFX.data.clipIndex,
-                IsBroadcastable = !string.IsNullOrEmpty(broadcast),
-                Broadcast = broadcast,
+                IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
+                Broadcast = broadcastData.broadcast,
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.TriggerAction",
                 ConditionData = "Player",
@@ -104,9 +103,9 @@ namespace Terra.Studio
             playVFX.data.canPlay = obj.canPlayVFX;
             playVFX.data.clipName = obj.vfxName;
             playVFX.data.clipIndex = obj.vfxIndex;
-            broadcast = obj.Broadcast;
+            broadcastData.broadcast = obj.Broadcast;
             //executeMultipleTimes = obj.listen == Listen.Always;
-            ImportVisualisation(broadcast, null);
+            ImportVisualisation(broadcastData.broadcast, null);
         }
 
         private void SetLastValue()
@@ -137,7 +136,7 @@ namespace Terra.Studio
             {
                 properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFX.data.clipName);
             }
-            var broadcasts = new string[] { broadcast };
+            var broadcasts = new string[] { broadcastData.broadcast };
             var previewData = new BehaviourPreviewUI.PreviewData()
             {
                 DisplayName = GetDisplayName(),

@@ -146,26 +146,27 @@ namespace Terra.Studio
             [AliasDrawer("Repeat\nType")] public RepeatDirectionType repeatType;
             [AliasDrawer("Repeat\nForever")] public bool repeatForever;
             [AliasDrawer("Broadcast At")] public BroadcastAt broadcastAt;
-            private string broadcast;
-            [AliasDrawer("Broadcast"), OnValueChanged(UpdateBroadcast = true)]
+            public Atom.Broadcast broadcastData = new();
+            [HideInInspector] public string lastEnteredBroadcast;
+
+            [HideInInspector]
             public string Broadcast
             {
                 get
                 {
-                    return broadcast;
+                    return broadcastData.broadcast;
                 }
                 set
                 {
-                    var last = broadcast;
-                    broadcast = value;
+                    var last = broadcastData.broadcast;
+                    broadcastData.broadcast = value;
                     behaviour.OnBroadcastStringUpdated(value, last);
                 }
             }
-            [HideInInspector] public string lastEnteredBroadcast;
-
             public override void Setup(GameObject target, BaseBehaviour behaviour)
             {
                 base.Setup(target, behaviour);
+                broadcastData.Setup(target, behaviour);
                 var allrepeats = EditorOp.Resolve<Atom>().AllRepeats;
                 if (!allrepeats.Contains(this))
                 {
@@ -334,8 +335,7 @@ namespace Terra.Studio
         [Serializable]
         public class Broadcast : BaseBroadcasterTemplate
         {
-            public int BroadcastValue;
-            [AliasDrawer("Broadcast"), OnValueChanged(UpdateBroadcast = true)]
+            [AliasDrawer("Broadcast"), OnValueChanged( UpdateBroadcast = true)]
             public string broadcast = string.Empty;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)

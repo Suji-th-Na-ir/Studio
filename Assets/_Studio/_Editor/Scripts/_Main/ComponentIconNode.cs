@@ -287,7 +287,7 @@ namespace Terra.Studio
                             broadcasticons[i].SetIconImage("GameWon");
                             broadcasticons[i].SetBackgroundColor(Helper.GetColorFromHex("#A0B042"));
                         }
-                        else if (m_isBroadcatingGameLoose)
+                        else if (m_isBroadcatingGameLoose && BroadcastingStrings[i] == "Game Lose")
                         {
                             broadcasticons[i].SetIconImage("GameLoose");
                             broadcasticons[i].SetBackgroundColor(Helper.GetColorFromHex("#FF5C01"));

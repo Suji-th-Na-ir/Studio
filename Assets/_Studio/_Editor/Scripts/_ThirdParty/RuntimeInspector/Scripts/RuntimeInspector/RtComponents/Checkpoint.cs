@@ -7,9 +7,7 @@ namespace Terra.Studio
     {
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
-        [AliasDrawer("Broadcast")]
-        [OnValueChanged(UpdateBroadcast = true)]
-        public string Broadcast = null;
+        public Atom.Broadcast broadcastData = new();
 
         public override string ComponentName => nameof(Checkpoint);
         public override bool CanPreview => false;
@@ -17,7 +15,7 @@ namespace Terra.Studio
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]
         {
-            Broadcast
+           broadcastData.broadcast
         };
 
         protected override void Awake()
@@ -25,6 +23,7 @@ namespace Terra.Studio
             base.Awake();
             PlaySFX.Setup<Checkpoint>(gameObject);
             PlayVFX.Setup<Checkpoint>(gameObject);
+            broadcastData.Setup(gameObject, this);
         }
 
         public override (string type, string data) Export()
@@ -37,12 +36,12 @@ namespace Terra.Studio
                 canPlayVFX = PlayVFX.data.canPlay,
                 vfxName = PlayVFX.data.clipName,
                 vfxIndex = PlayVFX.data.clipIndex,
-                IsBroadcastable = !string.IsNullOrEmpty(Broadcast),
+                IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
                 respawnPoint = transform.position,
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.TriggerAction",
                 ConditionData = "Player",
-                Broadcast = Broadcast
+                Broadcast = broadcastData.broadcast
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(component);
@@ -59,8 +58,8 @@ namespace Terra.Studio
             PlayVFX.data.canPlay = component.canPlayVFX;
             PlayVFX.data.clipName = component.vfxName;
             PlayVFX.data.clipIndex = component.vfxIndex;
-            Broadcast = component.Broadcast;
-            ImportVisualisation(Broadcast, null);
+            broadcastData.broadcast = component.Broadcast;
+            ImportVisualisation(broadcastData.broadcast, null);
         }
     }
 }

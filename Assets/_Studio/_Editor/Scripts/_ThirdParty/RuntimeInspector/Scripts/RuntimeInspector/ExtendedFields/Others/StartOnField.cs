@@ -29,17 +29,26 @@ namespace RuntimeInspectorNamespace
             LoadListenOptions();
             lastSubmittedValue = ((Atom.StartOn)lastSubmittedValue).data;
             EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(startOn.gameObject,
-                  () => startOn.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => startOn.targetGraphic.color = Skin.SelectedItemBackgroundColor,
                 () => startOn.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
             EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(listenOn.gameObject,
-           () => listenOn.targetGraphic.color = Skin.SelectedItemBackgroundColor,
-         () => listenOn.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+                () => listenOn.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => listenOn.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
         }
 
         private void LoadListenOptions()
         {
             listenOn.options.Clear();
-            listenOn.AddOptions(EditorOp.Resolve<BroadcastListenStringValidator>().BroadcastStrings);   
+            listenOn.AddOptions(SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings);
+            Atom.StartOn atom = (Atom.StartOn)Value;
+            for (int i = 0; i < listenOn.options.Count; i++)
+            {
+                if (listenOn.options[i].text == atom.data.listenName)
+                {
+                    listenOn.SetValueWithoutNotify(i);
+                    break;
+                }
+            }
         }
 
         protected override void OnUnbound()
@@ -196,10 +205,11 @@ namespace RuntimeInspectorNamespace
             if (atom != null)
             {
                 startOn.SetValueWithoutNotify(atom.data.startIndex);
-                if (EditorOp.Resolve<BroadcastListenStringValidator>().BroadcastStrings.Count > listenOn.options.Count)
+                if (SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings.Count > listenOn.options.Count)
                 {
                     listenOn.ClearOptions();
-                    listenOn.AddOptions(EditorOp.Resolve<BroadcastListenStringValidator>().BroadcastStrings);
+
+                    listenOn.AddOptions(SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings);
 
                     for (int i = 0; i < listenOn.options.Count; i++)
                     {

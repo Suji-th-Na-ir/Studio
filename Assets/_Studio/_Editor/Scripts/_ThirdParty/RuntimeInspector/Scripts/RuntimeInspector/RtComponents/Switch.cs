@@ -20,11 +20,11 @@ namespace Terra.Studio
         [AliasDrawer("Switch\nWhen")] public StartOn switchWhen;
         [AliasDrawer("Default")] public SwitchState defaultState;
         [Header("When Switch is \"On\"")]
-        [AliasDrawer("Broadcast"), OnValueChanged(UpdateBroadcast = true)] public string broadcastWhenOn;
+        public Atom.Broadcast broadcastWhenOnData = new();
         [AliasDrawer("Play SFX")] public Atom.PlaySfx playSFXWhenOn = new();
         [AliasDrawer("Play VFX")] public Atom.PlayVfx playVFXWhenOn = new();
         [Header("When Switch is \"Off\"")]
-        [AliasDrawer("Broadcast"), OnValueChanged(UpdateBroadcast = true)] public string broadcastWhenOff;
+        public Atom.Broadcast broadcastWhenOffData = new();
         [AliasDrawer("Play SFX")] public Atom.PlaySfx playSFXWhenOff = new();
         [AliasDrawer("Play VFX")] public Atom.PlayVfx playVFXWhenOff = new();
 
@@ -34,13 +34,15 @@ namespace Terra.Studio
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]
         {
-            broadcastWhenOn,
-            broadcastWhenOff
+            broadcastWhenOnData.broadcast,
+            broadcastWhenOffData.broadcast
         };
 
         protected override void Awake()
         {
             base.Awake();
+            broadcastWhenOffData.Setup(gameObject, this);
+            broadcastWhenOnData.Setup(gameObject, this);
             playSFXWhenOn.Setup<Switch>(gameObject, nameof(playSFXWhenOn));
             playVFXWhenOn.Setup<Switch>(gameObject, nameof(playVFXWhenOn));
             playSFXWhenOff.Setup<Switch>(gameObject, nameof(playSFXWhenOff));
@@ -55,8 +57,8 @@ namespace Terra.Studio
                 ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(switchWhen),
                 ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(switchWhen),
                 currentState = defaultState,
-                onStateData = GetSwitchComponentData(SwitchState.On, playSFXWhenOn.data, playVFXWhenOn.data, broadcastWhenOn),
-                offStateData = GetSwitchComponentData(SwitchState.Off, playSFXWhenOff.data, playVFXWhenOff.data, broadcastWhenOff),
+                onStateData = GetSwitchComponentData(SwitchState.On, playSFXWhenOn.data, playVFXWhenOn.data, broadcastWhenOnData.broadcast),
+                offStateData = GetSwitchComponentData(SwitchState.Off, playSFXWhenOff.data, playVFXWhenOff.data, broadcastWhenOffData.broadcast),
                 listen = Listen.Always
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -69,14 +71,14 @@ namespace Terra.Studio
             var component = JsonConvert.DeserializeObject<SwitchComponent>(data.data);
             defaultState = component.currentState;
             switchWhen = GetStartOn(component.ConditionType, component.ConditionData);
-            broadcastWhenOn = GetBroadcastData(component.onStateData);
-            broadcastWhenOff = GetBroadcastData(component.offStateData);
+            broadcastWhenOnData.broadcast = GetBroadcastData(component.onStateData);
+            broadcastWhenOffData.broadcast = GetBroadcastData(component.offStateData);
             playSFXWhenOn.data = GetPlaySFXData(component.onStateData);
             playSFXWhenOff.data = GetPlaySFXData(component.offStateData);
             playVFXWhenOn.data = GetPlayVFXData(component.onStateData);
             playVFXWhenOff.data = GetPlayVFXData(component.offStateData);
-            ImportVisualisation(broadcastWhenOn, null);
-            ImportVisualisation(broadcastWhenOff, null);
+            ImportVisualisation(broadcastWhenOnData.broadcast, null);
+            ImportVisualisation(broadcastWhenOffData.broadcast, null);
         }
 
         private SwitchComponentData GetSwitchComponentData(SwitchState state, PlayFXData playSFXData, PlayFXData playVFXData, string broadcast)
@@ -142,8 +144,8 @@ namespace Terra.Studio
             var broadcastValues = new string[2];
             if (defaultState == SwitchState.Off)
             {
-                broadcastValues[0] = broadcastWhenOff;
-                broadcastValues[1] = broadcastWhenOn;
+                broadcastValues[0] = broadcastWhenOffData.broadcast;
+                broadcastValues[1] = broadcastWhenOnData.broadcast;
                 if (playSFXWhenOff.data.canPlay)
                 {
                     properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFXWhenOff.data.clipName);
@@ -163,8 +165,8 @@ namespace Terra.Studio
             }
             else
             {
-                broadcastValues[0] = broadcastWhenOn;
-                broadcastValues[1] = broadcastWhenOff;
+                broadcastValues[0] = broadcastWhenOnData.broadcast;
+                broadcastValues[1] = broadcastWhenOffData.broadcast;
                 if (playSFXWhenOn.data.canPlay)
                 {
                     properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFXWhenOn.data.clipName);

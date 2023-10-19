@@ -205,7 +205,6 @@ namespace RuntimeInspectorNamespace
 				if( !parent.BoundVariableType.GetTypeInfo().IsValueType )
 #endif
                 {
-                    InjectToOnValueChangedIfAvailable(field, parent.Value);
                     var isObscured = IsObscurerTapped(field);
                     if (!isObscured)
                     {
@@ -253,21 +252,6 @@ namespace RuntimeInspectorNamespace
             {
                 throw new ArgumentException("Variable can either be a field or a property");
             }
-        }
-
-        private void InjectToOnValueChangedIfAvailable(FieldInfo fieldInfo, object instance)
-        {
-            var doesHaveOnValueChangedAttribute = fieldInfo.HasAttribute<OnValueChangedAttribute>();
-            if (!doesHaveOnValueChangedAttribute) return;
-            var attribute = fieldInfo.GetAttribute<OnValueChangedAttribute>();
-
-
-            if (instance as Atom.BaseBroadcasterTemplate != null)
-            {
-                Debug.Log(((Atom.BaseBroadcasterTemplate)instance).behaviour);
-                onStringUpdated = attribute.OnValueUpdated(((Atom.BaseBroadcasterTemplate)instance).behaviour);
-            }
-
         }
 
         private bool IsObscurerTapped(FieldInfo fieldInfo)
