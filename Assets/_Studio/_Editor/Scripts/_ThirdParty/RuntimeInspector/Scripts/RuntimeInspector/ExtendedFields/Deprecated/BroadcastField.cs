@@ -111,7 +111,7 @@ namespace RuntimeInspectorNamespace
             var newString = val.broadcast == null ? string.Empty : val.broadcast;
             var oldString = oldValue == null ? string.Empty : oldValue.ToString();
             onStringUpdated?.Invoke(newString, oldString);
-            OnValueUpdated.Invoke(newString);
+            OnValueUpdated?.Invoke(newString);
         }
 
         private void OnBroadcastValueChanged(string newValue)
