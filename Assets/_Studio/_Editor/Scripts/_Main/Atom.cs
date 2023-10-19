@@ -332,11 +332,16 @@ namespace Terra.Studio
         }
 
         [Serializable]
-        public class Broadcast
+        public class Broadcast: BaseBroadcasterTemplate
         {
             public int BroadcastValue;
             [AliasDrawer("Broadcast"), OnValueChanged(UpdateBroadcast = true)]
             public string broadcast;
+           
+            public override void Setup(GameObject target, BaseBehaviour behaviour)
+            {
+                base.Setup(target, behaviour);   
+            }
         }
     }
 

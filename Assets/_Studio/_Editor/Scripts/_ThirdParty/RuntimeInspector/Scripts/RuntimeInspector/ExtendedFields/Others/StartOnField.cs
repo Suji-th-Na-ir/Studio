@@ -12,7 +12,7 @@ namespace RuntimeInspectorNamespace
     {
 #pragma warning disable 0649
         [SerializeField] private Dropdown startOn;
-        [SerializeField] private InputField listenOn;
+        [SerializeField] private Dropdown listenOn;
 #pragma warning restore 0649
 
         public override void Initialize()
@@ -20,13 +20,13 @@ namespace RuntimeInspectorNamespace
             base.Initialize();
             startOn.onValueChanged.AddListener(OnStartValueChanged);
             listenOn.onValueChanged.AddListener(OnListenValueChanged);
-            listenOn.onEndEdit.AddListener(OnListenValueSubmitted);
         }
 
         protected override void OnBound(MemberInfo variable)
         {
             base.OnBound(variable);
             LoadStartOnOptions();
+            LoadListenOptions();
             lastSubmittedValue = ((Atom.StartOn)lastSubmittedValue).data;
             EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(startOn.gameObject,
                   () => startOn.targetGraphic.color = Skin.SelectedItemBackgroundColor,
@@ -34,6 +34,12 @@ namespace RuntimeInspectorNamespace
             EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(listenOn.gameObject,
            () => listenOn.targetGraphic.color = Skin.SelectedItemBackgroundColor,
          () => listenOn.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+        }
+
+        private void LoadListenOptions()
+        {
+            listenOn.options.Clear();
+            listenOn.AddOptions(EditorOp.Resolve<BroadcastListenStringValidator>().BroadcastStrings);   
         }
 
         protected override void OnUnbound()
@@ -113,22 +119,27 @@ namespace RuntimeInspectorNamespace
             if (Inspector) Inspector.RefreshDelayed();
         }
 
-        private void OnListenValueChanged(string _newString)
+        private void OnListenValueChanged(string value)
+        {
+            for (int i = 0; i < listenOn.options.Count; i++)
+            {
+                if (listenOn.options[i].text==value)
+                {
+                    OnListenValueChanged(i);
+                    return;
+                }
+            }
+        }
+
+        private void OnListenValueChanged(int value)
         {
             Atom.StartOn atom = (Atom.StartOn)Value;
             if (Inspector)
             {
                 Inspector.RefreshDelayed();
             }
-            atom.OnListenerUpdated?.Invoke(_newString, atom.data.listenName);
-            atom.data.listenName = _newString;
-            UpdateOtherCompData(atom);
-        }
-
-        public void OnListenValueSubmitted(string _newString)
-        {
-            Atom.StartOn atom = (Atom.StartOn)Value;
-            if (_newString != ((StartOnData)lastSubmittedValue).listenName)
+       
+            if (listenOn.options[value].text != ((StartOnData)lastSubmittedValue).listenName)
             {
                 EditorOp.Resolve<IURCommand>().Record(
                     lastSubmittedValue, atom.data,
@@ -139,13 +150,18 @@ namespace RuntimeInspectorNamespace
                     });
             }
             lastSubmittedValue = atom.data;
+
+            atom.OnListenerUpdated?.Invoke(listenOn.options[value].text, atom.data.listenName);
+            atom.data.listenName = listenOn.options[value].text;
+            UpdateOtherCompData(atom);
         }
+
 
         protected override void OnSkinChanged()
         {
             base.OnSkinChanged();
             startOn.SetSkinDropDownField(Skin);
-            listenOn.SetupInputFieldSkin(Skin);
+            listenOn.SetSkinDropDownField(Skin);
         }
 
         private void UpdateOtherCompData(Atom.StartOn _atom)
@@ -180,7 +196,21 @@ namespace RuntimeInspectorNamespace
             if (atom != null)
             {
                 startOn.SetValueWithoutNotify(atom.data.startIndex);
-                listenOn.SetTextWithoutNotify(atom.data.listenName);
+                if (EditorOp.Resolve<BroadcastListenStringValidator>().BroadcastStrings.Count > listenOn.options.Count)
+                {
+                    listenOn.ClearOptions();
+                    listenOn.AddOptions(EditorOp.Resolve<BroadcastListenStringValidator>().BroadcastStrings);
+
+                    for (int i = 0; i < listenOn.options.Count; i++)
+                    {
+                        if (listenOn.options[i].text == atom.data.listenName)
+                        {
+                            OnListenValueChanged(i);
+                            listenOn.SetValueWithoutNotify(i);
+                            break;
+                        }
+                    }
+                }
                 ShowHideListenDD();
             }
         }

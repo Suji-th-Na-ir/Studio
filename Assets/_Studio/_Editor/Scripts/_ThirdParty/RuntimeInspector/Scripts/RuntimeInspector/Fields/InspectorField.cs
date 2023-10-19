@@ -14,6 +14,7 @@ namespace RuntimeInspectorNamespace
         public delegate void Setter(object value);
         protected Action<string, string> onStringUpdated;
         public virtual Action<object> OnValueUpdated { get; set; }
+        public virtual Action<string> OnStringValueSubmitted { get; set; }
 
 #pragma warning disable 0649
         [SerializeField]
@@ -260,17 +261,13 @@ namespace RuntimeInspectorNamespace
             if (!doesHaveOnValueChangedAttribute) return;
             var attribute = fieldInfo.GetAttribute<OnValueChangedAttribute>();
 
-            if (instance as BaseBehaviour!=null)
+
+            if (instance as Atom.BaseBroadcasterTemplate != null)
             {
-                onStringUpdated = attribute.OnValueUpdated((BaseBehaviour)instance);
+                Debug.Log(((Atom.BaseBroadcasterTemplate)instance).behaviour);
+                onStringUpdated = attribute.OnValueUpdated(((Atom.BaseBroadcasterTemplate)instance).behaviour);
             }
-            else
-            {
-                if (instance as Atom.BaseBroadcasterTemplate!=null)
-                {
-                    onStringUpdated = attribute.OnValueUpdated(((Atom.BaseBroadcasterTemplate)instance).behaviour);
-                }
-            }
+
         }
 
         private bool IsObscurerTapped(FieldInfo fieldInfo)

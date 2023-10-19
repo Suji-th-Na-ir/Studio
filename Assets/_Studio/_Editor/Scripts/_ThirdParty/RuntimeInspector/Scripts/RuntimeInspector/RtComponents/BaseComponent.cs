@@ -29,6 +29,7 @@ namespace Terra.Studio
             {
                 OnBroadcastUpdated = (newString, oldString) =>
                 {
+                    Debug.Log("Updating broadcast");
                     OnBroadcastStringUpdated(newString, oldString);
                     UpdateBroadcastForMultiSelected(newString, oldString);
                 };
@@ -60,6 +61,7 @@ namespace Terra.Studio
         protected void ImportVisualisation(string broadcast, string broadcastListen)
         {
             EditorOp.Resolve<UILogicDisplayProcessor>().ImportVisualisation(gameObject, ComponentName, broadcast, broadcastListen);
+            EditorOp.Resolve<BroadcastListenStringValidator>().UpdateNewBroadcast(broadcast);
         }
 
         private void RegisterBroadcastToDisplayDock(string newString)
