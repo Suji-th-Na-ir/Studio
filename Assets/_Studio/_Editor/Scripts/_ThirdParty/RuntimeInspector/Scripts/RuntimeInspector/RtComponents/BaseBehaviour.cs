@@ -46,6 +46,8 @@ namespace Terra.Studio
 
         protected virtual void OnEnable()
         {
+            if (EditorOp.Resolve<EditorSystem>().IsIncognitoEnabled)
+                return;
             EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(DisplayDock);
             CheckAndUpdateVisualisation();
         }

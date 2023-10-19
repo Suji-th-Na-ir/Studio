@@ -30,9 +30,9 @@ MonoBehaviour:
   - type: Oscillate
     icon: {fileID: 21300000, guid: 7f183657d80e64c8ca9ff354fd74d42e, type: 3}
   - type: GameWon
-    icon: {fileID: 21300000, guid: 788584195943d40069b1d17356607b65, type: 3}
+    icon: {fileID: 21300000, guid: f8998aac52f4e4757aafc348ddc7e342, type: 3}
   - type: BroadcastNoListner
-    icon: {fileID: 21300000, guid: 7b4dec5bea41b490b9a47577dddf68ee, type: 3}
+    icon: {fileID: 21300000, guid: 80f6f73e6fc024f99b08ed27632a8c35, type: 3}
   - type: Push
     icon: {fileID: 21300000, guid: 58bb2bb64d8e94fd889c7e499bc66cab, type: 3}
   - type: Switch
@@ -46,17 +46,17 @@ MonoBehaviour:
   - type: Listen
     icon: {fileID: 21300000, guid: 6e925fd1abbf84a07b63d28c723c5aad, type: 3}
   - type: StopRotate
-    icon: {fileID: 21300000, guid: 9c966772ea889426c8913cef70115184, type: 3}
+    icon: {fileID: 21300000, guid: c60661c3f93bf490b9317e086f8319e4, type: 3}
   - type: StopTranslate
-    icon: {fileID: 21300000, guid: d577b19c0430545ffa4c4a82cc16ef13, type: 3}
+    icon: {fileID: 21300000, guid: 13eeb652a75034f08b851910919c5618, type: 3}
   - type: SetObjectPosition
-    icon: {fileID: 21300000, guid: 926d8497c2ce0485a9cf5421119acf06, type: 3}
+    icon: {fileID: 21300000, guid: 271f8ec56b9d8430da5837473639528d, type: 3}
   - type: GameLoose
-    icon: {fileID: 21300000, guid: 788584195943d40069b1d17356607b65, type: 3}
+    icon: {fileID: 21300000, guid: f8998aac52f4e4757aafc348ddc7e342, type: 3}
   - type: InGameTimer
     icon: {fileID: 21300000, guid: 10490c9945d974eacb6999636ebaacb0, type: 3}
   - type: GameStart
-    icon: {fileID: 21300000, guid: c152459e6242646f3a3780549d9eabbe, type: 3}
+    icon: {fileID: 21300000, guid: 1509a1ba8176b49eb954d4f330a5c479, type: 3}
   - type: OnClick
     icon: {fileID: 21300000, guid: 3bbe43be49cef44e8a8e92749fd3c760, type: 3}
   - type: OnPlayerCollide
@@ -65,3 +65,9 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: 02c940620b1604b79892db216fcf6bfd, type: 3}
   - type: BroadcastListen
     icon: {fileID: 21300000, guid: 6e925fd1abbf84a07b63d28c723c5aad, type: 3}
+  - type: Circle
+    icon: {fileID: 21300000, guid: d27c796c333a445a78953087d4589fa2, type: 3}
+  - type: OutlineCircle
+    icon: {fileID: 21300000, guid: c52b87cb604f04764825610a5b5f1926, type: 3}
+  - type: NoOneBroadcasting
+    icon: {fileID: 21300000, guid: 63f6bf6e3882d4ef1a643dad63ce4c55, type: 3}
