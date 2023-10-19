@@ -1,7 +1,6 @@
 using System;
 using mixpanel;
 using UnityEngine;
-using PlayShifu.Terra;
 using UnityEngine.SceneManagement;
 
 namespace Terra.Studio
@@ -50,21 +49,30 @@ namespace Terra.Studio
         private void LoadSilentServices()
         {
             SystemOp.Register(new CrossSceneDataHolder());
-            SystemOp.Register(new FileService());
             SystemOp.Register(new User());
             SystemOp.Register(new SaveSystem());
-            SystemOp.Resolve<LoginScreenView>().Init();
+            SystemOp.Register(new Flow());
+            SystemOp.Resolve<SaveSystem>().OnPreCheckDone +=
+            SystemOp.Resolve<LoginScreenView>().Init;
+            SystemOp.Resolve<SaveSystem>().PerformPrecheck();
         }
 
         private void LoadSceneData()
         {
             if (configData.PickupSavedData)
             {
-                var shouldIgnore = !Helper.IsInUnityEditor();
-                SystemOp.Resolve<FileService>().WriteFile(
-                    configData.SceneDataToLoad.text,
-                    FileService.GetSavedFilePath(ConfigSO.SceneDataToLoad.name),
-                    shouldIgnore);
+                if (configData.LoadFromCloud)
+                {
+                    SystemOp.Resolve<Flow>().DoCloudSaveCheck(LoadSubsystemScene);
+                }
+                else
+                {
+                    SystemOp.Resolve<Flow>().DoLocalSaveCheck(LoadSubsystemScene);
+                }
+            }
+            else
+            {
+                LoadSubsystemScene();
             }
         }
 
@@ -74,6 +82,10 @@ namespace Terra.Studio
                 ? configData.EditorSceneName
                 : configData.RuntimeSceneName;
             SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
+            if (SystemOp.Resolve<LoginScreenView>())
+            {
+                SystemOp.Resolve<LoginScreenView>().Flush();
+            }
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
@@ -85,11 +97,6 @@ namespace Terra.Studio
             currentActiveScene = scene;
             SceneManager.SetActiveScene(scene);
             SystemOp.Resolve<ISubsystem>().Initialize(scene);
-            if (PreviousStudioState == StudioState.Bootstrap &&
-                SystemOp.Resolve<LoginScreenView>())
-            {
-                SystemOp.Resolve<LoginScreenView>().FuckOff();
-            }
         }
 
         public void SwitchState()
@@ -138,7 +145,9 @@ namespace Terra.Studio
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SystemOp.Resolve<ISubsystem>()?.Dispose();
             SystemOp.Unregister<CrossSceneDataHolder>();
-            SystemOp.Unregister<FileService>();
+            SystemOp.Unregister<User>();
+            SystemOp.Unregister<SaveSystem>();
+            SystemOp.Unregister<Flow>();
             SystemOp.Unregister(this);
             SystemOp.Flush();
             EditorOp.Flush();

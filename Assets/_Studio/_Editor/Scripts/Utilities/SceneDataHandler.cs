@@ -42,27 +42,14 @@ namespace Terra.Studio
         public void Save()
         {
             var sceneData = ExportSceneData();
-            var filePath = GetFilePath();
             if (!Helper.IsInUnityEditorMode())
             {
                 EasyUI.Toast.Toast.Show("Saved Successfully!", 3.0f, EasyUI.Toast.ToastColor.Green);
-                SystemOp.Resolve<FileService>().WriteFile(sceneData, filePath, false);
+                SystemOp.Resolve<SaveSystem>().SaveManualData(sceneData, false, null);
             }
             else
             {
-                new FileService().WriteFile(sceneData, filePath, false);
-            }
-        }
-
-        private string GetFilePath()
-        {
-            if (!Helper.IsInUnityEditorMode())
-            {
-                return FileService.GetSavedFilePath(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name);
-            }
-            else
-            {
-                return FileService.GetSavedFilePath(GetAssetName?.Invoke());
+                new FileService().WriteFile(sceneData, GetAssetName?.Invoke(), false, null);
             }
         }
 
@@ -77,10 +64,16 @@ namespace Terra.Studio
         public void LoadScene()
         {
             var prevState = SystemOp.Resolve<System>().PreviousStudioState;
-            if (prevState != StudioState.Runtime && SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
+            if (prevState != StudioState.Runtime)
             {
-                var saveFilePath = FileService.GetSavedFilePath(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name);
-                SystemOp.Resolve<FileService>().ReadFileFromLocal?.Invoke(saveFilePath, OnDataReceived);
+                if (SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
+                {
+                    SystemOp.Resolve<SaveSystem>().GetManualSavedData(OnDataReceived);
+                }
+                else
+                {
+                    OnDataReceived(null);
+                }
             }
             else
             {
@@ -91,11 +84,12 @@ namespace Terra.Studio
 
         private void OnDataReceived(string data)
         {
-            if (string.IsNullOrEmpty(data))
+            if (!string.IsNullOrEmpty(data))
             {
-                return;
+                RecreateScene(data);
             }
-            RecreateScene(data);
+            SetupSceneDefaultObjects();
+            EditorOp.Resolve<EditorEssentialsLoader>().LoadEssentials();
         }
 
 #if UNITY_EDITOR
@@ -116,11 +110,6 @@ namespace Terra.Studio
             {
                 var entity = worldData.entities[i];
                 SpawnObjects(entity);
-            }
-            if (!Helper.IsInUnityEditorMode())
-            {
-                SetupSceneDefaultObjects();
-                EditorOp.Resolve<EditorEssentialsLoader>().LoadEssentials();
             }
         }
 

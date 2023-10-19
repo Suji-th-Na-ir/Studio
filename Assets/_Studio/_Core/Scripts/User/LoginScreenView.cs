@@ -9,13 +9,12 @@ namespace Terra.Studio
 {
     public class LoginScreenView : View
     {
+        [SerializeField] private Canvas parentCanvas;
         [SerializeField] private CanvasGroup m_refCanvasGroup;
-
         [SerializeField] private InputField nameInputField;
         [SerializeField] private Image m_refNameInputFieldBorder;
         [SerializeField] private InputField passwordInputField;
         [SerializeField] private Image m_refPasswordInputFieldBorder;
-
         [SerializeField] private Text feedbackText;
 
         private string m_strName;
@@ -36,37 +35,36 @@ namespace Terra.Studio
         public override void Init()
         {
             feedbackText.text = string.Empty;
-            SystemOp.Resolve<User>().Login((status) =>
+            OnLocalLoginFailed();
+            SystemOp.Resolve<User>().AttempLocalLogin((status) =>
             {
                 if (status)
                 {
-                    OnAutoLoginSuccessful();
-                }
-                else
-                {
-                    OnAutoLoginUnsuccessful();
+                    LogLoginEvent("auto");
+                    OnLocalLoginSuccessful();
                 }
             });
         }
 
-        private void OnAutoLoginSuccessful()
+        public override void Flush()
+        {
+            Destroy(parentCanvas.gameObject);
+        }
+
+        private void OnLocalLoginSuccessful()
         {
             m_refLoggingYouInScreenGO.SetActive(true);
             m_refNotLoggedInScreenGO.SetActive(false);
-            LogLoginEvent("auto");
-            OnLoginSuccessful?.Invoke();
+            SystemOp.Resolve<User>().AttemptCloudLogin((status) =>
+            {
+                OnLoginSuccessful?.Invoke();
+            });
         }
 
-        private void OnAutoLoginUnsuccessful()
+        private void OnLocalLoginFailed()
         {
             m_refLoggingYouInScreenGO.SetActive(false);
             m_refNotLoggedInScreenGO.SetActive(true);
-        }
-
-        private void OnManualLoginSuccessful()
-        {
-            LogLoginEvent("manual");
-            StartCoroutine(ShowCorrectPasswordAnim());
         }
 
         private void OnManualLoginUnsuccessful()
@@ -99,39 +97,18 @@ namespace Terra.Studio
             SystemOp.Resolve<User>().
                 UpdateUserName(m_strName).
                 UpdatePassword(m_strPassword);
-            SystemOp.Resolve<User>().Login((status) =>
+            SystemOp.Resolve<User>().AttempLocalLogin((status) =>
             {
                 if (status)
                 {
-                    OnManualLoginSuccessful();
+                    LogLoginEvent("manual");
+                    OnLocalLoginSuccessful();
                 }
                 else
                 {
                     OnManualLoginUnsuccessful();
                 }
             });
-        }
-
-        private IEnumerator ShowCorrectPasswordAnim()
-        {
-            float timer = 0f;
-            Color toCol = Color.green;
-            Color fromCol = m_refPasswordInputFieldBorder.color;
-            float speed = 3f;
-            feedbackText.text = "Correct Password!";
-            feedbackText.color = new Color(0, 0, 0, 0);
-            Color textFromCol = feedbackText.color;
-            Color textToCol = Color.green;
-            textToCol.a = 1f;
-            do
-            {
-                m_refNameInputFieldBorder.color = Color.Lerp(fromCol, toCol, timer);
-                m_refPasswordInputFieldBorder.color = Color.Lerp(fromCol, toCol, timer);
-                feedbackText.color = Color.Lerp(textFromCol, textToCol, timer);
-                timer += Time.deltaTime * speed;
-                yield return new WaitForEndOfFrame();
-            } while (timer <= 1f);
-            OnLoginSuccessful?.Invoke();
         }
 
         private void LogLoginEvent(string a_strSource)
@@ -235,26 +212,6 @@ namespace Terra.Studio
             } while (timer <= 1f);
             feedbackText.text = "";
             feedbackText.color = new Color(0, 0, 0, 0);
-        }
-
-        internal void FuckOff()
-        {
-            StartCoroutine(FuckOffAndGoAway());
-        }
-
-        private IEnumerator FuckOffAndGoAway()
-        {
-            float timer = 0f;
-            float speed = 0.5f;
-            float alphaFrom = m_refCanvasGroup.alpha;
-            float alphaTo = 0f;
-            do
-            {
-                m_refCanvasGroup.alpha = Mathf.Lerp(alphaFrom, alphaTo, timer);
-                timer += Time.deltaTime * speed;
-                yield return new WaitForEndOfFrame();
-            } while (timer <= 1f);
-            Destroy(gameObject);
         }
 
         private void OnDestroy()

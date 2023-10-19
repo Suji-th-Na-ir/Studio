@@ -7,10 +7,11 @@ namespace Terra.Studio
 {
     public class FileService
     {
+        public Action<string, string, Action<bool>> RenameKeyFromDBStore;
         public Action<string, Action<bool>> DoesFileExist;
         public Action<string, Action<string>> ReadFileFromLocal;
         public Action<string, Action<bool>> RemoveFileFromLocal;
-        private readonly Action<string, string> WriteFileIntoLocal;
+        private readonly Action<string, string, Action<bool>> WriteFileIntoLocal;
 
         public FileService()
         {
@@ -20,6 +21,7 @@ namespace Terra.Studio
                 WriteFileIntoLocal = SystemOp.Resolve<WebGLHandler>().WriteDataIntoStore;
                 ReadFileFromLocal = SystemOp.Resolve<WebGLHandler>().ReadDataFromStore;
                 RemoveFileFromLocal = SystemOp.Resolve<WebGLHandler>().RemoveDataFromStore;
+                RenameKeyFromDBStore = SystemOp.Resolve<WebGLHandler>().RenameKeyFromDBStore;
             }
             else
             {
@@ -30,12 +32,13 @@ namespace Terra.Studio
             }
         }
 
-        public void WriteFile(string data, string fullFilePath, bool ignoreIfFileExists)
+        public void WriteFile(string data, string fullFilePath, bool ignoreIfFileExists, Action<bool> callback)
         {
             DoesFileExist.Invoke(fullFilePath, (doesExistInLocal) =>
             {
                 if (ignoreIfFileExists && doesExistInLocal)
                 {
+                    callback?.Invoke(true);
                     return;
                 }
                 else
@@ -44,12 +47,12 @@ namespace Terra.Studio
                     {
                         BackupFile(fullFilePath);
                     }
-                    WriteFileIntoLocal.Invoke(data, fullFilePath);
+                    WriteFileIntoLocal.Invoke(data, fullFilePath, callback);
                 }
             });
         }
 
-        private void WriteFile(string data, string fullFilePath)
+        private void WriteFile(string data, string fullFilePath, Action<bool> callback)
         {
             var dirPath = Path.GetDirectoryName(fullFilePath);
             if (!Directory.Exists(dirPath))
@@ -57,6 +60,7 @@ namespace Terra.Studio
                 Directory.CreateDirectory(dirPath);
             }
             File.WriteAllText(fullFilePath, data);
+            callback?.Invoke(true);
         }
 
         private void ReadFromFile(string filePath, Action<string> callback)

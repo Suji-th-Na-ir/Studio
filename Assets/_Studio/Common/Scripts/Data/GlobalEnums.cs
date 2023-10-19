@@ -113,4 +113,10 @@ namespace Terra.Studio
         Off,
         On
     }
+
+    public enum RequestType
+    {
+        Get,
+        Post
+    }
 }

@@ -33,11 +33,11 @@ namespace Terra.Studio
 #endif
         }
 
-        public void WriteDataIntoStore(string data, string fullFilePath)
+        public void WriteDataIntoStore(string data, string fullFilePath, Action<bool> callback)
         {
 #if ENABLE_WEBGL_HANDLER
             var fileName = Path.GetFileNameWithoutExtension(fullFilePath);
-            SystemOp.Resolve<IndexedDBManager>().SaveDataToIndexedDB(fileName, data, null);
+            SystemOp.Resolve<IndexedDBManager>().SaveDataToIndexedDB(fileName, data, callback);
 #endif
         }
 
@@ -54,6 +54,13 @@ namespace Terra.Studio
 #if ENABLE_WEBGL_HANDLER
             var fileName = Path.GetFileNameWithoutExtension(fullFilePath);
             SystemOp.Resolve<IndexedDBManager>().RemoveDataFromIndexedDB(fileName, callback);
+#endif
+        }
+
+        public void RenameKeyFromDBStore(string lastKey, string newKey, Action<bool> callback)
+        {
+#if ENABLE_WEBGL_HANDLER
+            SystemOp.Resolve<IndexedDBManager>().RenameKeyFromStore(lastKey, newKey, callback);
 #endif
         }
 

@@ -34,7 +34,7 @@ namespace Terra.Studio
             return this;
         }
 
-        public void Login(Action<bool> isLoginSuccessful)
+        public void AttempLocalLogin(Action<bool> isLoginSuccessful)
         {
             var isSuccessful = password.Equals(CORRECT_PASSWORD);
             if (!isSuccessful)
@@ -45,6 +45,29 @@ namespace Terra.Studio
             USER_NAME_PREF.SetPref(userName);
             PASSWORD_PREF.SetPref(password);
             isLoginSuccessful?.Invoke(true);
+        }
+
+        public void AttemptCloudLogin(Action<bool> isCloudLoginSuccessful)
+        {
+            new LoginAPI(userName).DoRequest((status, response) =>
+            {
+                isCloudLoginSuccessful?.Invoke(status);
+            });
+        }
+
+        public void GetProjectDetails(Action<bool, string> onProjectDetailsReceived)
+        {
+            new GetProjectDetailsAPI().DoRequest(onProjectDetailsReceived);
+        }
+
+        public void CreateNewProject(Action<bool, string> onProjectCreated)
+        {
+            new CreateProjectAPI(projectName).DoRequest(onProjectCreated);
+        }
+
+        public void UploadSaveDataToCloud(string data, Action<bool, string> onProjectSaved)
+        {
+            new SaveProjectAPI(data).DoRequest(onProjectSaved);
         }
     }
 }
