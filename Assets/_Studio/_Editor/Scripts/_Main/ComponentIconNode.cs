@@ -212,7 +212,7 @@ namespace Terra.Studio
             Vector3 effectivePos = m_ObjectTarget.ComponentGameObject.transform.position;
             var objectScreenPos = m_MainCamera.WorldToViewportPoint(effectivePos + Vector3.up * 0.3f);
             objectScreenPos = m_MainCamera.ViewportToScreenPoint(objectScreenPos);
-            var offset = m_MainCamera.WorldToViewportPoint(effectivePos + Vector3.up);
+            var offset = m_MainCamera.WorldToViewportPoint(effectivePos + Vector3.up * 0.8f);
             offset = m_MainCamera.ViewportToScreenPoint(offset);
             var radius = (objectScreenPos - offset).magnitude;
             Vector3 screenPoint = CalculateCircularPositionAtIndex(objectScreenPos, radius, 3, m_componentIndex);
