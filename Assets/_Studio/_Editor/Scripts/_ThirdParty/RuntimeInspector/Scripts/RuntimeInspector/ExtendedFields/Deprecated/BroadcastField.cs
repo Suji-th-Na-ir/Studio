@@ -27,6 +27,24 @@ namespace RuntimeInspectorNamespace
         protected override void OnBound(MemberInfo variable)
         {
             base.OnBound(variable);
+
+            var val = (Atom.Broadcast)Value;
+
+            FieldInfo fInfo = Value.GetType().GetField(nameof(val.broadcast));
+            var attribute = fInfo.GetAttribute<OnValueChangedAttribute>();
+            if (attribute != null)
+            {
+                if (val != null)
+                {
+                    onStringUpdated = attribute.OnValueUpdated(val.behaviour);
+                }
+            }
+        }
+
+        protected override void OnUnbound()
+        {
+            base.OnUnbound();
+            onStringUpdated = null;
         }
 
         public override void Refresh()
@@ -97,24 +115,24 @@ namespace RuntimeInspectorNamespace
         {
             var val = (Atom.Broadcast)Value;
             var oldValue = val.broadcast;
-            if(broadcastDropdown.options[value].text == "None")
+            if (broadcastDropdown.options[value].text == "None")
             {
-                val.broadcast = "";
+                val.broadcast = String.Empty;
+                BroadcastFieldDrawer.SetInteractable(false, true);
             }
-            if (broadcastDropdown.options[value].text == "Custom")
+            else if (broadcastDropdown.options[value].text == "Custom")
             {
-              
-                val.broadcast = "";
+
+                val.broadcast = String.Empty;
                 BroadcastFieldDrawer.SetInteractable(true, true);
             }
             else
             {
-                BroadcastFieldDrawer.SetInteractable(false, true);
                 val.broadcast = broadcastDropdown.options[value].text;
+                BroadcastFieldDrawer.SetInteractable(false, true);
             }
             var newString = val.broadcast == null ? string.Empty : val.broadcast;
             var oldString = oldValue == null ? string.Empty : oldValue.ToString();
-            Debug.Log(onStringUpdated);
             onStringUpdated?.Invoke(newString, oldString);
         }
         protected override void OnSkinChanged()
