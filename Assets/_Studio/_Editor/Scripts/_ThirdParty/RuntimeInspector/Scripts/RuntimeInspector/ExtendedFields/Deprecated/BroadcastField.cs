@@ -30,6 +30,7 @@ namespace RuntimeInspectorNamespace
             base.OnBound(variable);
 
             var val = (Atom.Broadcast)Value;
+            broadcastDropdown.onValueChanged.RemoveAllListeners();
             broadcastDropdown.onValueChanged.AddListener((val) => OnBroadcastDropdownValueChanged(val));
             FieldInfo fInfo = Value.GetType().GetField(nameof(val.broadcast));
             var attribute = fInfo.GetAttribute<OnValueChangedAttribute>();
@@ -41,6 +42,7 @@ namespace RuntimeInspectorNamespace
                 }
             }
 
+            lastSubmittedValue = broadcastDropdown.value;
             EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(broadcastDropdown.gameObject,
            () => broadcastDropdown.targetGraphic.color = Skin.SelectedItemBackgroundColor,
            () => broadcastDropdown.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
@@ -96,7 +98,22 @@ namespace RuntimeInspectorNamespace
             broadcastDropdown.AddOptions(options);
         }
 
-        private void OnBroadcastDropdownValueChanged(int value)
+        private void OnBroadcastDropdownValueChanged(int input)
+        {
+            EditorOp.Resolve<IURCommand>().Record(
+                    lastSubmittedValue, input,
+                    $"Enum changed to: {broadcastDropdown.options[(int)lastSubmittedValue].text}",
+                    (value) =>
+                    {
+
+                        broadcastDropdown.SetValueWithoutNotify((int)value);
+                        UpdateBroadcastBasedOnDropdown((int)value);
+                        lastSubmittedValue = (int)value;
+                    });
+            UpdateBroadcastBasedOnDropdown(input);
+        }
+
+        private void UpdateBroadcastBasedOnDropdown(int value)
         {
             var val = (Atom.Broadcast)Value;
             var oldValue = val.broadcast;
@@ -119,6 +136,34 @@ namespace RuntimeInspectorNamespace
             var oldString = oldValue == null ? string.Empty : oldValue.ToString();
             onStringUpdated?.Invoke(newString, oldString);
             OnValueUpdated?.Invoke(newString);
+           
+            UpdateOtherCompData(newString);
+            lastSubmittedValue = value;
+        }
+
+        private void UpdateOtherCompData(string newValue)
+        {
+            Debug.Log("Updating for multiple");
+            List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selectedObjects.Count <= 1) return;
+            foreach (var obj in selectedObjects)
+            {
+                var allInstances = EditorOp.Resolve<Atom>().AllBroadcasts;
+                foreach (Atom.Broadcast atom in allInstances)
+                {
+                    if (obj == atom.target)
+                    {
+                        if (atom == Value)
+                            continue;
+
+                        var oldValue = atom.broadcast;
+                        atom.broadcast = newValue;
+                        var oldString = oldValue == null ? string.Empty : oldValue.ToString();
+
+                        atom.behaviour.OnBroadcastStringUpdated(newValue, oldString);
+                    }
+                }
+            }
         }
 
         private void OnBroadcastValueChanged(string newValue)

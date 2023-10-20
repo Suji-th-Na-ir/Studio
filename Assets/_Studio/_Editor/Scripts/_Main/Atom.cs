@@ -12,6 +12,7 @@ namespace Terra.Studio
         public List<PlaySfx> AllSfxes = new();
         public List<PlayVfx> AllVfxes = new();
         public List<Repeat> AllRepeats = new();
+        public List<Broadcast> AllBroadcasts = new();
 
         public class BasePlay
         {
@@ -51,6 +52,7 @@ namespace Terra.Studio
             AllSfxes.Clear();
             AllVfxes.Clear();
             AllRepeats.Clear();
+            AllBroadcasts.Clear();
         }
 
         [Serializable]
@@ -341,6 +343,11 @@ namespace Terra.Studio
             public override void Setup(GameObject target, BaseBehaviour behaviour)
             {
                 base.Setup(target, behaviour);
+                var allbroadcasts = EditorOp.Resolve<Atom>().AllBroadcasts;
+                if (!allbroadcasts.Contains(this))
+                {
+                    allbroadcasts.Add(this);
+                }
             }
         }
     }
