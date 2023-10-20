@@ -18,7 +18,9 @@ namespace RuntimeInspectorNamespace
         public override void Initialize()
         {
             base.Initialize();
+            startOn.onValueChanged.RemoveAllListeners();
             startOn.onValueChanged.AddListener(OnStartValueChanged);
+            listenOn.onValueChanged.RemoveAllListeners();
             listenOn.onValueChanged.AddListener(OnListenValueChanged);
         }
 
@@ -27,7 +29,7 @@ namespace RuntimeInspectorNamespace
             base.OnBound(variable);
             LoadStartOnOptions();
             LoadListenOptions();
-            lastSubmittedValue = ((Atom.StartOn)lastSubmittedValue).data;
+            lastSubmittedValue = ((Atom.StartOn)Value).data;
             EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(startOn.gameObject,
                 () => startOn.targetGraphic.color = Skin.SelectedItemBackgroundColor,
                 () => startOn.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
@@ -128,38 +130,26 @@ namespace RuntimeInspectorNamespace
             if (Inspector) Inspector.RefreshDelayed();
         }
 
-        private void OnListenValueChanged(string value)
-        {
-            for (int i = 0; i < listenOn.options.Count; i++)
-            {
-                if (listenOn.options[i].text==value)
-                {
-                    OnListenValueChanged(i);
-                    return;
-                }
-            }
-        }
-
         private void OnListenValueChanged(int value)
         {
             Atom.StartOn atom = (Atom.StartOn)Value;
-            if (Inspector)
-            {
-                Inspector.RefreshDelayed();
-            }
-       
+            UpdateListenValue(value);
             if (listenOn.options[value].text != ((StartOnData)lastSubmittedValue).listenName)
             {
                 EditorOp.Resolve<IURCommand>().Record(
                     lastSubmittedValue, atom.data,
-                    $"Listen value changed to: {atom.data.startName}",
+                    $"Listen value changed to: {atom.data.listenName}",
                     (value) =>
                     {
                         for (int i = 0; i < listenOn.options.Count; i++)
                         {
-                            if (listenOn.options[i].text == ((StartOnData)value).listenName)
+                            var listenstring = ((StartOnData)value).listenName;
+                            
+                            if (string.IsNullOrEmpty(listenstring))
+                                listenstring = "None";
+                           
+                            if (listenOn.options[i].text == listenstring)
                             {
-                                listenOn.SetValueWithoutNotify(i);
                                 UpdateListenValue(i);
                                 break;
                             }
@@ -167,13 +157,12 @@ namespace RuntimeInspectorNamespace
                        
                     });
             }
-            UpdateListenValue(value);
+            lastSubmittedValue = atom.data;
         }
 
         private void UpdateListenValue(int value)
         {
             Atom.StartOn atom = (Atom.StartOn)Value;
-            lastSubmittedValue = atom.data;
 
             atom.OnListenerUpdated?.Invoke(listenOn.options[value].text, atom.data.listenName);
             atom.data.listenName = listenOn.options[value].text;
@@ -223,14 +212,15 @@ namespace RuntimeInspectorNamespace
                 if (SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings.Count > listenOn.options.Count)
                 {
                     listenOn.ClearOptions();
-
                     listenOn.AddOptions(SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings);
+                }
 
+                if (listenOn.options[listenOn.value].text != atom.data.listenName)
+                {
                     for (int i = 0; i < listenOn.options.Count; i++)
                     {
                         if (listenOn.options[i].text == atom.data.listenName)
                         {
-                            OnListenValueChanged(i);
                             listenOn.SetValueWithoutNotify(i);
                             break;
                         }
