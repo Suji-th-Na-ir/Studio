@@ -23,6 +23,7 @@ namespace Terra.Studio
         public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => true;
+        protected override bool UpdateListenOnEnable => StartOn.data.startIndex == 4;
         protected override string[] BroadcasterRefs => new string[]
         {
           repeat.broadcastData.broadcast

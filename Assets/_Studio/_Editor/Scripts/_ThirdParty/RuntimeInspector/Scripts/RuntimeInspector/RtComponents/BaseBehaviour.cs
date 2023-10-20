@@ -18,6 +18,7 @@ namespace Terra.Studio
 
         protected abstract bool CanBroadcast { get; }
         protected abstract bool CanListen { get; }
+        protected virtual bool UpdateListenOnEnable { get { return true; } }
         protected virtual string[] BroadcasterRefs { get; }
         protected virtual string[] ListenerRefs { get; }
         protected virtual ComponentDisplayDock DisplayDock { get; private set; }
@@ -35,7 +36,7 @@ namespace Terra.Studio
             }
             if (CanListen)
             {
-                OnListenerUpdated = (newString, oldString) =>
+                OnListenerUpdated = (newString, oldString ) =>
                 {
                     OnListenerStringUpdated(newString, oldString);
                     UpdateListenerForMultiSelected(newString, oldString);
@@ -107,7 +108,7 @@ namespace Terra.Studio
                     }
                 }
             }
-            if (CanListen && ListenerRefs != null)
+            if (CanListen && ListenerRefs != null && UpdateListenOnEnable)
             {
                 foreach (var listener in ListenerRefs)
                 {

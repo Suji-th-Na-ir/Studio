@@ -20,6 +20,7 @@ namespace Terra.Studio
         public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
         protected override bool CanListen =>true;
+        protected override bool UpdateListenOnEnable => StartOn.data.startIndex == 4;
         public override Atom.RecordedVector3 RecordedVector3 { get { return Type.recordedVector3; } }
         protected override string[] BroadcasterRefs => new string[]
         {
