@@ -155,9 +155,24 @@ namespace RuntimeInspectorNamespace
                     $"Listen value changed to: {atom.data.startName}",
                     (value) =>
                     {
-                        OnListenValueChanged(((StartOnData)value).listenName);
+                        for (int i = 0; i < listenOn.options.Count; i++)
+                        {
+                            if (listenOn.options[i].text == ((StartOnData)value).listenName)
+                            {
+                                listenOn.SetValueWithoutNotify(i);
+                                UpdateListenValue(i);
+                                break;
+                            }
+                        }
+                       
                     });
             }
+            UpdateListenValue(value);
+        }
+
+        private void UpdateListenValue(int value)
+        {
+            Atom.StartOn atom = (Atom.StartOn)Value;
             lastSubmittedValue = atom.data;
 
             atom.OnListenerUpdated?.Invoke(listenOn.options[value].text, atom.data.listenName);
