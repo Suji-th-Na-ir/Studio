@@ -125,8 +125,8 @@ namespace RuntimeInspectorNamespace
             Atom.StartOn atom = (Atom.StartOn)Value;
             atom.data.startIndex = _index;
             atom.data.startName = atom.startList[_index];
-            atom.data.listenName = "";
-            UpdateOtherCompData(atom);
+            UpdateListenValue(0);
+           
             if (Inspector) Inspector.RefreshDelayed();
         }
 
@@ -164,9 +164,13 @@ namespace RuntimeInspectorNamespace
         {
             Atom.StartOn atom = (Atom.StartOn)Value;
 
-            atom.OnListenerUpdated?.Invoke(listenOn.options[value].text, atom.data.listenName);
-            atom.data.listenName = listenOn.options[value].text;
+            var oldstering = atom.data.listenName;
+            var listenstring = listenOn.options[value].text;
+            if (listenstring == "None")
+                listenstring = string.Empty;
+            atom.data.listenName = listenstring;
             UpdateOtherCompData(atom);
+            atom.OnListenerUpdated?.Invoke(listenstring, oldstering);
         }
 
 
@@ -215,11 +219,14 @@ namespace RuntimeInspectorNamespace
                     listenOn.AddOptions(SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings);
                 }
 
-                if (listenOn.options[listenOn.value].text != atom.data.listenName)
+                var listenString = atom.data.listenName;
+                if (atom.data.listenName == String.Empty)
+                    listenString = "None";
+                if (listenOn.options[listenOn.value].text != listenString)
                 {
                     for (int i = 0; i < listenOn.options.Count; i++)
                     {
-                        if (listenOn.options[i].text == atom.data.listenName)
+                        if (listenOn.options[i].text == listenString)
                         {
                             listenOn.SetValueWithoutNotify(i);
                             break;

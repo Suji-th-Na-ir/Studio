@@ -143,7 +143,6 @@ namespace RuntimeInspectorNamespace
 
         private void UpdateOtherCompData(string newValue)
         {
-            Debug.Log("Updating for multiple");
             List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
             if (selectedObjects.Count <= 1) return;
             foreach (var obj in selectedObjects)
