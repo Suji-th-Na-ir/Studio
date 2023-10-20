@@ -39,10 +39,10 @@ namespace Terra.Studio
             }
             else if (cloudDataIntegrityRes > 0)
             {
-                SystemOp.Resolve<SaveSystem>().SaveManualData(unpackedData.content, true, (status) =>
+                SystemOp.Resolve<SaveSystem>().SaveManualData(unpackedData.content, false, (status) =>
                 {
                     onDone?.Invoke();
-                });
+                }, unpackedData.timestamp);
             }
             else
             {
@@ -65,7 +65,7 @@ namespace Terra.Studio
         private int IsCloudDataLatest(string cloudTimestamp)
         {
             var isLastSavedAvailable = SystemOp.Resolve<SaveSystem>().TryGetLastSavedTimestamp(out var saveDateTime);
-            if (!isLastSavedAvailable) return -1;
+            if (!isLastSavedAvailable) return 1;
             var lastSaveDateTime = DateTime.Parse(saveDateTime);
             var cloudSaveDateTime = DateTime.Parse(cloudTimestamp);
             var result = DateTime.Compare(cloudSaveDateTime, lastSaveDateTime);

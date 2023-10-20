@@ -11,7 +11,7 @@ namespace Terra.Studio
         private readonly string backwardCompatibilityFileName;
         private readonly string savedFileName;
         private const string LAST_SAVED_KEY_PREF = "LastSavedAt";
-        private const string DATETIME_SAVE_FORMAT = "yyyy-MM-ddTHH:mm:ss.fffffffZ";
+        private const string DATETIME_SAVE_FORMAT = "yyyy-MM-ddTHH:mm:ss";
 
         public SaveSystem()
         {
@@ -44,17 +44,28 @@ namespace Terra.Studio
             });
         }
 
-        public void SaveManualData(string data, bool shouldIgnoreIfExistsAlready, Action<bool> callback)
+        public void SaveManualData(string data, bool shouldIgnoreIfExistsAlready, Action<bool> callback, string autoFlushNewTimeStamp = null)
         {
             var filePath = FileService.GetSavedFilePath(savedFileName);
-            SystemOp.Resolve<FileService>().WriteFile(data, filePath, shouldIgnoreIfExistsAlready, callback);
-            RegisterTimestampForLastSave();
+            SystemOp.Resolve<FileService>().WriteFile(data, filePath, shouldIgnoreIfExistsAlready, (status) =>
+            {
+                if (status)
+                {
+                    RegisterTimestampForLastSave(autoFlushNewTimeStamp);
+                }
+                callback?.Invoke(status);
+            });
         }
 
         public string CheckAndGetFreshSaveDateTimeIfLastSavedTimestampNotPresent()
         {
             var doesPrefExist = LAST_SAVED_KEY_PREF.HasKeyInPrefs();
-            if (!doesPrefExist) return DateTime.UtcNow.ToString(DATETIME_SAVE_FORMAT);
+            if (!doesPrefExist)
+            {
+                var date = DateTime.Now;
+                var timestamp = date.ToUniversalTime().ToString(DATETIME_SAVE_FORMAT);
+                return timestamp;
+            }
             LAST_SAVED_KEY_PREF.TryGetPrefString(out var dateTime);
             return dateTime;
         }
@@ -111,9 +122,18 @@ namespace Terra.Studio
             OnPreCheckDone = null;
         }
 
-        private void RegisterTimestampForLastSave()
+        private void RegisterTimestampForLastSave(string autoFlushNewTimeStamp = null)
         {
-            var timestamp = DateTime.UtcNow.ToString(DATETIME_SAVE_FORMAT);
+            string timestamp;
+            if (string.IsNullOrEmpty(autoFlushNewTimeStamp))
+            {
+                var dateTime = DateTime.Now;
+                timestamp = dateTime.ToUniversalTime().ToString(DATETIME_SAVE_FORMAT);
+            }
+            else
+            {
+                timestamp = autoFlushNewTimeStamp;
+            }
             LAST_SAVED_KEY_PREF.SetPref(timestamp);
         }
 

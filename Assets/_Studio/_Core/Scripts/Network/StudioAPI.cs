@@ -102,12 +102,13 @@ namespace Terra.Studio
 
         public SaveProjectAPI(string data)
         {
+            var timeStamp = SystemOp.Resolve<SaveSystem>().CheckAndGetFreshSaveDateTimeIfLastSavedTimestampNotPresent();
             FormData = new()
             {
                 { USER_NAME_KEY, SystemOp.Resolve<User>().UserName },
                 { PROJECT_NAME_KEY, SystemOp.Resolve<User>().ProjectName },
                 { DATA_KEY, data },
-                { TIME_STAMP_KEY, SystemOp.Resolve<SaveSystem>().CheckAndGetFreshSaveDateTimeIfLastSavedTimestampNotPresent() }
+                { TIME_STAMP_KEY, timeStamp }
             };
         }
     }
