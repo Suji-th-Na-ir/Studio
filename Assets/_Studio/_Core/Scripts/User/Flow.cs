@@ -55,7 +55,7 @@ namespace Terra.Studio
                     }
                     else
                     {
-                        new SaveProjectAPI(response).DoRequest(null);
+                        SystemOp.Resolve<User>().UploadSaveDataToCloud(response, null);
                         onDone?.Invoke();
                     }
                 });
@@ -105,7 +105,7 @@ namespace Terra.Studio
                     var isAvailable = !string.IsNullOrEmpty(response);
                     if (isAvailable)
                     {
-                        new SaveProjectAPI(response).DoRequest(null);
+                        SystemOp.Resolve<User>().UploadSaveDataToCloud(response, null);
                         onDone?.Invoke();
                     }
                     else
@@ -128,7 +128,7 @@ namespace Terra.Studio
             {
                 if (autoSaveToCloud)
                 {
-                    new SaveProjectAPI(saveData).DoRequest(null);
+                    SystemOp.Resolve<User>().UploadSaveDataToCloud(saveData, null);
                 }
                 onDone?.Invoke();
             });

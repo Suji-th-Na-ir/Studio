@@ -43,11 +43,23 @@ namespace Terra.Studio
 #endif
             }
         }
+        public bool DoCloudLogin
+        {
+            get
+            {
+#if UNITY_EDITOR
+                return doCloudLoginLocally;
+#else
+                return true;
+#endif
+            }
+        }
 
 #if UNITY_EDITOR
         [Space(10), Header("Editor only")]
         [SerializeField] private bool loadDefaultSceneOnPlay;
         public bool LoadDefaultSceneOnPlay { get { return loadDefaultSceneOnPlay; } }
+        [SerializeField] private bool doCloudLoginLocally;
         [SerializeField] private bool loadFromCloud;
 #endif
     }

@@ -49,6 +49,12 @@ namespace Terra.Studio
 
         public void AttemptCloudLogin(Action<bool> isCloudLoginSuccessful)
         {
+            var shouldDoCloudLogin = SystemOp.Resolve<System>().ConfigSO.DoCloudLogin;
+            if (!shouldDoCloudLogin)
+            {
+                isCloudLoginSuccessful?.Invoke(true);
+                return;
+            }
             new LoginAPI(userName).DoRequest((status, response) =>
             {
                 isCloudLoginSuccessful?.Invoke(status);
