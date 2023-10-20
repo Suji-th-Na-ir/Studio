@@ -54,6 +54,17 @@ namespace Terra.Studio
 #endif
             }
         }
+        public bool SaveToCloud
+        {
+            get
+            {
+#if UNITY_EDITOR
+                return saveToCloudWhenSaved;
+#else
+                return true;
+#endif
+            }
+        }
 
 #if UNITY_EDITOR
         [Space(10), Header("Editor only")]
@@ -61,6 +72,7 @@ namespace Terra.Studio
         public bool LoadDefaultSceneOnPlay { get { return loadDefaultSceneOnPlay; } }
         [SerializeField] private bool doCloudLoginLocally;
         [SerializeField] private bool loadFromCloud;
+        [SerializeField] private bool saveToCloudWhenSaved;
 #endif
     }
 

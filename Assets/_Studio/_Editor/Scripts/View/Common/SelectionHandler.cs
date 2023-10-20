@@ -45,10 +45,12 @@ public class SelectionHandler : View
     private void Awake()
     {
         EditorOp.Register(this);
+        SystemOp.Resolve<SaveSystem>().RegisterToAutosaveChangeListener(true);
     }
 
     private void OnDestroy()
     {
+        SystemOp.Resolve<SaveSystem>()?.RegisterToAutosaveChangeListener(false);
         EditorOp.Unregister(this);
     }
 

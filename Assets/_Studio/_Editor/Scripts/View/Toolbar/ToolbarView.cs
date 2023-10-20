@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayShifu.Terra;
-using RuntimeInspectorNamespace;
+using TMPro;
 
 namespace Terra.Studio
 {
@@ -23,9 +23,12 @@ namespace Terra.Studio
         private const string TIMER_BUTTON_LOC = "timer_button";
         private const string UNDO_BUTTON_LOC = "UndoButton";
         private const string REDO_BUTTON_LOC = "RedoButton";
+        private const string SAVE_MESSAGE_TEXT_LOC = "SaveText";
 
         private GameObject primitivePanel;
         private CanvasGroup canvasGroup;
+        private TextMeshProUGUI saveTextField;
+        private Button saveButton;
 
         private void Awake()
         {
@@ -35,21 +38,22 @@ namespace Terra.Studio
         public override void Init()
         {
             SpawnPrimitivePrefab();
-            var addButtonTr = Helper.FindDeepChild(transform, ADD_BUTTON_LOC, true);
-            var playButtonTr = Helper.FindDeepChild(transform, PLAY_BUTTON_LOC, true);
-            var saveButtonTr = Helper.FindDeepChild(transform, SAVE_BUTTON_LOC, true);
-            var loadButtonTr = Helper.FindDeepChild(transform, LOAD_BUTTON_LOC, true);
-            var cylinderPrimitiveTr = Helper.FindDeepChild(transform, CYLINDER_PRIMITIVE_BUTTON_LOC, true);
-            var spherePrimitiveTr = Helper.FindDeepChild(transform, SPHERE_PRIMITIVE_BUTTON_LOC, true);
-            var cubePrimitiveTr = Helper.FindDeepChild(transform, CUBE_PRIMITIVE_BUTTON_LOC, true);
-            var planePrimitiveTr = Helper.FindDeepChild(transform, PLANE_PRIMITIVE_BUTTON_LOC, true);
-            var checkpointTr = Helper.FindDeepChild(transform, CHECKPOINT_PRIMITIVE_BUTTON_LOC, true);
-            var timerTr = Helper.FindDeepChild(transform, TIMER_BUTTON_LOC, true);
-            var moveButtonTr = Helper.FindDeepChild(transform, MOVE_BUTTON_LOC, true);
-            var rotateButtonTr = Helper.FindDeepChild(transform, ROTATE_BUTTON_LOC, true);
-            var scaleButtonTr = Helper.FindDeepChild(transform, SCALE_BUTTON_LOC, true);
-            var undoButtonTr = Helper.FindDeepChild(transform, UNDO_BUTTON_LOC, true);
-            var redoButtonTr = Helper.FindDeepChild(transform, REDO_BUTTON_LOC, true);
+            var addButtonTr = Helper.FindDeepChild(transform, ADD_BUTTON_LOC);
+            var playButtonTr = Helper.FindDeepChild(transform, PLAY_BUTTON_LOC);
+            var saveButtonTr = Helper.FindDeepChild(transform, SAVE_BUTTON_LOC);
+            var loadButtonTr = Helper.FindDeepChild(transform, LOAD_BUTTON_LOC);
+            var cylinderPrimitiveTr = Helper.FindDeepChild(transform, CYLINDER_PRIMITIVE_BUTTON_LOC);
+            var spherePrimitiveTr = Helper.FindDeepChild(transform, SPHERE_PRIMITIVE_BUTTON_LOC);
+            var cubePrimitiveTr = Helper.FindDeepChild(transform, CUBE_PRIMITIVE_BUTTON_LOC);
+            var planePrimitiveTr = Helper.FindDeepChild(transform, PLANE_PRIMITIVE_BUTTON_LOC);
+            var checkpointTr = Helper.FindDeepChild(transform, CHECKPOINT_PRIMITIVE_BUTTON_LOC);
+            var timerTr = Helper.FindDeepChild(transform, TIMER_BUTTON_LOC);
+            var moveButtonTr = Helper.FindDeepChild(transform, MOVE_BUTTON_LOC);
+            var rotateButtonTr = Helper.FindDeepChild(transform, ROTATE_BUTTON_LOC);
+            var scaleButtonTr = Helper.FindDeepChild(transform, SCALE_BUTTON_LOC);
+            var undoButtonTr = Helper.FindDeepChild(transform, UNDO_BUTTON_LOC);
+            var redoButtonTr = Helper.FindDeepChild(transform, REDO_BUTTON_LOC);
+            saveTextField = Helper.FindDeepChild<TextMeshProUGUI>(transform, SAVE_MESSAGE_TEXT_LOC);
 
             var addButton = addButtonTr.GetComponent<Button>();
             AddListenerEvent(addButton, () =>
@@ -83,8 +87,9 @@ namespace Terra.Studio
                 EditorOp.Resolve<SelectionHandler>().SetWorkGizmoId(SelectionHandler.GizmoId.Scale);
             });
 
-            var saveButton = saveButtonTr.GetComponent<Button>();
+            saveButton = saveButtonTr.GetComponent<Button>();
             AddListenerEvent(saveButton, EditorOp.Resolve<SceneDataHandler>().Save);
+            SetSaveMessage(true, SaveState.Empty);
 
             var cylinderButton = cylinderPrimitiveTr.GetComponent<Button>();
             AddListenerEvent(cylinderButton, CreateObject, PrimitiveType.Cylinder.ToString());
@@ -154,10 +159,16 @@ namespace Terra.Studio
             EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);
         }
 
-        private bool IsIncognito()
+        public void SetSaveMessage(bool setInteractable, SaveState state)
         {
-            var isIncognito = EditorOp.Resolve<EditorSystem>().IsIncognitoEnabled;
-            return isIncognito;
+            if (!string.IsNullOrEmpty(saveTextField.text) &&
+                state == SaveState.UnsavedChanges)
+            {
+                return;
+            }
+            var message = state.GetStringValue();
+            saveButton.interactable = setInteractable;
+            saveTextField.text = message;
         }
 
         private void SpawnPrimitivePrefab()

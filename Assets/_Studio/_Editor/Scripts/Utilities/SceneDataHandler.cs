@@ -44,13 +44,36 @@ namespace Terra.Studio
             var sceneData = ExportSceneData();
             if (!Helper.IsInUnityEditorMode())
             {
-                EasyUI.Toast.Toast.Show("Saved Successfully!", 3.0f, EasyUI.Toast.ToastColor.Green);
-                SystemOp.Resolve<SaveSystem>().SaveManualData(sceneData, false, null);
+                EditorOp.Resolve<ToolbarView>().SetSaveMessage(false, SaveState.Saving);
+                SystemOp.Resolve<SaveSystem>().SaveManualData(sceneData, false, (status) =>
+                {
+                    if (SystemOp.Resolve<System>().ConfigSO.SaveToCloud)
+                    {
+                        if (status)
+                        {
+                            SystemOp.Resolve<User>().UploadSaveDataToCloud(sceneData, OnCloudSaveAttempted);
+                        }
+                        else
+                        {
+                            EditorOp.Resolve<ToolbarView>().SetSaveMessage(true, SaveState.Empty);
+                        }
+                    }
+                    else
+                    {
+                        EditorOp.Resolve<ToolbarView>().SetSaveMessage(true, SaveState.Empty);
+                    }
+                });
             }
             else
             {
                 new FileService().WriteFile(sceneData, GetAssetName?.Invoke(), false, null);
             }
+        }
+
+        private void OnCloudSaveAttempted(bool status, string response)
+        {
+            var saveState = status ? SaveState.SavedToCloud : SaveState.ChangesSavedOffline;
+            EditorOp.Resolve<ToolbarView>().SetSaveMessage(true, saveState);
         }
 
         public void PrepareSceneDataToRuntime()

@@ -1,5 +1,6 @@
 using System;
 using PlayShifu.Terra;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -64,6 +65,18 @@ namespace Terra.Studio
             return !string.IsNullOrEmpty(dateTime);
         }
 
+        public void RegisterToAutosaveChangeListener(bool enable)
+        {
+            if (enable)
+            {
+                SystemOp.Register(new AutoSave());
+            }
+            else
+            {
+                SystemOp.Unregister<AutoSave>();
+            }
+        }
+
         private void PrepareSavedDataForBackwardCompatibility(bool doFileExist)
         {
             if (!doFileExist)
@@ -107,6 +120,49 @@ namespace Terra.Studio
         public void Dispose()
         {
             SystemOp.Unregister<FileService>();
+        }
+
+        public class AutoSave : IDisposable
+        {
+            private const int VALIDATE_AUTOSAVE_AT_EVERY = 5;
+            private int validateIndex = 0;
+            private int lastURIndex = 0;
+
+            public AutoSave()
+            {
+                EditorOp.Resolve<SelectionHandler>().SelectionChanged += OnSelectionChanged;
+            }
+
+            private void OnSelectionChanged(List<UnityEngine.GameObject> gameObjects)
+            {
+                if (gameObjects == null || gameObjects.Count == 0)
+                {
+                    OnDeselected();
+                }
+            }
+
+            private void OnDeselected()
+            {
+                validateIndex++;
+                if (validateIndex < VALIDATE_AUTOSAVE_AT_EVERY)
+                {
+                    EditorOp.Resolve<ToolbarView>().SetSaveMessage(true, SaveState.UnsavedChanges);
+                    return;
+                }
+                validateIndex = 0;
+                var currentURIndex = EditorOp.Resolve<IURCommand>().CurrentIndex;
+                var delta = UnityEngine.Mathf.Abs(currentURIndex - lastURIndex);
+                if (delta != VALIDATE_AUTOSAVE_AT_EVERY * 2)
+                {
+                    lastURIndex = currentURIndex;
+                    EditorOp.Resolve<SceneDataHandler>().Save();
+                }
+            }
+
+            public void Dispose()
+            {
+                EditorOp.Resolve<SelectionHandler>().SelectionChanged -= OnSelectionChanged;
+            }
         }
     }
 }
