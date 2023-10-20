@@ -15,6 +15,29 @@ namespace RuntimeInspectorNamespace
         protected BoundInputField input;
 #pragma warning restore 0649
 
+        public override bool UseSubmitButton
+        {
+            get { return useSubmitButton; }
+            set
+            {
+                var rectT = input.BackingField.GetComponent<RectTransform>();
+                useSubmitButton = value;
+                if (useSubmitButton)
+                {
+                    rectT.offsetMax = new Vector2(-30, rectT.offsetMax.y);
+                    SubmmitButton.gameObject.SetActive(true);
+                    SubmmitButton.onClick.RemoveAllListeners();
+                    SubmmitButton.onClick.AddListener(() => { OnStringValueSubmitted?.Invoke(Value.ToString()); });
+                }
+                else
+                {
+                    rectT.offsetMax = new Vector2(0, rectT.offsetMax.y);
+                    SubmmitButton.gameObject.SetActive(false);
+                    SubmmitButton.onClick.RemoveAllListeners();
+                }
+            }
+        }
+
         private Mode m_setterMode = Mode.OnValueChange;
         public Mode SetterMode
         {
@@ -105,7 +128,7 @@ namespace RuntimeInspectorNamespace
             if (m_setterMode == Mode.OnSubmit)
                 Value = input;
 
-            if (Value != lastSubmittedValue)
+            if (Value != lastSubmittedValue && useSubmitButton == false)
             {
                 EditorOp.Resolve<IURCommand>().Record(
                     lastSubmittedValue, input,
@@ -116,7 +139,10 @@ namespace RuntimeInspectorNamespace
                         lastSubmittedValue = value;
                     });
             }
-            OnStringValueSubmitted?.Invoke(Value.ToString());
+            if (!useSubmitButton)
+            {
+                OnStringValueSubmitted?.Invoke(Value.ToString());
+            }
             lastSubmittedValue = Value;
             Inspector.RefreshDelayed();
             return true;

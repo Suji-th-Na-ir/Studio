@@ -51,6 +51,7 @@ namespace RuntimeInspectorNamespace
         protected override void OnUnbound()
         {
             base.OnUnbound();
+            BroadcastFieldDrawer.UseSubmitButton = false;
             onStringUpdated = null;
             EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(broadcastDropdown.gameObject);
         }
@@ -77,7 +78,7 @@ namespace RuntimeInspectorNamespace
             BroadcastFieldDrawer = CreateDrawerForField(nameof(val.broadcast));
             BroadcastFieldDrawer.OnStringValueSubmitted +=OnBroadcastValueChanged;
             BroadcastFieldDrawer.SetInteractable(false, true);
-
+            BroadcastFieldDrawer.UseSubmitButton = true;
             AddDropDownOptionsInOrder(SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings);
             SetBroadcastDropdownCurrentValue(val.broadcast, true);
         }

@@ -30,6 +30,9 @@ namespace RuntimeInspectorNamespace
 
         [SerializeField]
         private MaskableGraphic visibleArea;
+
+        [SerializeField]
+        protected Button SubmmitButton;
 #pragma warning restore 0649
 
         private RuntimeInspector m_inspector;
@@ -134,6 +137,10 @@ namespace RuntimeInspectorNamespace
 
         private bool m_isVisible = true;
         public bool IsVisible { get { return m_isVisible; } }
+
+        [HideInInspector]
+        protected bool useSubmitButton = false;
+        public virtual bool UseSubmitButton { get; set; }
 
         public string Name
         {
