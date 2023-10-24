@@ -178,21 +178,6 @@ namespace Terra.Studio
             primitivePanel.SetActive(false);
         }
 
-        public override void Draw()
-        {
-            //Nothing to draw
-        }
-
-        public override void Flush()
-        {
-            //Nothing to flush here
-        }
-
-        public override void Repaint()
-        {
-            //Nothing to re-paint
-        }
-
         private void AddCheckpointData(GameObject go)
         {
             go.AddComponent<Checkpoint>();

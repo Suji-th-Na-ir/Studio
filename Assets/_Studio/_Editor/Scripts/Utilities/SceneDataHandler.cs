@@ -47,16 +47,9 @@ namespace Terra.Studio
                 EditorOp.Resolve<ToolbarView>().SetSaveMessage(false, SaveState.Saving);
                 SystemOp.Resolve<SaveSystem>().SaveManualData(sceneData, false, (status) =>
                 {
-                    if (SystemOp.Resolve<System>().ConfigSO.SaveToCloud)
+                    if (SystemOp.Resolve<System>().ConfigSO.SaveToCloud && status)
                     {
-                        if (status)
-                        {
-                            SystemOp.Resolve<User>().UploadSaveDataToCloud(sceneData, OnCloudSaveAttempted);
-                        }
-                        else
-                        {
-                            EditorOp.Resolve<ToolbarView>().SetSaveMessage(true, SaveState.Empty);
-                        }
+                        SystemOp.Resolve<User>().UploadSaveDataToCloud(sceneData, OnCloudSaveAttempted);
                     }
                     else
                     {

@@ -35,7 +35,6 @@ namespace Terra.Studio
             {
                 url = string.Concat(url, ARGUMENT_SEPERATOR, Parameters);
             }
-            UnityEngine.Debug.Log($"Hitting the URL: {url}");
             return url;
         }
 
