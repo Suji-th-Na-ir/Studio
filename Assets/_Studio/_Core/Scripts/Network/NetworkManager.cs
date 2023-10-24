@@ -55,7 +55,6 @@ namespace Terra.Studio
             yield return request.SendWebRequest();
             if (request.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log($"Got response: {request.downloadHandler.text}");
                 callback?.Invoke(true, request.downloadHandler.text);
             }
             else
