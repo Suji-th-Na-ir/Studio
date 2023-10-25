@@ -91,15 +91,16 @@ namespace RuntimeInspectorNamespace
         {
             broadcastDropdown.ClearOptions();
             List<string> options = new List<string>();
-            if(names!=null)
+            if (names != null)
             {
                 foreach (var item in names)
                 {
+                    if (item == "Game Win")
+                        options.Add("Custom");
+
                     options.Add(item);
                 }
             }
-
-            options.Add("Custom");
             broadcastDropdown.AddOptions(options);
         }
 
@@ -185,6 +186,10 @@ namespace RuntimeInspectorNamespace
 
         private void SetBroadcastDropdownCurrentValue(string newValue, bool withoutnotify = false)
         {
+            if (string.IsNullOrEmpty(newValue) && broadcastDropdown.options[broadcastDropdown.value].text == "Custom")
+            {
+                return;
+            }
             if (string.IsNullOrEmpty(newValue))
                 newValue = "None";
 
