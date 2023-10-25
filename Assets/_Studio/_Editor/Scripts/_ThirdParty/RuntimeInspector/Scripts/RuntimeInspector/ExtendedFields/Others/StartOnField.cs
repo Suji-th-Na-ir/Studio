@@ -41,7 +41,7 @@ namespace RuntimeInspectorNamespace
         private void LoadListenOptions()
         {
             listenOn.options.Clear();
-            listenOn.AddOptions(SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings);
+            listenOn.AddOptions(SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings.FindAll(s=>(s!="Game Win"&& s != "Game Lose")));
             Atom.StartOn atom = (Atom.StartOn)Value;
             for (int i = 0; i < listenOn.options.Count; i++)
             {
@@ -213,10 +213,10 @@ namespace RuntimeInspectorNamespace
             if (atom != null)
             {
                 startOn.SetValueWithoutNotify(atom.data.startIndex);
-                if (SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings.Count > listenOn.options.Count)
+                if (SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings.Count-2 > listenOn.options.Count)
                 {
                     listenOn.ClearOptions();
-                    listenOn.AddOptions(SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings);
+                    listenOn.AddOptions(SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings.FindAll(s => (s != "Game Win" && s != "Game Lose")));
                 }
 
                 var listenString = atom.data.listenName;
