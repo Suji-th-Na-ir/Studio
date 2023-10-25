@@ -139,10 +139,9 @@ namespace RuntimeInspectorNamespace
                         lastSubmittedValue = value;
                     });
             }
-            if (!useSubmitButton)
-            {
-                OnStringValueSubmitted?.Invoke(Value.ToString());
-            }
+
+            OnStringValueSubmitted?.Invoke(Value.ToString());
+            
             lastSubmittedValue = Value;
             Inspector.RefreshDelayed();
             return true;

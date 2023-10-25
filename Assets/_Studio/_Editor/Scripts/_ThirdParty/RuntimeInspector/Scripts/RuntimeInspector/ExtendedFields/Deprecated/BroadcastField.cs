@@ -63,6 +63,10 @@ namespace RuntimeInspectorNamespace
                 didCheckForExpand = true;
                 IsExpanded = true;
             }
+            if (((Atom.Broadcast)Value).broadcast != broadcastDropdown.options[broadcastDropdown.value].text)
+            {
+                SetBroadcastDropdownCurrentValue(((Atom.Broadcast)Value).broadcast, true);
+            }
             base.Refresh();
         }
 

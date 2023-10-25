@@ -295,7 +295,6 @@ namespace Terra.Studio
             {
                 AddComponentIcon(compdock);
             }
-
             UpdateBroadcastString(broadcast, "", compdock);
             UpdateListenerString(broadcastListen, "", compdock);
         }
