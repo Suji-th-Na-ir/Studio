@@ -22,8 +22,6 @@ namespace Terra.Studio
 
         RuntimeInspector Inspector;
 
-
-
         private Icon iconPrefab;
 
         private Icon behaviourIcon;
@@ -282,12 +280,12 @@ namespace Terra.Studio
                         else
                             broadcasticons[i].Show();
 
-                        if (m_isBroadcatingGameWon)
+                        if ((m_isBroadcatingGameWon && m_broadcasatingStrings.Count == 1)|| m_broadcasatingStrings[i] == "Game Win")
                         {
                             broadcasticons[i].SetIconImage("GameWon");
                             broadcasticons[i].SetBackgroundColor(Helper.GetColorFromHex("#A0B042"));
                         }
-                        else if (m_isBroadcatingGameLoose && BroadcastingStrings[i] == "Game Lose")
+                        else if ((m_isBroadcatingGameLoose &&m_broadcasatingStrings.Count==1) || m_broadcasatingStrings[i] == "Game Lose")
                         {
                             broadcasticons[i].SetIconImage("GameLoose");
                             broadcasticons[i].SetBackgroundColor(Helper.GetColorFromHex("#FF5C01"));
