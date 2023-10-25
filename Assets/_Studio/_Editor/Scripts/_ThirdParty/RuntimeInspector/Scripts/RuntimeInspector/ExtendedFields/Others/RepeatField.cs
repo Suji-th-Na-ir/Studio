@@ -99,7 +99,6 @@ namespace RuntimeInspectorNamespace
 
         private void OnBroadcastTypeValueChanged(object value)
         {
-           
             UpdateOtherCompData((Atom.Repeat)Value, RepeatData.BroadcastType);
             ToggleBroadcastField();
         }
@@ -297,6 +296,11 @@ namespace RuntimeInspectorNamespace
                 didCheckForExpand = true;
                 IsExpanded = true;
             }
+            if ((bool)repeatFoeverFieldDrawer.Value != ((Atom.Repeat)Value).repeatForever)
+            {
+                ValidateRepeatForeverValue(((Atom.Repeat)Value).repeatForever);
+            }
+
             base.Refresh();
         }
         protected override void ClearElements()
