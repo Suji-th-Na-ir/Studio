@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using PlayShifu.Terra;
 using System.Collections.Generic;
-using Object = UnityEngine.Object;
+using Object = UnityEngine.Object; 
 
 namespace Terra.Studio
 {
@@ -12,7 +12,12 @@ namespace Terra.Studio
         public struct GhostDescription
         {
             public Action ToggleGhostMode;
+            public Action ShowSelectionGhost;
+            public Action HideSelectionGhost;
+            public Action UpdateSlectionGhostTRS;
+            public Action UpdateSlectionGhostsRepeatCount;
             public Func<Vector3[]> SpawnTRS;
+            public Func<Vector3[]> SelectionGhostsTRS;
             public bool ShowVisualsOnMultiSelect;
             public Action<object> OnGhostInteracted;
             public Action<bool> OnGhostModeToggled;
@@ -23,6 +28,7 @@ namespace Terra.Studio
         }
 
         private Dictionary<BaseBehaviour, RecordVisualiser> activeRecorders = new();
+        private Dictionary<BaseBehaviour, List<RecordVisualiser>> activeSelectionRecorders = new();
         private List<GameObject> ghosts = new();
 
         public void TrackPosition_NoGhostOnMultiselect<T>(T instance, bool enableModification) where T : BaseBehaviour
@@ -37,6 +43,17 @@ namespace Terra.Studio
                 HandleInstance(instance, RecordVisualiser.Record.Position, enableModification, true);
             }
             HandleSelection(SelectionHandler.GizmoId.Move);
+        }
+
+        public void ShowSelectionGhost<T>(T instance, bool show) where T : BaseBehaviour
+        {
+            ShowSelectionGhost_PositionRepeat(instance, 1, show);
+        }
+        public void ShowSelectionGhost_PositionRepeat<T>(T instance, int repeatCount, bool show) where T : BaseBehaviour
+        {
+            if (repeatCount == 0)
+                return;
+            HandleNonIncognitoInstance(instance, RecordVisualiser.Record.Position, show, repeatCount);
         }
 
         public void TrackPosition_ShowGhostOnMultiselect<T>(T instance, bool enableModification) where T : BaseBehaviour
@@ -88,6 +105,112 @@ namespace Terra.Studio
             else
             {
                 ghosts.Remove(ghost);
+            }
+        }
+
+        public void UpdateRepeatGhost_Multiselect<T>(T instance, int count) where T : BaseBehaviour
+        {
+            var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selections.Count > 1)
+            {
+                foreach (var selection in selections)
+                {
+                    if (selection.TryGetComponent<T>(out var component))
+                    {
+                        UpdateGhostRepeatCount(instance,count);
+                    }
+                }
+            }
+            else
+            {
+                UpdateGhostRepeatCount(instance, count);
+            }
+        }
+
+        public void UpdateGhostRepeatCount<T>(T instance, int count) where T : BaseBehaviour
+        {
+            var isPresent = activeSelectionRecorders.TryGetValue(instance, out var visualisers);
+            if (isPresent)
+            {
+                if (visualisers.Count != count)
+                {
+                    for (int i = 0; i < visualisers.Count; i++)
+                    {
+                        visualisers[i].Dispose();
+                    }
+                    activeSelectionRecorders.Remove(instance);
+                    ShowSelectionGhost_PositionRepeat(instance, count, true);
+                }
+            }
+            else
+            {
+                ShowSelectionGhost_PositionRepeat(instance, count, true);
+            }
+        }
+
+        public void UpdateTRS_Multiselect<T>(T instance) where T : BaseBehaviour
+        {
+            var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selections.Count > 1)
+            {
+                foreach (var selection in selections)
+                {
+                    if (selection.TryGetComponent<T>(out var component))
+                    {
+                        UpdateTRS(component);
+                    }
+                }
+            }
+            else
+            {
+                UpdateTRS(instance);
+            }
+        }
+
+        private void UpdateTRS<T>(T instance) where T : BaseBehaviour
+        {
+            var isPresent = activeSelectionRecorders.TryGetValue(instance, out var visualisers);
+            if (isPresent)
+            {
+                var alltrs = instance.GhostDescription.SelectionGhostsTRS?.Invoke();
+                for (int i = 0; i < visualisers.Count; i++)
+                {
+                    visualisers[i].UpdateTRS(alltrs[i]);
+                }
+            }
+        }
+
+        private void HandleNonIncognitoInstance<T>(T instance, RecordVisualiser.Record recorder, bool show, int count) where T : BaseBehaviour
+        {
+            var isPresent = activeSelectionRecorders.TryGetValue(instance, out var visualisers);
+            if (isPresent)
+            {
+                if (!show)
+                {
+                    foreach (var v in visualisers)
+                    {
+                        v.Dispose();
+                    }
+                    activeSelectionRecorders.Remove(instance);
+                    return;
+                }
+            }
+            else
+            {
+                if (!show)
+                    return;
+                var trs = instance.GhostDescription.SelectionGhostsTRS?.Invoke();
+                List<RecordVisualiser> recordVisulisers = new List<RecordVisualiser>();
+                for (int i = 0; i < count; i++)
+                {
+                    var visualiser = new RecordVisualiser(instance.GhostDescription.GhostTo,
+                    recorder,
+                    instance.GhostDescription.OnGhostInteracted,
+                   null,
+                    false, trs[i]);
+                    recordVisulisers.Add(visualiser);
+                }
+                activeSelectionRecorders.Add(instance, recordVisulisers);
             }
         }
 
@@ -310,6 +433,11 @@ namespace Terra.Studio
                 CleanCollider(child);
                 CleanMaterial(child);
             }
+        }
+
+        public void UpdateTRS(params Vector3[] trs)
+        {
+            RuntimeWrappers.ResolveTRS(ghost, null, trs);
         }
 
         private void CleanCollider(Transform child)

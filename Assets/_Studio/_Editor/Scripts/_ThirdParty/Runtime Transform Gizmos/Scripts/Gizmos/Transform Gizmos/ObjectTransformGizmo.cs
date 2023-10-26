@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Terra.Studio;
+using System.Linq;
 
 namespace RTG
 {
@@ -130,6 +131,8 @@ namespace RTG
         public Vector3 MinPositiveScale { get { return _minPositiveScale; } set { _minPositiveScale = Vector3.Max(value, Vector3Ex.FromValue(1e-5f)); } }
         public ObjectTransformGizmoSettings Settings { get { return _sharedSettings != null ? _sharedSettings : _settings; } }
         public ObjectTransformGizmoSettings SharedSettings { get { return _sharedSettings; } set { _sharedSettings = value; } }
+
+        public Action<List<GameObject>> onPositionRefreshed;
 
         public override void OnAttached()
         {
@@ -330,6 +333,7 @@ namespace RTG
                 if (_targetPivotObject == null) gizmoTransform.Position3D = GetTargetObjectGroupWorldAABB().Center;
                 else gizmoTransform.Position3D = _targetPivotObject.transform.TransformPoint(GetObjectCustomLocalPivot(_targetPivotObject));
             }
+            onPositionRefreshed?.Invoke(_targetObjects.ToList());
         }
 
         public void RefreshRotation()
@@ -360,7 +364,11 @@ namespace RTG
 
         public override void OnGizmoDragUpdate(int handleId)
         {
-            if (CanAffectPosition && Gizmo.ActiveDragChannel == GizmoDragChannel.Offset) MoveObjects(Gizmo.RelativeDragOffset);
+            if (CanAffectPosition && Gizmo.ActiveDragChannel == GizmoDragChannel.Offset)
+            {
+                MoveObjects(Gizmo.RelativeDragOffset);
+                onPositionRefreshed?.Invoke(_targetObjects.ToList());
+            }
             if (CanAffectRotation && Gizmo.ActiveDragChannel == GizmoDragChannel.Rotation) RotateObjects(Gizmo.RelativeDragRotation);
             if (CanAffectScale && Gizmo.ActiveDragChannel == GizmoDragChannel.Scale) ScaleObjects();
         }

@@ -172,6 +172,7 @@ public class SelectionHandler : View
         ResetAllHandles();
 
         objectMoveGizmo.SetTargetObjects(_selectedObjects);
+        objectMoveGizmo.onPositionRefreshed = OnPoisitionRefreshed;
         objectRotationGizmo.SetTargetObjects(_selectedObjects);
         objectScaleGizmo.SetTargetObjects(_selectedObjects);
         objectUniversalGizmo.SetTargetObjects(_selectedObjects);
@@ -190,6 +191,18 @@ public class SelectionHandler : View
             canUndo = !isEnabled;
             canRedo = !isEnabled;
         };
+    }
+
+    private void OnPoisitionRefreshed(List<GameObject> objects)
+    {
+        for (int i = 0; i < objects.Count; i++)
+        {
+            var behaviours = objects[i].GetComponents<BaseBehaviour>();
+            foreach (var b in behaviours)
+            {
+                b.GhostDescription.UpdateSlectionGhostTRS?.Invoke();
+            }
+        }
     }
 
     private void Update()
@@ -463,6 +476,12 @@ public class SelectionHandler : View
             {
                 outline.enabled = false;
             }
+
+            var behaviours = prevSelectedObjects[i].GetComponents<BaseBehaviour>();
+            foreach (var b in behaviours)
+            {
+                b.GhostDescription.HideSelectionGhost?.Invoke();
+            }
         }
 
         if (_selectedObjects.Count > 0)
@@ -499,6 +518,12 @@ public class SelectionHandler : View
                 outline.OutlineWidth = 5f;
                 outline.OutlineColor = Color.yellow;
                 outline.enabled = true;
+            }
+
+            var behaviours = _selectedObjects[i].GetComponents<BaseBehaviour>();
+            foreach (var b in behaviours)
+            {
+                b.GhostDescription.ShowSelectionGhost?.Invoke();
             }
         }
 

@@ -48,9 +48,26 @@ namespace Terra.Studio
             {
                 OnGhostInteracted = OnGhostDataModified,
                 SpawnTRS = GetCurrentOffsetInWorld,
+                SelectionGhostsTRS = GetCurrentRepeatOffsetInWorld,
                 ToggleGhostMode = () =>
                 {
                     EditorOp.Resolve<Recorder>().TrackPosition_ShowGhostOnMultiselect(this, true);
+                },
+                ShowSelectionGhost = () =>
+                {
+                    EditorOp.Resolve<Recorder>().ShowSelectionGhost_PositionRepeat(this, repeat.repeat > 10 ? 10 : repeat.repeat, true);
+                },
+                HideSelectionGhost = () =>
+                {
+                    EditorOp.Resolve<Recorder>().ShowSelectionGhost_PositionRepeat(this, repeat.repeat > 10 ? 10 : repeat.repeat, false);
+                },
+                UpdateSlectionGhostTRS = () =>
+                {
+                    EditorOp.Resolve<Recorder>().UpdateTRS_Multiselect(this);
+                },
+                UpdateSlectionGhostsRepeatCount = () =>
+                {
+                    EditorOp.Resolve<Recorder>().UpdateRepeatGhost_Multiselect(this, repeat.repeat > 10 ? 10 : repeat.repeat);
                 },
                 ShowVisualsOnMultiSelect = true,
                 GetLastValue = () => { return Type.LastVector3; },
@@ -192,6 +209,24 @@ namespace Terra.Studio
             }
             pos += localOffset;
             return new Vector3[] { pos };
+        }
+
+        private Vector3[] GetCurrentRepeatOffsetInWorld()
+        {
+            var pos = transform.position;
+            var localOffset = (Vector3)Type.recordedVector3.Get();
+            List<Vector3> trs = new List<Vector3>();
+            var count = repeat.repeat > 10 ? 10 : repeat.repeat;
+            for (int i = 0; i < count; i++)
+            {
+                if (transform.parent != null)
+                {
+                    localOffset = transform.TransformVector(localOffset);
+                }
+                pos += localOffset;
+                trs.Add(pos);
+            }
+            return trs.ToArray();
         }
 
         private void OnGhostDataModified(object data)

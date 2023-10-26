@@ -78,6 +78,7 @@ namespace RuntimeInspectorNamespace
             Atom.Repeat val = ValidateRepeatValue();
             UpdateOtherCompData(val, RepeatData.RepeatFor);
             UpdatebroadcastTypeDropDown();
+            val.behaviour.GhostDescription.UpdateSlectionGhostsRepeatCount?.Invoke();
         }
 
         private void OnRepeatTypeValueChanged(object obj)
