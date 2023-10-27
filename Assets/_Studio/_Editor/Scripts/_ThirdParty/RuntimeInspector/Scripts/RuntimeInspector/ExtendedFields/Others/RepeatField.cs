@@ -84,6 +84,8 @@ namespace RuntimeInspectorNamespace
         private void OnRepeatTypeValueChanged(object obj)
         {
             UpdateOtherCompData((Atom.Repeat)Value, RepeatData.RepeatType);
+            ((Atom.Repeat)Value).behaviour.GhostDescription.HideSelectionGhost?.Invoke();
+            ((Atom.Repeat)Value).behaviour.GhostDescription.ShowSelectionGhost?.Invoke();
         }
 
         private void OnRepeatForeverValueChanged(object value)

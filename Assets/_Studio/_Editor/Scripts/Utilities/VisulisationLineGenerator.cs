@@ -6,16 +6,29 @@ namespace Terra.Studio
     public class VisulisationLineGenerator
     {
         private Mesh mesh;
-        public Mesh Mesh{get{return mesh;} }
-        public VisulisationLineGenerator(Transform _transform, float length, float radius, float arrowHeadLength, float arrowHeadRadius, int segments = 36)
+        public Mesh Mesh { get { return mesh; } }
+        public VisulisationLineGenerator(Transform _transform, float length, float radius, float arrowHeadLength, float arrowHeadRadius, int segments = 36, bool createBothArrowHead = false)
         {
             var cylinder = GenerateCylinder(length, radius, segments);
-            var arrow = GenerateArrowHead(length, arrowHeadLength, arrowHeadRadius, segments);
+            var arrow = GenerateArrowHead(length, arrowHeadLength, arrowHeadRadius, segments, true);
             Mesh combinedMesh = new Mesh();
-            combinedMesh.CombineMeshes(new CombineInstance[] {
-            new CombineInstance { mesh = cylinder, transform = _transform.localToWorldMatrix },
-            new CombineInstance { mesh = arrow, transform = _transform.localToWorldMatrix }
+
+            if (createBothArrowHead)
+            {
+                var newArrow = GenerateArrowHead(length, arrowHeadLength, arrowHeadRadius, segments, false);
+                combinedMesh.CombineMeshes(new CombineInstance[] {
+                new CombineInstance { mesh = cylinder, transform = _transform.localToWorldMatrix },
+                new CombineInstance { mesh = arrow, transform = _transform.localToWorldMatrix },
+                new CombineInstance { mesh = newArrow, transform = _transform.localToWorldMatrix }
             });
+            }
+            else
+            {
+                combinedMesh.CombineMeshes(new CombineInstance[] {
+                new CombineInstance { mesh = cylinder, transform = _transform.localToWorldMatrix },
+                new CombineInstance { mesh = arrow, transform = _transform.localToWorldMatrix }
+            });
+            }
             mesh = combinedMesh;
         }
 
@@ -58,12 +71,14 @@ namespace Terra.Studio
 
 
 
-        private Mesh GenerateArrowHead(float length, float arrowHeadLength, float arrowHeadRadius, int segments)
+        private Mesh GenerateArrowHead(float length, float arrowHeadLength, float arrowHeadRadius, int segments, bool front)
         {
             List<Vector3> vertices = new List<Vector3>();
             List<int> triangles = new List<int>();
 
-            Vector3 tip = new Vector3(0, 0, length + arrowHeadLength);
+            var tipZ = front ? length + arrowHeadLength : -arrowHeadLength;
+            length = front ? length : 0.0f;
+            Vector3 tip = new Vector3(0, 0, tipZ);
             int tipIndex = vertices.Count;
             vertices.Add(tip);
 

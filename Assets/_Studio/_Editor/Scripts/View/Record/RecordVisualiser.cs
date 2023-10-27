@@ -25,6 +25,7 @@ namespace Terra.Studio
             public Func<object> GetRecentValue;
             public bool IsGhostInteractedInLastRecord;
             public GameObject GhostTo;
+            public bool showGhostWithTravelLine;
         }
 
         private Dictionary<BaseBehaviour, RecordVisualiser> activeRecorders = new();
@@ -43,17 +44,6 @@ namespace Terra.Studio
                 HandleInstance(instance, RecordVisualiser.Record.Position, enableModification, true);
             }
             HandleSelection(SelectionHandler.GizmoId.Move);
-        }
-
-        public void ShowSelectionGhost<T>(T instance, bool show) where T : BaseBehaviour
-        {
-            ShowSelectionGhost_PositionRepeat(instance, 1, show);
-        }
-        public void ShowSelectionGhost_PositionRepeat<T>(T instance, int repeatCount, bool show) where T : BaseBehaviour
-        {
-            if (repeatCount == 0)
-                return;
-            HandleNonIncognitoInstance(instance, RecordVisualiser.Record.Position, show, repeatCount);
         }
 
         public void TrackPosition_ShowGhostOnMultiselect<T>(T instance, bool enableModification) where T : BaseBehaviour
@@ -108,7 +98,23 @@ namespace Terra.Studio
             }
         }
 
-        public void UpdateRepeatGhost_Multiselect<T>(T instance, int count) where T : BaseBehaviour
+        public void ShowSelectionGhost<T>(T instance, bool show) where T : BaseBehaviour
+        {
+            ShowSelectionGhost_RepeatPosition(instance, 1, show, RepeatDirectionType.SameDirection);
+        }
+
+        public void ShowSelectionGhost_RepeatPosition<T>(T instance, int repeatCount, bool show, RepeatDirectionType directionType) where T : BaseBehaviour
+        {
+            if (repeatCount == 0)
+                return;
+            if (repeatCount == 1)
+            {
+                directionType = RepeatDirectionType.SameDirection;
+            }
+            HandleSelectionInstance(instance, RecordVisualiser.Record.Position, show, repeatCount, directionType);
+        }
+
+        public void UpdateGhostRepeatCount_Multiselect<T>(T instance, int count,RepeatDirectionType directionType) where T : BaseBehaviour
         {
             var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
             if (selections.Count > 1)
@@ -117,34 +123,31 @@ namespace Terra.Studio
                 {
                     if (selection.TryGetComponent<T>(out var component))
                     {
-                        UpdateGhostRepeatCount(instance,count);
+                        UpdateGhostRepeatCount(instance,count,directionType);
                     }
                 }
             }
             else
             {
-                UpdateGhostRepeatCount(instance, count);
+                UpdateGhostRepeatCount(instance, count,directionType);
             }
         }
 
-        public void UpdateGhostRepeatCount<T>(T instance, int count) where T : BaseBehaviour
+        public void UpdateGhostRepeatCount<T>(T instance, int count, RepeatDirectionType directionType) where T : BaseBehaviour
         {
             var isPresent = activeSelectionRecorders.TryGetValue(instance, out var visualisers);
             if (isPresent)
             {
-                if (visualisers.Count != count)
+                for (int i = 0; i < visualisers.Count; i++)
                 {
-                    for (int i = 0; i < visualisers.Count; i++)
-                    {
-                        visualisers[i].Dispose();
-                    }
-                    activeSelectionRecorders.Remove(instance);
-                    ShowSelectionGhost_PositionRepeat(instance, count, true);
+                    visualisers[i].Dispose();
                 }
+                activeSelectionRecorders.Remove(instance);
+                ShowSelectionGhost_RepeatPosition(instance, count, true, directionType);
             }
             else
             {
-                ShowSelectionGhost_PositionRepeat(instance, count, true);
+                ShowSelectionGhost_RepeatPosition(instance, count, true, directionType);
             }
         }
 
@@ -173,23 +176,25 @@ namespace Terra.Studio
             if (isPresent)
             {
                 var alltrs = instance.GhostDescription.SelectionGhostsTRS?.Invoke();
+
+                Vector3 point1, point2;
+                point1 = alltrs[0];
+                point2 = instance.transform.position;
+                float distance = (point2 - point1).magnitude * 0.7f;
+                Vector3 dir = (point1 - point2).normalized;
+
                 for (int i = 0; i < visualisers.Count; i++)
                 {
-                    if (visualisers.Count > 1 && i < visualisers.Count - 1)
+                    if (instance.GhostDescription.showGhostWithTravelLine)
                     {
-                        Vector3 point1, point2;
-                        point1 = alltrs[i + 1];
-                        point2 = alltrs[i];
-                        var distance = (point2 - point1).magnitude * 0.7f;
-                        var dir = (point1 - point2).normalized;
-                        visualisers[i].CreateVisualisationGhostLine(distance, dir);
+                        visualisers[i].CreateTravelLine(distance, dir);
                     }
                     visualisers[i].UpdateTRS(alltrs[i]);
                 }
             }
         }
 
-        private void HandleNonIncognitoInstance<T>(T instance, RecordVisualiser.Record recorder, bool show, int count) where T : BaseBehaviour
+        private void HandleSelectionInstance<T>(T instance, RecordVisualiser.Record recorder, bool show, int count, RepeatDirectionType directionType = RepeatDirectionType.SameDirection) where T : BaseBehaviour
         {
             var isPresent = activeSelectionRecorders.TryGetValue(instance, out var visualisers);
             if (isPresent)
@@ -210,25 +215,34 @@ namespace Terra.Studio
                     return;
                 var trs = instance.GhostDescription.SelectionGhostsTRS?.Invoke();
                 List<RecordVisualiser> recordVisulisers = new List<RecordVisualiser>();
+
+                Vector3 point1, point2;
+                point1 = trs[0];
+                point2 = instance.GhostDescription.GhostTo.transform.position;
+                float distance = (point2 - point1).magnitude * 0.7f;
+                Vector3 dir = (point1 - point2).normalized;
+
                 for (int i = 0; i < count; i++)
                 {
                     var visualiser = new RecordVisualiser(instance.GhostDescription.GhostTo,
                     recorder,
                     instance.GhostDescription.OnGhostInteracted,
-                   null,
+                    null,
                     false, trs[i]);
                     recordVisulisers.Add(visualiser);
-                    if (i < count - 1)
+
+                    if (instance.GhostDescription.showGhostWithTravelLine)
                     {
-                        Vector3 point1, point2;
-                        point1 = recordVisulisers[i].GhostMeshTransform.position;
-                        point2 = i - 1 < 0 ? instance.GhostDescription.GhostTo.transform.position :
-                            recordVisulisers[i - 1].GhostMeshTransform.position;
-                        var distance = (point2 - point1).magnitude*0.7f;
-                        var dir = (point1 - point2).normalized;
-                        visualiser.CreateVisualisationGhostLine( distance, dir);
+                        if (i == 0)
+                        {
+                            if (directionType == RepeatDirectionType.PingPong)
+                            {
+                                visualiser.CreateTravelLine(distance, dir, directionType);
+                                break;
+                            }
+                        }
+                        visualiser.CreateTravelLine(distance, dir, directionType);
                     }
-                    
                 }
                 activeSelectionRecorders.Add(instance, recordVisulisers);
             }
@@ -422,9 +436,11 @@ namespace Terra.Studio
         private BaseRecorder baseRecorder;
         private Transform childGhostMesh;
         private GameObject ghostLine;
+        private float lastArrowLength;
 
+        RepeatDirectionType cachedDirectionType;
         public Transform GhostMeshTransform { get { return childGhostMesh; } }
-
+       
         public RecordVisualiser(GameObject gameObject, Record recordFor, Action<object> onRecordDataModified, Action onGhostDataModified, bool enableModification, params Vector3[] trs)
         {
             this.onGhostDataModified = onGhostDataModified;
@@ -445,24 +461,47 @@ namespace Terra.Studio
                 EditorOp.Resolve<Recorder>().TrackGhost(true, ghost);
                 AttachRecorder(recordFor, onRecordDataModified);
             }
+            EditorOp.Resolve<EditorSystem>().OnIncognitoEnabled += OnIncognitoModeSwitched;
         }
 
-        public void CreateVisualisationGhostLine(float length, Vector3 direction)
+        private void OnIncognitoModeSwitched(bool enabled)
         {
-            if (ghostLine)
+            if (enabled)
+            {
+                ghost.SetActive(false);
+            }
+            else
+            {
+                ghost.SetActive(true);
+            }
+        }
+
+        public void CreateTravelLine(float length, Vector3 direction)
+        {
+            CreateTravelLine(length, direction, cachedDirectionType);
+        }
+
+        public void CreateTravelLine(float length, Vector3 direction,RepeatDirectionType directionType)
+        {
+            cachedDirectionType = directionType;
+            MeshFilter mf;
+            MeshRenderer mr;
+            if ((ghostLine && lastArrowLength != length) || ghostLine == null)
             {
                 GameObject.Destroy(ghostLine);
+                ghostLine = new GameObject("Arrow_Line");
+                mf = ghostLine.AddComponent<MeshFilter>();
+                mr = ghostLine.AddComponent<MeshRenderer>();
+                mf.mesh = new VisulisationLineGenerator(ghostLine.transform, length, 0.1f, 0.4f, 0.3f, 36, directionType == RepeatDirectionType.PingPong).Mesh;
+                ghostLine.transform.SetParent(ghost.transform);
+                Vector3 localDirection = ghostLine.transform.InverseTransformDirection(direction);
+                ghostLine.transform.localPosition = Vector3.zero - localDirection * length * 1.3f;
+                mr.material = ghostMaterial;
             }
-            ghostLine = new GameObject("Arrow_Line");
-            var mf = ghostLine.AddComponent<MeshFilter>();
-            var mr = ghostLine.AddComponent<MeshRenderer>();
-
-            mf.mesh = new VisulisationLineGenerator(ghostLine.transform, length, 0.1f, 0.4f, 0.3f).Mesh;
-            ghostLine.transform.SetParent(ghost.transform);
-            ghostLine.transform.localPosition = Vector3.zero;
+            lastArrowLength = length;
+            
             Quaternion rotation = Quaternion.FromToRotation(-Vector3.back, direction);
             ghostLine.transform.rotation = rotation;
-            mr.material = ghostMaterial;
         }
 
         private void Clean()
@@ -534,6 +573,7 @@ namespace Terra.Studio
         {
             Object.Destroy(ghost);
             EditorOp.Resolve<EditorSystem>().RequestIncognitoMode(false);
+            EditorOp.Resolve<EditorSystem>().OnIncognitoEnabled -= OnIncognitoModeSwitched;
             EditorOp.Resolve<Recorder>().TrackGhost(false, ghost);
             onGhostDataModified?.Invoke();
         }

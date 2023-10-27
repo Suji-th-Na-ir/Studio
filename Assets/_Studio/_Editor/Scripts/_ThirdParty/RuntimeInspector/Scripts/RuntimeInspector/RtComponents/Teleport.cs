@@ -67,10 +67,6 @@ namespace Terra.Studio
                 {
                     EditorOp.Resolve<Recorder>().UpdateTRS_Multiselect(this);
                 },
-                UpdateSlectionGhostsRepeatCount = () =>
-                {
-                    EditorOp.Resolve<Recorder>().UpdateRepeatGhost_Multiselect(this, 1);
-                },
                 ShowVisualsOnMultiSelect = false,
                 GetLastValue = () => { return teleportTo.LastVector3; },
                 GetRecentValue = () => { return teleportTo.Get(); },

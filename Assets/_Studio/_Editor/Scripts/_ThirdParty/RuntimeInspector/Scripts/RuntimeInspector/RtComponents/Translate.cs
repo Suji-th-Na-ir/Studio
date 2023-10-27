@@ -55,11 +55,11 @@ namespace Terra.Studio
                 },
                 ShowSelectionGhost = () =>
                 {
-                    EditorOp.Resolve<Recorder>().ShowSelectionGhost_PositionRepeat(this, repeat.repeat > 10 ? 10 : repeat.repeat, true);
+                    EditorOp.Resolve<Recorder>().ShowSelectionGhost_RepeatPosition(this, repeat.repeat > 10 ? 10 : repeat.repeat, true, repeat.repeatType);
                 },
                 HideSelectionGhost = () =>
                 {
-                    EditorOp.Resolve<Recorder>().ShowSelectionGhost_PositionRepeat(this, repeat.repeat > 10 ? 10 : repeat.repeat, false);
+                    EditorOp.Resolve<Recorder>().ShowSelectionGhost_RepeatPosition(this, repeat.repeat > 10 ? 10 : repeat.repeat, false, repeat.repeatType);
                 },
                 UpdateSlectionGhostTRS = () =>
                 {
@@ -67,7 +67,7 @@ namespace Terra.Studio
                 },
                 UpdateSlectionGhostsRepeatCount = () =>
                 {
-                    EditorOp.Resolve<Recorder>().UpdateRepeatGhost_Multiselect(this, repeat.repeat > 10 ? 10 : repeat.repeat);
+                    EditorOp.Resolve<Recorder>().UpdateGhostRepeatCount_Multiselect(this, repeat.repeat > 10 ? 10 : repeat.repeat, repeat.repeatType);
                 },
                 ShowVisualsOnMultiSelect = true,
                 GetLastValue = () => { return Type.LastVector3; },
@@ -80,7 +80,8 @@ namespace Terra.Studio
                     }
                 },
                 IsGhostInteractedInLastRecord = true,
-                GhostTo = gameObject
+                GhostTo = gameObject,
+                showGhostWithTravelLine = true
             };
             SetLastValue();
         }
