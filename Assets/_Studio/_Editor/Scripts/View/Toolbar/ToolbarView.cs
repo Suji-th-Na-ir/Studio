@@ -42,7 +42,10 @@ namespace Terra.Studio
             var playButtonTr = Helper.FindDeepChild(transform, PLAY_BUTTON_LOC);
             var saveButtonTr = Helper.FindDeepChild(transform, SAVE_BUTTON_LOC);
             var loadButtonTr = Helper.FindDeepChild(transform, LOAD_BUTTON_LOC);
-            var cylinderPrimitiveTr = Helper.FindDeepChild(transform, CYLINDER_PRIMITIVE_BUTTON_LOC);
+            var cylinderPrimitiveTr = Helper.FindDeepChild(
+                transform,
+                CYLINDER_PRIMITIVE_BUTTON_LOC
+            );
             var spherePrimitiveTr = Helper.FindDeepChild(transform, SPHERE_PRIMITIVE_BUTTON_LOC);
             var cubePrimitiveTr = Helper.FindDeepChild(transform, CUBE_PRIMITIVE_BUTTON_LOC);
             var planePrimitiveTr = Helper.FindDeepChild(transform, PLANE_PRIMITIVE_BUTTON_LOC);
@@ -56,36 +59,57 @@ namespace Terra.Studio
             saveTextField = Helper.FindDeepChild<TextMeshProUGUI>(transform, SAVE_MESSAGE_TEXT_LOC);
 
             var addButton = addButtonTr.GetComponent<Button>();
-            AddListenerEvent(addButton, () =>
-            {
-                var currentActiveState = primitivePanel.activeSelf;
-                primitivePanel.SetActive(!currentActiveState);
-            });
+            AddListenerEvent(
+                addButton,
+                () =>
+                {
+                    var currentActiveState = primitivePanel.activeSelf;
+                    primitivePanel.SetActive(!currentActiveState);
+                }
+            );
 
             var playButton = playButtonTr.GetComponent<Button>();
-            AddListenerEvent(playButton, () =>
-            {
-                EditorOp.Resolve<SceneDataHandler>().PrepareSceneDataToRuntime();
-                EditorOp.Resolve<EditorSystem>().RequestSwitchState();
-            });
+            AddListenerEvent(
+                playButton,
+                () =>
+                {
+                    EditorOp.Resolve<SceneDataHandler>().PrepareSceneDataToRuntime();
+                    EditorOp.Resolve<EditorSystem>().RequestSwitchState();
+                }
+            );
 
             var moveButton = moveButtonTr.GetComponent<Button>();
-            AddListenerEvent(moveButton, () =>
-            {
-                EditorOp.Resolve<SelectionHandler>().SetWorkGizmoId(SelectionHandler.GizmoId.Move);
-            });
+            AddListenerEvent(
+                moveButton,
+                () =>
+                {
+                    EditorOp
+                        .Resolve<SelectionHandler>()
+                        .SetWorkGizmoId(SelectionHandler.GizmoId.Move);
+                }
+            );
 
             var rotateButton = rotateButtonTr.GetComponent<Button>();
-            AddListenerEvent(rotateButton, () =>
-            {
-                EditorOp.Resolve<SelectionHandler>().SetWorkGizmoId(SelectionHandler.GizmoId.Rotate);
-            });
+            AddListenerEvent(
+                rotateButton,
+                () =>
+                {
+                    EditorOp
+                        .Resolve<SelectionHandler>()
+                        .SetWorkGizmoId(SelectionHandler.GizmoId.Rotate);
+                }
+            );
 
             var scaleButton = scaleButtonTr.GetComponent<Button>();
-            AddListenerEvent(scaleButton, () =>
-            {
-                EditorOp.Resolve<SelectionHandler>().SetWorkGizmoId(SelectionHandler.GizmoId.Scale);
-            });
+            AddListenerEvent(
+                scaleButton,
+                () =>
+                {
+                    EditorOp
+                        .Resolve<SelectionHandler>()
+                        .SetWorkGizmoId(SelectionHandler.GizmoId.Scale);
+                }
+            );
 
             saveButton = saveButtonTr.GetComponent<Button>();
             AddListenerEvent(saveButton, EditorOp.Resolve<SceneDataHandler>().Save);
@@ -112,12 +136,18 @@ namespace Terra.Studio
             var undoButton = undoButtonTr.GetComponent<Button>();
             AddListenerEvent(undoButton, EditorOp.Resolve<IURCommand>().Undo);
             undoButton.interactable = false;
-            EditorOp.Resolve<IURCommand>().OnUndoStackAvailable += (isPresent) => { undoButton.interactable = isPresent; };
+            EditorOp.Resolve<IURCommand>().OnUndoStackAvailable += (isPresent) =>
+            {
+                undoButton.interactable = isPresent;
+            };
 
             var redoButton = redoButtonTr.GetComponent<Button>();
             AddListenerEvent(redoButton, EditorOp.Resolve<IURCommand>().Redo);
             redoButton.interactable = false;
-            EditorOp.Resolve<IURCommand>().OnRedoStackAvailable += (isPresent) => { redoButton.interactable = isPresent; };
+            EditorOp.Resolve<IURCommand>().OnRedoStackAvailable += (isPresent) =>
+            {
+                redoButton.interactable = isPresent;
+            };
 
             EditorOp.Resolve<SelectionHandler>().SelectionChanged += (_) =>
             {
@@ -125,13 +155,19 @@ namespace Terra.Studio
             };
 
             canvasGroup = GetComponentInChildren<CanvasGroup>();
-            EditorOp.Resolve<EditorSystem>().OnIncognitoEnabled += (isEnabled) => { canvasGroup.SetInteractive(!isEnabled); };
+            EditorOp.Resolve<EditorSystem>().OnIncognitoEnabled += (isEnabled) =>
+            {
+                canvasGroup.SetInteractive(!isEnabled);
+            };
         }
 
         private void AddListenerEvent<T>(Button button, Action<T> callback, T type)
         {
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => { callback?.Invoke(type); });
+            button.onClick.AddListener(() =>
+            {
+                callback?.Invoke(type);
+            });
         }
 
         public void CreateObject(string name)
@@ -139,7 +175,9 @@ namespace Terra.Studio
             Transform cameraTransform = Camera.main.transform;
             Vector3 cameraPosition = cameraTransform.position;
             Vector3 spawnPosition = cameraPosition + cameraTransform.forward * 5;
-            var itemData = ((ResourceDB)SystemOp.Load(ResourceTag.ResourceDB)).GetItemDataForNearestName(name);
+            var itemData = (
+                (ResourceDB)SystemOp.Load(ResourceTag.ResourceDB)
+            ).GetItemDataForNearestName(name);
             var primitive = RuntimeWrappers.SpawnGameObject(itemData.ResourcePath, itemData);
             primitive.transform.position = spawnPosition;
 
@@ -161,10 +199,20 @@ namespace Terra.Studio
 
         public void SetSaveMessage(bool setInteractable, SaveState state)
         {
-            if (!string.IsNullOrEmpty(saveTextField.text) &&
-                state == SaveState.UnsavedChanges)
+            if (!string.IsNullOrEmpty(saveTextField.text) && state == SaveState.UnsavedChanges)
             {
                 return;
+            }
+            if (state == SaveState.SavedToCloud)
+            {
+                CoroutineService.RunCoroutine(
+                    () =>
+                    {
+                        SetSaveMessage(true, SaveState.Empty);
+                    },
+                    CoroutineService.DelayType.WaitForXSeconds,
+                    2f
+                );
             }
             var message = state.GetStringValue();
             saveButton.interactable = setInteractable;
@@ -191,7 +239,10 @@ namespace Terra.Studio
         private void AddListenerEvent(Button button, Action callback)
         {
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => { callback?.Invoke(); });
+            button.onClick.AddListener(() =>
+            {
+                callback?.Invoke();
+            });
         }
 
         private void OnDestroy()
