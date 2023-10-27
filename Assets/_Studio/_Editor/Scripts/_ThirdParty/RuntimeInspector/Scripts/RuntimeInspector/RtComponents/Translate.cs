@@ -55,19 +55,19 @@ namespace Terra.Studio
                 },
                 ShowSelectionGhost = () =>
                 {
-                    EditorOp.Resolve<Recorder>().ShowSelectionGhost_RepeatPosition(this, repeat.repeat > 10 ? 10 : repeat.repeat, true, repeat.repeatType);
+                    EditorOp.Resolve<Recorder>().ShowSelectionGhost_RepeatPosition(this, repeat.repeatForever ? int.MaxValue : repeat.repeat, true, repeat.repeatType);
                 },
                 HideSelectionGhost = () =>
                 {
-                    EditorOp.Resolve<Recorder>().ShowSelectionGhost_RepeatPosition(this, repeat.repeat > 10 ? 10 : repeat.repeat, false, repeat.repeatType);
+                    EditorOp.Resolve<Recorder>().ShowSelectionGhost_RepeatPosition(this, repeat.repeatForever ? int.MaxValue : repeat.repeat, false, repeat.repeatType);
                 },
                 UpdateSlectionGhostTRS = () =>
                 {
                     EditorOp.Resolve<Recorder>().UpdateTRS_Multiselect(this);
                 },
-                UpdateSlectionGhostsRepeatCount = () =>
+                UpdateSelectionGhostsRepeatCount = () =>
                 {
-                    EditorOp.Resolve<Recorder>().UpdateGhostRepeatCount_Multiselect(this, repeat.repeat > 10 ? 10 : repeat.repeat, repeat.repeatType);
+                    EditorOp.Resolve<Recorder>().UpdateGhostRepeatCount_Multiselect(this, repeat.repeatForever ? int.MaxValue : repeat.repeat, repeat.repeatType);
                 },
                 ShowVisualsOnMultiSelect = true,
                 GetLastValue = () => { return Type.LastVector3; },
@@ -218,6 +218,8 @@ namespace Terra.Studio
             var localOffset = (Vector3)Type.recordedVector3.Get();
             List<Vector3> trs = new List<Vector3>();
             var count = repeat.repeat > 10 ? 10 : repeat.repeat;
+            if (repeat.repeatForever)
+                count = 10;
             for (int i = 0; i < count; i++)
             {
                 if (transform.parent != null)

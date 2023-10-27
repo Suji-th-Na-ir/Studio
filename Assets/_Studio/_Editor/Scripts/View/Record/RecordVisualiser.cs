@@ -15,7 +15,7 @@ namespace Terra.Studio
             public Action ShowSelectionGhost;
             public Action HideSelectionGhost;
             public Action UpdateSlectionGhostTRS;
-            public Action UpdateSlectionGhostsRepeatCount;
+            public Action UpdateSelectionGhostsRepeatCount;
             public Func<Vector3[]> SpawnTRS;
             public Func<Vector3[]> SelectionGhostsTRS;
             public bool ShowVisualsOnMultiSelect;
@@ -222,6 +222,10 @@ namespace Terra.Studio
                 float distance = (point2 - point1).magnitude * 0.7f;
                 Vector3 dir = (point1 - point2).normalized;
 
+                bool repeatforver = count == int.MaxValue;
+                if (count > 10)
+                    count = 10;
+
                 for (int i = 0; i < count; i++)
                 {
                     var visualiser = new RecordVisualiser(instance.GhostDescription.GhostTo,
@@ -237,11 +241,11 @@ namespace Terra.Studio
                         {
                             if (directionType == RepeatDirectionType.PingPong)
                             {
-                                visualiser.CreateTravelLine(distance, dir, directionType);
+                                visualiser.CreateTravelLine(distance, dir, directionType,false);
                                 break;
                             }
                         }
-                        visualiser.CreateTravelLine(distance, dir, directionType);
+                        visualiser.CreateTravelLine(distance, dir, directionType, repeatforver && i == 9);
                     }
                 }
                 activeSelectionRecorders.Add(instance, recordVisulisers);
@@ -436,8 +440,9 @@ namespace Terra.Studio
         private BaseRecorder baseRecorder;
         private Transform childGhostMesh;
         private GameObject ghostLine;
+        private GameObject lastLine;
         private float lastArrowLength;
-
+        private bool showLastLine;
         RepeatDirectionType cachedDirectionType;
         public Transform GhostMeshTransform { get { return childGhostMesh; } }
        
@@ -468,27 +473,29 @@ namespace Terra.Studio
         {
             if (enabled)
             {
-                ghost.SetActive(false);
+                ghost?.SetActive(false);
             }
             else
             {
-                ghost.SetActive(true);
+                ghost?.SetActive(true);
             }
         }
 
         public void CreateTravelLine(float length, Vector3 direction)
         {
-            CreateTravelLine(length, direction, cachedDirectionType);
+            CreateTravelLine(length, direction, cachedDirectionType,showLastLine);
         }
 
-        public void CreateTravelLine(float length, Vector3 direction,RepeatDirectionType directionType)
+        public void CreateTravelLine(float length, Vector3 direction, RepeatDirectionType directionType, bool showLastLine)
         {
+            this.showLastLine = showLastLine;
             cachedDirectionType = directionType;
             MeshFilter mf;
             MeshRenderer mr;
             if ((ghostLine && lastArrowLength != length) || ghostLine == null)
             {
                 GameObject.Destroy(ghostLine);
+                GameObject.Destroy(lastLine);
                 ghostLine = new GameObject("Arrow_Line");
                 mf = ghostLine.AddComponent<MeshFilter>();
                 mr = ghostLine.AddComponent<MeshRenderer>();
@@ -497,11 +504,19 @@ namespace Terra.Studio
                 Vector3 localDirection = ghostLine.transform.InverseTransformDirection(direction);
                 ghostLine.transform.localPosition = Vector3.zero - localDirection * length * 1.3f;
                 mr.material = ghostMaterial;
+
+                if (showLastLine)
+                {
+                    lastLine = RuntimeWrappers.DuplicateGameObject(ghostLine, ghost.transform, Vector3.zero);
+                    lastLine.transform.localPosition = Vector3.zero;
+                }
             }
             lastArrowLength = length;
-            
+
             Quaternion rotation = Quaternion.FromToRotation(-Vector3.back, direction);
             ghostLine.transform.rotation = rotation;
+            if (lastLine)
+                lastLine.transform.rotation = rotation;
         }
 
         private void Clean()
