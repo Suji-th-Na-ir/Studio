@@ -30,31 +30,51 @@ namespace Terra.Studio
                 OnPrecheckDone();
                 return;
             }
-            SystemOp.Resolve<FileService>().DoesFileExist?.Invoke(
-                FileService.GetSavedFilePath(backwardCompatibilityFileName),
-                PrepareSavedDataForBackwardCompatibility);
+            SystemOp
+                .Resolve<FileService>()
+                .DoesFileExist?.Invoke(
+                    FileService.GetSavedFilePath(backwardCompatibilityFileName),
+                    PrepareSavedDataForBackwardCompatibility
+                );
         }
 
         public void GetManualSavedData(Action<string> savedData)
         {
             var filePath = FileService.GetSavedFilePath(savedFileName);
-            SystemOp.Resolve<FileService>().ReadFileFromLocal?.Invoke(filePath, (response) =>
-            {
-                savedData?.Invoke(response);
-            });
+            SystemOp
+                .Resolve<FileService>()
+                .ReadFileFromLocal?.Invoke(
+                    filePath,
+                    (response) =>
+                    {
+                        savedData?.Invoke(response);
+                    }
+                );
         }
 
-        public void SaveManualData(string data, bool shouldIgnoreIfExistsAlready, Action<bool> callback, string autoFlushNewTimeStamp = null)
+        public void SaveManualData(
+            string data,
+            bool shouldIgnoreIfExistsAlready,
+            Action<bool> callback,
+            string autoFlushNewTimeStamp = null
+        )
         {
             var filePath = FileService.GetSavedFilePath(savedFileName);
-            SystemOp.Resolve<FileService>().WriteFile(data, filePath, shouldIgnoreIfExistsAlready, (status) =>
-            {
-                if (status)
-                {
-                    RegisterTimestampForLastSave(autoFlushNewTimeStamp);
-                }
-                callback?.Invoke(status);
-            });
+            SystemOp
+                .Resolve<FileService>()
+                .WriteFile(
+                    data,
+                    filePath,
+                    shouldIgnoreIfExistsAlready,
+                    (status) =>
+                    {
+                        if (status)
+                        {
+                            RegisterTimestampForLastSave(autoFlushNewTimeStamp);
+                        }
+                        callback?.Invoke(status);
+                    }
+                );
         }
 
         public string CheckAndGetFreshSaveDateTimeIfLastSavedTimestampNotPresent()
@@ -98,21 +118,36 @@ namespace Terra.Studio
             RegisterTimestampForLastSave();
             if (Helper.IsPlatformWebGL())
             {
-                SystemOp.Resolve<FileService>().RenameKeyFromDBStore?.Invoke(backwardCompatibilityFileName, savedFileName, (_) =>
-                {
-                    OnPrecheckDone();
-                });
+                SystemOp
+                    .Resolve<FileService>()
+                    .RenameKeyFromDBStore?.Invoke(
+                        backwardCompatibilityFileName,
+                        savedFileName,
+                        (_) =>
+                        {
+                            OnPrecheckDone();
+                        }
+                    );
             }
             else
             {
                 var oldSaveFilePath = FileService.GetSavedFilePath(backwardCompatibilityFileName);
                 var newSaveFilePath = FileService.GetSavedFilePath(savedFileName);
-                SystemOp.Resolve<FileService>().ReadFileFromLocal.Invoke(oldSaveFilePath, (response) =>
-                {
-                    SystemOp.Resolve<FileService>().WriteFile(response, newSaveFilePath, false, null);
-                    SystemOp.Resolve<FileService>().RemoveFileFromLocal?.Invoke(oldSaveFilePath, null);
-                    OnPrecheckDone();
-                });
+                SystemOp
+                    .Resolve<FileService>()
+                    .ReadFileFromLocal.Invoke(
+                        oldSaveFilePath,
+                        (response) =>
+                        {
+                            SystemOp
+                                .Resolve<FileService>()
+                                .WriteFile(response, newSaveFilePath, false, null);
+                            SystemOp
+                                .Resolve<FileService>()
+                                .RemoveFileFromLocal?.Invoke(oldSaveFilePath, null);
+                            OnPrecheckDone();
+                        }
+                    );
             }
         }
 
@@ -146,7 +181,6 @@ namespace Terra.Studio
         {
             private const int VALIDATE_AUTOSAVE_AT_EVERY = 5;
             private int validateIndex = 0;
-            private int lastURIndex = 0;
 
             public AutoSave()
             {
@@ -170,13 +204,7 @@ namespace Terra.Studio
                     return;
                 }
                 validateIndex = 0;
-                var currentURIndex = EditorOp.Resolve<IURCommand>().CurrentIndex;
-                var delta = UnityEngine.Mathf.Abs(currentURIndex - lastURIndex);
-                if (delta != VALIDATE_AUTOSAVE_AT_EVERY * 2)
-                {
-                    lastURIndex = currentURIndex;
-                    EditorOp.Resolve<SceneDataHandler>().Save();
-                }
+                EditorOp.Resolve<SceneDataHandler>().Save();
             }
 
             public void Dispose()
