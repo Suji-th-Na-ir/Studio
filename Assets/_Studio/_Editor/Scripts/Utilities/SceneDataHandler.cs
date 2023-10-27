@@ -82,7 +82,7 @@ namespace Terra.Studio
         private void OnCloudSaveAttempted(bool status, string response)
         {
             var saveState = status ? SaveState.SavedToCloud : SaveState.ChangesSavedOffline;
-            EditorOp.Resolve<ToolbarView>().SetSaveMessage(true, saveState);
+            EditorOp.Resolve<ToolbarView>().SetSaveMessage(false, saveState);
         }
 
         public void PrepareSceneDataToRuntime(Action onPreparationDone)
@@ -496,7 +496,6 @@ namespace Terra.Studio
             }
             switch (type.Name)
             {
-
                 case nameof(BoxCollider):
                     var bx = (BoxCollider)collider;
                     bx.size = colliderData.size;

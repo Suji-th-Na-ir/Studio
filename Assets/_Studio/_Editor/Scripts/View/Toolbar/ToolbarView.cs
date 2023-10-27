@@ -225,7 +225,7 @@ namespace Terra.Studio
                 );
             }
             var message = state.GetStringValue();
-            saveButton.interactable = setInteractable;
+            saveButton.gameObject.SetActive(setInteractable);
             saveTextField.text = message;
         }
 

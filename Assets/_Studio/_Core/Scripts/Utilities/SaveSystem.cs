@@ -202,7 +202,6 @@ namespace Terra.Studio
             private void DoValidate()
             {
                 validateIndex++;
-                UnityEngine.Debug.Log($"Validating: {validateIndex}");
                 if (validateIndex < VALIDATE_AUTOSAVE_AT_EVERY * 2)
                 {
                     EditorOp.Resolve<ToolbarView>().SetSaveMessage(true, SaveState.UnsavedChanges);
