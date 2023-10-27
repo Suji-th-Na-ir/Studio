@@ -28,7 +28,7 @@ namespace Terra.Studio
         }
 
         private Dictionary<BaseBehaviour, RecordVisualiser> activeRecorders = new();
-        private Dictionary<BaseBehaviour, List<RecordVisualiser>> activeSelectionRecorders = new();
+        public Dictionary<BaseBehaviour, List<RecordVisualiser>> activeSelectionRecorders = new();
         private List<GameObject> ghosts = new();
 
         public void TrackPosition_NoGhostOnMultiselect<T>(T instance, bool enableModification) where T : BaseBehaviour
@@ -175,6 +175,15 @@ namespace Terra.Studio
                 var alltrs = instance.GhostDescription.SelectionGhostsTRS?.Invoke();
                 for (int i = 0; i < visualisers.Count; i++)
                 {
+                    if (visualisers.Count > 1 && i < visualisers.Count - 1)
+                    {
+                        Vector3 point1, point2;
+                        point1 = alltrs[i + 1];
+                        point2 = alltrs[i];
+                        var distance = (point2 - point1).magnitude * 0.7f;
+                        var dir = (point1 - point2).normalized;
+                        visualisers[i].CreateVisualisationGhostLine(distance, dir);
+                    }
                     visualisers[i].UpdateTRS(alltrs[i]);
                 }
             }
@@ -209,6 +218,17 @@ namespace Terra.Studio
                    null,
                     false, trs[i]);
                     recordVisulisers.Add(visualiser);
+                    if (i < count - 1)
+                    {
+                        Vector3 point1, point2;
+                        point1 = recordVisulisers[i].GhostMeshTransform.position;
+                        point2 = i - 1 < 0 ? instance.GhostDescription.GhostTo.transform.position :
+                            recordVisulisers[i - 1].GhostMeshTransform.position;
+                        var distance = (point2 - point1).magnitude*0.7f;
+                        var dir = (point1 - point2).normalized;
+                        visualiser.CreateVisualisationGhostLine( distance, dir);
+                    }
+                    
                 }
                 activeSelectionRecorders.Add(instance, recordVisulisers);
             }
@@ -400,6 +420,10 @@ namespace Terra.Studio
         private readonly Material ghostMaterial;
         private readonly Action onGhostDataModified;
         private BaseRecorder baseRecorder;
+        private Transform childGhostMesh;
+        private GameObject ghostLine;
+
+        public Transform GhostMeshTransform { get { return childGhostMesh; } }
 
         public RecordVisualiser(GameObject gameObject, Record recordFor, Action<object> onRecordDataModified, Action onGhostDataModified, bool enableModification, params Vector3[] trs)
         {
@@ -410,9 +434,9 @@ namespace Terra.Studio
             ghost.name = string.Concat(ghost.name, "_", gameObject.name);
             RuntimeWrappers.DuplicateGameObject(gameObject, ghost.transform, Vector3.zero);
             RuntimeWrappers.ResolveTRS(ghost, null, trs);
-            var child = ghost.transform.GetChild(0);
-            child.localPosition = Vector3.zero;
-            child.localScale = gameObject.transform.lossyScale;
+            childGhostMesh = ghost.transform.GetChild(0);
+            childGhostMesh.localPosition = Vector3.zero;
+            childGhostMesh.localScale = gameObject.transform.lossyScale;
             Clean();
             ghost.SetActive(true);
             if (enableModification)
@@ -421,6 +445,24 @@ namespace Terra.Studio
                 EditorOp.Resolve<Recorder>().TrackGhost(true, ghost);
                 AttachRecorder(recordFor, onRecordDataModified);
             }
+        }
+
+        public void CreateVisualisationGhostLine(float length, Vector3 direction)
+        {
+            if (ghostLine)
+            {
+                GameObject.Destroy(ghostLine);
+            }
+            ghostLine = new GameObject("Arrow_Line");
+            var mf = ghostLine.AddComponent<MeshFilter>();
+            var mr = ghostLine.AddComponent<MeshRenderer>();
+
+            mf.mesh = new VisulisationLineGenerator(ghostLine.transform, length, 0.1f, 0.4f, 0.3f).Mesh;
+            ghostLine.transform.SetParent(ghost.transform);
+            ghostLine.transform.localPosition = Vector3.zero;
+            Quaternion rotation = Quaternion.FromToRotation(-Vector3.back, direction);
+            ghostLine.transform.rotation = rotation;
+            mr.material = ghostMaterial;
         }
 
         private void Clean()
