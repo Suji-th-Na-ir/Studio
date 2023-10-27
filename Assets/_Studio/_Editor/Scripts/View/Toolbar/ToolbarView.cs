@@ -73,8 +73,12 @@ namespace Terra.Studio
                 playButton,
                 () =>
                 {
-                    EditorOp.Resolve<SceneDataHandler>().PrepareSceneDataToRuntime();
-                    EditorOp.Resolve<EditorSystem>().RequestSwitchState();
+                    EditorOp
+                        .Resolve<SceneDataHandler>()
+                        .PrepareSceneDataToRuntime(() =>
+                        {
+                            EditorOp.Resolve<EditorSystem>().RequestSwitchState();
+                        });
                 }
             );
 
@@ -112,7 +116,13 @@ namespace Terra.Studio
             );
 
             saveButton = saveButtonTr.GetComponent<Button>();
-            AddListenerEvent(saveButton, EditorOp.Resolve<SceneDataHandler>().Save);
+            AddListenerEvent(
+                saveButton,
+                () =>
+                {
+                    EditorOp.Resolve<SceneDataHandler>().Save();
+                }
+            );
             SetSaveMessage(true, SaveState.Empty);
 
             var cylinderButton = cylinderPrimitiveTr.GetComponent<Button>();

@@ -8,25 +8,29 @@ namespace Terra.Studio
     {
         public void DoCloudSaveCheck(Action onDone)
         {
-            SystemOp.Resolve<User>().GetProjectDetails((status, response) =>
-            {
-                if (status)
-                {
-                    var unpackedData = JsonConvert.DeserializeObject<APIResponse>(response);
-                    if (unpackedData.status == 200)
+            SystemOp
+                .Resolve<User>()
+                .GetProjectDetails(
+                    (status, response) =>
                     {
-                        OnCloudSaveDataReceived(unpackedData.data, onDone);
+                        if (status)
+                        {
+                            var unpackedData = JsonConvert.DeserializeObject<APIResponse>(response);
+                            if (unpackedData.status == 200)
+                            {
+                                OnCloudSaveDataReceived(unpackedData.data, onDone);
+                            }
+                            else
+                            {
+                                DoCloudSetup(onDone);
+                            }
+                        }
+                        else
+                        {
+                            DoLocalSaveCheck(onDone);
+                        }
                     }
-                    else
-                    {
-                        DoCloudSetup(onDone);
-                    }
-                }
-                else
-                {
-                    DoLocalSaveCheck(onDone);
-                }
-            });
+                );
         }
 
         private void OnCloudSaveDataReceived(string data, Action onDone)
@@ -39,33 +43,47 @@ namespace Terra.Studio
             }
             else if (cloudDataIntegrityRes > 0)
             {
-                SystemOp.Resolve<SaveSystem>().SaveManualData(unpackedData.content, false, (status) =>
-                {
-                    onDone?.Invoke();
-                }, unpackedData.timestamp);
+                SystemOp
+                    .Resolve<SaveSystem>()
+                    .SaveManualData(
+                        unpackedData.content,
+                        false,
+                        (status) =>
+                        {
+                            onDone?.Invoke();
+                        },
+                        unpackedData.timestamp
+                    );
             }
             else
             {
-                SystemOp.Resolve<SaveSystem>().GetManualSavedData((response) =>
-                {
-                    var isEmpty = string.IsNullOrEmpty(response);
-                    if (isEmpty)
-                    {
-                        DoLocalSaveCheck(onDone, true);
-                    }
-                    else
-                    {
-                        SystemOp.Resolve<User>().UploadSaveDataToCloud(response, null);
-                        onDone?.Invoke();
-                    }
-                });
+                SystemOp
+                    .Resolve<SaveSystem>()
+                    .GetManualSavedData(
+                        (response) =>
+                        {
+                            var isEmpty = string.IsNullOrEmpty(response);
+                            if (isEmpty)
+                            {
+                                DoLocalSaveCheck(onDone, true);
+                            }
+                            else
+                            {
+                                SystemOp.Resolve<User>().UploadSaveDataToCloud(response, null);
+                                onDone?.Invoke();
+                            }
+                        }
+                    );
             }
         }
 
         private int IsCloudDataLatest(string cloudTimestamp)
         {
-            var isLastSavedAvailable = SystemOp.Resolve<SaveSystem>().TryGetLastSavedTimestamp(out var saveDateTime);
-            if (!isLastSavedAvailable) return 1;
+            var isLastSavedAvailable = SystemOp
+                .Resolve<SaveSystem>()
+                .TryGetLastSavedTimestamp(out var saveDateTime);
+            if (!isLastSavedAvailable)
+                return 1;
             var lastSaveDateTime = DateTime.Parse(saveDateTime);
             var cloudSaveDateTime = DateTime.Parse(cloudTimestamp);
             var result = DateTime.Compare(cloudSaveDateTime, lastSaveDateTime);
@@ -74,45 +92,55 @@ namespace Terra.Studio
 
         private void DoCloudSetup(Action onDone)
         {
-            SystemOp.Resolve<User>().CreateNewProject((status, response) =>
-            {
-                if (status)
-                {
-                    var unpackedData = JsonConvert.DeserializeObject<APIResponse>(response);
-                    if (unpackedData.status == 200)
+            SystemOp
+                .Resolve<User>()
+                .CreateNewProject(
+                    (status, response) =>
                     {
-                        CheckAndUploadSaveData(onDone);
+                        if (status)
+                        {
+                            var unpackedData = JsonConvert.DeserializeObject<APIResponse>(response);
+                            if (unpackedData.status == 200)
+                            {
+                                CheckAndUploadSaveData(onDone);
+                            }
+                            else
+                            {
+                                DoLocalSaveCheck(onDone);
+                            }
+                        }
+                        else
+                        {
+                            DoLocalSaveCheck(onDone);
+                        }
                     }
-                    else
-                    {
-                        DoLocalSaveCheck(onDone);
-                    }
-                }
-                else
-                {
-                    DoLocalSaveCheck(onDone);
-                }
-            });
+                );
         }
 
         private void CheckAndUploadSaveData(Action onDone)
         {
-            var isLastSavedAvailable = SystemOp.Resolve<SaveSystem>().TryGetLastSavedTimestamp(out var saveDateTime);
+            var isLastSavedAvailable = SystemOp
+                .Resolve<SaveSystem>()
+                .TryGetLastSavedTimestamp(out var saveDateTime);
             if (isLastSavedAvailable)
             {
-                SystemOp.Resolve<SaveSystem>().GetManualSavedData((response) =>
-                {
-                    var isAvailable = !string.IsNullOrEmpty(response);
-                    if (isAvailable)
-                    {
-                        SystemOp.Resolve<User>().UploadSaveDataToCloud(response, null);
-                        onDone?.Invoke();
-                    }
-                    else
-                    {
-                        DoLocalSaveCheck(onDone, true);
-                    }
-                });
+                SystemOp
+                    .Resolve<SaveSystem>()
+                    .GetManualSavedData(
+                        (response) =>
+                        {
+                            var isAvailable = !string.IsNullOrEmpty(response);
+                            if (isAvailable)
+                            {
+                                SystemOp.Resolve<User>().UploadSaveDataToCloud(response, null);
+                                onDone?.Invoke();
+                            }
+                            else
+                            {
+                                DoLocalSaveCheck(onDone, true);
+                            }
+                        }
+                    );
             }
             else
             {
@@ -124,14 +152,20 @@ namespace Terra.Studio
         {
             var saveData = SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.text;
             var shouldIgnore = !Helper.IsInUnityEditor();
-            SystemOp.Resolve<SaveSystem>().SaveManualData(saveData, shouldIgnore, (_) =>
-            {
-                if (autoSaveToCloud)
-                {
-                    SystemOp.Resolve<User>().UploadSaveDataToCloud(saveData, null);
-                }
-                onDone?.Invoke();
-            });
+            SystemOp
+                .Resolve<SaveSystem>()
+                .SaveManualData(
+                    saveData,
+                    shouldIgnore,
+                    (_) =>
+                    {
+                        if (autoSaveToCloud)
+                        {
+                            SystemOp.Resolve<User>().UploadSaveDataToCloud(saveData, null);
+                        }
+                        onDone?.Invoke();
+                    }
+                );
         }
     }
 }

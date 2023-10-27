@@ -26,6 +26,7 @@ namespace Terra.Studio
         public virtual string URL => GetURL();
 
         protected abstract string Route { get; }
+
         protected const string DOMAIN = "http://game-assets-api.letsterra.com/studio";
 
         protected virtual string GetURL()
@@ -51,10 +52,7 @@ namespace Terra.Studio
 
         public LoginAPI(string userName)
         {
-            FormData = new()
-            {
-                { USER_NAME_KEY, userName }
-            };
+            FormData = new() { { USER_NAME_KEY, userName } };
         }
     }
 
@@ -66,11 +64,7 @@ namespace Terra.Studio
         public CreateProjectAPI(string projectName)
         {
             var userName = SystemOp.Resolve<User>().UserName;
-            FormData = new()
-            {
-                { USER_NAME_KEY, userName },
-                { PROJECT_NAME_KEY, projectName }
-            };
+            FormData = new() { { USER_NAME_KEY, userName }, { PROJECT_NAME_KEY, projectName } };
         }
     }
 
@@ -101,7 +95,9 @@ namespace Terra.Studio
 
         public SaveProjectAPI(string data)
         {
-            var timeStamp = SystemOp.Resolve<SaveSystem>().CheckAndGetFreshSaveDateTimeIfLastSavedTimestampNotPresent();
+            var timeStamp = SystemOp
+                .Resolve<SaveSystem>()
+                .CheckAndGetFreshSaveDateTimeIfLastSavedTimestampNotPresent();
             FormData = new()
             {
                 { USER_NAME_KEY, SystemOp.Resolve<User>().UserName },

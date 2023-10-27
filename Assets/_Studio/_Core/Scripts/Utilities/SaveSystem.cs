@@ -181,6 +181,7 @@ namespace Terra.Studio
         {
             private const int VALIDATE_AUTOSAVE_AT_EVERY = 5;
             private int validateIndex = 0;
+            private bool isSaveInProgress;
 
             public AutoSave()
             {
@@ -189,22 +190,36 @@ namespace Terra.Studio
 
             private void OnSelectionChanged(List<UnityEngine.GameObject> gameObjects)
             {
-                if (gameObjects == null || gameObjects.Count == 0)
+                var previousSelectedObjects = EditorOp
+                    .Resolve<SelectionHandler>()
+                    .GetPrevSelectedObjects();
+                if (gameObjects != previousSelectedObjects)
                 {
-                    OnDeselected();
+                    DoValidate();
                 }
             }
 
-            private void OnDeselected()
+            private void DoValidate()
             {
                 validateIndex++;
-                if (validateIndex < VALIDATE_AUTOSAVE_AT_EVERY)
+                UnityEngine.Debug.Log($"Validating: {validateIndex}");
+                if (validateIndex < VALIDATE_AUTOSAVE_AT_EVERY * 2)
                 {
                     EditorOp.Resolve<ToolbarView>().SetSaveMessage(true, SaveState.UnsavedChanges);
                     return;
                 }
                 validateIndex = 0;
-                EditorOp.Resolve<SceneDataHandler>().Save();
+                if (isSaveInProgress)
+                {
+                    return;
+                }
+                isSaveInProgress = true;
+                EditorOp
+                    .Resolve<SceneDataHandler>()
+                    .Save(() =>
+                    {
+                        isSaveInProgress = false;
+                    });
             }
 
             public void Dispose()

@@ -38,7 +38,7 @@ namespace Terra.Studio
             return SystemOp.Resolve<System>().CurrentStudioState == StudioState.Editor;
         }
 
-        public void Save()
+        public void Save(Action onSaveDone = null)
         {
             var sceneData = ExportSceneData();
             if (!Helper.IsInUnityEditorMode())
@@ -55,7 +55,14 @@ namespace Terra.Studio
                             {
                                 SystemOp
                                     .Resolve<User>()
-                                    .UploadSaveDataToCloud(sceneData, OnCloudSaveAttempted);
+                                    .UploadSaveDataToCloud(
+                                        sceneData,
+                                        (status, response) =>
+                                        {
+                                            OnCloudSaveAttempted(status, response);
+                                            onSaveDone?.Invoke();
+                                        }
+                                    );
                             }
                             else
                             {
@@ -78,11 +85,24 @@ namespace Terra.Studio
             EditorOp.Resolve<ToolbarView>().SetSaveMessage(true, saveState);
         }
 
-        public void PrepareSceneDataToRuntime()
+        public void PrepareSceneDataToRuntime(Action onPreparationDone)
         {
             var sceneData = ExportSceneData();
             SystemOp.Resolve<CrossSceneDataHolder>().Set(sceneData);
-            SystemOp.Resolve<User>().UploadSaveDataToCloud(sceneData, null);
+            SystemOp
+                .Resolve<SaveSystem>()
+                .SaveManualData(
+                    sceneData,
+                    false,
+                    (status) =>
+                    {
+                        if (status)
+                        {
+                            SystemOp.Resolve<User>().UploadSaveDataToCloud(sceneData, null);
+                            onPreparationDone?.Invoke();
+                        }
+                    }
+                );
         }
 
         #region Load Scene Data
