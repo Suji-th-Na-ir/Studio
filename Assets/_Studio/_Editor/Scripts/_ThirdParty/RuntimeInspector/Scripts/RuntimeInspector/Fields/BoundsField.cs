@@ -94,9 +94,10 @@ namespace RuntimeInspectorNamespace
 			inputExtents.Refresh();
 		}
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
-			inputCenter.SetInteractable(on);
+            base.SetInteractable(on, disableAlso);
+            inputCenter.SetInteractable(on);
 			inputExtents.SetInteractable(on);
         }
     }

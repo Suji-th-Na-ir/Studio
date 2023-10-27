@@ -19,11 +19,12 @@ namespace Terra.Studio
         public override string ComponentName => nameof(Translate);
         public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
-        protected override bool CanListen => StartOn.data.startIndex == 4;
+        protected override bool CanListen =>true;
+        protected override bool UpdateListenOnEnable => StartOn.data.startIndex == 4;
         public override Atom.RecordedVector3 RecordedVector3 { get { return Type.recordedVector3; } }
         protected override string[] BroadcasterRefs => new string[]
         {
-            repeat.Broadcast
+            repeat.broadcastData.broadcast
         };
         protected override string[] ListenerRefs => new string[]
         {
@@ -82,8 +83,8 @@ namespace Terra.Studio
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
                 broadcastAt = repeat.broadcastAt,
-                IsBroadcastable = !string.IsNullOrEmpty(repeat.Broadcast),
-                Broadcast = repeat.Broadcast,
+                IsBroadcastable = !string.IsNullOrEmpty(repeat.broadcastData.broadcast),
+                Broadcast = repeat.broadcastData.broadcast,
                 canPlaySFX = PlaySFX.data.canPlay,
                 canPlayVFX = PlayVFX.data.canPlay,
                 sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
@@ -149,7 +150,7 @@ namespace Terra.Studio
             repeat.repeatForever = comp.repeatForever;
             Type.recordedVector3.Set(comp.targetPosition);
             repeat.repeat = comp.repeatFor;
-            repeat.Broadcast = comp.Broadcast;
+            repeat.broadcastData.broadcast = comp.Broadcast;
             repeat.broadcastAt = comp.broadcastAt;
             StartOn.data.listenName = comp.ConditionData;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
@@ -178,7 +179,7 @@ namespace Terra.Studio
             {
                 listenString = StartOn.data.listenName;
             }
-            ImportVisualisation(repeat.Broadcast, listenString);
+            ImportVisualisation(repeat.broadcastData.broadcast, listenString);
         }
 
         private Vector3[] GetCurrentOffsetInWorld()
@@ -242,7 +243,7 @@ namespace Terra.Studio
                 DisplayName = GetDisplayName(),
                 EventName = startOnName.ToString(),
                 Properties = properties,
-                Broadcast = new string[] { repeat.Broadcast },
+                Broadcast = new string[] { repeat.broadcastData.broadcast },
                 Listen = StartOn.data.listenName
             };
             return previewData;

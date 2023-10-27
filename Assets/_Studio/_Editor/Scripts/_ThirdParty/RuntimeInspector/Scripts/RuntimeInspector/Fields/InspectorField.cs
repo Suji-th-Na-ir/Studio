@@ -14,6 +14,7 @@ namespace RuntimeInspectorNamespace
         public delegate void Setter(object value);
         protected Action<string, string> onStringUpdated;
         public virtual Action<object> OnValueUpdated { get; set; }
+        public virtual Action<string> OnStringValueSubmitted { get; set; }
 
 #pragma warning disable 0649
         [SerializeField]
@@ -29,6 +30,9 @@ namespace RuntimeInspectorNamespace
 
         [SerializeField]
         private MaskableGraphic visibleArea;
+
+        [SerializeField]
+        protected Button SubmmitButton;
 #pragma warning restore 0649
 
         private RuntimeInspector m_inspector;
@@ -134,6 +138,10 @@ namespace RuntimeInspectorNamespace
         private bool m_isVisible = true;
         public bool IsVisible { get { return m_isVisible; } }
 
+        [HideInInspector]
+        protected bool useSubmitButton = false;
+        public virtual bool UseSubmitButton { get; set; }
+
         public string Name
         {
             get { if (variableNameText) return variableNameText.text; return string.Empty; }
@@ -180,7 +188,13 @@ namespace RuntimeInspectorNamespace
             return true;
         }
 
-        public abstract void SetInteractable(bool on);
+        public virtual void SetInteractable(bool on,bool disableAlso=false)
+        {
+            if(disableAlso)
+            {
+                gameObject.SetActive(on);
+            }
+        }
         public virtual void InvokeUpdateDropdown(List<string> dropdowns){ }
 
         public void BindTo(InspectorField parent, MemberInfo variable, string variableName = null)
@@ -198,7 +212,6 @@ namespace RuntimeInspectorNamespace
 				if( !parent.BoundVariableType.GetTypeInfo().IsValueType )
 #endif
                 {
-                    InjectToOnValueChangedIfAvailable(field, parent.Value);
                     var isObscured = IsObscurerTapped(field);
                     if (!isObscured)
                     {
@@ -248,25 +261,6 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        private void InjectToOnValueChangedIfAvailable(FieldInfo fieldInfo, object instance)
-        {
-            var doesHaveOnValueChangedAttribute = fieldInfo.HasAttribute<OnValueChangedAttribute>();
-            if (!doesHaveOnValueChangedAttribute) return;
-            var attribute = fieldInfo.GetAttribute<OnValueChangedAttribute>();
-
-            if (instance as BaseBehaviour!=null)
-            {
-                onStringUpdated = attribute.OnValueUpdated((BaseBehaviour)instance);
-            }
-            else
-            {
-                if (instance as Atom.BaseBroadcasterTemplate!=null)
-                {
-                    onStringUpdated = attribute.OnValueUpdated(((Atom.BaseBroadcasterTemplate)instance).behaviour);
-                }
-            }
-        }
-
         private bool IsObscurerTapped(FieldInfo fieldInfo)
         {
             var isInterfacedWithObscurer = typeof(IObscurer).IsAssignableFrom(fieldInfo.FieldType);
@@ -298,6 +292,7 @@ namespace RuntimeInspectorNamespace
             this.setter = setter;
 
             OnBound(variable);
+            SetInteractable(true, true);
         }
 
         public void BindTo(Type variableType, string variableName, string reflectedName, object value, MemberInfo variable = null)
@@ -535,9 +530,6 @@ namespace RuntimeInspectorNamespace
         }
 
 
-
-    
-
         protected void CheckAndExpand()
         {
             if (m_headerVisibility == RuntimeInspector.HeaderVisibility.Collapsible)
@@ -628,7 +620,7 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        protected abstract void GenerateElements();
+        public abstract void GenerateElements();
 
         private void GenerateExposedMethodButtons()
         {
@@ -711,6 +703,22 @@ namespace RuntimeInspectorNamespace
             }
 
             return variableDrawer;
+        }
+
+
+        public InspectorField CreateDrawerForField(string name)
+        {
+            Type type = Value.GetType();
+            FieldInfo fieldInfo = type.GetField(name);
+            if (fieldInfo != null)
+            {
+                return CreateDrawerForVariable(fieldInfo, fieldInfo.Name, true);
+            }
+            else
+            {
+                var propertyInfo = type.GetProperty(name);
+                return CreateDrawerForVariable(propertyInfo, propertyInfo.Name, true);
+            }
         }
 
         public InspectorField CreateDrawerForVariable(MemberInfo variable, string variableName = null,bool takeOriginalDepth=false)

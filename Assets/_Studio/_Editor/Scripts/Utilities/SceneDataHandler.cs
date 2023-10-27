@@ -496,6 +496,7 @@ namespace Terra.Studio
             }
             switch (type.Name)
             {
+
                 case nameof(BoxCollider):
                     var bx = (BoxCollider)collider;
                     bx.size = colliderData.size;

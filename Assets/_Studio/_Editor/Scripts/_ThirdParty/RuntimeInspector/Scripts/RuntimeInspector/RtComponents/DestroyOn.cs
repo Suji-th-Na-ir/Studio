@@ -23,9 +23,8 @@ namespace Terra.Studio
         public Atom.StartOn StartOn = new();
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
-        [AliasDrawer("Broadcast")]
-        [OnValueChanged(UpdateBroadcast = true)]
-        public string Broadcast = null;
+
+        public Atom.Broadcast broadcastData = new();
 
         public override string ComponentName => nameof(DestroyOn);
         public override bool CanPreview => true;
@@ -33,7 +32,7 @@ namespace Terra.Studio
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]
         {
-            Broadcast
+            broadcastData.broadcast
         };
         protected override string[] ListenerRefs => new string[]
         {
@@ -44,6 +43,7 @@ namespace Terra.Studio
         {
             base.Awake();
             StartOn.Setup<DestroyOnEnum>(gameObject, ComponentName, OnListenerUpdated, StartOn.data.startIndex == 3);
+            broadcastData.Setup(gameObject,this);
             PlaySFX.Setup<DestroyOn>(gameObject);
             PlayVFX.Setup<DestroyOn>(gameObject);
         }
@@ -61,8 +61,8 @@ namespace Terra.Studio
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
-                IsBroadcastable = !string.IsNullOrEmpty(Broadcast),
-                Broadcast = Broadcast
+                IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
+                Broadcast = broadcastData.broadcast
             };
             gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -116,7 +116,7 @@ namespace Terra.Studio
                 StartOn.data.startName = res.ToString();
             }
             StartOn.data.listenName = comp.ConditionData;
-            Broadcast = comp.Broadcast;
+            broadcastData.broadcast = comp.Broadcast;
             PlaySFX.data.canPlay = comp.canPlaySFX;
             PlaySFX.data.clipIndex = comp.sfxIndex;
             PlaySFX.data.clipName = comp.sfxName;
@@ -128,7 +128,7 @@ namespace Terra.Studio
             {
                 listenstring = StartOn.data.listenName;
             }
-            ImportVisualisation(Broadcast, listenstring);
+            ImportVisualisation(broadcastData.broadcast, listenstring);
         }
 
         public override BehaviourPreviewUI.PreviewData GetPreviewData()
@@ -143,7 +143,7 @@ namespace Terra.Studio
             {
                 properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, PlayVFX.data.clipName);
             }
-            var broadcasts = new string[] { Broadcast };
+            var broadcasts = new string[] { broadcastData.broadcast };
             var eventIndex = StartOn.data.startIndex;
             var eventEnum = (DestroyOnEnum)eventIndex;
             var eventName = eventEnum.ToString();

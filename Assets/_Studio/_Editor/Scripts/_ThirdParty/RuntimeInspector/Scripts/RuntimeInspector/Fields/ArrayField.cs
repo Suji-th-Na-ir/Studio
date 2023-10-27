@@ -115,7 +115,7 @@ namespace RuntimeInspectorNamespace
 			base.ClearElements();
 		}
 
-		protected override void GenerateElements()
+		public override void GenerateElements()
 		{
 			if( Value == null )
 				return;
@@ -319,8 +319,9 @@ namespace RuntimeInspectorNamespace
 			return template;
 		}
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
+			base.SetInteractable(on, disableAlso);
            sizeInput.BackingField.interactable = on;
         }
     }

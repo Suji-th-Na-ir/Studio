@@ -38,6 +38,7 @@ MonoBehaviour:
   - {fileID: -7502050379305031079, guid: 68b016d88dc5e4d72828487602d5d652, type: 3}
   - {fileID: 8037117331184150712, guid: ee25e60f1be2a434196fd3aaafb2ae8d, type: 3}
   - {fileID: 221431203808498593, guid: 47dc8e8a9670c44a8854f1ea1f0f5703, type: 3}
+  - {fileID: 5068488856333491346, guid: 0f22cb0a010704a64a2773f146e22124, type: 3}
   m_referenceDrawers:
   - {fileID: 114341945564567828, guid: c3d8eb6a1cad6432398cb8b5b5618a4d, type: 3}
   - {fileID: 114690843832701802, guid: 540d9c4334a9e61498a26125e42ae81c, type: 3}

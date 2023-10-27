@@ -26,9 +26,7 @@ namespace Terra.Studio
         public Atom.RecordedVector3 targetPosition = new();
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
-        [AliasDrawer("Broadcast")]
-        [OnValueChanged(UpdateBroadcast = true)]
-        public string broadcast;
+        public Atom.Broadcast broadcastData = new();
 
         public override string ComponentName => nameof(SetObjectPosition);
         public override bool CanPreview => true;
@@ -38,7 +36,7 @@ namespace Terra.Studio
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[]
         {
-            broadcast
+            broadcastData.broadcast
         };
         protected override string[] ListenerRefs => new string[]
         {
@@ -51,6 +49,7 @@ namespace Terra.Studio
             startOn.Setup<StartOptions>(gameObject, ComponentName, OnListenerUpdated, startOn.data.startIndex == 3);
             playSFX.Setup<SetObjectPosition>(gameObject);
             playVFX.Setup<SetObjectPosition>(gameObject);
+            broadcastData.Setup(gameObject, this);
             targetPosition.Setup(this);
             SetupTargetPosition();
             SetupGhostDescription();
@@ -96,8 +95,8 @@ namespace Terra.Studio
                 IsConditionAvailable = true,
                 ConditionType = GetConditionType(),
                 ConditionData = GetConditionData(),
-                IsBroadcastable = !string.IsNullOrEmpty(broadcast),
-                Broadcast = broadcast,
+                IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
+                Broadcast = broadcastData.broadcast,
                 targetPosition = (Vector3)GhostDescription.GetRecentValue.Invoke(),
                 startIndex = startOn.data.startIndex,
                 canPlaySFX = playSFX.data.canPlay,
@@ -140,7 +139,7 @@ namespace Terra.Studio
         public override void Import(EntityBasedComponent data)
         {
             var obj = JsonConvert.DeserializeObject<SetObjectPositionComponent>(data.data);
-            broadcast = obj.Broadcast;
+            broadcastData.broadcast = obj.Broadcast;
             targetPosition.Set(obj.targetPosition);
             AssignStartOnData(obj);
             AssignSFXandVFXData(obj);
@@ -149,7 +148,7 @@ namespace Terra.Studio
             {
                 listenString = startOn.data.listenName;
             }
-            ImportVisualisation(broadcast, listenString);
+            ImportVisualisation(broadcastData.broadcast, listenString);
         }
 
         private void AssignStartOnData(SetObjectPositionComponent comp)
@@ -204,7 +203,7 @@ namespace Terra.Studio
         public override BehaviourPreviewUI.PreviewData GetPreviewData()
         {
             var properties = new Dictionary<string, object>[1];
-            var broadcastValues = new string[] { broadcast };
+            var broadcastValues = new string[] { broadcastData.broadcast };
             properties[0] = new();
             if (playSFX.data.canPlay)
             {

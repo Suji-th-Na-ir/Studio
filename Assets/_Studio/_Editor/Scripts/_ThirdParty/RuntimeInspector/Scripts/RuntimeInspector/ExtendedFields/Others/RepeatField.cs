@@ -58,7 +58,7 @@ namespace RuntimeInspectorNamespace
             var val = (Atom.Repeat)Value;
             if (val.broadcastAt == BroadcastAt.Never)
             {
-                broadcastFieldDrawer.gameObject.SetActive(false);
+                broadcastFieldDrawer.SetInteractable(false, true);
                 val.Broadcast = string.Empty;
                 UpdateOtherCompData(val, RepeatData.Broadcast);
             }
@@ -68,7 +68,7 @@ namespace RuntimeInspectorNamespace
                 {
                     val.Broadcast = val.lastEnteredBroadcast;
                 }
-                broadcastFieldDrawer.gameObject.SetActive(true);
+                broadcastFieldDrawer.SetInteractable(true, true);
                 UpdateOtherCompData(val, RepeatData.RevertToOldValues);
             }
         }
@@ -99,7 +99,6 @@ namespace RuntimeInspectorNamespace
 
         private void OnBroadcastTypeValueChanged(object value)
         {
-           
             UpdateOtherCompData((Atom.Repeat)Value, RepeatData.BroadcastType);
             ToggleBroadcastField();
         }
@@ -133,8 +132,8 @@ namespace RuntimeInspectorNamespace
 
         private void ToggelPauseForAndRepeat(bool on)
         {
-            pauseForFieldDrawer.gameObject.SetActive(on);
-            repeatTypeFieldDrawer.gameObject.SetActive(on);
+            pauseForFieldDrawer.SetInteractable(on,true);
+            repeatTypeFieldDrawer.SetInteractable(on, true);
         }
 
 
@@ -297,6 +296,11 @@ namespace RuntimeInspectorNamespace
                 didCheckForExpand = true;
                 IsExpanded = true;
             }
+            if ((bool)repeatFoeverFieldDrawer.Value != ((Atom.Repeat)Value).repeatForever)
+            {
+                ValidateRepeatForeverValue(((Atom.Repeat)Value).repeatForever);
+            }
+
             base.Refresh();
         }
         protected override void ClearElements()
@@ -305,7 +309,7 @@ namespace RuntimeInspectorNamespace
             didCheckForExpand = false;
         }
 
-        protected override void GenerateElements()
+        public override void GenerateElements()
         {
             var val = (Atom.Repeat)Value;
             repeatForFieldDrawer = CreateDrawerForField(nameof(val.repeat));
@@ -322,34 +326,12 @@ namespace RuntimeInspectorNamespace
 
             broadcastTypeFieldDrawer = CreateDrawerForField(nameof(val.broadcastAt));
             broadcastTypeFieldDrawer.OnValueUpdated += OnBroadcastTypeValueChanged;
-            
 
-            broadcastFieldDrawer = CreateDrawerForField(nameof(val.Broadcast));
+            broadcastFieldDrawer = CreateDrawerForField(nameof(val.broadcastData));
             broadcastFieldDrawer.OnValueUpdated += OnBroadcastValueChanged;
 
             ValidateRepeatValue();
             ValidateRepeatForeverValue(val.repeatForever);
-        }
-
-        private InspectorField CreateDrawerForField(string name)
-        {
-            Type type = Value.GetType();
-            FieldInfo fieldInfo = type.GetField(name);
-            if (fieldInfo != null)
-            {
-                return CreateDrawerForVariable(fieldInfo, fieldInfo.Name, true);
-            }
-            else
-            {
-                var propertyInfo = type.GetProperty(name);
-                return CreateDrawerForVariable(propertyInfo, propertyInfo.Name, true);
-            }
-         
-        }
-
-        public override void SetInteractable(bool on)
-        {
-            
         }
     }
 }

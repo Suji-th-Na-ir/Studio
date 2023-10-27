@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Reflection;
+using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -71,9 +72,23 @@ namespace RuntimeInspectorNamespace
 				inputX.Text = val.x.ToString( RuntimeInspectorUtils.numberFormat );
 				inputY.Text = val.y.ToString( RuntimeInspectorUtils.numberFormat );
 			}
-		}
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(inputX.gameObject,
+				() => inputX.BackingField.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => inputX.BackingField.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(inputY.gameObject,
+				() => inputY.BackingField.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => inputY.BackingField.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+        }
 
-		private bool OnValueChanged( BoundInputField source, string input )
+        protected override void OnUnbound()
+        {
+            base.OnUnbound();
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(inputX.gameObject);
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(inputY.gameObject);
+        }
+
+
+        private bool OnValueChanged( BoundInputField source, string input )
 		{
 #if UNITY_2017_2_OR_NEWER
 			if( isVector2Int )
@@ -166,9 +181,10 @@ namespace RuntimeInspectorNamespace
 			}
 		}
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
-			inputX.BackingField.interactable = on;
+            base.SetInteractable(on, disableAlso);
+            inputX.BackingField.interactable = on;
 			inputY.BackingField.interactable = on;
         }
     }

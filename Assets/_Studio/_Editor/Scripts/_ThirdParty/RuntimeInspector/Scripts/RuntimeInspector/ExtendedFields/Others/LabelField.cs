@@ -6,7 +6,7 @@ namespace Terra.Studio
 {
     public class LabelField : InspectorField
     {
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
            
         }

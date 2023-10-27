@@ -3,7 +3,6 @@ using UnityEngine;
 using PlayShifu.Terra;
 using RuntimeInspectorNamespace;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Terra.Studio
 {
@@ -13,6 +12,7 @@ namespace Terra.Studio
         public List<PlaySfx> AllSfxes = new();
         public List<PlayVfx> AllVfxes = new();
         public List<Repeat> AllRepeats = new();
+        public List<Broadcast> AllBroadcasts = new();
 
         public class BasePlay
         {
@@ -52,6 +52,7 @@ namespace Terra.Studio
             AllSfxes.Clear();
             AllVfxes.Clear();
             AllRepeats.Clear();
+            AllBroadcasts.Clear();
         }
 
         [Serializable]
@@ -147,26 +148,27 @@ namespace Terra.Studio
             [AliasDrawer("Repeat\nType")] public RepeatDirectionType repeatType;
             [AliasDrawer("Repeat\nForever")] public bool repeatForever;
             [AliasDrawer("Broadcast At")] public BroadcastAt broadcastAt;
-            private string broadcast;
-            [AliasDrawer("Broadcast"), OnValueChanged(UpdateBroadcast = true)]
+            public Atom.Broadcast broadcastData = new();
+            [HideInInspector] public string lastEnteredBroadcast;
+
+            [HideInInspector]
             public string Broadcast
             {
                 get
                 {
-                    return broadcast;
+                    return broadcastData.broadcast;
                 }
                 set
                 {
-                    var last = broadcast;
-                    broadcast = value;
+                    var last = broadcastData.broadcast;
+                    broadcastData.broadcast = value;
                     behaviour.OnBroadcastStringUpdated(value, last);
                 }
             }
-            [HideInInspector] public string lastEnteredBroadcast;
-
             public override void Setup(GameObject target, BaseBehaviour behaviour)
             {
                 base.Setup(target, behaviour);
+                broadcastData.Setup(target, behaviour);
                 var allrepeats = EditorOp.Resolve<Atom>().AllRepeats;
                 if (!allrepeats.Contains(this))
                 {
@@ -331,6 +333,23 @@ namespace Terra.Studio
                 return isIncognito;
             }
         }
+
+        [Serializable]
+        public class Broadcast : BaseBroadcasterTemplate
+        {
+            [AliasDrawer("Custom"), OnValueChanged( UpdateBroadcast = true)]
+            public string broadcast = string.Empty;
+
+            public override void Setup(GameObject target, BaseBehaviour behaviour)
+            {
+                base.Setup(target, behaviour);
+                var allbroadcasts = EditorOp.Resolve<Atom>().AllBroadcasts;
+                if (!allbroadcasts.Contains(this))
+                {
+                    allbroadcasts.Add(this);
+                }
+            }
+        }
     }
 
     [Serializable]
@@ -349,95 +368,4 @@ namespace Terra.Studio
         public int clipIndex;
     }
 
-    [Serializable]
-    public struct RotateComponentData
-    {
-        [HideInInspector] public Atom.RecordedVector3 vector3;
-        [HideInInspector] public Vector3 ghostLastRecordedRotation;
-        [HideInInspector] public Vector3 LastVector3;
-        public int rotateType;
-        public Direction direction;
-        public float speed;
-        public int repeat;
-        public float pauseBetween;
-        public Listen listen;
-        public BroadcastAt broadcastAt;
-        [HideInInspector]
-        public Action<string, string> OnBroadcastUpdated;
-        public string broadcast;
-        public string Broadcast
-        {
-            readonly get
-            {
-                return broadcast;
-            }
-            set
-            {
-                if (value != broadcast)
-                {
-                    OnBroadcastUpdated?.Invoke(value, broadcast);
-                    broadcast = value;
-                }
-            }
-        }
-
-        public readonly bool IsEmpty()
-        {
-            var clone = this;
-            clone.vector3 = default;
-            clone.OnBroadcastUpdated = default;
-            clone.LastVector3 = default;
-            clone.ghostLastRecordedRotation = default;
-            if (clone.Equals(default(RotateComponentData)))
-            {
-                return true;
-            }
-            return false;
-        }
-    }
-
-    [Serializable]
-    public struct TranslateComponentData
-    {
-        [HideInInspector] public Atom.RecordedVector3 recordedVector3;
-        [HideInInspector] public Vector3 LastVector3;
-        public int translateType;
-        public float pauseFor;
-        public float speed;
-        public int repeat;
-        public string listenTo;
-        public Listen listen;
-        public BroadcastAt broadcastAt;
-
-        public Action<string, string> OnBroadcastUpdated;
-        public string broadcast;
-        public string Broadcast
-        {
-            readonly get
-            {
-                return broadcast;
-            }
-            set
-            {
-                if (value != broadcast)
-                {
-                    OnBroadcastUpdated?.Invoke(value, broadcast);
-                    broadcast = value;
-                }
-            }
-        }
-
-        public readonly bool IsEmpty()
-        {
-            var cloneToTest = this;
-            cloneToTest.recordedVector3 = default;
-            cloneToTest.OnBroadcastUpdated = default;
-            cloneToTest.LastVector3 = default;
-            if (cloneToTest.Equals(default(TranslateComponentData)))
-            {
-                return true;
-            }
-            return false;
-        }
-    }
 }

@@ -39,6 +39,20 @@ namespace Terra.Studio
         {
             base.OnBound(variable);
             lastSubmittedValue = ((Atom.BasePlay)lastSubmittedValue).data;
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(toggleInput.gameObject,
+                () => toggleInput.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => toggleInput.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(optionsDropdown.gameObject,
+            () => optionsDropdown.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+            () => optionsDropdown.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+
+        }
+
+        protected override void OnUnbound()
+        {
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(toggleInput.gameObject);
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(optionsDropdown.gameObject);
         }
 
         public override void Initialize()
@@ -174,8 +188,9 @@ namespace Terra.Studio
 
         protected virtual void UpdateData() { }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
+            base.SetInteractable(on, disableAlso);
             toggleInput.interactable = on;
             optionsDropdown.interactable = on;
         }

@@ -50,6 +50,16 @@ namespace RuntimeInspectorNamespace
             numberHandler = NumberHandlers.Get(BoundVariableType);
             input.Text = numberHandler.ToString(Value);
             lastSubmittedValue = input.Text;
+
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(input.gameObject,
+                () => input.BackingField.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => input.BackingField.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+        }
+
+        protected override void OnUnbound()
+        {
+            base.OnUnbound();
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(input.gameObject);
         }
 
         protected virtual bool OnValueChanged(BoundInputField source, string input)
@@ -113,8 +123,9 @@ namespace RuntimeInspectorNamespace
                 input.Text = numberHandler.ToString(Value);
         }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
+            base.SetInteractable(on, disableAlso);
             input.BackingField.interactable = on;
             input.BackingField.textComponent.color = SkinUtils.GetInteractableColor(on);
         }

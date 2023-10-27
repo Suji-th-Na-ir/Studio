@@ -15,6 +15,29 @@ namespace RuntimeInspectorNamespace
         protected BoundInputField input;
 #pragma warning restore 0649
 
+        public override bool UseSubmitButton
+        {
+            get { return useSubmitButton; }
+            set
+            {
+                var rectT = input.BackingField.GetComponent<RectTransform>();
+                useSubmitButton = value;
+                if (useSubmitButton)
+                {
+                    rectT.offsetMax = new Vector2(-30, rectT.offsetMax.y);
+                    SubmmitButton.gameObject.SetActive(true);
+                    SubmmitButton.onClick.RemoveAllListeners();
+                    SubmmitButton.onClick.AddListener(() => { OnStringValueSubmitted?.Invoke(Value.ToString()); });
+                }
+                else
+                {
+                    rectT.offsetMax = new Vector2(0, rectT.offsetMax.y);
+                    SubmmitButton.gameObject.SetActive(false);
+                    SubmmitButton.onClick.RemoveAllListeners();
+                }
+            }
+        }
+
         private Mode m_setterMode = Mode.OnValueChange;
         public Mode SetterMode
         {
@@ -28,7 +51,6 @@ namespace RuntimeInspectorNamespace
 
         private int lineCount = 1;
         protected override float HeightMultiplier { get { return lineCount; } }
-
         public override void Initialize()
         {
             base.Initialize();
@@ -38,8 +60,9 @@ namespace RuntimeInspectorNamespace
             input.DefaultEmptyValue = string.Empty;
         }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on, bool disableAlso = false)
         {
+            base.SetInteractable(on, disableAlso);
             input.BackingField.interactable = on;
             input.BackingField.textComponent.color = SkinUtils.GetInteractableColor(on);
         }
@@ -75,12 +98,17 @@ namespace RuntimeInspectorNamespace
             }
 
             lastSubmittedValue = Value;
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(input.gameObject,
+                   () => input.BackingField.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                   () => input.BackingField.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+
         }
 
         protected override void OnUnbound()
         {
             base.OnUnbound();
             SetterMode = Mode.OnValueChange;
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(input.gameObject);
         }
 
         protected virtual bool OnValueChanged(BoundInputField source, string input)
@@ -90,10 +118,8 @@ namespace RuntimeInspectorNamespace
             {
                 Value = input;
             }
-            var newString = Value == null ? string.Empty : Value.ToString();
-            var oldString = oldValue == null ? string.Empty : oldValue.ToString();
-            onStringUpdated?.Invoke(newString, oldString);
-            OnValueUpdated?.Invoke(newString);
+
+            OnValueUpdated?.Invoke(input);
             return true;
         }
 
@@ -102,7 +128,7 @@ namespace RuntimeInspectorNamespace
             if (m_setterMode == Mode.OnSubmit)
                 Value = input;
 
-            if (Value != lastSubmittedValue)
+            if (Value != lastSubmittedValue && useSubmitButton == false)
             {
                 EditorOp.Resolve<IURCommand>().Record(
                     lastSubmittedValue, input,
@@ -114,7 +140,8 @@ namespace RuntimeInspectorNamespace
                     });
             }
 
-            OnValueUpdated?.Invoke(lastSubmittedValue);
+            OnStringValueSubmitted?.Invoke(Value.ToString());
+            
             lastSubmittedValue = Value;
             Inspector.RefreshDelayed();
             return true;

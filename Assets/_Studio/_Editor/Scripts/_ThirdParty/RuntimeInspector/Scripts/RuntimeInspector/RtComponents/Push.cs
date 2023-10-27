@@ -10,9 +10,7 @@ namespace Terra.Studio
         public bool showResetButton = true;
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
-        [AliasDrawer("Broadcast")]
-        [OnValueChanged(UpdateBroadcast = true)]
-        public string Broadcast = null;
+        public Atom.Broadcast broadcastData = new();
 
         public override string ComponentName => nameof(Push);
         public override bool CanPreview => false;
@@ -20,12 +18,13 @@ namespace Terra.Studio
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]
         {
-            Broadcast
+           broadcastData.broadcast
         };
 
         protected override void Awake()
         {
             base.Awake();
+            broadcastData.Setup(gameObject, this);
             PlaySFX.Setup<DestroyOn>(gameObject);
             PlayVFX.Setup<DestroyOn>(gameObject);
         }
@@ -46,8 +45,8 @@ namespace Terra.Studio
                 mass = resistance,
                 showResetButton = showResetButton,
                 listen = Listen.Always,
-                Broadcast = Broadcast,
-                IsBroadcastable = !string.IsNullOrEmpty(Broadcast)
+                Broadcast = broadcastData.broadcast,
+                IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast)
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(component);
@@ -65,8 +64,8 @@ namespace Terra.Studio
             PlayVFX.data.canPlay = comp.canPlayVFX;
             PlayVFX.data.clipIndex = comp.vfxIndex;
             PlayVFX.data.clipName = comp.vfxName;
-            Broadcast = comp.Broadcast;
-            ImportVisualisation(Broadcast, null);
+            broadcastData.broadcast = comp.Broadcast;
+            ImportVisualisation(broadcastData.broadcast, null);
         }
     }
 }

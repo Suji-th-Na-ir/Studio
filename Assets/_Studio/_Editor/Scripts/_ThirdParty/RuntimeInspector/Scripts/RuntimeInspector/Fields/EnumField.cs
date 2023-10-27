@@ -77,7 +77,7 @@ namespace RuntimeInspectorNamespace
 
             if (!enumNames.TryGetValue(BoundVariableType, out currEnumNames) || !enumValues.TryGetValue(BoundVariableType, out currEnumValues))
             {
-                string[] names = Enum.GetNames(BoundVariableType);
+                string[] names = Helper.GetEnumWithAliasNames(BoundVariableType).ToArray();
                 Array values = Enum.GetValues(BoundVariableType);
 
                 currEnumNames = new List<string>(names.Length);
@@ -96,7 +96,18 @@ namespace RuntimeInspectorNamespace
             input.ClearOptions();
             input.AddOptions(currEnumNames);
             lastSubmittedValue = currEnumNames.IndexOf($"{lastSubmittedValue}");
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(input.gameObject,
+            () => input.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+            () => input.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+         
         }
+
+        protected override void OnUnbound()
+        {
+            base.OnUnbound();
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(input.gameObject);
+        }
+
 
         protected override void OnInspectorChanged()
         {
@@ -189,8 +200,9 @@ namespace RuntimeInspectorNamespace
                 input.value = valueIndex;
         }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
+            base.SetInteractable(on, disableAlso);
             input.interactable = on;
         }
 

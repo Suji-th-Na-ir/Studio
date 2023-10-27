@@ -27,6 +27,7 @@ namespace Terra.Studio
             EditorOp.Register(new Atom());
             EditorOp.Register(new SceneDataHandler());
             EditorOp.Register(new UndoRedoSystem() as IURCommand);
+            EditorOp.Register(new FocusFieldsSystem());
             EditorOp.Register(new Recorder());
             EditorOp.Register(new CopyPasteSystem());
             EditorOp.Register(new BehaviourPreview());
@@ -36,12 +37,14 @@ namespace Terra.Studio
             EditorOp.Resolve<ToolbarView>().Init();
             EditorOp.Resolve<NavigationToolbar>().Init();
             EditorOp.Resolve<SceneView>().Init();
+
             EditorOp.Resolve<UILogicDisplayProcessor>().Init();
             EditorOp.Resolve<SceneDataHandler>().LoadScene();
         }
 
         public void Dispose()
         {
+            EditorOp.Unregister<FocusFieldsSystem>();
             EditorOp.Resolve<HierarchyView>().Flush();
             EditorOp.Resolve<InspectorView>().Flush();
             EditorOp.Resolve<ToolbarView>().Flush();

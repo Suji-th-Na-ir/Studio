@@ -12,23 +12,54 @@ namespace RuntimeInspectorNamespace
     {
 #pragma warning disable 0649
         [SerializeField] private Dropdown startOn;
-        [SerializeField] private InputField listenOn;
+        [SerializeField] private Dropdown listenOn;
 #pragma warning restore 0649
 
         public override void Initialize()
         {
             base.Initialize();
+            startOn.onValueChanged.RemoveAllListeners();
             startOn.onValueChanged.AddListener(OnStartValueChanged);
+            listenOn.onValueChanged.RemoveAllListeners();
             listenOn.onValueChanged.AddListener(OnListenValueChanged);
-            listenOn.onEndEdit.AddListener(OnListenValueSubmitted);
         }
 
         protected override void OnBound(MemberInfo variable)
         {
             base.OnBound(variable);
             LoadStartOnOptions();
-            lastSubmittedValue = ((Atom.StartOn)lastSubmittedValue).data;
+            LoadListenOptions();
+            lastSubmittedValue = ((Atom.StartOn)Value).data;
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(startOn.gameObject,
+                () => startOn.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => startOn.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(listenOn.gameObject,
+                () => listenOn.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => listenOn.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
         }
+
+        private void LoadListenOptions()
+        {
+            listenOn.options.Clear();
+            listenOn.AddOptions(SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings.FindAll(s=>(s!="Game Win"&& s != "Game Lose")));
+            Atom.StartOn atom = (Atom.StartOn)Value;
+            for (int i = 0; i < listenOn.options.Count; i++)
+            {
+                if (listenOn.options[i].text == atom.data.listenName)
+                {
+                    listenOn.SetValueWithoutNotify(i);
+                    break;
+                }
+            }
+        }
+
+        protected override void OnUnbound()
+        {
+            base.OnUnbound();
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(startOn.gameObject);
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(listenOn.gameObject);
+        }
+
 
         private void LoadStartOnOptions()
         {
@@ -94,44 +125,60 @@ namespace RuntimeInspectorNamespace
             Atom.StartOn atom = (Atom.StartOn)Value;
             atom.data.startIndex = _index;
             atom.data.startName = atom.startList[_index];
-            atom.data.listenName = "";
-            UpdateOtherCompData(atom);
+            UpdateListenValue(0);
+           
             if (Inspector) Inspector.RefreshDelayed();
         }
 
-        private void OnListenValueChanged(string _newString)
+        private void OnListenValueChanged(int value)
         {
             Atom.StartOn atom = (Atom.StartOn)Value;
-            if (Inspector)
-            {
-                Inspector.RefreshDelayed();
-            }
-            atom.OnListenerUpdated?.Invoke(_newString, atom.data.listenName);
-            atom.data.listenName = _newString;
-            UpdateOtherCompData(atom);
-        }
-
-        public void OnListenValueSubmitted(string _newString)
-        {
-            Atom.StartOn atom = (Atom.StartOn)Value;
-            if (_newString != ((StartOnData)lastSubmittedValue).listenName)
+            UpdateListenValue(value);
+            if (listenOn.options[value].text != ((StartOnData)lastSubmittedValue).listenName)
             {
                 EditorOp.Resolve<IURCommand>().Record(
                     lastSubmittedValue, atom.data,
-                    $"Listen value changed to: {atom.data.startName}",
+                    $"Listen value changed to: {atom.data.listenName}",
                     (value) =>
                     {
-                        OnListenValueChanged(((StartOnData)value).listenName);
+                        for (int i = 0; i < listenOn.options.Count; i++)
+                        {
+                            var listenstring = ((StartOnData)value).listenName;
+                            
+                            if (string.IsNullOrEmpty(listenstring))
+                                listenstring = "None";
+                           
+                            if (listenOn.options[i].text == listenstring)
+                            {
+                                UpdateListenValue(i);
+                                break;
+                            }
+                        }
+                       
                     });
             }
             lastSubmittedValue = atom.data;
         }
 
+        private void UpdateListenValue(int value)
+        {
+            Atom.StartOn atom = (Atom.StartOn)Value;
+
+            var oldstering = atom.data.listenName;
+            var listenstring = listenOn.options[value].text;
+            if (listenstring == "None")
+                listenstring = string.Empty;
+            atom.data.listenName = listenstring;
+            UpdateOtherCompData(atom);
+            atom.OnListenerUpdated?.Invoke(listenstring, oldstering);
+        }
+
+
         protected override void OnSkinChanged()
         {
             base.OnSkinChanged();
             startOn.SetSkinDropDownField(Skin);
-            listenOn.SetupInputFieldSkin(Skin);
+            listenOn.SetSkinDropDownField(Skin);
         }
 
         private void UpdateOtherCompData(Atom.StartOn _atom)
@@ -166,12 +213,31 @@ namespace RuntimeInspectorNamespace
             if (atom != null)
             {
                 startOn.SetValueWithoutNotify(atom.data.startIndex);
-                listenOn.SetTextWithoutNotify(atom.data.listenName);
+                if (SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings.Count-2 > listenOn.options.Count)
+                {
+                    listenOn.ClearOptions();
+                    listenOn.AddOptions(SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings.FindAll(s => (s != "Game Win" && s != "Game Lose")));
+                }
+
+                var listenString = atom.data.listenName;
+                if (atom.data.listenName == String.Empty)
+                    listenString = "None";
+                if (listenOn.options[listenOn.value].text != listenString)
+                {
+                    for (int i = 0; i < listenOn.options.Count; i++)
+                    {
+                        if (listenOn.options[i].text == listenString)
+                        {
+                            listenOn.SetValueWithoutNotify(i);
+                            break;
+                        }
+                    }
+                }
                 ShowHideListenDD();
             }
         }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
             startOn.interactable = on;
             listenOn.interactable = on;

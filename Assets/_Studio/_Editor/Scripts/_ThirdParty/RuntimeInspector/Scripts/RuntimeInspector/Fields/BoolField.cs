@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Reflection;
 using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,6 +25,20 @@ namespace RuntimeInspectorNamespace
         public override bool SupportsType(Type type)
         {
             return type == typeof(bool);
+        }
+
+        protected override void OnBound(MemberInfo variable)
+        {
+            base.OnBound(variable);
+            EditorOp.Resolve<FocusFieldsSystem>().AddFocusedGameobjects(input.gameObject,
+                () => input.targetGraphic.color = Skin.SelectedItemBackgroundColor,
+                () => input.targetGraphic.color = Skin.InputFieldNormalBackgroundColor);
+        }
+
+        protected override void OnUnbound()
+        {
+            base.OnUnbound();
+            EditorOp.Resolve<FocusFieldsSystem>().RemoveFocusedGameObjects(input.gameObject);
         }
 
         private void OnValueChanged(bool input)
@@ -66,9 +81,9 @@ namespace RuntimeInspectorNamespace
             input.SetIsOnWithoutNotify((bool)Value);
         }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
-           
+            base.SetInteractable(on, disableAlso);
         }
     }
 }

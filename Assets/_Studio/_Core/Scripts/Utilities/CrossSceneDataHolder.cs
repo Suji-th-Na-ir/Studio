@@ -7,6 +7,23 @@ namespace Terra.Studio
         private string crossSharableData;
         private Dictionary<string, object> keyToSharedData = new();
 
+        private List<string> broadcastStrings = new List<string>() { "None", "Game Win", "Game Lose" };
+        public List<string> BroadcastStrings { get { return broadcastStrings; } }
+
+        public void Dispose()
+        {
+            broadcastStrings.Clear();
+        }
+
+        public void UpdateNewBroadcast(string newValue)
+        {
+            if (string.IsNullOrEmpty(newValue))
+                return;
+
+            if (!broadcastStrings.Contains(newValue))
+                broadcastStrings.Add(newValue);
+        }
+
         public void Set(string data)
         {
             crossSharableData = data;

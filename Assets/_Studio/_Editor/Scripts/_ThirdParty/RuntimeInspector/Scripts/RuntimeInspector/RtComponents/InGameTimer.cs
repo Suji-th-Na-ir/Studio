@@ -6,9 +6,7 @@ namespace Terra.Studio
     public class InGameTimer : BaseBehaviour
     {
         public uint Time = 180;
-        [AliasDrawer("Broadcast")]
-        [OnValueChanged(UpdateBroadcast = true)]
-        public string Broadcast = "";
+        public Atom.Broadcast broadcastData = new();
 
         public override string ComponentName => nameof(InGameTimer);
         public override bool CanPreview => false;
@@ -16,12 +14,13 @@ namespace Terra.Studio
         protected override bool CanListen => false;
         protected override string[] BroadcasterRefs => new string[]
         {
-            Broadcast
+            broadcastData.broadcast
         };
 
         protected override void Awake()
         {
             base.Awake();
+            broadcastData.Setup(gameObject, this);
             var timer = EditorOp.Resolve<SceneDataHandler>().TimerManagerObj;
             if (timer)
             {
@@ -41,8 +40,8 @@ namespace Terra.Studio
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.GameStart",
                 ConditionData = "OnStart",
-                IsBroadcastable = !string.IsNullOrEmpty(Broadcast),
-                Broadcast = Broadcast,
+                IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
+                Broadcast = broadcastData.broadcast,
                 totalTime = Time
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -54,8 +53,8 @@ namespace Terra.Studio
         {
             var comp = JsonConvert.DeserializeObject<InGameTimerComponent>(data.data);
             Time = comp.totalTime;
-            Broadcast = comp.Broadcast;
-            ImportVisualisation(Broadcast, null);
+            broadcastData.broadcast = comp.Broadcast;
+            ImportVisualisation(broadcastData.broadcast, null);
         }
     }
 }

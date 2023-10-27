@@ -95,7 +95,7 @@ namespace RuntimeInspectorNamespace
             Length = 1;
         }
 
-        protected override void GenerateElements()
+        public override void GenerateElements()
         {
             //if( components.Count == 0 )
             //	return;
@@ -387,7 +387,7 @@ namespace RuntimeInspectorNamespace
             inspector.EnsureScrollViewIsWithinBounds(); // Scroll view's contents can get out of bounds after removing a component
         }
 
-        public override void SetInteractable(bool on)
+        public override void SetInteractable(bool on , bool disableAlso=false)
         {
            
         }

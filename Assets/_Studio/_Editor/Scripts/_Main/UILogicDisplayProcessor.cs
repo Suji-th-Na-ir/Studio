@@ -17,8 +17,6 @@ namespace Terra.Studio
         private Dictionary<string, List<ComponentDisplayDock>> m_Broadcasters; //key: BroadcastString Value: GameObject/Component
         private Dictionary<string, List<ComponentDisplayDock>> m_Listners;
 
-        private ComponentIconsPreset iconPresets;
-
         private Dictionary<GameObject, List<ComponentIconNode>> m_icons;
 
         private List<ComponentDisplayDock> GetListnersInSceneFor(string broadcastString) => m_Listners.TryGetValue(broadcastString, out var value) ? value : new List<ComponentDisplayDock>();
@@ -41,7 +39,6 @@ namespace Terra.Studio
             m_Broadcasters = new Dictionary<string, List<ComponentDisplayDock>>();
             m_Listners = new Dictionary<string, List<ComponentDisplayDock>>();
             m_icons = new Dictionary<GameObject, List<ComponentIconNode>>();
-            iconPresets = EditorOp.Load<ComponentIconsPreset>("SOs/Component_Icon_SO");
         }
 
         private void OnPageChanged(int index)
@@ -247,9 +244,10 @@ namespace Terra.Studio
         private void AddIcon(ComponentDisplayDock componentDisplay)
         {
             GameObject iconGameObject = new GameObject($"Icon{componentDisplay.ComponentGameObject.name}_{componentDisplay.ComponentType}");
-
+            iconGameObject.transform.SetParent(EditorOp.Resolve<VisualisationView>().transform, false);
             var compIcon = iconGameObject.AddComponent<ComponentIconNode>();
-            compIcon.Setup(iconPresets, componentDisplay);
+            compIcon.Setup(componentDisplay);
+
             if (!m_icons.TryGetValue(componentDisplay.ComponentGameObject, out List<ComponentIconNode> value))
             {
                 if (m_icons.ContainsKey(componentDisplay.ComponentGameObject))
@@ -297,7 +295,6 @@ namespace Terra.Studio
             {
                 AddComponentIcon(compdock);
             }
-
             UpdateBroadcastString(broadcast, "", compdock);
             UpdateListenerString(broadcastListen, "", compdock);
         }

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
+using PlayShifu.Terra;
 using RuntimeInspectorNamespace;
 using UnityEngine;
-using UnityEngine.UI;
-
 
 namespace Terra.Studio
 {
@@ -12,26 +12,27 @@ namespace Terra.Studio
         private RectTransform m_RectTransform;
         public RectTransform RectTransform { get { return m_RectTransform; } }
 
-        private Image m_ComponentTypeIcon;
-        private List<Image> m_BroadcastIcon = new List<Image>();
-        private Image m_ListenIcon;
+
         private const float m_MinScalingDistance = 40.0f; // Minimum distance for scaling up
         private const float m_MaxScalingDistance = 0.0f; // Maximum distance for scaling down
         private const int RESOLUTION = 25;
         private float initialWidth;
         private float initialHeight;
         private GameObject m_LineRenderGO;
-        private Sprite m_broadcastSprite;
-        private Sprite m_broadcastNoListnerSprite;
-        private Sprite m_GameWonBroadcastSprite;
-        private Sprite m_GameLooseBroadcastSprite;
-        private Sprite m_ListenSprite;
+
         RuntimeInspector Inspector;
+
+        private Icon iconPrefab;
+
+        private Icon behaviourIcon;
+        private List<Icon> broadcasticons = new List<Icon>();
+        private Icon listenIcon;
+
+        public Transform ListenIconTransform { get { return listenIcon.transform; } }
 
         private bool ISBroadcasting
         {
             get { return m_broadcasatingStrings.Count > 0; }
-
         }
 
         private bool m_isListning = false;
@@ -98,7 +99,6 @@ namespace Terra.Studio
                     if (!m_ListnerTargetNodes.Contains(value[i]))
                         m_ListnerTargetNodes.Add(value[i]);
                 }
-                //  m_ListnerTargetNodes = value;
             }
         }
 
@@ -127,66 +127,52 @@ namespace Terra.Studio
                 m_ListnerTargetNodes.Remove(toRemove);
         }
 
-        public void Setup(ComponentIconsPreset iconPresets, ComponentDisplayDock displayDock)
+        public void Setup(ComponentDisplayDock displayDock)
         {
-            Inspector = FindAnyObjectByType<RuntimeInspector>();
+            Inspector = EditorOp.Resolve<RuntimeInspector>();
             m_ObjectTarget = displayDock;
+
             if (!m_MainCamera)
                 m_MainCamera = Camera.main;
-            if (GetComponent<RectTransform>() == null)
-                m_RectTransform = gameObject.AddComponent<RectTransform>();
-            if (GetComponent<Image>() == null)
-                m_ComponentTypeIcon = gameObject.AddComponent<Image>();
-            m_ComponentTypeIcon.rectTransform.sizeDelta = new Vector2(50, 50);
-            m_ComponentTypeIcon.sprite = iconPresets.GetIcon(displayDock.ComponentType);
-            m_ComponentTypeIcon.raycastTarget = false;
+            iconPrefab = EditorOp.Load<Icon>("Prefabs/BehaviourIcon");
+
+            m_RectTransform = gameObject.AddComponent<RectTransform>();
+
+            //Setting up behaviour Icon
+            behaviourIcon = Instantiate(iconPrefab);
+            behaviourIcon.Setup(new Vector2(13, 13), "Circle", displayDock.ComponentType, transform, false);
+
             initialWidth = 1.5f;
             initialHeight = 1.5f;
-            var canvas = FindAnyObjectByType<SceneView>();
-            m_RectTransform.SetParent(canvas.transform, false);
 
-            //Broadcast
+            //Setting Up listner Icon
+            listenIcon = Instantiate(iconPrefab);
+            listenIcon.name = "Listen_Icon";
+            listenIcon.Setup(new Vector2(8, 8), "OutlineCircle", "Listen", transform, false);
+            PositionAroundCenterImage(listenIcon.RectTransform, 0, 1, 12, 90, false);
 
-            m_broadcastSprite = iconPresets.GetIcon("Broadcast");
-            m_broadcastNoListnerSprite = iconPresets.GetIcon("BroadcastNoListner");
-            m_GameWonBroadcastSprite = iconPresets.GetIcon("GameWon");
-            m_GameLooseBroadcastSprite = iconPresets.GetIcon("GameLoose");
-            //Listen
-            GameObject gm2 = new GameObject("Listen_Icon");
-            var rectTransform2 = gm2.AddComponent<RectTransform>();
-            var pointImage2 = gm2.AddComponent<Image>();
-            pointImage2.rectTransform.sizeDelta = new Vector2(40, 40);
-            pointImage2.raycastTarget = false;
-            m_ListenIcon = pointImage2;
-            rectTransform2.SetParent(this.transform, false);
-            rectTransform2.anchoredPosition = m_RectTransform.anchoredPosition + new Vector2(-15, 15);
-            rectTransform2.localScale = new Vector2(initialWidth * 0.5f, initialHeight * 0.5f);
-            m_ListenSprite = iconPresets.GetIcon("Listen");
-            m_ListenIcon.sprite = m_ListenSprite;
             m_LineRenderGO = EditorOp.Load<GameObject>("Prefabs/Line");
         }
 
 
         private void UpdateBroadcastIcons()
         {
-            var remaing = BroadcastingStrings.Count - m_BroadcastIcon.Count;
-
+            var remaing = BroadcastingStrings.Count - broadcasticons.Count;
             for (int i = 0; i < remaing; i++)
             {
-                GameObject gm = new GameObject("Broadcast_Icon");
-                var rectTransform1 = gm.AddComponent<RectTransform>();
-                var pointImage1 = gm.AddComponent<Image>();
-                pointImage1.rectTransform.sizeDelta = new Vector2(40, 40);
-                pointImage1.raycastTarget = false;
-                m_BroadcastIcon.Add(pointImage1);
-                rectTransform1.SetParent(this.transform, false);
-                rectTransform1.localScale = new Vector2(initialWidth * 0.5f, initialHeight * 0.5f);
-                PositionAroundCenterImage(rectTransform1, m_BroadcastIcon.IndexOf(pointImage1), m_BroadcastIcon.Count, 25, 90);
+                var newIcon = Instantiate(iconPrefab);
+                newIcon.Setup(new Vector2(8, 8), "OutlineCircle", "Broadcast", transform, false);
+                newIcon.name = $"BroadcatIcon_{i}";
+                broadcasticons.Add(newIcon);
+                PositionAroundCenterImage(newIcon.RectTransform, broadcasticons.IndexOf(newIcon), broadcasticons.Count, 12, 90, true);
             }
         }
 
         public void DestroyThisIcon()
         {
+            m_broadcasatingStrings.Clear();
+            m_listeningStrings.Clear();
+            broadcasticons.Clear();
             ClearAllLineRenderers();
             Destroy(this.gameObject);
         }
@@ -199,22 +185,22 @@ namespace Terra.Studio
             }
             if (Inspector.currentPageIndex == 0)
             {
-                foreach (var b in m_BroadcastIcon)
+                foreach (var b in broadcasticons)
                 {
-                    b.enabled = false;
+                    b.Hide();
                 }
-                m_ComponentTypeIcon.enabled = false;
+                behaviourIcon.Hide();
                 RectTransform.localScale = Vector3.zero;
                 ClearAllLineRenderers();
                 return;
             }
             else
             {
-                foreach (var b in m_BroadcastIcon)
+                foreach (var b in broadcasticons)
                 {
-                    b.enabled = true;
+                    b.Show();
                 }
-                m_ComponentTypeIcon.enabled = true;
+                behaviourIcon.Show();
             }
 
             if (IsTargetDestroyed())
@@ -224,7 +210,7 @@ namespace Terra.Studio
             Vector3 effectivePos = m_ObjectTarget.ComponentGameObject.transform.position;
             var objectScreenPos = m_MainCamera.WorldToViewportPoint(effectivePos + Vector3.up * 0.3f);
             objectScreenPos = m_MainCamera.ViewportToScreenPoint(objectScreenPos);
-            var offset = m_MainCamera.WorldToViewportPoint(effectivePos + Vector3.up * 0.6f);
+            var offset = m_MainCamera.WorldToViewportPoint(effectivePos + Vector3.up * 0.8f);
             offset = m_MainCamera.ViewportToScreenPoint(offset);
             var radius = (objectScreenPos - offset).magnitude;
             Vector3 screenPoint = CalculateCircularPositionAtIndex(objectScreenPos, radius, 3, m_componentIndex);
@@ -245,56 +231,79 @@ namespace Terra.Studio
 
             if (IsListning)
             {
-                if (m_BroadcastTargetNodes != null && m_BroadcastTargetNodes.Count > 0)
+                listenIcon.Show();
+                if (BroadcastingStrings == null && BroadcastingStrings.Count == 0)
                 {
-                    m_ListenIcon.gameObject.SetActive(false);
+                    listenIcon.SetIconImage("NoOneBroadcasting");
+                    listenIcon.SetBackgroundColor(Helper.GetColorFromHex("#FF413B"));
+                }
+
+                bool broadcaterPresent = false;
+                for (int j = 0; j < ListenStrings.Count; j++)
+                {
+                    var allbrodcasters = m_BroadcastTargetNodes?.FindAll(a => a.BroadcastingStrings.Contains(m_listeningStrings[j]));
+                    if (allbrodcasters.Count > 0)
+                    {
+                        broadcaterPresent = true;
+                        break;
+                    }
+                }
+                if (broadcaterPresent)
+                {
+                    listenIcon.SetIconImage("Listen");
+                    listenIcon.SetBackgroundColor(Color.white);
                 }
                 else
                 {
-                    m_ListenIcon.gameObject.SetActive(true);
+                    listenIcon.SetIconImage("NoOneBroadcasting");
+                    listenIcon.SetBackgroundColor(Helper.GetColorFromHex("#FF413B"));
                 }
+
             }
             else
             {
-                m_ListenIcon.gameObject.SetActive(false);
+                listenIcon.Hide();
             }
 
-            for (int i = 0; i < m_BroadcastIcon.Count; i++)
+            for (int i = 0; i < broadcasticons.Count; i++)
             {
                 if (i > BroadcastingStrings.Count - 1)
                 {
-                    m_BroadcastIcon[i].gameObject.SetActive(false);
+                    broadcasticons[i].Hide();
                 }
                 else
                 {
                     if (ISBroadcasting)
                     {
                         if (scalingFactor == 0)
-                            m_BroadcastIcon[i].gameObject.SetActive(false);
+                            broadcasticons[i].Hide();
                         else
-                            m_BroadcastIcon[i].gameObject.SetActive(true);
+                            broadcasticons[i].Show();
 
-                        if (m_isBroadcatingGameWon)
+                        if ((m_isBroadcatingGameWon && m_broadcasatingStrings.Count == 1)|| m_broadcasatingStrings[i] == "Game Win")
                         {
-                            m_BroadcastIcon[i].sprite = m_GameWonBroadcastSprite;
+                            broadcasticons[i].SetIconImage("GameWon");
+                            broadcasticons[i].SetBackgroundColor(Helper.GetColorFromHex("#A0B042"));
                         }
-                        else if (m_isBroadcatingGameLoose)
+                        else if ((m_isBroadcatingGameLoose &&m_broadcasatingStrings.Count==1) || m_broadcasatingStrings[i] == "Game Lose")
                         {
-                            m_BroadcastIcon[i].sprite = m_GameLooseBroadcastSprite;
+                            broadcasticons[i].SetIconImage("GameLoose");
+                            broadcasticons[i].SetBackgroundColor(Helper.GetColorFromHex("#FF5C01"));
                         }
                         else if (m_LineConnectors != null && m_ListnerTargetNodes?.FindAll(a => a.ListenStrings.Contains(BroadcastingStrings[i])).Count != 0)
                         {
-                            m_BroadcastIcon[i].sprite = m_broadcastSprite;
+                            broadcasticons[i].SetIconImage("Broadcast");
+                            broadcasticons[i].SetBackgroundColor(Helper.GetColorFromHex("#FFFFFF"));
                         }
                         else
                         {
-                            m_BroadcastIcon[i].sprite = m_broadcastNoListnerSprite;
+                            broadcasticons[i].SetIconImage("BroadcastNoListner");
+                            broadcasticons[i].SetBackgroundColor(Helper.GetColorFromHex("#FF413B"));
                         }
                     }
                     else
                     {
-                        m_BroadcastIcon[i].gameObject.SetActive(false);
-
+                        broadcasticons[i].Hide();
                     }
                 }
             }
@@ -366,7 +375,7 @@ namespace Terra.Studio
                     }
                     else
                     {
-                        startPoint = m_MainCamera.ScreenToWorldPoint(m_BroadcastIcon[k].transform.position);
+                        startPoint = m_MainCamera.ScreenToWorldPoint(broadcasticons[k].transform.position);
                     }
                     if (!CheckIfInsideScreen(allTargets[j].RectTransform) || allTargets[j].transform.localScale == Vector3.zero)
                     {
@@ -374,13 +383,11 @@ namespace Terra.Studio
                     }
                     else
                     {
-                        endPoint = m_MainCamera.ScreenToWorldPoint(allTargets[j].m_ListenIcon.transform.position);
+                        endPoint = m_MainCamera.ScreenToWorldPoint(allTargets[j].ListenIconTransform.position);
                     }
 
                     Vector3 controlPoint = (startPoint + endPoint) / 2f;
                     controlPoint += Vector3.up * Vector3.Distance(startPoint, endPoint) / 2f;
-
-                    // controlPoint2 = endPoint + new Vector3(0, 2);
 
                     for (int i = 0; i <= RESOLUTION; i++)
                     {
@@ -435,17 +442,15 @@ namespace Terra.Studio
             return offsetPosition;
         }
 
-        void PositionAroundCenterImage(RectTransform imageToPosition, int index, int totalImages, float radius, float totalAngle)
+        void PositionAroundCenterImage(RectTransform imageToPosition, int index, int totalImages, float radius, float totalAngle, bool clockwise)
         {
             float angleIncrement = totalAngle / totalImages;
-            float startingAngle = Mathf.PI / 4.0f; // 60 degrees in radians
+            float angle = 45.0f - index * angleIncrement;
+            angle = (angle + 360.0f) % 360.0f;
 
-            // Calculate the angle in radians, starting from the top and moving clockwise.
-            float angle = startingAngle - index * angleIncrement;
+            angle = angle * Mathf.Deg2Rad;
 
-            float xOffset = radius * Mathf.Cos(angle);
-            float yOffset = radius * Mathf.Sin(angle);
-            Vector2 offsetPosition = new Vector2(xOffset, yOffset);
+            Vector2 offsetPosition = new Vector2(clockwise ? Mathf.Cos(angle) : -Mathf.Cos(angle), Mathf.Sin(angle)).normalized * radius;
             imageToPosition.anchoredPosition = offsetPosition;
         }
 
