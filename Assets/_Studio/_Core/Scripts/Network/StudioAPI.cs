@@ -27,7 +27,7 @@ namespace Terra.Studio
 
         protected abstract string Route { get; }
 
-        protected const string DOMAIN = "http://game-assets-api.letsterra.com/studio";
+        protected const string DOMAIN = "https://game-assets-api.letsterra.com/studio";
 
         protected virtual string GetURL()
         {
