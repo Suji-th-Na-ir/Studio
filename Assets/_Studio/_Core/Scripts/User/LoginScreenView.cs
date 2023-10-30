@@ -9,21 +9,37 @@ namespace Terra.Studio
 {
     public class LoginScreenView : View
     {
-        [SerializeField] private Canvas parentCanvas;
-        [SerializeField] private CanvasGroup m_refCanvasGroup;
-        [SerializeField] private InputField nameInputField;
-        [SerializeField] private Image m_refNameInputFieldBorder;
-        [SerializeField] private InputField passwordInputField;
-        [SerializeField] private Image m_refPasswordInputFieldBorder;
-        [SerializeField] private Text feedbackText;
+        [SerializeField]
+        private Canvas parentCanvas;
+
+        [SerializeField]
+        private CanvasGroup m_refCanvasGroup;
+
+        [SerializeField]
+        private InputField nameInputField;
+
+        [SerializeField]
+        private Image m_refNameInputFieldBorder;
+
+        [SerializeField]
+        private InputField passwordInputField;
+
+        [SerializeField]
+        private Image m_refPasswordInputFieldBorder;
+
+        [SerializeField]
+        private Text feedbackText;
 
         private string m_strName;
         private string m_strPassword;
 
         private bool m_bIsCheckPasswordInProgress;
 
-        [SerializeField] private GameObject m_refNotLoggedInScreenGO;
-        [SerializeField] private GameObject m_refLoggingYouInScreenGO;
+        [SerializeField]
+        private GameObject m_refNotLoggedInScreenGO;
+
+        [SerializeField]
+        private GameObject m_refLoggingYouInScreenGO;
 
         public event Action OnLoginSuccessful;
 
@@ -36,14 +52,18 @@ namespace Terra.Studio
         {
             feedbackText.text = string.Empty;
             OnLocalLoginFailed();
-            SystemOp.Resolve<User>().AttempLocalLogin((status) =>
-            {
-                if (status)
-                {
-                    LogLoginEvent("auto");
-                    OnLocalLoginSuccessful();
-                }
-            });
+            SystemOp
+                .Resolve<User>()
+                .AttempLocalLogin(
+                    (status) =>
+                    {
+                        if (status)
+                        {
+                            LogLoginEvent("auto");
+                            OnLocalLoginSuccessful();
+                        }
+                    }
+                );
         }
 
         public override void Flush()
@@ -55,10 +75,14 @@ namespace Terra.Studio
         {
             m_refLoggingYouInScreenGO.SetActive(true);
             m_refNotLoggedInScreenGO.SetActive(false);
-            SystemOp.Resolve<User>().AttemptCloudLogin((status) =>
-            {
-                OnLoginSuccessful?.Invoke();
-            });
+            SystemOp
+                .Resolve<User>()
+                .AttemptCloudLogin(
+                    (status) =>
+                    {
+                        OnLoginSuccessful?.Invoke();
+                    }
+                );
         }
 
         private void OnLocalLoginFailed()
@@ -94,39 +118,34 @@ namespace Terra.Studio
                 StartCoroutine(ShowIncorrectNameAnim("Please enter your name!"));
                 return;
             }
-            SystemOp.Resolve<User>().
-                UpdateUserName(m_strName).
-                UpdatePassword(m_strPassword);
-            SystemOp.Resolve<User>().AttempLocalLogin((status) =>
-            {
-                if (status)
-                {
-                    LogLoginEvent("manual");
-                    OnLocalLoginSuccessful();
-                }
-                else
-                {
-                    OnManualLoginUnsuccessful();
-                }
-            });
+            SystemOp.Resolve<User>().UpdateUserName(m_strName).UpdatePassword(m_strPassword);
+            SystemOp
+                .Resolve<User>()
+                .AttempLocalLogin(
+                    (status) =>
+                    {
+                        if (status)
+                        {
+                            LogLoginEvent("manual");
+                            OnLocalLoginSuccessful();
+                        }
+                        else
+                        {
+                            OnManualLoginUnsuccessful();
+                        }
+                    }
+                );
         }
 
         private void LogLoginEvent(string a_strSource)
         {
-            Value val = new()
-            {
-                { "username", m_strName },
-                { "source", a_strSource }
-            };
+            Value val = new() { { "username", SystemOp.Resolve<User>().UserName }, { "source", a_strSource } };
             Mixpanel.Track("LoginSuccessful", val);
         }
 
         private void LogLoginFailedEvent(string a_strReason)
         {
-            Value val = new()
-            {
-                { "fail_reason", a_strReason }
-            };
+            Value val = new() { { "fail_reason", a_strReason } };
             Mixpanel.Track("LoginFailed", val);
         }
 
