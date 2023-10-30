@@ -54,10 +54,6 @@ namespace Terra.Studio
 
         protected virtual void OnDisable()
         {
-            if (EditorOp.Resolve<Recorder>() != null)
-            {
-                GhostDescription.HideSelectionGhost?.Invoke();
-            }
             if (EditorOp.Resolve<UILogicDisplayProcessor>())
             {
                 EditorOp.Resolve<UILogicDisplayProcessor>().RemoveComponentIcon(DisplayDock);

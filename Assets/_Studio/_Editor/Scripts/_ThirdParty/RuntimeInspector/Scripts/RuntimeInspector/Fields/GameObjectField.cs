@@ -97,6 +97,7 @@ namespace RuntimeInspectorNamespace
 
         public override void GenerateElements()
         {
+            //Region for name, layer and tag
             //if( components.Count == 0 )
             //	return;
 
@@ -300,7 +301,12 @@ namespace RuntimeInspectorNamespace
         {
             foreach (var tObject in selections)
             {
-                tObject.AddComponent(type);
+                var comp = tObject.AddComponent(type);
+                var behaviour = comp as BaseBehaviour;
+                if (behaviour)
+                {
+                    behaviour.StartCoroutine(ShowSelectionGhostIfAny(behaviour));
+                }
             }
         }
 
@@ -308,7 +314,13 @@ namespace RuntimeInspectorNamespace
         {
             foreach (var (obj, compData) in selections)
             {
-                var iComp = obj.AddComponent(type) as IComponent;
+                var comp = obj.AddComponent(type);
+                var iComp = comp as IComponent;
+                var behaviour = comp as BaseBehaviour;
+                if (behaviour)
+                {
+                    behaviour.StartCoroutine(ShowSelectionGhostIfAny(behaviour));
+                }
                 iComp.Import(compData);
             }
         }
@@ -318,6 +330,7 @@ namespace RuntimeInspectorNamespace
             foreach (var tObject in selections)
             {
                 var component = tObject.GetComponent(type);
+                HideSelectionGhostIfAny(component);
                 Destroy(component);
             }
         }
@@ -327,6 +340,7 @@ namespace RuntimeInspectorNamespace
             foreach (var (obj, _) in selections)
             {
                 var component = obj.GetComponent(type);
+                HideSelectionGhostIfAny(component);
                 Destroy(component);
             }
         }
@@ -378,6 +392,7 @@ namespace RuntimeInspectorNamespace
 
         private static IEnumerator RemoveComponentCoroutine(Component component, RuntimeInspector inspector)
         {
+            HideSelectionGhostIfAny(component);
             Destroy(component);
 
             // Destroy operation doesn't take place immediately, wait for the component to be fully destroyed
@@ -387,9 +402,22 @@ namespace RuntimeInspectorNamespace
             inspector.EnsureScrollViewIsWithinBounds(); // Scroll view's contents can get out of bounds after removing a component
         }
 
-        public override void SetInteractable(bool on , bool disableAlso=false)
+        private static void HideSelectionGhostIfAny(Component component)
         {
-           
+            var behaviour = component as BaseBehaviour;
+            if (behaviour)
+            {
+                behaviour.GhostDescription.HideSelectionGhost?.Invoke();
+            }
         }
+
+        private static IEnumerator ShowSelectionGhostIfAny(BaseBehaviour behaviour)
+        {
+            yield return new WaitForSeconds(0.1f);
+            if (!EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Contains(behaviour.gameObject))
+                yield break;
+
+            behaviour.GhostDescription.ShowSelectionGhost?.Invoke();
+        } 
     }
 }
