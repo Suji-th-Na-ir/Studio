@@ -206,7 +206,7 @@ namespace Terra.Studio
             var localOffset = (Vector3)Type.recordedVector3.Get();
             if (transform.parent != null)
             {
-                localOffset = transform.TransformVector(localOffset);
+                localOffset = transform.TransformDirection(localOffset);
             }
             pos += localOffset;
             return new Vector3[] { pos };
@@ -222,9 +222,9 @@ namespace Terra.Studio
                 count = 10;
             for (int i = 0; i < count; i++)
             {
-                if (transform.parent != null)
+                if (transform.parent != null && i==0)
                 {
-                    localOffset = transform.TransformVector(localOffset);
+                    localOffset = transform.TransformDirection(localOffset);
                 }
                 pos += localOffset;
                 trs.Add(pos);
