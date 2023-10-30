@@ -286,7 +286,12 @@ namespace RuntimeInspectorNamespace
                 return;
             }
             previewButton.gameObject.SetActive(true);
-            previewButton.onClick.AddListener(behaviour.DoPreview);
+            previewButton.onClick.AddListener(() =>
+            {
+                if (EditorOp.Resolve<EditorSystem>().IsIncognitoEnabled)
+                    return;
+                behaviour.DoPreview();
+            });
         }
     }
 }
