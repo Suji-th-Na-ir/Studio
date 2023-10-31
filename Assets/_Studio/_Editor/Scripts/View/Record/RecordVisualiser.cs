@@ -140,8 +140,22 @@ namespace Terra.Studio
 
         public void ShowSelectionGhost_Rotation<T>(T instance, bool show) where T : BaseBehaviour
         {
-            var selection = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
-            HandleSelectionInstance(instance, RecordVisualiser.Record.Rotation, show, 1, selection.Count == 1, RepeatDirectionType.SameDirection);
+            var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selections.Count > 1)
+            {
+                foreach (var selection in selections)
+                {
+                    if (selection.TryGetComponent<T>(out var component))
+                    {
+                        HandleSelectionInstance(component, RecordVisualiser.Record.Rotation, show, 1, false, RepeatDirectionType.SameDirection);
+                    }
+                }
+            }
+            else
+            {
+                HandleSelectionInstance(instance, RecordVisualiser.Record.Rotation, show, 1, true, RepeatDirectionType.SameDirection);
+            }
+           
         }
 
         public void ShowSelectionGhost_RepeatPosition<T>(T instance, int repeatCount, bool show, RepeatDirectionType directionType) where T : BaseBehaviour
@@ -152,8 +166,22 @@ namespace Terra.Studio
             {
                 directionType = RepeatDirectionType.SameDirection;
             }
-            var selection = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
-            HandleSelectionInstance(instance, RecordVisualiser.Record.Position, show, repeatCount, selection.Count == 1, directionType);
+            var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selections.Count > 1)
+            {
+                foreach (var selection in selections)
+                {
+                    if (selection.TryGetComponent<T>(out var component))
+                    {
+                        HandleSelectionInstance(component, RecordVisualiser.Record.Position, show, repeatCount, false, directionType);
+                    }
+                }
+            }
+            else
+            {
+                HandleSelectionInstance(instance, RecordVisualiser.Record.Position, show, repeatCount, true, directionType);
+            }
+          
         }
 
         public void UpdateGhostRepeatCount_Multiselect<T>(T instance, int count, RepeatDirectionType directionType) where T : BaseBehaviour
