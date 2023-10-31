@@ -180,12 +180,19 @@ namespace Terra.Studio
             var isPresent = activeSelectionRecorders.TryGetValue(instance, out var visualisers);
             if (isPresent)
             {
+                bool wasRecording=false;
                 for (int i = 0; i < visualisers.Count; i++)
                 {
+                    if(i==0)
+                    {
+                        wasRecording = visualisers[i].HasRecorder;
+                    }
                     visualisers[i].Dispose();
                 }
                 activeSelectionRecorders.Remove(instance);
                 ShowSelectionGhost_RepeatPosition(instance, count, true, directionType);
+                if (wasRecording)
+                    instance.GhostDescription.ToggleRecordMode?.Invoke();
             }
             else
             {
@@ -659,6 +666,7 @@ namespace Terra.Studio
 
         public void Dispose()
         {
+            EditorOp.Resolve<Recorder>().TrackGhost(false, ghost);
             Object.Destroy(ghost);
         }
 

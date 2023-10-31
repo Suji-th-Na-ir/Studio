@@ -236,7 +236,7 @@ namespace Terra.Studio
             var delta = vector3 - transform.position;
             if (transform.parent != null)
             {
-                delta = transform.InverseTransformVector(delta);
+                delta = transform.TransformDirection(delta);
             }
             if (delta != (Vector3)Type.recordedVector3.Get())
             {
