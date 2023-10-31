@@ -149,5 +149,13 @@ mergeInto(LibraryManager.library,
         request.onerror = function () {
             Module['dynCall_vi'](functionPtr, 0);
         };
+    },
+
+    GetUserData: function(function){
+        window.dispatchReactUnityEvent("getUser", function);
+    },
+
+    HideLoadingScreen: function(){
+        window.dispatchReactUnityEvent("hideLoading");
     }
 });
