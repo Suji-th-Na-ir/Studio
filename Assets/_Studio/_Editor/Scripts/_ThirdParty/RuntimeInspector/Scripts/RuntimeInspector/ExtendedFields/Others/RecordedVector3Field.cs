@@ -44,6 +44,8 @@ namespace Terra.Studio
             if (isModified)
             {
                 var vector3 = (Vector3)Value;
+                var recordedObj = (RecordedVector3)ObscuredValue;
+                recordedObj.UpdateGhostTrs?.Invoke();
                 InvokeDataChange(vector3);
             }
             return isModified;
@@ -66,6 +68,7 @@ namespace Terra.Studio
                     var baseComponent = (BaseBehaviour)component;
                     var recordedField = baseComponent.RecordedVector3;
                     recordedField?.Set(vector3);
+                    recordedField.UpdateGhostTrs?.Invoke();
                 }
             }
         }
@@ -80,15 +83,17 @@ namespace Terra.Studio
         private void OnRecordButtonClicked()
         {
             var recordedObj = (RecordedVector3)ObscuredValue;
-            recordedObj.ToggleGhostMode?.Invoke();
+            recordedObj.ToggleRecordMode?.Invoke();
             isRecording = !isRecording;
             if (isRecording)
             {
                 recordImageHolder.sprite = saveImage;
+                SetInteractable(false);
             }
             else
             {
                 recordImageHolder.sprite = recordImage;
+                SetInteractable(true);
             }
             CheckAndToggleInteractivityOfResetButton();
         }

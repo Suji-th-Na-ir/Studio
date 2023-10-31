@@ -143,7 +143,7 @@ namespace Terra.Studio
         [Serializable]
         public class Repeat : BaseBroadcasterTemplate
         {
-            [AliasDrawer("Repeat")] public int repeat;
+            [AliasDrawer("Repeat")] public int repeat = 1;
             [AliasDrawer("Pause For")] public float pauseFor;
             [AliasDrawer("Repeat\nType")] public RepeatDirectionType repeatType;
             [AliasDrawer("Repeat\nForever")] public bool repeatForever;
@@ -181,9 +181,7 @@ namespace Terra.Studio
         public class Rotate : BaseBroadcasterTemplate
         {
             [AliasDrawer("Rotate By")] public Atom.RecordedVector3 vector3;
-            [HideInInspector] public Vector3 ghostLastRecordedRotation;
             [HideInInspector] public Vector3 LastVector3;
-            [HideInInspector] public Action ForceRefreshData;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)
             {
@@ -235,11 +233,11 @@ namespace Terra.Studio
             public Vector3 LastVector3;
             public Action OnValueReset;
             public Action<bool> OnModified;
-            public Action OnPerAxisValueModified;
             public Type ObscureType => typeof(Vector3);
             public Type DeclaredType => behaviourType;
             public Func<bool> IsValueModified => IsModified;
-            public Action ToggleGhostMode => behaviour.GhostDescription.ToggleGhostMode;
+            public Action ToggleRecordMode => behaviour.GhostDescription.ToggleRecordMode;
+            public Action UpdateGhostTrs => behaviour.GhostDescription.UpdateSlectionGhostTRS;
 
             public static readonly Vector3 INFINITY = new(-float.MaxValue, -float.MaxValue, -float.MaxValue);
 
@@ -269,26 +267,6 @@ namespace Terra.Studio
                 {
                     Debug.LogError("Type of object passed is incorrected. Expected: Vector3");
                 }
-            }
-
-            public void Set(Axis axis, object obj)
-            {
-                var currentVector = (Vector3)Get();
-                var newValue = (float)obj;
-                switch (axis)
-                {
-                    case Axis.X:
-                        currentVector.x = newValue;
-                        break;
-                    case Axis.Y:
-                        currentVector.y = newValue;
-                        break;
-                    case Axis.Z:
-                        currentVector.z = newValue;
-                        break;
-                }
-                Set(currentVector);
-                OnPerAxisValueModified?.Invoke();
             }
 
             public void Reset()

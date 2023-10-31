@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using PlayShifu.Terra;
 using RuntimeInspectorNamespace;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -150,8 +151,8 @@ namespace Terra.Studio
                 AddInGameTimerData(primitive);
             }
 
-            EditorOp.Resolve<SelectionHandler>().DeselectAll();
-            EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);
+            EditorOp.Resolve<RuntimeHierarchy>().Refresh();
+            EditorOp.Resolve<SelectionHandler>().SelectObjectsInHierarchy(new List<Transform>() {primitive.transform }) ;
         }
 
         private bool IsIncognito()

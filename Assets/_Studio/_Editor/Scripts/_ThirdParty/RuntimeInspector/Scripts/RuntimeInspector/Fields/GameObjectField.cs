@@ -299,29 +299,32 @@ namespace RuntimeInspectorNamespace
 
         private static void Attach(IEnumerable<GameObject> selections, Type type)
         {
+            Component comp = null;
             foreach (var tObject in selections)
             {
-                var comp = tObject.AddComponent(type);
-                var behaviour = comp as BaseBehaviour;
-                if (behaviour)
-                {
-                    behaviour.StartCoroutine(ShowSelectionGhostIfAny(behaviour));
-                }
+                 comp = tObject.AddComponent(type);
+            }
+            var behaviour = comp as BaseBehaviour;
+            if (behaviour)
+            {
+                behaviour.StartCoroutine(ShowSelectionGhostIfAny(behaviour));
             }
         }
 
         private static void AttachAndImport(IEnumerable<(GameObject, EntityBasedComponent)> selections, Type type)
         {
+            Component comp = null;
             foreach (var (obj, compData) in selections)
             {
-                var comp = obj.AddComponent(type);
+                 comp = obj.AddComponent(type);
                 var iComp = comp as IComponent;
-                var behaviour = comp as BaseBehaviour;
-                if (behaviour)
-                {
-                    behaviour.StartCoroutine(ShowSelectionGhostIfAny(behaviour));
-                }
+               
                 iComp.Import(compData);
+            }
+            var behaviour = comp as BaseBehaviour;
+            if (behaviour)
+            {
+                behaviour.StartCoroutine(ShowSelectionGhostIfAny(behaviour));
             }
         }
 
@@ -414,10 +417,16 @@ namespace RuntimeInspectorNamespace
         private static IEnumerator ShowSelectionGhostIfAny(BaseBehaviour behaviour)
         {
             yield return new WaitForSeconds(0.1f);
-            if (!EditorOp.Resolve<SelectionHandler>().GetSelectedObjects().Contains(behaviour.gameObject))
-                yield break;
-
-            behaviour.GhostDescription.ShowSelectionGhost?.Invoke();
+            var selected = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            for (int i = 0; i < selected.Count; i++)
+            {
+                var behaviours = selected[i].GetComponents(behaviour.GetType());
+                foreach (var b in behaviours)
+                {
+                    var comp = b as BaseBehaviour;
+                    comp.GhostDescription.ShowSelectionGhost?.Invoke();
+                }
+            }
         } 
     }
 }

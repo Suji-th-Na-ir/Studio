@@ -47,11 +47,10 @@ namespace Terra.Studio
             GhostDescription = new()
             {
                 OnGhostInteracted = OnGhostDataModified,
-                SpawnTRS = GetCurrentOffsetInWorld,
                 SelectionGhostsTRS = GetCurrentRepeatOffsetInWorld,
-                ToggleGhostMode = () =>
+                ToggleRecordMode = () =>
                 {
-                    EditorOp.Resolve<Recorder>().TrackPosition_ShowGhostOnMultiselect(this, true);
+                    EditorOp.Resolve<Recorder>().TrackPosition_Multiselect(this,false);
                 },
                 ShowSelectionGhost = () =>
                 {
@@ -69,9 +68,8 @@ namespace Terra.Studio
                 {
                     EditorOp.Resolve<Recorder>().UpdateGhostRepeatCount_Multiselect(this, repeat.repeatForever ? int.MaxValue : repeat.repeat, repeat.repeatType);
                 },
-                ShowVisualsOnMultiSelect = true,
-                GetLastValue = () => { return Type.LastVector3; },
-                GetRecentValue = () => { return Type.recordedVector3.Get(); },
+                GetLastValue = () => { return Type.LastVector3+transform.position; },
+                GetRecentValue = () => { return (Vector3)Type.recordedVector3.Get() + transform.position; },
                 OnGhostModeToggled = (state) =>
                 {
                     if (state)

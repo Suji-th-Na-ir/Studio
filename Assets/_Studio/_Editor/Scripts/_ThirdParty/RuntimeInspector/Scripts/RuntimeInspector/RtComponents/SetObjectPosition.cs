@@ -60,25 +60,23 @@ namespace Terra.Studio
             GhostDescription = new()
             {
                 OnGhostInteracted = OnGhostDataModified,
-                SpawnTRS = () => { return new Vector3[] { (Vector3)GhostDescription.GetRecentValue.Invoke() }; },
                 SelectionGhostsTRS = () => { return new Vector3[] { (Vector3)GhostDescription.GetRecentValue.Invoke() }; },
-                ToggleGhostMode = () =>
+                ToggleRecordMode = () =>
                 {
-                    EditorOp.Resolve<Recorder>().TrackPosition_NoGhostOnMultiselect(this, true);
+                    EditorOp.Resolve<Recorder>().TrackPosition_Multiselect(this,true);
                 },
                 ShowSelectionGhost = () =>
                 {
-                    EditorOp.Resolve<Recorder>().ShowSelectionGhost(this, true);
+                    EditorOp.Resolve<Recorder>().ShowSelectionGhost_Position(this, true);
                 },
                 HideSelectionGhost = () =>
                 {
-                    EditorOp.Resolve<Recorder>().ShowSelectionGhost(this, false);
+                    EditorOp.Resolve<Recorder>().ShowSelectionGhost_Position(this, false);
                 },
                 UpdateSlectionGhostTRS = () =>
                 {
                     EditorOp.Resolve<Recorder>().UpdateTRS_Multiselect(this);
                 },
-                ShowVisualsOnMultiSelect = false,
                 GetLastValue = () => { return targetPosition.LastVector3; },
                 GetRecentValue = () => { return targetPosition.Get(); },
                 OnGhostModeToggled = (state) =>
