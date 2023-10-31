@@ -198,18 +198,6 @@ namespace Terra.Studio
             ImportVisualisation(repeat.broadcastData.broadcast, listenString);
         }
 
-        private Vector3[] GetCurrentOffsetInWorld()
-        {
-            var pos = transform.position;
-            var localOffset = (Vector3)Type.recordedVector3.Get();
-            if (transform.parent != null)
-            {
-                localOffset = transform.TransformDirection(localOffset);
-            }
-            pos += localOffset;
-            return new Vector3[] { pos };
-        }
-
         private Vector3[] GetCurrentRepeatOffsetInWorld()
         {
             var pos = transform.position;
@@ -236,7 +224,7 @@ namespace Terra.Studio
             var delta = vector3 - transform.position;
             if (transform.parent != null)
             {
-                delta = transform.TransformDirection(delta);
+                delta = transform.InverseTransformDirection(delta);
             }
             if (delta != (Vector3)Type.recordedVector3.Get())
             {
