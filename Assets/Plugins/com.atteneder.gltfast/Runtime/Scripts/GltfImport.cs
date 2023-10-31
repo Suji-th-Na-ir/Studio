@@ -46,6 +46,7 @@ using UnityEngine.Profiling;
 using UnityEngine;
 
 using Debug = UnityEngine.Debug;
+using Object = UnityEngine.Object;
 
 [assembly: InternalsVisibleTo("glTFast.Editor")]
 [assembly: InternalsVisibleTo("glTFast.Editor.Tests")]
@@ -265,7 +266,7 @@ namespace GLTFast
         /// </summary>
         string[] m_NodeNames;
 
-        MeshResult[] m_Primitives;
+        public MeshResult[] m_Primitives;
         int[] m_MeshPrimitiveIndex;
         Matrix4x4[][] m_SkinsInverseBindMatrices;
 #if UNITY_ANIMATION
@@ -535,7 +536,7 @@ namespace GLTFast
             m_Settings = importSettings ?? new ImportSettings();
             var success = await LoadGltfBinaryBuffer(bytes, uri);
             if (success) await LoadContent();
-            success = success && await Prepare();
+            success = success && await Prepare(UriHelper.GetBaseUri(uri));
             DisposeVolatileData();
             LoadingError = !success;
             LoadingDone = true;
@@ -560,7 +561,7 @@ namespace GLTFast
             m_Settings = importSettings ?? new ImportSettings();
             var success = await LoadGltf(json, uri);
             if (success) await LoadContent();
-            success = success && await Prepare();
+            success = success && await Prepare(UriHelper.GetBaseUri(uri));
             DisposeVolatileData();
             LoadingError = !success;
             LoadingDone = true;
@@ -710,16 +711,16 @@ namespace GLTFast
                 }
             }
 
-            DisposeArray(m_Materials);
-            m_Materials = null;
+            // DisposeArray(m_Materials);
+            // m_Materials = null;
 
 #if UNITY_ANIMATION
             DisposeArray(m_AnimationClips);
             m_AnimationClips = null;
 #endif
 
-            DisposeArray(m_Textures);
-            m_Textures = null;
+            // DisposeArray(m_Textures);
+            // m_Textures = null;
 
             if (m_AccessorData != null)
             {
@@ -983,7 +984,7 @@ namespace GLTFast
                 {
                     success = await LoadContent();
                 }
-                success = success && await Prepare();
+                success = success && await Prepare(UriHelper.GetBaseUri(url));
             }
             else
             {
@@ -1008,18 +1009,7 @@ namespace GLTFast
             }
 #endif
 
-            if (m_TextureDownloadTasks != null)
-            {
-                success = success && await WaitForTextureDownloads();
-                m_TextureDownloadTasks.Clear();
-            }
-
-#if KTX
-            if (m_KtxDownloadTasks != null) {
-                success = success && await WaitForKtxDownloads();
-                m_KtxDownloadTasks.Clear();
-            }
-#endif // KTX_UNITY
+           
 
             return success;
         }
@@ -1172,7 +1162,6 @@ namespace GLTFast
         {
             var baseUri = UriHelper.GetBaseUri(url);
             var success = await ParseJsonAndLoadBuffers(json, baseUri);
-            if (success) await LoadImages(baseUri);
             return success;
         }
 
@@ -1816,7 +1805,7 @@ namespace GLTFast
 
 #endif // MESHOPT
 
-        async Task<bool> Prepare()
+        public async Task<bool> Prepare(Uri baseUri)
         {
             if (Root.Meshes != null)
             {
@@ -1825,23 +1814,7 @@ namespace GLTFast
 
             m_Resources = new List<UnityEngine.Object>();
 
-            if (Root.Images != null && Root.Textures != null && Root.Materials != null)
-            {
-                if (m_Images == null)
-                {
-                    m_Images = new Texture2D[Root.Images.Count];
-                }
-                else
-                {
-                    Assert.AreEqual(m_Images.Length, Root.Images.Count);
-                }
-                m_ImageCreateContexts = new List<ImageCreateContext>();
-#if KTX
-                await
-#endif
-                CreateTexturesFromBuffers(Root.Images, Root.BufferViews, m_ImageCreateContexts);
-            }
-            await m_DeferAgent.BreakPoint();
+            
 
             // RedundantAssignment potentially becomes necessary when MESHOPT is not available
             // ReSharper disable once RedundantAssignment
@@ -1874,116 +1847,6 @@ namespace GLTFast
                 await CreatePrimitiveContexts(Root);
             }
 
-#if KTX
-            if(m_KtxLoadContextsBuffer!=null) {
-                await ProcessKtxLoadContexts();
-            }
-#endif // KTX_UNITY
-
-            if (m_ImageCreateContexts != null)
-            {
-                var imageCreateContextsLeft = true;
-                while (imageCreateContextsLeft)
-                {
-                    var loadedAny = false;
-                    for (int i = m_ImageCreateContexts.Count - 1; i >= 0; i--)
-                    {
-                        var jh = m_ImageCreateContexts[i];
-                        if (jh.jobHandle.IsCompleted)
-                        {
-                            jh.jobHandle.Complete();
-#if UNITY_IMAGECONVERSION
-                            m_Images[jh.imageIndex].LoadImage(jh.buffer,!m_ImageReadable[jh.imageIndex]);
-#endif
-                            jh.gcHandle.Free();
-                            m_ImageCreateContexts.RemoveAt(i);
-                            loadedAny = true;
-                            await m_DeferAgent.BreakPoint();
-                        }
-                    }
-                    imageCreateContextsLeft = m_ImageCreateContexts.Count > 0;
-                    if (!loadedAny && imageCreateContextsLeft)
-                    {
-                        await Task.Yield();
-                    }
-                }
-                m_ImageCreateContexts = null;
-            }
-
-            if (m_Images != null && Root.Textures != null)
-            {
-                SamplerKey defaultKey = new SamplerKey(new Sampler());
-                m_Textures = new Texture2D[Root.Textures.Count];
-                var imageVariants = new Dictionary<SamplerKey, Texture2D>[m_Images.Length];
-                for (int textureIndex = 0; textureIndex < Root.Textures.Count; textureIndex++)
-                {
-                    var txt = Root.Textures[textureIndex];
-                    SamplerKey key;
-                    Sampler sampler = null;
-                    if (txt.sampler >= 0)
-                    {
-                        sampler = Root.Samplers[txt.sampler];
-                        key = new SamplerKey(sampler);
-                    }
-                    else
-                    {
-                        key = defaultKey;
-                    }
-
-                    var imageIndex = txt.GetImageIndex();
-                    var img = m_Images[imageIndex];
-                    if (imageVariants[imageIndex] == null)
-                    {
-                        if (txt.sampler >= 0)
-                        {
-                            sampler.Apply(img, m_Settings.DefaultMinFilterMode, m_Settings.DefaultMagFilterMode);
-                        }
-                        imageVariants[imageIndex] = new Dictionary<SamplerKey, Texture2D>();
-                        imageVariants[imageIndex][key] = img;
-                        m_Textures[textureIndex] = img;
-                    }
-                    else
-                    {
-                        if (imageVariants[imageIndex].TryGetValue(key, out var imgVariant))
-                        {
-                            m_Textures[textureIndex] = imgVariant;
-                        }
-                        else
-                        {
-                            var newImg = UnityEngine.Object.Instantiate(img);
-                            m_Resources.Add(newImg);
-#if DEBUG
-                            newImg.name = $"{img.name}_sampler{txt.sampler}";
-                            m_Logger?.Warning(LogCode.ImageMultipleSamplers,imageIndex.ToString());
-#endif
-                            sampler?.Apply(newImg, m_Settings.DefaultMinFilterMode, m_Settings.DefaultMagFilterMode);
-                            imageVariants[imageIndex][key] = newImg;
-                            m_Textures[textureIndex] = newImg;
-                        }
-                    }
-                }
-            }
-
-            if (Root.Materials != null)
-            {
-                m_Materials = new UnityEngine.Material[Root.Materials.Count];
-                for (var i = 0; i < m_Materials.Length; i++)
-                {
-                    await m_DeferAgent.BreakPoint(.0001f);
-                    Profiler.BeginSample("GenerateMaterial");
-                    m_MaterialGenerator.SetLogger(m_Logger);
-                    var pointsSupport = GetMaterialPointsSupport(i);
-                    var material = m_MaterialGenerator.GenerateMaterial(
-                        Root.Materials[i],
-                        this,
-                        pointsSupport
-                    );
-                    m_Materials[i] = material;
-                    m_MaterialGenerator.SetLogger(null);
-                    Profiler.EndSample();
-                }
-            }
-            await m_DeferAgent.BreakPoint();
 
             if (m_PrimitiveContexts != null)
             {
@@ -2159,6 +2022,174 @@ namespace GLTFast
 #endif
 
             // Dispose all accessor data buffers, except the ones needed for instantiation
+            if (m_Settings.lazyLoadTextures)
+            {
+                return success;
+            }
+            else
+            {
+                bool x= await PrepareTextures(baseUri);
+                return x && success;
+            }
+        }
+
+        public async Task<bool> PrepareTextures(Uri baseUri)
+        {
+            Debug.LogError($"{baseUri}");
+            if (m_Settings.customBasePathForTextures)
+            {
+                baseUri = new Uri(baseUri.ToString() + m_Settings.additionToBasePath);
+            }
+            await LoadImages(baseUri);
+            bool success = true;
+            if (m_TextureDownloadTasks != null)
+            {
+                success = success && await WaitForTextureDownloads();
+                m_TextureDownloadTasks.Clear();
+            }
+            if (!success)
+                return false;
+
+#if KTX
+            if (m_KtxDownloadTasks != null) {
+                success = success && await WaitForKtxDownloads();
+                m_KtxDownloadTasks.Clear();
+            }
+#endif // KTX_UNITY
+            
+            if (Root.Images != null && Root.Textures != null && Root.Materials != null)
+            {
+                if (m_Images == null)
+                {
+                    m_Images = new Texture2D[Root.Images.Count];
+                }
+                else
+                {
+                    Assert.AreEqual(m_Images.Length, Root.Images.Count);
+                }
+                m_ImageCreateContexts = new List<ImageCreateContext>();
+#if KTX
+                await
+#endif
+                CreateTexturesFromBuffers(Root.Images, Root.BufferViews, m_ImageCreateContexts);
+            }
+            await m_DeferAgent.BreakPoint();
+            
+            #if KTX
+            if(m_KtxLoadContextsBuffer!=null) {
+                await ProcessKtxLoadContexts();
+            }
+#endif // KTX_UNITY
+
+            if (m_ImageCreateContexts != null)
+            {
+                var imageCreateContextsLeft = true;
+                while (imageCreateContextsLeft)
+                {
+                    var loadedAny = false;
+                    for (int i = m_ImageCreateContexts.Count - 1; i >= 0; i--)
+                    {
+                        var jh = m_ImageCreateContexts[i];
+                        if (jh.jobHandle.IsCompleted)
+                        {
+                            jh.jobHandle.Complete();
+#if UNITY_IMAGECONVERSION
+                            m_Images[jh.imageIndex].LoadImage(jh.buffer,!m_ImageReadable[jh.imageIndex]);
+#endif
+                            jh.gcHandle.Free();
+                            m_ImageCreateContexts.RemoveAt(i);
+                            loadedAny = true;
+                            await m_DeferAgent.BreakPoint();
+                        }
+                    }
+                    imageCreateContextsLeft = m_ImageCreateContexts.Count > 0;
+                    if (!loadedAny && imageCreateContextsLeft)
+                    {
+                        await Task.Yield();
+                    }
+                }
+                m_ImageCreateContexts = null;
+            }
+
+            if (m_Images != null && Root.Textures != null)
+            {
+                SamplerKey defaultKey = new SamplerKey(new Sampler());
+                m_Textures = new Texture2D[Root.Textures.Count];
+                var imageVariants = new Dictionary<SamplerKey, Texture2D>[m_Images.Length];
+                for (int textureIndex = 0; textureIndex < Root.Textures.Count; textureIndex++)
+                {
+                    var txt = Root.Textures[textureIndex];
+                    SamplerKey key;
+                    Sampler sampler = null;
+                    if (txt.sampler >= 0)
+                    {
+                        sampler = Root.Samplers[txt.sampler];
+                        key = new SamplerKey(sampler);
+                    }
+                    else
+                    {
+                        key = defaultKey;
+                    }
+
+                    var imageIndex = txt.GetImageIndex();
+                    var img = m_Images[imageIndex];
+                    if (imageVariants[imageIndex] == null)
+                    {
+                        if (txt.sampler >= 0)
+                        {
+                            sampler.Apply(img, m_Settings.DefaultMinFilterMode, m_Settings.DefaultMagFilterMode);
+                        }
+                        imageVariants[imageIndex] = new Dictionary<SamplerKey, Texture2D>();
+                        imageVariants[imageIndex][key] = img;
+                        m_Textures[textureIndex] = img;
+                    }
+                    else
+                    {
+                        if (imageVariants[imageIndex].TryGetValue(key, out var imgVariant))
+                        {
+                            m_Textures[textureIndex] = imgVariant;
+                        }
+                        else
+                        {
+                            var newImg = UnityEngine.Object.Instantiate(img);
+                            m_Resources.Add(newImg);
+#if DEBUG
+                            newImg.name = $"{img.name}_sampler{txt.sampler}";
+                            m_Logger?.Warning(LogCode.ImageMultipleSamplers,imageIndex.ToString());
+#endif
+                            sampler?.Apply(newImg, m_Settings.DefaultMinFilterMode, m_Settings.DefaultMagFilterMode);
+                            imageVariants[imageIndex][key] = newImg;
+                            m_Textures[textureIndex] = newImg;
+                        }
+                    }
+                }
+            }
+            
+            if (Root.Materials != null)
+            {
+                m_Materials = new UnityEngine.Material[Root.Materials.Count];
+                for (var i = 0; i < m_Materials.Length; i++)
+                {
+                    await m_DeferAgent.BreakPoint(.0001f);
+                    Profiler.BeginSample("GenerateMaterial");
+                    m_MaterialGenerator.SetLogger(m_Logger);
+                    var pointsSupport = GetMaterialPointsSupport(i);
+                    var material = m_MaterialGenerator.GenerateMaterial(
+                        Root.Materials[i],
+                        this,
+                        pointsSupport
+                    );
+                    m_Materials[i] = material;
+                    m_MaterialGenerator.SetLogger(null);
+                    Profiler.EndSample();
+                }
+            }
+            else
+            {
+            }
+
+            await m_DeferAgent.BreakPoint();
+
             if (m_AccessorData != null)
             {
                 for (var index = 0; index < m_AccessorData.Length; index++)
@@ -2284,12 +2315,25 @@ namespace GLTFast
             return name;
         }
 
+        public void DisposeVolatileDataFromTextures()
+        {
+            return;
+            m_TextureDownloadTasks = null;
+
+            m_AccessorUsage = null;
+            m_Images = null;
+        }
         /// <summary>
         /// Free up volatile loading resources
         /// </summary>
+        /// 
         void DisposeVolatileData()
         {
 
+            if (m_Settings != null && !m_Settings.lazyLoadTextures)
+            {
+                DisposeVolatileDataFromTextures();
+            }
             if (m_VertexAttributes != null)
             {
                 foreach (var vac in m_VertexAttributes.Values)
@@ -2327,13 +2371,10 @@ namespace GLTFast
             m_BinChunks = null;
 
             m_DownloadTasks = null;
-            m_TextureDownloadTasks = null;
-
-            m_AccessorUsage = null;
             m_PrimitiveContexts = null;
             m_MeshPrimitiveCluster = null;
             m_ImageCreateContexts = null;
-            m_Images = null;
+            
             m_ImageFormats = null;
             m_ImageReadable = null;
             m_ImageGamma = null;

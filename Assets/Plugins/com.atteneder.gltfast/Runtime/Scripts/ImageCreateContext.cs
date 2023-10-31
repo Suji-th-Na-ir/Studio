@@ -7,7 +7,7 @@ using Unity.Jobs;
 namespace GLTFast
 {
 
-    struct ImageCreateContext
+    public struct ImageCreateContext
     {
         public int imageIndex;
         public byte[] buffer;

@@ -28,6 +28,7 @@ namespace GLTFast
     /// </summary>
     public class GameObjectInstantiator : IInstantiator
     {
+        public Dictionary<Renderer, MeshResult> results = new();
         // Developers might want to customize this class by deriving from it.
         // Hence some members need to stay protected (not private)
         // ReSharper disable MemberCanBePrivate.Global
@@ -222,6 +223,11 @@ namespace GLTFast
             int primitiveNumeration = 0
         )
         {
+
+            if (results == null)
+            {
+                results = new();
+            }
             if ((m_Settings.Mask & ComponentType.Mesh) == 0)
             {
                 return;
@@ -288,6 +294,7 @@ namespace GLTFast
             }
 
             renderer.sharedMaterials = materials;
+            results.Add(renderer, meshResult);
 
             MeshAdded?.Invoke(
                 meshGo,

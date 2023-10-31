@@ -36,6 +36,9 @@ namespace GLTFast.Editor
                 serializedObject.FindProperty($"{pathPrefix}defaultMinFilterMode"),
                 serializedObject.FindProperty($"{pathPrefix}defaultMagFilterMode"),
                 serializedObject.FindProperty($"{pathPrefix}anisotropicFilterLevel"),
+                serializedObject.FindProperty($"{pathPrefix}lazyLoadTextures"),
+                serializedObject.FindProperty($"{pathPrefix}customBasePathForTextures"),
+                serializedObject.FindProperty($"{pathPrefix}additionToBasePath"),
             };
             var foldout = new Foldout { text = "Textures", value = true };
             Utils.CreateProperties(foldout, properties);

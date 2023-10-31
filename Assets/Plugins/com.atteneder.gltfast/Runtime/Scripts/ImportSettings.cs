@@ -90,5 +90,9 @@ namespace GLTFast
         [SerializeField]
         [Tooltip("Anisotropic filtering level for imported textures.")]
         int anisotropicFilterLevel = 1;
+
+        public bool lazyLoadTextures;
+        public bool customBasePathForTextures;
+        public string additionToBasePath;
     }
 }
