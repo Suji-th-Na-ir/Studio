@@ -27,7 +27,7 @@ namespace Terra.Studio
 
         protected abstract string Route { get; }
 
-        protected const string DOMAIN = "https://game-assets-api.letsterra.com/studio";
+        protected virtual string DOMAIN { get; set; } = "https://game-assets-api.letsterra.com/studio";
 
         protected virtual string GetURL()
         {
@@ -106,5 +106,12 @@ namespace Terra.Studio
                 { TIME_STAMP_KEY, timeStamp }
             };
         }
+    }
+
+    public class AssetsWindowAPI : StudioAPI
+    {
+        protected override string DOMAIN => "https://game-assets-api.letsterra.com";
+        public override RequestType RequestType => RequestType.Get;
+        protected override string Route => "getAllModels?type=assets_gltf";
     }
 }

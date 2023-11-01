@@ -44,7 +44,7 @@ using UnityEngine.Assertions;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Profiling;
 using UnityEngine;
-
+using UnityEngine.Rendering.Universal;
 using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
@@ -791,6 +791,10 @@ namespace GLTFast
             }
             return defaultMaterial;
 #else
+            if (m_MaterialGenerator == null)
+            {
+                m_MaterialGenerator = new UniversalRPMaterialGenerator((UniversalRenderPipelineAsset)QualitySettings.renderPipeline);
+            }
             m_MaterialGenerator.SetLogger(m_Logger);
             var material = m_MaterialGenerator.GetDefaultMaterial(m_DefaultMaterialPointsSupport);
             m_MaterialGenerator.SetLogger(null);
@@ -2035,7 +2039,6 @@ namespace GLTFast
 
         public async Task<bool> PrepareTextures(Uri baseUri)
         {
-            Debug.LogError($"{baseUri}");
             if (m_Settings.customBasePathForTextures)
             {
                 baseUri = new Uri(baseUri.ToString() + m_Settings.additionToBasePath);
