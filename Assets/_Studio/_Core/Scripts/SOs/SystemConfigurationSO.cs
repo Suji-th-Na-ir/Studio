@@ -1,7 +1,3 @@
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
 using UnityEngine;
 
 namespace Terra.Studio
@@ -75,17 +71,4 @@ namespace Terra.Studio
         [SerializeField] private bool saveToCloudWhenSaved;
 #endif
     }
-
-#if UNITY_EDITOR
-    [CustomEditor(typeof(SystemConfigurationSO))]
-    public class ConfigSOEditor : Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            base.OnInspectorGUI();
-            GUILayout.Space(10);
-            EditorGUILayout.HelpBox("Note: Load from cloud has to be disabled for the data sync to work in editor.", MessageType.Info);
-        }
-    }
-#endif
 }

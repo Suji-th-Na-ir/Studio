@@ -13,11 +13,13 @@ namespace Terra.Studio
     public class WebGLHandler : IDisposable
     {
 #if ENABLE_WEBGL_HANDLER
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         public static void WebGLHandlerInit()
         {
             SystemOp.Register(new WebGLHandler());
             SystemOp.Register(new IndexedDBManager());
+            new GameObject(nameof(WebGLWrapper), typeof(WebGLWrapper));
         }
 #endif
 

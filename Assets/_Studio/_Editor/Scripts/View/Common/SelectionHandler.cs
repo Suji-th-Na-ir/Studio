@@ -49,7 +49,7 @@ public class SelectionHandler : View
     private void Awake()
     {
         EditorOp.Register(this);
-        SystemOp.Resolve<SaveSystem>().RegisterToAutosaveChangeListener(true);
+        SystemOp.Resolve<SaveSystem>()?.RegisterToAutosaveChangeListener(true);
     }
 
     private void OnDestroy()

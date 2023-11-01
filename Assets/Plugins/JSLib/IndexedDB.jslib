@@ -151,11 +151,19 @@ mergeInto(LibraryManager.library,
         };
     },
 
-    GetUserData: function(function){
-        window.dispatchReactUnityEvent("getUser", function);
+    GetUserData: function(callbackTo){
+        window.dispatchReactUnityEvent("getUser", UTF8ToString(callbackTo));
+    },
+
+    GetProjectData: function(callbackTo){
+        window.dispatchReactUnityEvent("getProjectData", UTF8ToString(callbackTo));
     },
 
     HideLoadingScreen: function(){
         window.dispatchReactUnityEvent("hideLoading");
+    },
+
+    PublishGame: function(username, projectId){
+        window.dispatchReactUnityEvent("publishGame", UTF8ToString(username), UTF8ToString(projectId));
     }
 });

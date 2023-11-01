@@ -8,23 +8,19 @@ namespace Terra.Studio
     {
         public event Action OnPreCheckDone;
         private const char DELIMITER = '_';
-        private readonly string backwardCompatibilityFileName;
-        private readonly string savedFileName;
         private const string LAST_SAVED_KEY_PREF = "LastSavedAt";
         private const string DATETIME_SAVE_FORMAT = "yyyy-MM-ddTHH:mm:ss";
+        private string BackwardCompatibilityFileName => SystemOp.Resolve<User>().ProjectName;
+        private string SavedFileName => string.Concat(SystemOp.Resolve<User>().UserName, DELIMITER, SystemOp.Resolve<User>().ProjectName);
 
         public SaveSystem()
         {
             SystemOp.Register(new FileService());
-            var projectName = SystemOp.Resolve<User>().ProjectName;
-            var userName = SystemOp.Resolve<User>().UserName;
-            backwardCompatibilityFileName = projectName;
-            savedFileName = string.Concat(userName, DELIMITER, projectName);
         }
 
         public void PerformPrecheck()
         {
-            var isFreshInstall = string.IsNullOrEmpty(backwardCompatibilityFileName);
+            var isFreshInstall = string.IsNullOrEmpty(BackwardCompatibilityFileName);
             if (isFreshInstall)
             {
                 OnPrecheckDone();
@@ -33,14 +29,14 @@ namespace Terra.Studio
             SystemOp
                 .Resolve<FileService>()
                 .DoesFileExist?.Invoke(
-                    FileService.GetSavedFilePath(backwardCompatibilityFileName),
+                    FileService.GetSavedFilePath(BackwardCompatibilityFileName),
                     PrepareSavedDataForBackwardCompatibility
                 );
         }
 
         public void GetManualSavedData(Action<string> savedData)
         {
-            var filePath = FileService.GetSavedFilePath(savedFileName);
+            var filePath = FileService.GetSavedFilePath(SavedFileName);
             SystemOp
                 .Resolve<FileService>()
                 .ReadFileFromLocal?.Invoke(
@@ -59,7 +55,7 @@ namespace Terra.Studio
             string autoFlushNewTimeStamp = null
         )
         {
-            var filePath = FileService.GetSavedFilePath(savedFileName);
+            var filePath = FileService.GetSavedFilePath(SavedFileName);
             SystemOp
                 .Resolve<FileService>()
                 .WriteFile(
@@ -121,8 +117,8 @@ namespace Terra.Studio
                 SystemOp
                     .Resolve<FileService>()
                     .RenameKeyFromDBStore?.Invoke(
-                        backwardCompatibilityFileName,
-                        savedFileName,
+                        BackwardCompatibilityFileName,
+                        SavedFileName,
                         (_) =>
                         {
                             OnPrecheckDone();
@@ -131,8 +127,8 @@ namespace Terra.Studio
             }
             else
             {
-                var oldSaveFilePath = FileService.GetSavedFilePath(backwardCompatibilityFileName);
-                var newSaveFilePath = FileService.GetSavedFilePath(savedFileName);
+                var oldSaveFilePath = FileService.GetSavedFilePath(BackwardCompatibilityFileName);
+                var newSaveFilePath = FileService.GetSavedFilePath(SavedFileName);
                 SystemOp
                     .Resolve<FileService>()
                     .ReadFileFromLocal.Invoke(

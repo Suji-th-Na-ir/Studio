@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace Terra.Studio
@@ -11,6 +12,14 @@ namespace Terra.Studio
         public string data;
     }
 
+    [Serializable]
+    public struct ProjectData
+    {
+        public int ParamValue;
+        public string ProjectId;
+        public readonly StudioState State => (StudioState)ParamValue;
+    }
+
     public abstract class StudioAPI
     {
         protected const char PATH_SEPERATOR = '/';
@@ -19,15 +28,20 @@ namespace Terra.Studio
         protected const string USER_NAME_KEY = "username";
         protected const string TIME_STAMP_KEY = "timestamp";
         protected const string PROJECT_NAME_KEY = "projectname";
+        protected const string PASSWORD_NAME_KEY = "password";
+        protected const string PROJECT_ID_KEY = "id";
+        private const int DEFAULT_TIMEOUT = 20;
 
         public abstract RequestType RequestType { get; }
+        public virtual int Timeout => DEFAULT_TIMEOUT;
         public virtual string Parameters { get; protected set; }
         public virtual Dictionary<string, string> FormData { get; protected set; }
         public virtual string URL => GetURL();
 
         protected abstract string Route { get; }
 
-        protected const string DOMAIN = "https://game-assets-api.letsterra.com/studio";
+        //protected const string DOMAIN = "https://game-assets-api.letsterra.com/studio";
+        protected const string DOMAIN = "http://192.168.68.102:9000/studio";
 
         protected virtual string GetURL()
         {
@@ -41,7 +55,28 @@ namespace Terra.Studio
 
         public virtual void DoRequest(Action<bool, string> callback)
         {
-            SystemOp.Resolve<NetworkManager>().DoRequest(this, callback);
+            SystemOp.Resolve<NetworkManager>().DoRequest(this, (status, response) =>
+            {
+                var content = string.Empty;
+                if (string.IsNullOrEmpty(response))
+                {
+                    status = false;
+                }
+                else
+                {
+                    try
+                    {
+                        var unpackedData = JsonConvert.DeserializeObject<APIResponse>(response);
+                        status = unpackedData.status == 200;
+                        content = unpackedData.data;
+                    }
+                    catch
+                    {
+                        status = false;
+                    }
+                }
+                callback?.Invoke(status, content);
+            });
         }
     }
 
@@ -50,9 +85,9 @@ namespace Terra.Studio
         public override RequestType RequestType => RequestType.Post;
         protected override string Route => "login";
 
-        public LoginAPI(string userName)
+        public LoginAPI(string userName, string password)
         {
-            FormData = new() { { USER_NAME_KEY, userName } };
+            FormData = new() { { USER_NAME_KEY, userName }, { PASSWORD_NAME_KEY, password } };
         }
     }
 
@@ -75,21 +110,33 @@ namespace Terra.Studio
         {
             public string content;
             public string timestamp;
+            public string id;
+            public string projectname;
         }
 
+        public override int Timeout => 30;
         public override RequestType RequestType => RequestType.Get;
         protected override string Route => "project/info";
 
-        public GetProjectDetailsAPI()
+        public GetProjectDetailsAPI(bool useProjectId)
         {
-            var userName = SystemOp.Resolve<User>().UserName;
-            var projectName = SystemOp.Resolve<User>().ProjectName;
-            Parameters = $"{USER_NAME_KEY}={userName}&{PROJECT_NAME_KEY}={projectName}";
+            if (!useProjectId)
+            {
+                var userName = SystemOp.Resolve<User>().UserName;
+                var projectName = SystemOp.Resolve<User>().ProjectName;
+                Parameters = $"{USER_NAME_KEY}={userName}&{PROJECT_NAME_KEY}={projectName}";
+            }
+            else
+            {
+                var projectId = SystemOp.Resolve<User>().ProjectId;
+                Parameters = $"{PROJECT_ID_KEY}={projectId}";
+            }
         }
     }
 
     public class SaveProjectAPI : StudioAPI
     {
+        public override int Timeout => 30;
         public override RequestType RequestType => RequestType.Post;
         protected override string Route => "project/save";
 
@@ -104,6 +151,33 @@ namespace Terra.Studio
                 { PROJECT_NAME_KEY, SystemOp.Resolve<User>().ProjectName },
                 { DATA_KEY, data },
                 { TIME_STAMP_KEY, timeStamp }
+            };
+        }
+    }
+
+    public class GetPublishDataAPI : StudioAPI
+    {
+        public override RequestType RequestType => RequestType.Get;
+        protected override string Route => "published/info";
+
+        public GetPublishDataAPI()
+        {
+            var projectId = SystemOp.Resolve<User>().ProjectId;
+            Parameters = $"{PROJECT_ID_KEY}={projectId}";
+        }
+    }
+
+    public class PublishProjectAPI : StudioAPI
+    {
+        public override RequestType RequestType => RequestType.Post;
+        protected override string Route => "project/publish";
+
+        public PublishProjectAPI()
+        {
+            FormData = new()
+            {
+                { USER_NAME_KEY, SystemOp.Resolve<User>().UserName },
+                { PROJECT_ID_KEY, SystemOp.Resolve<User>().ProjectId }
             };
         }
     }

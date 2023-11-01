@@ -10,16 +10,19 @@ namespace Terra.Studio
         private const int TARGET_FRAME_RATE = 60;
         private SystemConfigurationSO configData;
         private RTDataManagerSO systemData;
+        private StudioState defaultStudioState;
         private StudioState previousStudioState;
         private StudioState currentStudioState;
         private Scene currentActiveScene;
 
+        public event Action OnSubsystemLoaded;
         public bool IsSimulating { get; private set; }
         public Func<bool> CanInitiateSubsystemProcess { get; set; }
-        public RTDataManagerSO SystemData { get { return systemData; } }
-        public SystemConfigurationSO ConfigSO { get { return configData; } }
-        public StudioState PreviousStudioState { get { return previousStudioState; } }
-        public StudioState CurrentStudioState { get { return currentStudioState; } }
+        public RTDataManagerSO SystemData => systemData;
+        public SystemConfigurationSO ConfigSO => configData;
+        public StudioState PreviousStudioState => previousStudioState;
+        public StudioState CurrentStudioState => currentStudioState;
+        public StudioState DefaultStudioState => defaultStudioState;
 
         private const string FIRST_TIME_LAUNCH_PREF_KEY = "ALFT";
 
@@ -41,9 +44,8 @@ namespace Terra.Studio
             SceneManager.sceneLoaded += OnSceneLoaded;
             configData = (SystemConfigurationSO)SystemOp.Load(ResourceTag.SystemConfig);
             systemData = (RTDataManagerSO)SystemOp.Load(ResourceTag.SystemData);
-            currentStudioState = configData.DefaultStudioState;
+            defaultStudioState = currentStudioState = configData.DefaultStudioState;
             previousStudioState = StudioState.Bootstrap;
-            SystemOp.Resolve<LoginScreenView>().OnLoginSuccessful += LoadSceneData;
         }
 
         private void LoadSilentServices()
@@ -52,40 +54,17 @@ namespace Terra.Studio
             SystemOp.Register(new User());
             SystemOp.Register(new SaveSystem());
             SystemOp.Register(new Flow());
-            SystemOp.Resolve<SaveSystem>().OnPreCheckDone +=
-            SystemOp.Resolve<LoginScreenView>().Init;
             SystemOp.Resolve<SaveSystem>().PerformPrecheck();
-        }
-
-        private void LoadSceneData()
-        {
-            if (configData.PickupSavedData)
-            {
-                if (configData.LoadFromCloud)
-                {
-                    SystemOp.Resolve<Flow>().DoCloudSaveCheck(LoadSubsystemScene);
-                }
-                else
-                {
-                    SystemOp.Resolve<Flow>().DoLocalSaveCheck(LoadSubsystemScene);
-                }
-            }
-            else
-            {
-                LoadSubsystemScene();
-            }
         }
 
         private void LoadSubsystemScene()
         {
-            var sceneToLoad = currentStudioState == StudioState.Editor
-                ? configData.EditorSceneName
-                : configData.RuntimeSceneName;
+            var sceneToLoad =
+                currentStudioState == StudioState.Editor
+                    ? configData.EditorSceneName
+                    : configData.RuntimeSceneName;
             SceneManager.LoadSceneAsync(sceneToLoad, LoadSceneMode.Additive);
-            if (SystemOp.Resolve<LoginScreenView>())
-            {
-                SystemOp.Resolve<LoginScreenView>().Flush();
-            }
+            OnSubsystemLoaded?.Invoke();
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
@@ -99,23 +78,14 @@ namespace Terra.Studio
             SystemOp.Resolve<ISubsystem>().Initialize(scene);
         }
 
-        public void SwitchState()
-        {
-            DisposeCurrentSubSystem(LoadSubsystemScene);
-            currentStudioState = GetNextState();
-            previousStudioState = GetOtherState();
-        }
-
-        public void SetSimulationState(bool isEnabled)
-        {
-            IsSimulating = isEnabled;
-        }
-
         private void DisposeCurrentSubSystem(Action onUnloadComplete)
         {
             var subSystem = SystemOp.Resolve<ISubsystem>();
             subSystem?.Dispose();
-            var operation = SceneManager.UnloadSceneAsync(currentActiveScene, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
+            var operation = SceneManager.UnloadSceneAsync(
+                currentActiveScene,
+                UnloadSceneOptions.UnloadAllEmbeddedSceneObjects
+            );
             operation.completed += (result) =>
             {
                 GC.Collect(0, GCCollectionMode.Forced);
@@ -127,7 +97,8 @@ namespace Terra.Studio
         {
             var index = (int)currentStudioState;
             var nextIndex = ++index % 3;
-            if (nextIndex == 0) nextIndex++;
+            if (nextIndex == 0)
+                nextIndex++;
             return (StudioState)nextIndex;
         }
 
@@ -163,6 +134,50 @@ namespace Terra.Studio
             }
             Mixpanel.Track("AppLaunch");
             Mixpanel.Flush();
+        }
+
+        public void SetSimulationState(bool isEnabled)
+        {
+            IsSimulating = isEnabled;
+        }
+
+        public void UpdateDefaultStudioState(StudioState state)
+        {
+            defaultStudioState = currentStudioState = state;
+        }
+
+        public void LoadSceneData()
+        {
+            if (defaultStudioState == StudioState.Editor)
+            {
+                if (configData.PickupSavedData)
+                {
+                    if (configData.LoadFromCloud)
+                    {
+                        SystemOp.Resolve<Flow>().DoCloudSaveCheck(LoadSubsystemScene);
+                    }
+                    else
+                    {
+                        SystemOp.Resolve<Flow>().DoLocalSaveCheck(LoadSubsystemScene);
+                    }
+                }
+                else
+                {
+                    LoadSubsystemScene();
+                }
+            }
+            else
+            {
+                currentStudioState = StudioState.Runtime;
+                SystemOp.Resolve<Flow>().GetAndSetProjectDetailsForRuntime(LoadSubsystemScene);
+            }
+        }
+
+        public void SwitchState()
+        {
+            DisposeCurrentSubSystem(LoadSubsystemScene);
+            currentStudioState = GetNextState();
+            previousStudioState = GetOtherState();
         }
     }
 }

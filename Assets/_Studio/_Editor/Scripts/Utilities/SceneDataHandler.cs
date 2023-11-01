@@ -79,7 +79,7 @@ namespace Terra.Studio
             }
         }
 
-        private void OnCloudSaveAttempted(bool status, string response)
+        private void OnCloudSaveAttempted(bool status, string _)
         {
             var saveState = status ? SaveState.SavedToCloud : SaveState.ChangesSavedOffline;
             EditorOp.Resolve<ToolbarView>().SetSaveMessage(false, saveState);

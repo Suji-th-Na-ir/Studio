@@ -1,15 +1,18 @@
+using TMPro;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayShifu.Terra;
-using TMPro;
 
 namespace Terra.Studio
 {
     public class ToolbarView : View
     {
+        public event Action OnPublishRequested;
+
         private const string ADD_BUTTON_LOC = "AddButton";
         private const string PLAY_BUTTON_LOC = "PlayButton";
+        private const string PUBLISH_BUTTON_LOC = "PublishButton";
         private const string SAVE_BUTTON_LOC = "SaveButton";
         private const string LOAD_BUTTON_LOC = "LoadButton";
         private const string MOVE_BUTTON_LOC = "MoveButton";
@@ -40,6 +43,7 @@ namespace Terra.Studio
             SpawnPrimitivePrefab();
             var addButtonTr = Helper.FindDeepChild(transform, ADD_BUTTON_LOC);
             var playButtonTr = Helper.FindDeepChild(transform, PLAY_BUTTON_LOC);
+            var publishButtonTr = Helper.FindDeepChild(transform, PUBLISH_BUTTON_LOC);
             var saveButtonTr = Helper.FindDeepChild(transform, SAVE_BUTTON_LOC);
             var loadButtonTr = Helper.FindDeepChild(transform, LOAD_BUTTON_LOC);
             var cylinderPrimitiveTr = Helper.FindDeepChild(
@@ -79,6 +83,22 @@ namespace Terra.Studio
                         {
                             EditorOp.Resolve<EditorSystem>().RequestSwitchState();
                         });
+                }
+            );
+
+            var publishButton = publishButtonTr.GetComponent<Button>();
+            AddListenerEvent(
+                publishButton,
+                () =>
+                {
+                    if (saveTextField.text.Equals(SaveState.UnsavedChanges.GetStringValue()))
+                    {
+                        EditorOp.Resolve<SceneDataHandler>().Save(OnPublishRequested);
+                    }
+                    else
+                    {
+                        OnPublishRequested?.Invoke();
+                    }
                 }
             );
 
