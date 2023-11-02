@@ -1,4 +1,6 @@
 using System;
+using mixpanel;
+using PlayShifu.Terra;
 
 namespace Terra.Studio
 {
@@ -106,6 +108,18 @@ namespace Terra.Studio
         public void PublishProject(Action<bool, string> onPublished)
         {
             new PublishProjectAPI().DoRequest(onPublished);
+        }
+
+        public void LogLoginEvent(bool isAutoLoggedIn)
+        {
+            if (Helper.IsInUnityEditor()) return;
+            var source = isAutoLoggedIn ? "auto" : "manual";
+            var val = new Value()
+            {
+                { "userid", userName },
+                { "source", source }
+            };
+            Mixpanel.Track("LoginSuccessful", val);
         }
     }
 }

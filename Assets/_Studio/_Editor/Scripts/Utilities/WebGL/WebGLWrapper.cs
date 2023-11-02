@@ -1,9 +1,9 @@
 #if UNITY_WEBGL && !UNITY_EDITOR
 
 using UnityEngine;
+using Newtonsoft.Json;
 using System.Collections;
 using System.Runtime.InteropServices;
-using Newtonsoft.Json;
 
 namespace Terra.Studio
 {
@@ -69,8 +69,11 @@ namespace Terra.Studio
         public void OnProjectDataReceived(string response)
         {
             var unpackedData = JsonConvert.DeserializeObject<LoginAPI.Data>(response);
-            SystemOp.Resolve<User>().UpdateUserId(unpackedData.userId);
-            SystemOp.Resolve<Flow>().OnProjectDetailsReceived(unpackedData.projectId, SystemOp.Resolve<System>().UpdateDefaultStudioState);
+            SystemOp.Resolve<User>()
+                .UpdateUserId(unpackedData.UserId)
+                .UpdateUserName(unpackedData.Username)
+                .LogLoginEvent(unpackedData.IsAutoLoggedIn);
+            SystemOp.Resolve<Flow>().OnProjectDetailsReceived(unpackedData.ProjectId, SystemOp.Resolve<System>().UpdateDefaultStudioState);
             SystemOp.Resolve<System>().LoadSceneData();
         }
     }

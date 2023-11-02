@@ -14,7 +14,6 @@ namespace Terra.Studio.RTEditor
         private int selectedStudioMode;
 
         private const string USERNAME_PREF = "UserName";
-        private const string USERID_PREF = "UserId";
         private const string STUDIO_PASSWORD = "Studio@12345";
         private static readonly string[] STATES = new[] { "Editor", "Runtime" };
 
@@ -95,15 +94,17 @@ namespace Terra.Studio.RTEditor
                 return;
             }
             SystemOp.Resolve<User>().UpdateUserName(username);
-            USERNAME_PREF.SetPref(username);
             var unpackedData = JsonConvert.DeserializeObject<LoginAPI.Data>(response);
+            unpackedData.IsAutoLoggedIn = false;
             var projectDetails = new ProjectData()
             {
                 ParamValue = selectedStudioMode + 1,
-                ProjectId = selectedStudioMode == 0 ? unpackedData.projectId : publishedProjId
+                ProjectId = selectedStudioMode == 0 ? unpackedData.ProjectId : publishedProjId,
             };
-            SystemOp.Resolve<User>().UpdateUserId(unpackedData.userId);
-            USERID_PREF.SetPref(unpackedData.userId);
+            SystemOp.Resolve<User>()
+                .UpdateUserId(unpackedData.UserId)
+                .UpdateUserName(unpackedData.Username)
+                .LogLoginEvent(unpackedData.IsAutoLoggedIn);
             var projectJson = JsonConvert.SerializeObject(projectDetails);
             SystemOp.Resolve<Flow>().OnProjectDetailsReceived(projectJson, SystemOp.Resolve<System>().UpdateDefaultStudioState);
             SystemOp.Resolve<System>().LoadSceneData();

@@ -86,8 +86,10 @@ namespace Terra.Studio
         [Serializable]
         public struct Data
         {
-            public string projectId;
-            public string userId;
+            public string Username;
+            public string ProjectId;
+            public string UserId;
+            public bool IsAutoLoggedIn;
         }
 
         public override RequestType RequestType => RequestType.Post;
