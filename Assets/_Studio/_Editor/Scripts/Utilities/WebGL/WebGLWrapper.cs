@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Runtime.InteropServices;
+using Newtonsoft.Json;
 
 namespace Terra.Studio
 {
@@ -47,7 +48,7 @@ namespace Terra.Studio
             }
             EditorOp.Resolve<ToolbarView>().OnPublishRequested += () =>
             {
-                var userName = SystemOp.Resolve<User>().UserName;
+                var userName = SystemOp.Resolve<User>().UserId;
                 var projectId = SystemOp.Resolve<User>().ProjectId;
                 PublishGame(userName, projectId);
             };
@@ -65,9 +66,11 @@ namespace Terra.Studio
             GetProjectData(nameof(OnProjectDataReceived));
         }
 
-        public void OnProjectDataReceived(string projectDetails)
+        public void OnProjectDataReceived(string response)
         {
-            SystemOp.Resolve<Flow>().OnProjectDetailsReceived(projectDetails, SystemOp.Resolve<System>().UpdateDefaultStudioState);
+            var unpackedData = JsonConvert.DeserializeObject<LoginAPI.Data>(response);
+            SystemOp.Resolve<User>().UpdateUserId(unpackedData.userId);
+            SystemOp.Resolve<Flow>().OnProjectDetailsReceived(unpackedData.projectId, SystemOp.Resolve<System>().UpdateDefaultStudioState);
             SystemOp.Resolve<System>().LoadSceneData();
         }
     }

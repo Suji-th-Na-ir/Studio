@@ -4,15 +4,17 @@ namespace Terra.Studio
 {
     public class User
     {
-        public string UserName => userName;
+        public string UserId => userId;
         public string ProjectName => projectName;
         public string ProjectId => projectId;
 
         private const string CORRECT_PASSWORD = "Studio@12345";
         private const string USER_NAME_PREF = "UserName";
+        private const string USER_ID_PREF = "UserId";
         private const string PASSWORD_PREF = "Password";
 
         private string userName;
+        private string userId;
         private string password;
         private string projectId;
         private string projectName;
@@ -20,6 +22,7 @@ namespace Terra.Studio
         public User()
         {
             USER_NAME_PREF.TryGetPrefString(out userName);
+            USER_ID_PREF.TryGetPrefString(out userId);
             PASSWORD_PREF.TryGetPrefString(out password);
             projectName = SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name;
         }
@@ -27,12 +30,21 @@ namespace Terra.Studio
         public User UpdateUserName(string userName)
         {
             this.userName = userName;
+            USER_NAME_PREF.SetPref(userName);
+            return this;
+        }
+
+        public User UpdateUserId(string userId)
+        {
+            this.userId = userId;
+            USER_ID_PREF.SetPref(userName);
             return this;
         }
 
         public User UpdatePassword(string password)
         {
             this.password = password;
+            PASSWORD_PREF.SetPref(userName);
             return this;
         }
 
@@ -78,7 +90,7 @@ namespace Terra.Studio
 
         public void GetProjectDetails(Action<bool, string> onProjectDetailsReceived)
         {
-            new GetProjectDetailsAPI(true).DoRequest(onProjectDetailsReceived);
+            new GetProjectDetailsAPI().DoRequest(onProjectDetailsReceived);
         }
 
         public void CreateNewProject(Action<bool, string> onProjectCreated)

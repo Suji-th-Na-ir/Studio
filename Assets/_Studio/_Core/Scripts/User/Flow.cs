@@ -59,10 +59,9 @@ namespace Terra.Studio
                 SystemOp
                     .Resolve<SaveSystem>()
                     .GetManualSavedData(
-                        (response) =>
+                        (status, response) =>
                         {
-                            var isEmpty = string.IsNullOrEmpty(response);
-                            if (isEmpty)
+                            if (status)
                             {
                                 DoLocalSaveCheck(onDone, true);
                             }
@@ -116,23 +115,20 @@ namespace Terra.Studio
                 .TryGetLastSavedTimestamp(out var saveDateTime);
             if (isLastSavedAvailable)
             {
-                SystemOp
-                    .Resolve<SaveSystem>()
-                    .GetManualSavedData(
-                        (response) =>
-                        {
-                            var isAvailable = !string.IsNullOrEmpty(response);
-                            if (isAvailable)
-                            {
-                                SystemOp.Resolve<User>().UploadSaveDataToCloud(response, null);
-                                onDone?.Invoke();
-                            }
-                            else
-                            {
-                                DoLocalSaveCheck(onDone, true);
-                            }
-                        }
-                    );
+                var projectId = SystemOp.Resolve<User>().ProjectId;
+                var filePath = FileService.GetSavedFilePath(projectId);
+                SystemOp.Resolve<SaveSystem>().GetManualSavedData((status, response) =>
+                {
+                    if (status)
+                    {
+                        SystemOp.Resolve<User>().UploadSaveDataToCloud(response, null);
+                        onDone?.Invoke();
+                    }
+                    else
+                    {
+                        DoLocalSaveCheck(onDone, true);
+                    }
+                });
             }
             else
             {

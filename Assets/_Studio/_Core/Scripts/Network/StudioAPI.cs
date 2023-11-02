@@ -26,10 +26,11 @@ namespace Terra.Studio
         protected const char ARGUMENT_SEPERATOR = '?';
         protected const string DATA_KEY = "data";
         protected const string USER_NAME_KEY = "username";
+        protected const string USER_ID_KEY = "userId";
         protected const string TIME_STAMP_KEY = "timestamp";
         protected const string PROJECT_NAME_KEY = "projectname";
         protected const string PASSWORD_NAME_KEY = "password";
-        protected const string PROJECT_ID_KEY = "id";
+        protected const string PROJECT_ID_KEY = "projectId";
         private const int DEFAULT_TIMEOUT = 20;
 
         public abstract RequestType RequestType { get; }
@@ -41,7 +42,7 @@ namespace Terra.Studio
         protected abstract string Route { get; }
 
         //protected const string DOMAIN = "https://game-assets-api.letsterra.com/studio";
-        protected const string DOMAIN = "http://192.168.68.102:9000/studio";
+        protected const string DOMAIN = "http://192.168.68.140:9000/studio";
 
         protected virtual string GetURL()
         {
@@ -82,6 +83,13 @@ namespace Terra.Studio
 
     public class LoginAPI : StudioAPI
     {
+        [Serializable]
+        public struct Data
+        {
+            public string projectId;
+            public string userId;
+        }
+
         public override RequestType RequestType => RequestType.Post;
         protected override string Route => "login";
 
@@ -98,8 +106,8 @@ namespace Terra.Studio
 
         public CreateProjectAPI(string projectName)
         {
-            var userName = SystemOp.Resolve<User>().UserName;
-            FormData = new() { { USER_NAME_KEY, userName }, { PROJECT_NAME_KEY, projectName } };
+            var userId = SystemOp.Resolve<User>().UserId;
+            FormData = new() { { USER_ID_KEY, userId }, { PROJECT_NAME_KEY, projectName } };
         }
     }
 
@@ -118,19 +126,11 @@ namespace Terra.Studio
         public override RequestType RequestType => RequestType.Get;
         protected override string Route => "project/info";
 
-        public GetProjectDetailsAPI(bool useProjectId)
+        public GetProjectDetailsAPI()
         {
-            if (!useProjectId)
-            {
-                var userName = SystemOp.Resolve<User>().UserName;
-                var projectName = SystemOp.Resolve<User>().ProjectName;
-                Parameters = $"{USER_NAME_KEY}={userName}&{PROJECT_NAME_KEY}={projectName}";
-            }
-            else
-            {
-                var projectId = SystemOp.Resolve<User>().ProjectId;
-                Parameters = $"{PROJECT_ID_KEY}={projectId}";
-            }
+            var userId = SystemOp.Resolve<User>().UserId;
+            var projectId = SystemOp.Resolve<User>().ProjectId;
+            Parameters = $"{USER_ID_KEY}={userId}&{PROJECT_ID_KEY}={projectId}";
         }
     }
 
@@ -147,8 +147,8 @@ namespace Terra.Studio
                 .CheckAndGetFreshSaveDateTimeIfLastSavedTimestampNotPresent();
             FormData = new()
             {
-                { USER_NAME_KEY, SystemOp.Resolve<User>().UserName },
-                { PROJECT_NAME_KEY, SystemOp.Resolve<User>().ProjectName },
+                { USER_ID_KEY, SystemOp.Resolve<User>().UserId },
+                { PROJECT_ID_KEY, SystemOp.Resolve<User>().ProjectId },
                 { DATA_KEY, data },
                 { TIME_STAMP_KEY, timeStamp }
             };
@@ -176,7 +176,7 @@ namespace Terra.Studio
         {
             FormData = new()
             {
-                { USER_NAME_KEY, SystemOp.Resolve<User>().UserName },
+                { USER_ID_KEY, SystemOp.Resolve<User>().UserId },
                 { PROJECT_ID_KEY, SystemOp.Resolve<User>().ProjectId }
             };
         }

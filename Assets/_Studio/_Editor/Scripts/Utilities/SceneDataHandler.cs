@@ -118,19 +118,20 @@ namespace Terra.Studio
                 }
                 else
                 {
-                    OnDataReceived(null);
+                    OnDataReceived(false, null);
                 }
             }
             else
             {
                 var data = SystemOp.Resolve<CrossSceneDataHolder>().Get();
-                OnDataReceived(data);
+                var isDataAvailable = !string.IsNullOrEmpty(data);
+                OnDataReceived(isDataAvailable, data);
             }
         }
 
-        private void OnDataReceived(string data)
+        private void OnDataReceived(bool status, string data)
         {
-            if (!string.IsNullOrEmpty(data))
+            if (status)
             {
                 RecreateScene(data);
             }

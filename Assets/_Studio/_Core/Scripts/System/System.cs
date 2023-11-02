@@ -54,7 +54,6 @@ namespace Terra.Studio
             SystemOp.Register(new User());
             SystemOp.Register(new SaveSystem());
             SystemOp.Register(new Flow());
-            SystemOp.Resolve<SaveSystem>().PerformPrecheck();
         }
 
         private void LoadSubsystemScene()
