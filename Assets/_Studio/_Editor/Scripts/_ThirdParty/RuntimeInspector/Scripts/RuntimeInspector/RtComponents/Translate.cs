@@ -93,7 +93,7 @@ namespace Terra.Studio
                 pauseFor = (repeat.repeat <= 1 && !repeat.repeatForever) ? 0 : repeat.pauseFor,
                 repeatForever = repeat.repeatForever,
                 repeatFor = repeat.repeat,
-                targetPosition = transform.TransformDirection((Vector3)Type.recordedVector3.Get()),
+                targetPosition = (Vector3)Type.recordedVector3.Get(),
                 startPosition = transform.position,
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
@@ -164,7 +164,7 @@ namespace Terra.Studio
             speed = comp.speed;
             repeat.pauseFor = comp.pauseFor;
             repeat.repeatForever = comp.repeatForever;
-            Type.recordedVector3.Set(transform.InverseTransformDirection(comp.targetPosition));
+            Type.recordedVector3.Set(comp.targetPosition);
             repeat.repeat = comp.repeatFor;
             repeat.broadcastData.broadcast = comp.Broadcast;
             repeat.broadcastAt = comp.broadcastAt;
@@ -208,10 +208,10 @@ namespace Terra.Studio
                 count = 10;
             for (int i = 0; i < count; i++)
             {
-                if (transform.parent != null && i==0)
-                {
-                    localOffset = transform.TransformDirection(localOffset);
-                }
+                //if (transform.parent != null && i==0)
+                //{
+                //    localOffset = transform.TransformDirection(localOffset);
+                //}
                 pos += localOffset;
                 trs.Add(pos);
                 trs.Add(transform.localRotation.eulerAngles);
@@ -224,10 +224,10 @@ namespace Terra.Studio
         {
             var vector3 = (Vector3)data;
             var delta = vector3 - transform.position;
-            if (transform.parent != null)
-            {
-                delta = transform.InverseTransformDirection(delta);
-            }
+            //if (transform.parent != null)
+            //{
+            //    delta = transform.InverseTransformDirection(delta);
+            //}
             if (delta != (Vector3)Type.recordedVector3.Get())
             {
                 Debug.Log($"Delta set: {delta} | World data: {(Vector3)data}");

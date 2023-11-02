@@ -35,7 +35,6 @@ namespace Terra.Studio
             var tr = entityRef.RefObj.transform;
             if (!entityRef.isInitialProcessDone)
             {
-                Debug.Log($"Delta got: {entityRef.targetPosition}");
                 //if (tr.parent != null)
                 //{
                 //    entityRef.targetPosition = tr.TransformVector(entityRef.targetPosition);
@@ -58,7 +57,6 @@ namespace Terra.Studio
             entityRef.loopsFinished = 0;
             entityRef.coveredDistance = 0f;
             entityRef.remainingDistance = pauseDistance;
-            Debug.Log($"Delta got and post processed: {targetPos}");
         }
 
         public void OnDemandRun(ref TranslateComponent translatable)
@@ -201,7 +199,7 @@ namespace Terra.Studio
             component.RefObj.transform.position += movement;
             component.remainingDistance -= step;
             var targetPosition = component.RefObj.transform.parent == null ? component.targetPosition + component.startPosition :
-                component.startPosition + component.RefObj.transform.TransformDirection(component.targetPosition);
+                component.startPosition + component.targetPosition;
             if (component.remainingDistance <= 0.01f)
             {
                 component.loopsFinished++;
