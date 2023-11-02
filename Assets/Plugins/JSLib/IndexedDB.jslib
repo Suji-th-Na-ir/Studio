@@ -163,7 +163,7 @@ mergeInto(LibraryManager.library,
         window.dispatchReactUnityEvent("hideLoading");
     },
 
-    PublishGame: function(username, projectId){
-        window.dispatchReactUnityEvent("publishGame", UTF8ToString(username), UTF8ToString(projectId));
+    PublishGame: function(username, projectId, callbackTo){
+        window.dispatchReactUnityEvent("publishGame", UTF8ToString(username), UTF8ToString(projectId, UTF8ToString(callbackTo)));
     }
 });

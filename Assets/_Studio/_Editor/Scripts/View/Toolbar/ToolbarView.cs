@@ -32,6 +32,7 @@ namespace Terra.Studio
         private CanvasGroup canvasGroup;
         private TextMeshProUGUI saveTextField;
         private Button saveButton;
+        private Button publishButton;
 
         private void Awake()
         {
@@ -86,11 +87,12 @@ namespace Terra.Studio
                 }
             );
 
-            var publishButton = publishButtonTr.GetComponent<Button>();
+            publishButton = publishButtonTr.GetComponent<Button>();
             AddListenerEvent(
                 publishButton,
                 () =>
                 {
+                    SetPublishButtonActive(false);
                     if (saveTextField.text.Equals(SaveState.UnsavedChanges.GetStringValue()))
                     {
                         EditorOp.Resolve<SceneDataHandler>().Save(OnPublishRequested);
@@ -247,6 +249,12 @@ namespace Terra.Studio
             var message = state.GetStringValue();
             saveButton.gameObject.SetActive(setInteractable);
             saveTextField.text = message;
+        }
+
+        public void SetPublishButtonActive(bool isInteractive)
+        {
+            if (!publishButton) return;
+            publishButton.interactable = isInteractive;
         }
 
         private void SpawnPrimitivePrefab()

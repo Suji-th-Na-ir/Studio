@@ -139,6 +139,7 @@ namespace Terra.Studio.RTEditor
                 {
                     EditorUtility.DisplayDialog("Terra Studio", $"Publish Failed! Response: {response}", "Ok");
                 }
+                EditorOp.Resolve<ToolbarView>().SetPublishButtonActive(true);
             });
         }
     }

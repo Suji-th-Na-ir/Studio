@@ -19,7 +19,7 @@ namespace Terra.Studio
         public static extern void HideLoadingScreen();
 
         [DllImport("__Internal")]
-        public static extern void PublishGame(string userName, string projectId);
+        public static extern void PublishGame(string userName, string projectId, string callback);
 
         private void OnEnable()
         {
@@ -50,7 +50,7 @@ namespace Terra.Studio
             {
                 var userName = SystemOp.Resolve<User>().UserId;
                 var projectId = SystemOp.Resolve<User>().ProjectId;
-                PublishGame(userName, projectId);
+                PublishGame(userName, projectId, nameof(TogglePublishButton));
             };
         }
 
@@ -75,6 +75,15 @@ namespace Terra.Studio
                 .LogLoginEvent(unpackedData.IsAutoLoggedIn);
             SystemOp.Resolve<Flow>().OnProjectDetailsReceived(unpackedData.ProjectId, SystemOp.Resolve<System>().UpdateDefaultStudioState);
             SystemOp.Resolve<System>().LoadSceneData();
+        }
+
+        public void TogglePublishButton(int state)
+        {
+            var shouldEnable = state == 1;
+            if (EditorOp.Resolve<ToolbarView>())
+            {
+                EditorOp.Resolve<ToolbarView>().SetPublishButtonActive(shouldEnable);
+            }
         }
     }
 }
