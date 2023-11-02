@@ -230,7 +230,6 @@ namespace Terra.Studio
             //}
             if (delta != (Vector3)Type.recordedVector3.Get())
             {
-                Debug.Log($"Delta set: {delta} | World data: {(Vector3)data}");
                 Type.recordedVector3.Set(delta);
             }
             GhostDescription.IsGhostInteractedInLastRecord = true;
