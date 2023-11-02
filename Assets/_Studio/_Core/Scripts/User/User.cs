@@ -116,10 +116,12 @@ namespace Terra.Studio
             var source = isAutoLoggedIn ? "auto" : "manual";
             var val = new Value()
             {
-                { "userid", userName },
+                { "user_name", userName },
                 { "source", source }
             };
             Mixpanel.Track("LoginSuccessful", val);
+            Mixpanel.Register("UserName", userName);
+            Mixpanel.People.Set("UserName", userName);
         }
     }
 }
