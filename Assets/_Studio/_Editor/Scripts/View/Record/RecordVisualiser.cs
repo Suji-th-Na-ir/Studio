@@ -262,12 +262,11 @@ namespace Terra.Studio
 
                 for (int i = 0; i < visualisers.Count; i++)
                 {
+                    visualisers[i].UpdateTRS(new Vector3[] { alltrs[i * 3], alltrs[i * 3 + 1], alltrs[i * 3 + 2] });
                     if (instance.GhostDescription.showGhostWithTravelLine)
                     {
                         visualisers[i].CreateTravelLine(distance, dir);
                     }
-
-                    visualisers[i].UpdateTRS(new Vector3[] { alltrs[i * 3], alltrs[i * 3 + 1], alltrs[i * 3 + 2] });
                 }
             }
         }
@@ -633,7 +632,7 @@ namespace Terra.Studio
             }
             lastArrowLength = length;
 
-            Quaternion rotation = Quaternion.FromToRotation(-Vector3.back, ghostLine.transform.InverseTransformDirection(direction));
+            Quaternion rotation = Quaternion.FromToRotation(-Vector3.back, direction);
             ghostLine.transform.rotation = rotation;
             if (lastLine)
                 lastLine.transform.rotation = rotation;
