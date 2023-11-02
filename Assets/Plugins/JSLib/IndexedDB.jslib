@@ -164,6 +164,6 @@ mergeInto(LibraryManager.library,
     },
 
     PublishGame: function(username, projectId, callbackTo){
-        window.dispatchReactUnityEvent("publishGame", UTF8ToString(username), UTF8ToString(projectId, UTF8ToString(callbackTo)));
+        window.dispatchReactUnityEvent("publishGame", UTF8ToString(username), UTF8ToString(projectId), UTF8ToString(callbackTo));
     }
 });
