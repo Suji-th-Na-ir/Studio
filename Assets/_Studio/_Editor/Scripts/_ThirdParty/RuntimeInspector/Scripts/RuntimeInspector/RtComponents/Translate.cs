@@ -93,7 +93,7 @@ namespace Terra.Studio
                 pauseFor = (repeat.repeat <= 1 && !repeat.repeatForever) ? 0 : repeat.pauseFor,
                 repeatForever = repeat.repeatForever,
                 repeatFor = repeat.repeat,
-                targetPosition = (Vector3)Type.recordedVector3.Get(),
+                targetPosition = transform.TransformDirection((Vector3)Type.recordedVector3.Get()),
                 startPosition = transform.position,
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
@@ -164,7 +164,7 @@ namespace Terra.Studio
             speed = comp.speed;
             repeat.pauseFor = comp.pauseFor;
             repeat.repeatForever = comp.repeatForever;
-            Type.recordedVector3.Set(comp.targetPosition);
+            Type.recordedVector3.Set(transform.InverseTransformDirection(comp.targetPosition));
             repeat.repeat = comp.repeatFor;
             repeat.broadcastData.broadcast = comp.Broadcast;
             repeat.broadcastAt = comp.broadcastAt;
@@ -214,6 +214,8 @@ namespace Terra.Studio
                 }
                 pos += localOffset;
                 trs.Add(pos);
+                trs.Add(transform.localRotation.eulerAngles);
+                trs.Add(Vector3.one);
             }
             return trs.ToArray();
         }
@@ -228,6 +230,7 @@ namespace Terra.Studio
             }
             if (delta != (Vector3)Type.recordedVector3.Get())
             {
+                Debug.Log($"Delta set: {delta} | World data: {(Vector3)data}");
                 Type.recordedVector3.Set(delta);
             }
             GhostDescription.IsGhostInteractedInLastRecord = true;

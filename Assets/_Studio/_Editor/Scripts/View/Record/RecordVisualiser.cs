@@ -257,7 +257,7 @@ namespace Terra.Studio
                 Vector3 point1, point2;
                 point1 = alltrs[0];
                 point2 = instance.transform.position;
-                float distance = (point2 - point1).magnitude * 0.7f;
+                float distance = (point2 - point1).magnitude;
                 Vector3 dir = (point1 - point2).normalized;
 
                 for (int i = 0; i < visualisers.Count; i++)
@@ -266,10 +266,8 @@ namespace Terra.Studio
                     {
                         visualisers[i].CreateTravelLine(distance, dir);
                     }
-                    if (visualisers[i].recordFor == RecordVisualiser.Record.Position)
-                        visualisers[i].UpdateTRS(alltrs[i]);
-                    else
-                        visualisers[i].UpdateTRS(alltrs);
+
+                    visualisers[i].UpdateTRS(new Vector3[] { alltrs[i * 3], alltrs[i * 3 + 1], alltrs[i * 3 + 2] });
                 }
             }
         }
@@ -299,7 +297,7 @@ namespace Terra.Studio
                 Vector3 point1, point2;
                 point1 = trs[0];
                 point2 = instance.GhostDescription.GhostTo.transform.position;
-                float distance = (point2 - point1).magnitude * 0.7f;
+                float distance = (point2 - point1).magnitude;
                 Vector3 dir = (point1 - point2).normalized;
 
                 bool repeatforver = count == int.MaxValue;
@@ -308,7 +306,7 @@ namespace Terra.Studio
 
                 for (int i = 0; i < count; i++)
                 {
-                    var contextTrs = (recorder == RecordVisualiser.Record.Position ?new Vector3[] { trs[i] } : trs);
+                    var contextTrs = new Vector3[] { trs[i * 3], trs[i * 3 + 1], trs[i * 3 + 2] };
                     var visualiser = new RecordVisualiser(instance.GhostDescription.GhostTo,
                     recorder,
                     () =>
@@ -565,6 +563,7 @@ namespace Terra.Studio
             this.onGhostDataModified = onGhostDataModified;
             ghostMaterial = EditorOp.Load<Material>(GHOST_MATERIAL_PATH);
             var ghostObj = EditorOp.Load<GameObject>(GHOST_RESOURCE_PATH);
+           
             ghost = Object.Instantiate(ghostObj);
             ghost.name = string.Concat(ghost.name, "_", gameObject.name);
             RuntimeWrappers.DuplicateGameObject(gameObject, ghost.transform, Vector3.zero);
@@ -607,6 +606,7 @@ namespace Terra.Studio
 
         public void CreateTravelLine(float length, Vector3 direction, RepeatDirectionType directionType, bool showLastLine)
         {
+            length = length * 0.85f; //For extra spacing on ends
             this.showLastLine = showLastLine;
             cachedDirectionType = directionType;
             MeshFilter mf;
@@ -619,10 +619,11 @@ namespace Terra.Studio
                 mf = ghostLine.AddComponent<MeshFilter>();
                 mr = ghostLine.AddComponent<MeshRenderer>();
                 mf.mesh = new VisulisationLineGenerator(ghostLine.transform, length, 0.1f, 0.4f, 0.3f, 36, directionType == RepeatDirectionType.PingPong).Mesh;
-                ghostLine.transform.SetParent(ghost.transform);
-                Vector3 localDirection = ghostLine.transform.InverseTransformDirection(direction);
-                ghostLine.transform.localPosition = Vector3.zero - localDirection * length * 1.3f;
                 mr.material = ghostMaterial;
+                ghostLine.transform.SetParent(ghost.transform);
+
+               var position = ghost.transform.position - direction * length * 1.1f;
+                ghostLine.transform.position = position;
 
                 if (showLastLine)
                 {
@@ -632,7 +633,7 @@ namespace Terra.Studio
             }
             lastArrowLength = length;
 
-            Quaternion rotation = Quaternion.FromToRotation(-Vector3.back, direction);
+            Quaternion rotation = Quaternion.FromToRotation(-Vector3.back, ghostLine.transform.InverseTransformDirection(direction));
             ghostLine.transform.rotation = rotation;
             if (lastLine)
                 lastLine.transform.rotation = rotation;

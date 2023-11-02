@@ -35,13 +35,14 @@ namespace Terra.Studio
             var tr = entityRef.RefObj.transform;
             if (!entityRef.isInitialProcessDone)
             {
-                if (tr.parent != null)
-                {
-                    entityRef.targetPosition = tr.TransformVector(entityRef.targetPosition);
-                }
+                Debug.Log($"Delta got: {entityRef.targetPosition}");
+                //if (tr.parent != null)
+                //{
+                //    entityRef.targetPosition = tr.TransformVector(entityRef.targetPosition);
+                //}
                 entityRef.isInitialProcessDone = true;
             }
-            var targetPos = tr.parent == null ? entityRef.targetPosition + entityRef.startPosition : entityRef.startPosition + tr.TransformDirection(entityRef.targetPosition);
+            var targetPos =  entityRef.startPosition + entityRef.targetPosition;
             var pauseDistance = Vector3.Distance(entityRef.startPosition, targetPos);
             var direction = targetPos - entityRef.startPosition;
             entityRef.pauseDistance = pauseDistance;
@@ -57,6 +58,7 @@ namespace Terra.Studio
             entityRef.loopsFinished = 0;
             entityRef.coveredDistance = 0f;
             entityRef.remainingDistance = pauseDistance;
+            Debug.Log($"Delta got and post processed: {targetPos}");
         }
 
         public void OnDemandRun(ref TranslateComponent translatable)

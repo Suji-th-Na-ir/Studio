@@ -60,7 +60,10 @@ namespace Terra.Studio
             GhostDescription = new()
             {
                 OnGhostInteracted = OnGhostDataModified,
-                SelectionGhostsTRS = () => { return new Vector3[] { (Vector3)GhostDescription.GetRecentValue.Invoke() }; },
+                SelectionGhostsTRS = () =>
+                {
+                    return new Vector3[] { (Vector3)GhostDescription.GetRecentValue.Invoke(), transform.localRotation.eulerAngles, Vector3.one };
+                },
                 ToggleRecordMode = () =>
                 {
                     EditorOp.Resolve<Recorder>().TrackPosition_Multiselect(this,true);
