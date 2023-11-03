@@ -78,6 +78,7 @@ namespace Terra.Studio
                 playButton,
                 () =>
                 {
+                    playButton.interactable = false;
                     EditorOp
                         .Resolve<SceneDataHandler>()
                         .PrepareSceneDataToRuntime(() =>
