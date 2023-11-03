@@ -585,7 +585,9 @@ namespace Terra.Studio
 
         public void RemoveRecorder()
         {
+            if(HasRecorder)
             EditorOp.Resolve<EditorSystem>().RequestIncognitoMode(false);
+
             EditorOp.Resolve<Recorder>().TrackGhost(false, ghost);
             if (baseRecorder)
                 Object.Destroy(baseRecorder);
