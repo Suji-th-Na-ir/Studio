@@ -621,21 +621,22 @@ namespace Terra.Studio
                 mr.material = ghostMaterial;
                 ghostLine.transform.SetParent(ghost.transform);
 
-               var position = ghost.transform.position - direction * length * 1.1f;
-                ghostLine.transform.position = position;
-
                 if (showLastLine)
                 {
                     lastLine = RuntimeWrappers.DuplicateGameObject(ghostLine, ghost.transform, Vector3.zero);
-                    lastLine.transform.localPosition = Vector3.zero;
                 }
             }
-            lastArrowLength = length;
+            var position = ghost.transform.position - direction * length * 1.1f;
+            ghostLine.transform.position = position;
 
             Quaternion rotation = Quaternion.FromToRotation(-Vector3.back, direction);
             ghostLine.transform.rotation = rotation;
             if (lastLine)
+            {
+                lastLine.transform.localPosition = Vector3.zero;
                 lastLine.transform.rotation = rotation;
+            }
+            lastArrowLength = length;
         }
 
         private void Clean()

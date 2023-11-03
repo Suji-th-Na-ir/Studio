@@ -198,8 +198,7 @@ namespace Terra.Studio
         {
             var position = transform.position;
             var rotation = transform.eulerAngles + (Vector3)Type.vector3.Get();
-       
-            return new Vector3[] { position, rotation,Vector3.one};
+            return new Vector3[] { position, rotation, Vector3.one };
         }
 
         private void OnGhostDataModified(object data)

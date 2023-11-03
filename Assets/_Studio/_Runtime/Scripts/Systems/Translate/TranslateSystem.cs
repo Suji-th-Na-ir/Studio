@@ -35,10 +35,6 @@ namespace Terra.Studio
             var tr = entityRef.RefObj.transform;
             if (!entityRef.isInitialProcessDone)
             {
-                //if (tr.parent != null)
-                //{
-                //    entityRef.targetPosition = tr.TransformVector(entityRef.targetPosition);
-                //}
                 entityRef.isInitialProcessDone = true;
             }
             var targetPos =  entityRef.startPosition + entityRef.targetPosition;
@@ -198,8 +194,7 @@ namespace Terra.Studio
             var movement = component.direction.normalized * step;
             component.RefObj.transform.position += movement;
             component.remainingDistance -= step;
-            var targetPosition = component.RefObj.transform.parent == null ? component.targetPosition + component.startPosition :
-                component.startPosition + component.targetPosition;
+            var targetPosition = component.targetPosition + component.startPosition;
             if (component.remainingDistance <= 0.01f)
             {
                 component.loopsFinished++;
