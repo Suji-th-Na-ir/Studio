@@ -182,6 +182,8 @@ namespace RuntimeInspectorNamespace
         [UnityEngine.Scripting.Preserve] // This method is bound to addComponentMethod
         private void AddComponentButtonClicked()
         {
+            if (EditorOp.Resolve<EditorSystem>().IsIncognitoEnabled)
+                return;
             GameObject target = (GameObject)Value;
             if (!target)
                 return;
@@ -351,6 +353,8 @@ namespace RuntimeInspectorNamespace
         [UnityEngine.Scripting.Preserve] // This method is bound to removeComponentMethod
         private static void RemoveComponentButtonClicked(ExpandableInspectorField componentDrawer)
         {
+            if (EditorOp.Resolve<EditorSystem>().IsIncognitoEnabled)
+                return;
             if (!componentDrawer || !componentDrawer.Inspector)
                 return;
 
