@@ -573,6 +573,14 @@ namespace Terra.Studio
             childGhostMesh.localScale = gameObject.transform.lossyScale;
             Clean();
             ghost.SetActive(true);
+
+            EditorOp.Resolve<EditorSystem>().OnPreviewEnabled += OnPreviewModeEnabled;
+        }
+
+        private void OnPreviewModeEnabled(bool enabled)
+        {
+            if (ghost != null)
+                ghost.SetActive(!enabled);
         }
 
         public void RemoveRecorder()
@@ -696,6 +704,7 @@ namespace Terra.Studio
         public void Dispose()
         {
             EditorOp.Resolve<Recorder>().TrackGhost(false, ghost);
+            EditorOp.Resolve<EditorSystem>().OnPreviewEnabled -= OnPreviewModeEnabled;
             Object.Destroy(ghost);
         }
 
