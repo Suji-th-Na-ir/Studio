@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using RuntimeInspectorNamespace;
+using UnityEngine;
 
 namespace Terra.Studio
 {
@@ -25,7 +27,7 @@ namespace Terra.Studio
                 input = "0";
             }
             var score = int.Parse(input);
-            InvokeDataChange(score);
+            UpdateOtherCompData(score);
             return value;
         }
 
@@ -56,16 +58,21 @@ namespace Terra.Studio
             }
         }
 
-        private void InvokeDataChange(int score)
+        private void UpdateOtherCompData(int score)
         {
-            var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
-            foreach (var selected in selections)
+            List<GameObject> selectedObjects = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            foreach (var obj in selectedObjects)
             {
-                if (selected.TryGetComponent(out Collectible collectible))
+                var allInstances = EditorOp.Resolve<Atom>().AllScores;
+                foreach (Atom.ScoreData atom in allInstances)
                 {
-                    collectible.Score.score = score;
                     var isUpdatingScore = score != 0;
-                    EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(isUpdatingScore, collectible.Score.instanceId);
+                    if (obj == atom.target)
+                    {
+                        atom.score = score;
+                     
+                        EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(isUpdatingScore, atom.instanceId);
+                    }
                 }
             }
         }

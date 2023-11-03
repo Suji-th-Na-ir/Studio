@@ -1459,6 +1459,22 @@ MonoBehaviour:
     guid: d5aa186d95fc84196922788e1051c643
     isPrimitive: 0
     primitiveType: 0
+  - name: PlayerModel
+    absolutePath: Assets/_Studio/Resources/Common/Prefabs/PlayerModel.prefab
+    resourcePath: Common/Prefabs/PlayerModel
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a19e74f022c994fc5b3f8bb35f37688b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Manager
+    absolutePath: Assets/_Studio/Resources/Runtime/Manager.prefab
+    resourcePath: Runtime/Manager
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f958a5650bcbd4be1931a641e9fac36f
+    isPrimitive: 0
+    primitiveType: 0
   watchFolders:
   - Assets/_Studio/Resources/Common
   - Assets/_Studio/Resources/Runtime

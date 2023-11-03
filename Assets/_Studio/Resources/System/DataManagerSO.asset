@@ -93,6 +93,11 @@ MonoBehaviour:
     SystemName: Terra.Studio.SetObjectPositionSystem
     DrawerName: Terra.Studio.SetObjectPosition
     DisplayName: Teleport Self
+  - Key: Terra.Studio.UpdateScore
+    ComponentName: Terra.Studio.UpdateScoreComponent
+    SystemName: Terra.Studio.UpdateScoreSystem
+    DrawerName: Terra.Studio.UpdateScore
+    DisplayName: Update Score
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent

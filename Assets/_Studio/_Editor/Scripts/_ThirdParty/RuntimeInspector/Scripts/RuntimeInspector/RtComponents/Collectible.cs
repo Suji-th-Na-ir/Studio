@@ -37,6 +37,7 @@ namespace Terra.Studio
             StartOn.Setup<StartOnCollectible>(gameObject, ComponentName);
             PlaySFX.Setup<Collectible>(gameObject);
             PlayVFX.Setup<Collectible>(gameObject);
+            Score.Setup(gameObject,this);
             broadcastData.Setup(gameObject, this);
         }
 
