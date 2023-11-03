@@ -113,4 +113,24 @@ namespace Terra.Studio
         Off,
         On
     }
+
+    public enum RequestType
+    {
+        Get,
+        Post
+    }
+
+    public enum SaveState
+    {
+        [StringValue("Unsaved Changes")]
+        UnsavedChanges,
+        [StringValue("Changes Saved Offline")]
+        ChangesSavedOffline,
+        [StringValue("Saved To Cloud")]
+        SavedToCloud,
+        [StringValue("Saving...")]
+        Saving,
+        [StringValue("")]
+        Empty
+    }
 }

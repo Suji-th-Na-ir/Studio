@@ -6,6 +6,7 @@ namespace Terra.Studio
     {
         public event Action<bool> OnUndoStackAvailable;
         public event Action<bool> OnRedoStackAvailable;
+        public int CurrentIndex { get; }
         public void Undo();
         public void Redo();
         public void Record(object lastData, object newData, string comment, Action<object> onExecuted);

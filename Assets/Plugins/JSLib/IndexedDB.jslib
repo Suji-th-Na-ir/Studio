@@ -22,8 +22,6 @@ mergeInto(LibraryManager.library,
     {
         var dbName = "StudioEditorDB";
         var storeName = "StudioStore";
-        var gameObjectName = "IndexedDBManager";
-        var methodName = "SaveDataCallback";
         var request = window.indexedDB.open(dbName, 1);
         var newKey = UTF8ToString(key)
         var newValue = UTF8ToString(value)
@@ -90,5 +88,82 @@ mergeInto(LibraryManager.library,
         {
             Module['dynCall_vi'](functionPtr, [emptyBuffer]);
         };
+    },
+
+    RemoveData: function (key, functionPtr) {
+        var dbName = "StudioEditorDB";
+        var storeName = "StudioStore";
+        var newKey = UTF8ToString(key);
+        var request = window.indexedDB.open(dbName, 1);
+        request.onsuccess = function (event) {
+            var db = event.target.result;
+            var transaction = db.transaction([storeName], "readwrite");
+            var objectStore = transaction.objectStore(storeName);
+            var deleteRequest = objectStore.delete(newKey);
+            deleteRequest.onsuccess = function (event) {
+                Module['dynCall_vi'](functionPtr, 1);
+            };
+            deleteRequest.onerror = function (event) {
+                Module['dynCall_vi'](functionPtr, 0);
+            };
+        };
+        request.onerror = function (event) {
+            Module['dynCall_vi'](functionPtr, 0);
+        };
+    },
+
+    RenameKey: function (oldKey, newKey, functionPtr) {
+        var dbName = "StudioEditorDB";
+        var storeName = "StudioStore";
+        var oldKeyName = UTF8ToString(oldKey);
+        var newKeyName = UTF8ToString(newKey);
+
+        var request = window.indexedDB.open(dbName, 1);
+        request.onsuccess = function (event) {
+            var db = event.target.result;
+            var transaction = db.transaction([storeName], "readwrite");
+            var objectStore = transaction.objectStore(storeName);
+            var getRequest = objectStore.get(oldKeyName);
+            getRequest.onsuccess = function (event) {
+                var data = event.target.result;
+                var deleteRequest = objectStore.delete(oldKeyName);
+                deleteRequest.onsuccess = function () {
+                    var addRequest = objectStore.add(data, newKeyName);
+                    addRequest.onsuccess = function () {
+                        Module['dynCall_vi'](functionPtr, 1);
+                    };
+                    addRequest.onerror = function () {
+                        Module['dynCall_vi'](functionPtr, 0);
+                    };
+                };
+                deleteRequest.onerror = function () {
+                    Module['dynCall_vi'](functionPtr, 0);
+                };
+            };
+
+            getRequest.onerror = function () {
+                Module['dynCall_vi'](functionPtr, 0);
+            };
+        };
+
+        request.onerror = function () {
+            Module['dynCall_vi'](functionPtr, 0);
+        };
+    },
+
+    GetUserData: function(callbackTo){
+        window.dispatchReactUnityEvent("getUser", UTF8ToString(callbackTo));
+    },
+
+    GetProjectData: function(callbackTo){
+        window.dispatchReactUnityEvent("getProjectData", UTF8ToString(callbackTo));
+    },
+
+    HideLoadingScreen: function(){
+        window.dispatchReactUnityEvent("hideLoading");
+    },
+
+    PublishGame: function(username, projectId, callbackTo){
+        window.dispatchReactUnityEvent("publishGame", UTF8ToString(username), UTF8ToString(projectId), UTF8ToString(callbackTo));
     }
 });

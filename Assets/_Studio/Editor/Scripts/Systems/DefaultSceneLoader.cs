@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using UnityEngine;
 using UnityEditor;
 using Terra.Studio;
@@ -27,9 +28,20 @@ public static class DefaultSceneLoader
             var system = Resources.Load<SystemConfigurationSO>("System/SystemSettings");
             if (system.LoadDefaultSceneOnPlay)
             {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
                 loadedDefaultScene = true;
-                IsEnteringPlayerMode?.Invoke(loadedDefaultScene);
+                var currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+                var scenesInBuildSettings = EditorBuildSettings.scenes;
+                if (scenesInBuildSettings != null && scenesInBuildSettings.Length > 0)
+                {
+                    var scene = Path.GetFileNameWithoutExtension(scenesInBuildSettings[0].path);
+                    if (scene.Equals(currentScene.name))
+                    {
+                        IsEnteringPlayerMode?.Invoke(loadedDefaultScene);
+                        return;
+                    }
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+                    IsEnteringPlayerMode?.Invoke(loadedDefaultScene);
+                }
             }
         }
 

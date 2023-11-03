@@ -9,6 +9,7 @@ namespace Terra.Studio.RTEditor
     public static class EditorSceneDataHandler
     {
         private const string SOPATH = "Assets/_Studio/Resources/System/SystemSettings.asset";
+        private const string USER_NAME_PREF = "UserName";
 
         static EditorSceneDataHandler()
         {
@@ -18,13 +19,23 @@ namespace Terra.Studio.RTEditor
         private static void OnPlayModeStateChanged(bool didEnterPlayMode)
         {
             var asset = AssetDatabase.LoadAssetAtPath<SystemConfigurationSO>(SOPATH);
-            if (!asset.PickupSavedData)
+            if (!asset.PickupSavedData || asset.LoadFromCloud)
             {
                 return;
             }
             var fileRef = asset.SceneDataToLoad;
             var filePath = AssetDatabase.GetAssetPath(fileRef);
-            var persistentPath = FileService.GetSavedFilePath(filePath);
+            string persistentPath;
+            USER_NAME_PREF.TryGetPrefString(out string userName);
+            if (!string.IsNullOrEmpty(userName))
+            {
+                persistentPath = string.Concat(userName, '_', fileRef.name);
+                persistentPath = FileService.GetSavedFilePath(persistentPath);
+            }
+            else
+            {
+                persistentPath = FileService.GetSavedFilePath(filePath);
+            }
             if (didEnterPlayMode)
             {
                 new FileService().CopyFile(filePath, persistentPath);

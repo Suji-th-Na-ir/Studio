@@ -19,8 +19,7 @@ namespace Terra.Studio
 
         public SceneDataHandler()
         {
-            if (!Helper.IsInUnityEditorMode() &&
-                EditorOp.Resolve<EditorEssentialsLoader>() == null)
+            if (!Helper.IsInUnityEditorMode() && EditorOp.Resolve<EditorEssentialsLoader>() == null)
             {
                 EditorOp.Register(new EditorEssentialsLoader());
             }
@@ -39,38 +38,71 @@ namespace Terra.Studio
             return SystemOp.Resolve<System>().CurrentStudioState == StudioState.Editor;
         }
 
-        public void Save()
+        public void Save(Action onSaveDone = null)
         {
             var sceneData = ExportSceneData();
-            var filePath = GetFilePath();
             if (!Helper.IsInUnityEditorMode())
             {
-                EasyUI.Toast.Toast.Show("Saved Successfully!", 3.0f, EasyUI.Toast.ToastColor.Green);
-                SystemOp.Resolve<FileService>().WriteFileIntoLocal?.Invoke(sceneData, filePath);
+                EditorOp.Resolve<ToolbarView>().SetSaveMessage(false, SaveState.Saving);
+                SystemOp
+                    .Resolve<SaveSystem>()
+                    .SaveManualData(
+                        sceneData,
+                        false,
+                        (status) =>
+                        {
+                            if (SystemOp.Resolve<System>().ConfigSO.SaveToCloud && status)
+                            {
+                                SystemOp
+                                    .Resolve<User>()
+                                    .UploadSaveDataToCloud(
+                                        sceneData,
+                                        (status, response) =>
+                                        {
+                                            OnCloudSaveAttempted(status, response);
+                                            onSaveDone?.Invoke();
+                                        }
+                                    );
+                            }
+                            else
+                            {
+                                EditorOp
+                                    .Resolve<ToolbarView>()
+                                    .SetSaveMessage(true, SaveState.Empty);
+                            }
+                        }
+                    );
             }
             else
             {
-                new FileService().WriteFileIntoLocal?.Invoke(sceneData, filePath);
+                new FileService().WriteFile(sceneData, GetAssetName?.Invoke(), false, null);
             }
-
         }
 
-        private string GetFilePath()
+        private void OnCloudSaveAttempted(bool status, string _)
         {
-            if (!Helper.IsInUnityEditorMode())
-            {
-                return FileService.GetSavedFilePath(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name);
-            }
-            else
-            {
-                return FileService.GetSavedFilePath(GetAssetName?.Invoke());
-            }
+            var saveState = status ? SaveState.SavedToCloud : SaveState.ChangesSavedOffline;
+            EditorOp.Resolve<ToolbarView>().SetSaveMessage(false, saveState);
         }
 
-        public void PrepareSceneDataToRuntime()
+        public void PrepareSceneDataToRuntime(Action onPreparationDone)
         {
             var sceneData = ExportSceneData();
             SystemOp.Resolve<CrossSceneDataHolder>().Set(sceneData);
+            SystemOp
+                .Resolve<SaveSystem>()
+                .SaveManualData(
+                    sceneData,
+                    false,
+                    (status) =>
+                    {
+                        if (status)
+                        {
+                            SystemOp.Resolve<User>().UploadSaveDataToCloud(sceneData, null);
+                            onPreparationDone?.Invoke();
+                        }
+                    }
+                );
         }
 
         #region Load Scene Data
@@ -78,31 +110,39 @@ namespace Terra.Studio
         public void LoadScene()
         {
             var prevState = SystemOp.Resolve<System>().PreviousStudioState;
-            if (prevState != StudioState.Runtime && SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
+            if (prevState != StudioState.Runtime)
             {
-                var saveFilePath = FileService.GetSavedFilePath(SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name);
-                SystemOp.Resolve<FileService>().ReadFileFromLocal?.Invoke(saveFilePath, OnDataReceived);
+                if (SystemOp.Resolve<System>().ConfigSO.PickupSavedData)
+                {
+                    SystemOp.Resolve<SaveSystem>().GetManualSavedData(OnDataReceived);
+                }
+                else
+                {
+                    OnDataReceived(false, null);
+                }
             }
             else
             {
                 var data = SystemOp.Resolve<CrossSceneDataHolder>().Get();
-                OnDataReceived(data);
+                var isDataAvailable = !string.IsNullOrEmpty(data);
+                OnDataReceived(isDataAvailable, data);
             }
         }
 
-        private void OnDataReceived(string data)
+        private void OnDataReceived(bool status, string data)
         {
-            if (string.IsNullOrEmpty(data))
+            if (status)
             {
-                return;
+                RecreateScene(data);
             }
-            RecreateScene(data);
+            SetupSceneDefaultObjects();
+            EditorOp.Resolve<EditorEssentialsLoader>().LoadEssentials();
         }
 
 #if UNITY_EDITOR
         public
 #endif
-            void RecreateScene(string data)
+        void RecreateScene(string data)
         {
             var worldData = JsonConvert.DeserializeObject<WorldData>(data);
             if (!Helper.IsInUnityEditorMode())
@@ -118,18 +158,18 @@ namespace Terra.Studio
                 var entity = worldData.entities[i];
                 SpawnObjects(entity);
             }
-            if (!Helper.IsInUnityEditorMode())
-            {
-                SetupSceneDefaultObjects();
-                EditorOp.Resolve<EditorEssentialsLoader>().LoadEssentials();
-            }
         }
 
         private void SpawnObjects(VirtualEntity entity)
         {
             GameObject generatedObj;
             var trs = new Vector3[] { entity.position, entity.rotation, entity.scale };
-            generatedObj = RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, trs);
+            generatedObj = RuntimeWrappers.SpawnObject(
+                entity.assetType,
+                entity.assetPath,
+                entity.primitiveType,
+                trs
+            );
             if (generatedObj == null)
             {
                 return;
@@ -140,7 +180,11 @@ namespace Terra.Studio
             HandleChildren(generatedObj, entity.children);
         }
 
-        private void AttachComponents(GameObject gameObject, VirtualEntity entity, Action<GameObject, VirtualEntity> onComponentDependencyFound = null)
+        private void AttachComponents(
+            GameObject gameObject,
+            VirtualEntity entity,
+            Action<GameObject, VirtualEntity> onComponentDependencyFound = null
+        )
         {
             for (int i = 0; i < entity.components.Length; i++)
             {
@@ -153,7 +197,9 @@ namespace Terra.Studio
                 {
                     if (EditorOp.Resolve<DataProvider>() != null)
                     {
-                        var type = EditorOp.Resolve<DataProvider>().GetVariance(entity.components[i].type);
+                        var type = EditorOp
+                            .Resolve<DataProvider>()
+                            .GetVariance(entity.components[i].type);
                         if (type == null || string.IsNullOrEmpty((string)entity.components[i].data))
                         {
                             continue;
@@ -166,7 +212,11 @@ namespace Terra.Studio
             onComponentDependencyFound?.Invoke(gameObject, entity);
         }
 
-        public void HandleChildren(GameObject gameObject, VirtualEntity[] children, Action<GameObject, VirtualEntity> onComponentDependencyFound = null)
+        public void HandleChildren(
+            GameObject gameObject,
+            VirtualEntity[] children,
+            Action<GameObject, VirtualEntity> onComponentDependencyFound = null
+        )
         {
             if (children == null || children.Length == 0)
             {
@@ -180,8 +230,18 @@ namespace Terra.Studio
                 if (tr.childCount < i + 1)
                 {
                     GameObject generatedObj;
-                    var trs = new Vector3[] { childEntity.position, childEntity.rotation, childEntity.scale };
-                    generatedObj = RuntimeWrappers.SpawnObject(childEntity.assetType, childEntity.assetPath, childEntity.primitiveType, trs);
+                    var trs = new Vector3[]
+                    {
+                        childEntity.position,
+                        childEntity.rotation,
+                        childEntity.scale
+                    };
+                    generatedObj = RuntimeWrappers.SpawnObject(
+                        childEntity.assetType,
+                        childEntity.assetPath,
+                        childEntity.primitiveType,
+                        trs
+                    );
                     child = generatedObj.transform;
                     child.SetParent(tr);
                     child.localScale = childEntity.scale.WorldToLocalScale(tr);
@@ -189,8 +249,14 @@ namespace Terra.Studio
                 else
                 {
                     child = gameObject.transform.GetChild(i);
-                    RuntimeWrappers.AttachPrerequisities(child.gameObject, ResourceDB.GetItemData(childEntity.assetPath));
-                    child.SetPositionAndRotation(childEntity.position, Quaternion.Euler(childEntity.rotation));
+                    RuntimeWrappers.AttachPrerequisities(
+                        child.gameObject,
+                        ResourceDB.GetItemData(childEntity.assetPath)
+                    );
+                    child.SetPositionAndRotation(
+                        childEntity.position,
+                        Quaternion.Euler(childEntity.rotation)
+                    );
                     child.localScale = childEntity.scale.WorldToLocalScale(child.parent);
                 }
                 child.name = childEntity.name;
@@ -217,7 +283,11 @@ namespace Terra.Studio
                 }
                 if (allGos[i].TryGetComponent(out IgnoreToPackObject _))
                 {
-                    TryHandleUnpackableGameObjectData(allGos[i], virtualEntities, ref worldMetaData);
+                    TryHandleUnpackableGameObjectData(
+                        allGos[i],
+                        virtualEntities,
+                        ref worldMetaData
+                    );
                     continue;
                 }
                 var entity = GetVirtualEntity(allGos[i], i, true);
@@ -233,7 +303,11 @@ namespace Terra.Studio
             return json;
         }
 
-        public VirtualEntity GetVirtualEntity(GameObject go, int index, bool shouldCheckForAssetPath)
+        public VirtualEntity GetVirtualEntity(
+            GameObject go,
+            int index,
+            bool shouldCheckForAssetPath
+        )
         {
             var newEntity = new VirtualEntity
             {
@@ -242,8 +316,13 @@ namespace Terra.Studio
                 assetPath = shouldCheckForAssetPath ? GetAssetPath(go) : null,
                 position = go.transform.position,
                 rotation = go.transform.eulerAngles,
-                scale = go.transform.parent != null ? go.transform.localScale.LocalToWorldScale(go.transform.parent) : go.transform.localScale,
-                assetType = !string.IsNullOrEmpty(GetAssetPath(go)) ? AssetType.Prefab : GetAssetType(go),
+                scale =
+                    go.transform.parent != null
+                        ? go.transform.localScale.LocalToWorldScale(go.transform.parent)
+                        : go.transform.localScale,
+                assetType = !string.IsNullOrEmpty(GetAssetPath(go))
+                    ? AssetType.Prefab
+                    : GetAssetType(go),
                 shouldLoadAssetAtRuntime = true
             };
             if (newEntity.assetType == AssetType.Primitive)
@@ -267,18 +346,18 @@ namespace Terra.Studio
                 for (int j = 0; j < editorComponents.Length; j++)
                 {
                     var (type, data) = editorComponents[j].Export();
-                    entityComponents[j] = new EntityBasedComponent()
-                    {
-                        type = type,
-                        data = data
-                    };
+                    entityComponents[j] = new EntityBasedComponent() { type = type, data = data };
                 }
             }
             newEntity.components = entityComponents;
             var childrenEntities = new VirtualEntity[go.transform.childCount];
             for (int k = 0; k < go.transform.childCount; k++)
             {
-                childrenEntities[k] = GetVirtualEntity(go.transform.GetChild(k).gameObject, k, true);
+                childrenEntities[k] = GetVirtualEntity(
+                    go.transform.GetChild(k).gameObject,
+                    k,
+                    true
+                );
             }
             newEntity.children = childrenEntities;
             GetColliderData(go, ref newEntity.metaData);
@@ -289,7 +368,9 @@ namespace Terra.Studio
         {
             if (!Helper.IsInUnityEditorMode())
             {
-                if (go.TryGetComponent(out StudioGameObject component) && component.itemData != null)
+                if (
+                    go.TryGetComponent(out StudioGameObject component) && component.itemData != null
+                )
                 {
                     return component.itemData.ResourcePath;
                 }
@@ -308,7 +389,10 @@ namespace Terra.Studio
             {
                 if (go.TryGetComponent(out StudioGameObject component))
                 {
-                    if (component.itemData != null && !string.IsNullOrEmpty(component.itemData.ResourcePath))
+                    if (
+                        component.itemData != null
+                        && !string.IsNullOrEmpty(component.itemData.ResourcePath)
+                    )
                     {
                         return AssetType.Prefab;
                     }
@@ -338,7 +422,9 @@ namespace Terra.Studio
         {
             if (!Helper.IsInUnityEditorMode())
             {
-                if (go.TryGetComponent(out StudioGameObject component) && component.itemData != null)
+                if (
+                    go.TryGetComponent(out StudioGameObject component) && component.itemData != null
+                )
                 {
                     if (component.itemData.IsPrimitive && go.IsPrimitive(out var type))
                     {
@@ -408,7 +494,6 @@ namespace Terra.Studio
             }
             switch (type.Name)
             {
-
                 case nameof(BoxCollider):
                     var bx = (BoxCollider)collider;
                     bx.size = colliderData.size;
@@ -436,7 +521,11 @@ namespace Terra.Studio
             }
         }
 
-        private void TryHandleUnpackableGameObjectData(GameObject go, List<VirtualEntity> virtualEntities, ref WorldMetaData metaData)
+        private void TryHandleUnpackableGameObjectData(
+            GameObject go,
+            List<VirtualEntity> virtualEntities,
+            ref WorldMetaData metaData
+        )
         {
             if (go.TryGetComponent(out StudioGameObject studioGameObject))
             {
@@ -464,7 +553,9 @@ namespace Terra.Studio
         private void SetupSceneDefaultObjects()
         {
             editorCamera = Camera.main;
-            var isDataPresent = SystemOp.Resolve<CrossSceneDataHolder>().Get("CameraPos", out var data);
+            var isDataPresent = SystemOp
+                .Resolve<CrossSceneDataHolder>()
+                .Get("CameraPos", out var data);
             if (isDataPresent)
             {
                 editorCamera.transform.position = (Vector3)data;
@@ -480,8 +571,12 @@ namespace Terra.Studio
         {
             if (editorCamera)
             {
-                SystemOp.Resolve<CrossSceneDataHolder>().Set("CameraPos", editorCamera.transform.position);
-                SystemOp.Resolve<CrossSceneDataHolder>().Set("CameraRot", editorCamera.transform.eulerAngles);
+                SystemOp
+                    .Resolve<CrossSceneDataHolder>()
+                    .Set("CameraPos", editorCamera.transform.position);
+                SystemOp
+                    .Resolve<CrossSceneDataHolder>()
+                    .Set("CameraRot", editorCamera.transform.eulerAngles);
             }
         }
 
@@ -521,7 +616,9 @@ namespace Terra.Studio
                 {
                     return;
                 }
-                EditorOp.Resolve<EditorEssentialsLoader>().Load(EditorObjectType.Score, out GameObject scoreManagerObj);
+                EditorOp
+                    .Resolve<EditorEssentialsLoader>()
+                    .Load(EditorObjectType.Score, out GameObject scoreManagerObj);
                 scoreManagerObj.transform.SetAsFirstSibling();
             }
             else if (ScoreManagerObj)

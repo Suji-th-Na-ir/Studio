@@ -14,6 +14,7 @@ namespace Terra.Studio
 
         public event Action<bool> OnUndoStackAvailable;
         public event Action<bool> OnRedoStackAvailable;
+        public int CurrentIndex => currentIndex;
 
         public UndoRedoSystem()
         {
@@ -235,7 +236,7 @@ namespace Terra.Studio
                 var transform = go.transform;
                 position = transform.position;
                 eulerAngles = transform.eulerAngles;
-                localScale = transform.localScale;    
+                localScale = transform.localScale;
             }
 
             private void ApplySnapshot()
@@ -631,16 +632,16 @@ namespace Terra.Studio
         {
             private readonly string dirtyComponentData;
             private readonly string newComponentData;
-            private  BaseBehaviour behaviour;
+            private BaseBehaviour behaviour;
             private readonly string comment;
             private readonly Action onDataModified;
             private ComponentDataSnapshot redoSnapshot;
             private readonly GameObject targetGameObject;
             private readonly Type behaviourType;
 
-            public static ComponentDataSnapshot CreateSnapshot(BaseBehaviour behaviour, string dirtyComponentData, string newComponentData,string comment, Action onDataModified)
+            public static ComponentDataSnapshot CreateSnapshot(BaseBehaviour behaviour, string dirtyComponentData, string newComponentData, string comment, Action onDataModified)
             {
-                return new ComponentDataSnapshot(behaviour,dirtyComponentData,newComponentData,comment,onDataModified,true);
+                return new ComponentDataSnapshot(behaviour, dirtyComponentData, newComponentData, comment, onDataModified, true);
             }
 
             public ComponentDataSnapshot(BaseBehaviour behaviour, string dirtyComponentData, string newComponentData, string comment, Action onDataModified, bool shouldStackRecord)
@@ -705,7 +706,7 @@ namespace Terra.Studio
 
             public static MultipleComponentDataSnapshot CreateSnapshot(List<BaseBehaviour> behaviours, string newComponentData, string comment, Action onDataModified)
             {
-                return new MultipleComponentDataSnapshot(behaviours,newComponentData,comment,onDataModified);
+                return new MultipleComponentDataSnapshot(behaviours, newComponentData, comment, onDataModified);
             }
 
             public MultipleComponentDataSnapshot(List<BaseBehaviour> behaviours, string newComponentData, string comment, Action onDataModified)
@@ -714,7 +715,7 @@ namespace Terra.Studio
                 StackIntoUndoRedo();
             }
 
-            private void InitializeData(List<BaseBehaviour> behaviours,string newComponentData, string comment, Action onDataModified)
+            private void InitializeData(List<BaseBehaviour> behaviours, string newComponentData, string comment, Action onDataModified)
             {
                 snapshots = new ComponentDataSnapshot[behaviours.Count];
                 for (int i = 0; i < behaviours.Count; i++)

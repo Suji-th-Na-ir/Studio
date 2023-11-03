@@ -14,11 +14,23 @@ namespace Terra.Studio
         public override void Init()
         {
             RuntimeOp.Register(this);
-            var button = gameObject.GetComponentInChildren<Button>();
-            button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(SystemOp.Resolve<System>().SwitchState);
+            CheckAndAttachBackButton();
             RuntimeOp.Resolve<GameStateHandler>().SubscribeToStateChanged(true, Repaint);
             Draw();
+        }
+
+        private void CheckAndAttachBackButton()
+        {
+            var button = gameObject.GetComponentInChildren<Button>();
+            button.onClick.RemoveAllListeners();
+            if (SystemOp.Resolve<System>().DefaultStudioState == StudioState.Runtime)
+            {
+                button.gameObject.SetActive(false);
+            }
+            else
+            {
+                button.onClick.AddListener(SystemOp.Resolve<System>().SwitchState);
+            }
         }
 
         public override void Draw()
