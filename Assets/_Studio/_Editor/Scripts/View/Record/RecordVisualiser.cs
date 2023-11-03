@@ -679,7 +679,7 @@ namespace Terra.Studio
                 var subMeshCount = mesh.mesh.subMeshCount;
                 if (child.TryGetComponent(out Renderer renderer))
                 {
-                    if (renderer.materials.Length > subMeshCount)
+                    if (renderer.materials.Length > subMeshCount || !renderer.materials.Contains(ghostMaterial))
                     {
                         var materials = new Material[subMeshCount];
                         for (int i = 0; i < subMeshCount; i++)
