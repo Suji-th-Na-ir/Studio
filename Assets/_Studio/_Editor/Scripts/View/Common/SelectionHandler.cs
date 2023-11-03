@@ -298,9 +298,10 @@ public class SelectionHandler : View
             {
                 if (RTInput.WasKeyPressedThisFrame(KeyCode.Backspace))
                 {
+                    var selections = new List<GameObject>(_selectedObjects);
                     runtimeHierarchy.Deselect();
-                    Snapshots.DeleteGameObjectsSnapshot.CreateSnapshot(_selectedObjects.ToList());
-                    foreach (GameObject obj in _selectedObjects)
+                    Snapshots.DeleteGameObjectsSnapshot.CreateSnapshot(selections.ToList());
+                    foreach (GameObject obj in selections)
                     {
                         obj.SetActive(false);
                     }
