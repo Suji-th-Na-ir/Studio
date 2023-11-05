@@ -136,5 +136,10 @@ namespace Terra.Studio
             currentTime = newTime;
             OnTimeModified?.Invoke(newTime);
         }
+
+        public void AddTime(float newTime)
+        {
+            currentTime += newTime;
+        }
     }
 }
