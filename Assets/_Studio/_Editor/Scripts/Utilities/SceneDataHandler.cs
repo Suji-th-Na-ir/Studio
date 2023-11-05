@@ -51,7 +51,7 @@ namespace Terra.Studio
                         false,
                         (status) =>
                         {
-                            if (SystemOp.Resolve<System>().ConfigSO.SaveToCloud && status)
+                            if (SystemOp.Resolve<System>().ConfigSO.ServeFromCloud && status)
                             {
                                 SystemOp
                                     .Resolve<User>()

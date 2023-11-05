@@ -36,6 +36,7 @@ namespace Terra.Studio
         {
             Initialize();
             LoadSilentServices();
+            AutoloadSceneIfSetFromConfig();
         }
 
         private void Initialize()
@@ -135,6 +136,19 @@ namespace Terra.Studio
             Mixpanel.Flush();
         }
 
+        private void AutoloadSceneIfSetFromConfig()
+        {
+            if (configData.ServeFromCloud) return;
+            "UserName".TryGetPrefString(out var username);
+            if (string.IsNullOrEmpty(username)) return;
+            var projectName = configData.SceneDataToLoad.name;
+            SystemOp.Resolve<User>().
+                UpdateUserName(username).
+                UpdateProjectName(projectName).
+                UpdateProjectId(projectName);
+            LoadSceneData();
+        }
+
         public void SetSimulationState(bool isEnabled)
         {
             IsSimulating = isEnabled;
@@ -151,7 +165,7 @@ namespace Terra.Studio
             {
                 if (configData.PickupSavedData)
                 {
-                    if (configData.LoadFromCloud)
+                    if (configData.ServeFromCloud)
                     {
                         SystemOp.Resolve<Flow>().DoCloudSaveCheck(LoadSubsystemScene);
                     }

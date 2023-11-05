@@ -86,6 +86,7 @@ namespace Terra.Studio
 
         public void RegisterToAutosaveChangeListener(bool enable)
         {
+            if (!SystemOp.Resolve<System>().ConfigSO.ServeFromCloud) return;
             if (enable)
             {
                 SystemOp.Register(new AutoSave());
@@ -98,6 +99,7 @@ namespace Terra.Studio
 
         private void RegisterTimestampForLastSave(string autoFlushNewTimeStamp = null)
         {
+            if (!SystemOp.Resolve<System>().ConfigSO.ServeFromCloud) return;
             string timestamp;
             if (string.IsNullOrEmpty(autoFlushNewTimeStamp))
             {
