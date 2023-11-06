@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using PlayShifu.Terra;
 using UnityEngine;
 
 namespace CMF
@@ -75,6 +76,8 @@ namespace CMF
 
 		void Update()
 		{
+			if (Helper.IsPointerOverUIElement(new Vector2(cameraInput.GetHorizontalCameraInput(), cameraInput.GetVerticalCameraInput()), out string name))
+				return;
 			HandleCameraRotation();
 		}
 
