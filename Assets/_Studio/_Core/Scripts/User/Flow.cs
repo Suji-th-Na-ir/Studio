@@ -165,7 +165,7 @@ namespace Terra.Studio
 
         public void GetAndSetProjectDetailsForRuntime(Action callback)
         {
-            var loadFromCloud = SystemOp.Resolve<System>().ConfigSO.LoadFromCloud;
+            var loadFromCloud = SystemOp.Resolve<System>().ConfigSO.ServeFromCloud;
             if (loadFromCloud)
             {
                 new GetPublishDataAPI().DoRequest((status, response) =>

@@ -17,9 +17,13 @@ namespace Terra.Studio
                     break;
                 case AssetType.Prefab:
                     object obj = null;
-                    var doesContainAnyData =
-                        SystemOp.Resolve<System>().IsSimulating &&
-                        SystemOp.Resolve<CrossSceneDataHolder>().Get(assetPath, out obj);
+                    var doesContainAnyData = false;
+                    if (!Helper.IsInUnityEditorMode())
+                    {
+                        doesContainAnyData =
+                            SystemOp.Resolve<System>().IsSimulating &&
+                            SystemOp.Resolve<CrossSceneDataHolder>().Get(assetPath, out obj);
+                    }
                     if (!doesContainAnyData)
                     {
                         go = SpawnGameObject(assetPath, ResourceDB.GetItemData(assetPath), trs);

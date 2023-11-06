@@ -12,6 +12,7 @@ namespace Terra.Studio.RTEditor
         private string username;
         private string publishedProjId;
         private int selectedStudioMode;
+        private SystemConfigurationSO configurationSO;
 
         private const string USERNAME_PREF = "UserName";
         private const string STUDIO_PASSWORD = "Studio@12345";
@@ -20,6 +21,7 @@ namespace Terra.Studio.RTEditor
         private void OnEnable()
         {
             username = PlayerPrefs.GetString(USERNAME_PREF, string.Empty);
+            configurationSO = (SystemConfigurationSO)target;
         }
 
         public override void OnInspectorGUI()
@@ -71,7 +73,19 @@ namespace Terra.Studio.RTEditor
             GUILayout.Space(5);
             if (GUILayout.Button("Setup"))
             {
-                SetupUser();
+                if (configurationSO.ServeFromCloud)
+                {
+                    SetupUser();
+                }
+                else
+                {
+                    var sceneName = configurationSO.SceneDataToLoad.name;
+                    SystemOp.Resolve<User>().
+                        UpdateUserName(username).
+                        UpdateProjectName(sceneName).
+                        UpdateProjectId(sceneName);
+                    SystemOp.Resolve<System>().LoadSceneData();
+                }
             }
         }
 

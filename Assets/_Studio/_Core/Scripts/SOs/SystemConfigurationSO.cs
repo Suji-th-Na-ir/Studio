@@ -28,34 +28,12 @@ namespace Terra.Studio
             set { pickupSavedData = value; }
 #endif
         }
-        public bool LoadFromCloud
+        public bool ServeFromCloud
         {
             get
             {
 #if UNITY_EDITOR
-                return loadFromCloud;
-#else
-                return true;
-#endif
-            }
-        }
-        public bool DoCloudLogin
-        {
-            get
-            {
-#if UNITY_EDITOR
-                return doCloudLoginLocally;
-#else
-                return true;
-#endif
-            }
-        }
-        public bool SaveToCloud
-        {
-            get
-            {
-#if UNITY_EDITOR
-                return saveToCloudWhenSaved;
+                return serveFromCloud;
 #else
                 return true;
 #endif
@@ -65,10 +43,8 @@ namespace Terra.Studio
 #if UNITY_EDITOR
         [Space(10), Header("Editor only")]
         [SerializeField] private bool loadDefaultSceneOnPlay;
+        [SerializeField] private bool serveFromCloud;
         public bool LoadDefaultSceneOnPlay { get { return loadDefaultSceneOnPlay; } }
-        [SerializeField] private bool doCloudLoginLocally;
-        [SerializeField] private bool loadFromCloud;
-        [SerializeField] private bool saveToCloudWhenSaved;
 #endif
     }
 }
