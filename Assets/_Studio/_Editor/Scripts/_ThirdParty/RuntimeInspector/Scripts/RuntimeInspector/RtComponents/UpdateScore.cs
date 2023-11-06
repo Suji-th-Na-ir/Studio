@@ -50,6 +50,7 @@ namespace Terra.Studio
                 AddScoreValue = Score.score,
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
                 Broadcast = broadcastData.broadcast,
+                listen = Listen.Always
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var json = JsonConvert.SerializeObject(data);

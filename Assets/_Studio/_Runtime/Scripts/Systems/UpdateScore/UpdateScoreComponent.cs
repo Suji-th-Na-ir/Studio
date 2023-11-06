@@ -20,5 +20,6 @@ namespace Terra.Studio
         [JsonIgnore] public GameObject RefObj { get; set; }
 
         public int AddScoreValue;
+        public Listen listen;
     }
 }

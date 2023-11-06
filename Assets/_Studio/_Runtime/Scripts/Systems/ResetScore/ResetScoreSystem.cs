@@ -13,9 +13,12 @@ namespace Terra.Studio
         public override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref entity.GetComponent<ResetScoreComponent>();
-            var comp = RuntimeOp.Resolve<ComponentsData>();
-            comp.ProvideEventContext(false, entityRef.EventContext);
-            entityRef.IsExecuted = true;
+            if (entityRef.listen != Listen.Always)
+            {
+                var compsData = RuntimeOp.Resolve<ComponentsData>();
+                compsData.ProvideEventContext(false, entityRef.EventContext);
+                entityRef.IsExecuted = true;
+            }
             OnDemandRun(in entityRef);
         }
 

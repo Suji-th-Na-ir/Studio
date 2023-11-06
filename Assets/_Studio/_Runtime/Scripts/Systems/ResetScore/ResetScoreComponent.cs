@@ -7,6 +7,8 @@ namespace Terra.Studio
     [Serializable]
     public struct ResetScoreComponent : IBaseComponent
     {
+        public Listen listen;
+
         public bool IsConditionAvailable { get; set; }
         public string ConditionType { get; set; }
         public string ConditionData { get; set; }
