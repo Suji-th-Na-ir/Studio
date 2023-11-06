@@ -71,3 +71,7 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: c52b87cb604f04764825610a5b5f1926, type: 3}
   - type: NoOneBroadcasting
     icon: {fileID: 21300000, guid: 63f6bf6e3882d4ef1a643dad63ce4c55, type: 3}
+  - type: ResetTimer
+    icon: {fileID: 21300000, guid: 63f6bf6e3882d4ef1a643dad63ce4c55, type: 3}
+  - type: UpdateTimer
+    icon: {fileID: 21300000, guid: 63f6bf6e3882d4ef1a643dad63ce4c55, type: 3}

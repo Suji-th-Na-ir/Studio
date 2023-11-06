@@ -3,11 +3,11 @@ using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
-    public class UpdateTimerSystem : BaseSystem
+    public class ResetTimerSystem : BaseSystem
     {
         public override void OnConditionalCheck(int entity, object data)
         {
-            ref var entityRef = ref EntityAuthorOp.GetComponent<UpdateTimerComponent>(entity);
+            ref var entityRef = ref EntityAuthorOp.GetComponent<ResetTimerComponent>(entity);
             if (entityRef.ConditionData.Equals("Terra.Studio.MouseAction"))
             {
                 if (data == null || data as GameObject != entityRef.RefObj) return;
@@ -16,9 +16,9 @@ namespace Terra.Studio
             OnDemandRun(in entityRef);
         }
 
-        public void OnDemandRun(in UpdateTimerComponent component)
+        public void OnDemandRun(in ResetTimerComponent component)
         {
-            RuntimeOp.Resolve<InGameTimeHandler>().AddTime(component.updateBy);
+            RuntimeOp.Resolve<InGameTimeHandler>().ResetTime();
             if (component.canPlaySFX)
             {
                 RuntimeWrappers.PlaySFX(component.sfxName);
@@ -35,8 +35,8 @@ namespace Terra.Studio
 
         public override void OnHaltRequested(EcsWorld currentWorld)
         {
-            var filter = currentWorld.Filter<UpdateTimerComponent>().End();
-            var compPool = currentWorld.GetPool<UpdateTimerComponent>();
+            var filter = currentWorld.Filter<ResetTimerComponent>().End();
+            var compPool = currentWorld.GetPool<ResetTimerComponent>();
             foreach (var entity in filter)
             {
                 var component = compPool.Get(entity);

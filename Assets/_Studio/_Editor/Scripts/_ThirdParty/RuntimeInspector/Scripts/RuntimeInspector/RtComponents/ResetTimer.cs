@@ -2,8 +2,8 @@ using Newtonsoft.Json;
 
 namespace Terra.Studio
 {
-    [EditorDrawComponent("Terra.Studio.UpdateTimer"), AliasDrawer("Update Timer")]
-    public class UpdateTimer : BaseBehaviour
+    [EditorDrawComponent("Terra.Studio.ResetTimer"), AliasDrawer("Reset Timer")]
+    public class ResetTimer : BaseBehaviour
     {
         public enum StartOn
         {
@@ -17,33 +17,24 @@ namespace Terra.Studio
             BroadcastListen
         }
 
-        public Atom.StartOn updateWhen = new();
-        public int updateBy = 0;
+        public Atom.StartOn resetWhen = new();
         public Atom.Broadcast broadcast = new();
 
-        public override string ComponentName => nameof(UpdateTimer);
+        public override string ComponentName => nameof(ResetTimer);
         public override bool CanPreview => false;
-        protected override bool CanBroadcast => true;
+        protected override bool CanBroadcast => false;
         protected override bool CanListen => true;
-        protected override string[] BroadcasterRefs => new string[]
-        {
-            broadcast.broadcast
-        };
-        protected override string[] ListenerRefs => new string[]
-        {
-            updateWhen.data.listenName
-        };
 
         protected override void Awake()
         {
             base.Awake();
-            updateWhen.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated, updateWhen.data.startIndex == 3);
+            resetWhen.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated, resetWhen.data.startIndex == 3);
             broadcast.Setup(gameObject, this);
         }
 
         public override (string type, string data) Export()
         {
-            var comp = new UpdateTimerComponent()
+            var component = new ResetTimerComponent()
             {
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
@@ -51,26 +42,24 @@ namespace Terra.Studio
                 IsBroadcastable = !string.IsNullOrEmpty(broadcast.broadcast),
                 Broadcast = broadcast.broadcast,
                 canPlaySFX = false,
-                canPlayVFX = false,
-                updateBy = updateBy
+                canPlayVFX = false
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
-            var data = JsonConvert.SerializeObject(comp);
+            var data = JsonConvert.SerializeObject(component);
             return (type, data);
         }
 
         public override void Import(EntityBasedComponent data)
         {
             var comp = JsonConvert.DeserializeObject<UpdateTimerComponent>(data.data);
-            updateBy = comp.updateBy;
             broadcast.broadcast = comp.Broadcast;
             ApplyStartCondition(comp);
-            ImportVisualisation(broadcast.broadcast, updateWhen.data.listenName);
+            ImportVisualisation(broadcast.broadcast, resetWhen.data.listenName);
         }
 
         private string GetStartEvent()
         {
-            int index = updateWhen.data.startIndex;
+            int index = resetWhen.data.startIndex;
             var value = (StartOn)index;
             var eventName = EditorOp.Resolve<DataProvider>().GetEnumValue(value);
             return eventName;
@@ -78,12 +67,12 @@ namespace Terra.Studio
 
         private string GetStartCondition()
         {
-            int index = updateWhen.data.startIndex;
+            int index = resetWhen.data.startIndex;
             var value = (StartOn)index;
             string inputString = value.ToString();
             if (inputString.ToLower().Contains("listen"))
             {
-                return updateWhen.data.listenName;
+                return resetWhen.data.listenName;
             }
             var data = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(value);
             return data;
@@ -100,21 +89,21 @@ namespace Terra.Studio
                 var targetEnum = playerCollideValue.Equals(component.ConditionData) ?
                     StartOn.OnPlayerCollide :
                     StartOn.OnObjectCollide;
-                updateWhen.data.startIndex = (int)targetEnum;
-                updateWhen.data.startName = targetEnum.ToString();
+                resetWhen.data.startIndex = (int)targetEnum;
+                resetWhen.data.startName = targetEnum.ToString();
                 return;
             }
             var listenType = EditorOp.Resolve<DataProvider>().GetEnumValue(StartOn.BroadcastListen);
             if (listenType.Equals(component.ConditionType))
             {
-                updateWhen.data.startIndex = (int)StartOn.BroadcastListen;
-                updateWhen.data.startName = StartOn.BroadcastListen.ToString();
-                updateWhen.data.listenName = component.ConditionData;
+                resetWhen.data.startIndex = (int)StartOn.BroadcastListen;
+                resetWhen.data.startName = StartOn.BroadcastListen.ToString();
+                resetWhen.data.listenName = component.ConditionData;
                 return;
             }
             var startOn = (StartOn)result;
-            updateWhen.data.startIndex = (int)startOn;
-            updateWhen.data.startName = startOn.ToString();
+            resetWhen.data.startIndex = (int)startOn;
+            resetWhen.data.startName = startOn.ToString();
         }
     }
 }

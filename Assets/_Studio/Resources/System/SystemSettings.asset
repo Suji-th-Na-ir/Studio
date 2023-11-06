@@ -19,5 +19,3 @@ MonoBehaviour:
   SceneData: {fileID: 4900000, guid: b3eb9ecd6122a4fba98116f814488f91, type: 3}
   loadDefaultSceneOnPlay: 1
   serveFromCloud: 0
-  doAutoLocalLogin: 0
-  autoLoadSceneIfUsernameExists: 1

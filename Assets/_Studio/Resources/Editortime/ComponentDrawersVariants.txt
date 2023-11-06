@@ -7,6 +7,7 @@
   "Terra.Studio.GameScore": "Terra.Studio.GameScore",
   "Terra.Studio.InGameTimer": "Terra.Studio.InGameTimer",
   "Terra.Studio.Push": "Terra.Studio.Push",
+  "Terra.Studio.ResetTimer": "Terra.Studio.ResetTimer",
   "Terra.Studio.Respawn": "Terra.Studio.Respawn",
   "Terra.Studio.Rotate": "Terra.Studio.Rotate",
   "Terra.Studio.SetObjectPosition": "Terra.Studio.SetObjectPosition",

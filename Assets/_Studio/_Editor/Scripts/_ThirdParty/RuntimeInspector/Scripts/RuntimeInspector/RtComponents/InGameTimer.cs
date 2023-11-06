@@ -1,3 +1,4 @@
+using UnityEngine;
 using Newtonsoft.Json;
 
 namespace Terra.Studio
@@ -5,7 +6,9 @@ namespace Terra.Studio
     [EditorDrawComponent("Terra.Studio.InGameTimer")]
     public class InGameTimer : BaseBehaviour
     {
-        public uint Time = 180;
+        public TimerType timerType;
+        public uint timer = 180;
+        [Header("At Timer End")]
         public Atom.Broadcast broadcastData = new();
 
         public override string ComponentName => nameof(InGameTimer);
@@ -42,7 +45,8 @@ namespace Terra.Studio
                 ConditionData = "OnStart",
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
                 Broadcast = broadcastData.broadcast,
-                totalTime = Time
+                totalTime = timer,
+                timerType = timerType
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp);
@@ -52,8 +56,9 @@ namespace Terra.Studio
         public override void Import(EntityBasedComponent data)
         {
             var comp = JsonConvert.DeserializeObject<InGameTimerComponent>(data.data);
-            Time = comp.totalTime;
+            timer = comp.totalTime;
             broadcastData.broadcast = comp.Broadcast;
+            timerType = comp.timerType;
             ImportVisualisation(broadcastData.broadcast, null);
         }
     }

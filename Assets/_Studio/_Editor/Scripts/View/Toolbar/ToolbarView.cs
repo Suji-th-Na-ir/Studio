@@ -218,12 +218,11 @@ namespace Terra.Studio
 
             if (name.Equals("CheckPoint"))
             {
-                AddCheckpointData(primitive);
+                primitive.AddComponent<Checkpoint>();
             }
-
-            if (name.Equals("InGameTimer"))
+            else if (name.Equals("InGameTimer"))
             {
-                AddInGameTimerData(primitive);
+                primitive.AddComponent<InGameTimer>();
             }
 
             EditorOp.Resolve<SelectionHandler>().DeselectAll();
@@ -263,16 +262,6 @@ namespace Terra.Studio
             var resObj = EditorOp.Load<GameObject>("Prefabs/PrimitivesPanel");
             primitivePanel = Instantiate(resObj, transform);
             primitivePanel.SetActive(false);
-        }
-
-        private void AddCheckpointData(GameObject go)
-        {
-            go.AddComponent<Checkpoint>();
-        }
-
-        private void AddInGameTimerData(GameObject go)
-        {
-            go.AddComponent<InGameTimer>();
         }
 
         private void AddListenerEvent(Button button, Action callback)

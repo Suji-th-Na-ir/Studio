@@ -51,6 +51,22 @@
     "Terra.Studio.Listener",
     null
   ],
+  "Terra.Studio.ResetTimer+StartOn.OnPlayerCollide": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "Terra.Studio.ResetTimer+StartOn.OnObjectCollide": [
+    "Terra.Studio.TriggerAction",
+    "Other"
+  ],
+  "Terra.Studio.ResetTimer+StartOn.OnClick": [
+    "Terra.Studio.MouseAction",
+    "OnClick"
+  ],
+  "Terra.Studio.ResetTimer+StartOn.BroadcastListen": [
+    "Terra.Studio.Listener",
+    null
+  ],
   "Terra.Studio.SetObjectPosition+StartOptions.OnClick": [
     "Terra.Studio.MouseAction",
     "OnClick"
@@ -102,5 +118,21 @@
   "Terra.Studio.Switch+StartOn.OnObjectCollide": [
     "Terra.Studio.TriggerAction",
     "Other"
+  ],
+  "Terra.Studio.UpdateTimer+StartOn.OnPlayerCollide": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "Terra.Studio.UpdateTimer+StartOn.OnObjectCollide": [
+    "Terra.Studio.TriggerAction",
+    "Other"
+  ],
+  "Terra.Studio.UpdateTimer+StartOn.OnClick": [
+    "Terra.Studio.MouseAction",
+    "OnClick"
+  ],
+  "Terra.Studio.UpdateTimer+StartOn.BroadcastListen": [
+    "Terra.Studio.Listener",
+    null
   ]
 }
