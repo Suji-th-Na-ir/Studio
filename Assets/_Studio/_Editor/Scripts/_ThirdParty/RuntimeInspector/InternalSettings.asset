@@ -143,6 +143,9 @@ MonoBehaviour:
   - ComponentName: UpdateScore
     hideAddButton: 0
     hideRemoveButton: 0
+  - ComponentName: ResetScore
+    hideAddButton: 0
+    hideRemoveButton: 0
   m_GameEssentials:
   - InGameTimer
   - GameScore

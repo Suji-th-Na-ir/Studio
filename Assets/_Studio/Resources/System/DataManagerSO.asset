@@ -98,6 +98,11 @@ MonoBehaviour:
     SystemName: Terra.Studio.UpdateScoreSystem
     DrawerName: Terra.Studio.UpdateScore
     DisplayName: Update Score
+  - Key: Terra.Studio.ResetScore
+    ComponentName: Terra.Studio.ResetScoreComponent
+    SystemName: Terra.Studio.ResetScoreSystem
+    DrawerName: Terra.Studio.ResetScore
+    DisplayName: Reset Score
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent

@@ -3,8 +3,8 @@ using Newtonsoft.Json;
 
 namespace Terra.Studio
 {
-    [EditorDrawComponent("Terra.Studio.UpdateScore"), AliasDrawer("Update Score")]
-    public class UpdateScore : BaseBehaviour
+    [EditorDrawComponent("Terra.Studio.ResetScore"), AliasDrawer("Reset Score")]
+    public class ResetScore : BaseBehaviour
     {
         public enum StartOn
         {
@@ -19,9 +19,9 @@ namespace Terra.Studio
         }
         [AliasDrawer("Update When")]
         public Atom.StartOn startOn = new();
-        [AliasDrawer("Update By")]
-        public Atom.ScoreData Score = new();
         public Atom.Broadcast broadcastData = new();
+
+        private Atom.ScoreData score= new();//Bypassing the logic of spawing gamescore based on components
 
         public override string ComponentName => nameof(UpdateScore);
         public override bool CanPreview => false;
@@ -35,19 +35,19 @@ namespace Terra.Studio
         protected override void Awake()
         {
             base.Awake();
-            Score.Setup(gameObject,this);
-            startOn.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated,startOn.data.startIndex==3);
+            startOn.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated, startOn.data.startIndex == 3);
             broadcastData.Setup(gameObject, this);
+            score.Setup(gameObject, this);
+            score.score = 1;
         }
 
         public override (string type, string data) Export()
         {
-            var data = new UpdateScoreComponent
+            var data = new ResetScoreComponent
             {
                 IsConditionAvailable = true,
                 ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(GetEnum(startOn.data.startName)),
                 ConditionData = GetStartCondition(),
-                AddScoreValue = Score.score,
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
                 Broadcast = broadcastData.broadcast,
             };
@@ -58,7 +58,7 @@ namespace Terra.Studio
 
         public override void Import(EntityBasedComponent data)
         {
-            var comp = JsonConvert.DeserializeObject<UpdateScoreComponent>(data.data);
+            var comp = JsonConvert.DeserializeObject<ResetScoreComponent>(data.data);
             startOn.data.startName = GetStart(comp).ToString();
             startOn.data.listenName = GetListenValues(comp);
             broadcastData.broadcast = comp.Broadcast;
@@ -84,27 +84,21 @@ namespace Terra.Studio
             }
             if (startOn.data.startIndex == 3)
                 listenString = startOn.data.listenName;
-            Score.score = comp.AddScoreValue;
-            if (Score.score != 0)
-            {
-                EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(true, Score.instanceId, false);
-            }
+
+            EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(true, score.instanceId, false);
             ImportVisualisation(broadcastData.broadcast, listenString);
         }
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            if (Score.score != 0)
-            {
-                EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(true, Score.instanceId);
-            }
+                EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(true, score.instanceId);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(false, Score.instanceId);
+            EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(false, score.instanceId);
         }
 
         private StartOn GetEnum(string data)
@@ -129,7 +123,7 @@ namespace Terra.Studio
             return data;
         }
 
-        private StartOn GetStart(UpdateScoreComponent comp)
+        private StartOn GetStart(ResetScoreComponent comp)
         {
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
@@ -138,7 +132,7 @@ namespace Terra.Studio
             return StartOn.OnClick;
         }
 
-        private string GetListenValues(UpdateScoreComponent comp)
+        private string GetListenValues(ResetScoreComponent comp)
         {
             if (comp.ConditionType.Equals(EditorOp.Resolve<DataProvider>().GetEnumValue(StartOn.BroadcastListen)))
             {
