@@ -137,9 +137,9 @@ namespace Terra.Studio
 
     public enum TimerType
     {
-        [AliasDrawer("Count Up")]
-        CountUp,
         [AliasDrawer("Count Down")]
-        CountDown
+        CountDown,
+        [AliasDrawer("Count Up")]
+        CountUp
     }
 }
