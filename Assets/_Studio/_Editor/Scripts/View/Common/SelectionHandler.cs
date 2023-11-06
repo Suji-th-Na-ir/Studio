@@ -305,7 +305,12 @@ public class SelectionHandler : View
                     Snapshots.DeleteGameObjectsSnapshot.CreateSnapshot(selections.ToList());
                     foreach (GameObject obj in selections)
                     {
-                        obj.SetActive(false);
+                        var comps = obj.GetComponentsInChildren<BaseBehaviour>();
+                        var canBeDeleted = Rulesets.CanBeDeleted(comps);
+                        if (canBeDeleted)
+                        {
+                            obj.SetActive(false);
+                        }
                     }
                     _selectedObjects.Clear();
                     OnSelectionChanged();
@@ -385,7 +390,7 @@ public class SelectionHandler : View
                     _selectedObjects.Clear();
                     _selectedObjects.Add(pickedObject);
                 }
-              
+
             }
             else
             {

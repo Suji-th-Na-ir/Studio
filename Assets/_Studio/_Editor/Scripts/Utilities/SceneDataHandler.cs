@@ -628,6 +628,15 @@ namespace Terra.Studio
             }
         }
 
+        public void SetupTimerManager()
+        {
+            if (EditorOp.Resolve<InGameTimer>()) return;
+            EditorOp.
+                Resolve<EditorEssentialsLoader>().
+                Load(EditorObjectType.Timer, out var timerObj);
+            timerObj.transform.SetAsFirstSibling();
+        }
+
         #endregion
     }
 }

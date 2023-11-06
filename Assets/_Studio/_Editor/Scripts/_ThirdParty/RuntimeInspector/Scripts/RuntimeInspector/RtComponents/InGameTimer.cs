@@ -29,12 +29,14 @@ namespace Terra.Studio
         protected override void OnEnable()
         {
             base.OnEnable();
+            EditorOp.Register(this);
             EditorOp.Resolve<ToolbarView>().SetTimerButtonInteractive(false);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
+            EditorOp.Unregister(this);
             if (EditorOp.Resolve<ToolbarView>())
             {
                 EditorOp.Resolve<ToolbarView>().SetTimerButtonInteractive(true);

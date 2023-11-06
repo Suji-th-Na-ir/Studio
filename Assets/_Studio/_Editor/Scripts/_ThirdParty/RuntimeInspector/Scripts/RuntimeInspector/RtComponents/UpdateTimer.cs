@@ -116,5 +116,7 @@ namespace Terra.Studio
             updateWhen.data.startIndex = (int)startOn;
             updateWhen.data.startName = startOn.ToString();
         }
+
+        private void Start() => EditorOp.Resolve<SceneDataHandler>().SetupTimerManager();
     }
 }

@@ -12,10 +12,27 @@ namespace Terra.Studio
             typeof(PlayerSpawnPoint)
         };
 
+        public static readonly Type[] NON_DELETABLES = new Type[]
+        {
+            typeof(PlayerSpawnPoint)
+        };
+
         public static bool CanBeDuplicated(string type)
         {
             var isAvailable = DUPLICATE_IGNORABLES.Any(x => x.Name.Equals(type));
             return !isAvailable;
+        }
+
+        public static bool CanBeDeleted(BaseBehaviour type)
+        {
+            var canBeDeleted = !NON_DELETABLES.Any(x => x == type.GetType());
+            return canBeDeleted;
+        }
+
+        public static bool CanBeDeleted(BaseBehaviour[] types)
+        {
+            var areNonDeletable = types.Any(x => NON_DELETABLES.Contains(x.GetType()));
+            return !areNonDeletable;
         }
     }
 }
