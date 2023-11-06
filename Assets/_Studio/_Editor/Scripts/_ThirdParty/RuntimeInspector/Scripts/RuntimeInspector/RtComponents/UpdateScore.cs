@@ -1,11 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Newtonsoft.Json;
-using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
-using static Terra.Studio.Atom;
-using static Terra.Studio.DestroyOn;
 
 namespace Terra.Studio
 {
@@ -69,10 +63,10 @@ namespace Terra.Studio
             startOn.data.listenName = GetListenValues(comp);
             broadcastData.broadcast = comp.Broadcast;
             var listenString = "";
-            if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(DestroyOnEnum), out object result))
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
-                var res = (DestroyOnEnum)result;
-                if (res == DestroyOnEnum.OnPlayerCollide)
+                var res = (StartOn)result;
+                if (res == StartOn.OnPlayerCollide)
                 {
                     if (comp.ConditionData.Equals("Player"))
                     {
@@ -80,12 +74,12 @@ namespace Terra.Studio
                     }
                     else
                     {
-                        startOn.data.startIndex = (int)DestroyOnEnum.OnObjectCollide;
+                        startOn.data.startIndex = (int)StartOn.OnObjectCollide;
                     }
                 }
                 else
                 {
-                    startOn.data.startIndex = (int)(DestroyOnEnum)result;
+                    startOn.data.startIndex = (int)(StartOn)result;
                 }
             }
             if (startOn.data.startIndex == 3)
