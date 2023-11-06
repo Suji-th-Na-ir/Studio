@@ -105,7 +105,8 @@ namespace Terra.Studio
         Default,
         SpawnPoint,
         Timer,
-        Score
+        Score,
+        Checkpoint
     }
 
     public enum SwitchState

@@ -24,16 +24,21 @@ namespace Terra.Studio
         {
             base.Awake();
             broadcastData.Setup(gameObject, this);
-            var timer = EditorOp.Resolve<SceneDataHandler>().TimerManagerObj;
-            if (timer)
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            EditorOp.Resolve<ToolbarView>().SetTimerButtonInteractive(false);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            if (EditorOp.Resolve<ToolbarView>())
             {
-                if (timer.activeSelf)
-                {
-                    Destroy(gameObject);
-                    return;
-                }
+                EditorOp.Resolve<ToolbarView>().SetTimerButtonInteractive(true);
             }
-            EditorOp.Resolve<SceneDataHandler>().TimerManagerObj = gameObject;
         }
 
         public override (string type, string data) Export()

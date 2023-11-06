@@ -57,9 +57,9 @@ namespace Terra.Studio
                                     .Resolve<User>()
                                     .UploadSaveDataToCloud(
                                         sceneData,
-                                        (status, response) =>
+                                        (status, _) =>
                                         {
-                                            OnCloudSaveAttempted(status, response);
+                                            OnCloudSaveAttempted(status);
                                             onSaveDone?.Invoke();
                                         }
                                     );
@@ -69,6 +69,8 @@ namespace Terra.Studio
                                 EditorOp
                                     .Resolve<ToolbarView>()
                                     .SetSaveMessage(true, SaveState.Empty);
+                                OnCloudSaveAttempted(false);
+                                onSaveDone?.Invoke();
                             }
                         }
                     );
@@ -79,7 +81,7 @@ namespace Terra.Studio
             }
         }
 
-        private void OnCloudSaveAttempted(bool status, string _)
+        private void OnCloudSaveAttempted(bool status)
         {
             var saveState = status ? SaveState.SavedToCloud : SaveState.ChangesSavedOffline;
             EditorOp.Resolve<ToolbarView>().SetSaveMessage(false, saveState);
@@ -549,7 +551,6 @@ namespace Terra.Studio
 
         #region Miscellaneous
 
-        public GameObject TimerManagerObj;
         public GameObject ScoreManagerObj;
         private List<string> modifiers = new();
 

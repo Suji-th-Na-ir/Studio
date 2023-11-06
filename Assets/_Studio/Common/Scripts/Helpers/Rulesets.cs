@@ -1,33 +1,21 @@
-using UnityEngine;
+using System;
+using System.Linq;
 
 namespace Terra.Studio
 {
     public class Rulesets
     {
-        public static void ApplyRuleset(Object obj)
+        public static readonly Type[] DUPLICATE_IGNORABLES = new Type[]
         {
-            if (!obj)
-                return;
+            typeof(InGameTimer),
+            typeof(InGameScoreSystem),
+            typeof(PlayerSpawnPoint)
+        };
 
-            var type = obj.GetType();
-            if (type == typeof(GameObject))
-            {
-                new GameObjectRulesets().Apply(obj as GameObject);
-            }
-
-        }
-
-        private class GameObjectRulesets
+        public static bool CanBeDuplicated(string type)
         {
-            public void Apply(GameObject gm)
-            {
-                //var allMesh = gm.transform.GetComponentsInChildren<MeshRenderer>();
-                //foreach (var mesh in allMesh)
-                //{
-                //    mesh.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                //}
-            }
-
+            var isAvailable = DUPLICATE_IGNORABLES.Any(x => x.Name.Equals(type));
+            return !isAvailable;
         }
     }
 }

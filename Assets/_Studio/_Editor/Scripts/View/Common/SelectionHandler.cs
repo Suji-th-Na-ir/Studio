@@ -313,6 +313,11 @@ public class SelectionHandler : View
                 var duplicatedGms = new List<Transform>();
                 foreach (GameObject obj in _selectedObjects)
                 {
+                    var components = obj.GetComponentsInChildren<BaseBehaviour>();
+                    if (components.Any(x => Rulesets.DUPLICATE_IGNORABLES.Contains(x.GetType())))
+                    {
+                        continue;
+                    }
                     var iObj = Instantiate(obj, obj.transform.position, obj.transform.rotation, obj.transform.parent);
                     duplicatedGms.Add(iObj.transform);
                 }
