@@ -672,7 +672,6 @@ namespace RuntimeInspectorNamespace
                     }
                     else if (m_allowMultiSelection && !m_multiSelectionToggleSelectionMode)
                     {
-                        Debug.Log(currentlyPressedDrawer);
                         if (currentSelectionSet.Add(currentlyPressedDrawer.Data.BoundTransform.GetHashCode()))
                         {
                             m_currentSelection.Add(currentlyPressedDrawer.Data.BoundTransform);

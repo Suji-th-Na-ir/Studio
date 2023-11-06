@@ -8,6 +8,12 @@ namespace Terra.Studio
     {
         public void DoCloudSaveCheck(Action onDone)
         {
+            var isProjectAvailable = !string.IsNullOrEmpty(SystemOp.Resolve<User>().ProjectId);
+            if (!isProjectAvailable)
+            {
+                DoCloudSetup(onDone);
+                return;
+            }
             SystemOp
                 .Resolve<User>()
                 .GetProjectDetails(
@@ -15,19 +21,11 @@ namespace Terra.Studio
                     {
                         if (status)
                         {
-                            var unpackedData = JsonConvert.DeserializeObject<APIResponse>(response);
-                            if (unpackedData.status == 200)
-                            {
-                                OnCloudSaveDataReceived(unpackedData.data, onDone);
-                            }
-                            else
-                            {
-                                DoCloudSetup(onDone);
-                            }
+                            OnCloudSaveDataReceived(response, onDone);
                         }
                         else
                         {
-                            DoLocalSaveCheck(onDone);
+                            DoCloudSetup(onDone);
                         }
                     }
                 );
@@ -36,6 +34,7 @@ namespace Terra.Studio
         private void OnCloudSaveDataReceived(string data, Action onDone)
         {
             var unpackedData = JsonConvert.DeserializeObject<GetProjectDetailsAPI.Data>(data);
+            SystemOp.Resolve<User>().UpdateProjectId(unpackedData.id).UpdateProjectName(unpackedData.projectname);
             var cloudDataIntegrityRes = IsCloudDataLatest(unpackedData.timestamp);
             if (cloudDataIntegrityRes == 0)
             {
@@ -60,10 +59,9 @@ namespace Terra.Studio
                 SystemOp
                     .Resolve<SaveSystem>()
                     .GetManualSavedData(
-                        (response) =>
+                        (status, response) =>
                         {
-                            var isEmpty = string.IsNullOrEmpty(response);
-                            if (isEmpty)
+                            if (status)
                             {
                                 DoLocalSaveCheck(onDone, true);
                             }
@@ -97,17 +95,10 @@ namespace Terra.Studio
                 .CreateNewProject(
                     (status, response) =>
                     {
+                        SystemOp.Resolve<User>().UpdateProjectId(response);
                         if (status)
                         {
-                            var unpackedData = JsonConvert.DeserializeObject<APIResponse>(response);
-                            if (unpackedData.status == 200)
-                            {
-                                CheckAndUploadSaveData(onDone);
-                            }
-                            else
-                            {
-                                DoLocalSaveCheck(onDone);
-                            }
+                            CheckAndUploadSaveData(onDone);
                         }
                         else
                         {
@@ -124,23 +115,20 @@ namespace Terra.Studio
                 .TryGetLastSavedTimestamp(out var saveDateTime);
             if (isLastSavedAvailable)
             {
-                SystemOp
-                    .Resolve<SaveSystem>()
-                    .GetManualSavedData(
-                        (response) =>
-                        {
-                            var isAvailable = !string.IsNullOrEmpty(response);
-                            if (isAvailable)
-                            {
-                                SystemOp.Resolve<User>().UploadSaveDataToCloud(response, null);
-                                onDone?.Invoke();
-                            }
-                            else
-                            {
-                                DoLocalSaveCheck(onDone, true);
-                            }
-                        }
-                    );
+                var projectId = SystemOp.Resolve<User>().ProjectId;
+                var filePath = FileService.GetSavedFilePath(projectId);
+                SystemOp.Resolve<SaveSystem>().GetManualSavedData((status, response) =>
+                {
+                    if (status)
+                    {
+                        SystemOp.Resolve<User>().UploadSaveDataToCloud(response, null);
+                        onDone?.Invoke();
+                    }
+                    else
+                    {
+                        DoLocalSaveCheck(onDone, true);
+                    }
+                });
             }
             else
             {
@@ -166,6 +154,44 @@ namespace Terra.Studio
                         onDone?.Invoke();
                     }
                 );
+        }
+
+        public void OnProjectDetailsReceived(string projectDetails, Action<StudioState> callback)
+        {
+            var unpackedData = JsonConvert.DeserializeObject<ProjectData>(projectDetails);
+            SystemOp.Resolve<User>().UpdateProjectId(unpackedData.ProjectId);
+            callback?.Invoke(unpackedData.State);
+        }
+
+        public void GetAndSetProjectDetailsForRuntime(Action callback)
+        {
+            var loadFromCloud = SystemOp.Resolve<System>().ConfigSO.ServeFromCloud;
+            if (loadFromCloud)
+            {
+                new GetPublishDataAPI().DoRequest((status, response) =>
+                {
+                    if (status)
+                    {
+                        SystemOp.Resolve<CrossSceneDataHolder>().Set(response);
+                    }
+                    else
+                    {
+                        ApplyLocalDataToCrossceneData();
+                    }
+                    callback?.Invoke();
+                });
+            }
+            else
+            {
+                ApplyLocalDataToCrossceneData();
+                callback?.Invoke();
+            }
+        }
+
+        private void ApplyLocalDataToCrossceneData()
+        {
+            var saveData = SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.text;
+            SystemOp.Resolve<CrossSceneDataHolder>().Set(saveData);
         }
     }
 }

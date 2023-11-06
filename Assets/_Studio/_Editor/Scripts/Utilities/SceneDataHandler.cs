@@ -51,7 +51,7 @@ namespace Terra.Studio
                         false,
                         (status) =>
                         {
-                            if (SystemOp.Resolve<System>().ConfigSO.SaveToCloud && status)
+                            if (SystemOp.Resolve<System>().ConfigSO.ServeFromCloud && status)
                             {
                                 SystemOp
                                     .Resolve<User>()
@@ -79,7 +79,7 @@ namespace Terra.Studio
             }
         }
 
-        private void OnCloudSaveAttempted(bool status, string response)
+        private void OnCloudSaveAttempted(bool status, string _)
         {
             var saveState = status ? SaveState.SavedToCloud : SaveState.ChangesSavedOffline;
             EditorOp.Resolve<ToolbarView>().SetSaveMessage(false, saveState);
@@ -118,19 +118,20 @@ namespace Terra.Studio
                 }
                 else
                 {
-                    OnDataReceived(null);
+                    OnDataReceived(false, null);
                 }
             }
             else
             {
                 var data = SystemOp.Resolve<CrossSceneDataHolder>().Get();
-                OnDataReceived(data);
+                var isDataAvailable = !string.IsNullOrEmpty(data);
+                OnDataReceived(isDataAvailable, data);
             }
         }
 
-        private void OnDataReceived(string data)
+        private void OnDataReceived(bool status, string data)
         {
-            if (!string.IsNullOrEmpty(data))
+            if (status)
             {
                 RecreateScene(data);
             }
@@ -206,12 +207,9 @@ namespace Terra.Studio
                         var component = gameObject.AddComponent(type) as IComponent;
                         component?.Import(entity.components[i]);
                     }
-                    else
-                    {
-                        onComponentDependencyFound?.Invoke(gameObject, entity);
-                    }
                 }
             }
+            onComponentDependencyFound?.Invoke(gameObject, entity);
         }
 
         public void HandleChildren(

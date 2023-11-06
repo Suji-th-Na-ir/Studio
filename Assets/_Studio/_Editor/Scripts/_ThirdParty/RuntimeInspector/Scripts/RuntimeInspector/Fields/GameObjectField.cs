@@ -97,6 +97,7 @@ namespace RuntimeInspectorNamespace
 
         public override void GenerateElements()
         {
+            //Region for name, layer and tag
             //if( components.Count == 0 )
             //	return;
 
@@ -181,6 +182,8 @@ namespace RuntimeInspectorNamespace
         [UnityEngine.Scripting.Preserve] // This method is bound to addComponentMethod
         private void AddComponentButtonClicked()
         {
+            if (EditorOp.Resolve<EditorSystem>().IsIncognitoEnabled)
+                return;
             GameObject target = (GameObject)Value;
             if (!target)
                 return;
@@ -298,18 +301,32 @@ namespace RuntimeInspectorNamespace
 
         private static void Attach(IEnumerable<GameObject> selections, Type type)
         {
+            Component comp = null;
             foreach (var tObject in selections)
             {
-                tObject.AddComponent(type);
+                 comp = tObject.AddComponent(type);
+            }
+            var behaviour = comp as BaseBehaviour;
+            if (behaviour)
+            {
+                behaviour.StartCoroutine(ShowSelectionGhostIfAny(behaviour));
             }
         }
 
         private static void AttachAndImport(IEnumerable<(GameObject, EntityBasedComponent)> selections, Type type)
         {
+            Component comp = null;
             foreach (var (obj, compData) in selections)
             {
-                var iComp = obj.AddComponent(type) as IComponent;
+                 comp = obj.AddComponent(type);
+                var iComp = comp as IComponent;
+               
                 iComp.Import(compData);
+            }
+            var behaviour = comp as BaseBehaviour;
+            if (behaviour)
+            {
+                behaviour.StartCoroutine(ShowSelectionGhostIfAny(behaviour));
             }
         }
 
@@ -318,6 +335,7 @@ namespace RuntimeInspectorNamespace
             foreach (var tObject in selections)
             {
                 var component = tObject.GetComponent(type);
+                HideSelectionGhostIfAny(component);
                 Destroy(component);
             }
         }
@@ -327,6 +345,7 @@ namespace RuntimeInspectorNamespace
             foreach (var (obj, _) in selections)
             {
                 var component = obj.GetComponent(type);
+                HideSelectionGhostIfAny(component);
                 Destroy(component);
             }
         }
@@ -334,6 +353,8 @@ namespace RuntimeInspectorNamespace
         [UnityEngine.Scripting.Preserve] // This method is bound to removeComponentMethod
         private static void RemoveComponentButtonClicked(ExpandableInspectorField componentDrawer)
         {
+            if (EditorOp.Resolve<EditorSystem>().IsIncognitoEnabled)
+                return;
             if (!componentDrawer || !componentDrawer.Inspector)
                 return;
 
@@ -378,6 +399,7 @@ namespace RuntimeInspectorNamespace
 
         private static IEnumerator RemoveComponentCoroutine(Component component, RuntimeInspector inspector)
         {
+            HideSelectionGhostIfAny(component);
             Destroy(component);
 
             // Destroy operation doesn't take place immediately, wait for the component to be fully destroyed
@@ -387,9 +409,28 @@ namespace RuntimeInspectorNamespace
             inspector.EnsureScrollViewIsWithinBounds(); // Scroll view's contents can get out of bounds after removing a component
         }
 
-        public override void SetInteractable(bool on , bool disableAlso=false)
+        private static void HideSelectionGhostIfAny(Component component)
         {
-           
+            var behaviour = component as BaseBehaviour;
+            if (behaviour)
+            {
+                behaviour.GhostDescription.HideSelectionGhost?.Invoke();
+            }
         }
+
+        private static IEnumerator ShowSelectionGhostIfAny(BaseBehaviour behaviour)
+        {
+            yield return new WaitForSeconds(0.1f);
+            var selected = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            for (int i = 0; i < selected.Count; i++)
+            {
+                var behaviours = selected[i].GetComponents(behaviour.GetType());
+                foreach (var b in behaviours)
+                {
+                    var comp = b as BaseBehaviour;
+                    comp.GhostDescription.ShowSelectionGhost?.Invoke();
+                }
+            }
+        } 
     }
 }

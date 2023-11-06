@@ -1,8 +1,10 @@
 using System;
+using System.IO;
 using UnityEngine;
 using UnityEditor;
 using Terra.Studio;
 using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 [InitializeOnLoad]
 public static class DefaultSceneLoader
@@ -15,7 +17,7 @@ public static class DefaultSceneLoader
         EditorApplication.playModeStateChanged += LoadDefaultScene;
     }
 
-    static void LoadDefaultScene(PlayModeStateChange state)
+    private static void LoadDefaultScene(PlayModeStateChange state)
     {
         if (state == PlayModeStateChange.ExitingEditMode)
         {
@@ -28,18 +30,19 @@ public static class DefaultSceneLoader
             if (system.LoadDefaultSceneOnPlay)
             {
                 loadedDefaultScene = true;
-                var currentScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+                var currentScene = SceneManager.GetActiveScene();
                 var scenesInBuildSettings = EditorBuildSettings.scenes;
                 if (scenesInBuildSettings != null && scenesInBuildSettings.Length > 0)
                 {
-                    if (scenesInBuildSettings[0].path.Contains(currentScene.name))
+                    var scene = Path.GetFileNameWithoutExtension(scenesInBuildSettings[0].path);
+                    if (scene.Equals(currentScene.name))
                     {
                         IsEnteringPlayerMode?.Invoke(loadedDefaultScene);
                         return;
                     }
+                    SceneManager.LoadScene(0);
+                    IsEnteringPlayerMode?.Invoke(loadedDefaultScene);
                 }
-                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-                IsEnteringPlayerMode?.Invoke(loadedDefaultScene);
             }
         }
 

@@ -12,6 +12,8 @@ namespace Terra.Studio
 
         private Scene scene;
         private ComponentIconsPreset componentIconsPreset;
+        public bool IsPreviewEnabled { get; private set; }
+        public Action<bool> OnPreviewEnabled;
 
         private void Awake()
         {
@@ -80,6 +82,11 @@ namespace Terra.Studio
         {
             IsIncognitoEnabled = enable;
             OnIncognitoEnabled?.Invoke(enable);
+        }
+        public void RequestPreviewMode(bool enable)
+        {
+            IsPreviewEnabled = enable;
+            OnPreviewEnabled?.Invoke(enable);
         }
 
         private void GetComponentData()

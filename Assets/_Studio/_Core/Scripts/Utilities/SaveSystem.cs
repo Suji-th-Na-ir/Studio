@@ -1,55 +1,42 @@
 using System;
-using PlayShifu.Terra;
 using System.Collections.Generic;
 
 namespace Terra.Studio
 {
     public class SaveSystem : IDisposable
     {
-        public event Action OnPreCheckDone;
-        private const char DELIMITER = '_';
-        private readonly string backwardCompatibilityFileName;
-        private readonly string savedFileName;
         private const string LAST_SAVED_KEY_PREF = "LastSavedAt";
         private const string DATETIME_SAVE_FORMAT = "yyyy-MM-ddTHH:mm:ss";
 
         public SaveSystem()
         {
             SystemOp.Register(new FileService());
-            var projectName = SystemOp.Resolve<User>().ProjectName;
-            var userName = SystemOp.Resolve<User>().UserName;
-            backwardCompatibilityFileName = projectName;
-            savedFileName = string.Concat(userName, DELIMITER, projectName);
         }
 
-        public void PerformPrecheck()
+        public void GetManualSavedData(Action<bool, string> savedData)
         {
-            var isFreshInstall = string.IsNullOrEmpty(backwardCompatibilityFileName);
-            if (isFreshInstall)
+            var projectId = SystemOp.Resolve<User>().ProjectId;
+            var filePath = FileService.GetSavedFilePath(projectId);
+            SystemOp.Resolve<FileService>().DoesFileExist?.Invoke(filePath, (status) =>
             {
-                OnPrecheckDone();
-                return;
-            }
-            SystemOp
-                .Resolve<FileService>()
-                .DoesFileExist?.Invoke(
-                    FileService.GetSavedFilePath(backwardCompatibilityFileName),
-                    PrepareSavedDataForBackwardCompatibility
-                );
-        }
-
-        public void GetManualSavedData(Action<string> savedData)
-        {
-            var filePath = FileService.GetSavedFilePath(savedFileName);
-            SystemOp
-                .Resolve<FileService>()
-                .ReadFileFromLocal?.Invoke(
-                    filePath,
-                    (response) =>
-                    {
-                        savedData?.Invoke(response);
-                    }
-                );
+                if (!status)
+                {
+                    savedData?.Invoke(false, null);
+                }
+                else
+                {
+                    SystemOp
+                    .Resolve<FileService>()
+                    .ReadFileFromLocal?.Invoke(
+                        filePath,
+                        (response) =>
+                        {
+                            var isDataAvailable = !string.IsNullOrEmpty(response);
+                            savedData?.Invoke(isDataAvailable, response);
+                        }
+                    );
+                }
+            });
         }
 
         public void SaveManualData(
@@ -59,7 +46,8 @@ namespace Terra.Studio
             string autoFlushNewTimeStamp = null
         )
         {
-            var filePath = FileService.GetSavedFilePath(savedFileName);
+            var projectId = SystemOp.Resolve<User>().ProjectId;
+            var filePath = FileService.GetSavedFilePath(projectId);
             SystemOp
                 .Resolve<FileService>()
                 .WriteFile(
@@ -98,6 +86,7 @@ namespace Terra.Studio
 
         public void RegisterToAutosaveChangeListener(bool enable)
         {
+            if (!SystemOp.Resolve<System>().ConfigSO.ServeFromCloud) return;
             if (enable)
             {
                 SystemOp.Register(new AutoSave());
@@ -108,57 +97,9 @@ namespace Terra.Studio
             }
         }
 
-        private void PrepareSavedDataForBackwardCompatibility(bool doFileExist)
-        {
-            if (!doFileExist)
-            {
-                OnPrecheckDone();
-                return;
-            }
-            RegisterTimestampForLastSave();
-            if (Helper.IsPlatformWebGL())
-            {
-                SystemOp
-                    .Resolve<FileService>()
-                    .RenameKeyFromDBStore?.Invoke(
-                        backwardCompatibilityFileName,
-                        savedFileName,
-                        (_) =>
-                        {
-                            OnPrecheckDone();
-                        }
-                    );
-            }
-            else
-            {
-                var oldSaveFilePath = FileService.GetSavedFilePath(backwardCompatibilityFileName);
-                var newSaveFilePath = FileService.GetSavedFilePath(savedFileName);
-                SystemOp
-                    .Resolve<FileService>()
-                    .ReadFileFromLocal.Invoke(
-                        oldSaveFilePath,
-                        (response) =>
-                        {
-                            SystemOp
-                                .Resolve<FileService>()
-                                .WriteFile(response, newSaveFilePath, false, null);
-                            SystemOp
-                                .Resolve<FileService>()
-                                .RemoveFileFromLocal?.Invoke(oldSaveFilePath, null);
-                            OnPrecheckDone();
-                        }
-                    );
-            }
-        }
-
-        private void OnPrecheckDone()
-        {
-            OnPreCheckDone?.Invoke();
-            OnPreCheckDone = null;
-        }
-
         private void RegisterTimestampForLastSave(string autoFlushNewTimeStamp = null)
         {
+            if (!SystemOp.Resolve<System>().ConfigSO.ServeFromCloud) return;
             string timestamp;
             if (string.IsNullOrEmpty(autoFlushNewTimeStamp))
             {

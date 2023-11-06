@@ -32,6 +32,7 @@ namespace Terra.Studio
         private IEnumerator Get(StudioAPI api, Action<bool, string> callback)
         {
             using var request = UnityWebRequest.Get(api.URL);
+            request.timeout = api.Timeout;
             yield return request.SendWebRequest();
             if (request.result == UnityWebRequest.Result.Success)
             {
@@ -52,10 +53,11 @@ namespace Terra.Studio
                 form.AddField(data.Key, data.Value);
             }
             using var request = UnityWebRequest.Post(api.URL, form);
+            request.timeout = api.Timeout;
             yield return request.SendWebRequest();
             if (request.result == UnityWebRequest.Result.Success)
             {
-                callback?.Invoke(true, request.downloadHandler.text);
+                callback?.Invoke(true, request.downloadHandler?.text);
             }
             else
             {

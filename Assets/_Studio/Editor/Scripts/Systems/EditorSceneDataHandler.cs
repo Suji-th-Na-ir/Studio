@@ -19,7 +19,7 @@ namespace Terra.Studio.RTEditor
         private static void OnPlayModeStateChanged(bool didEnterPlayMode)
         {
             var asset = AssetDatabase.LoadAssetAtPath<SystemConfigurationSO>(SOPATH);
-            if (!asset.PickupSavedData || asset.LoadFromCloud)
+            if (!asset.PickupSavedData || asset.ServeFromCloud)
             {
                 return;
             }
@@ -117,7 +117,7 @@ namespace Terra.Studio.RTEditor
             {
                 return "SaveFile";
             }
-            return resourceObj.SceneDataToLoad.name;
+            return FileService.GetSavedFilePath(resourceObj.SceneDataToLoad.name);
         }
     }
 }

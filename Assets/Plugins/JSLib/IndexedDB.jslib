@@ -149,5 +149,21 @@ mergeInto(LibraryManager.library,
         request.onerror = function () {
             Module['dynCall_vi'](functionPtr, 0);
         };
+    },
+
+    GetUserData: function(callbackTo){
+        window.dispatchReactUnityEvent("getUser", UTF8ToString(callbackTo));
+    },
+
+    GetProjectData: function(callbackTo){
+        window.dispatchReactUnityEvent("getProjectData", UTF8ToString(callbackTo));
+    },
+
+    HideLoadingScreen: function(){
+        window.dispatchReactUnityEvent("hideLoading");
+    },
+
+    PublishGame: function(username, projectId, callbackTo){
+        window.dispatchReactUnityEvent("publishGame", UTF8ToString(username), UTF8ToString(projectId), UTF8ToString(callbackTo));
     }
 });

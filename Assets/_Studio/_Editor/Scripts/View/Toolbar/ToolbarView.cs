@@ -1,15 +1,20 @@
+using TMPro;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayShifu.Terra;
-using TMPro;
+using System.Collections.Generic;
+using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
     public class ToolbarView : View
     {
+        public event Action OnPublishRequested;
+
         private const string ADD_BUTTON_LOC = "AddButton";
         private const string PLAY_BUTTON_LOC = "PlayButton";
+        private const string PUBLISH_BUTTON_LOC = "PublishButton";
         private const string SAVE_BUTTON_LOC = "SaveButton";
         private const string LOAD_BUTTON_LOC = "LoadButton";
         private const string MOVE_BUTTON_LOC = "MoveButton";
@@ -29,6 +34,7 @@ namespace Terra.Studio
         private CanvasGroup canvasGroup;
         private TextMeshProUGUI saveTextField;
         private Button saveButton;
+        private Button publishButton;
 
         private void Awake()
         {
@@ -40,6 +46,7 @@ namespace Terra.Studio
             SpawnPrimitivePrefab();
             var addButtonTr = Helper.FindDeepChild(transform, ADD_BUTTON_LOC);
             var playButtonTr = Helper.FindDeepChild(transform, PLAY_BUTTON_LOC);
+            var publishButtonTr = Helper.FindDeepChild(transform, PUBLISH_BUTTON_LOC);
             var saveButtonTr = Helper.FindDeepChild(transform, SAVE_BUTTON_LOC);
             var loadButtonTr = Helper.FindDeepChild(transform, LOAD_BUTTON_LOC);
             var cylinderPrimitiveTr = Helper.FindDeepChild(
@@ -73,12 +80,30 @@ namespace Terra.Studio
                 playButton,
                 () =>
                 {
+                    playButton.interactable = false;
                     EditorOp
                         .Resolve<SceneDataHandler>()
                         .PrepareSceneDataToRuntime(() =>
                         {
                             EditorOp.Resolve<EditorSystem>().RequestSwitchState();
                         });
+                }
+            );
+
+            publishButton = publishButtonTr.GetComponent<Button>();
+            AddListenerEvent(
+                publishButton,
+                () =>
+                {
+                    SetPublishButtonActive(false);
+                    if (saveTextField.text.Equals(SaveState.UnsavedChanges.GetStringValue()))
+                    {
+                        EditorOp.Resolve<SceneDataHandler>().Save(OnPublishRequested);
+                    }
+                    else
+                    {
+                        OnPublishRequested?.Invoke();
+                    }
                 }
             );
 
@@ -203,8 +228,8 @@ namespace Terra.Studio
                 AddInGameTimerData(primitive);
             }
 
-            EditorOp.Resolve<SelectionHandler>().DeselectAll();
-            EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(primitive);
+            EditorOp.Resolve<RuntimeHierarchy>().Refresh();
+            EditorOp.Resolve<SelectionHandler>().SelectObjectsInHierarchy(new List<Transform>() {primitive.transform }) ;
         }
 
         public void SetSaveMessage(bool setInteractable, SaveState state)
@@ -227,6 +252,12 @@ namespace Terra.Studio
             var message = state.GetStringValue();
             saveButton.gameObject.SetActive(setInteractable);
             saveTextField.text = message;
+        }
+
+        public void SetPublishButtonActive(bool isInteractive)
+        {
+            if (!publishButton) return;
+            publishButton.interactable = isInteractive;
         }
 
         private void SpawnPrimitivePrefab()

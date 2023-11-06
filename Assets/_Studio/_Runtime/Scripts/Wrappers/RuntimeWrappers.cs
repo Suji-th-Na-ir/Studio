@@ -17,9 +17,13 @@ namespace Terra.Studio
                     break;
                 case AssetType.Prefab:
                     object obj = null;
-                    var doesContainAnyData =
-                        SystemOp.Resolve<System>().IsSimulating &&
-                        SystemOp.Resolve<CrossSceneDataHolder>().Get(assetPath, out obj);
+                    var doesContainAnyData = false;
+                    if (!Helper.IsInUnityEditorMode())
+                    {
+                        doesContainAnyData =
+                            SystemOp.Resolve<System>().IsSimulating &&
+                            SystemOp.Resolve<CrossSceneDataHolder>().Get(assetPath, out obj);
+                    }
                     if (!doesContainAnyData)
                     {
                         go = SpawnGameObject(assetPath, ResourceDB.GetItemData(assetPath), trs);
@@ -167,11 +171,14 @@ namespace Terra.Studio
 
         public static void CleanBehaviour(Transform child)
         {
-            if (child.TryGetComponent(out BaseBehaviour behaviour))
+            BaseBehaviour[] behaviours = child.GetComponents<BaseBehaviour>();
+            foreach (var behaviour in behaviours)
             {
                 Object.Destroy(behaviour);
             }
-            if (child.TryGetComponent(out Outline outline))
+
+            Outline[] outlines = child.GetComponents<Outline>();
+            foreach (var outline in outlines)
             {
                 Object.Destroy(outline);
             }
