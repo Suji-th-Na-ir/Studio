@@ -7,7 +7,7 @@ namespace Terra.Studio
 {
     public class RuntimeWrappers
     {
-        public static GameObject SpawnObject(AssetType assetType, string assetPath, PrimitiveType primitiveType, params Vector3[] trs)
+        public static GameObject SpawnObject(AssetType assetType, string assetPath, PrimitiveType primitiveType,string uniqueName = "", params Vector3[] trs)
         {
             GameObject go = null;
             switch (assetType)
@@ -37,6 +37,10 @@ namespace Terra.Studio
                 case AssetType.Primitive:
                     go = SpawnPrimitive(primitiveType, ResourceDB.GetDummyItemData(primitiveType), trs);
                     break;
+                case AssetType.RemotePrefab:
+                    go = SpawnRemotePrefab(uniqueName, assetPath, trs);
+                    break;
+                    
             }
             return go;
         }
@@ -73,6 +77,16 @@ namespace Terra.Studio
         {
             var go = new GameObject();
             return ResolveTRS(go, itemData, trs);
+        }
+
+        public static GameObject SpawnRemotePrefab(string uniqueName,string url, params Vector3[] trs)
+        {
+            var go = new GameObject();
+            var x= go.AddComponent<StudioGameObject>();
+            x.assetType = AssetType.RemotePrefab;
+            x.itemData ??= new ResourceDB.ResourceItemData(uniqueName, url, url,"","",remoteAsset:true);
+            Debug.LogError($"AA", go);
+            return ResolveTRS(go, x.itemData, trs);
         }
 
         public static GameObject DuplicateGameObject(GameObject actualGameObject, Transform parent, params Vector3[] trs)

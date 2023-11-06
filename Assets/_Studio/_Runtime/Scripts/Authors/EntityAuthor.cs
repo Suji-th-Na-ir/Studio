@@ -48,7 +48,7 @@ namespace Terra.Studio
                     return generatedObj;
                 }
                 var trs = new Vector3[] { entity.position, entity.rotation, entity.scale };
-                generatedObj = RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, trs);
+                generatedObj = RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, entity.uniqueName,trs);
                 generatedObj.name = entity.name;
                 return generatedObj;
             }

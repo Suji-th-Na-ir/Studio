@@ -168,6 +168,7 @@ namespace Terra.Studio
                 entity.assetType,
                 entity.assetPath,
                 entity.primitiveType,
+                entity.uniqueName,
                 trs
             );
             if (generatedObj == null)
@@ -240,6 +241,7 @@ namespace Terra.Studio
                         childEntity.assetType,
                         childEntity.assetPath,
                         childEntity.primitiveType,
+                        childEntity.uniqueName,
                         trs
                     );
                     child = generatedObj.transform;
@@ -320,14 +322,17 @@ namespace Terra.Studio
                     go.transform.parent != null
                         ? go.transform.localScale.LocalToWorldScale(go.transform.parent)
                         : go.transform.localScale,
-                assetType = !string.IsNullOrEmpty(GetAssetPath(go))
-                    ? AssetType.Prefab
-                    : GetAssetType(go),
+                assetType = GetAssetType(go) ,
                 shouldLoadAssetAtRuntime = true
             };
             if (newEntity.assetType == AssetType.Primitive)
             {
                 newEntity.primitiveType = GetPrimitiveType(go);
+            }
+
+            if (go.TryGetComponent<StudioGameObject>(out var x))
+            {
+                newEntity.uniqueName = x.itemData.Name;
             }
             EntityBasedComponent[] entityComponents;
             if (Helper.IsInUnityEditorMode())
@@ -389,6 +394,10 @@ namespace Terra.Studio
             {
                 if (go.TryGetComponent(out StudioGameObject component))
                 {
+                    if (component.assetType == AssetType.RemotePrefab)
+                    {
+                        return AssetType.RemotePrefab;
+                    }
                     if (
                         component.itemData != null
                         && !string.IsNullOrEmpty(component.itemData.ResourcePath)

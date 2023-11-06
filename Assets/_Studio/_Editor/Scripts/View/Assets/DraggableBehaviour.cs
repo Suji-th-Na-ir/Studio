@@ -14,7 +14,7 @@ namespace Terra.Studio.Behaviour
         private AssetData _assetData;
         private Material _ghostMaterial;
 
-        private GltfObjectLoader currGo;
+        private StudioGameObject currGo;
         public void Init(AssetData data, GltfObjectLoader lp, Material ghMat)
         {
             _running = true;
@@ -31,10 +31,11 @@ namespace Terra.Studio.Behaviour
 
             if (currGo == null)
             {
-                currGo = Instantiate(_loaderPrefab);
-                currGo.cloudUrl = _assetData.gltf[0].Replace("https","http");
-                currGo.unique_name = _assetData.unique_name;
-                currGo.LoadModel(ModelDownloaded);
+                currGo = new GameObject().AddComponent<StudioGameObject>();
+                currGo.assetType = AssetType.RemotePrefab;
+                var url = _assetData.gltf[0].Replace("https", "http");
+                currGo.itemData = new ResourceDB.ResourceItemData(_assetData.unique_name,url,url, "","", remoteAsset:true );
+                // currGo.LoadModel();
             }
         }
 

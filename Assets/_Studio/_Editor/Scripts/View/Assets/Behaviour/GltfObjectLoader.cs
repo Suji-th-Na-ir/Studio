@@ -24,7 +24,7 @@ namespace Terra.Studio
     public class GltfObjectLoader : MonoBehaviour
     {
         [SerializeField] public string cloudUrl;
-        [SerializeField] private ImportSettings importSettings;
+        public ImportSettings importSettings;
 
         [NonSerialized] public string unique_name;
         private GltfImport importer;
@@ -140,12 +140,12 @@ namespace Terra.Studio
         
         public async void LoadTextures()
         {
-            Debug.LogError($"Loading textures?");
+            Debug.Log($"Loading textures");
             if (!modelLoaded)
             {
                 return;
             }
-            Debug.LogError($"textures!");
+            Debug.Log($"textures!");
             await importer.PrepareTextures(UriHelper.GetBaseUri(new Uri(OgUrl)));
             foreach (var (ren, meshResult) in _instantiator.results)
             {

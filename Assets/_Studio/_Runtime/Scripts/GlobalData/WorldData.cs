@@ -16,6 +16,7 @@ namespace Terra.Studio
     {
         public int id;
         public string name;
+        public string uniqueName;
         public string assetPath;
         public AssetType assetType;
         public PrimitiveType primitiveType;
@@ -64,6 +65,7 @@ namespace Terra.Studio
     {
         Empty,
         Primitive,
-        Prefab
+        Prefab,
+        RemotePrefab
     }
 }

@@ -18,6 +18,7 @@ namespace Terra.Studio
             [SerializeField] private string guid;
             [SerializeField] private bool isPrimitive;
             [SerializeField] private PrimitiveType primitiveType;
+            [SerializeField] private bool remoteAsset;
 
             public string AbsolutePath { get { return absolutePath; } }
             public string ResourcePath { get { return resourcePath; } }
@@ -27,7 +28,7 @@ namespace Terra.Studio
             public bool IsPrimitive { get { return isPrimitive; } }
             public PrimitiveType PrimitiveType { get { return primitiveType; } }
 
-            public ResourceItemData(string name, string absolutePath, string resourcePath, string type, string guid, bool isPrimitive = false, PrimitiveType primitiveType = default)
+            public ResourceItemData(string name, string absolutePath, string resourcePath, string type, string guid, bool isPrimitive = false, PrimitiveType primitiveType = default, bool remoteAsset = false)
             {
                 this.absolutePath = absolutePath;
                 this.resourcePath = resourcePath;
@@ -36,6 +37,7 @@ namespace Terra.Studio
                 this.guid = guid;
                 this.isPrimitive = isPrimitive;
                 this.primitiveType = primitiveType;
+                this.remoteAsset = remoteAsset;
             }
         }
 
