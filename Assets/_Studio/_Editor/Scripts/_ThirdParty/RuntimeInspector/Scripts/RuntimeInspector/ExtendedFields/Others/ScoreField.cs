@@ -26,8 +26,11 @@ namespace Terra.Studio
             {
                 input = "0";
             }
-            var score = int.Parse(input);
-            UpdateOtherCompData(score);
+            if (int.TryParse(input, out var score))
+            {
+                UpdateOtherCompData(score);
+            }
+          
             return value;
         }
 

@@ -25,7 +25,12 @@ namespace Terra.Studio
 
         public void OnDemandRun(in UpdateScoreComponent component)
         {
-            RuntimeOp.Resolve<ScoreHandler>().AddScore(component.AddScoreValue);
+            if (component.AddScoreValue != 0)
+                RuntimeOp.Resolve<ScoreHandler>().AddScore(component.AddScoreValue);
+            if (component.IsBroadcastable)
+            {
+                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
+            }
         }
 
         public override void OnHaltRequested(EcsWorld currentWorld)

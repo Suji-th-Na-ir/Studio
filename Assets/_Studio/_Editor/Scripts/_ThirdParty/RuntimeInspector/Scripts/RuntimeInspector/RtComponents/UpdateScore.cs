@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 using static Terra.Studio.Atom;
+using static Terra.Studio.DestroyOn;
 
 namespace Terra.Studio
 {
@@ -21,23 +22,28 @@ namespace Terra.Studio
             OnClick,
             [EditorEnumField("Terra.Studio.Listener"), AliasDrawer("Broadcast Listened")]
             BroadcastListen
-
         }
         [AliasDrawer("Update When")]
         public Atom.StartOn startOn = new();
+        [AliasDrawer("Update By")]
         public Atom.ScoreData Score = new();
+        public Atom.Broadcast broadcastData = new();
 
         public override string ComponentName => nameof(UpdateScore);
-
         public override bool CanPreview => false;
-        protected override bool CanBroadcast => false;
+        protected override bool CanBroadcast => true;
         protected override bool CanListen => true;
+        protected override string[] BroadcasterRefs => new string[]
+        {
+            broadcastData.broadcast
+        };
 
         protected override void Awake()
         {
             base.Awake();
             Score.Setup(gameObject,this);
-            startOn.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated, startOn.data.startIndex == 1);
+            startOn.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated,startOn.data.startIndex==3);
+            broadcastData.Setup(gameObject, this);
         }
 
         public override (string type, string data) Export()
@@ -46,11 +52,10 @@ namespace Terra.Studio
             {
                 IsConditionAvailable = true,
                 ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(GetEnum(startOn.data.startName)),
-                IsBroadcastable = false,
-                Broadcast = string.Empty,
-                ConditionData = GetConditionValue(),
-                startIndex = startOn.data.startIndex,
-                AddScoreValue = Score.score
+                ConditionData = GetStartCondition(),
+                AddScoreValue = Score.score,
+                IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
+                Broadcast = broadcastData.broadcast,
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var json = JsonConvert.SerializeObject(data);
@@ -59,19 +64,38 @@ namespace Terra.Studio
 
         public override void Import(EntityBasedComponent data)
         {
-            var obj = JsonConvert.DeserializeObject<UpdateScoreComponent>(data.data);
-            startOn.data.startName = GetStart(obj).ToString();
-            startOn.data.listenName = GetListenValues(obj);
-            startOn.data.startIndex = obj.startIndex;
+            var comp = JsonConvert.DeserializeObject<UpdateScoreComponent>(data.data);
+            startOn.data.startName = GetStart(comp).ToString();
+            startOn.data.listenName = GetListenValues(comp);
+            broadcastData.broadcast = comp.Broadcast;
             var listenString = "";
-            if (startOn.data.startIndex == 1)
+            if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(DestroyOnEnum), out object result))
+            {
+                var res = (DestroyOnEnum)result;
+                if (res == DestroyOnEnum.OnPlayerCollide)
+                {
+                    if (comp.ConditionData.Equals("Player"))
+                    {
+                        startOn.data.startIndex = (int)res;
+                    }
+                    else
+                    {
+                        startOn.data.startIndex = (int)DestroyOnEnum.OnObjectCollide;
+                    }
+                }
+                else
+                {
+                    startOn.data.startIndex = (int)(DestroyOnEnum)result;
+                }
+            }
+            if (startOn.data.startIndex == 3)
                 listenString = startOn.data.listenName;
-            Score.score = obj.AddScoreValue;
+            Score.score = comp.AddScoreValue;
             if (Score.score != 0)
             {
                 EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(true, Score.instanceId, false);
             }
-            ImportVisualisation(string.Empty, listenString);
+            ImportVisualisation(broadcastData.broadcast, listenString);
         }
 
         protected override void OnEnable()
@@ -98,21 +122,17 @@ namespace Terra.Studio
             return StartOn.OnClick;
         }
 
-        private string GetConditionValue()
+        public string GetStartCondition()
         {
-            if (string.IsNullOrEmpty(startOn.data.startName) ||
-                startOn.data.startName.Equals(StartOn.OnClick))
-            {
-                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOn.OnClick);
-            }
-            else if (startOn.data.startName.Equals(StartOn.OnObjectCollide.ToString()))
-            {
-                return EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(StartOn.OnObjectCollide);
-            }
-            else
+            int index = startOn.data.startIndex;
+            var value = (StartOn)index;
+            string inputString = value.ToString();
+            if (inputString.ToLower().Contains("listen"))
             {
                 return startOn.data.listenName;
             }
+            var data = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(value);
+            return data;
         }
 
         private StartOn GetStart(UpdateScoreComponent comp)
