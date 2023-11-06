@@ -32,7 +32,8 @@ namespace Terra.Studio.Behaviour
             if (currGo == null)
             {
                 currGo = Instantiate(_loaderPrefab);
-                currGo.url = _assetData.gltf[0].Replace("https","http");
+                currGo.cloudUrl = _assetData.gltf[0].Replace("https","http");
+                currGo.unique_name = _assetData.unique_name;
                 currGo.LoadModel(ModelDownloaded);
             }
         }

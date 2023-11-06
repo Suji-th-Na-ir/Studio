@@ -182,7 +182,7 @@ namespace GLTFast
 
         ImportSettings m_Settings;
 
-        byte[][] m_Buffers;
+        public byte[][] m_Buffers;
 
         /// <summary>
         /// GCHandles for pinned managed arrays <see cref="m_Buffers"/>
@@ -1162,10 +1162,13 @@ namespace GLTFast
             return true;
         }
 
+        public string FinalJson;
+
         async Task<bool> LoadGltf(string json, Uri url)
         {
             var baseUri = UriHelper.GetBaseUri(url);
             var success = await ParseJsonAndLoadBuffers(json, baseUri);
+            FinalJson = json;
             return success;
         }
 
@@ -2318,9 +2321,13 @@ namespace GLTFast
             return name;
         }
 
+        public void ForceCleanBuffers()
+        {
+            m_Buffers = null;
+        }
+
         public void DisposeVolatileDataFromTextures()
         {
-            return;
             m_TextureDownloadTasks = null;
 
             m_AccessorUsage = null;
@@ -2369,7 +2376,7 @@ namespace GLTFast
 #endif
             m_NativeBuffers = null;
 
-            m_Buffers = null;
+            // m_Buffers = null;
 
             m_BinChunks = null;
 

@@ -15,7 +15,7 @@ namespace Terra.Studio
         private const string sampleJson = "Editortime/Prefabs/AssetsWindow/Sample";
 
         private bool useSampleJson = true;
-        [SerializeField] private int numberOfAssetsToShowForNow = 10;
+        private int numberOfAssetsToShowForNow = 30;
         private AssetsAPIResponse _fullData; 
         public void Awake()
         {
@@ -56,7 +56,8 @@ namespace Terra.Studio
             var buttonPrefab = EditorOp.Load<GameObject>(assetsWindowButtonPath);
             var ghostMat = EditorOp.Load<Material>(ghostMatPath);
             var temp = GetComponentInChildren<GridLayoutGroup>();
-            for (var i = 0; i < _fullData.data.Length && i < numberOfAssetsToShowForNow; i++)
+            var x = 120;
+            for (var i = 120; i < _fullData.data.Length && i < 120+numberOfAssetsToShowForNow; i++)
             {
                 var data = _fullData.data[i];
                 var button = Instantiate(buttonPrefab, temp.transform);

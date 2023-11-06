@@ -1,49 +1,152 @@
 using System;
 using System.IO;
+using System.Text;
 using GLTFast;
+using GLTFast.Loading;
+using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Terra.Studio
 {
+    [Serializable]
+    public class TempStruct
+    {
+        public BufferData[] buffers;
+    }
+
+    [Serializable]
+    public struct BufferData
+    {
+        public string uri;
+        public int byteLength;
+    }
     public class GltfObjectLoader : MonoBehaviour
     {
-        [SerializeField] public string url;
+        [SerializeField] public string cloudUrl;
         [SerializeField] private ImportSettings importSettings;
-        [SerializeField] private bool loadFromStreamingAssets;
-        
+
+        [NonSerialized] public string unique_name;
         private GltfImport importer;
         private GameObjectInstantiator _instantiator;
         private bool modelLoaded;
-        
-        public string FullUrl => loadFromStreamingAssets ? Path.Combine(Application.streamingAssetsPath, url) : url;
-        
-        public async void LoadModel(Action callback)
+
+
+        private CacheValidator _cacheValidator;
+
+        public CacheValidator CacheValidator
         {
-            importer = new GltfImport();
-            // try
+            get
             {
-                await importer.Load(FullUrl, importSettings);
-                Debug.Log($"Finished importing.");
+                if (_cacheValidator == null)
+                {
+                    _cacheValidator = SystemOp.Resolve<CacheValidator>();
+                }
+
+                return _cacheValidator;
+            }
+        }
+
+        public string FullUrl
+        {
+            get => cloudUrl;
+            set
+            {
+                cloudUrl = value;
+            }
+        }
+        public string OgUrl { get; private set; }
+
+        private async void Test(bool inCache, string localPath, Action callback)
+        {
+            if (inCache)
+            {
+                importer = new GltfImport(new LocalFileProvider());
+                // FullUrl = "file://" + localPath;
+                FullUrl = localPath;
+                Debug.Log($"Loading from cache!...{FullUrl}");
+                var success = await importer.Load(FullUrl, importSettings);
+                if (!success)
+                {
+                    Debug.LogError($"Model not loaded");
+                    return;
+                }
+
+                Debug.Log($"Model loaded.");
+                importer.ForceCleanBuffers();
                 _instantiator = new GameObjectInstantiator(importer, transform);
-                Debug.Log($"Instantiating.");
                 modelLoaded = await importer.InstantiateMainSceneAsync(_instantiator, default);
-                Debug.Log($"Finished Instantiating.");
+                if (modelLoaded)
+                {
+                    callback?.Invoke();
+                }
+                else
+                {
+                    Debug.LogError($"Model loading failed");
+                }
             }
-            // catch (Exception e)
+            else
             {
-                // Debug.LogError($"JAI MATA DI {e}...{e.Message}....{e.Source}");
+                importer = new GltfImport(new DefaultDownloadProvider());
+                Debug.Log($"Loading normally");
+                var success = await importer.Load(FullUrl, importSettings);
+                if (!success)
+                {
+                    Debug.LogError($"Model not loaded");
+                    return;
+                }
+                Debug.Log($"Model loaded.");
+
+                var json = importer.FinalJson;
+                var buffers = importer.m_Buffers;
+                
+                var converted = JsonConvert.DeserializeObject<TempStruct>(json);
+                for (var i = 0; i < buffers.Length; i++)
+                {
+                    var bufferData = buffers[i];
+                    var bufferName = converted.buffers[i].uri;
+                    // string result = Encoding.UTF8.GetString(bufferData, 0, bufferData.Length);
+                    var path = Path.Combine(unique_name, bufferName);
+                    CacheValidator.Save(path, bufferData, $"{unique_name}.bin");
+                }
+                
+                Uri uri = new Uri(FullUrl);
+                var gltfFileName = Path.GetFileName(uri.LocalPath);
+                CacheValidator.Save(Path.Combine(unique_name, gltfFileName), json, $"{unique_name}.gltf");
+                importer.ForceCleanBuffers();
+                _instantiator = new GameObjectInstantiator(importer, transform);
+                modelLoaded = await importer.InstantiateMainSceneAsync(_instantiator, default);
+
+                if (modelLoaded)
+                {
+                    callback?.Invoke();
+                }
+                else
+                {
+                    Debug.LogError($"Model loading failed");
+                }
             }
-            callback?.Invoke();
-            // LoadTextures();
+        }
+        
+        public void LoadModel(Action cb)
+        {
+            OgUrl = FullUrl;
+            Debug.Log($"Loading started.");
+            CacheValidator.IsFileInCache($"{unique_name}.gltf",(inCache,localPath) =>
+            {
+                Test(inCache, localPath, cb);
+            });
         }
         
         public async void LoadTextures()
         {
+            Debug.LogError($"Loading textures?");
             if (!modelLoaded)
             {
                 return;
             }
-            await importer.PrepareTextures(UriHelper.GetBaseUri(new Uri(FullUrl)));
+            Debug.LogError($"textures!");
+            await importer.PrepareTextures(UriHelper.GetBaseUri(new Uri(OgUrl)));
             foreach (var (ren, meshResult) in _instantiator.results)
             {
                 var materials = new Material[meshResult.materialIndices.Length];
