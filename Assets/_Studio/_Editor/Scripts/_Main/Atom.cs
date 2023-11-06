@@ -61,7 +61,6 @@ namespace Terra.Studio
         public class StartOn
         {
             public GameObject target;
-            public StartOnField field;
             public StartOnData data = new();
             public string componentType = null;
             public List<string> startList = new();
