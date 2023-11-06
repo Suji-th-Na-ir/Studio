@@ -69,10 +69,6 @@ namespace Terra.Studio.Behaviour
             {
                 Destroy(currGo.gameObject);
             }
-            else
-            {
-                currGo.LoadTextures();
-            }
 
             currGo = null;
         }

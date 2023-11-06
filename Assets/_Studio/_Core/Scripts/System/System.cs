@@ -56,6 +56,7 @@ namespace Terra.Studio
             SystemOp.Register(new SaveSystem());
             SystemOp.Register(new Flow());
             SystemOp.Register(new CacheValidator());
+            SystemOp.Register(new LoadedPoolValidator());
         }
 
         private void LoadSubsystemScene()
@@ -121,6 +122,7 @@ namespace Terra.Studio
             SystemOp.Unregister<SaveSystem>();
             SystemOp.Unregister<Flow>();
             SystemOp.Unregister<CacheValidator>();
+            SystemOp.Unregister<LoadedPoolValidator>();
             SystemOp.Unregister(this);
             SystemOp.Flush();
             EditorOp.Flush();

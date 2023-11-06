@@ -21,6 +21,7 @@ namespace Terra.Studio
         public string uri;
         public int byteLength;
     }
+
     public class GltfObjectLoader : MonoBehaviour
     {
         [SerializeField] public string cloudUrl;
@@ -33,28 +34,18 @@ namespace Terra.Studio
 
 
         private CacheValidator _cacheValidator;
+        private LoadedPoolValidator _loadedPoolValidator;
 
-        public CacheValidator CacheValidator
-        {
-            get
-            {
-                if (_cacheValidator == null)
-                {
-                    _cacheValidator = SystemOp.Resolve<CacheValidator>();
-                }
+        public CacheValidator CacheValidator => _cacheValidator ??= SystemOp.Resolve<CacheValidator>();
 
-                return _cacheValidator;
-            }
-        }
+        public LoadedPoolValidator LoadedPoolValidator => _loadedPoolValidator ??= SystemOp.Resolve<LoadedPoolValidator>();
 
         public string FullUrl
         {
             get => cloudUrl;
-            set
-            {
-                cloudUrl = value;
-            }
+            set { cloudUrl = value; }
         }
+
         public string OgUrl { get; private set; }
 
         private async void Test(bool inCache, string localPath, Action callback)
@@ -71,7 +62,6 @@ namespace Terra.Studio
                     Debug.LogError($"Model not loaded");
                     return;
                 }
-
                 Debug.Log($"Model loaded.");
                 importer.ForceCleanBuffers();
                 _instantiator = new GameObjectInstantiator(importer, transform);
@@ -95,11 +85,12 @@ namespace Terra.Studio
                     Debug.LogError($"Model not loaded");
                     return;
                 }
+
                 Debug.Log($"Model loaded.");
 
                 var json = importer.FinalJson;
                 var buffers = importer.m_Buffers;
-                
+
                 var converted = JsonConvert.DeserializeObject<TempStruct>(json);
                 for (var i = 0; i < buffers.Length; i++)
                 {
@@ -109,7 +100,7 @@ namespace Terra.Studio
                     var path = Path.Combine(unique_name, bufferName);
                     CacheValidator.Save(path, bufferData, $"{unique_name}.bin");
                 }
-                
+
                 Uri uri = new Uri(FullUrl);
                 var gltfFileName = Path.GetFileName(uri.LocalPath);
                 CacheValidator.Save(Path.Combine(unique_name, gltfFileName), json, $"{unique_name}.gltf");
@@ -127,24 +118,36 @@ namespace Terra.Studio
                 }
             }
         }
-        
+
         public void LoadModel(Action cb)
         {
-            OgUrl = FullUrl;
-            Debug.Log($"Loading started.");
-            CacheValidator.IsFileInCache($"{unique_name}.gltf",(inCache,localPath) =>
+            if (LoadedPoolValidator.IsInLoadedPool(unique_name))
             {
-                Test(inCache, localPath, cb);
-            });
+                Debug.Log($"Getting from pool");
+                var temp = LoadedPoolValidator.GetDuplicateFromPool(unique_name);
+                modelLoaded = true;
+                cb?.Invoke();
+                temp.transform.SetParent(transform);
+                
+                Destroy(this);
+            }
+            else
+            {
+                OgUrl = FullUrl;
+                Debug.Log($"Loading started.");
+                CacheValidator.IsFileInCache($"{unique_name}.gltf",
+                    (inCache, localPath) => { Test(inCache, localPath, cb); });
+            }
         }
-        
+
         public async void LoadTextures()
         {
-            Debug.Log($"Loading textures");
             if (!modelLoaded)
             {
+                Debug.LogError($"Still Loading the model.", gameObject);
                 return;
             }
+
             Debug.Log($"textures!");
             await importer.PrepareTextures(UriHelper.GetBaseUri(new Uri(OgUrl)));
             foreach (var (ren, meshResult) in _instantiator.results)
@@ -152,11 +155,18 @@ namespace Terra.Studio
                 var materials = new Material[meshResult.materialIndices.Length];
                 for (var index = 0; index < materials.Length; index++)
                 {
-                    var material = importer.GetMaterial(meshResult.materialIndices[index]) ?? importer.GetDefaultMaterial();
+                    var material = importer.GetMaterial(meshResult.materialIndices[index]) ??
+                                   importer.GetDefaultMaterial();
                     materials[index] = material;
                 }
+
                 ren.sharedMaterials = materials;
             }
+            Debug.Log($"{_loadedPoolValidator}....{transform.GetChild(0)}");
+            // Debug.Break();
+            // LoadedPoolValidator.AddToPool(unique_name, transform.GetChild(1).gameObject);
+            importer.DisposeVolatileDataFromTextures();
+            Destroy(this);
         }
     }
 }

@@ -43,10 +43,5 @@ namespace Terra.Studio
             RuntimeWrappers.ResolveTRS(gameObject, itemData);
             _loader.LoadTextures();   
         }
-
-        public void LoadTextures()
-        {
-            
-        }
     }
 }
