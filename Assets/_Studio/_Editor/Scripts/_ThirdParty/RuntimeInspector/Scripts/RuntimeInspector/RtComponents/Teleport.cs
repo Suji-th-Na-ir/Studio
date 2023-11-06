@@ -51,7 +51,7 @@ namespace Terra.Studio
                 OnGhostInteracted = OnGhostDataModified,
                 SelectionGhostsTRS = () =>
                 {
-                    return new Vector3[] { (Vector3)GhostDescription.GetRecentValue.Invoke(), transform.localRotation.eulerAngles, Vector3.one };
+                    return new Vector3[] { (Vector3)GhostDescription.GetRecentValue.Invoke(), Quaternion.identity.eulerAngles, Vector3.one };
                 },
                 ToggleRecordMode = () =>
                 {
