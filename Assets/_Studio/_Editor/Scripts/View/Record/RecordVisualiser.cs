@@ -7,39 +7,101 @@ using Object = UnityEngine.Object;
 
 namespace Terra.Studio
 {
-    public class Recorder
+    public class Recorder : IDisposable
     {
+        public Recorder()
+        {
+            Init();
+        }
+
         public struct GhostDescription
         {
-            public Action ToggleGhostMode;
-            public Func<Vector3[]> SpawnTRS;
-            public bool ShowVisualsOnMultiSelect;
+            public Action ToggleRecordMode;
+            public Action ShowSelectionGhost;
+            public Action HideSelectionGhost;
+            public Action UpdateSlectionGhostTRS;
+            public Action UpdateSelectionGhostsRepeatCount;
+            public Func<Vector3[]> SelectionGhostsTRS;
             public Action<object> OnGhostInteracted;
             public Action<bool> OnGhostModeToggled;
             public Func<object> GetLastValue;
             public Func<object> GetRecentValue;
             public bool IsGhostInteractedInLastRecord;
             public GameObject GhostTo;
+            public bool showGhostWithTravelLine;
         }
-
-        private Dictionary<BaseBehaviour, RecordVisualiser> activeRecorders = new();
+        public Dictionary<BaseBehaviour, List<RecordVisualiser>> activeSelectionRecorders = new();
         private List<GameObject> ghosts = new();
 
-        public void TrackPosition_NoGhostOnMultiselect<T>(T instance, bool enableModification) where T : BaseBehaviour
+        private void Init()
+        {
+            EditorOp.Resolve<SelectionHandler>().SelectionChanged += OnSelectionChanged;
+        }
+
+
+        public void Dispose()
+        {
+            EditorOp.Resolve<SelectionHandler>().SelectionChanged -= OnSelectionChanged;
+        }
+
+        private void OnSelectionChanged(List<GameObject> selected)
+        {
+            foreach (var g in selected)
+            {
+                var behaviours = g.GetComponents<BaseBehaviour>();
+                foreach (var b in behaviours)
+                {
+                    if (!activeSelectionRecorders.TryGetValue(b, out var value))
+                    {
+                        b.GhostDescription.ShowSelectionGhost?.Invoke();
+                    }
+                }
+            }
+            var previousSelected = EditorOp.Resolve<SelectionHandler>().GetPrevSelectedObjects();
+          
+            foreach (var p in previousSelected)
+            {
+                if (selected.Contains(p))
+                    continue;
+                var behaviours = p.GetComponents<BaseBehaviour>();
+                foreach (var b in behaviours)
+                {
+                    if (activeSelectionRecorders.TryGetValue(b, out var value))
+                    {
+                        b.GhostDescription.HideSelectionGhost?.Invoke();
+                    }
+                }
+            }
+        }
+
+        public void TrackPosition_Multiselect<T>(T instance,bool noGhost) where T : BaseBehaviour
         {
             var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
             if (selections.Count > 1)
             {
-                HandleInstance_NoGhostOnMultiselect(instance, RecordVisualiser.Record.Position, enableModification);
+                if (noGhost)
+                {
+                    HandleInstance_NoGhostOnMultiselect(instance);
+                }
+                else
+                {
+                    foreach (var selection in selections)
+                    {
+                        if (selection.TryGetComponent<T>(out var component))
+                        {
+                            HandleInstance(component);
+                        }
+                    }
+                }
             }
             else
             {
-                HandleInstance(instance, RecordVisualiser.Record.Position, enableModification, true);
+                HandleInstance(instance);
             }
             HandleSelection(SelectionHandler.GizmoId.Move);
         }
 
-        public void TrackPosition_ShowGhostOnMultiselect<T>(T instance, bool enableModification) where T : BaseBehaviour
+        public void TrackRotation_ShowGhostOnMultiselect<T>(T instance) where T : BaseBehaviour
         {
             var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
             if (selections.Count > 1)
@@ -48,33 +110,13 @@ namespace Terra.Studio
                 {
                     if (selection.TryGetComponent<T>(out var component))
                     {
-                        HandleInstance(component, RecordVisualiser.Record.Position, enableModification, false);
+                        HandleInstance(component);
                     }
                 }
             }
             else
             {
-                HandleInstance(instance, RecordVisualiser.Record.Position, enableModification, true);
-            }
-            HandleSelection(SelectionHandler.GizmoId.Move);
-        }
-
-        public void TrackRotation_ShowGhostOnMultiselect<T>(T instance, bool enableModification) where T : BaseBehaviour
-        {
-            var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
-            if (selections.Count > 1)
-            {
-                foreach (var selection in selections)
-                {
-                    if (selection.TryGetComponent<T>(out var component))
-                    {
-                        HandleInstance(component, RecordVisualiser.Record.Rotation, enableModification, false);
-                    }
-                }
-            }
-            else
-            {
-                HandleInstance(instance, RecordVisualiser.Record.Rotation, enableModification, true);
+                HandleInstance(instance);
             }
             HandleSelection(SelectionHandler.GizmoId.Rotate);
         }
@@ -91,69 +133,266 @@ namespace Terra.Studio
             }
         }
 
-        private void HandleInstance<T>(T instance, RecordVisualiser.Record recorder, bool enableModification, bool isTrulySingleInstance) where T : BaseBehaviour
+        public void ShowSelectionGhost_Position<T>(T instance, bool show) where T : BaseBehaviour
+        {
+            ShowSelectionGhost_RepeatPosition(instance, 1, show, RepeatDirectionType.SameDirection);
+        }
+
+        public void ShowSelectionGhost_Rotation<T>(T instance, bool show) where T : BaseBehaviour
+        {
+            var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selections.Count > 1)
+            {
+                foreach (var selection in selections)
+                {
+                    if (selection.TryGetComponent<T>(out var component))
+                    {
+                        HandleSelectionInstance(component, RecordVisualiser.Record.Rotation, show, 1, false, RepeatDirectionType.SameDirection);
+                    }
+                }
+            }
+            else
+            {
+                HandleSelectionInstance(instance, RecordVisualiser.Record.Rotation, show, 1, true, RepeatDirectionType.SameDirection);
+            }
+           
+        }
+
+        public void ShowSelectionGhost_RepeatPosition<T>(T instance, int repeatCount, bool show, RepeatDirectionType directionType) where T : BaseBehaviour
+        {
+            if (repeatCount == 0)
+                return;
+            if (repeatCount == 1)
+            {
+                directionType = RepeatDirectionType.SameDirection;
+            }
+            var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selections.Count > 1)
+            {
+                foreach (var selection in selections)
+                {
+                    if (selection.TryGetComponent<T>(out var component))
+                    {
+                        HandleSelectionInstance(component, RecordVisualiser.Record.Position, show, repeatCount, false, directionType);
+                    }
+                }
+            }
+            else
+            {
+                HandleSelectionInstance(instance, RecordVisualiser.Record.Position, show, repeatCount, true, directionType);
+            }
+          
+        }
+
+        public void UpdateGhostRepeatCount_Multiselect<T>(T instance, int count, RepeatDirectionType directionType) where T : BaseBehaviour
+        {
+            var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selections.Count > 1)
+            {
+                foreach (var selection in selections)
+                {
+                    if (selection.TryGetComponent<T>(out var component))
+                    {
+                        UpdateGhostRepeatCount(component, count, directionType);
+                    }
+                }
+            }
+            else
+            {
+                UpdateGhostRepeatCount(instance, count, directionType);
+            }
+        }
+
+        public void UpdateGhostRepeatCount<T>(T instance, int count, RepeatDirectionType directionType) where T : BaseBehaviour
+        {
+            var isPresent = activeSelectionRecorders.TryGetValue(instance, out var visualisers);
+            if (isPresent)
+            {
+                bool wasRecording=false;
+                for (int i = 0; i < visualisers.Count; i++)
+                {
+                    if(i==0)
+                    {
+                        wasRecording = visualisers[i].HasRecorder;
+                    }
+                    visualisers[i].Dispose();
+                }
+                activeSelectionRecorders.Remove(instance);
+                ShowSelectionGhost_RepeatPosition(instance, count, true, directionType);
+                if (wasRecording)
+                    instance.GhostDescription.ToggleRecordMode?.Invoke();
+            }
+            else
+            {
+                ShowSelectionGhost_RepeatPosition(instance, count, true, directionType);
+            }
+        }
+
+        public void UpdateTRS_Multiselect<T>(T instance) where T : BaseBehaviour
+        {
+            var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selections.Count > 1)
+            {
+                foreach (var selection in selections)
+                {
+                    if (selection.TryGetComponent<T>(out var component))
+                    {
+                        UpdateTRS(component);
+                    }
+                }
+            }
+            else
+            {
+                UpdateTRS(instance);
+            }
+        }
+
+        private void UpdateTRS<T>(T instance) where T : BaseBehaviour
+        {
+            var isPresent = activeSelectionRecorders.TryGetValue(instance, out var visualisers);
+            if (isPresent)
+            {
+                var alltrs = instance.GhostDescription.SelectionGhostsTRS?.Invoke();
+
+                Vector3 point1, point2;
+                point1 = alltrs[0];
+                point2 = instance.transform.position;
+                float distance = (point2 - point1).magnitude;
+                Vector3 dir = (point1 - point2).normalized;
+
+                for (int i = 0; i < visualisers.Count; i++)
+                {
+                    visualisers[i].UpdateTRS(new Vector3[] { alltrs[i * 3], alltrs[i * 3 + 1], alltrs[i * 3 + 2] });
+                    if (instance.GhostDescription.showGhostWithTravelLine)
+                    {
+                        visualisers[i].CreateTravelLine(distance, dir);
+                    }
+                }
+            }
+        }
+
+        private void HandleSelectionInstance<T>(T instance, RecordVisualiser.Record recorder, bool show, int count, bool isTrulySingleInstance, RepeatDirectionType directionType = RepeatDirectionType.SameDirection) where T : BaseBehaviour
+        {
+            var isPresent = activeSelectionRecorders.TryGetValue(instance, out var visualisers);
+            if (isPresent)
+            {
+                if (!show)
+                {
+                    foreach (var v in visualisers)
+                    {
+                        v.Dispose();
+                    }
+                    activeSelectionRecorders.Remove(instance);
+                    return;
+                }
+            }
+            else
+            {
+                if (!show)
+                    return;
+                var trs = instance.GhostDescription.SelectionGhostsTRS?.Invoke();
+                List<RecordVisualiser> recordVisulisers = new List<RecordVisualiser>();
+
+                Vector3 point1, point2;
+                point1 = trs[0];
+                point2 = instance.GhostDescription.GhostTo.transform.position;
+                float distance = (point2 - point1).magnitude;
+                Vector3 dir = (point1 - point2).normalized;
+
+                bool repeatforver = count == int.MaxValue;
+                if (count > 10)
+                    count = 10;
+
+                for (int i = 0; i < count; i++)
+                {
+                    var contextTrs = new Vector3[] { trs[i * 3], trs[i * 3 + 1], trs[i * 3 + 2] };
+                    var visualiser = new RecordVisualiser(instance.GhostDescription.GhostTo,
+                    recorder,
+                    () =>
+                    {
+                        if (isTrulySingleInstance)
+                        {
+                            HandleUndoRedo_SingleInstance(instance);
+                        }
+                        else
+                        {
+                            var references = GetAllComponentsForSelected(instance, false);
+                            HandleUndoRedo_MultipleInstances(references);
+                        }
+                    },contextTrs);
+                    recordVisulisers.Add(visualiser);
+
+                    if (instance.GhostDescription.showGhostWithTravelLine)
+                    {
+                        if (i == 0 && directionType == RepeatDirectionType.PingPong)
+                        {
+                            visualiser.CreateTravelLine(distance, dir, directionType, false);
+                            break;
+                        }
+                        visualiser.CreateTravelLine(distance, dir, directionType, repeatforver && i == 9);
+                    }
+                }
+                activeSelectionRecorders.Add(instance, recordVisulisers);
+            }
+        }
+
+        private void HandleInstance<T>(T instance) where T : BaseBehaviour
         {
             var isPresent = ToggleGhostMode(instance);
             if (isPresent) return;
-            var trs = instance.GhostDescription.SpawnTRS?.Invoke();
-            var visualiser = new RecordVisualiser(instance.GhostDescription.GhostTo,
-                recorder,
-                instance.GhostDescription.OnGhostInteracted,
-                () =>
+            var trs = instance.GhostDescription.SelectionGhostsTRS?.Invoke();
+            if (activeSelectionRecorders.TryGetValue(instance, out var visualiser))
+            {
+                visualiser[0].AttachRecorder((data)=>
                 {
-                    if (isTrulySingleInstance)
-                    {
-                        HandleUndoRedo_SingleInstance(instance);
-                    }
-                    else
-                    {
-                        var references = GetAllComponentsForSelected(instance, false);
-                        HandleUndoRedo_MultipleInstances(references);
-                    }
-                },
-                enableModification, trs);
+                    instance.GhostDescription.OnGhostInteracted?.Invoke(data);
+                    UpdateTRS(instance);
+                });
+            }
             instance.GhostDescription.OnGhostModeToggled(true);
-            activeRecorders[instance] = visualiser;
         }
 
-        private void HandleInstance_NoGhostOnMultiselect<T>(T instance, RecordVisualiser.Record recorder, bool enableModification) where T : BaseBehaviour
+        private void HandleInstance_NoGhostOnMultiselect<T>(T instance) where T : BaseBehaviour
         {
             var isPresent = ToggleGhostMode(instance);
             if (isPresent) return;
             var components = GetAllComponentsForSelected(instance, true);
-            var trs = instance.GhostDescription.SpawnTRS?.Invoke();
-            var visualiser = new RecordVisualiser(instance.GhostDescription.GhostTo,
-                recorder,
-                (data) =>
+            var trs = instance.GhostDescription.SelectionGhostsTRS?.Invoke();
+            if (activeSelectionRecorders.TryGetValue(instance, out var visualiser))
+            {
+                if (visualiser.Count > 0)
                 {
-                    instance.GhostDescription.OnGhostInteracted?.Invoke(data);
-                    foreach (var component in components)
+                    visualiser[0].AttachRecorder((data) =>
                     {
-                        component.GhostDescription.OnGhostInteracted?.Invoke(data);
-                    }
-                },
-                () =>
-                {
-                    var references = GetAllComponentsForSelected(instance, false);
-                    HandleUndoRedo_MultipleInstances(references);
-                },
-                enableModification, trs);
+                        instance.GhostDescription.OnGhostInteracted?.Invoke(data);
+                        foreach (var component in components)
+                        {
+                            component.GhostDescription.OnGhostInteracted?.Invoke(data);
+                            UpdateTRS_Multiselect(instance);
+                        }
+                    });
+                }
+            }
             instance.GhostDescription.OnGhostModeToggled(true);
-            activeRecorders[instance] = visualiser;
         }
 
         private bool ToggleGhostMode<T>(T instance) where T : BaseBehaviour
         {
-            var isPresent = activeRecorders.TryGetValue(instance, out var visualiser);
+            activeSelectionRecorders.TryGetValue(instance, out var visualiser);
+            var isPresent = visualiser.Count > 0;
             if (isPresent)
             {
-                visualiser.Dispose();
-                activeRecorders.Remove(instance);
-                instance.GhostDescription.OnGhostModeToggled(false);
+                if (visualiser[0].HasRecorder)
+                {
+                    visualiser[0].RemoveRecorder();
+                    instance.GhostDescription.OnGhostModeToggled(false);
+                }
+                else
+                    return false;
             }
             else
             {
-                activeRecorders.Add(instance, null);
+                Debug.Log("Ghost was not created on selection");
             }
             return isPresent;
         }
@@ -172,6 +411,7 @@ namespace Terra.Studio
             }
         }
 
+
         private void HandleUndoRedo_SingleInstance<T>(T instance) where T : BaseBehaviour
         {
             var description = instance.GhostDescription;
@@ -182,13 +422,23 @@ namespace Terra.Studio
                 return;
             }
             EditorOp.Resolve<IURCommand>().Record(
-                (lastValue, description.OnGhostInteracted),
-                (recentValue, description.OnGhostInteracted),
+                (lastValue, description.OnGhostInteracted,instance.gameObject),
+                (recentValue, description.OnGhostInteracted,instance.gameObject),
                 $"Vector3 modified: {description.GetRecentValue.Invoke()}",
                 (data) =>
                 {
-                    var (value, action) = ((object, Action<object>))data;
+                    var (value, action,GObject) = ((object, Action<object>,GameObject))data;
+                    var comp = instance as BaseBehaviour;
+                    if (comp == null)
+                    {
+                         comp = GObject.GetComponent(instance.GetType()) as BaseBehaviour;
+                        if(comp)
+                        {
+                            action = comp.GhostDescription.OnGhostInteracted;
+                        }
+                    }
                     action?.Invoke(value);
+                    UpdateTRS(comp);
                 });
         }
 
@@ -205,8 +455,10 @@ namespace Terra.Studio
                 }
                 var data = new MultiselectUndoRedoChanges()
                 {
+                    instance = instances.Single(z => z.GhostDescription.Equals(y)),
                     value = y.GetLastValue.Invoke(),
-                    action = y.OnGhostInteracted
+                    action = y.OnGhostInteracted,
+                    gObject = instances.Single(z => z.GhostDescription.Equals(y)).gameObject
                 };
                 return data;
             });
@@ -220,8 +472,10 @@ namespace Terra.Studio
                 }
                 var data = new MultiselectUndoRedoChanges()
                 {
+                    instance = instances.Single(z => z.GhostDescription.Equals(y)),
                     value = y.GetRecentValue.Invoke(),
-                    action = y.OnGhostInteracted
+                    action = y.OnGhostInteracted,
+                    gObject = instances.Single(z => z.GhostDescription.Equals(y)).gameObject
                 };
                 return data;
             });
@@ -234,12 +488,24 @@ namespace Terra.Studio
                     var values = (List<MultiselectUndoRedoChanges>)data;
                     foreach (var value in values)
                     {
+                        if (value.instance == null)
+                        {
+                            var comp = value.gObject.GetComponent(instances.First().GetType()) as BaseBehaviour;
+                            if (comp)
+                            {
+                                comp.GhostDescription.OnGhostInteracted?.Invoke(value.value);
+                                continue;
+                            }
+
+                        }
                         if (value.value == null)
                         {
                             continue;
                         }
                         value.action?.Invoke(value.value);
+
                     }
+                    UpdateTRS_Multiselect(instances.First());
                 });
         }
 
@@ -256,10 +522,13 @@ namespace Terra.Studio
             return components;
         }
 
+
         private struct MultiselectUndoRedoChanges
         {
+            public BaseBehaviour instance;
             public object value;
             public Action<object> action;
+            public GameObject gObject;
         }
     }
 
@@ -277,27 +546,107 @@ namespace Terra.Studio
         private readonly Material ghostMaterial;
         private readonly Action onGhostDataModified;
         private BaseRecorder baseRecorder;
+        private Transform childGhostMesh;
+        private GameObject ghostLine;
+        private GameObject lastLine;
+        private float lastArrowLength;
+        public readonly Record recordFor;
+        private bool showLastLine;
+        RepeatDirectionType cachedDirectionType;
+        public Transform GhostMeshTransform { get { return childGhostMesh; } }
+        public bool HasRecorder => baseRecorder != null;
 
-        public RecordVisualiser(GameObject gameObject, Record recordFor, Action<object> onRecordDataModified, Action onGhostDataModified, bool enableModification, params Vector3[] trs)
+        public RecordVisualiser(GameObject gameObject, Record recordFor, Action onGhostDataModified, params Vector3[] trs)
         {
+            this.recordFor = recordFor;
             this.onGhostDataModified = onGhostDataModified;
             ghostMaterial = EditorOp.Load<Material>(GHOST_MATERIAL_PATH);
             var ghostObj = EditorOp.Load<GameObject>(GHOST_RESOURCE_PATH);
+           
             ghost = Object.Instantiate(ghostObj);
             ghost.name = string.Concat(ghost.name, "_", gameObject.name);
             RuntimeWrappers.DuplicateGameObject(gameObject, ghost.transform, Vector3.zero);
             RuntimeWrappers.ResolveTRS(ghost, null, trs);
-            var child = ghost.transform.GetChild(0);
-            child.localPosition = Vector3.zero;
-            child.localScale = gameObject.transform.lossyScale;
+            childGhostMesh = ghost.transform.GetChild(0);
+            childGhostMesh.localPosition = Vector3.zero;
+            childGhostMesh.localRotation = Quaternion.identity;
+            childGhostMesh.localScale = gameObject.transform.lossyScale;
             Clean();
             ghost.SetActive(true);
-            if (enableModification)
+
+            EditorOp.Resolve<EditorSystem>().OnPreviewEnabled += OnPreviewModeEnabled;
+        }
+
+        private void OnPreviewModeEnabled(bool enabled)
+        {
+            if (ghost != null)
+                ghost.SetActive(!enabled);
+        }
+
+        public void RemoveRecorder()
+        {
+            if(HasRecorder)
+            EditorOp.Resolve<EditorSystem>().RequestIncognitoMode(false);
+
+            EditorOp.Resolve<Recorder>().TrackGhost(false, ghost);
+            if (baseRecorder)
+                Object.Destroy(baseRecorder);
+            onGhostDataModified?.Invoke();
+        }
+
+        public void AttachRecorder(Action<object> onRecordDataModified)
+        {
+            EditorOp.Resolve<EditorSystem>().RequestIncognitoMode(true);
+            EditorOp.Resolve<Recorder>().TrackGhost(true, ghost);
+
+            baseRecorder = recordFor switch
             {
-                EditorOp.Resolve<EditorSystem>().RequestIncognitoMode(true);
-                EditorOp.Resolve<Recorder>().TrackGhost(true, ghost);
-                AttachRecorder(recordFor, onRecordDataModified);
+                Record.Position => ghost.AddComponent<PositionRecorder>(),
+                Record.Rotation => ghost.AddComponent<RotationRecorder>(),
+                _ => throw new NotImplementedException()
+            };
+            baseRecorder.Init(onRecordDataModified);
+        }
+
+        public void CreateTravelLine(float length, Vector3 direction)
+        {
+            CreateTravelLine(length, direction, cachedDirectionType, showLastLine);
+        }
+
+        public void CreateTravelLine(float length, Vector3 direction, RepeatDirectionType directionType, bool showLastLine)
+        {
+            length = length * 0.85f; //For extra spacing on ends
+            this.showLastLine = showLastLine;
+            cachedDirectionType = directionType;
+            MeshFilter mf;
+            MeshRenderer mr;
+            if ((ghostLine && lastArrowLength != length) || ghostLine == null)
+            {
+                GameObject.Destroy(ghostLine);
+                GameObject.Destroy(lastLine);
+                ghostLine = new GameObject("Arrow_Line");
+                mf = ghostLine.AddComponent<MeshFilter>();
+                mr = ghostLine.AddComponent<MeshRenderer>();
+                mf.mesh = new VisulisationLineGenerator(ghostLine.transform, length, 0.1f, 0.4f, 0.3f, 36, directionType == RepeatDirectionType.PingPong).Mesh;
+                mr.material = ghostMaterial;
+                ghostLine.transform.SetParent(ghost.transform);
+
+                if (showLastLine)
+                {
+                    lastLine = RuntimeWrappers.DuplicateGameObject(ghostLine, ghost.transform, Vector3.zero);
+                }
             }
+            var position = ghost.transform.position - direction * length * 1.1f;
+            ghostLine.transform.position = position;
+
+            Quaternion rotation = Quaternion.FromToRotation(-Vector3.back, direction);
+            ghostLine.transform.rotation = rotation;
+            if (lastLine)
+            {
+                lastLine.transform.localPosition = Vector3.zero;
+                lastLine.transform.rotation = rotation;
+            }
+            lastArrowLength = length;
         }
 
         private void Clean()
@@ -310,6 +659,11 @@ namespace Terra.Studio
                 CleanCollider(child);
                 CleanMaterial(child);
             }
+        }
+
+        public void UpdateTRS(params Vector3[] trs)
+        {
+            RuntimeWrappers.ResolveTRS(ghost, null, trs);
         }
 
         private void CleanCollider(Transform child)
@@ -327,7 +681,7 @@ namespace Terra.Studio
                 var subMeshCount = mesh.mesh.subMeshCount;
                 if (child.TryGetComponent(out Renderer renderer))
                 {
-                    if (renderer.materials.Length > subMeshCount)
+                    if (renderer.materials.Length > subMeshCount || !renderer.materials.Contains(ghostMaterial))
                     {
                         var materials = new Material[subMeshCount];
                         for (int i = 0; i < subMeshCount; i++)
@@ -349,24 +703,13 @@ namespace Terra.Studio
             }
         }
 
-        private void AttachRecorder(Record recordFor, Action<object> onRecordDataModified)
-        {
-            baseRecorder = recordFor switch
-            {
-                Record.Position => ghost.AddComponent<PositionRecorder>(),
-                Record.Rotation => ghost.AddComponent<RotationRecorder>(),
-                _ => throw new NotImplementedException()
-            };
-            baseRecorder.Init(onRecordDataModified);
-        }
-
         public void Dispose()
         {
-            Object.Destroy(ghost);
-            EditorOp.Resolve<EditorSystem>().RequestIncognitoMode(false);
             EditorOp.Resolve<Recorder>().TrackGhost(false, ghost);
-            onGhostDataModified?.Invoke();
+            EditorOp.Resolve<EditorSystem>().OnPreviewEnabled -= OnPreviewModeEnabled;
+            Object.Destroy(ghost);
         }
+
 
         public abstract class BaseRecorder : MonoBehaviour
         {

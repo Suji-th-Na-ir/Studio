@@ -209,12 +209,9 @@ namespace Terra.Studio
                         var component = gameObject.AddComponent(type) as IComponent;
                         component?.Import(entity.components[i]);
                     }
-                    else
-                    {
-                        onComponentDependencyFound?.Invoke(gameObject, entity);
-                    }
                 }
             }
+            onComponentDependencyFound?.Invoke(gameObject, entity);
         }
 
         public void HandleChildren(

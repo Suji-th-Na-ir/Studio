@@ -3,6 +3,8 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayShifu.Terra;
+using System.Collections.Generic;
+using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
@@ -222,7 +224,8 @@ namespace Terra.Studio
             obj.transform.position = spawnPosition;
             Snapshots.SpawnGameObjectSnapshot.CreateSnapshot(obj);
             EditorOp.Resolve<SelectionHandler>().DeselectAll();
-            EditorOp.Resolve<SelectionHandler>().OnSelectionChanged(obj);
+            EditorOp.Resolve<RuntimeHierarchy>().Refresh();
+            EditorOp.Resolve<SelectionHandler>().SelectObjectsInHierarchy(new List<Transform>() {obj.transform }) ;
         }
 
         public void SetSaveMessage(bool setInteractable, SaveState state)

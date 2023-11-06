@@ -170,11 +170,14 @@ namespace Terra.Studio
 
         public static void CleanBehaviour(Transform child)
         {
-            if (child.TryGetComponent(out BaseBehaviour behaviour))
+            BaseBehaviour[] behaviours = child.GetComponents<BaseBehaviour>();
+            foreach (var behaviour in behaviours)
             {
                 Object.Destroy(behaviour);
             }
-            if (child.TryGetComponent(out Outline outline))
+
+            Outline[] outlines = child.GetComponents<Outline>();
+            foreach (var outline in outlines)
             {
                 Object.Destroy(outline);
             }

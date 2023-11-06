@@ -58,6 +58,7 @@ namespace Terra.Studio
         private void OnEnable()
         {
             EditorOp.Resolve<EditorSystem>().RequestIncognitoMode(true);
+            EditorOp.Resolve<EditorSystem>().RequestPreviewMode(true);
             EditorOp.Resolve<SelectionHandler>().ToggleGizmo(false);
             EditorOp.Resolve<SceneView>().TogglePreviewAnim(true);
         }
@@ -65,6 +66,7 @@ namespace Terra.Studio
         private void OnDisable()
         {
             EditorOp.Resolve<EditorSystem>().RequestIncognitoMode(false);
+            EditorOp.Resolve<EditorSystem>().RequestPreviewMode(false);
             EditorOp.Resolve<SelectionHandler>().ToggleGizmo(true);
             EditorOp.Resolve<SceneView>().TogglePreviewAnim(false);
             TogglePreviewUI();

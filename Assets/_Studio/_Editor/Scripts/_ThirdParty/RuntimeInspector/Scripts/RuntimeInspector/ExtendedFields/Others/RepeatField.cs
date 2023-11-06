@@ -78,17 +78,20 @@ namespace RuntimeInspectorNamespace
             Atom.Repeat val = ValidateRepeatValue();
             UpdateOtherCompData(val, RepeatData.RepeatFor);
             UpdatebroadcastTypeDropDown();
+            val.behaviour.GhostDescription.UpdateSelectionGhostsRepeatCount?.Invoke();
         }
 
         private void OnRepeatTypeValueChanged(object obj)
         {
             UpdateOtherCompData((Atom.Repeat)Value, RepeatData.RepeatType);
+            ((Atom.Repeat)Value).behaviour.GhostDescription.UpdateSelectionGhostsRepeatCount?.Invoke();
         }
 
         private void OnRepeatForeverValueChanged(object value)
         {
             Atom.Repeat val = ValidateRepeatForeverValue(value);
             UpdateOtherCompData(val, RepeatData.RepeatForever);
+            ((Atom.Repeat)Value).behaviour.GhostDescription.UpdateSelectionGhostsRepeatCount?.Invoke();
         }
 
         private void OnPauseForValueChanged(object value)

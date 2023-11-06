@@ -124,8 +124,7 @@ public class SelectionHandler : View
                         OnSelectionChanged(go, SelectOptions.Additive);
                         if (isUndo)
                         {
-                            runtimeHierarchy.Deselect();
-                            runtimeHierarchy.Select(_selectedObjects.Select(y => y.transform).ToList(), SelectOptions.Additive);
+                            UpdateSelectedInHirearchy();
                         }
                         runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
                     });
@@ -147,21 +146,18 @@ public class SelectionHandler : View
                             _selectedObjects.Add(newList[i]);
                         }
                         OnSelectionChanged();
-                        runtimeHierarchy.Deselect();
-                        runtimeHierarchy.Select(_selectedObjects.Select(y => y.transform).ToList(), SelectOptions.Additive);
+                        UpdateSelectedInHirearchy();
                         runtimeHierarchy.OnSelectionChanged += OnHierarchySelectionChanged;
                     });
             }
         }
-        if (_allTransform.Count > 0)
+
+        _selectedObjects.Clear();
+        foreach (Transform tr in _allTransform)
         {
-            _selectedObjects.Clear();
-            foreach (Transform tr in _allTransform)
-            {
-                _selectedObjects.Add(tr.gameObject);
-            }
-            OnSelectionChanged();
+            _selectedObjects.Add(tr.gameObject);
         }
+        OnSelectionChanged();
     }
 
     public override void Init()
@@ -174,6 +170,7 @@ public class SelectionHandler : View
         ResetAllHandles();
 
         objectMoveGizmo.SetTargetObjects(_selectedObjects);
+        objectMoveGizmo.onPositionRefreshed = OnPoisitionRefreshed;
         objectRotationGizmo.SetTargetObjects(_selectedObjects);
         objectScaleGizmo.SetTargetObjects(_selectedObjects);
         objectUniversalGizmo.SetTargetObjects(_selectedObjects);
@@ -192,6 +189,18 @@ public class SelectionHandler : View
             canUndo = !isEnabled;
             canRedo = !isEnabled;
         };
+    }
+
+    private void OnPoisitionRefreshed(List<GameObject> objects)
+    {
+        for (int i = 0; i < objects.Count; i++)
+        {
+            var behaviours = objects[i].GetComponents<BaseBehaviour>();
+            foreach (var b in behaviours)
+            {
+                b.GhostDescription.UpdateSlectionGhostTRS?.Invoke();
+            }
+        }
     }
 
     private void Update()
@@ -291,9 +300,10 @@ public class SelectionHandler : View
             {
                 if (RTInput.WasKeyPressedThisFrame(KeyCode.Backspace))
                 {
+                    var selections = new List<GameObject>(_selectedObjects);
                     runtimeHierarchy.Deselect();
-                    Snapshots.DeleteGameObjectsSnapshot.CreateSnapshot(_selectedObjects.ToList());
-                    foreach (GameObject obj in _selectedObjects)
+                    Snapshots.DeleteGameObjectsSnapshot.CreateSnapshot(selections.ToList());
+                    foreach (GameObject obj in selections)
                     {
                         obj.SetActive(false);
                     }
@@ -349,7 +359,7 @@ public class SelectionHandler : View
 
     private void Scan()
     {
-        if (RTInput.WasLeftMouseButtonPressedThisFrame() &&
+        if (Input.GetMouseButtonDown(0) &&
             RTGizmosEngine.Get.HoveredGizmo == null)
         {
             if (CheckIfThereIsAnyPopups()) return;
@@ -369,23 +379,19 @@ public class SelectionHandler : View
                         _selectedObjects.Remove(pickedObject);
                     else
                         _selectedObjects.Add(pickedObject);
-
-                    runtimeHierarchy.Select(pickedObject.transform, SelectOptions.Additive);
-                    OnSelectionChanged();
                 }
                 else
                 {
-                    runtimeHierarchy.Select(pickedObject.transform, SelectOptions.FocusOnSelection);
                     _selectedObjects.Clear();
                     _selectedObjects.Add(pickedObject);
-                    OnSelectionChanged();
                 }
+              
             }
             else
             {
                 _selectedObjects.Clear();
-                OnSelectionChanged();
             }
+            UpdateSelectedInHirearchy();
         }
         if (RTInput.WasKeyPressedThisFrame(KeyCode.W)) SetWorkGizmoId(GizmoId.Move);
         else if (RTInput.WasKeyPressedThisFrame(KeyCode.E)) SetWorkGizmoId(GizmoId.Rotate);
@@ -431,6 +437,16 @@ public class SelectionHandler : View
         }
         return mainCamera;
     }
+
+    public void UpdateSelectedInHirearchy()
+    {
+        List<Transform> transforms = new List<Transform>();
+        foreach (var s in _selectedObjects)
+        {
+            transforms.Add(s.transform);
+        }
+        runtimeHierarchy.Select(transforms, SelectOptions.FocusOnSelection);
+    }
     public void SelectObjectsInHierarchy(List<Transform> _obj)
     {
         runtimeHierarchy.Select(_obj, SelectOptions.FocusOnSelection);
@@ -462,7 +478,7 @@ public class SelectionHandler : View
         }
     }
 
-    public void OnSelectionChanged(GameObject sObject = null, SelectOptions selectOption = SelectOptions.FocusOnSelection)
+    private void OnSelectionChanged(GameObject sObject = null, SelectOptions selectOption = SelectOptions.FocusOnSelection)
     {
         for (int i = 0; i < prevSelectedObjects.Count; i++)
         {
@@ -470,13 +486,18 @@ public class SelectionHandler : View
             {
                 outline.enabled = false;
             }
+
+            var behaviours = prevSelectedObjects[i].GetComponents<BaseBehaviour>();
+            foreach (var b in behaviours)
+            {
+                b.GhostDescription.HideSelectionGhost?.Invoke();
+            }
         }
 
         if (_selectedObjects.Count > 0)
         {
             prevSelectedObjects = _selectedObjects.ToList();
         }
-
         if (sObject != null)
         {
             if (_selectedObjects.Contains(sObject))

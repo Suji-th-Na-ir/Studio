@@ -47,14 +47,29 @@ namespace Terra.Studio
             GhostDescription = new()
             {
                 OnGhostInteracted = OnGhostDataModified,
-                SpawnTRS = GetCurrentOffsetInWorld,
-                ToggleGhostMode = () =>
+                SelectionGhostsTRS = GetCurrentRepeatOffsetInWorld,
+                ToggleRecordMode = () =>
                 {
-                    EditorOp.Resolve<Recorder>().TrackPosition_ShowGhostOnMultiselect(this, true);
+                    EditorOp.Resolve<Recorder>().TrackPosition_Multiselect(this,false);
                 },
-                ShowVisualsOnMultiSelect = true,
-                GetLastValue = () => { return Type.LastVector3; },
-                GetRecentValue = () => { return Type.recordedVector3.Get(); },
+                ShowSelectionGhost = () =>
+                {
+                    EditorOp.Resolve<Recorder>().ShowSelectionGhost_RepeatPosition(this, repeat.repeatForever ? int.MaxValue : repeat.repeat, true, repeat.repeatType);
+                },
+                HideSelectionGhost = () =>
+                {
+                    EditorOp.Resolve<Recorder>().ShowSelectionGhost_RepeatPosition(this, repeat.repeatForever ? int.MaxValue : repeat.repeat, false, repeat.repeatType);
+                },
+                UpdateSlectionGhostTRS = () =>
+                {
+                    EditorOp.Resolve<Recorder>().UpdateTRS_Multiselect(this);
+                },
+                UpdateSelectionGhostsRepeatCount = () =>
+                {
+                    EditorOp.Resolve<Recorder>().UpdateGhostRepeatCount_Multiselect(this, repeat.repeatForever ? int.MaxValue : repeat.repeat, repeat.repeatType);
+                },
+                GetLastValue = () => { return Type.LastVector3+transform.position; },
+                GetRecentValue = () => { return (Vector3)Type.recordedVector3.Get() + transform.position; },
                 OnGhostModeToggled = (state) =>
                 {
                     if (state)
@@ -63,7 +78,8 @@ namespace Terra.Studio
                     }
                 },
                 IsGhostInteractedInLastRecord = true,
-                GhostTo = gameObject
+                GhostTo = gameObject,
+                showGhostWithTravelLine = true
             };
             SetLastValue();
         }
@@ -182,26 +198,36 @@ namespace Terra.Studio
             ImportVisualisation(repeat.broadcastData.broadcast, listenString);
         }
 
-        private Vector3[] GetCurrentOffsetInWorld()
+        private Vector3[] GetCurrentRepeatOffsetInWorld()
         {
             var pos = transform.position;
             var localOffset = (Vector3)Type.recordedVector3.Get();
-            if (transform.parent != null)
+            List<Vector3> trs = new List<Vector3>();
+            var count = repeat.repeat > 10 ? 10 : repeat.repeat;
+            if (repeat.repeatForever)
+                count = 10;
+            for (int i = 0; i < count; i++)
             {
-                localOffset = transform.TransformVector(localOffset);
+                //if (transform.parent != null && i==0)
+                //{
+                //    localOffset = transform.TransformDirection(localOffset);
+                //}
+                pos += localOffset;
+                trs.Add(pos);
+                trs.Add(transform.localRotation.eulerAngles);
+                trs.Add(Vector3.one);
             }
-            pos += localOffset;
-            return new Vector3[] { pos };
+            return trs.ToArray();
         }
 
         private void OnGhostDataModified(object data)
         {
             var vector3 = (Vector3)data;
             var delta = vector3 - transform.position;
-            if (transform.parent != null)
-            {
-                delta = transform.InverseTransformVector(delta);
-            }
+            //if (transform.parent != null)
+            //{
+            //    delta = transform.InverseTransformDirection(delta);
+            //}
             if (delta != (Vector3)Type.recordedVector3.Get())
             {
                 Type.recordedVector3.Set(delta);

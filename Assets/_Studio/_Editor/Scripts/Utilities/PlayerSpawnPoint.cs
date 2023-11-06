@@ -6,6 +6,7 @@ namespace Terra.Studio
         public override bool CanPreview => false;
         protected override bool CanBroadcast => false;
         protected override bool CanListen => false;
+        protected override bool ShowComponentIcon => false;
 
         public override (string type, string data) Export()
         {

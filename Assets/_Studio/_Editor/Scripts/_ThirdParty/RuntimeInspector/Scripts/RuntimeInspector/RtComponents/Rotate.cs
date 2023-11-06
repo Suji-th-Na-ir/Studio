@@ -49,12 +49,23 @@ namespace Terra.Studio
             GhostDescription = new()
             {
                 OnGhostInteracted = OnGhostDataModified,
-                SpawnTRS = GetSpawnTRS,
-                ToggleGhostMode = () =>
+                SelectionGhostsTRS = GetSpawnTRS,
+                ToggleRecordMode = () =>
                 {
-                    EditorOp.Resolve<Recorder>().TrackRotation_ShowGhostOnMultiselect(this, true);
+                    EditorOp.Resolve<Recorder>().TrackRotation_ShowGhostOnMultiselect(this);
                 },
-                ShowVisualsOnMultiSelect = true,
+                ShowSelectionGhost = () =>
+                {
+                    EditorOp.Resolve<Recorder>().ShowSelectionGhost_Rotation(this, true);
+                },
+                HideSelectionGhost = () =>
+                {
+                    EditorOp.Resolve<Recorder>().ShowSelectionGhost_Rotation(this, false);
+                },
+                UpdateSlectionGhostTRS = () =>
+                {
+                    EditorOp.Resolve<Recorder>().UpdateTRS_Multiselect(this);
+                },
                 GetLastValue = () => { return Type.LastVector3; },
                 GetRecentValue = () => { return Type.vector3.Get(); },
                 OnGhostModeToggled = (state) =>
@@ -68,15 +79,6 @@ namespace Terra.Studio
                 GhostTo = gameObject
             };
             SetLastValue();
-            Type.vector3.OnPerAxisValueModified = () =>
-            {
-                Type.ghostLastRecordedRotation = transform.eulerAngles + (Vector3)Type.vector3.Get();
-            };
-            Type.vector3.OnValueReset = () =>
-            {
-                Type.vector3.OnPerAxisValueModified?.Invoke();
-                Type.ForceRefreshData?.Invoke();
-            };
         }
 
         public override (string type, string data) Export()
@@ -104,7 +106,6 @@ namespace Terra.Studio
                 sfxIndex = PlaySFX.data.clipIndex,
                 vfxIndex = PlayVFX.data.clipIndex,
                 listen = Listen.Always,
-                ghostLastRotation = Type.ghostLastRecordedRotation
             };
             gameObject.TrySetTrigger(false, true);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -164,7 +165,6 @@ namespace Terra.Studio
             repeat.broadcastAt = comp.broadcastAt;
             repeat.broadcastData.broadcast = comp.Broadcast;
             repeat.repeatType = comp.repeatType;
-            Type.ghostLastRecordedRotation = comp.ghostLastRotation;
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOn), out object result))
             {
                 var res = (StartOn)result;
@@ -197,11 +197,8 @@ namespace Terra.Studio
         private Vector3[] GetSpawnTRS()
         {
             var position = transform.position;
-            var rotation = Type.ghostLastRecordedRotation == Atom.RecordedVector3.INFINITY ||
-                Type.ghostLastRecordedRotation == Vector3.zero ?
-                gameObject.transform.rotation.eulerAngles :
-                Type.ghostLastRecordedRotation;
-            return new Vector3[] { position, rotation };
+            var rotation = transform.eulerAngles + (Vector3)Type.vector3.Get();
+            return new Vector3[] { position, rotation, Vector3.one };
         }
 
         private void OnGhostDataModified(object data)
@@ -209,11 +206,9 @@ namespace Terra.Studio
             GhostDescription.IsGhostInteractedInLastRecord = true;
             var vector3 = (Vector3)data;
             vector3 = Quaternion.Euler(vector3).eulerAngles;
-            Type.ghostLastRecordedRotation = vector3;
             var delta = vector3 - transform.eulerAngles;
             delta = delta.GetAbsEulerAngle();
             Type.vector3.Set(delta);
-            Type.ForceRefreshData?.Invoke();
         }
 
         private void SetLastValue()
