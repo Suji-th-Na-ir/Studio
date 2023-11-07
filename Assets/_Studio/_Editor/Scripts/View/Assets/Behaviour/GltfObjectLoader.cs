@@ -225,7 +225,7 @@ namespace Terra.Studio
                     sgo = _loadedObject.gameObject.AddComponent<StudioGameObject>();
                 }
                 sgo.assetType = AssetType.RemotePrefab;
-                sgo.itemData = new ResourceDB.ResourceItemData(_uniqueName, OgUrl, OgUrl, "","",remoteAsset:true);
+                sgo.itemData = new ResourceDB.ResourceItemData(_uniqueName, OgUrl, OgUrl, "", "");
             }
         }
 

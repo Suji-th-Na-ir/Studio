@@ -88,7 +88,7 @@ namespace Terra.Studio
         {
             var go = new GameObject();
             go.AddComponent<HideInHierarchy>();
-            var itemData = new ResourceDB.ResourceItemData(uniqueName, url, url,"","",remoteAsset:true);
+            var itemData = new ResourceDB.ResourceItemData(uniqueName, url, url, "", "");
             // ResolveTRS(go, itemData, trs);
             var x= go.AddComponent<GltfObjectLoader>();
             x.Init( url,uniqueName, new ImportSettings()
