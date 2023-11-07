@@ -44,7 +44,8 @@ namespace Terra.Studio
 
         private CacheValidator _cacheValidator;
         private LoadedPoolValidator _loadedPoolValidator;
-        
+        private Action<bool> onTextureLoadCompleted;
+
         private bool _loadTexturesCalled;
         private static readonly int BaseColorTextureSt = Shader.PropertyToID("baseColorTexture_ST");
 
@@ -64,7 +65,7 @@ namespace Terra.Studio
             }
         }
 
-        public void LoadModel(Action<GameObject, bool> cb, Transform finalParent)
+        public void LoadModel(Action<GameObject, bool> onModelLoaded, Transform finalParent)
         {
             OgUrl = FullUrl;
             if (LoadedPoolValidator.IsInLoadedPool(_uniqueName))
@@ -72,7 +73,7 @@ namespace Terra.Studio
                 Debug.Log($"Getting from pool");
                 var temp = LoadedPoolValidator.GetDuplicateFromPool(_uniqueName);
                 _modelLoaded = true;
-                cb?.Invoke(temp, true);
+                onModelLoaded?.Invoke(temp, true);
                 // temp.transform.SetParent(transform);
                 _loadedObject = temp.transform;
                 _loadedObject.SetParent(finalParent);
@@ -83,7 +84,7 @@ namespace Terra.Studio
             {
                 Debug.Log($"Loading started.");
                 CacheValidator.IsFileInCache($"{_uniqueName}.gltf",
-                    (inCache, localPath) => { LoadFromCacheOrDownload(inCache, localPath, cb, finalParent); });
+                    (inCache, localPath) => { LoadFromCacheOrDownload(inCache, localPath, onModelLoaded, finalParent); });
             }
         }
         
@@ -168,8 +169,9 @@ namespace Terra.Studio
             }
         }
 
-        public async void LoadTextures()
+        public async void LoadTextures(Action<bool> onTexturesLoaded = null)
         {
+            onTextureLoadCompleted = onTexturesLoaded;
             if (!_modelLoaded)
             {
                 _loadTexturesCalled = true;
@@ -177,7 +179,9 @@ namespace Terra.Studio
                 return;
             }
             
-            await _importer.PrepareTextures(UriHelper.GetBaseUri(new Uri(OgUrl)));
+            Debug.Log($"Loading Textures why.");
+            bool success = await _importer.PrepareTextures(UriHelper.GetBaseUri(new Uri(OgUrl)));
+            
             
             foreach (var (ren, meshResult) in _instantiator.results)
             {
@@ -196,6 +200,7 @@ namespace Terra.Studio
                 ren.sharedMaterials = materials;
             }
             LoadedPoolValidator.AddToPool(_uniqueName, _loadedObject.gameObject);
+            onTextureLoadCompleted?.Invoke(success);
             _importer.DisposeVolatileDataFromTextures();
             CompletedFlow();
         }

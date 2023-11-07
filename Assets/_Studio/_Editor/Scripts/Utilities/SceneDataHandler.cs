@@ -153,7 +153,7 @@ namespace Terra.Studio
                     PlayerSpawnPoint = metaData.playerSpawnPoint;
                 }
             }
-            SystemOp.Resolve<RequestValidator>().Bla(ref worldData, () =>
+            SystemOp.Resolve<RequestValidator>().Prewarm(ref worldData, () =>
             {
                 for (int i = 0; i < worldData.entities.Length; i++)
                 {

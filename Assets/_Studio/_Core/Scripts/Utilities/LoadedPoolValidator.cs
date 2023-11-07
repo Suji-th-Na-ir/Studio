@@ -79,10 +79,9 @@ namespace Terra.Studio
                     Object.Destroy(prefab);
                 }
 
-                _uniqueLoadedMap[key] = null;
+                // _uniqueLoadedMap[key] = null;
             }
-
-            _uniqueLoadedMap = null;
+            _uniqueLoadedMap.Clear();
         }
     }
 }
