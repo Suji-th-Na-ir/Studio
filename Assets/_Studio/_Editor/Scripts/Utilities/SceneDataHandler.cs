@@ -162,23 +162,26 @@ namespace Terra.Studio
 
         private void SpawnObjects(VirtualEntity entity)
         {
-            GameObject generatedObj;
+            GameObject generatedObj= default;
             var trs = new Vector3[] { entity.position, entity.rotation, entity.scale };
-            generatedObj = RuntimeWrappers.SpawnObject(
+            RuntimeWrappers.SpawnObject(
                 entity.assetType,
                 entity.assetPath,
                 entity.primitiveType,
+                bla,
                 entity.uniqueName,
                 trs
             );
-            if (generatedObj == null)
+
+            void bla(GameObject x)
             {
-                return;
+                generatedObj = x;
+                generatedObj.name = entity.name;
+                SetColliderData(generatedObj, entity.metaData);
+                AttachComponents(generatedObj, entity);
+                HandleChildren(generatedObj, entity.children);
             }
-            generatedObj.name = entity.name;
-            SetColliderData(generatedObj, entity.metaData);
-            AttachComponents(generatedObj, entity);
-            HandleChildren(generatedObj, entity.children);
+            
         }
 
         private void AttachComponents(
@@ -230,23 +233,34 @@ namespace Terra.Studio
                 Transform child;
                 if (tr.childCount < i + 1)
                 {
-                    GameObject generatedObj;
+                    GameObject generatedObj = default;
                     var trs = new Vector3[]
                     {
                         childEntity.position,
                         childEntity.rotation,
                         childEntity.scale
                     };
-                    generatedObj = RuntimeWrappers.SpawnObject(
+                    RuntimeWrappers.SpawnObject(
                         childEntity.assetType,
                         childEntity.assetPath,
                         childEntity.primitiveType,
+                        bla,
                         childEntity.uniqueName,
                         trs
                     );
-                    child = generatedObj.transform;
-                    child.SetParent(tr);
-                    child.localScale = childEntity.scale.WorldToLocalScale(tr);
+                   
+
+                    void bla(GameObject gb)
+                    {
+                        generatedObj = gb;
+                        child = generatedObj.transform;
+                        child.SetParent(tr);
+                        child.localScale = childEntity.scale.WorldToLocalScale(tr);
+                        child.name = childEntity.name;
+                        SetColliderData(child.gameObject, childEntity.metaData);
+                        AttachComponents(child.gameObject, childEntity, onComponentDependencyFound);
+                        HandleChildren(child.gameObject, childEntity.children, onComponentDependencyFound);
+                    }
                 }
                 else
                 {
@@ -260,11 +274,12 @@ namespace Terra.Studio
                         Quaternion.Euler(childEntity.rotation)
                     );
                     child.localScale = childEntity.scale.WorldToLocalScale(child.parent);
+                    child.name = childEntity.name;
+                    SetColliderData(child.gameObject, childEntity.metaData);
+                    AttachComponents(child.gameObject, childEntity, onComponentDependencyFound);
+                    HandleChildren(child.gameObject, childEntity.children, onComponentDependencyFound);
                 }
-                child.name = childEntity.name;
-                SetColliderData(child.gameObject, childEntity.metaData);
-                AttachComponents(child.gameObject, childEntity, onComponentDependencyFound);
-                HandleChildren(child.gameObject, childEntity.children, onComponentDependencyFound);
+                
             }
         }
 

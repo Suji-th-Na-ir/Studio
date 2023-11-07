@@ -234,8 +234,8 @@ namespace Terra.Studio
                 sgo.assetType = AssetType.RemotePrefab;
                 sgo.itemData = new ResourceDB.ResourceItemData(unique_name, OgUrl, OgUrl, "","",remoteAsset:true);
                 
-                transform.GetPositionAndRotation(out var pos, out var rot);
-                loadedObject.SetPositionAndRotation(pos,rot);
+                // transform.GetPositionAndRotation(out var pos, out var rot);
+                // loadedObject.SetPositionAndRotation(pos,rot);
                 loadedObject.transform.localScale = transform.localScale;
             }
             Destroy(gameObject);

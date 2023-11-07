@@ -1,6 +1,8 @@
+using System;
 using System.Linq;
 using UnityEngine;
 using Leopotam.EcsLite;
+using Object = UnityEngine.Object;
 
 namespace Terra.Studio
 {
@@ -36,21 +38,33 @@ namespace Terra.Studio
             public override void Generate(object data)
             {
                 var virtualEntity = (VirtualEntity)data;
-                var go = CreateVisualRepresentation(virtualEntity);
-                HandleEntityAndComponentGeneration(go, virtualEntity);
+                CreateVisualRepresentation(virtualEntity, (x =>
+                {
+                    HandleEntityAndComponentGeneration(x, virtualEntity);    
+                }));
+                
             }
 
-            private GameObject CreateVisualRepresentation(VirtualEntity entity)
+            private void CreateVisualRepresentation(VirtualEntity entity, Action<GameObject> cb)
             {
                 GameObject generatedObj = null;
                 if (!entity.shouldLoadAssetAtRuntime)
                 {
-                    return generatedObj;
+                    cb?.Invoke(null);
+                    return;
+                    // return cb?.Invoke(null);
                 }
                 var trs = new Vector3[] { entity.position, entity.rotation, entity.scale };
-                generatedObj = RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, entity.uniqueName,trs);
-                generatedObj.name = entity.name;
-                return generatedObj;
+                RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, (x)=>
+                {
+                    if (x != null)
+                    {
+                        x.name = entity.name;
+                    }
+                    cb?.Invoke(x);   
+                },entity.uniqueName,trs);
+                // generatedObj.name = entity.name;
+                // return generatedObj;
             }
 
             private void HandleEntityAndComponentGeneration(GameObject go, VirtualEntity virtualEntity)

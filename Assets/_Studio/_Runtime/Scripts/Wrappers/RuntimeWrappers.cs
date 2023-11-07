@@ -1,3 +1,4 @@
+using System;
 using GLTFast;
 using UnityEngine;
 using PlayShifu.Terra;
@@ -8,13 +9,14 @@ namespace Terra.Studio
 {
     public class RuntimeWrappers
     {
-        public static GameObject SpawnObject(AssetType assetType, string assetPath, PrimitiveType primitiveType,string uniqueName = "", params Vector3[] trs)
+        public static void SpawnObject(AssetType assetType, string assetPath, PrimitiveType primitiveType,Action<GameObject> cb,string uniqueName = "" ,params Vector3[] trs)
         {
             GameObject go = null;
             switch (assetType)
             {
                 case AssetType.Empty:
                     go = SpawnEmpty(null, trs);
+                    cb?.Invoke(go);
                     break;
                 case AssetType.Prefab:
                     object obj = null;
@@ -34,16 +36,18 @@ namespace Terra.Studio
                         go = DuplicateGameObject((GameObject)obj, null, trs);
                         CleanAllBehaviours(go.transform);
                     }
+                    cb?.Invoke(go);
                     break;
                 case AssetType.Primitive:
                     go = SpawnPrimitive(primitiveType, ResourceDB.GetDummyItemData(primitiveType), trs);
+                    cb?.Invoke(go);
                     break;
                 case AssetType.RemotePrefab:
-                    go = SpawnRemotePrefab(uniqueName, assetPath, trs);
+                    SpawnRemotePrefab(uniqueName, assetPath, cb,trs);
                     break;
-                    
+                
             }
-            return go;
+            // return go;
         }
 
         public static GameObject SpawnGameObject(string path, ResourceDB.ResourceItemData itemData, params Vector3[] trs)
@@ -80,11 +84,11 @@ namespace Terra.Studio
             return ResolveTRS(go, itemData, trs);
         }
 
-        public static GameObject SpawnRemotePrefab(string uniqueName,string url, params Vector3[] trs)
+        public static void SpawnRemotePrefab(string uniqueName,string url, Action<GameObject> cb, params Vector3[] trs)
         {
             var go = new GameObject();
             var itemData = new ResourceDB.ResourceItemData(uniqueName, url, url,"","",remoteAsset:true);
-            ResolveTRS(go, itemData, trs);
+            // ResolveTRS(go, itemData, trs);
             var x= go.AddComponent<GltfObjectLoader>();
             x.Init( url,uniqueName, new ImportSettings()
             {
@@ -92,16 +96,19 @@ namespace Terra.Studio
                 customBasePathForTextures = true,
                 additionToBasePath = "textures/"
             });
-            x.LoadModel((_, preloaded) =>
+            
+            x.LoadModel((loadedObject, preloaded) =>
             {
+                ResolveTRS(loadedObject.gameObject, itemData, trs);
+                // 
+                cb?.Invoke(loadedObject.gameObject);
                 if (!preloaded)
                 {
                     x.LoadTextures();
                 }
             }, null);
             // x.assetType = AssetType.RemotePrefab;
-
-            return go;
+            // return go;
         }
 
         public static GameObject DuplicateGameObject(GameObject actualGameObject, Transform parent, params Vector3[] trs)
