@@ -123,18 +123,22 @@ namespace Terra.Studio
 
         public void OnPointerUp()
         {
-            if (!_running)
-                return;
-            _view.Dragger(this,false);
+            if (!_running) return;
+            _view.Dragger(this, false);
             if (_currGo != null)
             {
                 if (_currGo.LoadedObject != null)
                 {
-                    // Debug.Log($"Force Selecting {_currGo.LoadedObject.gameObject} @Sujith :)");
-                    // EditorOp.Resolve<SelectionHandler>().Select(_currGo.LoadedObject.gameObject);
                     SetLayerOfAllChildren(_currGo.LoadedObject.gameObject, "Default");
                 }
-                _currGo.LoadTextures();
+                var go = _currGo.LoadedObject.gameObject;
+                _currGo.LoadTextures((status) =>
+                {
+                    if (status)
+                    {
+                        EditorOp.Resolve<SelectionHandler>().Select(go);
+                    }
+                });
                 if (EventSystem.current.IsPointerOverGameObject())
                 {
                     Destroy(_currGo.gameObject);
