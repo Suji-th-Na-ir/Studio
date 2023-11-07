@@ -17,7 +17,7 @@ namespace Terra.Studio
         private const string sampleJson = "Editortime/Prefabs/AssetsWindow/Sample";
 
         private bool useSampleJson = true;
-        private int numberOfAssetsToShowForNow = 30;
+        private int numberOfAssetsToShowForNow = 21;
         private AssetsAPIResponse _fullData;
         private ButtonScroll _scroll;
         private SearchBar _search;
@@ -93,7 +93,8 @@ namespace Terra.Studio
 
             Debug.Log($"Ended searching for {query}");
             currentData = bla.ToArray();
-            PageChanged(1);
+            _scroll.Init(currentData.Length, PageChanged);
+            // PageChanged(1);
         }
 
         private AssetData[] currentData;

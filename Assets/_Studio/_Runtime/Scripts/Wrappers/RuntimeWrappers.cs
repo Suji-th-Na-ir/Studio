@@ -1,3 +1,4 @@
+using GLTFast;
 using UnityEngine;
 using PlayShifu.Terra;
 using UnityEngine.SceneManagement;
@@ -82,11 +83,25 @@ namespace Terra.Studio
         public static GameObject SpawnRemotePrefab(string uniqueName,string url, params Vector3[] trs)
         {
             var go = new GameObject();
-            var x= go.AddComponent<StudioGameObject>();
-            x.assetType = AssetType.RemotePrefab;
-            x.itemData ??= new ResourceDB.ResourceItemData(uniqueName, url, url,"","",remoteAsset:true);
-            Debug.LogError($"AA", go);
-            return ResolveTRS(go, x.itemData, trs);
+            var itemData = new ResourceDB.ResourceItemData(uniqueName, url, url,"","",remoteAsset:true);
+            ResolveTRS(go, itemData, trs);
+            var x= go.AddComponent<GltfObjectLoader>();
+            x.Init( url,uniqueName, new ImportSettings()
+            {
+                lazyLoadTextures = true,
+                customBasePathForTextures = true,
+                additionToBasePath = "textures/"
+            });
+            x.LoadModel((_, preloaded) =>
+            {
+                if (!preloaded)
+                {
+                    x.LoadTextures();
+                }
+            }, null);
+            // x.assetType = AssetType.RemotePrefab;
+
+            return go;
         }
 
         public static GameObject DuplicateGameObject(GameObject actualGameObject, Transform parent, params Vector3[] trs)

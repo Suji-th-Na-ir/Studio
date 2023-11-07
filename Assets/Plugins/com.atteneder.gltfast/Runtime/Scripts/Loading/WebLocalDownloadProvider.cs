@@ -78,7 +78,6 @@ namespace GLTFast.Loading {
 
         protected void Init()
         {
-            Debug.Log("[FileLoad] Opening " + path);
             fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
             length = (int)fileStream.Length;
             sumLoaded = 0;

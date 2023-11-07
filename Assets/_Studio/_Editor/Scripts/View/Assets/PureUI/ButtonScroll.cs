@@ -15,9 +15,9 @@ namespace Terra.Studio
         private int max = 10;
 
         private Action<int> onPageChanged;
-        public void Init(int max, Action<int> pageChanged)
+        public void Init(int currentMax, Action<int> pageChanged)
         {
-            this.max = max; 
+            max = currentMax; 
             onPageChanged = pageChanged;
             currentPage = 1;
             SetButtonRange(1);

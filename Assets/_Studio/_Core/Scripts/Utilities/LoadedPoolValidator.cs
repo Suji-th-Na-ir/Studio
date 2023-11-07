@@ -31,7 +31,6 @@ namespace Terra.Studio
             }
             else
             {
-                Debug.LogError($"Already contains {uniqueName}");
                 return;
             }
         }
@@ -59,6 +58,7 @@ namespace Terra.Studio
             if (uniqueLoadedMap.TryGetValue(uniqueName, out var prefab))
             {
                 var temp = Object.Instantiate(prefab);
+                temp.name = temp.name.Replace("(Clone)", "");
                 temp.SetActive(true);
                 return temp;
             }

@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using GLTFast;
 using GLTFast.Loading;
 using Newtonsoft.Json;
@@ -48,15 +50,26 @@ namespace Terra.Studio
 
         public string OgUrl { get; private set; }
 
-        private async void Test(bool inCache, string localPath, Action callback)
+        private Transform loadedObject;
+        private CancellationTokenSource _cts;
+        private CancellationToken _token;
+
+        public void Init(string fullUrl, string uniqueName,ImportSettings settings)
+        {
+            cloudUrl = fullUrl;
+            this.unique_name = uniqueName;
+            this.importSettings = settings;
+            _cts = new CancellationTokenSource();
+        }
+
+        private async void Test(bool inCache, string localPath, Action<GameObject, bool> callback, Transform finalParent)
         {
             if (inCache)
             {
                 importer = new GltfImport(new LocalFileProvider());
-                // FullUrl = "file://" + localPath;
                 FullUrl = localPath;
                 Debug.Log($"Loading from cache!...{FullUrl}");
-                var success = await importer.Load(FullUrl, importSettings);
+                var success = await importer.Load(FullUrl, importSettings, _cts.Token);
                 if (!success)
                 {
                     Debug.LogError($"Model not loaded");
@@ -66,9 +79,12 @@ namespace Terra.Studio
                 importer.ForceCleanBuffers();
                 _instantiator = new GameObjectInstantiator(importer, transform);
                 modelLoaded = await importer.InstantiateMainSceneAsync(_instantiator, default);
+                Debug.Log($"Model instantiated...{modelLoaded}");
                 if (modelLoaded)
                 {
-                    callback?.Invoke();
+                    loadedObject = transform.GetChild(0);
+                    loadedObject.SetParent(finalParent);
+                    callback?.Invoke(loadedObject.gameObject, false);
                 }
                 else
                 {
@@ -79,7 +95,7 @@ namespace Terra.Studio
             {
                 importer = new GltfImport(new DefaultDownloadProvider());
                 Debug.Log($"Loading normally");
-                var success = await importer.Load(FullUrl, importSettings);
+                var success = await importer.Load(FullUrl, importSettings, _cts.Token);
                 if (!success)
                 {
                     Debug.LogError($"Model not loaded");
@@ -110,46 +126,64 @@ namespace Terra.Studio
 
                 if (modelLoaded)
                 {
-                    callback?.Invoke();
+                    loadedObject = transform.GetChild(0);
+                    loadedObject.SetParent(finalParent);
+                    callback?.Invoke(loadedObject.gameObject, false);
                 }
                 else
                 {
                     Debug.LogError($"Model loading failed");
                 }
             }
+
+            if (loadTexturesCalled)
+            {
+                LoadTextures();
+            }
         }
 
-        public void LoadModel(Action cb)
+        public void SetPosition(Vector3 pos)
         {
+            if (loadedObject != null)
+            {
+                loadedObject.transform.position = pos;
+            }
+        }
+
+        public void LoadModel(Action<GameObject, bool> cb, Transform finalParent)
+        {
+            OgUrl = FullUrl;
             if (LoadedPoolValidator.IsInLoadedPool(unique_name))
             {
                 Debug.Log($"Getting from pool");
                 var temp = LoadedPoolValidator.GetDuplicateFromPool(unique_name);
                 modelLoaded = true;
-                cb?.Invoke();
-                temp.transform.SetParent(transform);
-                
-                Destroy(this);
+                cb?.Invoke(temp, true);
+                // temp.transform.SetParent(transform);
+                loadedObject = temp.transform;
+                loadedObject.SetParent(finalParent);
+                CompletedFlow();
             }
             else
             {
-                OgUrl = FullUrl;
                 Debug.Log($"Loading started.");
                 CacheValidator.IsFileInCache($"{unique_name}.gltf",
-                    (inCache, localPath) => { Test(inCache, localPath, cb); });
+                    (inCache, localPath) => { Test(inCache, localPath, cb, finalParent); });
             }
         }
 
+        private bool loadTexturesCalled;
         public async void LoadTextures()
         {
             if (!modelLoaded)
             {
+                loadTexturesCalled = true;
                 Debug.LogError($"Still Loading the model.", gameObject);
                 return;
             }
-
-            Debug.Log($"textures!");
+            
             await importer.PrepareTextures(UriHelper.GetBaseUri(new Uri(OgUrl)));
+            
             foreach (var (ren, meshResult) in _instantiator.results)
             {
                 var materials = new Material[meshResult.materialIndices.Length];
@@ -162,11 +196,31 @@ namespace Terra.Studio
 
                 ren.sharedMaterials = materials;
             }
-            Debug.Log($"{_loadedPoolValidator}....{transform.GetChild(0)}");
+            // Debug.Log($"{_loadedPoolValidator}....{transform.GetChild(0)}");
             // Debug.Break();
-            // LoadedPoolValidator.AddToPool(unique_name, transform.GetChild(1).gameObject);
+            LoadedPoolValidator.AddToPool(unique_name, loadedObject.gameObject);
             importer.DisposeVolatileDataFromTextures();
-            Destroy(this);
+            CompletedFlow();
+        }
+
+        private void CompletedFlow()
+        {
+            if (loadedObject != null)
+            {
+                var sgo = loadedObject.gameObject.AddComponent<StudioGameObject>();
+                sgo.assetType = AssetType.RemotePrefab;
+                sgo.itemData = new ResourceDB.ResourceItemData(unique_name, OgUrl, OgUrl, "","",remoteAsset:true);
+                
+                transform.GetPositionAndRotation(out var pos, out var rot);
+                loadedObject.SetPositionAndRotation(pos,rot);
+                loadedObject.transform.localScale = transform.localScale;
+            }
+            Destroy(gameObject);
+        }
+
+        private void OnDestroy()
+        {
+            _cts?.Cancel();
         }
     }
 }
