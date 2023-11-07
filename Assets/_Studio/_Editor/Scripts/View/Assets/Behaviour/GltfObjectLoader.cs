@@ -229,8 +229,12 @@ namespace Terra.Studio
                         meshCol.sharedMesh = meshFilter.mesh;
                     }
                 }
+
                 
-                var sgo = loadedObject.gameObject.AddComponent<StudioGameObject>();
+                if (!loadedObject.gameObject.TryGetComponent(out StudioGameObject sgo))
+                {
+                    sgo = loadedObject.gameObject.AddComponent<StudioGameObject>();
+                }
                 sgo.assetType = AssetType.RemotePrefab;
                 sgo.itemData = new ResourceDB.ResourceItemData(unique_name, OgUrl, OgUrl, "","",remoteAsset:true);
                 
