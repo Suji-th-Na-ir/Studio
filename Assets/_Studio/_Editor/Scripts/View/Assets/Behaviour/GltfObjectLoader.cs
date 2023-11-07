@@ -1,13 +1,10 @@
 using System;
 using System.IO;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using GLTFast;
 using GLTFast.Loading;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Terra.Studio
 {
@@ -54,12 +51,12 @@ namespace Terra.Studio
         public void Init(string fullUrl, string uniqueName,ImportSettings settings)
         {
             cloudUrl = fullUrl;
-            this._uniqueName = uniqueName;
-            this.importSettings = settings;
+            _uniqueName = uniqueName;
+            importSettings = settings;
             _cts = new CancellationTokenSource();
         }
         
-        public void SetPosition(Vector3 pos)
+        public void SetPositionForDragInAssetsWindow(Vector3 pos)
         {
             if (_loadedObject != null)
             {
@@ -79,6 +76,7 @@ namespace Terra.Studio
                 // temp.transform.SetParent(transform);
                 _loadedObject = temp.transform;
                 _loadedObject.SetParent(finalParent);
+                CompleteModelFlow();
                 CompletedFlow();
             }
             else
@@ -163,6 +161,7 @@ namespace Terra.Studio
                 }
             }
 
+            CompleteModelFlow();
             if (_loadTexturesCalled)
             {
                 LoadTextures();
@@ -201,20 +200,13 @@ namespace Terra.Studio
             CompletedFlow();
         }
 
-        private void CompletedFlow()
+        private void CompleteModelFlow()
         {
             if (_loadedObject != null)
             {
                 var renderers = _loadedObject.GetComponentsInChildren<MeshFilter>();
                 foreach (var meshFilter in renderers)
                 {
-                    meshFilter.mesh.RecalculateBounds();
-                    meshFilter.mesh.RecalculateNormals();
-                    meshFilter.mesh.RecalculateTangents();
-                    meshFilter.mesh.RecalculateUVDistributionMetrics();
-                    meshFilter.mesh.RecalculateBounds();
-
-
                     if (!meshFilter.TryGetComponent(out MeshCollider meshCol))
                     {
                         meshCol = meshFilter.gameObject.AddComponent<MeshCollider>();
@@ -235,6 +227,10 @@ namespace Terra.Studio
                 sgo.assetType = AssetType.RemotePrefab;
                 sgo.itemData = new ResourceDB.ResourceItemData(_uniqueName, OgUrl, OgUrl, "","",remoteAsset:true);
             }
+        }
+
+        private void CompletedFlow()
+        {
             Destroy(gameObject);
         }
 

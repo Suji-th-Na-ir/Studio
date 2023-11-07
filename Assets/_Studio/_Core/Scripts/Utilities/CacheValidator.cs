@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -10,94 +9,70 @@ namespace Terra.Studio
     [Serializable]
     public class CachedData
     {
-        public Dictionary<string, string> cloudUrlToLocalMap;
+        public Dictionary<string, string> CloudUrlToLocalMap;
     }
+
     public class CacheValidator
     {
-        public  readonly string cacheFileName = "SavedData.json";
-        public string cachedFilePath => Path.Combine(basePath, cacheFileName);
+        public readonly string cacheFileName = "SavedData.json";
+        public string CachedFilePath => Path.Combine(basePath, cacheFileName);
 
         private string basePath =>
 #if UNITY_EDITOR
-            Application.dataPath.Replace("Assets","Dummy");
-        #else
+            Application.dataPath.Replace("Assets", "Dummy");
+#else
             Application.persistentDataPath;
 #endif
 
-        private CachedData cachedData;
+        private CachedData _cachedData;
 
         public CacheValidator()
         {
             Init();
         }
 
-        public void Init()
+        private void Init()
         {
-            Debug.Log($"Cache Validator Initialized");
-// #if UNITY_EDITOR || !UNITY_WEBGL
             if (!Directory.Exists(basePath))
             {
-                Debug.Log($"Directory did not exist, creating");
                 Directory.CreateDirectory(basePath);
             }
-            
-            if (!File.Exists(cachedFilePath))
+
+            if (!File.Exists(CachedFilePath))
             {
-                File.WriteAllText(cachedFilePath, JsonConvert.SerializeObject(new CachedData()));
+                File.WriteAllText(CachedFilePath, JsonConvert.SerializeObject(new CachedData()));
             }
-            
-            var json = File.ReadAllText(cachedFilePath);
-            cachedData = JsonConvert.DeserializeObject<CachedData>(json);
-            cachedData??= new CachedData();
-            cachedData.cloudUrlToLocalMap ??= new();
-// #else
-//             Validate();
-//             SaveCacheFile();
-//             
-// #endif
+
+            var json = File.ReadAllText(CachedFilePath);
+            _cachedData = JsonConvert.DeserializeObject<CachedData>(json);
+            _cachedData ??= new CachedData();
+            _cachedData.CloudUrlToLocalMap ??= new();
         }
 
-        
-        public void IsFileInCache(string key, Action<bool,string> invoked)
+
+        public void IsFileInCache(string key, Action<bool, string> invoked)
         {
             string localPath = "";
-            if (!cachedData.cloudUrlToLocalMap.ContainsKey(key))
+            if (!_cachedData.CloudUrlToLocalMap.ContainsKey(key))
             {
                 invoked?.Invoke(false, localPath);
                 return;
             }
-// #if !UNITY_EDITOR || !UNITY_WEBGL
 
-            var path = Path.Combine(basePath, cachedData.cloudUrlToLocalMap[key]);
+            var path = Path.Combine(basePath, _cachedData.CloudUrlToLocalMap[key]);
             if (File.Exists(path))
             {
                 localPath = path;
                 invoked?.Invoke(true, localPath);
                 return;
             }
+
             Debug.LogError($"THIS IS FUCKING WRONG. FILE EXISTED IN MAP BUT IN IN FS");
             invoked?.Invoke(false, localPath);
-// #else
-//             
-//             
-//             Validate();
-//             var bla = SystemOp.Resolve<FileService>();
-//             var fp = FileService.GetSavedFilePath(cachedData.cloudUrlToLocalMap[key]);
-//             Debug.Log($"Checking for file {fp}");
-//             localPath = fp;
-//
-//             var exists = File.Exists(fp);
-//             if (!exists)
-//             {
-//                 Debug.LogError($"THIS IS FUCKING WRONG. FILE EXISTED IN MAP BUT IN IN FS");
-//             }
-//             invoked?.Invoke(exists, localPath);
-// #endif
         }
 
         public void Save(string localPath, string content, string uniqueName)
         {
-// #if !UNITY_EDITOR || !UNITY_WEBGL
             var path = Path.Combine(basePath, localPath);
             var fileName = Path.GetFileName(localPath);
 
@@ -106,35 +81,19 @@ namespace Terra.Studio
             {
                 Directory.CreateDirectory(directoryPath);
             }
-            
-            
-            File.WriteAllText(path, content);
-            
-            cachedData.cloudUrlToLocalMap.Add(uniqueName, localPath);
 
-            var json = JsonConvert.SerializeObject(cachedData);
-            File.WriteAllText(cachedFilePath, json);
+
+            File.WriteAllText(path, content);
+
+            _cachedData.CloudUrlToLocalMap.Add(uniqueName, localPath);
+
+            var json = JsonConvert.SerializeObject(_cachedData);
+            File.WriteAllText(CachedFilePath, json);
             SaveCacheFile();
-// #else
-//             Debug.Log($"Saving {localPath}.....{uniqueName}....{content.Length}");
-//             Validate();
-//             var bla = SystemOp.Resolve<FileService>();
-//             var fp = FileService.GetSavedFilePath(localPath);
-//             Debug.Log($"Saving file {fp}");
-//             File.WriteAllText(fp, content);
-//             // bla.WriteFile(content, fp, false, (x)=>
-//             // {
-//             //     Debug.Log($"File with {uniqueName} and {filePath} saved!......{x}");
-//             //        
-//             // });
-//             cachedData.cloudUrlToLocalMap.Add(uniqueName, localPath);
-//             SaveCacheFile();
-// #endif
         }
 
         public void Save(string localPath, byte[] content, string uniqueName)
         {
-// #if !UNITY_EDITOR || !UNITY_WEBGL
             var path = Path.Combine(basePath, localPath);
             var fileName = Path.GetFileName(localPath);
 
@@ -143,35 +102,20 @@ namespace Terra.Studio
             {
                 Directory.CreateDirectory(directoryPath);
             }
-            
-            File.WriteAllBytes(path, content);
-            
-            cachedData.cloudUrlToLocalMap.Add(uniqueName, localPath);
 
-            var json = JsonConvert.SerializeObject(cachedData);
-            File.WriteAllText(cachedFilePath, json);
+            File.WriteAllBytes(path, content);
+
+            _cachedData.CloudUrlToLocalMap.Add(uniqueName, localPath);
+
+            var json = JsonConvert.SerializeObject(_cachedData);
+            File.WriteAllText(CachedFilePath, json);
             SaveCacheFile();
-// #else
-//             Validate();
-//             Debug.Log($"Saving {localPath}.....{uniqueName}....{content.Length}");
-//             var bla = SystemOp.Resolve<FileService>();
-//             var fp = FileService.GetSavedFilePath(localPath);
-//             var toWrite = Encoding.UTF8.GetString(content, 0, content.Length);
-//             Debug.Log($"Saving file {fp}");
-//             File.WriteAllBytes(fp, content);
-//             // bla.WriteFile(toWrite, fp, false, (x)=>
-//             // {
-//             //     Debug.Log($"File with {uniqueName} and {filePath} saved!......{x}");
-//             // });
-//             cachedData.cloudUrlToLocalMap.Add(uniqueName, localPath);
-//             SaveCacheFile();
-// #endif
         }
 
         private void Validate()
         {
-            cachedData??= new CachedData();
-            cachedData.cloudUrlToLocalMap ??= new();
+            _cachedData ??= new CachedData();
+            _cachedData.CloudUrlToLocalMap ??= new();
         }
 
         public void SaveCacheFile()
@@ -183,7 +127,7 @@ namespace Terra.Studio
             var bla = SystemOp.Resolve<FileService>();
             Validate();
             var fp = FileService.GetSavedFilePath(Path.GetFileNameWithoutExtension(cacheFileName));
-            bla.WriteFile(JsonConvert.SerializeObject(cachedData),fp, false, b =>
+            bla.WriteFile(JsonConvert.SerializeObject(_cachedData), fp, false, b =>
             {
                 if (!b)
                 {
@@ -191,6 +135,5 @@ namespace Terra.Studio
                 }
             });
         }
-        
     }
 }

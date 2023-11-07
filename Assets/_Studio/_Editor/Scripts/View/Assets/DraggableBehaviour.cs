@@ -1,39 +1,66 @@
-using System;
 using System.Collections;
-using DG.Tweening;
 using GLTFast;
-using Terra.Studio.Data;
+using PlayShifu.Terra;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-namespace Terra.Studio.Behaviour
+namespace Terra.Studio
 {
     public class DraggableBehaviour : MonoBehaviour
     {
+        [SerializeField] private Image outline;
         [SerializeField] private Transform loadingIcon;
         [SerializeField] private RawImage image;
         [SerializeField] private TextMeshProUGUI displayNameText;
         
-        private GltfObjectLoader _loaderPrefab;
-        private bool _running = false;
+        private Camera Camera => _camera??= Camera.main;
+
+        private bool _running;
         private AssetData _assetData;
         private Material _ghostMaterial;
 
-        private GltfObjectLoader currGo;
-        private GameObject actuallyLoadedGo;
-        
-        public void Init(AssetData data, GltfObjectLoader lp, Material ghMat)
+        private GltfObjectLoader _currGo;
+        private GameObject _actuallyLoadedGo;
+        private Coroutine _textureDownloadRoutine;
+        private UnityWebRequest _textureRequest;
+        private Camera _camera;
+        private AssetsView _view;
+
+        public void Init(AssetsView view, AssetData data, Material ghMat)
         {
+            _view = view;
             _running = true;
             displayNameText.text = data.display_name;
             _assetData = data;
-            _loaderPrefab = lp;
             _ghostMaterial = ghMat;
 
             StartCoroutine(SendThumbnailRequest());
+        }
+        
+        private IEnumerator SendThumbnailRequest()
+        {
+            _textureRequest = UnityWebRequestTexture.GetTexture(Helper.ReplaceHttpsFromUrl(_assetData.thumbnails[0]));
+            _textureRequest.SendWebRequest();
+            while (!_textureRequest.isDone)
+            {
+                loadingIcon.RotateAround(loadingIcon.position, loadingIcon.forward, 100 * Time.deltaTime);
+                yield return null;
+            }
+
+            if (_textureRequest.result == UnityWebRequest.Result.Success)
+            {
+                image.texture = (_textureRequest.downloadHandler as DownloadHandlerTexture)?.texture;
+                image.enabled = true;
+                Destroy(loadingIcon.gameObject);
+            }
+            else
+            {
+                _textureRequest.Abort();
+                _textureRequest.Dispose();
+            }
         }
 
         public void OnPointerDown()
@@ -41,26 +68,24 @@ namespace Terra.Studio.Behaviour
             if (!_running)
                 return;
 
-            if (currGo == null)
+            _view.Dragger(this, true);
+            if (_currGo == null)
             {
-                currGo = new GameObject().AddComponent<GltfObjectLoader>();
-                currGo.Init( _assetData.gltf[0],_assetData.unique_name, new ImportSettings()
+                _currGo = new GameObject().AddComponent<GltfObjectLoader>();
+                _currGo.gameObject.AddComponent<HideInHierarchy>();
+                _currGo.Init( _assetData.gltf[0],_assetData.unique_name, new ImportSettings()
                 {
                     lazyLoadTextures = true,
                     customBasePathForTextures = true,
                     additionToBasePath = "textures/"
                 });
-                currGo.LoadModel(ModelDownloaded, null);
-                // currGo.assetType = AssetType.RemotePrefab;
-                // var url = _assetData.gltf[0].Replace("https", "http");
-                // currGo.itemData = new ResourceDB.ResourceItemData(_assetData.unique_name,url,url, "","", remoteAsset:true );
-                // currGo.LoadModel();
+                _currGo.LoadModel(ModelDownloaded, null);
             }
         }
 
         private void ModelDownloaded(GameObject loadedGo, bool preloaded)
         {
-            actuallyLoadedGo = loadedGo;
+            _actuallyLoadedGo = loadedGo;
             if (!preloaded)
             {
                 var renderers = loadedGo.GetComponentsInChildren<Renderer>();
@@ -80,18 +105,17 @@ namespace Terra.Studio.Behaviour
             if (!_running)
                 return;
             
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            var ray = Camera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out var hit))
             {
-                if (currGo)
+                if (_currGo)
                 {
-                    currGo.transform.position = hit.point;
-                    currGo.SetPosition(hit.point);
+                    _currGo.transform.position = hit.point;
+                    _currGo.SetPositionForDragInAssetsWindow(hit.point);
                 }
-                else if (actuallyLoadedGo)
+                else if (_actuallyLoadedGo)
                 {
-                    actuallyLoadedGo.transform.position = hit.point;
-                    // actuallyLoadedGo.SetPosition(hit.point);
+                    _actuallyLoadedGo.transform.position = hit.point;
                 }
             }
         }
@@ -100,57 +124,51 @@ namespace Terra.Studio.Behaviour
         {
             if (!_running)
                 return;
-            if (currGo != null)
+            _view.Dragger(this,false);
+            if (_currGo != null)
             {
-                currGo.LoadTextures();
+                _currGo.LoadTextures();
                 if (EventSystem.current.IsPointerOverGameObject())
                 {
-                    Destroy(currGo.gameObject);
+                    Destroy(_currGo.gameObject);
                 }
             }
-            currGo = null;
+            _currGo = null;
         }
 
+        public void OnPointerEnter()
+        {
+            _view.Selected(this, true);
+        }
+        public void OnPointerExit()
+        {
+            _view.Selected(this, false);
+        }
+
+        public void SetHighlight(bool toSet)
+        {
+            var col = outline.color;
+            col.a  = toSet ? 1 : 0;
+            outline.color = col;
+        }
         private void OnDestroy()
         {
-            if (textureDownloadRoutine != null)
+            if (_textureDownloadRoutine != null)
             {
-                StopCoroutine(textureDownloadRoutine);
+                StopCoroutine(_textureDownloadRoutine);
             }
             
-            if (textureRequest != null)
+            if (_textureRequest != null)
             {
-                textureRequest.Abort();
-                if (textureRequest.downloadHandler is DownloadHandlerTexture dht && textureRequest.isDone)
+                if (!_textureRequest.isDone)
+                {
+                    _textureRequest.Abort();
+                }
+                if (_textureRequest.downloadHandler is DownloadHandlerTexture dht && _textureRequest.isDone)
                 {
                     Destroy(dht.texture);
                 }
-                textureRequest.Dispose();
-            }
-        }
-
-        private Coroutine textureDownloadRoutine;
-        private UnityWebRequest textureRequest;
-        private IEnumerator SendThumbnailRequest()
-        {
-            textureRequest = UnityWebRequestTexture.GetTexture(_assetData.thumbnails[0].Replace("https","http"));
-            textureRequest.SendWebRequest();
-            while (!textureRequest.isDone)
-            {
-                loadingIcon.RotateAround(loadingIcon.position, loadingIcon.forward, 100 * Time.deltaTime);
-                yield return null;
-            }
-
-            if (textureRequest.result == UnityWebRequest.Result.Success)
-            {
-                image.texture = (textureRequest.downloadHandler as DownloadHandlerTexture)?.texture;
-                image.enabled = true;
-                Destroy(loadingIcon.gameObject);
-            }
-            else
-            {
-                textureRequest.Abort();
-                textureRequest.Dispose();
+                _textureRequest.Dispose();
             }
         }
     }

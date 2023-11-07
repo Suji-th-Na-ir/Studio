@@ -1,6 +1,6 @@
 using System;
 
-namespace Terra.Studio.Data
+namespace Terra.Studio
 {
     [Serializable]
     public class AssetsAPIResponse

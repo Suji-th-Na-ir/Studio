@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using Terra.Studio.Behaviour;
-using Terra.Studio.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,34 +11,31 @@ namespace Terra.Studio
     {
         private const string ghostMatPath = "Editortime/Materials/Ghost";
         private const string assetsWindowButtonPath = "Editortime/Prefabs/AssetsWindow/AssetWindow_Button";
-        private const string gltfObjectLoader = "Editortime/Prefabs/AssetsWindow/GltfObjectLoader";
         private const string sampleJson = "Editortime/Prefabs/AssetsWindow/Sample";
 
         private bool useSampleJson = true;
-        private int numberOfAssetsToShowForNow = 21;
+        private const int NumberOfAssetsToShowForNow = 21;
         private AssetsAPIResponse _fullData;
         private ButtonScroll _scroll;
         private SearchBar _search;
+        private AssetData[] _currentData;
+        
         public void Awake()
         {
             EditorOp.Register(this);
-        }
-
-        private void OnDestroy()
-        {
-            EditorOp.Unregister(this);
         }
         
         public override void Init()
         {
             AssetsWindowAPI api = new AssetsWindowAPI();
-            Debug.Log($"Started downloading!");
             if (!useSampleJson)
             {
+                Debug.Log($"Started downloading json!");
                 api.DoRequest(OnDataFetchSuccess);
             }
             else
             {
+                Debug.Log($"Using sample json.");
                 var text = EditorOp.Load<TextAsset>(sampleJson);
                 OnDataFetchSuccess(true, text.text);
             }
@@ -50,10 +45,10 @@ namespace Terra.Studio
         {
             _fullData = JsonConvert.DeserializeObject<AssetsAPIResponse>(response);
 
-            currentData = _fullData.data;
+            _currentData = _fullData.data;
             
             _scroll = GetComponentInChildren<ButtonScroll>();
-            _scroll.Init(_fullData.data.Length/numberOfAssetsToShowForNow, PageChanged);
+            _scroll.Init(_fullData.data.Length/NumberOfAssetsToShowForNow, PageChanged);
 
             _search = GetComponentInChildren<SearchBar>();
             _search.Init(OnSearch);
@@ -67,7 +62,7 @@ namespace Terra.Studio
             }
             else
             {
-                currentData = _fullData.data;
+                _currentData = _fullData.data;
                 PageChanged(1);
             }
         }
@@ -92,28 +87,25 @@ namespace Terra.Studio
             }
 
             Debug.Log($"Ended searching for {query}");
-            currentData = bla.ToArray();
-            _scroll.Init(currentData.Length, PageChanged);
-            // PageChanged(1);
+            _currentData = bla.ToArray();
+            _scroll.Init(_currentData.Length, PageChanged);
         }
-
-        private AssetData[] currentData;
+        
         private void PageChanged(int obj)
         {
             ClearDataIfAny();
             
-            var loaderPrefab = EditorOp.Load<GltfObjectLoader>(gltfObjectLoader);
             var buttonPrefab = EditorOp.Load<GameObject>(assetsWindowButtonPath);
             var ghostMat = EditorOp.Load<Material>(ghostMatPath);
             var temp = GetComponentInChildren<GridLayoutGroup>();
             var x = obj - 1;
             int counter = 0;
-            for (var i = numberOfAssetsToShowForNow * x; i < currentData.Length && counter<numberOfAssetsToShowForNow; i++)
+            for (var i = NumberOfAssetsToShowForNow * x; i < _currentData.Length && counter<NumberOfAssetsToShowForNow; i++)
             {
                 counter++;
-                var data = currentData[i];
+                var data = _currentData[i];
                 var button = Instantiate(buttonPrefab, temp.transform);
-                button.GetComponent<DraggableBehaviour>().Init(data, loaderPrefab, ghostMat);
+                button.GetComponent<DraggableBehaviour>().Init(this,data, ghostMat);
             }
             
         }
@@ -126,10 +118,58 @@ namespace Terra.Studio
                 Destroy(o.gameObject);
             }
         }
-
-        private Texture GetThumbnailForModelID(AssetData data)
+        
+        
+        private DraggableBehaviour currHighlight;
+        private bool currentlyDragging;
+        
+        public void Selected(DraggableBehaviour currHover, bool highlight)
         {
-            return null;
+            if (currentlyDragging)
+                return;
+
+            if (currHighlight == currHover && !highlight)
+            {
+                currHighlight.SetHighlight(false);
+            }
+            
+            if (currHighlight != null && highlight)
+            {
+                currHighlight.SetHighlight(false);
+            }
+
+            if (highlight)
+            {
+                currHighlight = currHover;
+                currHighlight.SetHighlight(true);
+            }
+        }
+
+        public void Dragger(DraggableBehaviour bla, bool highlight)
+        {
+            currentlyDragging = highlight;
+            if (highlight)
+            {
+                if (currHighlight != null)
+                {
+                    currHighlight.SetHighlight(false);
+                }
+                currHighlight = bla;
+                currHighlight.SetHighlight(true);
+            }
+            else
+            {
+                if (bla == currHighlight)
+                {
+                    currHighlight = null;
+                }
+                bla.SetHighlight(false);
+            }
+        }
+        
+        private void OnDestroy()
+        {
+            EditorOp.Unregister(this);
         }
     }
 }

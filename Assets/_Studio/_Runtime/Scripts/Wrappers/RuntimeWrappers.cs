@@ -87,6 +87,7 @@ namespace Terra.Studio
         public static void SpawnRemotePrefab(string uniqueName,string url, Action<GameObject> cb, params Vector3[] trs)
         {
             var go = new GameObject();
+            go.AddComponent<HideInHierarchy>();
             var itemData = new ResourceDB.ResourceItemData(uniqueName, url, url,"","",remoteAsset:true);
             // ResolveTRS(go, itemData, trs);
             var x= go.AddComponent<GltfObjectLoader>();

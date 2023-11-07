@@ -7,27 +7,32 @@ namespace Terra.Studio
 {
     public class LoadedPoolValidator : IDisposable
     {
-        private GameObject rootGo;
-        private Dictionary<string, GameObject> uniqueLoadedMap;
+        private readonly GameObject _rootGo;
+        private Dictionary<string, GameObject> _uniqueLoadedMap;
         public LoadedPoolValidator()
         {
-            rootGo = new GameObject();
-            rootGo.gameObject.name = "LoadedPoolValidation";
-            uniqueLoadedMap = new();
-            Object.DontDestroyOnLoad(rootGo);
+            _rootGo = new GameObject
+            {
+                gameObject =
+                {
+                    name = "LoadedPoolValidation"
+                }
+            };
+            _uniqueLoadedMap = new();
+            Object.DontDestroyOnLoad(_rootGo);
         }
 
         public void AddToPool(string uniqueName, GameObject go)
         {
-            if (!uniqueLoadedMap.ContainsKey(uniqueName))
+            if (!_uniqueLoadedMap.ContainsKey(uniqueName))
             {
-                var temp = Object.Instantiate(go, rootGo.transform, true);
+                var temp = Object.Instantiate(go, _rootGo.transform, true);
                 if (temp.TryGetComponent(out StudioGameObject sgo))
                 {
                     Object.Destroy(sgo);
                 }
                 temp.SetActive(false);
-                uniqueLoadedMap.Add(uniqueName, temp);
+                _uniqueLoadedMap.Add(uniqueName, temp);
             }
             else
             {
@@ -36,26 +41,25 @@ namespace Terra.Studio
         }
         public bool IsInLoadedPool(string uniqueName)
         {
-            return uniqueLoadedMap.ContainsKey(uniqueName);
+            return _uniqueLoadedMap.ContainsKey(uniqueName);
         }
 
         public void RemoveFromPool(string uniqueName)
         {
-            if (uniqueLoadedMap.ContainsKey(uniqueName))
+            if (_uniqueLoadedMap.ContainsKey(uniqueName))
             {
-                var prefab = uniqueLoadedMap[uniqueName];
+                var prefab = _uniqueLoadedMap[uniqueName];
                 if (prefab != null)
                 {
                     Object.Destroy(prefab);
                 }
-                var x = uniqueLoadedMap.Remove(uniqueName);
+                var x = _uniqueLoadedMap.Remove(uniqueName);
             }
         }
 
         public GameObject GetDuplicateFromPool(string uniqueName)
         {
-            // return null;
-            if (uniqueLoadedMap.TryGetValue(uniqueName, out var prefab))
+            if (_uniqueLoadedMap.TryGetValue(uniqueName, out var prefab))
             {
                 var temp = Object.Instantiate(prefab);
                 temp.name = temp.name.Replace("(Clone)", "");
@@ -68,17 +72,17 @@ namespace Terra.Studio
 
         public void Dispose()
         {
-            foreach (var (key, prefab) in uniqueLoadedMap)
+            foreach (var (key, prefab) in _uniqueLoadedMap)
             {
                 if (prefab != null)
                 {
                     Object.Destroy(prefab);
                 }
 
-                uniqueLoadedMap[key] = null;
+                _uniqueLoadedMap[key] = null;
             }
 
-            uniqueLoadedMap = null;
+            _uniqueLoadedMap = null;
         }
     }
 }

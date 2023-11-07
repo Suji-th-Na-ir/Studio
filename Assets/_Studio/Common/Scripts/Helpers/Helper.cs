@@ -814,5 +814,10 @@ namespace PlayShifu.Terra
         {
             return new Quaternion(p.x + q.x, p.y + q.y, p.z + q.z, p.w + q.w);
         }
+
+        public static string ReplaceHttpsFromUrl(string url)
+        {
+            return url.Replace("https", "http");
+        }
     }
 }
