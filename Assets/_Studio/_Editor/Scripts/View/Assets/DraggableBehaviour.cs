@@ -130,6 +130,8 @@ namespace Terra.Studio
             {
                 if (_currGo.LoadedObject != null)
                 {
+                    Debug.Log($"Force Selecting {_currGo.LoadedObject.gameObject} @Sujith :)");
+                    EditorOp.Resolve<SelectionHandler>().Select(_currGo.LoadedObject.gameObject);
                     SetLayerOfAllChildren(_currGo.LoadedObject.gameObject, "Default");
                 }
                 _currGo.LoadTextures();
