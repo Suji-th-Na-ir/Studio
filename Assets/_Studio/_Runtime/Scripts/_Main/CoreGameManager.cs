@@ -106,6 +106,7 @@ namespace Terra.Studio
         public int currentScore;
         public int CurrentScore { get { return currentScore; } }
         public event Action<int> OnScoreModified;
+        public event Action OnScoreReset;
         public event Action OnTargetScoreReached;
 
         public void AddScore(int addBy)
@@ -118,10 +119,11 @@ namespace Terra.Studio
             }
         }
 
-        public void RemoveScore(int removeBy)
+        public void ResetScore()
         {
-            currentScore -= removeBy;
+            currentScore = 0;
             OnScoreModified?.Invoke(currentScore);
+            OnScoreReset?.Invoke();
         }
     }
 

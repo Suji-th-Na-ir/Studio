@@ -71,6 +71,12 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: c52b87cb604f04764825610a5b5f1926, type: 3}
   - type: NoOneBroadcasting
     icon: {fileID: 21300000, guid: 63f6bf6e3882d4ef1a643dad63ce4c55, type: 3}
+  - type: UpdateScore
+    icon: {fileID: 21300000, guid: 44b21946be2ef40b8b2dd0b566561848, type: 3}
+  - type: ResetScore
+    icon: {fileID: 21300000, guid: c3e0f8e68fc2a4720b488001bea17764, type: 3}
+  - type: GameScore
+    icon: {fileID: 21300000, guid: a5062f417fe46439d96c6fc0628e81db, type: 3}
   - type: ResetTimer
     icon: {fileID: 21300000, guid: d7d045eb4073549a2be814dd268b9a9a, type: 3}
   - type: UpdateTimer

@@ -51,6 +51,22 @@
     "Terra.Studio.Listener",
     null
   ],
+  "Terra.Studio.ResetScore+StartOn.OnPlayerCollide": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "Terra.Studio.ResetScore+StartOn.OnObjectCollide": [
+    "Terra.Studio.TriggerAction",
+    "Other"
+  ],
+  "Terra.Studio.ResetScore+StartOn.OnClick": [
+    "Terra.Studio.MouseAction",
+    "OnClick"
+  ],
+  "Terra.Studio.ResetScore+StartOn.BroadcastListen": [
+    "Terra.Studio.Listener",
+    null
+  ],
   "Terra.Studio.ResetTimer+StartOn.OnPlayerCollide": [
     "Terra.Studio.TriggerAction",
     "Player"
@@ -118,6 +134,22 @@
   "Terra.Studio.Switch+StartOn.OnObjectCollide": [
     "Terra.Studio.TriggerAction",
     "Other"
+  ],
+  "Terra.Studio.UpdateScore+StartOn.OnPlayerCollide": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "Terra.Studio.UpdateScore+StartOn.OnObjectCollide": [
+    "Terra.Studio.TriggerAction",
+    "Other"
+  ],
+  "Terra.Studio.UpdateScore+StartOn.OnClick": [
+    "Terra.Studio.MouseAction",
+    "OnClick"
+  ],
+  "Terra.Studio.UpdateScore+StartOn.BroadcastListen": [
+    "Terra.Studio.Listener",
+    null
   ],
   "Terra.Studio.UpdateTimer+StartOn.OnPlayerCollide": [
     "Terra.Studio.TriggerAction",

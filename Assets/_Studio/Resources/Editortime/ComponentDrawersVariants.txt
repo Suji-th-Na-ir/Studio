@@ -7,6 +7,7 @@
   "Terra.Studio.GameScore": "Terra.Studio.GameScore",
   "Terra.Studio.InGameTimer": "Terra.Studio.InGameTimer",
   "Terra.Studio.Push": "Terra.Studio.Push",
+  "Terra.Studio.ResetScore": "Terra.Studio.ResetScore",
   "Terra.Studio.ResetTimer": "Terra.Studio.ResetTimer",
   "Terra.Studio.Respawn": "Terra.Studio.Respawn",
   "Terra.Studio.Rotate": "Terra.Studio.Rotate",
@@ -16,5 +17,6 @@
   "Terra.Studio.Switch": "Terra.Studio.Switch",
   "Terra.Studio.Teleport": "Terra.Studio.Teleport",
   "Terra.Studio.Translate": "Terra.Studio.Translate",
+  "Terra.Studio.UpdateScore": "Terra.Studio.UpdateScore",
   "Terra.Studio.UpdateTimer": "Terra.Studio.UpdateTimer"
 }
