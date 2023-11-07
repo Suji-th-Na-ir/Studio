@@ -1,8 +1,8 @@
-﻿
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using UnityEngine;
 using RuntimeInspectorNamespace;
 using UnityEngine.EventSystems;
+using PlayShifu.Terra;
 
 namespace CMF
 {
@@ -19,22 +19,11 @@ namespace CMF
 		public bool useRawInput = true;
 		bool isJumpPressed;
 
-        [DllImport("__Internal")]
-        private static extern bool IsMobile();
 
-		private bool IsMobilePlatform()
-		{
-#if UNITY_EDITOR
-			return false;
-#else
-			return IsMobile();
-#endif
-
-		}
 
 		private void Awake()
 		{
-			if (!IsMobilePlatform())
+			if (!Helper.IsMobileWebGlPlatform())
 			{
 				mobileInputCanvas.SetActive(false);
 			}
@@ -47,7 +36,7 @@ namespace CMF
 
         public override float GetHorizontalMovementInput()
 		{
-			if(IsMobilePlatform())
+			if(Helper.IsMobileWebGlPlatform())
 			{
 				return joystick.Horizontal;
 			}
@@ -60,7 +49,7 @@ namespace CMF
 
 		public override float GetVerticalMovementInput()
 		{
-            if (IsMobilePlatform())
+            if (Helper.IsMobileWebGlPlatform())
             {
                 return joystick.Vertical;
             }
@@ -72,7 +61,7 @@ namespace CMF
 
 		public override bool IsJumpKeyPressed()
 		{
-			if(IsMobilePlatform())
+			if(Helper.IsMobileWebGlPlatform())
 			{
 				return isJumpPressed;
 			}

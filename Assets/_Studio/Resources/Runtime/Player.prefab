@@ -186,7 +186,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 7
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -267,8 +267,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -323.79022, y: 256}
-  m_SizeDelta: {x: 202.3243, y: 172.4478}
+  m_AnchoredPosition: {x: -286, y: 180.31}
+  m_SizeDelta: {x: 226.0207, y: 233.3814}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4459469532084451555
 CanvasRenderer:
@@ -460,12 +460,12 @@ PrefabInstance:
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 256
+      value: 261
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 256
+      value: 180.31
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252,
         type: 3}
@@ -495,10 +495,28 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 756737475625525997}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2460851982537757470}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45977bbae16431c46a013576a1aea384, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &2460851982537757470 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2929252283123773939, guid: aaa2c939c0359ac4dbce3f49e8b90252,
+    type: 3}
+  m_PrefabInstance: {fileID: 756737475625525997}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &550095352320646135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2460851982537757470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3502065971f7ef46ad6fc5a1a3385b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &2460851982537757471 stripped
@@ -590,6 +608,31 @@ PrefabInstance:
       propertyPath: mobileInputCanvas
       value: 
       objectReference: {fileID: 2133908642654473872}
+    - target: {fileID: 114100764997902158, guid: 41c209abb2d73574a9baf7bf474510cc,
+        type: 3}
+      propertyPath: joystick
+      value: 
+      objectReference: {fileID: 550095352320646135}
+    - target: {fileID: 114100764997902158, guid: 41c209abb2d73574a9baf7bf474510cc,
+        type: 3}
+      propertyPath: jumpButton
+      value: 
+      objectReference: {fileID: 3316960591487309344}
+    - target: {fileID: 114420073759096334, guid: 41c209abb2d73574a9baf7bf474510cc,
+        type: 3}
+      propertyPath: joystick
+      value: 
+      objectReference: {fileID: 550095352320646135}
+    - target: {fileID: 114420073759096334, guid: 41c209abb2d73574a9baf7bf474510cc,
+        type: 3}
+      propertyPath: jumpButton
+      value: 
+      objectReference: {fileID: 3316960591487309344}
+    - target: {fileID: 114420073759096334, guid: 41c209abb2d73574a9baf7bf474510cc,
+        type: 3}
+      propertyPath: uiImageRectTransform
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 114808892733143080, guid: 41c209abb2d73574a9baf7bf474510cc,
         type: 3}
       propertyPath: stepHeightRatio
