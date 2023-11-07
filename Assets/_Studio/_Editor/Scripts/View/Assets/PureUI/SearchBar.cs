@@ -15,6 +15,11 @@ namespace Terra.Studio
         public void Init(Action<string> onSearch)
         {
             onSearchPressed = onSearch;
+            cancelSearchButton.onClick.AddListener(() =>
+            {
+                inputField.text = "";
+                onSearchPressed?.Invoke("");
+            });
             inputField.onValueChanged.AddListener(InputValueChanged);
             inputField.onSubmit.AddListener(InputSubmitted);
         }

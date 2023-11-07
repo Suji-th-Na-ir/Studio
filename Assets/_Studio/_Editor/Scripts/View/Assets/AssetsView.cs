@@ -63,7 +63,7 @@ namespace Terra.Studio
             else
             {
                 _currentData = _fullData.data;
-                PageChanged(1);
+                _scroll.Init(_currentData.Length/NumberOfAssetsToShowForNow, PageChanged);
             }
         }
 
@@ -88,7 +88,7 @@ namespace Terra.Studio
 
             Debug.Log($"Ended searching for {query}");
             _currentData = bla.ToArray();
-            _scroll.Init(_currentData.Length, PageChanged);
+            _scroll.Init(_currentData.Length/NumberOfAssetsToShowForNow, PageChanged);
         }
         
         private void PageChanged(int obj)
@@ -98,7 +98,7 @@ namespace Terra.Studio
             var buttonPrefab = EditorOp.Load<GameObject>(assetsWindowButtonPath);
             var ghostMat = EditorOp.Load<Material>(ghostMatPath);
             var temp = GetComponentInChildren<GridLayoutGroup>();
-            var x = obj - 1;
+            var x = Mathf.Max(obj - 1, 0);
             int counter = 0;
             for (var i = NumberOfAssetsToShowForNow * x; i < _currentData.Length && counter<NumberOfAssetsToShowForNow; i++)
             {

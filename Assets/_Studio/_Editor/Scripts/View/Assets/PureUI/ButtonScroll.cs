@@ -57,6 +57,7 @@ namespace Terra.Studio
             for (var i = 0; i < textInButtons.Length; i++)
             {
                 textInButtons[i].text = (lowestRange + i).ToString();
+                buttons[i].gameObject.SetActive(lowestRange + i <= _max && lowestRange+i>0);
             }
 
             if (_currentPage > 2 && _currentPage < _max - 2)
