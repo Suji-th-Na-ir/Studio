@@ -207,6 +207,29 @@ namespace Terra.Studio
         {
             if (loadedObject != null)
             {
+                var renderers = loadedObject.GetComponentsInChildren<MeshFilter>();
+                foreach (var meshFilter in renderers)
+                {
+                    meshFilter.mesh.RecalculateBounds();
+                    meshFilter.mesh.RecalculateNormals();
+                    meshFilter.mesh.RecalculateTangents();
+                    meshFilter.mesh.RecalculateUVDistributionMetrics();
+                    meshFilter.mesh.RecalculateBounds();
+
+
+                    if (!meshFilter.TryGetComponent(out MeshCollider meshCol))
+                    {
+                        meshCol = meshFilter.gameObject.AddComponent<MeshCollider>();
+                        meshCol.sharedMesh = meshFilter.mesh;
+                        meshCol.convex = true;
+                    }
+                    else
+                    {
+                        meshCol.convex = true;
+                        meshCol.sharedMesh = meshFilter.mesh;
+                    }
+                }
+                
                 var sgo = loadedObject.gameObject.AddComponent<StudioGameObject>();
                 sgo.assetType = AssetType.RemotePrefab;
                 sgo.itemData = new ResourceDB.ResourceItemData(unique_name, OgUrl, OgUrl, "","",remoteAsset:true);
