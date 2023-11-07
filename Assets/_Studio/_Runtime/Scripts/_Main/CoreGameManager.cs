@@ -129,14 +129,35 @@ namespace Terra.Studio
 
     public class InGameTimeHandler
     {
+        private float startTime;
         private float currentTime;
         public float CurrentTime { get { return currentTime; } }
         public event Action<float> OnTimeModified;
+
+        public void SetTime(float startTime)
+        {
+            this.startTime = startTime;
+            currentTime = startTime;
+        }
 
         public void UpdateTime(float newTime)
         {
             currentTime = newTime;
             OnTimeModified?.Invoke(newTime);
+        }
+
+        public void AddTime(float newTime)
+        {
+            currentTime += newTime;
+            if (currentTime < 0f)
+            {
+                currentTime = 0f;
+            }
+        }
+
+        public void ResetTime()
+        {
+            currentTime = startTime;
         }
     }
 }

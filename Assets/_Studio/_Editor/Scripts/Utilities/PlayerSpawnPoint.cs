@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class PlayerSpawnPoint : MonoBehaviour
+namespace Terra.Studio
 {
-    // Start is called before the first frame update
-    void Start()
+    public class PlayerSpawnPoint : BaseBehaviour
     {
-        
-    }
+        public override string ComponentName => nameof(PlayerSpawnPoint);
+        public override bool CanPreview => false;
+        protected override bool CanBroadcast => false;
+        protected override bool CanListen => false;
+        protected override bool ShowComponentIcon => false;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public override (string type, string data) Export()
+        {
+            return default;
+        }
+
+        public override void Import(EntityBasedComponent data) { }
     }
 }

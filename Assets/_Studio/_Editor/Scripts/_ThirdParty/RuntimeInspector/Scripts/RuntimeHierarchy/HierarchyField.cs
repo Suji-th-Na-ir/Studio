@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Terra.Studio;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -31,11 +32,11 @@ namespace RuntimeInspectorNamespace
         [SerializeField]
         private Toggle multiSelectionToggle;
 
-		[SerializeField]
-		private Image multiSelectionToggleBackground;
+        [SerializeField]
+        private Image multiSelectionToggleBackground;
 
-		[SerializeField]
-		private PointerEventListener m_refDuplicateIcon;
+        [SerializeField]
+        private PointerEventListener m_refDuplicateIcon;
 
 #pragma warning restore 0649
 
@@ -77,20 +78,24 @@ namespace RuntimeInspectorNamespace
             {
                 m_isSelected = value;
 
-				Color textColor;
-				if( m_isSelected )
-				{
-					background.color = Skin.SelectedItemBackgroundColor;
-					textColor = Skin.SelectedItemTextColor;
-					m_refDuplicateIcon.gameObject.SetActive (true);
-					m_refDuplicateIcon.GetComponent<Image> ().color = Skin.SelectedItemBackgroundColor;
-				}
-				else
-				{
-					background.color = Data.Depth == 0 ? Skin.BackgroundColor.Tint( 0.075f ) : Color.clear;
-					textColor = Skin.TextColor;
-					m_refDuplicateIcon.gameObject.SetActive (false);
-				}
+                Color textColor;
+                if (m_isSelected)
+                {
+                    background.color = Skin.SelectedItemBackgroundColor;
+                    textColor = Skin.SelectedItemTextColor;
+                    var setInteractive = Rulesets.CanBeDuplicated(Data.Name);
+                    m_refDuplicateIcon.gameObject.SetActive(setInteractive);
+                    if (setInteractive)
+                    {
+                        m_refDuplicateIcon.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
+                    }
+                }
+                else
+                {
+                    background.color = Data.Depth == 0 ? Skin.BackgroundColor.Tint(0.075f) : Color.clear;
+                    textColor = Skin.TextColor;
+                    m_refDuplicateIcon.gameObject.SetActive(false);
+                }
 
                 textColor.a = m_isActive ? 1f : INACTIVE_ITEM_TEXT_ALPHA;
                 nameText.color = textColor;
@@ -171,31 +176,32 @@ namespace RuntimeInspectorNamespace
             rectTransform = (RectTransform)transform;
             background = clickListener.GetComponent<Image>();
 
-			if( hierarchy.ShowTooltips )
-				clickListener.gameObject.AddComponent<TooltipArea>().Initialize( hierarchy.TooltipListener, this );
+            if (hierarchy.ShowTooltips)
+                clickListener.gameObject.AddComponent<TooltipArea>().Initialize(hierarchy.TooltipListener, this);
 
-			expandToggle.PointerClick += ( eventData ) => ToggleExpandedState();
-			clickListener.PointerClick += ( eventData ) => OnClick();
-			clickListener.PointerDown += OnPointerDown;
-			clickListener.PointerUp += OnPointerUp;
+            expandToggle.PointerClick += (eventData) => ToggleExpandedState();
+            clickListener.PointerClick += (eventData) => OnClick();
+            clickListener.PointerDown += OnPointerDown;
+            clickListener.PointerUp += OnPointerUp;
 
-			m_refDuplicateIcon.gameObject.SetActive (false);
-			m_refDuplicateIcon.PointerClick += OnDuplicateIconClicked;
-		}
+            m_refDuplicateIcon.gameObject.SetActive(false);
+            m_refDuplicateIcon.PointerClick += OnDuplicateIconClicked;
+        }
 
-        private void OnDuplicateIconClicked (PointerEventData eventData) {
-			Hierarchy.DuplicateSelectedObject ();
-		}
+        private void OnDuplicateIconClicked(PointerEventData eventData)
+        {
+            Hierarchy.DuplicateSelectedObject();
+        }
 
-        public void SetContent( HierarchyData data )
-		{
-			Data = data;
+        public void SetContent(HierarchyData data)
+        {
+            Data = data;
 
-			contentTransform.anchoredPosition = new Vector2( Skin.IndentAmount * data.Depth + ( MultiSelectionToggleVisible ? Skin.LineHeight * 0.8f : 0f ), 0f );
-			//background.sprite = data.Depth == 0 ? Hierarchy.SceneDrawerBackground : Hierarchy.TransformDrawerBackground;
+            contentTransform.anchoredPosition = new Vector2(Skin.IndentAmount * data.Depth + (MultiSelectionToggleVisible ? Skin.LineHeight * 0.8f : 0f), 0f);
+            //background.sprite = data.Depth == 0 ? Hierarchy.SceneDrawerBackground : Hierarchy.TransformDrawerBackground;
 
-			RefreshName();
-		}
+            RefreshName();
+        }
 
         private void ToggleExpandedState()
         {
@@ -212,7 +218,6 @@ namespace RuntimeInspectorNamespace
         public void RefreshName()
         {
             nameText.text = Data.Name;
-
             if (Hierarchy.ShowHorizontalScrollbar)
             {
                 LayoutRebuilder.ForceRebuildLayoutImmediate(nameText.rectTransform);

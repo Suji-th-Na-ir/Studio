@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Terra.Studio
 {
     [Serializable]
-    public struct InGameTimerComponent : IBaseComponent
+    public struct UpdateTimerComponent : IBaseComponent
     {
         public bool IsConditionAvailable { get; set; }
         public string ConditionType { get; set; }
@@ -16,9 +16,15 @@ namespace Terra.Studio
         public int TargetId { get; set; }
         [JsonIgnore] public bool CanExecute { get; set; }
         [JsonIgnore] public bool IsExecuted { get; set; }
-        public EventContext EventContext { get; set; }
-        public GameObject RefObj { get; set; }
-        public uint totalTime;
-        public TimerType timerType;
+        [JsonIgnore] public EventContext EventContext { get; set; }
+        [JsonIgnore] public GameObject RefObj { get; set; }
+
+        public bool canPlaySFX;
+        public string sfxName;
+        public int sfxIndex;
+        public bool canPlayVFX;
+        public string vfxName;
+        public int vfxIndex;
+        public int updateBy;
     }
 }

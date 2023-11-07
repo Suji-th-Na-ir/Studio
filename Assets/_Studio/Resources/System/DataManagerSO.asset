@@ -103,6 +103,16 @@ MonoBehaviour:
     SystemName: Terra.Studio.ResetScoreSystem
     DrawerName: Terra.Studio.ResetScore
     DisplayName: Reset Score
+  - Key: Terra.Studio.UpdateTimer
+    ComponentName: Terra.Studio.UpdateTimerComponent
+    SystemName: Terra.Studio.UpdateTimerSystem
+    DrawerName: Terra.Studio.UpdateTimer
+    DisplayName: Update Timer
+  - Key: Terra.Studio.ResetTimer
+    ComponentName: Terra.Studio.ResetTimerComponent
+    SystemName: Terra.Studio.ResetTimerSystem
+    DrawerName: Terra.Studio.ResetTimer
+    DisplayName: Reset Timer
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent

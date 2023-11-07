@@ -105,7 +105,8 @@ namespace Terra.Studio
         Default,
         SpawnPoint,
         Timer,
-        Score
+        Score,
+        Checkpoint
     }
 
     public enum SwitchState
@@ -132,5 +133,13 @@ namespace Terra.Studio
         Saving,
         [StringValue("")]
         Empty
+    }
+
+    public enum TimerType
+    {
+        [AliasDrawer("Count Down")]
+        CountDown,
+        [AliasDrawer("Count Up")]
+        CountUp
     }
 }

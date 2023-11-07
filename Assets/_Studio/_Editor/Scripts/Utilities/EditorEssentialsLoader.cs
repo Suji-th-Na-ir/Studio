@@ -37,9 +37,7 @@ namespace Terra.Studio
         {
             var resourceObj = EditorOp.Load<GameObject>(essential.itemData.ResourcePath);
             spawnedObj = Object.Instantiate(resourceObj);
-            Rulesets.ApplyRuleset(spawnedObj);
             spawnedObj.transform.position = essential.spawnPosition;
-            spawnedObj.AddComponent<IgnoreToPackObject>();
             var studioGO = spawnedObj.AddComponent<StudioGameObject>();
             studioGO.itemData = essential.itemData;
             studioGO.type = essential.type;
@@ -53,10 +51,20 @@ namespace Terra.Studio
             {
                 var pos = EditorOp.Resolve<SceneDataHandler>().PlayerSpawnPoint;
                 go.transform.position = pos;
+                go.AddComponent<IgnoreToPackObject>();
             }
             if (type == EditorObjectType.Score)
             {
                 go.AddComponent<GameScore>();
+                go.AddComponent<IgnoreToPackObject>();
+            }
+            if (type == EditorObjectType.Timer)
+            {
+                go.AddComponent<InGameTimer>();
+            }
+            if (type == EditorObjectType.Checkpoint)
+            {
+                go.AddComponent<Checkpoint>();
             }
         }
     }
