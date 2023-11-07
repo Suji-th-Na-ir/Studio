@@ -12,7 +12,7 @@ using UnityEngine.Serialization;
 namespace Terra.Studio
 {
     [Serializable]
-    public class TempStruct
+    public class GltfData
     {
         public BufferData[] buffers;
     }
@@ -21,193 +21,191 @@ namespace Terra.Studio
     public struct BufferData
     {
         public string uri;
-        public int byteLength;
     }
 
     public class GltfObjectLoader : MonoBehaviour
     {
-        [SerializeField] public string cloudUrl;
-        public ImportSettings importSettings;
-
-        [NonSerialized] public string unique_name;
-        private GltfImport importer;
-        private GameObjectInstantiator _instantiator;
-        private bool modelLoaded;
-
-
-        private CacheValidator _cacheValidator;
-        private LoadedPoolValidator _loadedPoolValidator;
-
-        public CacheValidator CacheValidator => _cacheValidator ??= SystemOp.Resolve<CacheValidator>();
-
-        public LoadedPoolValidator LoadedPoolValidator => _loadedPoolValidator ??= SystemOp.Resolve<LoadedPoolValidator>();
-
-        public string FullUrl
+        [SerializeField] private string cloudUrl;
+        [SerializeField] private ImportSettings importSettings;
+        
+        private CacheValidator CacheValidator => _cacheValidator ??= SystemOp.Resolve<CacheValidator>();
+        private LoadedPoolValidator LoadedPoolValidator => _loadedPoolValidator ??= SystemOp.Resolve<LoadedPoolValidator>();
+        private string FullUrl
         {
             get => cloudUrl;
             set { cloudUrl = value; }
         }
+        private string OgUrl { get; set; }
 
-        public string OgUrl { get; private set; }
-
-        private Transform loadedObject;
+        private Transform _loadedObject;
         private CancellationTokenSource _cts;
         private CancellationToken _token;
+        private string _uniqueName;
+        private GltfImport _importer;
+        private GameObjectInstantiator _instantiator;
+        private bool _modelLoaded;
+
+        private CacheValidator _cacheValidator;
+        private LoadedPoolValidator _loadedPoolValidator;
+        
+        private bool _loadTexturesCalled;
+        private static readonly int BaseColorTextureSt = Shader.PropertyToID("baseColorTexture_ST");
 
         public void Init(string fullUrl, string uniqueName,ImportSettings settings)
         {
             cloudUrl = fullUrl;
-            this.unique_name = uniqueName;
+            this._uniqueName = uniqueName;
             this.importSettings = settings;
             _cts = new CancellationTokenSource();
         }
-
-        private async void Test(bool inCache, string localPath, Action<GameObject, bool> callback, Transform finalParent)
-        {
-            if (inCache)
-            {
-                importer = new GltfImport(new LocalFileProvider());
-                FullUrl = localPath;
-                Debug.Log($"Loading from cache!...{FullUrl}");
-                var success = await importer.Load(FullUrl, importSettings, _cts.Token);
-                if (!success)
-                {
-                    Debug.LogError($"Model not loaded");
-                    return;
-                }
-                Debug.Log($"Model loaded.");
-                importer.ForceCleanBuffers();
-                _instantiator = new GameObjectInstantiator(importer, transform);
-                modelLoaded = await importer.InstantiateMainSceneAsync(_instantiator, default);
-                Debug.Log($"Model instantiated...{modelLoaded}");
-                if (modelLoaded)
-                {
-                    loadedObject = transform.GetChild(0);
-                    loadedObject.SetParent(finalParent);
-                    callback?.Invoke(loadedObject.gameObject, false);
-                }
-                else
-                {
-                    Debug.LogError($"Model loading failed");
-                }
-            }
-            else
-            {
-                importer = new GltfImport(new DefaultDownloadProvider());
-                Debug.Log($"Loading normally");
-                var success = await importer.Load(FullUrl, importSettings, _cts.Token);
-                if (!success)
-                {
-                    Debug.LogError($"Model not loaded");
-                    return;
-                }
-
-                Debug.Log($"Model loaded.");
-
-                var json = importer.FinalJson;
-                var buffers = importer.m_Buffers;
-
-                var converted = JsonConvert.DeserializeObject<TempStruct>(json);
-                for (var i = 0; i < buffers.Length; i++)
-                {
-                    var bufferData = buffers[i];
-                    var bufferName = converted.buffers[i].uri;
-                    // string result = Encoding.UTF8.GetString(bufferData, 0, bufferData.Length);
-                    var path = Path.Combine(unique_name, bufferName);
-                    CacheValidator.Save(path, bufferData, $"{unique_name}.bin");
-                }
-
-                Uri uri = new Uri(FullUrl);
-                var gltfFileName = Path.GetFileName(uri.LocalPath);
-                CacheValidator.Save(Path.Combine(unique_name, gltfFileName), json, $"{unique_name}.gltf");
-                importer.ForceCleanBuffers();
-                _instantiator = new GameObjectInstantiator(importer, transform);
-                modelLoaded = await importer.InstantiateMainSceneAsync(_instantiator, default);
-
-                if (modelLoaded)
-                {
-                    loadedObject = transform.GetChild(0);
-                    loadedObject.SetParent(finalParent);
-                    callback?.Invoke(loadedObject.gameObject, false);
-                }
-                else
-                {
-                    Debug.LogError($"Model loading failed");
-                }
-            }
-
-            if (loadTexturesCalled)
-            {
-                LoadTextures();
-            }
-        }
-
+        
         public void SetPosition(Vector3 pos)
         {
-            if (loadedObject != null)
+            if (_loadedObject != null)
             {
-                loadedObject.transform.position = pos;
+                _loadedObject.transform.position = pos;
             }
         }
 
         public void LoadModel(Action<GameObject, bool> cb, Transform finalParent)
         {
             OgUrl = FullUrl;
-            if (LoadedPoolValidator.IsInLoadedPool(unique_name))
+            if (LoadedPoolValidator.IsInLoadedPool(_uniqueName))
             {
                 Debug.Log($"Getting from pool");
-                var temp = LoadedPoolValidator.GetDuplicateFromPool(unique_name);
-                modelLoaded = true;
+                var temp = LoadedPoolValidator.GetDuplicateFromPool(_uniqueName);
+                _modelLoaded = true;
                 cb?.Invoke(temp, true);
                 // temp.transform.SetParent(transform);
-                loadedObject = temp.transform;
-                loadedObject.SetParent(finalParent);
+                _loadedObject = temp.transform;
+                _loadedObject.SetParent(finalParent);
                 CompletedFlow();
             }
             else
             {
                 Debug.Log($"Loading started.");
-                CacheValidator.IsFileInCache($"{unique_name}.gltf",
-                    (inCache, localPath) => { Test(inCache, localPath, cb, finalParent); });
+                CacheValidator.IsFileInCache($"{_uniqueName}.gltf",
+                    (inCache, localPath) => { LoadFromCacheOrDownload(inCache, localPath, cb, finalParent); });
+            }
+        }
+        
+        private async void LoadFromCacheOrDownload(bool inCache, string localPath, Action<GameObject, bool> callback, Transform finalParent)
+        {
+            if (inCache)
+            {
+                _importer = new GltfImport(new LocalFileProvider());
+                FullUrl = localPath;
+                Debug.Log($"Loading from cache!...{FullUrl}");
+                var success = await _importer.Load(FullUrl, importSettings, _cts.Token);
+                if (!success)
+                {
+                    Debug.LogError($"Model not loaded");
+                    return;
+                }
+                Debug.Log($"Model loaded.");
+                _importer.ForceCleanBuffers();
+                _instantiator = new GameObjectInstantiator(_importer, transform);
+                _modelLoaded = await _importer.InstantiateMainSceneAsync(_instantiator, default);
+                Debug.Log($"Model instantiated...{_modelLoaded}");
+                if (_modelLoaded)
+                {
+                    _loadedObject = transform.GetChild(0);
+                    _loadedObject.SetParent(finalParent);
+                    callback?.Invoke(_loadedObject.gameObject, false);
+                }
+                else
+                {
+                    Debug.LogError($"Model loading failed");
+                }
+            }
+            else
+            {
+                _importer = new GltfImport(new DefaultDownloadProvider());
+                Debug.Log($"Loading normally");
+                var success = await _importer.Load(FullUrl, importSettings, _cts.Token);
+                if (!success)
+                {
+                    Debug.LogError($"Model not loaded");
+                    return;
+                }
+
+                Debug.Log($"Model loaded.");
+
+                var json = _importer.FinalJson;
+                var buffers = _importer.m_Buffers;
+
+                var converted = JsonConvert.DeserializeObject<GltfData>(json);
+                for (var i = 0; i < buffers.Length; i++)
+                {
+                    var bufferData = buffers[i];
+                    var bufferName = converted.buffers[i].uri;
+                    // string result = Encoding.UTF8.GetString(bufferData, 0, bufferData.Length);
+                    var path = Path.Combine(_uniqueName, bufferName);
+                    CacheValidator.Save(path, bufferData, $"{_uniqueName}.bin");
+                }
+
+                Uri uri = new Uri(FullUrl);
+                var gltfFileName = Path.GetFileName(uri.LocalPath);
+                CacheValidator.Save(Path.Combine(_uniqueName, gltfFileName), json, $"{_uniqueName}.gltf");
+                _importer.ForceCleanBuffers();
+                _instantiator = new GameObjectInstantiator(_importer, transform);
+                _modelLoaded = await _importer.InstantiateMainSceneAsync(_instantiator, default);
+
+                if (_modelLoaded)
+                {
+                    _loadedObject = transform.GetChild(0);
+                    _loadedObject.SetParent(finalParent);
+                    callback?.Invoke(_loadedObject.gameObject, false);
+                }
+                else
+                {
+                    Debug.LogError($"Model loading failed");
+                }
+            }
+
+            if (_loadTexturesCalled)
+            {
+                LoadTextures();
             }
         }
 
-        private bool loadTexturesCalled;
         public async void LoadTextures()
         {
-            if (!modelLoaded)
+            if (!_modelLoaded)
             {
-                loadTexturesCalled = true;
+                _loadTexturesCalled = true;
                 Debug.LogError($"Still Loading the model.", gameObject);
                 return;
             }
             
-            await importer.PrepareTextures(UriHelper.GetBaseUri(new Uri(OgUrl)));
+            await _importer.PrepareTextures(UriHelper.GetBaseUri(new Uri(OgUrl)));
             
             foreach (var (ren, meshResult) in _instantiator.results)
             {
                 var materials = new Material[meshResult.materialIndices.Length];
                 for (var index = 0; index < materials.Length; index++)
                 {
-                    var material = importer.GetMaterial(meshResult.materialIndices[index]) ??
-                                   importer.GetDefaultMaterial();
+                    var material = _importer.GetMaterial(meshResult.materialIndices[index]) ??
+                                   _importer.GetDefaultMaterial();
+                    var oldVec = material.GetVector(BaseColorTextureSt);
+                    var newVec = new Vector4(1, -1, oldVec.z, oldVec.w);
+                    material.SetVector(BaseColorTextureSt,newVec);
+                    Debug.Log($"Setting {oldVec}.....{newVec}");
                     materials[index] = material;
                 }
 
                 ren.sharedMaterials = materials;
             }
-            // Debug.Log($"{_loadedPoolValidator}....{transform.GetChild(0)}");
-            // Debug.Break();
-            LoadedPoolValidator.AddToPool(unique_name, loadedObject.gameObject);
-            importer.DisposeVolatileDataFromTextures();
+            LoadedPoolValidator.AddToPool(_uniqueName, _loadedObject.gameObject);
+            _importer.DisposeVolatileDataFromTextures();
             CompletedFlow();
         }
 
         private void CompletedFlow()
         {
-            if (loadedObject != null)
+            if (_loadedObject != null)
             {
-                var renderers = loadedObject.GetComponentsInChildren<MeshFilter>();
+                var renderers = _loadedObject.GetComponentsInChildren<MeshFilter>();
                 foreach (var meshFilter in renderers)
                 {
                     meshFilter.mesh.RecalculateBounds();
@@ -229,18 +227,13 @@ namespace Terra.Studio
                         meshCol.sharedMesh = meshFilter.mesh;
                     }
                 }
-
                 
-                if (!loadedObject.gameObject.TryGetComponent(out StudioGameObject sgo))
+                if (!_loadedObject.gameObject.TryGetComponent(out StudioGameObject sgo))
                 {
-                    sgo = loadedObject.gameObject.AddComponent<StudioGameObject>();
+                    sgo = _loadedObject.gameObject.AddComponent<StudioGameObject>();
                 }
                 sgo.assetType = AssetType.RemotePrefab;
-                sgo.itemData = new ResourceDB.ResourceItemData(unique_name, OgUrl, OgUrl, "","",remoteAsset:true);
-                
-                // transform.GetPositionAndRotation(out var pos, out var rot);
-                // loadedObject.SetPositionAndRotation(pos,rot);
-                // loadedObject.transform.localScale = transform.localScale;
+                sgo.itemData = new ResourceDB.ResourceItemData(_uniqueName, OgUrl, OgUrl, "","",remoteAsset:true);
             }
             Destroy(gameObject);
         }
