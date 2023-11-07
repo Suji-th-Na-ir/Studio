@@ -42,7 +42,7 @@ namespace Terra.Studio
                     return;
                 }
                 var value = worldData.Value;
-                SystemOp.Resolve<RequestValidator>().Bla(ref value, () =>
+                SystemOp.Resolve<RequestValidator>().Prewarm(ref value, () =>
                 {
                     foreach (var virtualEntity in value.entities)
                     {
