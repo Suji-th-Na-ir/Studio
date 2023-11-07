@@ -17,6 +17,7 @@ namespace Terra.Studio
     {
         public int ParamValue;
         public string ProjectId;
+        public string ProjectName;
         public readonly StudioState State => (StudioState)ParamValue;
     }
 
@@ -31,6 +32,7 @@ namespace Terra.Studio
         protected const string PROJECT_NAME_KEY = "projectname";
         protected const string PASSWORD_NAME_KEY = "password";
         protected const string PROJECT_ID_KEY = "projectId";
+        protected const string BUILD_ID_KEY = "buildId";
         private const int DEFAULT_TIMEOUT = 20;
 
         public abstract RequestType RequestType { get; }
@@ -41,7 +43,8 @@ namespace Terra.Studio
 
         protected abstract string Route { get; }
 
-        protected const string DOMAIN = "https://game-assets-api.letsterra.com/studio";
+        //protected const string DOMAIN = "https://game-assets-api.letsterra.com/studio";
+        protected const string DOMAIN = "http://192.168.68.112:9000/studio";
 
         protected virtual string GetURL()
         {
@@ -86,7 +89,7 @@ namespace Terra.Studio
         public struct Data
         {
             public string Username;
-            public string ProjectId;
+            public string ProjectData;
             public string UserId;
             public bool IsAutoLoggedIn;
         }
@@ -108,7 +111,13 @@ namespace Terra.Studio
         public CreateProjectAPI(string projectName)
         {
             var userId = SystemOp.Resolve<User>().UserId;
-            FormData = new() { { USER_ID_KEY, userId }, { PROJECT_NAME_KEY, projectName } };
+            var buildId = SystemOp.Resolve<System>().ConfigSO.BuildId;
+            FormData = new()
+            {
+                { USER_ID_KEY, userId },
+                { PROJECT_NAME_KEY, projectName },
+                { BUILD_ID_KEY, buildId }
+            };
         }
     }
 

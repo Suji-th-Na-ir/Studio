@@ -109,20 +109,13 @@ namespace Terra.Studio.RTEditor
             }
             SystemOp.Resolve<User>().UpdateUserName(username);
             var unpackedData = JsonConvert.DeserializeObject<LoginAPI.Data>(response);
-            unpackedData.IsAutoLoggedIn = false;
-            var projectDetails = new ProjectData()
-            {
-                ParamValue = selectedStudioMode + 1,
-                ProjectId = selectedStudioMode == 0 ? unpackedData.ProjectId : publishedProjId,
-            };
             SystemOp.Resolve<User>()
                 .UpdateUserId(unpackedData.UserId)
                 .UpdateUserName(unpackedData.Username)
-                .LogLoginEvent(unpackedData.IsAutoLoggedIn);
-            var projectJson = JsonConvert.SerializeObject(projectDetails);
-            SystemOp.Resolve<Flow>().OnProjectDetailsReceived(projectJson, SystemOp.Resolve<System>().UpdateDefaultStudioState);
-            SystemOp.Resolve<System>().LoadSceneData();
+                .LogLoginEvent(false);
+            SystemOp.Resolve<Flow>().OnProjectDetailsReceived(unpackedData.ProjectData, SystemOp.Resolve<System>().UpdateDefaultStudioState);
             SystemOp.Resolve<System>().OnSubsystemLoaded += OnSceneLoaded;
+            SystemOp.Resolve<System>().LoadSceneData();
         }
 
         private void OnSceneLoaded()
