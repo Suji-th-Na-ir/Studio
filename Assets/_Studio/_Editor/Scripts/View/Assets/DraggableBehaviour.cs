@@ -85,6 +85,7 @@ namespace Terra.Studio
 
         private void ModelDownloaded(GameObject loadedGo, bool preloaded)
         {
+            SetLayerOfAllChildren(loadedGo, "Ignore Raycast");
             _actuallyLoadedGo = loadedGo;
             if (!preloaded)
             {
@@ -127,6 +128,10 @@ namespace Terra.Studio
             _view.Dragger(this,false);
             if (_currGo != null)
             {
+                if (_currGo.LoadedObject != null)
+                {
+                    SetLayerOfAllChildren(_currGo.LoadedObject.gameObject, "Default");
+                }
                 _currGo.LoadTextures();
                 if (EventSystem.current.IsPointerOverGameObject())
                 {
@@ -150,6 +155,16 @@ namespace Terra.Studio
             var col = outline.color;
             col.a  = toSet ? 1 : 0;
             outline.color = col;
+        }
+
+        private void SetLayerOfAllChildren(GameObject go, string layer)
+        {
+            var layerNum = LayerMask.NameToLayer(layer);
+            var all = go.GetComponentsInChildren<Transform>();
+            foreach (var transform1 in all)
+            {
+                transform1.gameObject.layer = layerNum;
+            }
         }
         private void OnDestroy()
         {

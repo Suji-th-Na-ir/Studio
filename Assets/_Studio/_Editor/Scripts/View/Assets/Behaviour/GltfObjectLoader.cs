@@ -34,7 +34,7 @@ namespace Terra.Studio
         }
         private string OgUrl { get; set; }
 
-        private Transform _loadedObject;
+        public Transform LoadedObject { get; private set; }
         private CancellationTokenSource _cts;
         private CancellationToken _token;
         private string _uniqueName;
@@ -59,9 +59,9 @@ namespace Terra.Studio
         
         public void SetPositionForDragInAssetsWindow(Vector3 pos)
         {
-            if (_loadedObject != null)
+            if (LoadedObject != null)
             {
-                _loadedObject.transform.position = pos;
+                LoadedObject.transform.position = pos;
             }
         }
 
@@ -75,8 +75,8 @@ namespace Terra.Studio
                 _modelLoaded = true;
                 onModelLoaded?.Invoke(temp, true);
                 // temp.transform.SetParent(transform);
-                _loadedObject = temp.transform;
-                _loadedObject.SetParent(finalParent);
+                LoadedObject = temp.transform;
+                LoadedObject.SetParent(finalParent);
                 CompleteModelFlow();
                 CompletedFlow();
             }
@@ -108,9 +108,9 @@ namespace Terra.Studio
                 Debug.Log($"Model instantiated...{_modelLoaded}");
                 if (_modelLoaded)
                 {
-                    _loadedObject = transform.GetChild(0);
-                    _loadedObject.SetParent(finalParent);
-                    callback?.Invoke(_loadedObject.gameObject, false);
+                    LoadedObject = transform.GetChild(0);
+                    LoadedObject.SetParent(finalParent);
+                    callback?.Invoke(LoadedObject.gameObject, false);
                 }
                 else
                 {
@@ -152,9 +152,9 @@ namespace Terra.Studio
 
                 if (_modelLoaded)
                 {
-                    _loadedObject = transform.GetChild(0);
-                    _loadedObject.SetParent(finalParent);
-                    callback?.Invoke(_loadedObject.gameObject, false);
+                    LoadedObject = transform.GetChild(0);
+                    LoadedObject.SetParent(finalParent);
+                    callback?.Invoke(LoadedObject.gameObject, false);
                 }
                 else
                 {
@@ -199,7 +199,7 @@ namespace Terra.Studio
 
                 ren.sharedMaterials = materials;
             }
-            LoadedPoolValidator.AddToPool(_uniqueName, _loadedObject.gameObject);
+            LoadedPoolValidator.AddToPool(_uniqueName, LoadedObject.gameObject);
             onTextureLoadCompleted?.Invoke(success);
             _importer.DisposeVolatileDataFromTextures();
             CompletedFlow();
@@ -207,9 +207,9 @@ namespace Terra.Studio
 
         private void CompleteModelFlow()
         {
-            if (_loadedObject != null)
+            if (LoadedObject != null)
             {
-                var renderers = _loadedObject.GetComponentsInChildren<MeshFilter>();
+                var renderers = LoadedObject.GetComponentsInChildren<MeshFilter>();
                 foreach (var meshFilter in renderers)
                 {
                     if (!meshFilter.TryGetComponent(out MeshCollider meshCol))
@@ -225,9 +225,9 @@ namespace Terra.Studio
                     }
                 }
                 
-                if (!_loadedObject.gameObject.TryGetComponent(out StudioGameObject sgo))
+                if (!LoadedObject.gameObject.TryGetComponent(out StudioGameObject sgo))
                 {
-                    sgo = _loadedObject.gameObject.AddComponent<StudioGameObject>();
+                    sgo = LoadedObject.gameObject.AddComponent<StudioGameObject>();
                 }
                 sgo.assetType = AssetType.RemotePrefab;
                 sgo.itemData = new ResourceDB.ResourceItemData(_uniqueName, OgUrl, OgUrl, "", "");
