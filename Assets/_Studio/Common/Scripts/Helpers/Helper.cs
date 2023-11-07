@@ -36,12 +36,12 @@ namespace PlayShifu.Terra
             return platform;
         }
 
-       public static bool IsMobileWebGlPlatform()
+        public static bool IsMobileWebGlPlatform()
         {
-#if UNITY_EDITOR
-            return false;
+#if UNITY_WEBGL && !UNITY_EDITOR
+          return  WebGLWrapper.IsMobile();
 #else
-			return Helper.IsMobile();
+            return false;
 #endif
         }
 
@@ -78,8 +78,7 @@ namespace PlayShifu.Terra
             return false;
         }
 
-        [DllImport("__Internal")]
-        public static extern bool IsMobile();
+        
 
         public static bool ISaCenterCamDevice()
         {
