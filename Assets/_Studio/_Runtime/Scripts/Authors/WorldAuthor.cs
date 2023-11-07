@@ -42,14 +42,17 @@ namespace Terra.Studio
                     return;
                 }
                 var value = worldData.Value;
-                SystemOp.Resolve<RequestValidator>().Bla(ref value, action);
-                foreach (var virtualEntity in value.entities)
+                SystemOp.Resolve<RequestValidator>().Bla(ref value, () =>
                 {
-                    EntityAuthorOp.Generate(virtualEntity);
-                }
-                var metaData = value.metaData;
-                if (metaData.Equals(default(WorldMetaData))) return;
-                RuntimeOp.Resolve<GameData>().RespawnPoint = metaData.playerSpawnPoint;
+                    foreach (var virtualEntity in value.entities)
+                    {
+                        EntityAuthorOp.Generate(virtualEntity);
+                    }
+                    var metaData = value.metaData;
+                    if (metaData.Equals(default(WorldMetaData))) return;
+                    RuntimeOp.Resolve<GameData>().RespawnPoint = metaData.playerSpawnPoint;
+                    action?.Invoke();
+                });
             }
         }
     }
