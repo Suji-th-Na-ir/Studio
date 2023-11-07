@@ -240,7 +240,7 @@ namespace Terra.Studio
                 
                 // transform.GetPositionAndRotation(out var pos, out var rot);
                 // loadedObject.SetPositionAndRotation(pos,rot);
-                loadedObject.transform.localScale = transform.localScale;
+                // loadedObject.transform.localScale = transform.localScale;
             }
             Destroy(gameObject);
         }
