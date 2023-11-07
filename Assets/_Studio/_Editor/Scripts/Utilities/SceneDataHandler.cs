@@ -153,16 +153,19 @@ namespace Terra.Studio
                     PlayerSpawnPoint = metaData.playerSpawnPoint;
                 }
             }
-            for (int i = 0; i < worldData.entities.Length; i++)
+            SystemOp.Resolve<RequestValidator>().Bla(ref worldData, () =>
             {
-                var entity = worldData.entities[i];
-                SpawnObjects(entity);
-            }
+                for (int i = 0; i < worldData.entities.Length; i++)
+                {
+                    var entity = worldData.entities[i];
+                    SpawnObjects(entity);
+                }
+            });
         }
 
         private void SpawnObjects(VirtualEntity entity)
         {
-            GameObject generatedObj= default;
+            GameObject generatedObj = default;
             var trs = new Vector3[] { entity.position, entity.rotation, entity.scale };
             RuntimeWrappers.SpawnObject(
                 entity.assetType,
@@ -181,7 +184,7 @@ namespace Terra.Studio
                 AttachComponents(generatedObj, entity);
                 HandleChildren(generatedObj, entity.children);
             }
-            
+
         }
 
         private void AttachComponents(
@@ -248,7 +251,7 @@ namespace Terra.Studio
                         childEntity.uniqueName,
                         trs
                     );
-                   
+
 
                     void bla(GameObject gb)
                     {
@@ -279,7 +282,7 @@ namespace Terra.Studio
                     AttachComponents(child.gameObject, childEntity, onComponentDependencyFound);
                     HandleChildren(child.gameObject, childEntity.children, onComponentDependencyFound);
                 }
-                
+
             }
         }
 
@@ -337,7 +340,7 @@ namespace Terra.Studio
                     go.transform.parent != null
                         ? go.transform.localScale.LocalToWorldScale(go.transform.parent)
                         : go.transform.localScale,
-                assetType = GetAssetType(go) ,
+                assetType = GetAssetType(go),
                 shouldLoadAssetAtRuntime = true
             };
             if (newEntity.assetType == AssetType.Primitive)

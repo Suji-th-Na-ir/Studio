@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 
 namespace Terra.Studio
@@ -5,11 +6,6 @@ namespace Terra.Studio
     public class WorldAuthorOp
     {
         public static IAuthor Author => Author<WorldAuthor>.Current;
-
-        public static void Generate()
-        {
-            Author.Generate();
-        }
 
         public static void Generate(object data)
         {
@@ -36,15 +32,22 @@ namespace Terra.Studio
                 return worldData;
             }
 
-            public override void Generate()
+            public override void Generate(object data)
             {
+                var action = (Action)data;
                 var worldData = GetWorldData();
-                if (worldData == null || !worldData.HasValue) return;
-                foreach (var virtualEntity in worldData.Value.entities)
+                if (worldData == null || !worldData.HasValue)
+                {
+                    action?.Invoke();
+                    return;
+                }
+                var value = worldData.Value;
+                SystemOp.Resolve<RequestValidator>().Bla(ref value, action);
+                foreach (var virtualEntity in value.entities)
                 {
                     EntityAuthorOp.Generate(virtualEntity);
                 }
-                var metaData = worldData.Value.metaData;
+                var metaData = value.metaData;
                 if (metaData.Equals(default(WorldMetaData))) return;
                 RuntimeOp.Resolve<GameData>().RespawnPoint = metaData.playerSpawnPoint;
             }
