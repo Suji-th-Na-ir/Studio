@@ -62,6 +62,31 @@ namespace CMF
                 }
 
             };
+
+            jumpButton.PointerUp += (PointerEventData data) =>
+            {
+                if (!touches.ContainsKey(0))
+                {
+                    touches.Add(0, -1);
+                }
+                else
+                {
+                    touches[0] = -1;
+                }
+
+            };
+            joystick.PointerUp += (PointerEventData data) =>
+            {
+                if (!touches.ContainsKey(1))
+                {
+                    touches.Add(1, -1);
+                }
+                else
+                {
+                    touches[1] = -1;
+                }
+
+            };
         }
 
         public override float GetHorizontalCameraInput()
