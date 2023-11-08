@@ -29,7 +29,7 @@ namespace Terra.Studio
         protected const string USER_NAME_KEY = "username";
         protected const string USER_ID_KEY = "userId";
         protected const string TIME_STAMP_KEY = "timestamp";
-        protected const string PROJECT_NAME_KEY = "projectname";
+        protected const string PROJECT_NAME_KEY = "projectName";
         protected const string PASSWORD_NAME_KEY = "password";
         protected const string PROJECT_ID_KEY = "projectId";
         protected const string BUILD_ID_KEY = "buildId";
