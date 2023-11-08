@@ -188,14 +188,14 @@ namespace RuntimeInspectorNamespace
             return true;
         }
 
-        public virtual void SetInteractable(bool on,bool disableAlso=false)
+        public virtual void SetInteractable(bool on, bool disableAlso = false)
         {
-            if(disableAlso)
+            if (disableAlso)
             {
                 gameObject.SetActive(on);
             }
         }
-        public virtual void InvokeUpdateDropdown(List<string> dropdowns){ }
+        public virtual void InvokeUpdateDropdown(List<string> dropdowns) { }
 
         public void BindTo(InspectorField parent, MemberInfo variable, string variableName = null)
         {
@@ -624,19 +624,16 @@ namespace RuntimeInspectorNamespace
 
         private void GenerateExposedMethodButtons()
         {
-            bool hideRemoveButtonInAny = false;
+            bool showRemoveButton = true;
             if (elements != null)
             {
-                if (elements[elements.Count - 1].ComponentType != null)
+                var type = elements[^1].ComponentType;
+                if (type != null)
                 {
-                    var comp = Inspector.ShownComponents.FirstOrDefault(component => component.ComponentName == elements[elements.Count - 1].ComponentType.Name);
-                    if (comp.hideRemoveButton && !hideRemoveButtonInAny)
-                    {
-                        hideRemoveButtonInAny = true;
-                    }
+                    showRemoveButton = !RTDataManagerSO.HideRemoveButtonForTypes.Any(x => x == type);
                 }
             }
-            if (!hideRemoveButtonInAny)
+            if (showRemoveButton)
             {
                 if (Inspector.ShowRemoveComponentButton && typeof(Component).IsAssignableFrom(BoundVariableType) && !typeof(Transform).IsAssignableFrom(BoundVariableType) && Inspector.currentPageIndex == 1)
                     CreateExposedMethodButton(GameObjectField.removeComponentMethod, () => this, (value) => { });
@@ -721,7 +718,7 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        public InspectorField CreateDrawerForVariable(MemberInfo variable, string variableName = null,bool takeOriginalDepth=false)
+        public InspectorField CreateDrawerForVariable(MemberInfo variable, string variableName = null, bool takeOriginalDepth = false)
         {
             // xnx 
             if (variable.Name.ToLower() == "enabled")
@@ -732,7 +729,7 @@ namespace RuntimeInspectorNamespace
             variableName = string.IsNullOrEmpty(displayName) ? variableName : displayName;
 
             int depth = Depth;
-            if(!takeOriginalDepth)
+            if (!takeOriginalDepth)
             {
                 depth += 1;
             }

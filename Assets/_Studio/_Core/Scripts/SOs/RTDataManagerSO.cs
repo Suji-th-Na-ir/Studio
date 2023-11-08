@@ -7,6 +7,8 @@ namespace Terra.Studio
     [CreateAssetMenu(fileName = "DataManagerSO", menuName = "Terra/DataManager")]
     public class RTDataManagerSO : ScriptableObject
     {
+        #region Serializables
+
         [Serializable]
         public class SystemData
         {
@@ -36,10 +38,17 @@ namespace Terra.Studio
             public Type DrawerType;
         }
 
+        #endregion
+
+        public static readonly Type[] HideAddButtonForTypes = new[] { typeof(InGameTimer), typeof(GameScore) };
+        public static readonly Type[] HideRemoveButtonForTypes = new[] { typeof(Checkpoint), typeof(InGameTimer), typeof(GameScore) };
+
         [SerializeField] private List<SystemData> systemData;
         [SerializeField] private List<EventData> eventData;
         private List<CachedSystemData> cachedSystemData = new();
         private List<Type> cachedEventTypes = new();
+
+        #region Getter Methods
 
         public bool TryGetDefaultFromEnumOfEventType(string enumValue, out string defaultValue)
         {
@@ -145,5 +154,14 @@ namespace Terra.Studio
             }
             return !string.IsNullOrEmpty(displayName);
         }
+
+        public bool CanShowComponent(Type type)
+        {
+            var fullName = type.FullName;
+            var foundData = systemData.Find(x => x.DrawerName.Equals(fullName));
+            return foundData != null;
+        }
+
+        #endregion
     }
 }

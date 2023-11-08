@@ -97,24 +97,6 @@ namespace RuntimeInspectorNamespace
 
         public override void GenerateElements()
         {
-            //Region for name, layer and tag
-            //if( components.Count == 0 )
-            //	return;
-
-            //if (Inspector.currentPageIndex == 0)
-            //{
-            //	//CreateDrawer(typeof(bool), "Is Active", isActiveGetter, isActiveSetter);
-            //	//StringField nameField = CreateDrawer(typeof(string), "Name", nameGetter, nameSetter) as StringField;
-            //	//StringField tagField = CreateDrawer(typeof(string), "Tag", tagGetter, tagSetter) as StringField;
-            //	//CreateDrawerForVariable(layerProp, "Layer");
-
-            //	//if (nameField)
-            //	//	nameField.SetterMode = StringField.Mode.OnSubmit;
-
-            //	//if (tagField)
-            //	//	tagField.SetterMode = StringField.Mode.OnSubmit;
-            //         }
-
             for (int i = 0, j = 0; i < components.Count; i++)
             {
                 InspectorField componentDrawer = CreateDrawerForComponent(components[i]);
@@ -122,27 +104,19 @@ namespace RuntimeInspectorNamespace
                     ((ExpandableInspectorField)componentDrawer).IsExpanded = true;
 
             }
-
-
-            bool hideAddButtonInAny = false;
-            var comp = Inspector.ShownComponents.FirstOrDefault(component => component.ComponentName == components[components.Count - 1].GetType().Name);
-            if (comp.hideAddButton && !hideAddButtonInAny)
-            {
-                hideAddButtonInAny = true;
-            }
-
-            if (!hideAddButtonInAny)
+            var showAddButton = !RTDataManagerSO.HideAddButtonForTypes.Any(x => x == components[^1].GetType());
+            if (showAddButton)
             {
                 if (Inspector.ShowAddComponentButton && Inspector.currentPageIndex == 1)
+                {
                     CreateExposedMethodButton(addComponentMethod, () => this, (value) => { });
+                }
             }
-
             componentsExpandedStates.Clear();
         }
 
         public override void Refresh()
         {
-            // Refresh components
             components.Clear();
             GameObject go = Value as GameObject;
             if (go)
@@ -151,14 +125,15 @@ namespace RuntimeInspectorNamespace
 
                 for (int i = components.Count - 1; i >= 0; i--)
                 {
-                    if (!components[i] || (Inspector.currentPageIndex == 0 && (components[i].GetType().Namespace == "RuntimeInspectorNamespace" ||
-                        components[i].GetType().Namespace == "Terra.Studio")) ||
-                        (Inspector.currentPageIndex == 1 && (components[i].GetType().Namespace != "RuntimeInspectorNamespace" &&
-                        components[i].GetType().Namespace != "Terra.Studio"))
-                        || !Inspector.ShownComponents.Any(component => component.ComponentName == components[i].GetType().Name))
+                    if (!components[i] ||
+                        (Inspector.currentPageIndex == 0 && (components[i].GetType().Namespace == "RuntimeInspectorNamespace" || components[i].GetType().Namespace == "Terra.Studio")) ||
+                        (Inspector.currentPageIndex == 1 && components[i].GetType().Namespace != "RuntimeInspectorNamespace" && components[i].GetType().Namespace != "Terra.Studio") ||
+                        !SystemOp.Resolve<Terra.Studio.System>().SystemData.CanShowComponent(components[i].GetType()))
                     {
                         if (components[i] as Transform == null)
+                        {
                             components.RemoveAt(i);
+                        }
                     }
 
                 }
@@ -170,9 +145,7 @@ namespace RuntimeInspectorNamespace
                 {
                     Length = components.Count;
                 }
-
-                if (Inspector.ComponentFilter != null)
-                    Inspector.ComponentFilter(go, components);
+                Inspector.ComponentFilter?.Invoke(go, components);
             }
 
             // Regenerate components' drawers, if necessary
