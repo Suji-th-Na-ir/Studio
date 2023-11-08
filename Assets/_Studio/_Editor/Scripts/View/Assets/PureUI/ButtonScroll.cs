@@ -50,6 +50,9 @@ namespace Terra.Studio
                     PageChanged();
                 });
             }
+
+            this.GetComponent<HorizontalLayoutGroup> ().enabled = false;
+            this.GetComponent<HorizontalLayoutGroup> ().enabled = true;
         }
 
         private void SetButtonRange(int lowestRange)
@@ -57,7 +60,8 @@ namespace Terra.Studio
             for (var i = 0; i < textInButtons.Length; i++)
             {
                 textInButtons[i].text = (lowestRange + i).ToString();
-                buttons[i].gameObject.SetActive(lowestRange + i <= _max && lowestRange+i>0);
+                textInButtons [i].color = Color.white;
+                buttons [i].gameObject.SetActive(lowestRange + i <= _max && lowestRange+i>0);
             }
 
             if (_currentPage > 2 && _currentPage < _max - 2)
@@ -86,6 +90,7 @@ namespace Terra.Studio
         {
             var txt = textInButtons[idx].text;
             textInButtons[idx].text = $"<b>{txt}</b>";
+            textInButtons [idx].color = PlayShifu.Terra.Helper.GetColorFromHex ("#7063FF");
         }
 
         public void LeftClicked()

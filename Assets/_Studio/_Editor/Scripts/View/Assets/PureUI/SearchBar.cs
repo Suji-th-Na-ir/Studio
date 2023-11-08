@@ -8,7 +8,7 @@ namespace Terra.Studio
     public class SearchBar : MonoBehaviour
     {
         [SerializeField] private Button cancelSearchButton;
-        [SerializeField] private TMP_InputField inputField;
+        [SerializeField] private InputField inputField;
         
         private Action<string> onSearchPressed;
         
