@@ -142,4 +142,14 @@ namespace Terra.Studio
         [AliasDrawer("Count Up")]
         CountUp
     }
+
+    //public enum InstantiateOn
+    //{
+    //    [EditorEnumField("Terra.Studio.GameStart", "Start"), AliasDrawer("Game Starts")]
+    //    GameStart,
+    //    [EditorEnumField("Terra.Studio.Listener"), AliasDrawer("Broadcast Listened")]
+    //    BroadcastListen,
+    //    [AliasDrawer("Every x seconds")]
+    //    EveryXSeconds
+    //}
 }

@@ -13,6 +13,16 @@ namespace Terra.Studio
             Author.Generate(data);
         }
 
+        public static void HandleComponentsGeneration(GameObject refObj, EntityBasedComponent[] components)
+        {
+            ((EntityAuthor)Author).HandleComponentsGeneration(refObj, components);
+        }
+
+        public static void HandleEntityAndComponentsGeneration(GameObject go, VirtualEntity virtualEntity)
+        {
+            ((EntityAuthor)Author).HandleEntityAndComponentGeneration(go, virtualEntity);
+        }
+
         public static void Degenerate(int entityID)
         {
             Author.Degenerate(entityID);
@@ -53,27 +63,32 @@ namespace Terra.Studio
                 return generatedObj;
             }
 
-            private void HandleEntityAndComponentGeneration(GameObject go, VirtualEntity virtualEntity)
+            public void HandleComponentsGeneration(GameObject refObj, EntityBasedComponent[] components)
+            {
+                var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
+                var entity = ecsWorld.NewEntity();
+                foreach (var component in components)
+                {
+                    ComponentAuthorOp.Generate(new ComponentGenerateData()
+                    {
+                        entity = entity,
+                        data = component,
+                        obj = refObj
+                    });
+                }
+                RuntimeOp.Resolve<EntitiesGraphics>().TrackEntityVisual(entity, refObj);
+            }
+
+            public void HandleEntityAndComponentGeneration(GameObject go, VirtualEntity virtualEntity)
             {
                 if (go == null && virtualEntity.shouldLoadAssetAtRuntime)
                 {
                     return;
                 }
                 RuntimeOp.Resolve<SceneDataHandler>().SetColliderData(go, virtualEntity.metaData);
-                var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
                 if (virtualEntity.components != null && virtualEntity.components.Length > 0)
                 {
-                    var entity = ecsWorld.NewEntity();
-                    RuntimeOp.Resolve<EntitiesGraphics>().TrackEntityVisual(entity, go);
-                    foreach (var component in virtualEntity.components)
-                    {
-                        ComponentAuthorOp.Generate(new ComponentGenerateData()
-                        {
-                            entity = entity,
-                            data = component,
-                            obj = go
-                        });
-                    }
+                    HandleComponentsGeneration(go, virtualEntity.components);
                 }
                 RuntimeOp.Resolve<SceneDataHandler>().HandleChildren(go, virtualEntity.children, HandleEntityAndComponentGeneration);
             }

@@ -12,11 +12,11 @@ namespace Terra.Studio
         [Serializable]
         public class SystemData
         {
+            public string DisplayName;
             public string Key;
             [ComponentList] public string ComponentName;
             [SystemList] public string SystemName;
             [EditorDrawerList] public string DrawerName;
-            public string DisplayName;
         }
 
         [Serializable]

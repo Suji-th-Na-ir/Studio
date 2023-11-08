@@ -2,10 +2,10 @@ using System;
 using UnityEngine;
 using PlayShifu.Terra;
 using Newtonsoft.Json;
-using RuntimeInspectorNamespace;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
+using System.Linq;
 
 namespace Terra.Studio
 {
@@ -182,7 +182,7 @@ namespace Terra.Studio
             HandleChildren(generatedObj, entity.children);
         }
 
-        private void AttachComponents(
+        public void AttachComponents(
             GameObject gameObject,
             VirtualEntity entity,
             Action<GameObject, VirtualEntity> onComponentDependencyFound = null
@@ -202,7 +202,7 @@ namespace Terra.Studio
                         var type = EditorOp
                             .Resolve<DataProvider>()
                             .GetVariance(entity.components[i].type);
-                        if (type == null || string.IsNullOrEmpty((string)entity.components[i].data))
+                        if (type == null || string.IsNullOrEmpty(entity.components[i].data))
                         {
                             continue;
                         }
@@ -301,11 +301,7 @@ namespace Terra.Studio
             return json;
         }
 
-        public VirtualEntity GetVirtualEntity(
-            GameObject go,
-            int index,
-            bool shouldCheckForAssetPath
-        )
+        public VirtualEntity GetVirtualEntity(GameObject go, int index, bool shouldCheckForAssetPath)
         {
             var newEntity = new VirtualEntity
             {
@@ -328,6 +324,7 @@ namespace Terra.Studio
                 newEntity.primitiveType = GetPrimitiveType(go);
             }
             EntityBasedComponent[] entityComponents;
+            var isInstantiable = false;
             if (Helper.IsInUnityEditorMode())
             {
                 var metaComponents = go.GetComponents<EditorMetaData>();
@@ -339,26 +336,45 @@ namespace Terra.Studio
             }
             else
             {
-                var editorComponents = go.GetComponents<IComponent>();
-                entityComponents = new EntityBasedComponent[editorComponents.Length];
-                for (int j = 0; j < editorComponents.Length; j++)
+                var attachedComponents = go.GetComponents<IComponent>();
+                var instantiableTypeName = nameof(InstantiateStudioObject);
+                isInstantiable = attachedComponents.Any(x => x.ComponentName.Equals(instantiableTypeName));
+                if (isInstantiable)
                 {
-                    var (type, data) = editorComponents[j].Export();
-                    entityComponents[j] = new EntityBasedComponent() { type = type, data = data };
+                    entityComponents = attachedComponents.
+                        Where(x => x.ComponentName.Equals(instantiableTypeName)).
+                        Select(y =>
+                        {
+                            var (type, data) = y.Export();
+                            return new EntityBasedComponent()
+                            {
+                                type = type,
+                                data = data
+                            };
+                        }).
+                        ToArray();
+                }
+                else
+                {
+                    entityComponents = new EntityBasedComponent[attachedComponents.Length];
+                    for (int j = 0; j < attachedComponents.Length; j++)
+                    {
+                        var (type, data) = attachedComponents[j].Export();
+                        entityComponents[j] = new EntityBasedComponent() { type = type, data = data };
+                    }
                 }
             }
             newEntity.components = entityComponents;
-            var childrenEntities = new VirtualEntity[go.transform.childCount];
-            for (int k = 0; k < go.transform.childCount; k++)
-            {
-                childrenEntities[k] = GetVirtualEntity(
-                    go.transform.GetChild(k).gameObject,
-                    k,
-                    true
-                );
-            }
-            newEntity.children = childrenEntities;
             GetColliderData(go, ref newEntity.metaData);
+            if (!isInstantiable)
+            {
+                var childrenEntities = new VirtualEntity[go.transform.childCount];
+                for (int k = 0; k < go.transform.childCount; k++)
+                {
+                    childrenEntities[k] = GetVirtualEntity(go.transform.GetChild(k).gameObject, k, true);
+                }
+                newEntity.children = childrenEntities;
+            }
             return newEntity;
         }
 

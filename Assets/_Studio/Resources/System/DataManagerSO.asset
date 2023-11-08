@@ -113,6 +113,11 @@ MonoBehaviour:
     SystemName: Terra.Studio.ResetTimerSystem
     DrawerName: Terra.Studio.ResetTimer
     DisplayName: Reset Timer
+  - Key: Terra.Studio.InstantiateStudioObject
+    ComponentName: Terra.Studio.InstantiateStudioObjectComponent
+    SystemName: Terra.Studio.InstantiateStudioObjectSystem
+    DrawerName: Terra.Studio.InstantiateStudioObject
+    DisplayName: Instantiate
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent

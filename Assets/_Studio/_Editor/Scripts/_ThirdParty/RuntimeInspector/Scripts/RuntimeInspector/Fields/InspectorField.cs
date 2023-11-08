@@ -625,7 +625,7 @@ namespace RuntimeInspectorNamespace
         private void GenerateExposedMethodButtons()
         {
             bool showRemoveButton = true;
-            if (elements != null)
+            if (elements != null && elements.Count > 0)
             {
                 var type = elements[^1].ComponentType;
                 if (type != null)
