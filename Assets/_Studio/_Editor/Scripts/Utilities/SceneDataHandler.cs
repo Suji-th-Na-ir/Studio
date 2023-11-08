@@ -251,10 +251,6 @@ namespace Terra.Studio
                 else
                 {
                     child = gameObject.transform.GetChild(i);
-                    RuntimeWrappers.AttachPrerequisities(
-                        child.gameObject,
-                        ResourceDB.GetItemData(childEntity.assetPath)
-                    );
                     child.SetPositionAndRotation(
                         childEntity.position,
                         Quaternion.Euler(childEntity.rotation)
