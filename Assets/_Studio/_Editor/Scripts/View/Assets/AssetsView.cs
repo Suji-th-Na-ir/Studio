@@ -19,6 +19,7 @@ namespace Terra.Studio
         private ButtonScroll _scroll;
         private SearchBar _search;
         private AssetData[] _currentData;
+        [SerializeField] private GridLayoutGroup m_refMainGridGroup;
         
         public void Awake()
         {
@@ -52,8 +53,17 @@ namespace Terra.Studio
 
             _search = GetComponentInChildren<SearchBar>();
             _search.Init(OnSearch);
+
+            MakeUIBetter ();
         }
-        
+
+        private void MakeUIBetter () {
+            int columnCount = m_refMainGridGroup.constraintCount;
+            Debug.Log ("m_refMainGridGroup : " + m_refMainGridGroup.gameObject.GetComponent<RectTransform> ().rect);
+            float ySize = m_refMainGridGroup.gameObject.GetComponent<RectTransform> ().rect.height / (NumberOfAssetsToShowForNow/columnCount);
+            m_refMainGridGroup.cellSize = new Vector2 (m_refMainGridGroup.cellSize.x, ySize - m_refMainGridGroup.spacing.y);
+        }
+
         private void OnSearch(string searchString)
         {
             if (!string.IsNullOrEmpty(searchString))
