@@ -24,7 +24,7 @@ namespace Terra.Studio
     {
         [SerializeField] private string cloudUrl;
         [SerializeField] private ImportSettings importSettings;
-        
+
         private CacheValidator CacheValidator => _cacheValidator ??= SystemOp.Resolve<CacheValidator>();
         private LoadedPoolValidator LoadedPoolValidator => _loadedPoolValidator ??= SystemOp.Resolve<LoadedPoolValidator>();
         private string FullUrl
@@ -49,14 +49,14 @@ namespace Terra.Studio
         private bool _loadTexturesCalled;
         private static readonly int BaseColorTextureSt = Shader.PropertyToID("baseColorTexture_ST");
 
-        public void Init(string fullUrl, string uniqueName,ImportSettings settings)
+        public void Init(string fullUrl, string uniqueName, ImportSettings settings)
         {
             cloudUrl = fullUrl;
             _uniqueName = uniqueName;
             importSettings = settings;
             _cts = new CancellationTokenSource();
         }
-        
+
         public void SetPositionForDragInAssetsWindow(Vector3 pos)
         {
             if (LoadedObject != null)
@@ -87,7 +87,7 @@ namespace Terra.Studio
                     (inCache, localPath) => { LoadFromCacheOrDownload(inCache, localPath, onModelLoaded, finalParent); });
             }
         }
-        
+
         private async void LoadFromCacheOrDownload(bool inCache, string localPath, Action<GameObject, bool> callback, Transform finalParent)
         {
             if (inCache)
@@ -178,11 +178,11 @@ namespace Terra.Studio
                 Debug.LogError($"Still Loading the model.", gameObject);
                 return;
             }
-            
+
             Debug.Log($"Loading Textures why.");
             bool success = await _importer.PrepareTextures(UriHelper.GetBaseUri(new Uri(OgUrl)));
-            
-            
+
+
             foreach (var (ren, meshResult) in _instantiator.results)
             {
                 var materials = new Material[meshResult.materialIndices.Length];
@@ -192,7 +192,7 @@ namespace Terra.Studio
                                    _importer.GetDefaultMaterial();
                     var oldVec = material.GetVector(BaseColorTextureSt);
                     var newVec = new Vector4(1, -1, oldVec.z, oldVec.w);
-                    material.SetVector(BaseColorTextureSt,newVec);
+                    material.SetVector(BaseColorTextureSt, newVec);
                     Debug.Log($"Setting {oldVec}.....{newVec}");
                     materials[index] = material;
                 }
@@ -224,7 +224,7 @@ namespace Terra.Studio
                         meshCol.sharedMesh = meshFilter.mesh;
                     }
                 }
-                
+
                 if (!LoadedObject.gameObject.TryGetComponent(out StudioGameObject sgo))
                 {
                     sgo = LoadedObject.gameObject.AddComponent<StudioGameObject>();

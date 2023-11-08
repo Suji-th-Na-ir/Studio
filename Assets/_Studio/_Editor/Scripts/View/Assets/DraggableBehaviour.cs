@@ -15,8 +15,8 @@ namespace Terra.Studio
         [SerializeField] private Transform loadingIcon;
         [SerializeField] private RawImage image;
         [SerializeField] private TextMeshProUGUI displayNameText;
-        
-        private Camera Camera => _camera??= Camera.main;
+
+        private Camera Camera => _camera = _camera != null ? _camera : Camera.main;
 
         private bool _running;
         private AssetData _assetData;
@@ -28,6 +28,8 @@ namespace Terra.Studio
         private UnityWebRequest _textureRequest;
         private Camera _camera;
         private AssetsView _view;
+        private bool isPointerUp;
+        private bool isInitOnPointerDownDone;
 
         public void Init(AssetsView view, AssetData data, Material ghMat)
         {
@@ -36,10 +38,9 @@ namespace Terra.Studio
             displayNameText.text = data.display_name;
             _assetData = data;
             _ghostMaterial = ghMat;
-
             StartCoroutine(SendThumbnailRequest());
         }
-        
+
         private IEnumerator SendThumbnailRequest()
         {
             _textureRequest = UnityWebRequestTexture.GetTexture(Helper.ReplaceHttpsFromUrl(_assetData.thumbnails[0]));
@@ -65,22 +66,9 @@ namespace Terra.Studio
 
         public void OnPointerDown()
         {
-            if (!_running)
-                return;
-
-            _view.Dragger(this, true);
-            if (_currGo == null)
-            {
-                _currGo = new GameObject().AddComponent<GltfObjectLoader>();
-                _currGo.gameObject.AddComponent<HideInHierarchy>();
-                _currGo.Init( _assetData.gltf[0],_assetData.unique_name, new ImportSettings()
-                {
-                    lazyLoadTextures = true,
-                    customBasePathForTextures = true,
-                    additionToBasePath = "textures/"
-                });
-                _currGo.LoadModel(ModelDownloaded, null);
-            }
+            isPointerUp = false;
+            isInitOnPointerDownDone = false;
+            return;
         }
 
         private void ModelDownloaded(GameObject loadedGo, bool preloaded)
@@ -105,7 +93,26 @@ namespace Terra.Studio
         {
             if (!_running)
                 return;
-            
+
+            if (!isPointerUp && !isInitOnPointerDownDone)
+            {
+                isInitOnPointerDownDone = true;
+                _view.Dragger(this, true);
+                if (_currGo == null)
+                {
+                    _currGo = new GameObject().AddComponent<GltfObjectLoader>();
+                    _currGo.gameObject.AddComponent<HideInHierarchy>();
+                    _currGo.Init(_assetData.gltf[0], _assetData.unique_name, new ImportSettings()
+                    {
+                        lazyLoadTextures = true,
+                        customBasePathForTextures = true,
+                        additionToBasePath = "textures/"
+                    });
+                    _currGo.LoadModel(ModelDownloaded, null);
+                }
+                return;
+            }
+
             var ray = Camera.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out var hit))
             {
@@ -124,10 +131,11 @@ namespace Terra.Studio
         public void OnPointerUp()
         {
             if (!_running) return;
+            isPointerUp = true;
             _view.Dragger(this, false);
-            if (_currGo != null)
+            if (_currGo)
             {
-                if (_currGo.LoadedObject != null)
+                if (_currGo.LoadedObject)
                 {
                     SetLayerOfAllChildren(_currGo.LoadedObject.gameObject, "Default");
                 }
@@ -145,6 +153,11 @@ namespace Terra.Studio
                 }
             }
             _currGo = null;
+            if (_actuallyLoadedGo)
+            {
+                SetLayerOfAllChildren(_actuallyLoadedGo, "Default");
+                EditorOp.Resolve<SelectionHandler>().Select(_actuallyLoadedGo);
+            }
         }
 
         public void OnPointerEnter()
@@ -159,7 +172,7 @@ namespace Terra.Studio
         public void SetHighlight(bool toSet)
         {
             var col = outline.color;
-            col.a  = toSet ? 1 : 0;
+            col.a = toSet ? 1 : 0;
             outline.color = col;
         }
 
@@ -178,7 +191,7 @@ namespace Terra.Studio
             {
                 StopCoroutine(_textureDownloadRoutine);
             }
-            
+
             if (_textureRequest != null)
             {
                 if (!_textureRequest.isDone)
