@@ -13,6 +13,11 @@ namespace Terra.Studio
             Author.Generate(data);
         }
 
+        public static GameObject ProvideGameobjectForEntity(VirtualEntity entity)
+        {
+            return ((EntityAuthor)Author).CreateVisualRepresentation(entity);
+        }
+
         public static void HandleComponentsGeneration(GameObject refObj, EntityBasedComponent[] components)
         {
             ((EntityAuthor)Author).HandleComponentsGeneration(refObj, components);
@@ -50,7 +55,7 @@ namespace Terra.Studio
                 HandleEntityAndComponentGeneration(go, virtualEntity);
             }
 
-            private GameObject CreateVisualRepresentation(VirtualEntity entity)
+            public GameObject CreateVisualRepresentation(VirtualEntity entity)
             {
                 GameObject generatedObj = null;
                 if (!entity.shouldLoadAssetAtRuntime)
@@ -82,16 +87,10 @@ namespace Terra.Studio
 
             public void HandleEntityAndComponentGeneration(GameObject go, VirtualEntity virtualEntity)
             {
-                if (go == null && virtualEntity.shouldLoadAssetAtRuntime)
-                {
-                    return;
-                }
+                if (go == null && virtualEntity.shouldLoadAssetAtRuntime) return;
                 RuntimeOp.Resolve<SceneDataHandler>().SetColliderData(go, virtualEntity.metaData);
-                if (virtualEntity.components != null && virtualEntity.components.Length > 0)
-                {
-                    HandleComponentsGeneration(go, virtualEntity.components);
-                }
-                RuntimeOp.Resolve<SceneDataHandler>().HandleChildren(go, virtualEntity.children, HandleEntityAndComponentGeneration);
+                HandleComponentsGeneration(go, virtualEntity.components);
+                RuntimeOp.Resolve<SceneDataHandler>().HandleChildren(go, virtualEntity.children, HandleComponentsGeneration);
             }
 
             public override void Degenerate(int entityID)

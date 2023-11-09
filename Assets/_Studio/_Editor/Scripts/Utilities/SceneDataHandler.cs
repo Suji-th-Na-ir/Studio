@@ -187,7 +187,7 @@ namespace Terra.Studio
         public void AttachComponents(
             GameObject gameObject,
             VirtualEntity entity,
-            Action<GameObject, VirtualEntity> onComponentDependencyFound = null
+            Action<GameObject, EntityBasedComponent[]> onComponentDependencyFound = null
         )
         {
             for (int i = 0; i < entity.components.Length; i++)
@@ -213,13 +213,16 @@ namespace Terra.Studio
                     }
                 }
             }
-            onComponentDependencyFound?.Invoke(gameObject, entity);
+            if (entity.components != null && entity.components.Length != 0)
+            {
+                onComponentDependencyFound?.Invoke(gameObject, entity.components);
+            }
         }
 
         public void HandleChildren(
             GameObject gameObject,
             VirtualEntity[] children,
-            Action<GameObject, VirtualEntity> onComponentDependencyFound = null
+            Action<GameObject, EntityBasedComponent[]> onComponentDependencyFound = null
         )
         {
             if (children == null || children.Length == 0)
@@ -262,7 +265,10 @@ namespace Terra.Studio
                 child.name = childEntity.name;
                 SetColliderData(child.gameObject, childEntity.metaData);
                 AttachComponents(child.gameObject, childEntity, onComponentDependencyFound);
-                HandleChildren(child.gameObject, childEntity.children, onComponentDependencyFound);
+                if (childEntity.children != null && childEntity.children.Length > 0)
+                {
+                    HandleChildren(child.gameObject, childEntity.children, onComponentDependencyFound);
+                }
             }
         }
 

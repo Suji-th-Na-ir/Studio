@@ -37,7 +37,7 @@ namespace Terra.Studio
 
         private void Instantiate(in InstantiateStudioObjectComponent component)
         {
-            var duplicate = UnityEngine.Object.Instantiate(component.RefObj, component.RefObj.transform.parent);
+            var duplicate = Object.Instantiate(component.RefObj, component.RefObj.transform.parent);
             duplicate.SetActive(true);
             EntityAuthorOp.HandleComponentsGeneration(duplicate, component.componentsOnSelf.components);
             var refTr = duplicate.transform;
@@ -49,13 +49,8 @@ namespace Terra.Studio
                 GameObject childGo;
                 if (refTr.childCount < i + 1)
                 {
-                    var trs = new Vector3[]
-                    {
-                        entityData.position,
-                        entityData.rotation,
-                        entityData.scale
-                    };
-                    childGo = RuntimeWrappers.SpawnObject(entityData.assetType, entityData.assetPath, entityData.primitiveType, trs);
+                    entityData.shouldLoadAssetAtRuntime = true;
+                    childGo = EntityAuthorOp.ProvideGameobjectForEntity(entityData);
                     childGo.transform.SetParent(refTr);
                 }
                 else
