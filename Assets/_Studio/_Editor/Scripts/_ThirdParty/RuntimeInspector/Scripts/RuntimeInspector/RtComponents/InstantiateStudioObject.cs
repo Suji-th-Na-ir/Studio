@@ -35,11 +35,11 @@ namespace Terra.Studio
                 virtualEntities[i] = EditorOp.Resolve<SceneDataHandler>().GetVirtualEntity(transform.GetChild(0).gameObject, i, true);
                 virtualEntities[i].shouldLoadAssetAtRuntime = false;
             }
-            var virtualEntity = new VirtualEntity();
+            var components = new EntityBasedComponent[0];
             var attachedBehaviours = GetComponents<BaseBehaviour>();
             if (attachedBehaviours != null && attachedBehaviours.Length > 0)
             {
-                var components = attachedBehaviours.
+                components = attachedBehaviours.
                 Where(x => x.ComponentName != ComponentName).
                 Select(y =>
                 {
@@ -51,7 +51,6 @@ namespace Terra.Studio
                     };
                 }).
                 ToArray();
-                virtualEntity.components = components;
             }
             var comp = new InstantiateStudioObjectComponent()
             {
@@ -63,7 +62,7 @@ namespace Terra.Studio
                 canPlaySFX = false,
                 canPlayVFX = false,
                 childrenEntities = virtualEntities,
-                componentsOnSelf = virtualEntity
+                componentsOnSelf = components
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp);
@@ -81,7 +80,7 @@ namespace Terra.Studio
 
         private void ImportPostSceneSetup(InstantiateStudioObjectComponent component)
         {
-            var componentsOnSelf = component.componentsOnSelf.components;
+            var componentsOnSelf = component.componentsOnSelf;
             if (componentsOnSelf != null && componentsOnSelf.Length > 0)
             {
                 EditorOp.Resolve<SceneDataHandler>().AttachComponents(gameObject, component.componentsOnSelf);

@@ -180,22 +180,22 @@ namespace Terra.Studio
             }
             generatedObj.name = entity.name;
             SetColliderData(generatedObj, entity.metaData);
-            AttachComponents(generatedObj, entity);
+            AttachComponents(generatedObj, entity.components);
             HandleChildren(generatedObj, entity.children);
         }
 
         public void AttachComponents(
             GameObject gameObject,
-            VirtualEntity entity,
+            EntityBasedComponent[] components,
             Action<GameObject, EntityBasedComponent[]> onComponentDependencyFound = null
         )
         {
-            for (int i = 0; i < entity.components.Length; i++)
+            for (int i = 0; i < components.Length; i++)
             {
                 if (Helper.IsInUnityEditorMode())
                 {
                     var metaData = gameObject.AddComponent<EditorMetaData>();
-                    metaData.componentData = entity.components[i];
+                    metaData.componentData = components[i];
                 }
                 else
                 {
@@ -203,19 +203,19 @@ namespace Terra.Studio
                     {
                         var type = EditorOp
                             .Resolve<DataProvider>()
-                            .GetVariance(entity.components[i].type);
-                        if (type == null || string.IsNullOrEmpty(entity.components[i].data))
+                            .GetVariance(components[i].type);
+                        if (type == null || string.IsNullOrEmpty(components[i].data))
                         {
                             continue;
                         }
                         var component = gameObject.AddComponent(type) as IComponent;
-                        component?.Import(entity.components[i]);
+                        component?.Import(components[i]);
                     }
                 }
             }
-            if (entity.components != null && entity.components.Length != 0)
+            if (components != null && components.Length != 0)
             {
-                onComponentDependencyFound?.Invoke(gameObject, entity.components);
+                onComponentDependencyFound?.Invoke(gameObject, components);
             }
         }
 
@@ -264,7 +264,7 @@ namespace Terra.Studio
                 }
                 child.name = childEntity.name;
                 SetColliderData(child.gameObject, childEntity.metaData);
-                AttachComponents(child.gameObject, childEntity, onComponentDependencyFound);
+                AttachComponents(child.gameObject, childEntity.components, onComponentDependencyFound);
                 if (childEntity.children != null && childEntity.children.Length > 0)
                 {
                     HandleChildren(child.gameObject, childEntity.children, onComponentDependencyFound);

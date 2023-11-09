@@ -39,7 +39,7 @@ namespace Terra.Studio
         {
             var duplicate = Object.Instantiate(component.RefObj, component.RefObj.transform.parent);
             duplicate.SetActive(true);
-            EntityAuthorOp.HandleComponentsGeneration(duplicate, component.componentsOnSelf.components);
+            EntityAuthorOp.HandleComponentsGeneration(duplicate, component.componentsOnSelf);
             var refTr = duplicate.transform;
             var childrenEntities = component.childrenEntities;
             if (childrenEntities == null || childrenEntities.Length == 0) return;

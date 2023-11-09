@@ -25,7 +25,7 @@ namespace Terra.Studio
         public bool canPlayVFX;
         public string vfxName;
         public int vfxIndex;
-        public VirtualEntity componentsOnSelf;
+        public EntityBasedComponent[] componentsOnSelf;
         public VirtualEntity[] childrenEntities;
     }
 }
