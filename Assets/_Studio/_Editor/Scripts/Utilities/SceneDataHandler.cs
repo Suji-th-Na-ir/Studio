@@ -1,19 +1,20 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using PlayShifu.Terra;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
-using System.Linq;
 
 namespace Terra.Studio
 {
     public class SceneDataHandler : IDisposable
     {
-        public Func<string> GetAssetName;
-        public Func<GameObject, string> TryGetAssetPath;
         private Camera editorCamera;
+        public Func<string> GetAssetName;
+        public event Action OnSceneSetupDone;
+        public Func<GameObject, string> TryGetAssetPath;
 
         public Vector3 PlayerSpawnPoint { get; private set; }
 
@@ -139,6 +140,7 @@ namespace Terra.Studio
             }
             SetupSceneDefaultObjects();
             EditorOp.Resolve<EditorEssentialsLoader>().LoadEssentials();
+            OnSceneSetupDone?.Invoke();
         }
 
 #if UNITY_EDITOR

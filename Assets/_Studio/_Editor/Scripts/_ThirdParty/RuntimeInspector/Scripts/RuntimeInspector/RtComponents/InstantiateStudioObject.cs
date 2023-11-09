@@ -32,7 +32,7 @@ namespace Terra.Studio
             var virtualEntities = new VirtualEntity[transform.childCount];
             for (int i = 0; i < virtualEntities.Length; i++)
             {
-                virtualEntities[i] = EditorOp.Resolve<SceneDataHandler>().GetVirtualEntity(transform.GetChild(0).gameObject, i, false);
+                virtualEntities[i] = EditorOp.Resolve<SceneDataHandler>().GetVirtualEntity(transform.GetChild(0).gameObject, i, true);
                 virtualEntities[i].shouldLoadAssetAtRuntime = false;
             }
             var virtualEntity = new VirtualEntity();
@@ -73,6 +73,14 @@ namespace Terra.Studio
         public override void Import(EntityBasedComponent data)
         {
             var component = JsonConvert.DeserializeObject<InstantiateStudioObjectComponent>(data.data);
+            EditorOp.Resolve<SceneDataHandler>().OnSceneSetupDone += () =>
+            {
+                ImportPostSceneSetup(component);
+            };
+        }
+
+        private void ImportPostSceneSetup(InstantiateStudioObjectComponent component)
+        {
             var componentsOnSelf = component.componentsOnSelf.components;
             if (componentsOnSelf != null && componentsOnSelf.Length > 0)
             {

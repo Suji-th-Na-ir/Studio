@@ -65,6 +65,7 @@ namespace Terra.Studio
 
             public void HandleComponentsGeneration(GameObject refObj, EntityBasedComponent[] components)
             {
+                if (components == null || components.Length == 0) return;
                 var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
                 var entity = ecsWorld.NewEntity();
                 foreach (var component in components)
