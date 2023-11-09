@@ -19,6 +19,7 @@ namespace Terra.Studio
         protected abstract bool CanBroadcast { get; }
         protected abstract bool CanListen { get; }
         protected virtual bool UpdateListenOnEnable { get { return true; } }
+        protected virtual bool ShowComponentIcon { get { return true; } }
         protected virtual string[] BroadcasterRefs { get; }
         protected virtual string[] ListenerRefs { get; }
         protected virtual ComponentDisplayDock DisplayDock { get; private set; }
@@ -36,7 +37,7 @@ namespace Terra.Studio
             }
             if (CanListen)
             {
-                OnListenerUpdated = (newString, oldString ) =>
+                OnListenerUpdated = (newString, oldString) =>
                 {
                     OnListenerStringUpdated(newString, oldString);
                     UpdateListenerForMultiSelected(newString, oldString);
@@ -46,15 +47,17 @@ namespace Terra.Studio
 
         protected virtual void OnEnable()
         {
-            if (EditorOp.Resolve<EditorSystem>().IsIncognitoEnabled)
-                return;
-            EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(DisplayDock);
+            if (EditorOp.Resolve<EditorSystem>().IsIncognitoEnabled) return;
             CheckAndUpdateVisualisation();
+            if (ShowComponentIcon)
+            {
+                EditorOp.Resolve<UILogicDisplayProcessor>().AddComponentIcon(DisplayDock);
+            }
         }
 
         protected virtual void OnDisable()
         {
-            if (EditorOp.Resolve<UILogicDisplayProcessor>())
+            if (EditorOp.Resolve<UILogicDisplayProcessor>() && ShowComponentIcon)
             {
                 EditorOp.Resolve<UILogicDisplayProcessor>().RemoveComponentIcon(DisplayDock);
             }

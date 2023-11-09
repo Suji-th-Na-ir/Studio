@@ -67,7 +67,6 @@ namespace Terra.Studio
 
             {
                 go = Object.Instantiate(go);
-                Rulesets.ApplyRuleset(go);
             }
             return ResolveTRS(go, itemData, trs);
         }

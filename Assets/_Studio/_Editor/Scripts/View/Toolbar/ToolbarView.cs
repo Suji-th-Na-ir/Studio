@@ -35,6 +35,7 @@ namespace Terra.Studio
         private TextMeshProUGUI saveTextField;
         private Button saveButton;
         private Button publishButton;
+        private Button timerButton;
 
         private void Awake()
         {
@@ -151,22 +152,22 @@ namespace Terra.Studio
             SetSaveMessage(true, SaveState.Empty);
 
             var cylinderButton = cylinderPrimitiveTr.GetComponent<Button>();
-            AddListenerEvent(cylinderButton, CreateObject, PrimitiveType.Cylinder.ToString());
+            AddListenerEvent(cylinderButton, CreateObject, PrimitiveType.Cylinder.ToString(), EditorObjectType.Default);
 
             var sphereButton = spherePrimitiveTr.GetComponent<Button>();
-            AddListenerEvent(sphereButton, CreateObject, PrimitiveType.Sphere.ToString());
+            AddListenerEvent(sphereButton, CreateObject, PrimitiveType.Sphere.ToString(), EditorObjectType.Default);
 
             var cubeButton = cubePrimitiveTr.GetComponent<Button>();
-            AddListenerEvent(cubeButton, CreateObject, PrimitiveType.Cube.ToString());
+            AddListenerEvent(cubeButton, CreateObject, PrimitiveType.Cube.ToString(), EditorObjectType.Default);
 
             var planeButton = planePrimitiveTr.GetComponent<Button>();
-            AddListenerEvent(planeButton, CreateObject, PrimitiveType.Plane.ToString());
+            AddListenerEvent(planeButton, CreateObject, PrimitiveType.Plane.ToString(), EditorObjectType.Default);
 
             var checkpointButton = checkpointTr.GetComponent<Button>();
-            AddListenerEvent(checkpointButton, CreateObject, "CheckPoint");
+            AddListenerEvent(checkpointButton, CreateObject, "CheckPoint", EditorObjectType.Checkpoint);
 
-            var timerButton = timerTr.GetComponent<Button>();
-            AddListenerEvent(timerButton, CreateObject, "InGameTimer");
+            timerButton = timerTr.GetComponent<Button>();
+            AddListenerEvent(timerButton, CreateObject, "InGameTimer", EditorObjectType.Timer);
 
             var undoButton = undoButtonTr.GetComponent<Button>();
             AddListenerEvent(undoButton, EditorOp.Resolve<IURCommand>().Undo);
@@ -196,40 +197,35 @@ namespace Terra.Studio
             };
         }
 
-        private void AddListenerEvent<T>(Button button, Action<T> callback, T type)
+        private void AddListenerEvent<T, T1>(Button button, Action<T, T1> callback, T name, T1 type) where T1 : Enum
         {
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(() =>
             {
-                callback?.Invoke(type);
+                callback?.Invoke(name, type);
             });
         }
 
-        public void CreateObject(string name)
+        public void CreateObject(string name, EditorObjectType type)
         {
             Transform cameraTransform = Camera.main.transform;
             Vector3 cameraPosition = cameraTransform.position;
             Vector3 spawnPosition = cameraPosition + cameraTransform.forward * 5;
-            var itemData = (
-                (ResourceDB)SystemOp.Load(ResourceTag.ResourceDB)
-            ).GetItemDataForNearestName(name);
-            var primitive = RuntimeWrappers.SpawnGameObject(itemData.ResourcePath, itemData);
-            primitive.transform.position = spawnPosition;
-
-            Snapshots.SpawnGameObjectSnapshot.CreateSnapshot(primitive);
-
-            if (name.Equals("CheckPoint"))
+            GameObject obj;
+            if (type == EditorObjectType.Default)
             {
-                AddCheckpointData(primitive);
+                var itemData = ((ResourceDB)SystemOp.Load(ResourceTag.ResourceDB)).GetItemDataForNearestName(name);
+                obj = RuntimeWrappers.SpawnGameObject(itemData.ResourcePath, itemData);
             }
-
-            if (name.Equals("InGameTimer"))
+            else
             {
-                AddInGameTimerData(primitive);
+                EditorOp.Resolve<EditorEssentialsLoader>().Load(type, out obj);
             }
-
+            obj.transform.position = spawnPosition;
+            Snapshots.SpawnGameObjectSnapshot.CreateSnapshot(obj);
+            EditorOp.Resolve<SelectionHandler>().DeselectAll();
             EditorOp.Resolve<RuntimeHierarchy>().Refresh();
-            EditorOp.Resolve<SelectionHandler>().SelectObjectsInHierarchy(new List<Transform>() {primitive.transform }) ;
+            EditorOp.Resolve<SelectionHandler>().SelectObjectsInHierarchy(new List<Transform>() {obj.transform }) ;
         }
 
         public void SetSaveMessage(bool setInteractable, SaveState state)
@@ -260,21 +256,17 @@ namespace Terra.Studio
             publishButton.interactable = isInteractive;
         }
 
+        public void SetTimerButtonInteractive(bool isInteractive)
+        {
+            if (!timerButton) return;
+            timerButton.interactable = isInteractive;
+        }
+
         private void SpawnPrimitivePrefab()
         {
             var resObj = EditorOp.Load<GameObject>("Prefabs/PrimitivesPanel");
             primitivePanel = Instantiate(resObj, transform);
             primitivePanel.SetActive(false);
-        }
-
-        private void AddCheckpointData(GameObject go)
-        {
-            go.AddComponent<Checkpoint>();
-        }
-
-        private void AddInGameTimerData(GameObject go)
-        {
-            go.AddComponent<InGameTimer>();
         }
 
         private void AddListenerEvent(Button button, Action callback)

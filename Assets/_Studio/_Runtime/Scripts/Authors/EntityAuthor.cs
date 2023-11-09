@@ -94,6 +94,15 @@ namespace Terra.Studio
 
             public override void Degenerate(int entityID)
             {
+                CoroutineService.RunCoroutine(() =>
+                {
+                    DestroyEntity(entityID);
+                },
+                CoroutineService.DelayType.WaitForFrame);
+            }
+
+            private void DestroyEntity(int entityID)
+            {
                 var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
                 var entities = new int[0];
                 ecsWorld.GetAllEntities(ref entities);

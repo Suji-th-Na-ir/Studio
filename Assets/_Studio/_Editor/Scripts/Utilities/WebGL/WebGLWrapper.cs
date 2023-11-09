@@ -21,6 +21,9 @@ namespace Terra.Studio
         [DllImport("__Internal")]
         public static extern void PublishGame(string userName, string projectId, string callback);
 
+        [DllImport("__Internal")]
+        public static extern bool IsMobile();
+
         private void OnEnable()
         {
             SystemOp.Register(this);

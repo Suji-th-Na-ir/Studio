@@ -13,6 +13,7 @@ namespace Terra.Studio
         public List<PlayVfx> AllVfxes = new();
         public List<Repeat> AllRepeats = new();
         public List<Broadcast> AllBroadcasts = new();
+        public List<ScoreData> AllScores = new();
 
         public class BasePlay
         {
@@ -29,7 +30,7 @@ namespace Terra.Studio
             }
         }
 
-        public class BaseBroadcasterTemplate
+        public class BaseTargetTemplate
         {
             [HideInInspector]
             public string id;
@@ -53,13 +54,13 @@ namespace Terra.Studio
             AllVfxes.Clear();
             AllRepeats.Clear();
             AllBroadcasts.Clear();
+            AllScores.Clear();
         }
 
         [Serializable]
         public class StartOn
         {
             public GameObject target;
-            public StartOnField field;
             public StartOnData data = new();
             public string componentType = null;
             public List<string> startList = new();
@@ -141,7 +142,7 @@ namespace Terra.Studio
         }
 
         [Serializable]
-        public class Repeat : BaseBroadcasterTemplate
+        public class Repeat : BaseTargetTemplate
         {
             [AliasDrawer("Repeat")] public int repeat = 1;
             [AliasDrawer("Pause For")] public float pauseFor;
@@ -178,7 +179,7 @@ namespace Terra.Studio
         }
 
         [Serializable]
-        public class Rotate : BaseBroadcasterTemplate
+        public class Rotate : BaseTargetTemplate
         {
             [AliasDrawer("Rotate By")] public Atom.RecordedVector3 vector3;
             [HideInInspector] public Vector3 LastVector3;
@@ -193,7 +194,7 @@ namespace Terra.Studio
         }
 
         [Serializable]
-        public class Translate : BaseBroadcasterTemplate
+        public class Translate : BaseTargetTemplate
         {
             [AliasDrawer("Move By")] public Atom.RecordedVector3 recordedVector3;
             [HideInInspector] public Vector3 LastVector3;
@@ -208,15 +209,22 @@ namespace Terra.Studio
         }
 
         [Serializable]
-        public class ScoreData
+        public class ScoreData : BaseTargetTemplate
         {
             public int score;
-            public ScoreField field;
             public string instanceId;
-
             public ScoreData()
             {
                 instanceId = Guid.NewGuid().ToString("N");
+            }
+            public override void Setup(GameObject target, BaseBehaviour behaviour)
+            {
+                base.Setup(target, behaviour);
+                var allscores = EditorOp.Resolve<Atom>().AllScores;
+                if (!allscores.Contains(this))
+                {
+                    allscores.Add(this);
+                }
             }
         }
 
@@ -313,7 +321,7 @@ namespace Terra.Studio
         }
 
         [Serializable]
-        public class Broadcast : BaseBroadcasterTemplate
+        public class Broadcast : BaseTargetTemplate
         {
             [AliasDrawer("Custom"), OnValueChanged( UpdateBroadcast = true)]
             public string broadcast = string.Empty;
