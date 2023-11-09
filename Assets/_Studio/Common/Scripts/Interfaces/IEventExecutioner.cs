@@ -14,6 +14,20 @@ namespace Terra.Studio
         public string componentName;
         public string conditionType;
         public string conditionData;
+        public object additionalData;
         public GameObject goRef;
+    }
+
+    public struct ObjectToEvent
+    {
+        public string componentName;
+        public GameObject objRef;
+        public Action<object> action;
+    }
+
+    public struct InvokeAfterData
+    {
+        public uint rounds;
+        public bool invokeAtStart;
     }
 }

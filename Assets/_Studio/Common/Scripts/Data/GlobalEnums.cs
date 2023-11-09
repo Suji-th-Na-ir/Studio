@@ -143,13 +143,20 @@ namespace Terra.Studio
         CountUp
     }
 
-    //public enum InstantiateOn
-    //{
-    //    [EditorEnumField("Terra.Studio.GameStart", "Start"), AliasDrawer("Game Starts")]
-    //    GameStart,
-    //    [EditorEnumField("Terra.Studio.Listener"), AliasDrawer("Broadcast Listened")]
-    //    BroadcastListen,
-    //    [AliasDrawer("Every x seconds")]
-    //    EveryXSeconds
-    //}
+    public enum InstantiateOn
+    {
+        [EditorEnumField("Terra.Studio.GameStart", "Start"), AliasDrawer("Game Starts")]
+        GameStart,
+        [EditorEnumField("Terra.Studio.Listener", ""), AliasDrawer("Broadcast Listened")]
+        BroadcastListen,
+        [EditorEnumField("Terra.Studio.InvokeAfter", "1"), AliasDrawer("Every x seconds")]
+        EveryXSeconds
+    }
+
+    public enum SpawnWhere
+    {
+        [AliasDrawer("This Point")]
+        CurrentPoint,
+        Random
+    }
 }

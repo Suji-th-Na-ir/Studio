@@ -25,7 +25,15 @@ namespace Terra.Studio
         public bool canPlayVFX;
         public string vfxName;
         public int vfxIndex;
+        public float interval;
+        public uint rounds;
+        public bool canRepeatForver;
+        public uint duplicatesToSpawn;
+        public InstantiateOn instantiateOn;
+        public SpawnWhere spawnWhere;
         public EntityBasedComponent[] componentsOnSelf;
         public VirtualEntity[] childrenEntities;
+
+        [JsonIgnore] public uint currentRound;
     }
 }

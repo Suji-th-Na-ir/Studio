@@ -1,3 +1,4 @@
+using UnityEngine;
 using System.Linq;
 using Newtonsoft.Json;
 
@@ -6,26 +7,28 @@ namespace Terra.Studio
     [EditorDrawComponent("Terra.Studio.InstantiateStudioObject"), AliasDrawer("Instantiate")]
     public class InstantiateStudioObject : BaseBehaviour
     {
-        //public enum SpawnWhere
-        //{
-        //    [AliasDrawer("This Point")]
-        //    CurrentPoint,
-        //    Random
-        //}
-
         public override string ComponentName => nameof(InstantiateStudioObject);
         public override bool CanPreview => true;
         protected override bool CanBroadcast => false;
         protected override bool CanListen => true;
 
-        //public string helloWorld;
+        [SerializeField] private InstantiateOn spawnWhen;
+        [SerializeField] private SpawnWhere spawnWhere;
+        [SerializeField] private uint rounds;
+        [SerializeField] private bool repeatForever;
+        [SerializeField] private uint howMany;
+        [SerializeField] private Atom.PlaySfx playSFX = new();
+        [SerializeField] private Atom.PlayVfx playVFX = new();
+        [SerializeField] private bool canBroadcast;
+        [SerializeField] private string broadcast;
+        [SerializeField] private string condition;
 
-        //[SerializeField] private InstantiateOn SpawnWhen;
-        //[SerializeField] private string listenTo;
-        //[SerializeField] private uint rounds;
-        //[SerializeField] private bool repeatForever;
-        //[SerializeField] private SpawnWhere spawnWhere;
-        //[SerializeField] private uint howMany;
+        protected override void Awake()
+        {
+            base.Awake();
+            playSFX.Setup<InstantiateStudioObject>(gameObject);
+            playVFX.Setup<InstantiateStudioObject>(gameObject);
+        }
 
         public override (string type, string data) Export()
         {
@@ -55,14 +58,19 @@ namespace Terra.Studio
             var comp = new InstantiateStudioObjectComponent()
             {
                 IsConditionAvailable = true,
-                ConditionType = "Terra.Studio.Listener",
-                ConditionData = "SpawnMe",
-                IsBroadcastable = true,
-                Broadcast = "Spawned Object!",
+                ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(spawnWhen),
+                ConditionData = condition,
                 canPlaySFX = false,
                 canPlayVFX = false,
                 childrenEntities = virtualEntities,
-                componentsOnSelf = components
+                componentsOnSelf = components,
+                instantiateOn = spawnWhen,
+                spawnWhere = spawnWhere,
+                rounds = rounds,
+                canRepeatForver = repeatForever,
+                duplicatesToSpawn = howMany,
+                IsBroadcastable = canBroadcast,
+                Broadcast = broadcast
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp);
