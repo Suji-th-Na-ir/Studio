@@ -1,11 +1,12 @@
-using System.Collections;
-using GLTFast;
-using PlayShifu.Terra;
 using TMPro;
+using GLTFast;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Networking;
+using System.Linq;
 using UnityEngine.UI;
+using PlayShifu.Terra;
+using System.Collections;
+using UnityEngine.Networking;
+using UnityEngine.EventSystems;
 
 namespace Terra.Studio
 {
@@ -144,7 +145,11 @@ namespace Terra.Studio
                 {
                     if (status)
                     {
-                        EditorOp.Resolve<SelectionHandler>().Select(go);
+                        var currentSelectedObjs = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+                        if (currentSelectedObjs != null && !currentSelectedObjs.Any(x => x == go))
+                        {
+                            EditorOp.Resolve<SelectionHandler>().Select(go);
+                        }
                     }
                 });
                 if (EventSystem.current.IsPointerOverGameObject())
