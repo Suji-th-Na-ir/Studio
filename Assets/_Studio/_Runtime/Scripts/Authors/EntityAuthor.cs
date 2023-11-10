@@ -40,9 +40,9 @@ namespace Terra.Studio
                 var virtualEntity = (VirtualEntity)data;
                 CreateVisualRepresentation(virtualEntity, (x =>
                 {
-                    HandleEntityAndComponentGeneration(x, virtualEntity);    
+                    HandleEntityAndComponentGeneration(x, virtualEntity);
                 }));
-                
+
             }
 
             private void CreateVisualRepresentation(VirtualEntity entity, Action<GameObject> cb)
@@ -52,19 +52,21 @@ namespace Terra.Studio
                 {
                     cb?.Invoke(null);
                     return;
-                    // return cb?.Invoke(null);
                 }
                 var trs = new Vector3[] { entity.position, entity.rotation, entity.scale };
-                RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, (x)=>
+                RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, (x) =>
                 {
                     if (x != null)
                     {
                         x.name = entity.name;
                     }
-                    cb?.Invoke(x);   
-                },entity.uniqueName,trs);
-                // generatedObj.name = entity.name;
-                // return generatedObj;
+                    var outlines = x.GetComponentsInChildren<Outline>();
+                    for (int i = 0; i < outlines.Length; i++)
+                    {
+                        Object.Destroy(outlines[i]);
+                    }
+                    cb?.Invoke(x);
+                }, entity.uniqueName, trs);
             }
 
             private void HandleEntityAndComponentGeneration(GameObject go, VirtualEntity virtualEntity)

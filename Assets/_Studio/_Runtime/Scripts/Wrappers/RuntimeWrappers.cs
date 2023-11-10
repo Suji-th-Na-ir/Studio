@@ -106,7 +106,6 @@ namespace Terra.Studio
                 {
                     x.LoadTextures();
                 }
-                CleanAllBehaviours(loadedObject.transform);
             }, null);
             // x.assetType = AssetType.RemotePrefab;
             // return go;
@@ -214,14 +213,20 @@ namespace Terra.Studio
                 Object.Destroy(behaviour);
             }
 
+            RemoveOutline(child);
+
+            if (child.TryGetComponent(out StudioGameObject gameObject))
+            {
+                Object.Destroy(gameObject);
+            }
+        }
+
+        public static void RemoveOutline(Transform child)
+        {
             Outline[] outlines = child.GetComponents<Outline>();
             foreach (var outline in outlines)
             {
                 Object.Destroy(outline);
-            }
-            if (child.TryGetComponent(out StudioGameObject gameObject))
-            {
-                Object.Destroy(gameObject);
             }
         }
 
