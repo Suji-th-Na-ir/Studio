@@ -1,0 +1,86 @@
+fileFormatVersion: 2
+guid: aec9e76c0bfaaf747bdbcc13bb79e5cd
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 715df9372183c47e389bb6e19fbc3b52, type: 3}
+  editorImportSettings:
+    generateSecondaryUVSet: 0
+  importSettings:
+    nodeNameMethod: 1
+    animationMethod: 2
+    generateMipMaps: 1
+    defaultMinFilterMode: 9729
+    defaultMagFilterMode: 9729
+    anisotropicFilterLevel: 1
+    lazyLoadTextures: 0
+    customBasePathForTextures: 0
+    additionToBasePath: 
+  instantiationSettings:
+    mask: -1
+    layer: 0
+    skinUpdateWhenOffscreen: 1
+    lightIntensityFactor: 1
+    sceneObjectCreation: 2
+  assetDependencies:
+  - type: 0
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Small_Temple_01.bin
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Small_Temple_01.bin
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Pillars_Normal.png
+    assetPath: 
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Pillars.jpg
+    assetPath: 
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Pillar_Colour_01.jpg
+    assetPath: 
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Metal_02_Normal.png
+    assetPath: 
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Metal_02_Base.jpg
+    assetPath: 
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Metal_01_Normal.png
+    assetPath: 
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Metal_01_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Metal_01_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Pillar_Colour_11.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Pillar_Colour_11.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Wall_020_Normal.png
+    assetPath: 
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Wall_020_Base.jpg
+    assetPath: 
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Roof_005_Normal.png
+    assetPath: 
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Roof_005_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Roof_005_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Roof_006_AO.jpg
+    assetPath: 
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Wall_022_Normal.png
+    assetPath: 
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Wall_022_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Wall_022_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Pillar_Colour_04.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Pillar_Colour_04.jpg
+  reportItems:
+  - type: 0
+    code: 43
+    messages:
+    - Couldn't load texture at Assets/TerraAssets/GLB/RC_Small_Temple_01_M9NvAwjV2v/RC_Pillars_Normal.png
+    - 0

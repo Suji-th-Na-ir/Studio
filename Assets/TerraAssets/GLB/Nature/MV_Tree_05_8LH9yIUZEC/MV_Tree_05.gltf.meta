@@ -1,0 +1,42 @@
+fileFormatVersion: 2
+guid: cabf08eb11d90ee47987665eb8bcf24e
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 715df9372183c47e389bb6e19fbc3b52, type: 3}
+  editorImportSettings:
+    generateSecondaryUVSet: 0
+  importSettings:
+    nodeNameMethod: 1
+    animationMethod: 2
+    generateMipMaps: 1
+    defaultMinFilterMode: 9729
+    defaultMagFilterMode: 9729
+    anisotropicFilterLevel: 1
+    lazyLoadTextures: 0
+    customBasePathForTextures: 0
+    additionToBasePath: 
+  instantiationSettings:
+    mask: -1
+    layer: 0
+    skinUpdateWhenOffscreen: 1
+    lightIntensityFactor: 1
+    sceneObjectCreation: 2
+  assetDependencies:
+  - type: 0
+    originalUri: Assets/TerraAssets/GLB/Nature/MV_Tree_05_8LH9yIUZEC/MV_Tree_05.bin
+    assetPath: Assets/TerraAssets/GLB/Nature/MV_Tree_05_8LH9yIUZEC/MV_Tree_05.bin
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/Nature/MV_Tree_05_8LH9yIUZEC/MV_Tree_Trunk_02_Normal.png
+    assetPath: Assets/TerraAssets/GLB/Nature/MV_Tree_05_8LH9yIUZEC/MV_Tree_Trunk_02_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/Nature/MV_Tree_05_8LH9yIUZEC/MV_Tree_Trunk_02_Color.jpg
+    assetPath: Assets/TerraAssets/GLB/Nature/MV_Tree_05_8LH9yIUZEC/MV_Tree_Trunk_02_Color.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/Nature/MV_Tree_05_8LH9yIUZEC/MV_Tree_03_leaf.png
+    assetPath: Assets/TerraAssets/GLB/Nature/MV_Tree_05_8LH9yIUZEC/MV_Tree_03_leaf.png
+  reportItems: []

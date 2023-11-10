@@ -1,0 +1,51 @@
+fileFormatVersion: 2
+guid: 0d0c0be5f68416b41a15c3511fe46444
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 715df9372183c47e389bb6e19fbc3b52, type: 3}
+  editorImportSettings:
+    generateSecondaryUVSet: 0
+  importSettings:
+    nodeNameMethod: 1
+    animationMethod: 2
+    generateMipMaps: 1
+    defaultMinFilterMode: 9729
+    defaultMagFilterMode: 9729
+    anisotropicFilterLevel: 1
+    lazyLoadTextures: 0
+    customBasePathForTextures: 0
+    additionToBasePath: 
+  instantiationSettings:
+    mask: -1
+    layer: 0
+    skinUpdateWhenOffscreen: 1
+    lightIntensityFactor: 1
+    sceneObjectCreation: 2
+  assetDependencies:
+  - type: 0
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_011_Front_Building_7VXwNB4XFO/RC_Small_Building_011_Front_Building.bin
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_011_Front_Building_7VXwNB4XFO/RC_Small_Building_011_Front_Building.bin
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_011_Front_Building_7VXwNB4XFO/RC_Wall_03.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_011_Front_Building_7VXwNB4XFO/RC_Wall_03.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_011_Front_Building_7VXwNB4XFO/RC_Wall_04.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_011_Front_Building_7VXwNB4XFO/RC_Wall_04.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_011_Front_Building_7VXwNB4XFO/RC_Wood_06_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_011_Front_Building_7VXwNB4XFO/RC_Wood_06_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_011_Front_Building_7VXwNB4XFO/RC_Wood_06_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_011_Front_Building_7VXwNB4XFO/RC_Wood_06_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_011_Front_Building_7VXwNB4XFO/RC_Wood_09_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_011_Front_Building_7VXwNB4XFO/RC_Wood_09_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_011_Front_Building_7VXwNB4XFO/RC_Wood_09_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_011_Front_Building_7VXwNB4XFO/RC_Wood_09_Base.jpg
+  reportItems: []

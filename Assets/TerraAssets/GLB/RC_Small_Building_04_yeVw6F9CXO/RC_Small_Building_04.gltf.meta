@@ -1,0 +1,129 @@
+fileFormatVersion: 2
+guid: 75df574f02af82d43a68264754ae4fd4
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 715df9372183c47e389bb6e19fbc3b52, type: 3}
+  editorImportSettings:
+    generateSecondaryUVSet: 0
+  importSettings:
+    nodeNameMethod: 1
+    animationMethod: 2
+    generateMipMaps: 1
+    defaultMinFilterMode: 9729
+    defaultMagFilterMode: 9729
+    anisotropicFilterLevel: 1
+    lazyLoadTextures: 0
+    customBasePathForTextures: 0
+    additionToBasePath: 
+  instantiationSettings:
+    mask: -1
+    layer: 0
+    skinUpdateWhenOffscreen: 1
+    lightIntensityFactor: 1
+    sceneObjectCreation: 2
+  assetDependencies:
+  - type: 0
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Small_Building_04.bin
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Small_Building_04.bin
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wall_002_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wall_002_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wall_38_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wall_38_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wood_06_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wood_06_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wood_06_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wood_06_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wall_38_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wall_38_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wood_09_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wood_09_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wood_09_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wood_09_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Roof_011_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Roof_011_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Roof_011_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Roof_011_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Roof_011_DS.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Roof_011_DS.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Metal_06_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Metal_06_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Metal_06_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Metal_06_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wood_04_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wood_04_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wood_08_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wood_08_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wood_08_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wood_08_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Metal_04_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Metal_04_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Metal_04_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Metal_04_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Marble_04_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Marble_04_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Marble_04_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Marble_04_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wood_04_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wood_04_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Fabric_03_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Fabric_03_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Fabric_03_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Fabric_03_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wall_002_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wall_002_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Pillars_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Pillars_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Symbol_06_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Symbol_06_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Pillars.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Pillars.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Ground_01_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Ground_01_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Ground_01_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Ground_01_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wall_003_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wall_003_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wall_003_Base.jpg
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/RC_Wall_003_Base.jpg
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/Flower_01_Normal.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/Flower_01_Normal.png
+  - type: 1
+    originalUri: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/Flower_01_Color.png
+    assetPath: Assets/TerraAssets/GLB/RC_Small_Building_04_yeVw6F9CXO/Flower_01_Color.png
+  reportItems: []
