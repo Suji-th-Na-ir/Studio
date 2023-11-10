@@ -10,9 +10,10 @@ namespace Terra.Studio
             ref var entityRef = ref entity.GetComponent<InstantiateStudioObjectComponent>();
             entityRef.RefObj.SetActive(false);
             var context = entityRef.EventContext;
+            var rounds = entityRef.canRepeatForver ? uint.MaxValue : entityRef.rounds;
             context.additionalData = new InvokeAfterData()
             {
-                rounds = entityRef.rounds,
+                rounds = rounds,
                 invokeAtStart = true
             };
             entityRef.EventContext = context;
@@ -25,10 +26,13 @@ namespace Terra.Studio
             entityRef.CanExecute = true;
             if (entityRef.instantiateOn == InstantiateOn.EveryXSeconds)
             {
-                entityRef.currentRound++;
-                if (entityRef.currentRound > entityRef.rounds)
+                if (!entityRef.canRepeatForver)
                 {
-                    entityRef.IsExecuted = true;
+                    entityRef.currentRound++;
+                    if (entityRef.currentRound > entityRef.rounds)
+                    {
+                        entityRef.IsExecuted = true;
+                    }
                 }
             }
             if (entityRef.instantiateOn == InstantiateOn.GameStart)

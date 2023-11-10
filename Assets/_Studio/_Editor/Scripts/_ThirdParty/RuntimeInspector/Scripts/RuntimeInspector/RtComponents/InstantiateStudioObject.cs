@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Linq;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -97,6 +98,34 @@ namespace Terra.Studio
             {
                 EditorOp.Resolve<SceneDataHandler>().HandleChildren(gameObject, component.childrenEntities);
             }
+        }
+
+        public override BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            var properties = new Dictionary<string, object>[1];
+            properties[0] = new()
+            {
+                { "Spawn Where", spawnWhere.ToString() },
+                { "Condition", condition }
+            };
+            if (playSFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFX.data.clipName);
+            }
+            if (playVFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFX.data.clipName);
+            }
+            var startOnName = spawnWhen.ToString();
+            var previewData = new BehaviourPreviewUI.PreviewData()
+            {
+                DisplayName = GetDisplayName(),
+                EventName = startOnName,
+                Properties = properties,
+                Broadcast = new string[] { broadcast },
+                Listen = condition
+            };
+            return previewData;
         }
     }
 }

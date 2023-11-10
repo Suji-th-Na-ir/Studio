@@ -77,7 +77,6 @@ namespace Terra.Studio
             for (int i = 0; i < rounds; i++)
             {
                 backTrackRound--;
-                Debug.Log($"Performing Round: {i} from {rounds} | back track value: {backTrackRound}");
                 localCoroutine = StartCoroutine(PerformSimpleCoroutine(backTrackRound));
                 yield return localCoroutine;
             }
