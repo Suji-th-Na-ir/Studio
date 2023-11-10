@@ -9,7 +9,7 @@ namespace Terra.Studio
 {
     public class RuntimeWrappers
     {
-        public static void SpawnObject(AssetType assetType, string assetPath, PrimitiveType primitiveType,Action<GameObject> cb,string uniqueName = "" ,params Vector3[] trs)
+        public static void SpawnObject(AssetType assetType, string assetPath, PrimitiveType primitiveType, Action<GameObject> cb, string uniqueName = "", params Vector3[] trs)
         {
             GameObject go = null;
             switch (assetType)
@@ -43,9 +43,9 @@ namespace Terra.Studio
                     cb?.Invoke(go);
                     break;
                 case AssetType.RemotePrefab:
-                    SpawnRemotePrefab(uniqueName, assetPath, cb,trs);
+                    SpawnRemotePrefab(uniqueName, assetPath, cb, trs);
                     break;
-                
+
             }
             // return go;
         }
@@ -83,20 +83,20 @@ namespace Terra.Studio
             return ResolveTRS(go, itemData, trs);
         }
 
-        public static void SpawnRemotePrefab(string uniqueName,string url, Action<GameObject> cb, params Vector3[] trs)
+        public static void SpawnRemotePrefab(string uniqueName, string url, Action<GameObject> cb, params Vector3[] trs)
         {
             var go = new GameObject();
             go.AddComponent<HideInHierarchy>();
             var itemData = new ResourceDB.ResourceItemData(uniqueName, url, url, "", "");
             // ResolveTRS(go, itemData, trs);
-            var x= go.AddComponent<GltfObjectLoader>();
-            x.Init( url,uniqueName, new ImportSettings()
+            var x = go.AddComponent<GltfObjectLoader>();
+            x.Init(url, uniqueName, new ImportSettings()
             {
                 lazyLoadTextures = true,
                 customBasePathForTextures = true,
                 additionToBasePath = "textures/"
             });
-            
+
             x.LoadModel((loadedObject, preloaded) =>
             {
                 ResolveTRS(loadedObject.gameObject, itemData, trs);
@@ -106,6 +106,7 @@ namespace Terra.Studio
                 {
                     x.LoadTextures();
                 }
+                CleanAllBehaviours(loadedObject.transform);
             }, null);
             // x.assetType = AssetType.RemotePrefab;
             // return go;

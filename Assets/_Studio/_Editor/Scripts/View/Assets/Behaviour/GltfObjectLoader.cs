@@ -216,11 +216,9 @@ namespace Terra.Studio
                     {
                         meshCol = meshFilter.gameObject.AddComponent<MeshCollider>();
                         meshCol.sharedMesh = meshFilter.mesh;
-                        meshCol.convex = true;
                     }
                     else
                     {
-                        meshCol.convex = true;
                         meshCol.sharedMesh = meshFilter.mesh;
                     }
                 }
