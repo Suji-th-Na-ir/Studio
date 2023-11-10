@@ -76,7 +76,7 @@ namespace Terra.Studio
                 .UpdateUserId(unpackedData.UserId)
                 .UpdateUserName(unpackedData.Username)
                 .LogLoginEvent(unpackedData.IsAutoLoggedIn);
-            SystemOp.Resolve<Flow>().OnProjectDetailsReceived(unpackedData.ProjectId, SystemOp.Resolve<System>().UpdateDefaultStudioState);
+            SystemOp.Resolve<Flow>().OnProjectDetailsReceived(unpackedData.ProjectData, SystemOp.Resolve<System>().UpdateDefaultStudioState);
             SystemOp.Resolve<System>().LoadSceneData();
         }
 
