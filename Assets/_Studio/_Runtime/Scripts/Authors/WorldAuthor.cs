@@ -49,7 +49,11 @@ namespace Terra.Studio
                         EntityAuthorOp.Generate(virtualEntity);
                     }
                     var metaData = value.metaData;
-                    if (metaData.Equals(default(WorldMetaData))) return;
+                    if (metaData.Equals(default(WorldMetaData)))
+                    {
+                        action?.Invoke();
+                        return;
+                    }
                     RuntimeOp.Resolve<GameData>().RespawnPoint = metaData.playerSpawnPoint;
                     action?.Invoke();
                 });
