@@ -36,6 +36,15 @@ namespace PlayShifu.Terra
             return platform;
         }
 
+        public static bool IsMobileWebGlPlatform()
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+          return  WebGLWrapper.IsMobile();
+#else
+            return false;
+#endif
+        }
+
         public static bool IsPhone()
         {
             return (GetAspectRatio() > 1.65f);
@@ -68,6 +77,8 @@ namespace PlayShifu.Terra
 
             return false;
         }
+
+        
 
         public static bool ISaCenterCamDevice()
         {
