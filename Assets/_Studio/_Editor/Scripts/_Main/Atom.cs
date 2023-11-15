@@ -102,6 +102,10 @@ namespace Terra.Studio
                 {
                     allStartOns.Add(this);
                 }
+                else
+                {
+                    Debug.Log($"Attempting to add multiple start on instance!");
+                }
             }
         }
 
@@ -323,7 +327,7 @@ namespace Terra.Studio
         [Serializable]
         public class Broadcast : BaseTargetTemplate
         {
-            [AliasDrawer("Custom"), OnValueChanged( UpdateBroadcast = true)]
+            [AliasDrawer("Custom"), OnValueChanged(UpdateBroadcast = true)]
             public string broadcast = string.Empty;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)
@@ -335,6 +339,19 @@ namespace Terra.Studio
                     allbroadcasts.Add(this);
                 }
             }
+        }
+
+        [Serializable]
+        public class InstantiateOnData : BaseTargetTemplate
+        {
+            [AliasDrawer("Spawn when")] public InstantiateOn spawnWhen;
+            [AliasDrawer("Spawn where")] public SpawnWhere spawnWhere;
+            [AliasDrawer("How many")] public int howMany;
+            [AliasDrawer("Interval")] public int interval;
+            [AliasDrawer("Rounds")] public uint rounds;
+            [AliasDrawer("Repeat forever")] public bool repeatForever;
+            public string listenTo;
+            public List<string> listenToStrings;
         }
     }
 

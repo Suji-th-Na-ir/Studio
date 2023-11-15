@@ -12,21 +12,25 @@ namespace Terra.Studio
         public override bool CanPreview => true;
         protected override bool CanBroadcast => false;
         protected override bool CanListen => true;
-
-        [SerializeField] private InstantiateOn spawnWhen;
-        [SerializeField] private SpawnWhere spawnWhere;
-        [SerializeField] private uint rounds;
-        [SerializeField] private bool repeatForever;
-        [SerializeField] private uint howMany;
+        //use
+        [SerializeField] private Atom.InstantiateOnData data = new();
+        //Do not use
+        //[SerializeField] private Atom.StartOn spawnWhen = new();
+        //[SerializeField] private SpawnWhere spawnWhere;
+        //[SerializeField] private uint rounds;
+        //[SerializeField] private bool repeatForever;
+        //[SerializeField] private uint howMany;
         [SerializeField] private Atom.PlaySfx playSFX = new();
         [SerializeField] private Atom.PlayVfx playVFX = new();
-        [SerializeField] private bool canBroadcast;
-        [SerializeField] private string broadcast;
-        [SerializeField] private string condition;
+        //[SerializeField] private bool canBroadcast;
+        //[SerializeField] private string broadcast;
+        //[SerializeField] private string condition;
 
         protected override void Awake()
         {
             base.Awake();
+            data.Setup(gameObject, this);
+            //spawnWhen.Setup<InstantiateOn>(gameObject, ComponentName, OnListenerUpdated, spawnWhen.data.startIndex == 1);
             playSFX.Setup<InstantiateStudioObject>(gameObject);
             playVFX.Setup<InstantiateStudioObject>(gameObject);
         }
@@ -58,20 +62,20 @@ namespace Terra.Studio
             }
             var comp = new InstantiateStudioObjectComponent()
             {
-                IsConditionAvailable = true,
-                ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(spawnWhen),
-                ConditionData = condition,
-                canPlaySFX = false,
-                canPlayVFX = false,
-                childrenEntities = virtualEntities,
-                componentsOnSelf = components,
-                instantiateOn = spawnWhen,
-                spawnWhere = spawnWhere,
-                rounds = rounds,
-                canRepeatForver = repeatForever,
-                duplicatesToSpawn = howMany,
-                IsBroadcastable = canBroadcast,
-                Broadcast = broadcast
+                //IsConditionAvailable = true,
+                ////ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(spawnWhen),
+                //ConditionData = condition,
+                //canPlaySFX = false,
+                //canPlayVFX = false,
+                //childrenEntities = virtualEntities,
+                //componentsOnSelf = components,
+                ////instantiateOn = spawnWhen,
+                //spawnWhere = spawnWhere,
+                //rounds = rounds,
+                //canRepeatForver = repeatForever,
+                //duplicatesToSpawn = howMany,
+                //IsBroadcastable = canBroadcast,
+                //Broadcast = broadcast
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp);
@@ -102,30 +106,31 @@ namespace Terra.Studio
 
         public override BehaviourPreviewUI.PreviewData GetPreviewData()
         {
-            var properties = new Dictionary<string, object>[1];
-            properties[0] = new()
-            {
-                { "Spawn Where", spawnWhere.ToString() },
-                { "Condition", condition }
-            };
-            if (playSFX.data.canPlay)
-            {
-                properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFX.data.clipName);
-            }
-            if (playVFX.data.canPlay)
-            {
-                properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFX.data.clipName);
-            }
-            var startOnName = spawnWhen.ToString();
-            var previewData = new BehaviourPreviewUI.PreviewData()
-            {
-                DisplayName = GetDisplayName(),
-                EventName = startOnName,
-                Properties = properties,
-                Broadcast = new string[] { broadcast },
-                Listen = condition
-            };
-            return previewData;
+            //var properties = new Dictionary<string, object>[1];
+            //properties[0] = new()
+            //{
+            //    { "Spawn Where", spawnWhere.ToString() },
+            //    { "Condition", condition }
+            //};
+            //if (playSFX.data.canPlay)
+            //{
+            //    properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFX.data.clipName);
+            //}
+            //if (playVFX.data.canPlay)
+            //{
+            //    properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFX.data.clipName);
+            //}
+            //var startOnName = spawnWhen.ToString();
+            //var previewData = new BehaviourPreviewUI.PreviewData()
+            //{
+            //    DisplayName = GetDisplayName(),
+            //    EventName = startOnName,
+            //    Properties = properties,
+            //    Broadcast = new string[] { broadcast },
+            //    Listen = condition
+            //};
+            //return previewData;
+            return base.GetPreviewData();
         }
     }
 }
