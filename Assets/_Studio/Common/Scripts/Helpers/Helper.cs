@@ -39,7 +39,7 @@ namespace PlayShifu.Terra
         public static bool IsMobileWebGlPlatform()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
-          return  WebGLWrapper.IsMobile();
+            return WebGLWrapper.IsMobile() == 1;
 #else
             return false;
 #endif
