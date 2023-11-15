@@ -167,9 +167,21 @@ mergeInto(LibraryManager.library,
         window.dispatchReactUnityEvent("publishGame", UTF8ToString(username), UTF8ToString(projectId), UTF8ToString(callbackTo));
     },
  
-    IsMobile : function()
-    {
-         return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    IsMobile : function(){
+        var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile){
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    },
+
+    SetProjectId : function(projectId){
+        window.dispatchReactUnityEvent("setProjectId", UTF8ToString(projectId));
+    },
+
+    ShowLoadingScreen : function(progress){
+        window.dispatchReactUnityEvent("showLoading", progress);
     }
-   
 });

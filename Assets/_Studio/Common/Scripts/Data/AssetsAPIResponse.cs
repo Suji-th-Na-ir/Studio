@@ -23,5 +23,6 @@ namespace Terra.Studio
         public string[] category;
         public bool terras3;
         public int asset_id;
+        public string[] flags;
     }
 }

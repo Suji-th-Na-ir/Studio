@@ -194,6 +194,9 @@ namespace Terra.Studio
 
         public void SwitchState()
         {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            WebGLWrapper.ShowLoadingScreen(50);
+#endif
             DisposeCurrentSubSystem(LoadSubsystemScene);
             currentStudioState = GetNextState();
             previousStudioState = GetOtherState();
