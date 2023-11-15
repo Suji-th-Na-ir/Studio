@@ -28,15 +28,13 @@ namespace Terra.Studio
         
         public override void Init()
         {
-            AssetsWindowAPI api = new AssetsWindowAPI();
+            var api = new AssetsWindowAPI();
             if (!useSampleJson)
             {
-                Debug.Log($"Started downloading json!");
                 api.DoRequest(OnDataFetchSuccess);
             }
             else
             {
-                Debug.Log($"Using sample json.");
                 var text = EditorOp.Load<TextAsset>(sampleJson);
                 OnDataFetchSuccess(true, text.text);
             }
@@ -44,24 +42,23 @@ namespace Terra.Studio
 
         private void OnDataFetchSuccess(bool success, string response)
         {
-            _fullData = JsonConvert.DeserializeObject<AssetsAPIResponse>(response);
-
+            var data = JsonConvert.DeserializeObject<AssetsAPIResponse>(response);
+            data.data = data.data.Where(x => x.flags != null && x.flags.Any(y => y == "Premium")).ToArray();
+            _fullData = data;
             _currentData = _fullData.data;
-            
             _scroll = GetComponentInChildren<ButtonScroll>();
-            _scroll.Init(_fullData.data.Length/NumberOfAssetsToShowForNow, PageChanged);
-
+            _scroll.Init(_fullData.data.Length / NumberOfAssetsToShowForNow, PageChanged);
             _search = GetComponentInChildren<SearchBar>();
             _search.Init(OnSearch);
-
-            MakeUIBetter ();
+            MakeUIBetter();
         }
 
-        private void MakeUIBetter () {
+        private void MakeUIBetter()
+        {
             int columnCount = m_refMainGridGroup.constraintCount;
-            Debug.Log ("m_refMainGridGroup : " + m_refMainGridGroup.gameObject.GetComponent<RectTransform> ().rect);
-            float ySize = m_refMainGridGroup.gameObject.GetComponent<RectTransform> ().rect.height / (NumberOfAssetsToShowForNow/columnCount);
-            m_refMainGridGroup.cellSize = new Vector2 (m_refMainGridGroup.cellSize.x, ySize - m_refMainGridGroup.spacing.y);
+            Debug.Log("m_refMainGridGroup : " + m_refMainGridGroup.gameObject.GetComponent<RectTransform>().rect);
+            float ySize = m_refMainGridGroup.gameObject.GetComponent<RectTransform>().rect.height / (NumberOfAssetsToShowForNow / columnCount);
+            m_refMainGridGroup.cellSize = new Vector2(m_refMainGridGroup.cellSize.x, ySize - m_refMainGridGroup.spacing.y);
         }
 
         private void OnSearch(string searchString)
