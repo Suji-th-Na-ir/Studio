@@ -44,7 +44,7 @@ namespace Terra.Studio
 
         private IEnumerator SendThumbnailRequest()
         {
-            _textureRequest = UnityWebRequestTexture.GetTexture(Helper.ReplaceHttpsFromUrl(_assetData.thumbnails[0]));
+            _textureRequest = UnityWebRequestTexture.GetTexture(_assetData.thumbnails[0]);
             _textureRequest.SendWebRequest();
             while (!_textureRequest.isDone)
             {
