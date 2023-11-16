@@ -66,6 +66,7 @@ namespace Terra.Studio
             public List<string> startList = new();
             public List<string> aliasNameList = new();
             public Action<string, string> OnListenerUpdated;
+            public Action<int> OnStartOnUpdated;
 
             public void Setup<T>(GameObject target, string componentType) where T : Enum
             {
@@ -344,14 +345,61 @@ namespace Terra.Studio
         [Serializable]
         public class InstantiateOnData : BaseTargetTemplate
         {
-            [AliasDrawer("Spawn when")] public InstantiateOn spawnWhen;
+            [AliasDrawer("Spawn when")] public StartOn spawnWhen = new();
             [AliasDrawer("Spawn where")] public SpawnWhere spawnWhere;
-            [AliasDrawer("How many")] public int howMany;
+            [AliasDrawer("How many")] public uint howMany;
             [AliasDrawer("Interval")] public int interval;
             [AliasDrawer("Rounds")] public uint rounds;
             [AliasDrawer("Repeat forever")] public bool repeatForever;
-            public string listenTo;
-            public List<string> listenToStrings;
+            [HideInInspector] public InstantiateOn instantiateOn;
+            [HideInInspector] public Vector3[] trs;
+            public Action<InstantiateOn> OnSpawnWhenUpdated;
+            public Action<bool> OnRecordToggled;
+
+            public override void Setup(GameObject target, BaseBehaviour behaviour)
+            {
+                base.Setup(target, behaviour);
+                spawnWhen.Setup<InstantiateOn>(target, behaviour.ComponentName, behaviour.OnListenerUpdated, spawnWhen.data.startIndex == 2);
+                spawnWhen.OnStartOnUpdated += (index) =>
+                {
+                    instantiateOn = (InstantiateOn)index;
+                    OnSpawnWhenUpdated?.Invoke(instantiateOn);
+                };
+                SetupTRS();
+            }
+
+            private void SetupTRS()
+            {
+                var tr = target.transform;
+                var position = tr.position;
+                var rotation = tr.eulerAngles;
+                var scale = tr.localScale;
+                trs = new Vector3[]
+                {
+                    position,
+                    rotation,
+                    scale
+                };
+            }
+
+            public void UpdateTRS(Vector3[] trs)
+            {
+                Array.Copy(trs, this.trs, trs.Length);
+                CheckForMultiselectScenario(trs);
+            }
+
+            private void CheckForMultiselectScenario(Vector3[] trs)
+            {
+                var selectedObjs = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+                foreach (var obj in selectedObjs)
+                {
+                    if (obj == target) continue;
+                    if (obj.TryGetComponent(out InstantiateStudioObject component))
+                    {
+                        component.instantiateData.UpdateTRS(trs);
+                    }
+                }
+            }
         }
     }
 

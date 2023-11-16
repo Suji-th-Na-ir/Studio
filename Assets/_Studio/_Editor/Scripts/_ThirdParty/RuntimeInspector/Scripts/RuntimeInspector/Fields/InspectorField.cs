@@ -664,6 +664,15 @@ namespace RuntimeInspectorNamespace
             exposedMethods.Clear();
         }
 
+        protected virtual void ClearElement(InspectorField inspectorField)
+        {
+            if (elements.Contains(inspectorField))
+            {
+                inspectorField.Unbind();
+                elements.Remove(inspectorField);
+            }
+        }
+
         public override void Refresh()
         {
             base.Refresh();
@@ -774,9 +783,7 @@ namespace RuntimeInspectorNamespace
             if (variableDrawer != null)
             {
                 variableDrawer.BindTo(variableType, variableName == null ? null : string.Empty, variableName == null ? null : string.Empty, getter, setter);
-                if (variableName != null)
-                    variableDrawer.NameRaw = variableName;
-
+                if (variableName != null) variableDrawer.NameRaw = variableName;
                 elements.Add(variableDrawer);
             }
 

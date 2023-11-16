@@ -86,6 +86,10 @@ MonoBehaviour:
   layoutGroup: {fileID: 1536822972035317291}
   expandArrow: {fileID: 8208014084505315483}
   ignoreHeadingSpace: 1
+  currentPoint: {fileID: 3129666392934952896, guid: 6006845499b694118b6d55edff95be57,
+    type: 3}
+  ghostOption: {fileID: 9122442582772428104, guid: 5b81a35c9ae9f48c8b63d6d7447657d5,
+    type: 3}
 --- !u!114 &1536822972035317291
 MonoBehaviour:
   m_ObjectHideFlags: 0

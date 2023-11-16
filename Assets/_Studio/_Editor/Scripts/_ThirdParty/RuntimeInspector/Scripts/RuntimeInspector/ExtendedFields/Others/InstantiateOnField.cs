@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using System.Linq;
+using UnityEngine.UI;
 using System.Reflection;
 using static Terra.Studio.Atom;
 using RuntimeInspectorNamespace;
@@ -9,27 +9,19 @@ namespace Terra.Studio
 {
     public class InstantiateOnField : ExpandableInspectorField
     {
-        private FieldInfo[] allFields;
-        protected FieldInfo[] FieldInfos
-        {
-            get
-            {
-                if (allFields == null)
-                {
-                    var fields = SupportedType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    allFields = fields.Where(field => !field.IsDefined(typeof(HideInInspector), false)).ToArray();
-                }
-                return allFields;
-            }
-        }
-
-        protected override int Length { get { return 1; } }
+        [SerializeField] private GameObject currentPoint;
+        [SerializeField] private GameObject ghostOption;
 
         private readonly Type SupportedType = typeof(InstantiateOnData);
-        private InspectorField spawnWhenField;
-        private InspectorField listenToField;
         private InspectorField intervalField;
         private InspectorField roundsField;
+        private InspectorField repeatForeverField;
+        private InspectorField howManyField;
+        private InstantiateOnData unboxedData;
+        private GameObject currentPointInstance;
+        private GameObject ghostOptionInstance;
+        private Text currentPointTRS;
+        private bool currentRecordState;
 
         public override bool SupportsType(Type type)
         {
@@ -38,65 +30,123 @@ namespace Terra.Studio
 
         public override void GenerateElements()
         {
-            var value = (InstantiateOnData)Value;
-            spawnWhenField = CreateDrawer(typeof(InstantiateOn), nameof(value.spawnWhen), () => { return value.spawnWhen; }, ValidateSpawnWhen, true);
-            //spawnWhenField = CreateDrawerForField(nameof(value.spawnWhen));
-            spawnWhenField.OnValueUpdated += ValidateSpawnWhen;
-            GenerateSpawnWhenElements();
+            CreateDrawerForField(nameof(unboxedData.spawnWhen));
+            GenerateEveryXSecondsDrawer();
+            CreateDrawer(typeof(SpawnWhere), "Spawn Where", () => { return unboxedData.spawnWhere; }, OnSpawnWhereUpdated, true);
+            SpawnDynamicUI();
+            GenerateHowManyDrawer();
             IsExpanded = true;
         }
 
-        private void ValidateSpawnWhen(object value)
+        private void OnSpawnWhenUpdated(InstantiateOn instantiateOn)
         {
-            Debug.Log($"Value received for spawn when is: {value}");
-            var instantiateOnData = (InstantiateOnData)Value;
-            var spawnWhen = (InstantiateOn)value;
-            if (instantiateOnData.spawnWhen == spawnWhen) return;
-            instantiateOnData.spawnWhen = spawnWhen;
-            RegenerateElements();
-        }
-
-        private void GenerateSpawnWhenElements()
-        {
-            var instantiateOnData = (InstantiateOnData)Value;
-            switch (instantiateOnData.spawnWhen)
+            if (instantiateOn != InstantiateOn.EveryXSeconds)
             {
-                default:
-                case InstantiateOn.GameStart:
-                    return;
-                case InstantiateOn.BroadcastListen:
-                    instantiateOnData.listenToStrings = SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings;
-                    listenToField = CreateDrawerForField(nameof(instantiateOnData.listenToStrings));
-                    listenToField.OnValueUpdated += OnBroadcastListenUpdated;
-                    return;
-                case InstantiateOn.EveryXSeconds:
-                    intervalField = CreateDrawerForField(nameof(instantiateOnData.interval));
-                    intervalField.OnValueUpdated += OnIntervalValueUpdated;
-                    roundsField = CreateDrawerForField(nameof(instantiateOnData.rounds));
-                    roundsField.OnValueUpdated += OnRoundsValueUpdated;
-                    break;
+                if (intervalField != null || roundsField != null || repeatForeverField != null)
+                {
+                    ClearElement(intervalField);
+                    ClearElement(roundsField);
+                    ClearElement(repeatForeverField);
+                    intervalField = roundsField = repeatForeverField = null;
+                    Refresh();
+                }
+                return;
+            }
+            else
+            {
+                RegenerateElements();
             }
         }
 
-        private void OnBroadcastListenUpdated(object value)
+        private void OnSpawnWhereUpdated(object value)
         {
-            Debug.Log($"Value received for broadcast listen is: {value}");
+            var newValue = (SpawnWhere)value;
+            if (unboxedData.spawnWhere == newValue) return;
+            unboxedData.spawnWhere = newValue;
+            if (unboxedData.spawnWhere != SpawnWhere.Random)
+            {
+                if (howManyField != null)
+                {
+                    ClearElement(howManyField);
+                    howManyField = null;
+                }
+            }
+            RegenerateElements();
         }
 
-        private void OnIntervalValueUpdated(object value)
+        private void SpawnDynamicUI()
         {
-            Debug.Log($"Value received for interval update is: {value}");
+            if (unboxedData.spawnWhere == SpawnWhere.CurrentPoint)
+            {
+                if (ghostOptionInstance) Destroy(ghostOptionInstance);
+                currentPointInstance = Instantiate(currentPoint, drawArea.transform);
+                currentPointTRS = currentPointInstance.GetComponent<Text>();
+            }
+            else
+            {
+                if (currentPointInstance) Destroy(currentPointInstance);
+                ghostOptionInstance = Instantiate(ghostOption, drawArea.transform);
+                var button = ghostOptionInstance.GetComponent<Button>();
+                button.onClick.RemoveAllListeners();
+                button.onClick.AddListener(OnRecordToggled);
+            }
         }
 
-        private void OnRoundsValueUpdated(object value)
+        private void OnRecordToggled()
         {
-            Debug.Log($"Value received for rounds update is: {value}");
+            currentRecordState = !currentRecordState;
+            unboxedData.OnRecordToggled?.Invoke(currentRecordState);
+        }
+
+        private void GenerateEveryXSecondsDrawer()
+        {
+            if (unboxedData.instantiateOn != InstantiateOn.EveryXSeconds) return;
+            intervalField = CreateDrawer(typeof(int), "Interval", () => { return unboxedData.interval; }, (value) => { unboxedData.interval = (int)value; }, true);
+            roundsField = CreateDrawer(typeof(uint), "Rounds", () => { return unboxedData.rounds; }, (value) => { unboxedData.rounds = (uint)value; }, true);
+            repeatForeverField = CreateDrawer(typeof(bool), "Repeat Forever", () => { return unboxedData.repeatForever; }, OnRepeatForeverChecked, true);
+            OnRepeatForeverChecked(unboxedData.repeatForever);
+        }
+
+        private void OnRepeatForeverChecked(object value)
+        {
+            unboxedData.repeatForever = (bool)value;
+            var setInteractable = !unboxedData.repeatForever;
+            roundsField.SetInteractable(setInteractable);
+        }
+
+        private void GenerateHowManyDrawer()
+        {
+            if (unboxedData.spawnWhere != SpawnWhere.Random) return;
+            howManyField = CreateDrawer(typeof(uint), "How Many", () => { return unboxedData.howMany; }, (value) => { unboxedData.howMany = (uint)value; }, true);
+        }
+
+        protected override void OnBound(MemberInfo variable)
+        {
+            base.OnBound(variable);
+            var data = (InstantiateOnData)Value;
+            data.OnSpawnWhenUpdated += OnSpawnWhenUpdated;
+            unboxedData = data;
         }
 
         protected override void OnUnbound()
         {
             base.OnUnbound();
-            spawnWhenField.OnValueUpdated -= ValidateSpawnWhen;
+            var data = (InstantiateOnData)Value;
+            data.OnSpawnWhenUpdated -= OnSpawnWhenUpdated;
+            unboxedData = null;
+        }
+
+        public override void Refresh()
+        {
+            base.Refresh();
+            UpdateTRS();
+        }
+
+        private void UpdateTRS()
+        {
+            if (unboxedData == null || unboxedData.spawnWhere == SpawnWhere.Random) return;
+            var target = unboxedData.target.transform.localPosition;
+            currentPointTRS.text = $"X: {Math.Round(target.x, 2)}    Y: {Math.Round(target.y, 2)}    Z: {Math.Round(target.z, 2)}";
         }
     }
 }
