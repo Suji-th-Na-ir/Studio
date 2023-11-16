@@ -162,6 +162,9 @@ namespace Terra.Studio
                     var entity = worldData.entities[i];
                     SpawnObjects(entity);
                 }
+#if UNITY_WEBGL && !UNITY_EDITOR
+            WebGLWrapper.HideLoadingScreen();
+#endif
             });
         }
 
