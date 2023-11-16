@@ -190,10 +190,13 @@ namespace Terra.Studio
                 {
                     var material = _importer.GetMaterial(meshResult.materialIndices[index]) ??
                                    _importer.GetDefaultMaterial();
-                    var oldVec = material.GetVector(BaseColorTextureSt);
-                    var newVec = new Vector4(1, -1, oldVec.z, oldVec.w);
-                    material.SetVector(BaseColorTextureSt, newVec);
-                    Debug.Log($"Setting {oldVec}.....{newVec}");
+                    //var oldVec = material.GetVector(BaseColorTextureSt);
+                    //if (!(oldVec.x == 1 && oldVec.y == -1))
+                    //{
+                    //    var newVec = new Vector4(1, -1, oldVec.z, oldVec.w);
+                    //    material.SetVector(BaseColorTextureSt, newVec);
+                    //    Debug.Log($"Setting {oldVec}.....{newVec}");
+                    //}
                     materials[index] = material;
                 }
 
