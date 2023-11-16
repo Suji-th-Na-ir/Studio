@@ -41,6 +41,8 @@ namespace Terra.Studio
         private List<CachedSystemData> cachedSystemData = new();
         private List<Type> cachedEventTypes = new();
 
+        public readonly Type[] gameEssentialBehaviours = new Type[] { typeof(PlayerSpawnPoint),typeof(InGameTimer),typeof(GameScore) };
+
         public bool TryGetDefaultFromEnumOfEventType(string enumValue, out string defaultValue)
         {
             defaultValue = null;
