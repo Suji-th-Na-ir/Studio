@@ -42,7 +42,6 @@ namespace Terra.Studio
 
         private void OnSubsystemLoaded()
         {
-            HideLoadingScreen();
             if (SystemOp.Resolve<System>().CurrentStudioState == StudioState.Editor)
             {
                 StartCoroutine(WaitAndFetchReferencesForScene());
