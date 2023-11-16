@@ -133,6 +133,7 @@ namespace RTG
         public ObjectTransformGizmoSettings SharedSettings { get { return _sharedSettings; } set { _sharedSettings = value; } }
 
         public Action<List<GameObject>> onPositionRefreshed;
+        public Action<List<GameObject>> onRotationRefreshed;
 
         public override void OnAttached()
         {
@@ -347,6 +348,7 @@ namespace RTG
                 if (_targetPivotObject == null) gizmoTransform.Rotation3D = Quaternion.identity;
                 else gizmoTransform.Rotation3D = _targetPivotObject.transform.rotation;
             }
+            onRotationRefreshed?.Invoke(_targetObjects.ToList());
         }
 
         public void RefreshPositionAndRotation()
@@ -369,7 +371,11 @@ namespace RTG
                 MoveObjects(Gizmo.RelativeDragOffset);
                 onPositionRefreshed?.Invoke(_targetObjects.ToList());
             }
-            if (CanAffectRotation && Gizmo.ActiveDragChannel == GizmoDragChannel.Rotation) RotateObjects(Gizmo.RelativeDragRotation);
+            if (CanAffectRotation && Gizmo.ActiveDragChannel == GizmoDragChannel.Rotation)
+            {
+                RotateObjects(Gizmo.RelativeDragRotation);
+                onRotationRefreshed?.Invoke(_targetObjects.ToList());
+            }
             if (CanAffectScale && Gizmo.ActiveDragChannel == GizmoDragChannel.Scale) ScaleObjects();
         }
 

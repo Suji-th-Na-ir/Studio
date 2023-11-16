@@ -170,8 +170,9 @@ public class SelectionHandler : View
         ResetAllHandles();
 
         objectMoveGizmo.SetTargetObjects(_selectedObjects);
-        objectMoveGizmo.onPositionRefreshed = OnPoisitionRefreshed;
+        objectMoveGizmo.onPositionRefreshed += RefreshObjectTRS;
         objectRotationGizmo.SetTargetObjects(_selectedObjects);
+        objectRotationGizmo.onRotationRefreshed += RefreshObjectTRS;
         objectScaleGizmo.SetTargetObjects(_selectedObjects);
         objectUniversalGizmo.SetTargetObjects(_selectedObjects);
 
@@ -191,7 +192,7 @@ public class SelectionHandler : View
         };
     }
 
-    private void OnPoisitionRefreshed(List<GameObject> objects)
+    private void RefreshObjectTRS(List<GameObject> objects)
     {
         for (int i = 0; i < objects.Count; i++)
         {
