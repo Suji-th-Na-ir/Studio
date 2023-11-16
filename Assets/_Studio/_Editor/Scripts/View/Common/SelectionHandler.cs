@@ -98,7 +98,7 @@ public class SelectionHandler : View
                     runtimeHierarchy.OnSelectionChanged -= OnHierarchySelectionChanged;
                     var (prev, current) = ((GameObject, GameObject))tuple;
                     var isPrevAvailable = prev != null;
-                    OnSelectionChanged(current, SelectOptions.FocusOnSelection);
+                    OnSelectionChanged(current,  SelectOptions.FocusOnSelection);
                     if (isPrevAvailable)
                     {
                         OnSelectionChanged(prev, SelectOptions.FocusOnSelection);
@@ -488,9 +488,9 @@ public class SelectionHandler : View
     {
         for (int i = 0; i < prevSelectedObjects.Count; i++)
         {
-            if (prevSelectedObjects[i] != null && prevSelectedObjects[i].TryGetComponent(out Outline outline))
+            if (prevSelectedObjects[i] != null)
             {
-                outline.enabled = false;
+                prevSelectedObjects[i].layer = LayerMask.NameToLayer("Default");
             }
 
             var behaviours = prevSelectedObjects[i].GetComponents<BaseBehaviour>();
@@ -509,10 +509,7 @@ public class SelectionHandler : View
             if (_selectedObjects.Contains(sObject))
             {
                 _selectedObjects.Remove(sObject);
-                if (sObject.TryGetComponent(out Outline outline))
-                {
-                    outline.enabled = false;
-                }
+                sObject.layer = LayerMask.NameToLayer("Default");
             }
             else
             {
@@ -523,16 +520,13 @@ public class SelectionHandler : View
 
         for (int i = 0; i < _selectedObjects.Count; i++)
         {
-            if (_selectedObjects[i] != null && _selectedObjects[i].TryGetComponent(out Outline outline))
+            if (_selectedObjects[i] != null && _selectedObjects[i].layer== LayerMask.NameToLayer("Outline"))
             {
-                outline.enabled = true;
+                _selectedObjects[i].layer = LayerMask.NameToLayer("Default");
             }
             else
             {
-                outline = _selectedObjects[i].AddComponent<Outline>();
-                outline.OutlineWidth = 5f;
-                outline.OutlineColor = Color.yellow;
-                outline.enabled = true;
+                _selectedObjects[i].layer = LayerMask.NameToLayer("Outline");
             }
         }
 

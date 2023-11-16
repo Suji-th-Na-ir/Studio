@@ -60,10 +60,9 @@ namespace Terra.Studio
                     {
                         x.name = entity.name;
                     }
-                    var outlines = x.GetComponentsInChildren<Outline>();
-                    for (int i = 0; i < outlines.Length; i++)
+                    for (int i = 0; i < x.transform.childCount; i++)
                     {
-                        Object.Destroy(outlines[i]);
+                        x.transform.GetChild(i).gameObject.layer = LayerMask.NameToLayer("Default");
                     }
                     cb?.Invoke(x);
                 }, entity.uniqueName, trs);
