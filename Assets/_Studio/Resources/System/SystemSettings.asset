@@ -18,5 +18,5 @@ MonoBehaviour:
   pickupSavedData: 1
   SceneData: {fileID: 4900000, guid: 78228457762ea43d597402cfaa363dc9, type: 3}
   buildId: Build002
-  loadDefaultSceneOnPlay: 0
+  loadDefaultSceneOnPlay: 1
   serveFromCloud: 0

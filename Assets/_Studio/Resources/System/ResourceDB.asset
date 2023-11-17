@@ -85,12 +85,52 @@ MonoBehaviour:
     guid: f7c4e2fbd3b4a48009fd40fa826f1e2c
     isPrimitive: 0
     primitiveType: 0
+  - name: A_Addon_Chimney_A
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_Chimney_A.prefab
+    resourcePath: Common/ScenePrefabs/A_Addon_Chimney_A
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 953f9077426b4854bb893c2176f428d8
+    isPrimitive: 0
+    primitiveType: 0
   - name: A_Addon_Chimney_B
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_Chimney_B.prefab
     resourcePath: Common/ScenePrefabs/A_Addon_Chimney_B
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: 2b91c19c6826f9e49b6f8865d033ca80
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Addon_Chimney_B_KitParts
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_Chimney_B_KitParts.FBX
+    resourcePath: Common/ScenePrefabs/A_Addon_Chimney_B_KitParts
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e39a3ea5e5e83a14899c5e770c276685
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Addon_Helix_A_BehindPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_Helix_A_BehindPart.prefab
+    resourcePath: Common/ScenePrefabs/A_Addon_Helix_A_BehindPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 9546e11505a0b87428ac5e7a749b5e33
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Addon_Helix_A_MovingPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_Helix_A_MovingPart.prefab
+    resourcePath: Common/ScenePrefabs/A_Addon_Helix_A_MovingPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 45b23803a5ca93a47834ea454b64aedf
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Addon_Helix_FrontPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_Helix_FrontPart.prefab
+    resourcePath: Common/ScenePrefabs/A_Addon_Helix_FrontPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1f1118ec83b7db44286a5010706f2c57
     isPrimitive: 0
     primitiveType: 0
   - name: A_Addon_SmallWindow_A
@@ -101,12 +141,68 @@ MonoBehaviour:
     guid: 90d6600ef36fa96429441a87940e608b
     isPrimitive: 0
     primitiveType: 0
+  - name: A_Addon_SmallWindow_B
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_SmallWindow_B.prefab
+    resourcePath: Common/ScenePrefabs/A_Addon_SmallWindow_B
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 65e07a9a28ed80343acd74b9c7989daf
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Addon_SmallWindow_D
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_SmallWindow_D.prefab
+    resourcePath: Common/ScenePrefabs/A_Addon_SmallWindow_D
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 4023467288835f4469e64ee42daedeaf
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Addon_Window_B
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_Window_B.prefab
+    resourcePath: Common/ScenePrefabs/A_Addon_Window_B
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 6caff68ab520969478390915e5ddb7a2
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Addon_Window_C
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_Window_C.prefab
+    resourcePath: Common/ScenePrefabs/A_Addon_Window_C
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b1bb8908a05fe054e825ec9bbbcf21a3
+    isPrimitive: 0
+    primitiveType: 0
   - name: A_Addon_Window_E
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_Window_E.prefab
     resourcePath: Common/ScenePrefabs/A_Addon_Window_E
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: a0e773da37cecbd4f825d9b3bfc054f9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Addon_Window_E_KitParts
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_Window_E_KitParts.FBX
+    resourcePath: Common/ScenePrefabs/A_Addon_Window_E_KitParts
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: ede42023bbcdd754fb93425d9d98a90d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Addon_Window_E_Tiles
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_Window_E_Tiles.FBX
+    resourcePath: Common/ScenePrefabs/A_Addon_Window_E_Tiles
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a963e770337ebbb4f9dec60aee464b9a
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Addon_Window_F
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_Window_F.prefab
+    resourcePath: Common/ScenePrefabs/A_Addon_Window_F
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0551ae8adeaacff47bb85687f09b12ae
     isPrimitive: 0
     primitiveType: 0
   - name: A_Addon_Window_G
@@ -117,12 +213,52 @@ MonoBehaviour:
     guid: bc3b88966f8c88443876034fd029a7b6
     isPrimitive: 0
     primitiveType: 0
+  - name: A_Addon_Window_G_KitParts
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_Window_G_KitParts.FBX
+    resourcePath: Common/ScenePrefabs/A_Addon_Window_G_KitParts
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f1c4874f29641c44f9d9b549ab187169
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Addon_Window_G_Tiles
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_Window_G_Tiles.FBX
+    resourcePath: Common/ScenePrefabs/A_Addon_Window_G_Tiles
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 9c5a5bd90491bb344bb8aa15122ce8fb
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Addon_Window_H
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Addon_Window_H.prefab
+    resourcePath: Common/ScenePrefabs/A_Addon_Window_H
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: aa70a6c1c7e77c7489819d3c6fd78401
+    isPrimitive: 0
+    primitiveType: 0
   - name: A_Bridge_A
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Bridge_A.prefab
     resourcePath: Common/ScenePrefabs/A_Bridge_A
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: ccd7055ef723137409a8da389b9dd8aa
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Bridge_A_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Bridge_A_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_Bridge_A_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: fb8d5b87e928a7247afe22800a5359ac
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Bridge_A_Tiles
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Bridge_A_Tiles.FBX
+    resourcePath: Common/ScenePrefabs/A_Bridge_A_Tiles
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 316623ad3e927764985fa5fc4110dc1b
     isPrimitive: 0
     primitiveType: 0
   - name: A_Bridge_B
@@ -133,12 +269,52 @@ MonoBehaviour:
     guid: cff8dd9580b0b7241ae29e319b9cffb4
     isPrimitive: 0
     primitiveType: 0
+  - name: A_Bridge_B_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Bridge_B_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_Bridge_B_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: ee3d72a2e9b2c474c92eaaf63d04e7d5
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Bridge_B_Tiles
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Bridge_B_Tiles.FBX
+    resourcePath: Common/ScenePrefabs/A_Bridge_B_Tiles
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 7baae10a68e6f344e9871ed0c97bc584
+    isPrimitive: 0
+    primitiveType: 0
   - name: A_Door_A
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Door_A.prefab
     resourcePath: Common/ScenePrefabs/A_Door_A
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: eef4648981a76ee498adb5c9f80c8f78
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Door_A_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Door_A_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_Door_A_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: d68c39d2471dceb4aa6d129a72dfcf70
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Door_A_Tiles
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Door_A_Tiles.FBX
+    resourcePath: Common/ScenePrefabs/A_Door_A_Tiles
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e76b06a08ad0bc34da687f4c5085b534
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Door_B
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Door_B.prefab
+    resourcePath: Common/ScenePrefabs/A_Door_B
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0aeaa346eafe5b04488ae74a5567af81
     isPrimitive: 0
     primitiveType: 0
   - name: A_Door_C
@@ -157,12 +333,44 @@ MonoBehaviour:
     guid: ab4be3de535607546911a8e260c4e3f7
     isPrimitive: 0
     primitiveType: 0
+  - name: A_Large_BuildingBlock_A_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Large_BuildingBlock_A_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_Large_BuildingBlock_A_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8a8d626b4be6cb34d8828fc756e7e7f6
+    isPrimitive: 0
+    primitiveType: 0
   - name: A_Large_Roof_B
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Large_Roof_B.prefab
     resourcePath: Common/ScenePrefabs/A_Large_Roof_B
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: b971164e245e5f74f83962930e6663b9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Large_Roof_B_Collider
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Large_Roof_B_Collider.FBX
+    resourcePath: Common/ScenePrefabs/A_Large_Roof_B_Collider
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f4b7cfebba601424ba90e051776f6513
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Large_Roof_B_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Large_Roof_B_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_Large_Roof_B_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3d923ffa7774a914cb033993c2a599c2
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Large_Roof_B_Tiles
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Large_Roof_B_Tiles.FBX
+    resourcePath: Common/ScenePrefabs/A_Large_Roof_B_Tiles
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: cb43d7f7220061e4887f5bb542d5f918
     isPrimitive: 0
     primitiveType: 0
   - name: A_Medium_BuildingBlock_A
@@ -173,12 +381,28 @@ MonoBehaviour:
     guid: e0feabf0107dcb549adb0a7ea4638ea4
     isPrimitive: 0
     primitiveType: 0
+  - name: A_Medium_BuildingBlock_A_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Medium_BuildingBlock_A_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_Medium_BuildingBlock_A_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b5722a6eafc85cd42b7b3934ceca70da
+    isPrimitive: 0
+    primitiveType: 0
   - name: A_Medium_BuildingBlock_B
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Medium_BuildingBlock_B.prefab
     resourcePath: Common/ScenePrefabs/A_Medium_BuildingBlock_B
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: 6631aca75b9d0c349b38628cbbf20daf
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Medium_BuildingBlock_B_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Medium_BuildingBlock_B_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_Medium_BuildingBlock_B_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 684c4bd33553cd04ba4ab0afe48756d4
     isPrimitive: 0
     primitiveType: 0
   - name: A_Medium_BuildingBlock_C
@@ -189,12 +413,36 @@ MonoBehaviour:
     guid: dc686f24225ee004ca36b8cbca4d8913
     isPrimitive: 0
     primitiveType: 0
+  - name: A_Medium_BuildingBlock_C_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Medium_BuildingBlock_C_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_Medium_BuildingBlock_C_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: d59a7477eddc2fa4e84d2898f8a14e15
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Medium_BuildingBlock_D
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Medium_BuildingBlock_D.prefab
+    resourcePath: Common/ScenePrefabs/A_Medium_BuildingBlock_D
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 257caa7f3055361489aeea1712bc65c4
+    isPrimitive: 0
+    primitiveType: 0
   - name: A_Medium_FloorBlock_A
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Medium_FloorBlock_A.prefab
     resourcePath: Common/ScenePrefabs/A_Medium_FloorBlock_A
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: f99bb1bc7432cc74ca1b2d7420503809
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Medium_FloorBlock_A_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Medium_FloorBlock_A_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_Medium_FloorBlock_A_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5ea11989dda4e3648ab095e2efa496e7
     isPrimitive: 0
     primitiveType: 0
   - name: A_Medium_Roof_B
@@ -205,12 +453,60 @@ MonoBehaviour:
     guid: 319adb0e84c42d04c8576659a6bfcb5f
     isPrimitive: 0
     primitiveType: 0
+  - name: A_Medium_Roof_B_Collider
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Medium_Roof_B_Collider.FBX
+    resourcePath: Common/ScenePrefabs/A_Medium_Roof_B_Collider
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a3f15e141418f164d8bf04d917e561ef
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Medium_Roof_B_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Medium_Roof_B_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_Medium_Roof_B_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b0d5b79699923e54b92947f9e77843af
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Medium_Roof_B_Tiles
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Medium_Roof_B_Tiles.FBX
+    resourcePath: Common/ScenePrefabs/A_Medium_Roof_B_Tiles
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b63f7eca2ac2c38498f589a7eeabea99
+    isPrimitive: 0
+    primitiveType: 0
   - name: A_Medium_Roof_C
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Medium_Roof_C.prefab
     resourcePath: Common/ScenePrefabs/A_Medium_Roof_C
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: 7344b36171291254b84b6b876642e56e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Medium_Roof_C_Collider
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Medium_Roof_C_Collider.FBX
+    resourcePath: Common/ScenePrefabs/A_Medium_Roof_C_Collider
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 6a314303b33091b4fafb1ca398bfa6f3
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Medium_Roof_C_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Medium_Roof_C_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_Medium_Roof_C_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8375b67c0149e8d4bb3c449546a2c2c0
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Medium_Roof_C_Tiles
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Medium_Roof_C_Tiles.FBX
+    resourcePath: Common/ScenePrefabs/A_Medium_Roof_C_Tiles
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 101448c7717cc6447a4c2431951145ae
     isPrimitive: 0
     primitiveType: 0
   - name: A_SmallWall_A
@@ -221,12 +517,28 @@ MonoBehaviour:
     guid: ed95160d01af5934886e7f92a2a8a796
     isPrimitive: 0
     primitiveType: 0
+  - name: A_SmallWall_A_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_SmallWall_A_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_SmallWall_A_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 29f0c0d7ac2762241ae0610eb289044b
+    isPrimitive: 0
+    primitiveType: 0
   - name: A_SmallWall_B
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_SmallWall_B.prefab
     resourcePath: Common/ScenePrefabs/A_SmallWall_B
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: 407282656ddb99a409e1463d88239893
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_SmallWall_B_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_SmallWall_B_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_SmallWall_B_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c0c917b2c75e01b4eaae0d430647fdcb
     isPrimitive: 0
     primitiveType: 0
   - name: A_SmallWallPillar_A
@@ -261,12 +573,44 @@ MonoBehaviour:
     guid: 2ac6458ed91771a42b9038f77439d1b9
     isPrimitive: 0
     primitiveType: 0
+  - name: A_Tower_Top_B_MovingPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Tower_Top_B_MovingPart.FBX
+    resourcePath: Common/ScenePrefabs/A_Tower_Top_B_MovingPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a65f6b00a90e485449fcb1bed0ae6faa
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Tower_Top_B_Tiles
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Tower_Top_B_Tiles.FBX
+    resourcePath: Common/ScenePrefabs/A_Tower_Top_B_Tiles
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a857d48be214b7d4a879dffb478271aa
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Tower_Top_C
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Tower_Top_C.prefab
+    resourcePath: Common/ScenePrefabs/A_Tower_Top_C
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 95de71babdb294042a7658d771401b46
+    isPrimitive: 0
+    primitiveType: 0
   - name: A_TowerBig_Floor_C
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_TowerBig_Floor_C.prefab
     resourcePath: Common/ScenePrefabs/A_TowerBig_Floor_C
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: 67c41c14cc30e1747ad30d95bdd973e2
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_TowerBig_Floor_C_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_TowerBig_Floor_C_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_TowerBig_Floor_C_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 614e97ff75152324ca605b96fa2b5655
     isPrimitive: 0
     primitiveType: 0
   - name: A_TowerSmall_Floor_A
@@ -277,6 +621,14 @@ MonoBehaviour:
     guid: 69832d869239ce347a0d572e8b9538e5
     isPrimitive: 0
     primitiveType: 0
+  - name: A_TowerSmall_Floor_B
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_TowerSmall_Floor_B.prefab
+    resourcePath: Common/ScenePrefabs/A_TowerSmall_Floor_B
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 06acf313ad2f49d48abe52d2f2d7c3da
+    isPrimitive: 0
+    primitiveType: 0
   - name: A_TowerUnique_A
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_TowerUnique_A.prefab
     resourcePath: Common/ScenePrefabs/A_TowerUnique_A
@@ -285,12 +637,44 @@ MonoBehaviour:
     guid: 6cb4b7890cce56947975af6dfc510ea1
     isPrimitive: 0
     primitiveType: 0
+  - name: A_TowerUnique_A_KitParts
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_TowerUnique_A_KitParts.FBX
+    resourcePath: Common/ScenePrefabs/A_TowerUnique_A_KitParts
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: abe824378a90de14193a9b5c4ef951d9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_TowerUnique_A_Tiles
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_TowerUnique_A_Tiles.FBX
+    resourcePath: Common/ScenePrefabs/A_TowerUnique_A_Tiles
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 82d02e52efbfeb34a969e32b559a7c6a
+    isPrimitive: 0
+    primitiveType: 0
   - name: A_UniqueBigTower
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_UniqueBigTower.prefab
     resourcePath: Common/ScenePrefabs/A_UniqueBigTower
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: 905844821ff2f2a498e60736e023403d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_UniqueBigTower_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_UniqueBigTower_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_UniqueBigTower_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 983a6295f3b8faf45b47165eef3c46ea
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_UniqueBigTower_Tiles
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_UniqueBigTower_Tiles.FBX
+    resourcePath: Common/ScenePrefabs/A_UniqueBigTower_Tiles
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f8db5d9591b35fd4e89962978e9ef324
     isPrimitive: 0
     primitiveType: 0
   - name: A_Wall_A
@@ -309,6 +693,22 @@ MonoBehaviour:
     guid: 2c0a4bd797d53fb4c868a11931caa35a
     isPrimitive: 0
     primitiveType: 0
+  - name: A_Wall_A_Bis_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Wall_A_Bis_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_Wall_A_Bis_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 4276ec4bf6a283946b8ed66d8a53ce00
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Wall_A_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Wall_A_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_Wall_A_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3fe0dc48b7df053448fc660218105811
+    isPrimitive: 0
+    primitiveType: 0
   - name: A_Wall_B
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Wall_B.prefab
     resourcePath: Common/ScenePrefabs/A_Wall_B
@@ -325,12 +725,44 @@ MonoBehaviour:
     guid: 38ecd592939f69b4e99ad61849bef7bc
     isPrimitive: 0
     primitiveType: 0
+  - name: A_Wall_B_Bis_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Wall_B_Bis_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_Wall_B_Bis_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 9584e9ddac7252c449ae9b44d2bc6713
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_Wall_B_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_Wall_B_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_Wall_B_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 03b52c955da03dc44aacd9ff8d17ac59
+    isPrimitive: 0
+    primitiveType: 0
   - name: A_WallSegment_A
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_WallSegment_A.prefab
     resourcePath: Common/ScenePrefabs/A_WallSegment_A
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: c0279271af6ed8a428964999eb80a876
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_WallSegment_A_KitPart
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_WallSegment_A_KitPart.FBX
+    resourcePath: Common/ScenePrefabs/A_WallSegment_A_KitPart
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: cebb3190ce8684747bf428b4ea2f14a9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: A_WallSegment_A_Tiles
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/A_WallSegment_A_Tiles.FBX
+    resourcePath: Common/ScenePrefabs/A_WallSegment_A_Tiles
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 2b6bb90ba29fc204a83cac072360d085
     isPrimitive: 0
     primitiveType: 0
   - name: C_House_2
@@ -493,12 +925,28 @@ MonoBehaviour:
     guid: 35ae5bc525cf33f45b3aceb152db885b
     isPrimitive: 0
     primitiveType: 0
+  - name: F_Tree_Basic_B_Leaves
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/F_Tree_Basic_B_Leaves.FBX
+    resourcePath: Common/ScenePrefabs/F_Tree_Basic_B_Leaves
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f9122606513d6e34b9606ba8b63cf20c
+    isPrimitive: 0
+    primitiveType: 0
   - name: F_Tree_Basic_C
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/F_Tree_Basic_C.prefab
     resourcePath: Common/ScenePrefabs/F_Tree_Basic_C
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: 1c9c9cccb83179343897c67bfd9494ac
+    isPrimitive: 0
+    primitiveType: 0
+  - name: F_Tree_Basic_C_Leaves
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/F_Tree_Basic_C_Leaves.FBX
+    resourcePath: Common/ScenePrefabs/F_Tree_Basic_C_Leaves
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8ca4937b68c49974eb51a190dd846c1f
     isPrimitive: 0
     primitiveType: 0
   - name: F_Tree_Cypress_A
@@ -557,6 +1005,14 @@ MonoBehaviour:
     guid: 8ca0b25b5f249d0488b785427ad476ea
     isPrimitive: 0
     primitiveType: 0
+  - name: F_Tree_Pine_A_Leaves
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/F_Tree_Pine_A_Leaves.FBX
+    resourcePath: Common/ScenePrefabs/F_Tree_Pine_A_Leaves
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: ad82ba7b4c0ae7f489b557547e25eef8
+    isPrimitive: 0
+    primitiveType: 0
   - name: F_Tree_Pine_B
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/F_Tree_Pine_B.prefab
     resourcePath: Common/ScenePrefabs/F_Tree_Pine_B
@@ -565,12 +1021,28 @@ MonoBehaviour:
     guid: c5bb324f4e844d04ba1f02ad418817c1
     isPrimitive: 0
     primitiveType: 0
+  - name: F_Tree_Pine_B_Leaves
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/F_Tree_Pine_B_Leaves.FBX
+    resourcePath: Common/ScenePrefabs/F_Tree_Pine_B_Leaves
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 2f349033d60a9b641a56d229b1a734a7
+    isPrimitive: 0
+    primitiveType: 0
   - name: F_Tree_Pine_C
     absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/F_Tree_Pine_C.prefab
     resourcePath: Common/ScenePrefabs/F_Tree_Pine_C
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: 9c7d72527dabe6c44b459b8388a20fa4
+    isPrimitive: 0
+    primitiveType: 0
+  - name: F_Tree_Pine_C_Leaves
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/F_Tree_Pine_C_Leaves.FBX
+    resourcePath: Common/ScenePrefabs/F_Tree_Pine_C_Leaves
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: dbd75f5b2fd33b74c9b6e694fc1684e6
     isPrimitive: 0
     primitiveType: 0
   - name: Floor
@@ -707,6 +1179,14 @@ MonoBehaviour:
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: b05b956bcf1e4f140adda28e0e6a6a2b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: O_Barrel_Collider
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/O_Barrel_Collider.FBX
+    resourcePath: Common/ScenePrefabs/O_Barrel_Collider
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 768b0cc224e92b84899ce0f6811a31ce
     isPrimitive: 0
     primitiveType: 0
   - name: O_Bench_A
