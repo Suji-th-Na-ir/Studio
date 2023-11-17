@@ -81,7 +81,13 @@ namespace Terra.Studio
                 var renderers = loadedGo.GetComponentsInChildren<Renderer>();
                 foreach (var renderer1 in renderers)
                 {
-                    renderer1.material = _ghostMaterial;
+                    Material[] materials = new Material[renderer1.sharedMaterials.Length];
+                    for (int i = 0; i < materials.Length; i++)
+                    {
+                        materials[i] = _ghostMaterial;
+                    }
+
+                    renderer1.sharedMaterials = materials;
                 }
             }
             else

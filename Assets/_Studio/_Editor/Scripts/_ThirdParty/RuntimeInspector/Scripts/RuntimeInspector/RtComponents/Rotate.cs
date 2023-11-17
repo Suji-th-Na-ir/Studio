@@ -86,7 +86,7 @@ namespace Terra.Studio
             var targetVector = (Vector3)Type.vector3.Get();
             var comp = new RotateComponent
             {
-                direction = repeat.repeatType == RepeatDirectionType.PingPong ? Direction.Clockwise : direction,
+                direction = direction,
                 repeatType = repeat.repeatType,
                 speed = speed,
                 rotateTo = targetVector,
