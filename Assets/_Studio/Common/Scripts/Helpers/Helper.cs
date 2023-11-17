@@ -11,14 +11,6 @@ namespace PlayShifu.Terra
 {
     public static class Helper
     {
-        public static readonly List<string> COMPONENTS_TO_FILTER_OUT = new()
-        {
-            "Checkpoint",
-            "GameScore",
-            "InGameTimer",
-            "Oscillate"
-        };
-
         public static string GetCurrentAppPlatform()
         {
             string platform = "ios";
