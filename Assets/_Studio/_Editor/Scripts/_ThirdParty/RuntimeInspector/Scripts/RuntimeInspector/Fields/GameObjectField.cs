@@ -216,7 +216,7 @@ namespace RuntimeInspectorNamespace
                     {
                         foreach (Type type in assembly.GetExportedTypes())
                         {
-                            if (SystemOp.Resolve<Terra.Studio.System>().SystemData.gameEssentialBehaviours.Contains(type))
+                            if (RTDataManagerSO.GameEssentialBehaviours.Contains(type))
                             {
                                 continue;
                             }
