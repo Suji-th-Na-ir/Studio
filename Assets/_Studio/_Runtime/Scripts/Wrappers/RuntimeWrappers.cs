@@ -47,6 +47,8 @@ namespace Terra.Studio
                     break;
 
             }
+            if(go)
+                go.layer = LayerMask.NameToLayer("Default");
             // return go;
         }
 
@@ -223,11 +225,7 @@ namespace Terra.Studio
 
         public static void RemoveOutline(Transform child)
         {
-            Outline[] outlines = child.GetComponents<Outline>();
-            foreach (var outline in outlines)
-            {
-                Object.Destroy(outline);
-            }
+            child.gameObject.layer = LayerMask.NameToLayer("Default");
         }
 
         public static void MoveGameObjectToActiveScene(GameObject go)
