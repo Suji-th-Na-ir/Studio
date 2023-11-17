@@ -114,7 +114,7 @@ namespace Terra.Studio
                 var button = Instantiate(buttonPrefab, temp.transform);
                 button.GetComponent<DraggableBehaviour>().Init(this,data, ghostMat);
             }
-            
+            MakeUIBetter();
         }
 
         private void ClearDataIfAny()

@@ -51,12 +51,20 @@ namespace Terra.Studio
                     var metaData = value.metaData;
                     if (metaData.Equals(default(WorldMetaData)))
                     {
-                        action?.Invoke();
+                        OnGenerateDone(action);
                         return;
                     }
                     RuntimeOp.Resolve<GameData>().RespawnPoint = metaData.playerSpawnPoint;
-                    action?.Invoke();
+                    OnGenerateDone(action);
                 });
+            }
+
+            private void OnGenerateDone(Action action)
+            {
+                action?.Invoke();
+#if UNITY_WEBGL && !UNITY_EDITOR
+            WebGLWrapper.HideLoadingScreen();
+#endif
             }
         }
     }

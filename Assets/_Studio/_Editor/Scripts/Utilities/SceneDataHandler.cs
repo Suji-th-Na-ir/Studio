@@ -154,15 +154,26 @@ namespace Terra.Studio
                 {
                     PlayerSpawnPoint = metaData.playerSpawnPoint;
                 }
+                SystemOp.Resolve<RequestValidator>().Prewarm(ref worldData, () =>
+                {
+                    for (int i = 0; i < worldData.entities.Length; i++)
+                    {
+                        var entity = worldData.entities[i];
+                        SpawnObjects(entity);
+                    }
+#if UNITY_WEBGL && !UNITY_EDITOR
+            WebGLWrapper.HideLoadingScreen();
+#endif
+                });
             }
-            SystemOp.Resolve<RequestValidator>().Prewarm(ref worldData, () =>
+            else
             {
                 for (int i = 0; i < worldData.entities.Length; i++)
                 {
                     var entity = worldData.entities[i];
                     SpawnObjects(entity);
                 }
-            });
+            }
         }
 
         private void SpawnObjects(VirtualEntity entity)
