@@ -13,22 +13,6 @@ MonoBehaviour:
   m_Name: ResourceDB
   m_EditorClassIdentifier: 
   itemsData:
-  - name: KawaiiLandDayLights
-    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandDayLights.prefab
-    resourcePath: Common/KawaiiLandDayLights
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: 1dcb23477617a49478c9f9d3454eb697
-    isPrimitive: 0
-    primitiveType: 0
-  - name: KawaiiLandDayWater
-    absolutePath: Assets/_Studio/Resources/Common/KawaiiLandDayWater.prefab
-    resourcePath: Common/KawaiiLandDayWater
-    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-    guid: a9eda68c0372c4d14b3d6bdc39773ae9
-    isPrimitive: 0
-    primitiveType: 0
   - name: CheckPoint
     absolutePath: Assets/_Studio/Resources/Common/Prefabs/CheckPoint.prefab
     resourcePath: Common/Prefabs/CheckPoint
@@ -99,6 +83,1806 @@ MonoBehaviour:
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
     guid: f7c4e2fbd3b4a48009fd40fa826f1e2c
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Aircraft01_Room01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Aircraft01_Room01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Aircraft01_Room01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f70283d60411c1e44aeda0b384e202f3
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Aircraft01_Room02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Aircraft01_Room02.prefab
+    resourcePath: Common/ScenePrefabs/SP_Aircraft01_Room02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 661a1eb88a713ea4a99f3cf94319815d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Arena_Support
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Arena_Support.prefab
+    resourcePath: Common/ScenePrefabs/SP_Arena_Support
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 7abfb89a4b086cc4987f865b9f3a2bcf
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_ArenaHouse01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_ArenaHouse01.prefab
+    resourcePath: Common/ScenePrefabs/SP_ArenaHouse01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: fea01796db8ee594bafac855d900e850
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_ArenaHouse02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_ArenaHouse02.prefab
+    resourcePath: Common/ScenePrefabs/SP_ArenaHouse02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 724955a5956afe944951db7ea1a7d98d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_ArenaHouse03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_ArenaHouse03.prefab
+    resourcePath: Common/ScenePrefabs/SP_ArenaHouse03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1f9b900eefc934b469fc8bad0149255f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_ArenaHouse04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_ArenaHouse04.prefab
+    resourcePath: Common/ScenePrefabs/SP_ArenaHouse04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 878c1645103119f40bfd7e1fea2d5e13
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_BaseHexagon
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_BaseHexagon.prefab
+    resourcePath: Common/ScenePrefabs/SP_BaseHexagon
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3b6a873d5160e02488b645ad0c765845
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_CurrentPole01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_CurrentPole01.prefab
+    resourcePath: Common/ScenePrefabs/SP_CurrentPole01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 793b4081070d5b64eb50fd420886d3c4
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_CurrentPole_02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_CurrentPole_02.prefab
+    resourcePath: Common/ScenePrefabs/SP_CurrentPole_02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 749bbccb70691674988656e8d79a65fc
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_CurrentPoleSupport01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_CurrentPoleSupport01.prefab
+    resourcePath: Common/ScenePrefabs/SP_CurrentPoleSupport01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 613a241364052ad45acf70367a6a26ad
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_HandRale01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_HandRale01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_HandRale01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: ff780d3e0dd9fa5439c0bd4d72022180
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_Light01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_Light01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_Light01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 45b737a2775466d4e90fb84bdc77da0d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_Light02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_Light02.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_Light02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 08ba3562c896837439581d007c6c4ff6
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_MetalBar01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_MetalBar01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_MetalBar01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 55827e38595c53a4f8309a319330d4e6
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_Piipe03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_Piipe03.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_Piipe03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: eba33bffb8680e0489b2a39a59b9dd3b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_Pipe01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_Pipe01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_Pipe01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5e3ea93598b1d6e42a43064b463a1d14
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_Pipe02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_Pipe02.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_Pipe02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 790567a966cad73489aa68ec6ebe50c9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_Roof01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_Roof01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_Roof01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1b4beff24a37fd847983cb1dd17563a2
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_Roof02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_Roof02.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_Roof02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c7629485a998ab04d8f04c184bfc9f22
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_Roof03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_Roof03.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_Roof03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8f3e372475520824fb08599873c584af
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_Room01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_Room01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_Room01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 2d5b90389463ff749995c399caa8e6a4
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_Room02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_Room02.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_Room02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: abb41c915365a004fa982220b415ab88
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_Tower01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_Tower01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_Tower01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 093c8fe8082d13e43a133f0e55a31cad
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_Window01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_Window01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_Window01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 38faf53c7cba4f642bb32f2bfe4836f1
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_Window02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_Window02.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_Window02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 575dadaeee6cfed488a5b21f0e7039cd
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_Window03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_Window03.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_Window03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: bf21af2b500ca9743800e8c4e920267e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_Window04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_Window04.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_Window04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 9b0e0f7cd1feb474e912f33074458a02
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Entrance01_Window05
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Entrance01_Window05.prefab
+    resourcePath: Common/ScenePrefabs/SP_Entrance01_Window05
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 85af16a4a30018246a53001b9fc5fc76
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House01_Column02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House01_Column02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House01_Column02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1baed7391e757d3488a1170bff037db4
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House01_Floor02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House01_Floor02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House01_Floor02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f0fc2e9d4c4665e46813bc1d7f0c120f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House01_Roof02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House01_Roof02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House01_Roof02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 426a53c9d816eee48a5539ea6116e376
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House01_RoofSupportBeam03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House01_RoofSupportBeam03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House01_RoofSupportBeam03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 2995e708b6e0474449644db427af6f8f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House01_RoofSupportBeam04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House01_RoofSupportBeam04.prefab
+    resourcePath: Common/ScenePrefabs/SP_House01_RoofSupportBeam04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e22bfef1edca8bb41b3a296d220ea5ab
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House01_RoofSupportBeam05
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House01_RoofSupportBeam05.prefab
+    resourcePath: Common/ScenePrefabs/SP_House01_RoofSupportBeam05
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 9a2091e7c6ff1ae41804e92e420037f9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House01_Vent01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House01_Vent01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House01_Vent01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 464695e38a42e0341995df783a12f4c3
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House01_VentFan01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House01_VentFan01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House01_VentFan01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3cc4d44c94d2f3244930a06d3aa7e837
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House01_VentStand01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House01_VentStand01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House01_VentStand01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f4970e1153490c1488b531fecec8d980
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House01_Wall03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House01_Wall03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House01_Wall03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5972aaac9302a5844a2c9f910532f2c8
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House01_Wall04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House01_Wall04.prefab
+    resourcePath: Common/ScenePrefabs/SP_House01_Wall04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5bfcc3ded70510a44810c8e84fe24ef0
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House01_Window03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House01_Window03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House01_Window03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8eb682c519996f64dba9422f41248bbc
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_Door01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_Door01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_Door01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 42b5dede72c02c74db73d2c85bedc3c1
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_FrontBorder01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_FrontBorder01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_FrontBorder01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0bc3ecbb7e0f7f748a396fbff675a7ef
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_Iron01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_Iron01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_Iron01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8c2cd18c0ce1a9c49a19798666d61db1
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_Pipe02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_Pipe02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_Pipe02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 9a576b7dd74a89c4a9c2d119feb671db
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_Pipe03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_Pipe03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_Pipe03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1ffbb8802c501724fbd83c827dd276ea
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_Pipe06
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_Pipe06.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_Pipe06
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 666f86a749a5a604383bacf8e5ac8120
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_Pipe07
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_Pipe07.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_Pipe07
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 41cae533494e7a144bf26f640ea1bc2d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_Roof01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_Roof01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_Roof01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b9f59b93a9113f14a933378ca6b07081
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_Roof02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_Roof02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_Roof02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 92cf94b2aca6fd44f8015a9f1ca185e5
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_RoofBorder01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_RoofBorder01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_RoofBorder01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a4edba60c9647a14c865c182aea2aa07
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_SideBorder01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_SideBorder01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_SideBorder01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 35b8aa6ed30021f419179e778856cf3f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_SideBorder02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_SideBorder02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_SideBorder02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e7db947fd79ba014bb7dd0bbae4f0f89
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_SideWall01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_SideWall01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_SideWall01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 23163acb8f8eedb4888a7f90cd8f0b8c
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_Wall01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_Wall01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_Wall01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 62203c7651f90e14b8a7a75c8d9451aa
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_Window01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_Window01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_Window01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 09c29e6cb5c908f47b2dc65b8691698c
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_Window02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_Window02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_Window02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b761cf614a4780147b3ca865e8cb1826
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_Window03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_Window03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_Window03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 94a0b944823cf4749876519719501097
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House02_WindowWall01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House02_WindowWall01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House02_WindowWall01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: cbb8aa78ce6aaf7439f37ad2b2da2185
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House05_Base
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House05_Base.prefab
+    resourcePath: Common/ScenePrefabs/SP_House05_Base
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 92222137be01fa34fa97cef7ff808f55
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_BackWall01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_BackWall01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_BackWall01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 95a510507ed14ef40b0e5167a508300a
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_Base01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_Base01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_Base01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: ac06b963a7c7a6a4e91bd0ae517b29ee
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_Door01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_Door01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_Door01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8ad52b49e02b446498a8045f2af76d87
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_DoorWindow01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_DoorWindow01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_DoorWindow01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: cab8d95fab8c5574690000f79b6b620e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_Farme01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_Farme01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_Farme01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b5257246ac4b3ea42b775dd52a3948ab
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_FrontWall01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_FrontWall01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_FrontWall01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0d7a59407f2256e4893270e90637ffd9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_Pipe01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_Pipe01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_Pipe01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b47aba5afeec74840b2e5dbf7f2fbdbe
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_Pipe02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_Pipe02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_Pipe02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 875342cd3f5f5f64c96e6193fe38c372
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_Pipe03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_Pipe03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_Pipe03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 04c872e9ded33d94681015408f7bdeee
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_PipeCap01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_PipeCap01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_PipeCap01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 49baee7891af7284f824df3950012265
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_Roof01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_Roof01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_Roof01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 6b5923b18e27d9346992d09ebc0ea13f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_SideWall01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_SideWall01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_SideWall01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: be236313073dbca4a818d8b896b9a608
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_SideWall02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_SideWall02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_SideWall02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f623b63db3c6f0f48a34244f4b24b20b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_TopCylinder02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_TopCylinder02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_TopCylinder02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8e513e7f7f9d540499a2d057671cdde0
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_Window01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_Window01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_Window01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3905178d6f2cb7a4ca1ef7d5d510a8de
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_Window02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_Window02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_Window02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b5f8d896e4a77db49a11dfcdf354396e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_Window03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_Window03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_Window03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a755d4f48b206414f81d0d91b77090ef
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_Window04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_Window04.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_Window04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 75d28d7a2599ce04395b26109cd15944
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_Window05
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_Window05.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_Window05
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 65ed40236c826084ab0ba0b47b9442e8
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_Window06
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_Window06.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_Window06
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e8aa4e8f7fa285743ab2cb860d5f320b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_Window07
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_Window07.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_Window07
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5048ce0876f27684abb88c4f0a15db3b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_WindowSupporter01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_WindowSupporter01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_WindowSupporter01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 66f769ad54055dc4f9bd9c7d8f765df1
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House06_WindowSupporter02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House06_WindowSupporter02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House06_WindowSupporter02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e2bdcfe41d528c4408b386aab01897c0
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Base01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Base01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Base01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3f654a5a5c103bd4ba6fdafa08a08547
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Base02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Base02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Base02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: abcf32d33e8d3034a8858760b4f6096f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Cylinder01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Cylinder01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Cylinder01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: d011f27ac79dc1842988206d7fd07665
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Cylinder03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Cylinder03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Cylinder03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 61cce9a42c3e8c74ca4c817131d8b21c
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Cylinder04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Cylinder04.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Cylinder04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 670a2daff907c234eb063c56139302e1
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Door
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Door.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Door
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0ea027f7d557b124891b8c9a6cdbe0e7
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Exhaust02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Exhaust02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Exhaust02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c88caa4a08e3b32438371cf705d40b5e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Lid01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Lid01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Lid01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: aa49ca08cfa518347a409c9eda820e24
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Lid02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Lid02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Lid02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 27be5997f72b4be40bc52c1f199f8186
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Pipe01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Pipe01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Pipe01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b140ad6cd1f008247b3029cfceffeefe
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Pipe03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Pipe03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Pipe03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 942e38b025c150d498f668d383946a29
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Pipe04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Pipe04.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Pipe04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 03f35b61420efbd43b1c4a411ee68d2d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Pipe06
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Pipe06.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Pipe06
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b9b65ff95ae34414aa58dc99b58a9341
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Pipe07
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Pipe07.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Pipe07
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b09caca6a0c0d144e9b6e6b0ff0b1bd3
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Roof01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Roof01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Roof01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c6c02c9b0de1f7247b4b19732f3975d9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Steps
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Steps.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Steps
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: d68f31b8d724e56409f4296ee1df8e37
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Window01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Window01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Window01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: d2c771c14187d124ea33d68e80c3669b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House07_Window03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House07_Window03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House07_Window03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 171a7a2112d0ab447b279ff83a87c15c
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Base01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Base01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Base01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: efe6c93ba9af1b247a3b372c7c0a5f03
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Base02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Base02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Base02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8ea3d6cb26bd9a44d912c411702a8e61
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Base03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Base03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Base03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5530ba7443999c743a8d24a67b2836ba
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Boder01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Boder01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Boder01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e77757608261ead479e5ae1e575e91d2
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Door01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Door01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Door01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f16b3c03e4bb91343a4088bf4e9bffab
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Mainwall01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Mainwall01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Mainwall01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 79990b8a0eeb5194a9011003feae24ab
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Pipe01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Pipe01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Pipe01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8fc50c3b03421c246bef966184ae7a30
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Pipe02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Pipe02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Pipe02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3fbc2aeab4ce9314ea7703c151612968
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Pipe03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Pipe03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Pipe03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: ba471973d3e9a39498c5db591ee21228
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Pipe04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Pipe04.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Pipe04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a2eb4f2f0b3f2ed42b1d2c5492937876
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Pole01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Pole01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Pole01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 49ec4e96fbf32f64192e2c5580df71bb
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Roof01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Roof01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Roof01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: ff077d5eca8da3c44bc226b1c6a5a014
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Roof02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Roof02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Roof02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 96f97961d12b69742aa60f35551879dc
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_SmallRoom01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_SmallRoom01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_SmallRoom01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 31a4ee02d0ca88748a654656cdbef7bc
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Window01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Window01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Window01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 52c88dbbd3564c94cad8d33b50abc187
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Window02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Window02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Window02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 2893a3ae8cd40454180f295fd5cf8b0e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Window03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Window03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Window03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 6c0d78c413ea59b42a5a723d067a3b1f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Window04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Window04.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Window04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 9df3fb15c72b4f54498812076ac48e21
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House08_Window05
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House08_Window05.prefab
+    resourcePath: Common/ScenePrefabs/SP_House08_Window05
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0915311d9cd22a947bfdfbeb7d7406d2
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House09_Base
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House09_Base.prefab
+    resourcePath: Common/ScenePrefabs/SP_House09_Base
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: cf64e45264cfb5046930474f2de0137d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House09_Cylinder
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House09_Cylinder.prefab
+    resourcePath: Common/ScenePrefabs/SP_House09_Cylinder
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 65bcccbec642a3d4abea23f8b803e6dd
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House09_Door01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House09_Door01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House09_Door01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c54d394ce8c692d4380677ef12bc8243
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House09_Pipe02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House09_Pipe02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House09_Pipe02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 31d6dc5db0733894cb0633dde961b227
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House09_Pipe03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House09_Pipe03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House09_Pipe03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f85d902e79e50c14ab3deebd13e1c87b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House09_Pipe04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House09_Pipe04.prefab
+    resourcePath: Common/ScenePrefabs/SP_House09_Pipe04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 23b9d094f11e38345a1c066d6005d0ae
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House09_Pipe05
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House09_Pipe05.prefab
+    resourcePath: Common/ScenePrefabs/SP_House09_Pipe05
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 768cf734cb8ad224b9b626dea81c275d
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House09_Roof01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House09_Roof01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House09_Roof01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 4cb56a4b4f9bceb4780af30c3f6eaab5
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House09_Steps
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House09_Steps.prefab
+    resourcePath: Common/ScenePrefabs/SP_House09_Steps
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c61d18a1e4426b94dade945d098aacb7
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House09_Window01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House09_Window01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House09_Window01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: d7f646b98a18919469d14b51fbcc43e9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House09_Window02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House09_Window02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House09_Window02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b48d4a2babf701445944eff3d028190c
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House09_Window03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House09_Window03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House09_Window03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 60cc1582f416c2e4194e026ac7e8bd71
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Base01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Base01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Base01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3fd5ef1c1cb597040ab902b8fba27a65
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Border01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Border01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Border01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f0851f14fd6349046ab362914a6f640e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Border02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Border02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Border02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e9b5fd6c93003ce47acdb1453fc92c4c
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Border03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Border03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Border03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b887e47d8ae991046a938ecd215aa607
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Border04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Border04.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Border04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: d92c2866a5206bf4d85493431354b620
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Desgin01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Desgin01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Desgin01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3a97c826a65b9c0409f0c413709a55d6
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Desgin02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Desgin02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Desgin02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: bad1b04a5315b624abd0bdf4644d6961
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Door01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Door01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Door01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8ea2944cf80a5e741973401d676ffcf1
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_FrontWall01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_FrontWall01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_FrontWall01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: fc4553d5abcdb72488046a90a564e1b5
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_MainWall01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_MainWall01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_MainWall01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c8c34d41841b92c409d1068d27dd1e2e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Roof01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Roof01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Roof01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0ab81264dde2bd04b846af86a0c5c7a7
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Roof02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Roof02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Roof02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c58faaa7275cb964bafdba47fb00139f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Roof03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Roof03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Roof03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e4913d683c059ef4085be893fb8916b0
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Steps01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Steps01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Steps01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3debe548f2509574caf0fa9196b57c86
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Window01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Window01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Window01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: dc59923147ab7c84eb7f3871bbbf607e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Window02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Window02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Window02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b608a9c737b30424fa5437bbfa15ab41
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Window03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Window03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Window03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b9e661f00dde98c4f9244b840fd3a742
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Window04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Window04.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Window04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0652d4c7f511cbf46b6cd24c1a33c5db
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House10_Window05
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House10_Window05.prefab
+    resourcePath: Common/ScenePrefabs/SP_House10_Window05
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 29c3a9e357325df468b0fc09181a3e58
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House12_Design02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House12_Design02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House12_Design02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: abedb32746b223f4597b8a206d1ad9f9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Base01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Base01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Base01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5df9b6ab80f16994ab52d0380219cad9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Boder01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Boder01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Boder01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 44a9a0eb8c205694998d6860af636b73
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Boder02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Boder02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Boder02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: de0bcc5dda265684fb81e1744ac197ca
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Boder03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Boder03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Boder03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 3c54438346e2988489b971b164748de7
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Boder04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Boder04.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Boder04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: decfeb43f9ca73f47b3ad23245860af8
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Boder05
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Boder05.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Boder05
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: d21dc5787c7263247914eeef4d3e0fa1
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Boder06
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Boder06.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Boder06
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: aeb4c4bccaf998845869959a657d628e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Cylinder01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Cylinder01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Cylinder01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a2d9226bb4f1fcd40a674d2f2b8e3bc9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Cylinder02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Cylinder02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Cylinder02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 6b25a0d4c66252845847fe8869669a8a
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Cylinder03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Cylinder03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Cylinder03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 594179bb184f67d43b7c422186830735
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Cylinder04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Cylinder04.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Cylinder04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 63bc640eec16fa24f8648dcb889509a6
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Door01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Door01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Door01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 18a51bde4f67c874ca6eec440a88bee8
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_DoorArch01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_DoorArch01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_DoorArch01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c641e72524b564c409306d3b7cbe613f
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Pipe01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Pipe01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Pipe01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 5926b7c58ceffc44cb2869c1b21da8f6
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Pipe02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Pipe02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Pipe02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a404f3db1fd405549890f9b8646b3072
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Pipe03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Pipe03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Pipe03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f9507bcc35386ce4d9b47715d60c6a72
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Pipe04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Pipe04.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Pipe04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8a4699fbb7b41034d91e5c0875bd3e64
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Pipe05
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Pipe05.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Pipe05
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 791cd9bae68553449bcf850c6a38e916
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Pipe06
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Pipe06.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Pipe06
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 2f8f042802696d1439a96d5b29ca97c6
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Pole01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Pole01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Pole01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: fe9d7396f59863b43a92958f8b2ca181
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Roof02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Roof02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Roof02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 13eb8689b12fe0e48a518cabf49df3a5
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Room01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Room01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Room01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 752be1240a48bed41a426a3bf34510f9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Room02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Room02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Room02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b9491fdae1d11ed4e998ddf6d0287b1e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Steps01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Steps01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Steps01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 09a3409b582d07e40820090bfdec5627
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_StepsWall01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_StepsWall01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_StepsWall01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 91da3ac548f5809429442755cde90dd6
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Window01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Window01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Window01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0b880a364edab0749a36c17c6f01438c
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Window03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Window03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Window03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e6f0a3f2f207f3e468ca9709cbcdf438
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House13_Window04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House13_Window04.prefab
+    resourcePath: Common/ScenePrefabs/SP_House13_Window04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 79d7d9dc3ddbb6f48ae84e2f54ed6cb3
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House14_Door01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House14_Door01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House14_Door01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1cfe0e806e04bb34598b7ac0047a9af0
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House14_Pipe01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House14_Pipe01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House14_Pipe01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a6e1b7fcef7ffcb4b8b4b45393e661ab
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House14_Pipe02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House14_Pipe02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House14_Pipe02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 6419de7cf6062404aaed1d464c949bac
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House14_Pipe03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House14_Pipe03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House14_Pipe03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b85d95031c4b0bc4dad77113a8da7b72
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House14_Roof01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House14_Roof01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House14_Roof01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 90235026925bb424ea880820d7757aa9
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House14_Roof02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House14_Roof02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House14_Roof02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 028a1f808f49aa14cb729f935d9628d1
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House14_RoofEdge01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House14_RoofEdge01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House14_RoofEdge01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c71b8f28f76b90c4588a25641319d591
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House14_RoofTopWindow01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House14_RoofTopWindow01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House14_RoofTopWindow01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 315a9453768440d4b9ad7d14e096661c
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House14_Room01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House14_Room01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House14_Room01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 2ea000ffc38bad345b6963f77c3f7ea3
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House14_Stair01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House14_Stair01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House14_Stair01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 411f9b12855c21a4c81a08e55cf3e1b4
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House14_Tower01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House14_Tower01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House14_Tower01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c0fe1e76b32a87b4d8197324a7e383a4
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House14_Window01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House14_Window01.prefab
+    resourcePath: Common/ScenePrefabs/SP_House14_Window01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 70af396de89f8aa41adaf7a6fffe17c7
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House14_Window02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House14_Window02.prefab
+    resourcePath: Common/ScenePrefabs/SP_House14_Window02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 377299d986352214dbb2310c19729a9b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House14_Window03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House14_Window03.prefab
+    resourcePath: Common/ScenePrefabs/SP_House14_Window03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: d6f388d5c78ec68489e6911b60d323b2
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_House14_Window04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_House14_Window04.prefab
+    resourcePath: Common/ScenePrefabs/SP_House14_Window04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 968b6214c46c9294bb0ef8ccef51ecf8
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_MainBase01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_MainBase01.prefab
+    resourcePath: Common/ScenePrefabs/SP_MainBase01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b9aa35e024089804fa6cf13ad9cc80f2
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Mech01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Mech01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Mech01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: ff8dbe7c9a779d4418e5cfe4e5bac504
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Phonebooth
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Phonebooth.prefab
+    resourcePath: Common/ScenePrefabs/SP_Phonebooth
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c922e01d8e10d1c479b686352bd4bae5
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Road02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Road02.prefab
+    resourcePath: Common/ScenePrefabs/SP_Road02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: c88d35d5b0decf042ac3bb1590587d31
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Road04
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Road04.prefab
+    resourcePath: Common/ScenePrefabs/SP_Road04
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e693de6478e70af45b59f22dfdc13a31
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Signboard01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Signboard01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Signboard01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 535a13307dc01ea478c7e51e07e90f93
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Tower01_Bulb01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Tower01_Bulb01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Tower01_Bulb01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 75a52f1479d037040a9e53165a58369a
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Tower01_Bulbholder01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Tower01_Bulbholder01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Tower01_Bulbholder01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 601bc578b79382341b9381505d70ec6a
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Tower01_Exhust01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Tower01_Exhust01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Tower01_Exhust01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: dddd018141841c1488f5c812744134a4
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Tower01_ExhustFan01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Tower01_ExhustFan01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Tower01_ExhustFan01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: dd1998a8eee72d647b0e5521e2fbda11
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Tower01_Room03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Tower01_Room03.prefab
+    resourcePath: Common/ScenePrefabs/SP_Tower01_Room03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: ea22adbf60e4d0d42a2cebe93bf2e4bc
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Traffic_Light
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Traffic_Light.prefab
+    resourcePath: Common/ScenePrefabs/SP_Traffic_Light
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e065b05b1679c0744b78e2342689eba7
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Trash_Bag01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Trash_Bag01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Trash_Bag01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 2cc81badf7fcb644f93f708cf851a7af
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Trash_ColaTIn01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Trash_ColaTIn01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Trash_ColaTIn01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f2a8bab0d020bee449083a9c20c535a7
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Trash_NewsPaper01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Trash_NewsPaper01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Trash_NewsPaper01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: a83dc132a0074434ba4f019edf09f8df
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_TrashBox01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_TrashBox01.prefab
+    resourcePath: Common/ScenePrefabs/SP_TrashBox01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 2707918e35ccffe4ca2a1927427ededc
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_TrashCan01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_TrashCan01.prefab
+    resourcePath: Common/ScenePrefabs/SP_TrashCan01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8a6781133f1682d49bfc76e7e1126688
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_TrashContainer01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_TrashContainer01.prefab
+    resourcePath: Common/ScenePrefabs/SP_TrashContainer01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 9f79d6ad6b1732a44bc871497212a511
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_TrashContainer02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_TrashContainer02.prefab
+    resourcePath: Common/ScenePrefabs/SP_TrashContainer02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 443146398ae2f434eb504d0813c728bf
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_TrashTin01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_TrashTin01.prefab
+    resourcePath: Common/ScenePrefabs/SP_TrashTin01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: b105b37d4c8474e408770d001154f7f6
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Tree03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Tree03.prefab
+    resourcePath: Common/ScenePrefabs/SP_Tree03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 747c55cc60c5a5d4fa60d4bb9a9f8989
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Tree06
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Tree06.prefab
+    resourcePath: Common/ScenePrefabs/SP_Tree06
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: f70fc071b60ab7b479b025da801332c4
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Tree07
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Tree07.prefab
+    resourcePath: Common/ScenePrefabs/SP_Tree07
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 0ecc2778efd921b44bd79b6bca1267e3
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_TreeHouseRoof2
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_TreeHouseRoof2.prefab
+    resourcePath: Common/ScenePrefabs/SP_TreeHouseRoof2
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: ccbb29db8fc98ef498db9e41fa9859e5
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_TreeHouseRoom1
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_TreeHouseRoom1.prefab
+    resourcePath: Common/ScenePrefabs/SP_TreeHouseRoom1
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: e4b8ea818aeb2ff4da61078cbba90dc0
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Wire01
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Wire01.prefab
+    resourcePath: Common/ScenePrefabs/SP_Wire01
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 279e179d6f58d7543b1b94f2ec56fa52
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Wire02
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Wire02.prefab
+    resourcePath: Common/ScenePrefabs/SP_Wire02
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 26d7d0a283d8e4c42a725cbbe3ab683b
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Wire03
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Wire03.prefab
+    resourcePath: Common/ScenePrefabs/SP_Wire03
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 99ab781d56a381749a1182f7329f4459
+    isPrimitive: 0
+    primitiveType: 0
+  - name: SP_Wire06
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/SP_Wire06.prefab
+    resourcePath: Common/ScenePrefabs/SP_Wire06
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 1bd408475b4a0ab41b21039d9b50671e
+    isPrimitive: 0
+    primitiveType: 0
+  - name: Steampunk_Lights
+    absolutePath: Assets/_Studio/Resources/Common/ScenePrefabs/Steampunk_Lights.prefab
+    resourcePath: Common/ScenePrefabs/Steampunk_Lights
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 8ffd1f523e6f246afb28f28aa849a397
     isPrimitive: 0
     primitiveType: 0
   - name: Aqua Blast
