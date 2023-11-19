@@ -77,6 +77,12 @@ namespace Terra.Studio
                 }).
                 ToArray();
             }
+            var trsData = new InstantiateStudioObjectComponent.TRS()
+            {
+                Position = instantiateData.trs[0],
+                Rotation = instantiateData.trs[1],
+                Scale = instantiateData.trs[2],
+            };
             var comp = new InstantiateStudioObjectComponent()
             {
                 IsConditionAvailable = true,
@@ -93,10 +99,12 @@ namespace Terra.Studio
                 duplicatesToSpawn = instantiateData.howMany,
                 IsBroadcastable = !string.IsNullOrEmpty(broadcast.broadcast),
                 Broadcast = broadcast.broadcast,
-                rangeTRS = instantiateData.trs
+                trs = trsData
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp);
+            Debug.Log($"Type: {type}");
+            Debug.Log($"Data: {data}");
             return (type, data);
         }
 

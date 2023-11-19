@@ -153,6 +153,7 @@ namespace Terra.Studio
         {
             SetObjectPathData();
             var system = RuntimeOp.Resolve<RuntimeSystem>();
+            RuntimeOp.Resolve<EntitiesGraphics>()?.FlushAllTrackedVisuals();
             system.Dispose();
             system.UnstageAll();
             OnRuntimeActive(cachedRuntimeScene);

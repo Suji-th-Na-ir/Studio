@@ -61,19 +61,25 @@ namespace Terra.Studio
 
         private void Instantiate(in InstantiateStudioObjectComponent component)
         {
+            var iterations = component.duplicatesToSpawn;
+            Vector3[] points;
+            if (component.spawnWhere == SpawnWhere.CurrentPoint)
+            {
+                points = new Vector3[] { component.RefObj.transform.position };
+            }
+            else
+            {
+                points = component.GetRandomPoints(iterations);
+            }
             for (int i = 0; i < component.duplicatesToSpawn; i++)
             {
-                var spawnPoint = component.RefObj.transform.position;
-                if (component.spawnWhere == SpawnWhere.Random)
-                {
-                    var randomDelta = Random.onUnitSphere * Random.Range(1f, 3f);
-                    spawnPoint += randomDelta;
-                }
-                var duplicate = Object.Instantiate(component.RefObj, component.RefObj.transform.parent);
+                var spawnPoint = points[i];
+                var duplicate = RuntimeWrappers.DuplicateGameObject(component.RefObj, component.RefObj.transform.parent, spawnPoint);
                 duplicate.SetActive(true);
+                var randomEntityValue = Random.Range(int.MinValue, int.MaxValue);
+                RuntimeOp.Resolve<EntitiesGraphics>().TrackEntityVisual(randomEntityValue, duplicate);
                 EntityAuthorOp.HandleComponentsGeneration(duplicate, component.componentsOnSelf);
                 var refTr = duplicate.transform;
-                refTr.position = spawnPoint;
                 var childrenEntities = component.childrenEntities;
                 if (childrenEntities == null || childrenEntities.Length == 0) continue;
                 for (int j = 0; j < childrenEntities.Length; j++)

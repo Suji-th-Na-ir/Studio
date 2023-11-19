@@ -532,6 +532,7 @@ namespace Terra.Studio
             {
                 instantiateRecorder = new InstantiateRecorder(trs, onRecordDone);
                 EditorOp.Resolve<SelectionHandler>().OverrideGizmoOntoTarget(new List<GameObject>() { instantiateRecorder.Recorder }, SelectionHandler.GizmoId.Move);
+                EditorOp.Resolve<SelectionHandler>().OnGizmoChanged += OnGizmoChangedWhileRecording;
             }
             else
             {
@@ -539,7 +540,13 @@ namespace Terra.Studio
                 instantiateRecorder = null;
                 var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
                 EditorOp.Resolve<SelectionHandler>().OverrideGizmoOntoTarget(selections, SelectionHandler.GizmoId.Move);
+                EditorOp.Resolve<SelectionHandler>().OnGizmoChanged -= OnGizmoChangedWhileRecording;
             }
+        }
+
+        private void OnGizmoChangedWhileRecording(SelectionHandler.GizmoId gizmoId)
+        {
+            EditorOp.Resolve<SelectionHandler>().OverrideGizmoOntoTarget(new List<GameObject>() { instantiateRecorder.Recorder }, gizmoId);
         }
     }
 
@@ -813,7 +820,6 @@ namespace Terra.Studio
             recorder = Object.Instantiate(obj);
             RuntimeWrappers.ResolveTRS(recorder, null, trs);
             this.onRecordDone = onRecordDone;
-            EditorOp.Resolve<SelectionHandler>().Select(recorder);
         }
 
         public void Dispose()
@@ -829,7 +835,6 @@ namespace Terra.Studio
                 Object.Destroy(recorder);
                 recorder = null;
                 onRecordDone?.Invoke(vectors);
-                EditorOp.Resolve<SelectionHandler>().DeselectAll();
             }
         }
     }

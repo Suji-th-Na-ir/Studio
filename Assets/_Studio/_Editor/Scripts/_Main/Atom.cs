@@ -366,6 +366,7 @@ namespace Terra.Studio
                     OnSpawnWhenUpdated?.Invoke(instantiateOn);
                 };
                 SetupTRS();
+                SetupDefault();
             }
 
             private void SetupTRS()
@@ -373,13 +374,20 @@ namespace Terra.Studio
                 var tr = target.transform;
                 var position = tr.position;
                 var rotation = tr.eulerAngles;
-                var scale = tr.localScale;
+                var scale = GetBoundsSize();
                 trs = new Vector3[]
                 {
                     position,
                     rotation,
                     scale
                 };
+            }
+
+            private void SetupDefault()
+            {
+                howMany = 1;
+                interval = 1;
+                rounds = 1;
             }
 
             public void UpdateTRS(Vector3[] trs)
@@ -399,6 +407,21 @@ namespace Terra.Studio
                         component.instantiateData.UpdateTRS(trs);
                     }
                 }
+            }
+
+            private Vector3 GetBoundsSize()
+            {
+                var renderers = target.GetComponentsInChildren<Renderer>();
+                if (renderers.Length == 0)
+                {
+                    return Vector3.one;
+                }
+                Bounds bounds = renderers[0].bounds;
+                foreach (var renderer in renderers)
+                {
+                    bounds.Encapsulate(renderer.bounds);
+                }
+                return bounds.size;
             }
         }
     }

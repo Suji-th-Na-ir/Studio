@@ -13,6 +13,8 @@ namespace Terra.Studio
         [SerializeField] private GameObject ghostOption;
 
         private readonly Type SupportedType = typeof(InstantiateOnData);
+        private InspectorField spawnWhenField;
+        private InspectorField spawnWhereField;
         private InspectorField intervalField;
         private InspectorField roundsField;
         private InspectorField repeatForeverField;
@@ -30,9 +32,9 @@ namespace Terra.Studio
 
         public override void GenerateElements()
         {
-            CreateDrawerForField(nameof(unboxedData.spawnWhen));
+            spawnWhenField = CreateDrawerForField(nameof(unboxedData.spawnWhen));
             GenerateEveryXSecondsDrawer();
-            CreateDrawer(typeof(SpawnWhere), "Spawn Where", () => { return unboxedData.spawnWhere; }, OnSpawnWhereUpdated, true);
+            spawnWhereField = CreateDrawer(typeof(SpawnWhere), "Spawn Where", () => { return unboxedData.spawnWhere; }, OnSpawnWhereUpdated, true);
             SpawnDynamicUI();
             GenerateHowManyDrawer();
             IsExpanded = true;
@@ -76,15 +78,14 @@ namespace Terra.Studio
 
         private void SpawnDynamicUI()
         {
+            ClearDynamicUI();
             if (unboxedData.spawnWhere == SpawnWhere.CurrentPoint)
             {
-                if (ghostOptionInstance) Destroy(ghostOptionInstance);
                 currentPointInstance = Instantiate(currentPoint, drawArea.transform);
                 currentPointTRS = currentPointInstance.GetComponent<Text>();
             }
             else
             {
-                if (currentPointInstance) Destroy(currentPointInstance);
                 ghostOptionInstance = Instantiate(ghostOption, drawArea.transform);
                 var button = ghostOptionInstance.GetComponent<Button>();
                 button.onClick.RemoveAllListeners();
@@ -92,10 +93,31 @@ namespace Terra.Studio
             }
         }
 
+        private void ClearDynamicUI()
+        {
+            if (ghostOptionInstance) Destroy(ghostOptionInstance);
+            if (currentPointInstance) Destroy(currentPointInstance);
+        }
+
         private void OnRecordToggled()
         {
             currentRecordState = !currentRecordState;
             unboxedData.OnRecordToggled?.Invoke(currentRecordState);
+            ToggleInteractivityOfAllFields(!currentRecordState);
+            if (currentRecordState)
+            {
+                EditorOp.Resolve<ToolbarView>().ToggleInteractionOfGroup("GizmoToolGroup", true);
+            }
+        }
+
+        private void ToggleInteractivityOfAllFields(bool status)
+        {
+            if (spawnWhenField) spawnWhenField.SetInteractable(status);
+            if (spawnWhereField) spawnWhereField.SetInteractable(status);
+            if (intervalField) intervalField.SetInteractable(status);
+            if (repeatForeverField) repeatForeverField.SetInteractable(status);
+            if (howManyField) howManyField.SetInteractable(status);
+            if (roundsField && !unboxedData.repeatForever) roundsField.SetInteractable(status);
         }
 
         private void GenerateEveryXSecondsDrawer()
@@ -131,6 +153,8 @@ namespace Terra.Studio
         protected override void OnUnbound()
         {
             base.OnUnbound();
+            if (Value != null || Value is not InstantiateOnData) return;
+            ClearDynamicUI();
             var data = (InstantiateOnData)Value;
             data.OnSpawnWhenUpdated -= OnSpawnWhenUpdated;
             unboxedData = null;
@@ -144,7 +168,7 @@ namespace Terra.Studio
 
         private void UpdateTRS()
         {
-            if (unboxedData == null || unboxedData.spawnWhere == SpawnWhere.Random) return;
+            if (unboxedData == null || unboxedData.spawnWhere == SpawnWhere.Random || !currentPointTRS) return;
             var target = unboxedData.target.transform.localPosition;
             currentPointTRS.text = $"X: {Math.Round(target.x, 2)}    Y: {Math.Round(target.y, 2)}    Z: {Math.Round(target.z, 2)}";
         }

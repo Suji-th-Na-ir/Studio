@@ -12,6 +12,7 @@ using EasyUI.Helpers;
 using PlayShifu.Terra;
 using EasyUI.Toast;
 using UnityEngine.UI;
+using System;
 
 public class SelectionHandler : View
 {
@@ -24,13 +25,11 @@ public class SelectionHandler : View
     }
 
     [SerializeField] private ToastUI toastUI;
-
     private RuntimeHierarchy runtimeHierarchy;
     private ObjectTransformGizmo objectMoveGizmo;
     private ObjectTransformGizmo objectRotationGizmo;
     private ObjectTransformGizmo objectScaleGizmo;
     private ObjectTransformGizmo objectUniversalGizmo;
-
     private GizmoId _workGizmoId;
     private ObjectTransformGizmo _workGizmo;
     private List<GameObject> _selectedObjects = new List<GameObject>();
@@ -39,12 +38,13 @@ public class SelectionHandler : View
     private Camera mainCamera;
     private Selectable nextSelecteField;
     private EditorSystem cachedEditorSystem;
+    private PointerEventData pointerEventData;
+    private float tabTrailTimer = 0;
+    private const float TAB_TRAILTIME = 0.5f;
     public bool canUndo, canRedo;
     public delegate void SelectionChangedDelegate(List<GameObject> gm);
     public SelectionChangedDelegate SelectionChanged;
-    PointerEventData pointerEventData;
-    float tabTrailTimer = 0;
-    const float TAB_TRAILTIME = 0.5f;
+    public event Action<GizmoId> OnGizmoChanged;
 
     private void Awake()
     {
@@ -481,6 +481,7 @@ public class SelectionHandler : View
             _workGizmo.Gizmo.SetEnabled(true);
             _workGizmo.RefreshPositionAndRotation();
         }
+        OnGizmoChanged?.Invoke(gizmoId);
     }
 
     private void OnSelectionChanged(GameObject sObject = null, SelectOptions selectOption = SelectOptions.FocusOnSelection)
