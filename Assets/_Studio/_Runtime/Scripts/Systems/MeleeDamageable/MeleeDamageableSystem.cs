@@ -35,7 +35,7 @@ namespace Terra.Studio
                         var componentToCheck = compPool.Get(entity1);
                         if (go == componentToCheck.RefObj)
                         {
-                            OnDemandRun(ref entityRef, entity);
+                            OnDemandRun(ref entityRef, componentToCheck.damage);
                             break;
                         }
                     }

@@ -1491,6 +1491,14 @@ MonoBehaviour:
     guid: f958a5650bcbd4be1931a641e9fac36f
     isPrimitive: 0
     primitiveType: 0
+  - name: MeleeAttack
+    absolutePath: Assets/_Studio/Resources/Runtime/DynamicUI/MeleeAttack.prefab
+    resourcePath: Runtime/DynamicUI/MeleeAttack
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 6faf040b94a2340e6852ac7147957674
+    isPrimitive: 0
+    primitiveType: 0
   watchFolders:
   - Assets/_Studio/Resources/Common
   - Assets/_Studio/Resources/Runtime

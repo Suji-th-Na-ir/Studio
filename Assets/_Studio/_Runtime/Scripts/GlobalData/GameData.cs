@@ -10,6 +10,19 @@ namespace Terra.Studio
         public Transform PlayerRef;
         public GameEndState EndState;
         Action OnNewWeaponEquip;
+
+        private Animator playerAnimator;
+        public Animator PlayerAnimator
+        {
+            get
+            {
+                if (!playerAnimator)
+                    playerAnimator = PlayerRef.GetComponentInChildren<Animator>();
+
+                return playerAnimator;
+            }
+        }
+
         public void SetEndState(string state)
         {
             if (state.Equals("Game Win"))
@@ -31,26 +44,35 @@ namespace Terra.Studio
         }
 
         public void SetMeleeWeaponParentTransform(Transform weapon, Action onWeaponEquip)
-        {
-           
+        {    
            var parent= Helper.FindDeepChild(PlayerRef, "MeleeWeaponParent");
             for (int i = 0; i < parent.childCount; i++)
             {
                 var child = parent.GetChild(i);
                 child.gameObject.tag = "Untagged";
                 child.transform.position = RuntimeOp.Resolve<GameData>().PlayerRef.position + Vector3.up * 2f + Vector3.right * 2f;
-                child.GetComponent<Collider>().isTrigger = false;
+               
                 child.transform.SetParent(null);
             }
             OnNewWeaponEquip?.Invoke();
             OnNewWeaponEquip = onWeaponEquip;
 
             weapon.SetParent(parent);
-            weapon.localPosition = Vector3.zero;
+            weapon.position = parent.position + parent.forward;
             weapon.localRotation = Quaternion.identity;
             weapon.gameObject.tag = "Damager";
-            weapon.GetComponent<Collider>().isTrigger = true;
+           
+        }
 
+        public void ExecutePlayerMeleeAttack(GameObject weapon)
+        {
+            weapon.GetComponent<Collider>().isTrigger = true;
+            PlayerAnimator.SetTrigger("Attack");
+            CoroutineService.RunCoroutine(() =>
+            {
+                weapon.GetComponent<Collider>().isTrigger = false;
+            },
+            CoroutineService.DelayType.WaitForXSeconds, playerAnimator.GetCurrentAnimatorStateInfo(0).length);
         }
     }
 }
