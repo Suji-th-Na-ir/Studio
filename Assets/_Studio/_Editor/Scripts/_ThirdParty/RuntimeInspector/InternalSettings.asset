@@ -155,6 +155,9 @@ MonoBehaviour:
   - ComponentName: IncreasePlayerHealth
     hideAddButton: 0
     hideRemoveButton: 0
+  - ComponentName: DecreasePlayerHealth
+    hideAddButton: 0
+    hideRemoveButton: 0
   m_GameEssentials:
   - InGameTimer
   - GameScore

@@ -118,6 +118,11 @@ MonoBehaviour:
     SystemName: Terra.Studio.IncreasePlayerHealthSystem
     DrawerName: Terra.Studio.IncreasePlayerHealth
     DisplayName: Increase Player Health
+  - Key: Terra.Studio.DecreasePlayerHealth
+    ComponentName: Terra.Studio.DecreasePlayerHealthComponent
+    SystemName: Terra.Studio.DecreasePlayerHealthSystem
+    DrawerName: Terra.Studio.DecreasePlayerHealth
+    DisplayName: Decrease Player Health
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent

@@ -1,10 +1,10 @@
-using Newtonsoft.Json;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace Terra.Studio
 {
-    [EditorDrawComponent("Terra.Studio.IncreasePlayerHealth"), AliasDrawer("Increase Player Health")]
-    public class IncreasePlayerHealth : BaseBehaviour
+    [EditorDrawComponent("Terra.Studio.DecreasePlayerHealth"), AliasDrawer("Decrease Player Health")]
+    public class DecreasePlayerHealth : BaseBehaviour
     {
         public enum StartOn
         {
@@ -20,7 +20,7 @@ namespace Terra.Studio
         [SerializeField] private Atom.PlayVfx playVFX = new();
         [SerializeField] private Atom.Broadcast broadcast = new();
 
-        public override string ComponentName => nameof(IncreasePlayerHealth);
+        public override string ComponentName => nameof(DecreasePlayerHealth);
         public override bool CanPreview => false;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => true;
@@ -31,14 +31,14 @@ namespace Terra.Studio
         {
             base.Awake();
             when.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated, when.data.startIndex == (int)StartOn.BroadcastListen);
-            playSFX.Setup<IncreasePlayerHealth>(gameObject);
-            playVFX.Setup<IncreasePlayerHealth>(gameObject);
+            playSFX.Setup<DecreasePlayerHealth>(gameObject);
+            playVFX.Setup<DecreasePlayerHealth>(gameObject);
             broadcast.Setup(gameObject, this);
         }
 
         public override (string type, string data) Export()
         {
-            var data = new IncreasePlayerHealthComponent()
+            var data = new DecreasePlayerHealthComponent()
             {
                 IsConditionAvailable = true,
                 ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue((StartOn)when.data.startIndex),
@@ -69,7 +69,7 @@ namespace Terra.Studio
 
         public override void Import(EntityBasedComponent data)
         {
-            var component = JsonConvert.DeserializeObject<IncreasePlayerHealthComponent>(data.data);
+            var component = JsonConvert.DeserializeObject<DecreasePlayerHealthComponent>(data.data);
             byPoint = component.playerHealthModifier;
             playSFX.data.canPlay = component.canPlaySFX;
             playSFX.data.clipIndex = component.sfxIndex;
