@@ -25,7 +25,7 @@ namespace Terra.Studio
                 RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
             }
             var respawnPoint = RuntimeOp.Resolve<GameData>().RespawnPoint;
-            RuntimeOp.Resolve<GameData>().SetPlayerPosition(respawnPoint);
+            RuntimeOp.Resolve<PlayerData>().SetPlayerPosition(respawnPoint);
         }
 
         public override void OnHaltRequested(EcsWorld currentWorld)

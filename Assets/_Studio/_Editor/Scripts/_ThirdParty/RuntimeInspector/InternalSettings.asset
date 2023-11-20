@@ -152,6 +152,9 @@ MonoBehaviour:
   - ComponentName: ResetTimer
     hideAddButton: 0
     hideRemoveButton: 0
+  - ComponentName: IncreasePlayerHealth
+    hideAddButton: 0
+    hideRemoveButton: 0
   m_GameEssentials:
   - InGameTimer
   - GameScore

@@ -51,6 +51,14 @@
     "Terra.Studio.Listener",
     null
   ],
+  "Terra.Studio.IncreasePlayerHealth+StartOn.PlayerTouches": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "Terra.Studio.IncreasePlayerHealth+StartOn.BroadcastListen": [
+    "Terra.Studio.Listener",
+    null
+  ],
   "Terra.Studio.ResetScore+StartOn.OnPlayerCollide": [
     "Terra.Studio.TriggerAction",
     "Player"

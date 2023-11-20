@@ -2,23 +2,17 @@ using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
-    public class TeleportSystem : BaseSystem
+    public class IncreasePlayerHealthSystem : BaseSystem
     {
         public override void OnConditionalCheck(int entity, object data)
         {
-            ref var entityRef = ref entity.GetComponent<TeleportComponent>();
-            if (entityRef.listen != Listen.Always)
-            {
-                var compsData = RuntimeOp.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(false, entityRef.EventContext);
-                entityRef.IsExecuted = true;
-            }
+            ref var entityRef = ref EntityAuthorOp.GetComponent<IncreasePlayerHealthComponent>(entity);
             OnDemandRun(in entityRef);
         }
 
-        public void OnDemandRun(in TeleportComponent component)
+        public void OnDemandRun(in IncreasePlayerHealthComponent component)
         {
-            RuntimeOp.Resolve<PlayerData>().SetPlayerPosition(component.teleportTo);
+            RuntimeOp.Resolve<PlayerData>().ModifyPlayerHealth((int)component.playerHealthModifier);
             if (component.canPlaySFX)
             {
                 RuntimeWrappers.PlaySFX(component.sfxName);
@@ -27,17 +21,16 @@ namespace Terra.Studio
             {
                 RuntimeWrappers.PlayVFX(component.vfxName, component.RefObj.transform.position);
             }
-            var listenMultipleTimes = component.listen == Listen.Always;
             if (component.IsBroadcastable)
             {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, !listenMultipleTimes);
+                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
             }
         }
 
         public override void OnHaltRequested(EcsWorld currentWorld)
         {
-            var filter = currentWorld.Filter<TeleportComponent>().End();
-            var compPool = currentWorld.GetPool<TeleportComponent>();
+            var filter = currentWorld.Filter<IncreasePlayerHealthComponent>().End();
+            var compPool = currentWorld.GetPool<IncreasePlayerHealthComponent>();
             foreach (var entity in filter)
             {
                 var component = compPool.Get(entity);

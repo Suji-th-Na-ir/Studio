@@ -113,6 +113,11 @@ MonoBehaviour:
     SystemName: Terra.Studio.ResetTimerSystem
     DrawerName: Terra.Studio.ResetTimer
     DisplayName: Reset Timer
+  - Key: Terra.Studio.IncreasePlayerHealth
+    ComponentName: Terra.Studio.IncreasePlayerHealthComponent
+    SystemName: Terra.Studio.IncreasePlayerHealthSystem
+    DrawerName: Terra.Studio.IncreasePlayerHealth
+    DisplayName: Increase Player Health
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent

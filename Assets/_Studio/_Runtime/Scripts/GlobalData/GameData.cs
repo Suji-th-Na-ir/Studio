@@ -1,12 +1,17 @@
+using System;
 using UnityEngine;
 
 namespace Terra.Studio
 {
-    public class GameData
+    public class GameData : IDisposable
     {
         public Vector3 RespawnPoint;
-        public Transform PlayerRef;
         public GameEndState EndState;
+
+        public GameData()
+        {
+            RuntimeOp.Register(new PlayerData());
+        }
 
         public void SetEndState(string state)
         {
@@ -20,12 +25,9 @@ namespace Terra.Studio
             }
         }
 
-        public void SetPlayerPosition(Vector3 position)
+        public void Dispose()
         {
-            if (PlayerRef)
-            {
-                PlayerRef.position = position;
-            }
+            RuntimeOp.Unregister<PlayerData>();
         }
     }
 }
