@@ -1,6 +1,4 @@
-using System.ComponentModel;
 using Leopotam.EcsLite;
-using PlayShifu.Terra;
 using UnityEngine;
 
 namespace Terra.Studio
@@ -12,7 +10,6 @@ namespace Terra.Studio
             base.Init<T>(entity);
             ref var entityRef = ref entity.GetComponent<MeleeDamageableComponent>();
             entityRef.currentHealth = entityRef.health;
-            Debug.Log($"Broadcast Dead: {entityRef.BroadcastDead}  Health: {entityRef.health}");
         }
         public override void OnConditionalCheck(int entity, object data)
         {
@@ -20,13 +17,31 @@ namespace Terra.Studio
 
             if (data == null)
                 return;
-            if(entityRef.currentHealth>0)
+            
+            var go = data as GameObject;
+            if (go)
             {
-                entityRef.currentHealth -= 1;
+                if (go.transform.CompareTag("Damager"))
+                {
+                    var currentWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
+                    var filter = currentWorld.Filter<MeleeWeaponComponent>().End();
+                    var compPool = currentWorld.GetPool<MeleeWeaponComponent>();
+                    foreach (var entity1 in filter)
+                    {
+                        if (entity1 == entity)
+                        {
+                            continue;
+                        }
+                        var componentToCheck = compPool.Get(entity1);
+                        if (go == componentToCheck.RefObj)
+                        {
+                            OnDemandRun(ref entityRef, entity);
+                            break;
+                        }
+                    }
+                }
             }
-
-            OnDemandRun(in entityRef, entity);
-            Debug.Log($"Broadcast Dead: {entityRef.BroadcastDead}  Health: {entityRef.health}");
+           
             if (entityRef.currentHealth <= 0)
             {
                 entityRef.IsExecuted = true;
@@ -36,8 +51,9 @@ namespace Terra.Studio
 
         
 
-        public void OnDemandRun(in MeleeDamageableComponent component, int entity)
+        public void OnDemandRun(ref MeleeDamageableComponent component, int damage)
         {
+            component.currentHealth = Mathf.Clamp(component.currentHealth - damage, 0, int.MaxValue);
             if (component.currentHealth <= 0)
             {
                 if (component.canPlaySFXDead)

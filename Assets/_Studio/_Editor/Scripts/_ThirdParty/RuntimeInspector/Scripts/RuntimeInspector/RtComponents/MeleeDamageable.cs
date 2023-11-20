@@ -1,6 +1,5 @@
 using PlayShifu.Terra;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Terra.Studio
@@ -57,8 +56,8 @@ namespace Terra.Studio
             {
                 IsConditionAvailable = true,
                 health = Health,
-                ConditionType = "Terra.Studio.MouseAction",
-                ConditionData = "OnClick",
+                ConditionType = "Terra.Studio.TriggerAction",
+                ConditionData = "Any",
                 canPlaySFXHit = PlaySFXHit.data.canPlay,
                 canPlayVFXHit = PlayVFXHit.data.canPlay,
                 sfxNameHit = Helper.GetSfxClipNameByIndex(PlaySFXHit.data.clipIndex),

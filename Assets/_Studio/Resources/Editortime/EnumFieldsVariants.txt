@@ -51,6 +51,22 @@
     "Terra.Studio.Listener",
     null
   ],
+  "Terra.Studio.MeleeWeapon+StartEnum.GameStart": [
+    "Terra.Studio.GameStart",
+    "Start"
+  ],
+  "Terra.Studio.MeleeWeapon+StartEnum.OnPlayerCollide": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "Terra.Studio.MeleeWeapon+StartEnum.OnClick": [
+    "Terra.Studio.MouseAction",
+    "OnClick"
+  ],
+  "Terra.Studio.MeleeWeapon+StartEnum.BroadcastListen": [
+    "Terra.Studio.Listener",
+    null
+  ],
   "Terra.Studio.ResetScore+StartOn.OnPlayerCollide": [
     "Terra.Studio.TriggerAction",
     "Player"

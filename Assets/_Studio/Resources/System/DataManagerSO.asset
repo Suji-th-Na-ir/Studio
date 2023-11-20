@@ -118,6 +118,11 @@ MonoBehaviour:
     SystemName: Terra.Studio.MeleeDamageableSystem
     DrawerName: Terra.Studio.MeleeDamageable
     DisplayName: MeleeDamageable
+  - Key: Terra.Studio.MeleeWeapon
+    ComponentName: Terra.Studio.MeleeWeaponComponent
+    SystemName: Terra.Studio.MeleeWeaponSystem
+    DrawerName: Terra.Studio.MeleeWeapon
+    DisplayName: Melee Weapon
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent
