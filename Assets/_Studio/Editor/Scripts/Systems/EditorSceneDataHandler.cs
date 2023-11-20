@@ -2,6 +2,8 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using PlayShifu.Terra;
 
 namespace Terra.Studio.RTEditor
 {
@@ -107,6 +109,65 @@ namespace Terra.Studio.RTEditor
                 return "SaveFile";
             }
             return FileService.GetSavedFilePath(resourceObj.SceneDataToLoad.name);
+        }
+
+        [MenuItem("Terra/Miscellaneous/Move All Prefabs To Resources")]
+        public static void MoveAllPrefabsToScenePrefabFolder()
+        {
+            var dest = "Assets/_Studio/Resources/Common/ScenePrefabs/";
+            var selection = Selection.activeGameObject;
+            var paths = new List<string>();
+            for (int i = 0; i < selection.transform.childCount; i++)
+            {
+                var child = selection.transform.GetChild(i).gameObject;
+                var path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(child);
+                if (!string.IsNullOrEmpty(path) && !paths.Contains(path) && !path.Contains(dest))
+                {
+                    paths.Add(path);
+                }
+                if (child.transform.childCount > 0)
+                {
+                    var childrenPaths = GetPrefabPathsFromChild(child.transform);
+                    foreach (var childPath in childrenPaths)
+                    {
+                        if (!paths.Contains(childPath) && !childPath.Contains(dest))
+                        {
+                            paths.Add(childPath);
+                        }
+                    }
+                }
+            }
+            foreach (var path in paths)
+            {
+                var assetName = Path.GetFileName(path);
+                var newPath = Path.Combine(dest, assetName);
+                AssetDatabase.MoveAsset(path, newPath);
+                Debug.Log($"Moved {path} to {newPath}");
+            }
+            AssetDatabase.Refresh();
+        }
+
+        private static List<string> GetPrefabPathsFromChild(Transform child)
+        {
+            var paths = new List<string>();
+            for (int i = 0; i < child.childCount; i++)
+            {
+                var furtherChild = child.GetChild(i).gameObject;
+                var path = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(furtherChild);
+                if (!paths.Contains(path)) paths.Add(path);
+                if (furtherChild.transform.childCount > 0)
+                {
+                    for (int j = 0; j < furtherChild.transform.childCount; j++)
+                    {
+                        var childrenPaths = GetPrefabPathsFromChild(furtherChild.transform.GetChild(j));
+                        foreach (var childPath in childrenPaths)
+                        {
+                            if (!paths.Contains(childPath)) paths.Add(childPath);
+                        }
+                    }
+                }
+            }
+            return paths;
         }
     }
 }
