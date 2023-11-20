@@ -28,6 +28,13 @@ namespace Terra.Studio
                 componentType = typeof(T);
                 this.fieldName = fieldName;
             }
+
+            public void Import(bool canPlay, int clipIndex, string clipName)
+            {
+                data.canPlay = canPlay;
+                data.clipIndex = clipIndex;
+                data.clipName = clipName;
+            }
         }
 
         public class BaseTargetTemplate
@@ -340,6 +347,11 @@ namespace Terra.Studio
                     allbroadcasts.Add(this);
                 }
             }
+
+            public void Import(string value)
+            {
+                broadcast = value;
+            }
         }
 
         [Serializable]
@@ -369,6 +381,36 @@ namespace Terra.Studio
                 SetupDefault();
             }
 
+            public void UpdateTRS(Vector3[] trs)
+            {
+                Array.Copy(trs, this.trs, trs.Length);
+                CheckForMultiselectScenario(trs);
+            }
+
+            public void Import(InstantiateStudioObjectComponent component)
+            {
+                spawnWhere = component.spawnWhere;
+                howMany = component.duplicatesToSpawn;
+                rounds = component.rounds;
+                repeatForever = component.canRepeatForver;
+                trs = InstantiateStudioObjectComponent.TRS.GetVector3Array(component.trs);
+                var isAvailable = EditorOp.Resolve<DataProvider>().TryGetEnum(component.ConditionType, typeof(InstantiateOn), out var result);
+                if (isAvailable)
+                {
+                    instantiateOn = (InstantiateOn)result;
+                    spawnWhen.data.startIndex = (int)instantiateOn;
+                    spawnWhen.data.startName = instantiateOn.GetStringValue();
+                    if (instantiateOn == InstantiateOn.EveryXSeconds)
+                    {
+                        interval = int.Parse(component.ConditionData);
+                    }
+                    else if (instantiateOn == InstantiateOn.BroadcastListen)
+                    {
+                        spawnWhen.data.listenName = component.ConditionData;
+                    }
+                }
+            }
+
             private void SetupTRS()
             {
                 var tr = target.transform;
@@ -388,12 +430,6 @@ namespace Terra.Studio
                 howMany = 1;
                 interval = 1;
                 rounds = 1;
-            }
-
-            public void UpdateTRS(Vector3[] trs)
-            {
-                Array.Copy(trs, this.trs, trs.Length);
-                CheckForMultiselectScenario(trs);
             }
 
             private void CheckForMultiselectScenario(Vector3[] trs)

@@ -14,6 +14,28 @@ namespace Terra.Studio
             [JsonConverter(typeof(Vector3Converter))] public Vector3 Position;
             [JsonConverter(typeof(Vector3Converter))] public Vector3 Rotation;
             [JsonConverter(typeof(Vector3Converter))] public Vector3 Scale;
+
+            public static TRS GetTRS(Vector3[] trs)
+            {
+                var trsData = new TRS()
+                {
+                    Position = trs[0],
+                    Rotation = trs[1],
+                    Scale = trs[2],
+                };
+                return trsData;
+            }
+
+            public static Vector3[] GetVector3Array(TRS trs)
+            {
+                var vector3s = new Vector3[]
+                {
+                    trs.Position,
+                    trs.Rotation,
+                    trs.Scale
+                };
+                return vector3s;
+            }
         }
 
         public bool IsConditionAvailable { get; set; }

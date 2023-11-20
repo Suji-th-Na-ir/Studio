@@ -77,19 +77,17 @@ namespace Terra.Studio
                 }).
                 ToArray();
             }
-            var trsData = new InstantiateStudioObjectComponent.TRS()
-            {
-                Position = instantiateData.trs[0],
-                Rotation = instantiateData.trs[1],
-                Scale = instantiateData.trs[2],
-            };
             var comp = new InstantiateStudioObjectComponent()
             {
                 IsConditionAvailable = true,
                 ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(instantiateData.instantiateOn),
                 ConditionData = GetCondition(),
-                canPlaySFX = false,
-                canPlayVFX = false,
+                canPlaySFX = playSFX.data.canPlay,
+                sfxIndex = playSFX.data.clipIndex,
+                sfxName = playSFX.data.clipName,
+                canPlayVFX = playVFX.data.canPlay,
+                vfxIndex = playVFX.data.clipIndex,
+                vfxName = playVFX.data.clipName,
                 childrenEntities = virtualEntities,
                 componentsOnSelf = components,
                 instantiateOn = instantiateData.instantiateOn,
@@ -99,12 +97,10 @@ namespace Terra.Studio
                 duplicatesToSpawn = instantiateData.howMany,
                 IsBroadcastable = !string.IsNullOrEmpty(broadcast.broadcast),
                 Broadcast = broadcast.broadcast,
-                trs = trsData
+                trs = InstantiateStudioObjectComponent.TRS.GetTRS(instantiateData.trs)
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp);
-            Debug.Log($"Type: {type}");
-            Debug.Log($"Data: {data}");
             return (type, data);
         }
 
@@ -121,10 +117,20 @@ namespace Terra.Studio
         public override void Import(EntityBasedComponent data)
         {
             var component = JsonConvert.DeserializeObject<InstantiateStudioObjectComponent>(data.data);
+            ImportComponentData(component);
             EditorOp.Resolve<SceneDataHandler>().OnSceneSetupDone += () =>
             {
                 ImportPostSceneSetup(component);
             };
+        }
+
+        private void ImportComponentData(InstantiateStudioObjectComponent component)
+        {
+            playSFX.Import(component.canPlaySFX, component.sfxIndex, component.sfxName);
+            playVFX.Import(component.canPlayVFX, component.vfxIndex, component.vfxName);
+            broadcast.Import(component.Broadcast);
+            instantiateData.Import(component);
+            ImportVisualisation(component.Broadcast, instantiateData.spawnWhen.data.listenName);
         }
 
         private void ImportPostSceneSetup(InstantiateStudioObjectComponent component)
@@ -151,7 +157,7 @@ namespace Terra.Studio
             }
             properties[0] = new()
             {
-                { "Spawn Where", instantiateData.spawnWhere.ToString() },
+                { "Spawn Where", instantiateData.spawnWhere.GetStringValue() },
                 { "Spawn When", startName }
             };
             if (instantiateOn == InstantiateOn.EveryXSeconds)

@@ -36,7 +36,7 @@ namespace Terra.Studio
         private static string GetStringValueFromAlias(FieldInfo fieldInfo)
         {
             var attribs = fieldInfo.GetCustomAttributes(typeof(AliasDrawerAttribute), false) as AliasDrawerAttribute[];
-            return attribs.Length > 0 ? attribs[0].Alias : null;
+            return attribs.Length > 0 ? attribs[0].Alias : fieldInfo.Name;
         }
 
         public static Type GetStoredType(this Enum value)
