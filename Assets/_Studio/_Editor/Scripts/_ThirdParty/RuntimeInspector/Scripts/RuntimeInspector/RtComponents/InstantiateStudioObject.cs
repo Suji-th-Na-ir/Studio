@@ -143,11 +143,28 @@ namespace Terra.Studio
         public override BehaviourPreviewUI.PreviewData GetPreviewData()
         {
             var properties = new Dictionary<string, object>[1];
+            var instantiateOn = (InstantiateOn)instantiateData.spawnWhen.data.startIndex;
+            var startName = instantiateOn.GetStringValue();
+            if (instantiateOn == InstantiateOn.EveryXSeconds)
+            {
+                startName = startName.Replace("x", $"{instantiateData.interval}");
+            }
             properties[0] = new()
             {
                 { "Spawn Where", instantiateData.spawnWhere.ToString() },
-                { "Spawn When", instantiateData.spawnWhen.data.startName }
+                { "Spawn When", startName }
             };
+            if (instantiateOn == InstantiateOn.EveryXSeconds)
+            {
+                if (instantiateData.repeatForever)
+                {
+                    properties[0].Add("Rounds", "Repeat Forever");
+                }
+                else
+                {
+                    properties[0].Add("Rounds", $"{instantiateData.rounds}");
+                }
+            }
             if (playSFX.data.canPlay)
             {
                 properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFX.data.clipName);
@@ -156,11 +173,10 @@ namespace Terra.Studio
             {
                 properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFX.data.clipName);
             }
-            var startOnName = instantiateData.instantiateOn.ToString();
             var previewData = new BehaviourPreviewUI.PreviewData()
             {
                 DisplayName = GetDisplayName(),
-                EventName = startOnName,
+                EventName = startName,
                 Properties = properties,
                 Broadcast = new string[] { broadcast.broadcast },
                 Listen = instantiateData.spawnWhen.data.listenName

@@ -69,6 +69,7 @@ namespace Terra.Studio
                 StopCoroutine(localCoroutine);
                 localCoroutine = null;
             }
+            Destroy(gameObject);
         }
 
         private IEnumerator PerformBatchedCoroutine()

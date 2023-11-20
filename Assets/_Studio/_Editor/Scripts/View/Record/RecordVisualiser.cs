@@ -546,7 +546,10 @@ namespace Terra.Studio
 
         private void OnGizmoChangedWhileRecording(SelectionHandler.GizmoId gizmoId)
         {
-            EditorOp.Resolve<SelectionHandler>().OverrideGizmoOntoTarget(new List<GameObject>() { instantiateRecorder.Recorder }, gizmoId);
+            if (instantiateRecorder != null)
+            {
+                EditorOp.Resolve<SelectionHandler>().OverrideGizmoOntoTarget(new List<GameObject>() { instantiateRecorder.Recorder }, gizmoId);
+            }
         }
     }
 
