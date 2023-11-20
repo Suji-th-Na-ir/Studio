@@ -47,7 +47,11 @@ namespace Terra.Studio
         private Action<bool> onTextureLoadCompleted;
 
         private bool _loadTexturesCalled;
-        private static readonly int BaseColorTextureSt = Shader.PropertyToID("baseColorTexture_ST");
+        private static readonly int BaseColorTextureSt = Shader.PropertyToID("baseColorTexture");
+        private static readonly int EmissiveTextureSt = Shader.PropertyToID("emissiveTexture");
+        private static readonly int OcclusionTextureSt = Shader.PropertyToID("occlusionTexture");
+        private static readonly int NormalTextureSt = Shader.PropertyToID("normalTexture");
+        private static readonly int MetallicRoughnessSt = Shader.PropertyToID("metallicRoughnessTexture");
 
         public void Init(string fullUrl, string uniqueName, ImportSettings settings)
         {
@@ -188,15 +192,36 @@ namespace Terra.Studio
                 var materials = new Material[meshResult.materialIndices.Length];
                 for (var index = 0; index < materials.Length; index++)
                 {
-                    var material = _importer.GetMaterial(meshResult.materialIndices[index]) ??
-                                   _importer.GetDefaultMaterial();
-                    //var oldVec = material.GetVector(BaseColorTextureSt);
-                    //if (!(oldVec.x == 1 && oldVec.y == -1))
-                    //{
-                    //    var newVec = new Vector4(1, -1, oldVec.z, oldVec.w);
-                    //    material.SetVector(BaseColorTextureSt, newVec);
-                    //    Debug.Log($"Setting {oldVec}.....{newVec}");
-                    //}
+                    var material = _importer.GetMaterial(meshResult.materialIndices[index]) ?? _importer.GetDefaultMaterial();
+                    
+                    
+                    // var oldVec = material.GetVector(BaseColorTextureSt);
+                    // var newVec = new Vector4(1, -1, oldVec.z, oldVec.w);
+                    // material.SetVector(BaseColorTextureSt, new Vector4(1,-1,0,1));
+                    
+                    Debug.Log($"AA -> {material.shader}");
+                    
+                    Debug.Log($"OG - BASE -> {material.GetTextureScale(BaseColorTextureSt)}     {material.GetTextureOffset(BaseColorTextureSt)}");
+                    Debug.Log($"OG - EMISSIVE -> {material.GetTextureScale(EmissiveTextureSt)}     {material.GetTextureOffset(EmissiveTextureSt)}");
+                    Debug.Log($"OG - NORMAL -> {material.GetTextureScale(NormalTextureSt)}     {material.GetTextureOffset(NormalTextureSt)}");
+                    Debug.Log($"OG - OCCLUSION -> {material.GetTextureScale(OcclusionTextureSt)}     {material.GetTextureOffset(OcclusionTextureSt)}");
+                    Debug.Log($"OG - MROUGHNESS -> {material.GetTextureScale(MetallicRoughnessSt)}     {material.GetTextureOffset(MetallicRoughnessSt)}");
+                    
+                    
+                    material.SetTextureScale(BaseColorTextureSt, new Vector2(1,-1));
+                    material.SetTextureOffset(BaseColorTextureSt, new Vector2(0,1));
+                    
+                    material.SetTextureScale(EmissiveTextureSt, new Vector2(1,-1));
+                    material.SetTextureOffset(EmissiveTextureSt, new Vector2(0,1));
+                    
+                    material.SetTextureScale(NormalTextureSt, new Vector2(1,-1));
+                    material.SetTextureOffset(NormalTextureSt, new Vector2(0,1));
+                    
+                    material.SetTextureScale(OcclusionTextureSt, new Vector2(1,-1));
+                    material.SetTextureOffset(OcclusionTextureSt, new Vector2(0,1));
+                    
+                    material.SetTextureScale(MetallicRoughnessSt, new Vector2(1,-1));
+                    material.SetTextureOffset(MetallicRoughnessSt, new Vector2(0,1));
                     materials[index] = material;
                 }
 
