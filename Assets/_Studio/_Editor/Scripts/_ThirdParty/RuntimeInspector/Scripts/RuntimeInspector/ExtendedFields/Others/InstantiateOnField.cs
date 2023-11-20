@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Reflection;
 using static Terra.Studio.Atom;
 using RuntimeInspectorNamespace;
+using UnityEditor;
 
 namespace Terra.Studio
 {
@@ -19,11 +20,12 @@ namespace Terra.Studio
         private InspectorField roundsField;
         private InspectorField repeatForeverField;
         private InspectorField howManyField;
-        private InstantiateOnData unboxedData;
         private GameObject currentPointInstance;
         private GameObject ghostOptionInstance;
         private Text currentPointTRS;
         private bool currentRecordState;
+        private InstantiateOnData unboxedData;
+        private InstantiateOnData UnboxedData => unboxedData;
 
         public override bool SupportsType(Type type)
         {
@@ -32,9 +34,9 @@ namespace Terra.Studio
 
         public override void GenerateElements()
         {
-            spawnWhenField = CreateDrawerForField(nameof(unboxedData.spawnWhen));
+            spawnWhenField = CreateDrawerForField(nameof(UnboxedData.spawnWhen));
             GenerateEveryXSecondsDrawer();
-            spawnWhereField = CreateDrawer(typeof(SpawnWhere), "Spawn Where", () => { return unboxedData.spawnWhere; }, OnSpawnWhereUpdated, true);
+            spawnWhereField = CreateDrawer(typeof(SpawnWhere), "Spawn Where", () => { return UnboxedData.spawnWhere; }, OnSpawnWhereUpdated, true);
             SpawnDynamicUI();
             GenerateHowManyDrawer();
             IsExpanded = true;
@@ -63,9 +65,9 @@ namespace Terra.Studio
         private void OnSpawnWhereUpdated(object value)
         {
             var newValue = (SpawnWhere)value;
-            if (unboxedData.spawnWhere == newValue) return;
-            unboxedData.spawnWhere = newValue;
-            if (unboxedData.spawnWhere != SpawnWhere.Random)
+            if (UnboxedData.spawnWhere == newValue) return;
+            UnboxedData.spawnWhere = newValue;
+            if (UnboxedData.spawnWhere != SpawnWhere.Random)
             {
                 if (howManyField != null)
                 {
@@ -73,13 +75,14 @@ namespace Terra.Studio
                     howManyField = null;
                 }
             }
+            PostProcessDataUpdate(UpdateType.SpawnWhere, value);
             RegenerateElements();
         }
 
         private void SpawnDynamicUI()
         {
             ClearDynamicUI();
-            if (unboxedData.spawnWhere == SpawnWhere.CurrentPoint)
+            if (UnboxedData.spawnWhere == SpawnWhere.CurrentPoint)
             {
                 currentPointInstance = Instantiate(currentPoint, drawArea.transform);
                 currentPointTRS = currentPointInstance.GetComponent<Text>();
@@ -102,7 +105,7 @@ namespace Terra.Studio
         private void OnRecordToggled()
         {
             currentRecordState = !currentRecordState;
-            unboxedData.OnRecordToggled?.Invoke(currentRecordState);
+            UnboxedData.OnRecordToggled?.Invoke(currentRecordState);
             ToggleInteractivityOfAllFields(!currentRecordState);
             if (currentRecordState)
             {
@@ -117,29 +120,30 @@ namespace Terra.Studio
             if (intervalField) intervalField.SetInteractable(status);
             if (repeatForeverField) repeatForeverField.SetInteractable(status);
             if (howManyField) howManyField.SetInteractable(status);
-            if (roundsField && !unboxedData.repeatForever) roundsField.SetInteractable(status);
+            if (roundsField && !UnboxedData.repeatForever) roundsField.SetInteractable(status);
         }
 
         private void GenerateEveryXSecondsDrawer()
         {
-            if (unboxedData.instantiateOn != InstantiateOn.EveryXSeconds) return;
-            intervalField = CreateDrawer(typeof(int), "Interval", () => { return unboxedData.interval; }, (value) => { unboxedData.interval = (int)value; }, true);
-            roundsField = CreateDrawer(typeof(uint), "Rounds", () => { return unboxedData.rounds; }, (value) => { unboxedData.rounds = (uint)value; }, true);
-            repeatForeverField = CreateDrawer(typeof(bool), "Repeat Forever", () => { return unboxedData.repeatForever; }, OnRepeatForeverChecked, true);
-            OnRepeatForeverChecked(unboxedData.repeatForever);
+            if (UnboxedData.instantiateOn != InstantiateOn.EveryXSeconds) return;
+            intervalField = CreateDrawer(typeof(int), "Interval", () => { return UnboxedData.interval; }, (value) => { UnboxedData.interval = (int)value; PostProcessDataUpdate(UpdateType.Interval, value); }, true);
+            roundsField = CreateDrawer(typeof(uint), "Rounds", () => { return UnboxedData.rounds; }, (value) => { UnboxedData.rounds = (uint)value; PostProcessDataUpdate(UpdateType.Rounds, value); }, true);
+            repeatForeverField = CreateDrawer(typeof(bool), "Repeat Forever", () => { return UnboxedData.repeatForever; }, OnRepeatForeverChecked, true);
+            OnRepeatForeverChecked(UnboxedData.repeatForever);
         }
 
         private void OnRepeatForeverChecked(object value)
         {
-            unboxedData.repeatForever = (bool)value;
-            var setInteractable = !unboxedData.repeatForever;
+            UnboxedData.repeatForever = (bool)value;
+            var setInteractable = !UnboxedData.repeatForever;
             roundsField.SetInteractable(setInteractable);
+            PostProcessDataUpdate(UpdateType.RepeatForever, value);
         }
 
         private void GenerateHowManyDrawer()
         {
-            if (unboxedData.spawnWhere != SpawnWhere.Random) return;
-            howManyField = CreateDrawer(typeof(uint), "How Many", () => { return unboxedData.howMany; }, (value) => { unboxedData.howMany = (uint)value; }, true);
+            if (UnboxedData.spawnWhere != SpawnWhere.Random) return;
+            howManyField = CreateDrawer(typeof(uint), "How Many", () => { return UnboxedData.howMany; }, (value) => { UnboxedData.howMany = (uint)value; PostProcessDataUpdate(UpdateType.HowMany, value); }, true);
         }
 
         protected override void OnBound(MemberInfo variable)
@@ -163,14 +167,74 @@ namespace Terra.Studio
         public override void Refresh()
         {
             base.Refresh();
-            UpdateTRS();
+            if (unboxedData != null)
+            {
+                if (unboxedData.isDirty)
+                {
+                    unboxedData.isDirty = false;
+                    RegenerateElements();
+                }
+                else
+                {
+                    UpdateTRS();
+                }
+            }
         }
 
         private void UpdateTRS()
         {
-            if (unboxedData == null || unboxedData.spawnWhere == SpawnWhere.Random || !currentPointTRS) return;
-            var target = unboxedData.target.transform.localPosition;
+            if (UnboxedData == null || UnboxedData.spawnWhere == SpawnWhere.Random || !currentPointTRS) return;
+            var target = UnboxedData.target.transform.localPosition;
             currentPointTRS.text = $"X: {Math.Round(target.x, 2)}    Y: {Math.Round(target.y, 2)}    Z: {Math.Round(target.z, 2)}";
+        }
+
+        private void PostProcessDataUpdate(UpdateType updateType, object value)
+        {
+            var selections = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+            if (selections.Count <= 1) return;
+            foreach (var selection in selections)
+            {
+                if (selection == unboxedData.target) continue;
+                UpdateValue(selection, updateType, value);
+            }
+        }
+
+        private void UpdateValue(GameObject gameObject, UpdateType updateType, object value)
+        {
+            if (!gameObject.TryGetComponent(out InstantiateStudioObject instantiate)) return;
+            var data = instantiate.instantiateData;
+            switch (updateType)
+            {
+                case UpdateType.SpawnWhere:
+                    data.spawnWhere = (SpawnWhere)value;
+                    data.isDirty = true;
+                    break;
+                case UpdateType.Interval:
+                    data.interval = (int)value;
+                    data.isDirty = true;
+                    break;
+                case UpdateType.Rounds:
+                    data.rounds = (uint)value;
+                    data.isDirty = true;
+                    break;
+                case UpdateType.RepeatForever:
+                    data.repeatForever = (bool)value;
+                    data.isDirty = true;
+                    break;
+                case UpdateType.HowMany:
+                    data.howMany = (uint)value;
+                    data.isDirty = true;
+                    break;
+            }
+        }
+
+        private enum UpdateType
+        {
+            SpawnWhere,
+            Interval,
+            Rounds,
+            RepeatForever,
+            HowMany
         }
     }
 }

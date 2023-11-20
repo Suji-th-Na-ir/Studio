@@ -363,6 +363,7 @@ namespace Terra.Studio
             [AliasDrawer("Interval")] public int interval;
             [AliasDrawer("Rounds")] public uint rounds;
             [AliasDrawer("Repeat forever")] public bool repeatForever;
+            [HideInInspector] public bool isDirty;
             [HideInInspector] public InstantiateOn instantiateOn;
             [HideInInspector] public Vector3[] trs;
             public Action<InstantiateOn> OnSpawnWhenUpdated;
@@ -376,6 +377,7 @@ namespace Terra.Studio
                 {
                     instantiateOn = (InstantiateOn)index;
                     OnSpawnWhenUpdated?.Invoke(instantiateOn);
+                    CheckForMultiselectScenario(instantiateOn);
                 };
                 SetupTRS();
                 SetupDefault();
@@ -383,8 +385,13 @@ namespace Terra.Studio
 
             public void UpdateTRS(Vector3[] trs)
             {
-                Array.Copy(trs, this.trs, trs.Length);
+                UpdateTRS_WithoutMultiselect(trs);
                 CheckForMultiselectScenario(trs);
+            }
+
+            public void UpdateTRS_WithoutMultiselect(Vector3[] trs)
+            {
+                Array.Copy(trs, this.trs, trs.Length);
             }
 
             public void Import(InstantiateStudioObjectComponent component)
@@ -440,7 +447,23 @@ namespace Terra.Studio
                     if (obj == target) continue;
                     if (obj.TryGetComponent(out InstantiateStudioObject component))
                     {
-                        component.instantiateData.UpdateTRS(trs);
+                        component.instantiateData.UpdateTRS_WithoutMultiselect(trs);
+                    }
+                }
+            }
+
+            private void CheckForMultiselectScenario(InstantiateOn instantiateOn)
+            {
+                var selectedObjs = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+                foreach (var obj in selectedObjs)
+                {
+                    if (obj == target) continue;
+                    if (obj.TryGetComponent(out InstantiateStudioObject component))
+                    {
+                        component.instantiateData.spawnWhen.data.startIndex = (int)instantiateOn;
+                        component.instantiateData.spawnWhen.data.startName = instantiateOn.ToString();
+                        component.instantiateData.instantiateOn = instantiateOn;
+                        component.instantiateData.OnSpawnWhenUpdated?.Invoke(instantiateOn);
                     }
                 }
             }
@@ -452,7 +475,7 @@ namespace Terra.Studio
                 {
                     return Vector3.one;
                 }
-                Bounds bounds = renderers[0].bounds;
+                var bounds = renderers[0].bounds;
                 foreach (var renderer in renderers)
                 {
                     bounds.Encapsulate(renderer.bounds);
