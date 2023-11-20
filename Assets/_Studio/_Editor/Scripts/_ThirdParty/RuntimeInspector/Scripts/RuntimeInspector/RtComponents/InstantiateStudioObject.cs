@@ -157,8 +157,8 @@ namespace Terra.Studio
             }
             properties[0] = new()
             {
-                { "Spawn Where", instantiateData.spawnWhere.GetStringValue() },
-                { "Spawn When", startName }
+                { "Spawn When", startName },
+                { "Spawn Where", instantiateData.spawnWhere.GetStringValue() }
             };
             if (instantiateOn == InstantiateOn.EveryXSeconds)
             {
@@ -170,6 +170,10 @@ namespace Terra.Studio
                 {
                     properties[0].Add("Rounds", $"{instantiateData.rounds}");
                 }
+            }
+            if (instantiateData.spawnWhere == SpawnWhere.Random)
+            {
+                properties[0].Add("How Many", $"{instantiateData.howMany}");
             }
             if (playSFX.data.canPlay)
             {

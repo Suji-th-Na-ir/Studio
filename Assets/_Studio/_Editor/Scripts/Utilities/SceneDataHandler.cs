@@ -101,7 +101,10 @@ namespace Terra.Studio
                     {
                         if (status)
                         {
-                            SystemOp.Resolve<User>().UploadSaveDataToCloud(sceneData, null);
+                            if (SystemOp.Resolve<System>().ConfigSO.ServeFromCloud)
+                            {
+                                SystemOp.Resolve<User>().UploadSaveDataToCloud(sceneData, null);
+                            }
                             onPreparationDone?.Invoke();
                         }
                     }
@@ -199,10 +202,6 @@ namespace Terra.Studio
                 AttachComponents(generatedObj, entity.components);
                 HandleChildren(generatedObj, entity.children);
             }
-            generatedObj.name = entity.name;
-            SetColliderData(generatedObj, entity.metaData);
-            AttachComponents(generatedObj, entity.components);
-            HandleChildren(generatedObj, entity.children);
         }
 
         public void AttachComponents(
@@ -380,7 +379,8 @@ namespace Terra.Studio
                 var attachedComponents = go.GetComponents<IComponent>();
                 var instantiableTypeName = nameof(InstantiateStudioObject);
                 isInstantiable = attachedComponents.Any(x => x.ComponentName.Equals(instantiableTypeName));
-                if (isInstantiable)
+                var isSubsystemEnabled = SystemOp.Resolve<System>().CanInitiateSubsystemProcess?.Invoke() ?? true;
+                if (isInstantiable && isSubsystemEnabled)
                 {
                     entityComponents = attachedComponents.
                         Where(x => x.ComponentName.Equals(instantiableTypeName)).

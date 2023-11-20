@@ -17,7 +17,7 @@ namespace Terra.Studio
         public static CoroutineService RunCoroutine(Action onCoroutineDone, DelayType delayType, float delay = 0, Func<bool> predicate = null)
         {
             var coroutineService = new GameObject("CoroutineHelper-Service");
-            RuntimeWrappers.MoveGameObjectToActiveScene(coroutineService);
+            DontDestroyOnLoad(coroutineService);
             var coroutine = coroutineService.AddComponent<CoroutineService>();
             coroutine.delayType = delayType;
             coroutine.onPerformed = onCoroutineDone;
@@ -30,7 +30,7 @@ namespace Terra.Studio
         public static CoroutineService RunCoroutineInBatches(uint rounds, DelayType delayType, float delay, Func<bool> predicate, Action onCoroutineDone)
         {
             var coroutineService = new GameObject("BatchCoroutineHelper-Service");
-            RuntimeWrappers.MoveGameObjectToActiveScene(coroutineService);
+            DontDestroyOnLoad(coroutineService);
             var coroutine = coroutineService.AddComponent<CoroutineService>();
             coroutine.delayType = delayType;
             coroutine.onPerformed = onCoroutineDone;
