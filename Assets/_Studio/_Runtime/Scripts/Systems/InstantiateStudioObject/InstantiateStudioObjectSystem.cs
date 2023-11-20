@@ -89,18 +89,26 @@ namespace Terra.Studio
                     if (refTr.childCount < j + 1)
                     {
                         entityData.shouldLoadAssetAtRuntime = true;
-                        childGo = EntityAuthorOp.ProvideGameobjectForEntity(entityData);
-                        childGo.transform.SetParent(refTr);
+                        EntityAuthorOp.ProvideGameobjectForEntity(entityData, (go) =>
+                        {
+                            go.transform.SetParent(refTr);
+                            SetupChildGo(go, in entityData);
+                        });
                     }
                     else
                     {
                         childGo = refTr.GetChild(j).gameObject;
                         RuntimeWrappers.ResolveTRS(childGo, null, entityData.position, entityData.rotation, entityData.scale);
+                        SetupChildGo(childGo, in entityData);
                     }
-                    RuntimeOp.Resolve<SceneDataHandler>().SetColliderData(childGo, entityData.metaData);
-                    EntityAuthorOp.HandleEntityAndComponentsGeneration(childGo, entityData);
                 }
             }
+        }
+
+        private void SetupChildGo(GameObject childGo, in VirtualEntity entityData)
+        {
+            RuntimeOp.Resolve<SceneDataHandler>().SetColliderData(childGo, entityData.metaData);
+            EntityAuthorOp.HandleEntityAndComponentsGeneration(childGo, entityData);
         }
 
         public override void OnHaltRequested(EcsWorld currentWorld)

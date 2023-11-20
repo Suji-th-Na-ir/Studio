@@ -160,7 +160,7 @@ namespace RuntimeInspectorNamespace
             GameObject target = (GameObject)Value;
             if (!target)
                 return;
-
+            addComponentTypes = null;
             if (addComponentTypes == null)
             {
                 List<Type> componentTypes = new List<Type>(128);
@@ -189,17 +189,23 @@ namespace RuntimeInspectorNamespace
                     {
                         foreach (Type type in assembly.GetExportedTypes())
                         {
-                            bool canSkip = false;
-                            foreach (var compName in Helper.COMPONENTS_TO_FILTER_OUT)
+                            if (RTDataManagerSO.GameEssentialBehaviours.Contains(type))
                             {
-                                if (type.Name.Contains(compName))
+                                continue;
+                            }
+
+                            bool canSkip = false;
+                            foreach (var c in target.GetComponents<BaseBehaviour>())
+                            {
+                                if(c.GetType().Equals(type))
                                 {
                                     canSkip = true;
                                     break;
-                                }
+                                }    
                             }
 
-                            if (canSkip) continue;
+                            if (canSkip)
+                                continue;
 
                             // show classes that only inherits from Terra.Studio.RTEditor.IComponent
                             if (!type.GetTypeInfo().GetInterfaces().Contains(typeof(IComponent)))
@@ -214,7 +220,7 @@ namespace RuntimeInspectorNamespace
 							if( type.GetTypeInfo().IsGenericType || type.GetTypeInfo().IsAbstract )
 #endif
                                 continue;
-
+                            
                             componentTypes.Add(type);
                         }
                     }

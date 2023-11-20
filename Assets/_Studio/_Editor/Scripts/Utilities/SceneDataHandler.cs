@@ -156,27 +156,48 @@ namespace Terra.Studio
                 {
                     PlayerSpawnPoint = metaData.playerSpawnPoint;
                 }
+                SystemOp.Resolve<RequestValidator>().Prewarm(ref worldData, () =>
+                {
+                    for (int i = 0; i < worldData.entities.Length; i++)
+                    {
+                        var entity = worldData.entities[i];
+                        SpawnObjects(entity);
+                    }
+#if UNITY_WEBGL && !UNITY_EDITOR
+            WebGLWrapper.HideLoadingScreen();
+#endif
+                });
             }
-            for (int i = 0; i < worldData.entities.Length; i++)
+            else
             {
-                var entity = worldData.entities[i];
-                SpawnObjects(entity);
+                for (int i = 0; i < worldData.entities.Length; i++)
+                {
+                    var entity = worldData.entities[i];
+                    SpawnObjects(entity);
+                }
             }
         }
 
         private void SpawnObjects(VirtualEntity entity)
         {
-            GameObject generatedObj;
+            GameObject generatedObj = default;
             var trs = new Vector3[] { entity.position, entity.rotation, entity.scale };
-            generatedObj = RuntimeWrappers.SpawnObject(
+            RuntimeWrappers.SpawnObject(
                 entity.assetType,
                 entity.assetPath,
                 entity.primitiveType,
+                bla,
+                entity.uniqueName,
                 trs
             );
-            if (generatedObj == null)
+
+            void bla(GameObject x)
             {
-                return;
+                generatedObj = x;
+                generatedObj.name = entity.name;
+                SetColliderData(generatedObj, entity.metaData);
+                AttachComponents(generatedObj, entity.components);
+                HandleChildren(generatedObj, entity.children);
             }
             generatedObj.name = entity.name;
             SetColliderData(generatedObj, entity.metaData);
@@ -236,22 +257,34 @@ namespace Terra.Studio
                 Transform child;
                 if (tr.childCount < i + 1)
                 {
-                    GameObject generatedObj;
+                    GameObject generatedObj = default;
                     var trs = new Vector3[]
                     {
                         childEntity.position,
                         childEntity.rotation,
                         childEntity.scale
                     };
-                    generatedObj = RuntimeWrappers.SpawnObject(
+                    RuntimeWrappers.SpawnObject(
                         childEntity.assetType,
                         childEntity.assetPath,
                         childEntity.primitiveType,
+                        bla,
+                        childEntity.uniqueName,
                         trs
                     );
-                    child = generatedObj.transform;
-                    child.SetParent(tr);
-                    child.localScale = childEntity.scale.WorldToLocalScale(tr);
+
+
+                    void bla(GameObject gb)
+                    {
+                        generatedObj = gb;
+                        child = generatedObj.transform;
+                        child.SetParent(tr);
+                        child.localScale = childEntity.scale.WorldToLocalScale(tr);
+                        child.name = childEntity.name;
+                        SetColliderData(child.gameObject, childEntity.metaData);
+                        AttachComponents(child.gameObject, childEntity.components, onComponentDependencyFound);
+                        HandleChildren(child.gameObject, childEntity.children, onComponentDependencyFound);
+                    }
                 }
                 else
                 {
@@ -261,12 +294,9 @@ namespace Terra.Studio
                         Quaternion.Euler(childEntity.rotation)
                     );
                     child.localScale = childEntity.scale.WorldToLocalScale(child.parent);
-                }
-                child.name = childEntity.name;
-                SetColliderData(child.gameObject, childEntity.metaData);
-                AttachComponents(child.gameObject, childEntity.components, onComponentDependencyFound);
-                if (childEntity.children != null && childEntity.children.Length > 0)
-                {
+                    child.name = childEntity.name;
+                    SetColliderData(child.gameObject, childEntity.metaData);
+                    AttachComponents(child.gameObject, childEntity.components, onComponentDependencyFound);
                     HandleChildren(child.gameObject, childEntity.children, onComponentDependencyFound);
                 }
             }
@@ -322,14 +352,17 @@ namespace Terra.Studio
                     go.transform.parent != null
                         ? go.transform.localScale.LocalToWorldScale(go.transform.parent)
                         : go.transform.localScale,
-                assetType = !string.IsNullOrEmpty(GetAssetPath(go))
-                    ? AssetType.Prefab
-                    : GetAssetType(go),
+                assetType = GetAssetType(go),
                 shouldLoadAssetAtRuntime = true
             };
             if (newEntity.assetType == AssetType.Primitive)
             {
                 newEntity.primitiveType = GetPrimitiveType(go);
+            }
+
+            if (go.TryGetComponent<StudioGameObject>(out var x))
+            {
+                newEntity.uniqueName = x.itemData.Name;
             }
             EntityBasedComponent[] entityComponents;
             var isInstantiable = false;
@@ -411,6 +444,10 @@ namespace Terra.Studio
             {
                 if (go.TryGetComponent(out StudioGameObject component))
                 {
+                    if (component.assetType == AssetType.RemotePrefab)
+                    {
+                        return AssetType.RemotePrefab;
+                    }
                     if (
                         component.itemData != null
                         && !string.IsNullOrEmpty(component.itemData.ResourcePath)

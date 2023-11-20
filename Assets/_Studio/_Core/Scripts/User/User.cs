@@ -53,6 +53,9 @@ namespace Terra.Studio
         public User UpdateProjectId(string projectId)
         {
             this.projectId = projectId;
+#if UNITY_WEBGL && !UNITY_EDITOR
+            WebGLWrapper.SetProjectId(projectId);
+#endif
             return this;
         }
 

@@ -1,6 +1,8 @@
+using System;
 using System.Linq;
 using UnityEngine;
 using Leopotam.EcsLite;
+using Object = UnityEngine.Object;
 
 namespace Terra.Studio
 {
@@ -13,9 +15,9 @@ namespace Terra.Studio
             Author.Generate(data);
         }
 
-        public static GameObject ProvideGameobjectForEntity(VirtualEntity entity)
+        public static void ProvideGameobjectForEntity(VirtualEntity entity, Action<GameObject> onSpawned)
         {
-            return ((EntityAuthor)Author).CreateVisualRepresentation(entity);
+            ((EntityAuthor)Author).CreateVisualRepresentation(entity, onSpawned);
         }
 
         public static void HandleComponentsGeneration(GameObject refObj, EntityBasedComponent[] components)
@@ -51,21 +53,33 @@ namespace Terra.Studio
             public override void Generate(object data)
             {
                 var virtualEntity = (VirtualEntity)data;
-                var go = CreateVisualRepresentation(virtualEntity);
-                HandleEntityAndComponentGeneration(go, virtualEntity);
+                CreateVisualRepresentation(virtualEntity, (x =>
+                {
+                    HandleEntityAndComponentGeneration(x, virtualEntity);
+                }));
+
             }
 
-            public GameObject CreateVisualRepresentation(VirtualEntity entity)
+            public void CreateVisualRepresentation(VirtualEntity entity, Action<GameObject> cb)
             {
-                GameObject generatedObj = null;
                 if (!entity.shouldLoadAssetAtRuntime)
                 {
-                    return generatedObj;
+                    cb?.Invoke(null);
+                    return;
                 }
                 var trs = new Vector3[] { entity.position, entity.rotation, entity.scale };
-                generatedObj = RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, trs);
-                generatedObj.name = entity.name;
-                return generatedObj;
+                RuntimeWrappers.SpawnObject(entity.assetType, entity.assetPath, entity.primitiveType, (x) =>
+                {
+                    if (x != null)
+                    {
+                        x.name = entity.name;
+                    }
+                    for (int i = 0; i < x.transform.childCount; i++)
+                    {
+                        x.transform.GetChild(i).gameObject.layer = LayerMask.NameToLayer("Default");
+                    }
+                    cb?.Invoke(x);
+                }, entity.uniqueName, trs);
             }
 
             public void HandleComponentsGeneration(GameObject refObj, EntityBasedComponent[] components)

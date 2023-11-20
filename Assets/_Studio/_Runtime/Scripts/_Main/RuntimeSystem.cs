@@ -22,6 +22,7 @@ namespace Terra.Studio
         private List<Type> customUpdateSystemToRemove;
         private List<BaseCoroutineRunner> coroutineRunners;
         private Scene scene;
+        private Action onPreInitialisationCompleted;
 
         public EcsWorld World { get { return ecsWorld; } }
         public Action<GameObject> OnClicked { get; set; }
@@ -36,10 +37,9 @@ namespace Terra.Studio
         {
             this.scene = scene;
             ResolveEssentials();
-            InitializeEcs();
             RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameStart(true, (data) => { canRunSystems = true; });
             RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameEnd(true, (data) => { DestroyEcsSystemsAndWorld(); });
-            InitializeStateBasedOnSystemCondition();
+            InitializeEcs();
         }
 
         private void ResolveEssentials()
@@ -49,6 +49,14 @@ namespace Terra.Studio
             RuntimeOp.Register(new CoreGameManager());
             RuntimeOp.Register(new SceneDataHandler());
             RuntimeOp.Register(new EntitiesGraphics());
+        }
+
+        private void InitializeEcs()
+        {
+            ecsWorld = new EcsWorld();
+            InitializeUpdateSystems();
+            onPreInitialisationCompleted = InitializeStateBasedOnSystemCondition;
+            WorldAuthorOp.Generate(onPreInitialisationCompleted);
         }
 
         private void InitializeStateBasedOnSystemCondition()
@@ -62,13 +70,6 @@ namespace Terra.Studio
             {
                 canRunSystems = true;
             }
-        }
-
-        private void InitializeEcs()
-        {
-            ecsWorld = new EcsWorld();
-            InitializeUpdateSystems();
-            WorldAuthorOp.Generate();
         }
 
         private void InitializeUpdateSystems()

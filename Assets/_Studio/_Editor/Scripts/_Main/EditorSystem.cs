@@ -39,6 +39,7 @@ namespace Terra.Studio
             EditorOp.Resolve<ToolbarView>().Init();
             EditorOp.Resolve<NavigationToolbar>().Init();
             EditorOp.Resolve<SceneView>().Init();
+            EditorOp.Resolve<AssetsView>().Init();
 
             EditorOp.Resolve<UILogicDisplayProcessor>().Init();
             EditorOp.Resolve<SceneDataHandler>().LoadScene();

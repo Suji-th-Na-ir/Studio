@@ -159,7 +159,13 @@ namespace Terra.Studio
         public void OnProjectDetailsReceived(string projectDetails, Action<StudioState> callback)
         {
             var unpackedData = JsonConvert.DeserializeObject<ProjectData>(projectDetails);
-            SystemOp.Resolve<User>().UpdateProjectId(unpackedData.ProjectId);
+            if (string.IsNullOrEmpty(unpackedData.ProjectName))
+            {
+                unpackedData.ProjectName = SystemOp.Resolve<System>().ConfigSO.SceneDataToLoad.name;
+            }
+            SystemOp.Resolve<User>().
+                UpdateProjectId(unpackedData.ProjectId).
+                UpdateProjectName(unpackedData.ProjectName);
             callback?.Invoke(unpackedData.State);
         }
 

@@ -11,14 +11,6 @@ namespace PlayShifu.Terra
 {
     public static class Helper
     {
-        public static readonly List<string> COMPONENTS_TO_FILTER_OUT = new()
-        {
-            "Checkpoint",
-            "GameScore",
-            "InGameTimer",
-            "Oscillate"
-        };
-
         public static string GetCurrentAppPlatform()
         {
             string platform = "ios";
@@ -39,7 +31,7 @@ namespace PlayShifu.Terra
         public static bool IsMobileWebGlPlatform()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
-          return  WebGLWrapper.IsMobile();
+            return WebGLWrapper.IsMobile() == 1;
 #else
             return false;
 #endif
@@ -824,6 +816,11 @@ namespace PlayShifu.Terra
         public static Quaternion Add(Quaternion p, Quaternion q)
         {
             return new Quaternion(p.x + q.x, p.y + q.y, p.z + q.z, p.w + q.w);
+        }
+
+        public static string ReplaceHttpsFromUrl(string url)
+        {
+            return url.Replace("https", "http");
         }
     }
 }

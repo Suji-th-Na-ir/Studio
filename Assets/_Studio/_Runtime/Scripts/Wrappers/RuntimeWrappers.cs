@@ -1,3 +1,5 @@
+using System;
+using GLTFast;
 using UnityEngine;
 using PlayShifu.Terra;
 using UnityEngine.SceneManagement;
@@ -7,13 +9,14 @@ namespace Terra.Studio
 {
     public class RuntimeWrappers
     {
-        public static GameObject SpawnObject(AssetType assetType, string assetPath, PrimitiveType primitiveType, params Vector3[] trs)
+        public static void SpawnObject(AssetType assetType, string assetPath, PrimitiveType primitiveType, Action<GameObject> cb, string uniqueName = "", params Vector3[] trs)
         {
             GameObject go = null;
             switch (assetType)
             {
                 case AssetType.Empty:
                     go = SpawnEmpty(null, trs);
+                    cb?.Invoke(go);
                     break;
                 case AssetType.Prefab:
                     object obj = null;
@@ -33,12 +36,20 @@ namespace Terra.Studio
                         go = DuplicateGameObject((GameObject)obj, null, trs);
                         CleanAllBehaviours(go.transform);
                     }
+                    cb?.Invoke(go);
                     break;
                 case AssetType.Primitive:
                     go = SpawnPrimitive(primitiveType, ResourceDB.GetDummyItemData(primitiveType), trs);
+                    cb?.Invoke(go);
                     break;
+                case AssetType.RemotePrefab:
+                    SpawnRemotePrefab(uniqueName, assetPath, cb, trs);
+                    break;
+
             }
-            return go;
+            if(go)
+                go.layer = LayerMask.NameToLayer("Default");
+            // return go;
         }
 
         public static GameObject SpawnGameObject(string path, ResourceDB.ResourceItemData itemData, params Vector3[] trs)
@@ -72,6 +83,34 @@ namespace Terra.Studio
         {
             var go = new GameObject();
             return ResolveTRS(go, itemData, trs);
+        }
+
+        public static void SpawnRemotePrefab(string uniqueName, string url, Action<GameObject> cb, params Vector3[] trs)
+        {
+            var go = new GameObject();
+            go.AddComponent<HideInHierarchy>();
+            var itemData = new ResourceDB.ResourceItemData(uniqueName, url, url, "", "");
+            // ResolveTRS(go, itemData, trs);
+            var x = go.AddComponent<GltfObjectLoader>();
+            x.Init(url, uniqueName, new ImportSettings()
+            {
+                lazyLoadTextures = true,
+                customBasePathForTextures = true,
+                additionToBasePath = "textures/"
+            });
+
+            x.LoadModel((loadedObject, preloaded) =>
+            {
+                ResolveTRS(loadedObject.gameObject, itemData, trs);
+                // 
+                cb?.Invoke(loadedObject.gameObject);
+                if (!preloaded)
+                {
+                    x.LoadTextures();
+                }
+            }, null);
+            // x.assetType = AssetType.RemotePrefab;
+            // return go;
         }
 
         public static GameObject DuplicateGameObject(GameObject actualGameObject, Transform parent, params Vector3[] trs)
@@ -176,15 +215,17 @@ namespace Terra.Studio
                 Object.Destroy(behaviour);
             }
 
-            Outline[] outlines = child.GetComponents<Outline>();
-            foreach (var outline in outlines)
-            {
-                Object.Destroy(outline);
-            }
+            RemoveOutline(child);
+
             if (child.TryGetComponent(out StudioGameObject gameObject))
             {
                 Object.Destroy(gameObject);
             }
+        }
+
+        public static void RemoveOutline(Transform child)
+        {
+            child.gameObject.layer = LayerMask.NameToLayer("Default");
         }
 
         public static void MoveGameObjectToActiveScene(GameObject go)

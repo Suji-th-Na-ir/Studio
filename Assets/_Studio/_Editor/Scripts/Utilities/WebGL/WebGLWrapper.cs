@@ -16,13 +16,19 @@ namespace Terra.Studio
         public static extern void GetProjectData(string callbackTo);
 
         [DllImport("__Internal")]
+        public static extern void ShowLoadingScreen(int value);
+
+        [DllImport("__Internal")]
         public static extern void HideLoadingScreen();
 
         [DllImport("__Internal")]
         public static extern void PublishGame(string userName, string projectId, string callback);
 
         [DllImport("__Internal")]
-        public static extern bool IsMobile();
+        public static extern int IsMobile();
+
+        [DllImport("__Internal")]
+        public static extern void SetProjectId(string projectId);
 
         private void OnEnable()
         {
@@ -36,7 +42,6 @@ namespace Terra.Studio
 
         private void OnSubsystemLoaded()
         {
-            HideLoadingScreen();
             if (SystemOp.Resolve<System>().CurrentStudioState == StudioState.Editor)
             {
                 StartCoroutine(WaitAndFetchReferencesForScene());
@@ -76,7 +81,7 @@ namespace Terra.Studio
                 .UpdateUserId(unpackedData.UserId)
                 .UpdateUserName(unpackedData.Username)
                 .LogLoginEvent(unpackedData.IsAutoLoggedIn);
-            SystemOp.Resolve<Flow>().OnProjectDetailsReceived(unpackedData.ProjectId, SystemOp.Resolve<System>().UpdateDefaultStudioState);
+            SystemOp.Resolve<Flow>().OnProjectDetailsReceived(unpackedData.ProjectData, SystemOp.Resolve<System>().UpdateDefaultStudioState);
             SystemOp.Resolve<System>().LoadSceneData();
         }
 

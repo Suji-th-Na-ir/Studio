@@ -10,10 +10,12 @@ namespace Terra.Studio
         [SerializeField] private string runtimeSceneName;
         [SerializeField] private bool pickupSavedData;
         [SerializeField] private TextAsset SceneData;
+        [SerializeField] private string buildId;
 
-        public StudioState DefaultStudioState { get { return defaultStudioState; } }
-        public string EditorSceneName { get { return editorSceneName; } }
-        public string RuntimeSceneName { get { return runtimeSceneName; } }
+        public StudioState DefaultStudioState => defaultStudioState;
+        public string EditorSceneName => editorSceneName;
+        public string RuntimeSceneName => runtimeSceneName;
+        public string BuildId => buildId;
         public TextAsset SceneDataToLoad
         {
             get { return SceneData; }

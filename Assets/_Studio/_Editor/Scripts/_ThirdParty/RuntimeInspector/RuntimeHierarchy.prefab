@@ -650,7 +650,7 @@ GameObject:
   - component: {fileID: 222081285104708726}
   - component: {fileID: 114985804818885682}
   - component: {fileID: 1893851519}
-  - component: {fileID: 1893851520}
+  - component: {fileID: 2500976293322300041}
   - component: {fileID: 2828669875545929289}
   m_Layer: 5
   m_Name: RuntimeHierarchy
@@ -696,7 +696,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_skin: {fileID: 11400000, guid: b38b1cb4db852fe4ea114688dada27d0, type: 2}
-  canvasGroup: {fileID: 2828669875545929289}
   m_internalSettings: {fileID: 11400000, guid: 4a8fe947d3fe11d4295482519cc14b03, type: 2}
   m_refreshInterval: 0.25
   m_objectNamesRefreshInterval: 10
@@ -806,7 +805,7 @@ MonoBehaviour:
   m_PixelsPerUnitMultiplier: 1
   borderWidth: 0
   falloffDistance: 1
---- !u!114 &1893851520
+--- !u!114 &2500976293322300041
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -815,10 +814,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1292172246486946}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8714c362c0c8a6449a9559a31cdab9a5, type: 3}
+  m_Script: {fileID: 11500000, guid: 68356c3764ad390429ddad9e48ce8c31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 20
+  radius: {x: 0, y: 10, z: 10, w: 0}
 --- !u!225 &2828669875545929289
 CanvasGroup:
   m_ObjectHideFlags: 0

@@ -55,6 +55,9 @@ namespace Terra.Studio
             SystemOp.Register(new User());
             SystemOp.Register(new SaveSystem());
             SystemOp.Register(new Flow());
+            SystemOp.Register(new CacheValidator());
+            SystemOp.Register(new LoadedPoolValidator());
+            SystemOp.Register(new RequestValidator());
         }
 
         private void LoadSubsystemScene()
@@ -119,6 +122,9 @@ namespace Terra.Studio
             SystemOp.Unregister<User>();
             SystemOp.Unregister<SaveSystem>();
             SystemOp.Unregister<Flow>();
+            SystemOp.Unregister<CacheValidator>();
+            SystemOp.Unregister<LoadedPoolValidator>();
+            SystemOp.Unregister<RequestValidator>();
             SystemOp.Unregister(this);
             SystemOp.Flush();
             EditorOp.Flush();
@@ -188,6 +194,9 @@ namespace Terra.Studio
 
         public void SwitchState()
         {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            WebGLWrapper.ShowLoadingScreen(50);
+#endif
             DisposeCurrentSubSystem(LoadSubsystemScene);
             currentStudioState = GetNextState();
             previousStudioState = GetOtherState();
