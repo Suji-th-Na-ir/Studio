@@ -11,7 +11,8 @@ namespace Terra.Studio
             WaitForFrame,
             WaitForXFrames,
             WaitForXSeconds,
-            WaitUntil
+            WaitUntil,
+            UntilPredicateFailed
         }
 
         public static CoroutineService RunCoroutine(Action onCoroutineDone, DelayType delayType, float delay = 0, Func<bool> predicate = null)
@@ -107,8 +108,15 @@ namespace Terra.Studio
                         yield return new WaitUntil(predicate);
                     }
                     break;
+                case DelayType.UntilPredicateFailed:
+                    while (predicate?.Invoke() ?? false)
+                    {
+                        onPerformed?.Invoke();
+                        yield return null;
+                    }
+                    break;
             }
-            onPerformed?.Invoke();
+            if (delayType != DelayType.UntilPredicateFailed) onPerformed?.Invoke();
             if (currentRound == -1) Destroy(gameObject);
         }
 
