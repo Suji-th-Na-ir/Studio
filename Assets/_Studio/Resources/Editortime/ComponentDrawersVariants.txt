@@ -8,6 +8,7 @@
   "Terra.Studio.InGameTimer": "Terra.Studio.InGameTimer",
   "Terra.Studio.DecreasePlayerHealth": "Terra.Studio.DecreasePlayerHealth",
   "Terra.Studio.IncreasePlayerHealth": "Terra.Studio.IncreasePlayerHealth",
+  "Terra.Studio.PlayerHealth": "Terra.Studio.PlayerHealth",
   "Terra.Studio.Push": "Terra.Studio.Push",
   "Terra.Studio.ResetScore": "Terra.Studio.ResetScore",
   "Terra.Studio.ResetTimer": "Terra.Studio.ResetTimer",
