@@ -114,7 +114,11 @@ namespace RuntimeInspectorNamespace
                     $"Start on changed to: {atom.data.startName}",
                     (value) =>
                     {
-                        OnStartOnValueSubmitted(((StartOnData)value).startIndex);
+                        var startOnData = (StartOnData)value;
+                        var index = startOnData.startIndex;
+                        OnStartOnValueSubmitted(index);
+                        UpdateListenString(startOnData.listenName);
+                        atom.OnStartOnUpdated?.Invoke(index);
                     });
             }
             lastSubmittedValue = atom.data;
@@ -162,15 +166,21 @@ namespace RuntimeInspectorNamespace
 
         private void UpdateListenValue(int value)
         {
-            Atom.StartOn atom = (Atom.StartOn)Value;
-
-            var oldstering = atom.data.listenName;
             var listenstring = listenOn.options[value].text;
+            UpdateListenString(listenstring);
+        }
+
+        private void UpdateListenString(string listenstring)
+        {
+            Atom.StartOn atom = (Atom.StartOn)Value;
+            var oldString = atom.data.listenName;
             if (listenstring == "None")
+            {
                 listenstring = string.Empty;
+            }
             atom.data.listenName = listenstring;
             UpdateOtherCompData(atom);
-            atom.OnListenerUpdated?.Invoke(listenstring, oldstering);
+            atom.OnListenerUpdated?.Invoke(listenstring, oldString);
         }
 
 

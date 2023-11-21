@@ -15,6 +15,7 @@ namespace RuntimeInspectorNamespace
         protected Action<string, string> onStringUpdated;
         public virtual Action<object> OnValueUpdated { get; set; }
         public virtual Action<string> OnStringValueSubmitted { get; set; }
+        public bool shouldPopulateIntoUndoRedoStack = true;
 
 #pragma warning disable 0649
         [SerializeField]
