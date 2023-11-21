@@ -8,6 +8,7 @@
   "Terra.Studio.InGameTimer": "Terra.Studio.InGameTimer",
   "Terra.Studio.MeleeDamageable": "Terra.Studio.MeleeDamageable",
   "Terra.Studio.MeleeWeapon": "Terra.Studio.MeleeWeapon",
+  "Terra.Studio.InstantiateStudioObject": "Terra.Studio.InstantiateStudioObject",
   "Terra.Studio.Push": "Terra.Studio.Push",
   "Terra.Studio.ResetScore": "Terra.Studio.ResetScore",
   "Terra.Studio.ResetTimer": "Terra.Studio.ResetTimer",

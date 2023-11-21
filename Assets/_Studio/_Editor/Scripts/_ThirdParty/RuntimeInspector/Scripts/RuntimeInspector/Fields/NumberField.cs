@@ -77,7 +77,7 @@ namespace RuntimeInspectorNamespace
         {
             if (ValidatePassedInput(input))
             {
-                if (input != (string)lastSubmittedValue)
+                if (input != (string)lastSubmittedValue && shouldPopulateIntoUndoRedoStack)
                 {
                     EditorOp.Resolve<IURCommand>().Record(
                         lastSubmittedValue, input,

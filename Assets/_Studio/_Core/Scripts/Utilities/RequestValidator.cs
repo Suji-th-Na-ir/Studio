@@ -17,7 +17,7 @@ namespace Terra.Studio
             _loadedPoolValidator = SystemOp.Resolve<LoadedPoolValidator>();
             uniqueToCloud = new();
             _onComplete = onComplete;
-            
+
             CheckForChildrenAlso(world.entities);
             if (uniqueToCloud.Count == 0)
             {
@@ -29,13 +29,17 @@ namespace Terra.Studio
 
         private void CheckForChildrenAlso(VirtualEntity[] objects)
         {
+            if (objects == null)
+            {
+                return;
+            }
             foreach (var virtualEntity in objects)
             {
                 if (virtualEntity.assetType == AssetType.RemotePrefab)
                 {
                     if (!_loadedPoolValidator.IsInLoadedPool(virtualEntity.uniqueName))
                     {
-                        uniqueToCloud.TryAdd(virtualEntity.uniqueName, virtualEntity.assetPath);    
+                        uniqueToCloud.TryAdd(virtualEntity.uniqueName, virtualEntity.assetPath);
                     }
                 }
                 CheckForChildrenAlso(virtualEntity.children);
@@ -54,35 +58,35 @@ namespace Terra.Studio
         {
             var go = new GameObject();
             go.AddComponent<HideInHierarchy>();
-            var x= go.AddComponent<GltfObjectLoader>();
-            
-            x.Init( url,uniqueName, new ImportSettings()
+            var x = go.AddComponent<GltfObjectLoader>();
+
+            x.Init(url, uniqueName, new ImportSettings()
             {
                 lazyLoadTextures = true,
                 customBasePathForTextures = true,
                 additionToBasePath = "textures/"
             });
-            
+
             x.LoadModel((loadedObject, preloaded) =>
             {
                 if (loadedObject != null)
                 {
                     x.LoadTextures(success =>
                     {
-                        ModelFullyCompleted(uniqueName,loadedObject, success);
+                        ModelFullyCompleted(uniqueName, loadedObject, success);
                         Object.Destroy(go);
-                    });    
+                    });
                 }
                 else
                 {
-                    ModelFullyCompleted(uniqueName, null,false);
+                    ModelFullyCompleted(uniqueName, null, false);
                     Object.Destroy(go);
                 }
-                
+
             }, null);
         }
 
-        private void ModelFullyCompleted(string uniqueName, GameObject loadedGo,bool success)
+        private void ModelFullyCompleted(string uniqueName, GameObject loadedGo, bool success)
         {
             if (success)
             {

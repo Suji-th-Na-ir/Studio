@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {

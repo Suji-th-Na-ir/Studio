@@ -279,6 +279,7 @@ namespace RuntimeInspectorNamespace
         private void SetupPreview()
         {
             previewButton.onClick.RemoveAllListeners();
+            if (Value == null || Value is not BaseBehaviour) return;
             var behaviour = (BaseBehaviour)Value;
             if (!behaviour.CanPreview)
             {

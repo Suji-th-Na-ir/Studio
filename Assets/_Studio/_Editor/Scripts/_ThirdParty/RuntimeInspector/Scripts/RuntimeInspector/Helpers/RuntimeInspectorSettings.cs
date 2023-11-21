@@ -1,15 +1,7 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RuntimeInspectorNamespace
 {
-    [Serializable]
-    public struct ShownComponent
-    {
-        public string ComponentName;
-        public bool hideAddButton;
-        public bool hideRemoveButton;
-    }
     [CreateAssetMenu(fileName = "Inspector Settings", menuName = "yasirkula/RuntimeInspector/Settings", order = 111)]
     public class RuntimeInspectorSettings : ScriptableObject
     {
@@ -30,9 +22,6 @@ namespace RuntimeInspectorNamespace
         private VariableSet[] m_exposedVariables;
         public VariableSet[] ExposedVariables { get { return m_exposedVariables; } }
 
-        [SerializeField]
-        private ShownComponent[] m_ShowComponents;
-        public ShownComponent[] ShowComponents { get { return m_ShowComponents; } }
         [SerializeField]
         private string[] m_GameEssentials;
         public string[] GameEssentials { get { return m_GameEssentials; } }

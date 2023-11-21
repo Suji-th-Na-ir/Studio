@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using PlayShifu.Terra;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Terra.Studio
 {
@@ -177,7 +178,16 @@ namespace Terra.Studio
             var headingText = Helper.FindDeepChild<TextMeshProUGUI>(leftGroup, HEADING_TEXT_LOC);
             var iconImage = Helper.FindDeepChild<Image>(leftGroup, ICON_IMAGE_LOC);
             var preset = EditorOp.Resolve<EditorSystem>().ComponentIconsPreset;
-            var icon = preset.GetIcon(data.EventName);
+            var exp = new Regex(@"Every|seconds");
+            Sprite icon;
+            if (exp.IsMatch(data.EventName))
+            {
+                icon = preset.GetIcon("Every x seconds");
+            }
+            else
+            {
+                icon = preset.GetIcon(data.EventName);
+            }
             var isAvailable = SystemOp.Resolve<System>().SystemData.TryGetEventDisplayName(data.EventName, out var displayName);
             if (!isAvailable)
             {

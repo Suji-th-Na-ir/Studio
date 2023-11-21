@@ -128,7 +128,7 @@ namespace RuntimeInspectorNamespace
 
         private void OnValueChanged(int input)
         {
-            if (input != (int)lastSubmittedValue)
+            if (input != (int)lastSubmittedValue && shouldPopulateIntoUndoRedoStack)
             {
                 EditorOp.Resolve<IURCommand>().Record(
                     lastSubmittedValue, input,
