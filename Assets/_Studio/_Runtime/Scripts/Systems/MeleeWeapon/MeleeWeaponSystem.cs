@@ -82,6 +82,8 @@ namespace Terra.Studio
             CoroutineService.RunCoroutine(() =>
             {
                 var go = RuntimeOp.Resolve<View>().AttachDynamicUI(entity, meleeAttack);
+                if (!go)
+                    return;
                 var btn = go.GetComponent<Button>();
                 btn.onClick.RemoveAllListeners();
                 
