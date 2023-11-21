@@ -37,6 +37,18 @@ namespace Terra.Studio
             broadcast.Setup(gameObject, this);
         }
 
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            EditorOp.Resolve<SceneDataHandler>().SetupPlayerHealthManager(true);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            EditorOp.Resolve<SceneDataHandler>()?.SetupPlayerHealthManager(false);
+        }
+
         public override (string type, string data) Export()
         {
             var data = new IncreasePlayerHealthComponent()

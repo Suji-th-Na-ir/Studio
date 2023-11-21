@@ -24,6 +24,18 @@ namespace Terra.Studio
             broadcast.Setup(gameObject, this);
         }
 
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            EditorOp.Register(this);
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            EditorOp.Unregister(this);
+        }
+
         public override (string type, string data) Export()
         {
             var component = new PlayerHealthComponent()

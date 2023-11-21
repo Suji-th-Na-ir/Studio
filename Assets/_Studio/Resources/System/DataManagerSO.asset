@@ -128,6 +128,11 @@ MonoBehaviour:
     ComponentName: Terra.Studio.InstantiateStudioObjectComponent
     SystemName: Terra.Studio.InstantiateStudioObjectSystem
     DrawerName: Terra.Studio.InstantiateStudioObject
+  - DisplayName: Player Health
+    Key: Terra.Studio.PlayerHealth
+    ComponentName: Terra.Studio.PlayerHealthComponent
+    SystemName: Terra.Studio.PlayerHealthSystem
+    DrawerName: Terra.Studio.PlayerHealth
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent

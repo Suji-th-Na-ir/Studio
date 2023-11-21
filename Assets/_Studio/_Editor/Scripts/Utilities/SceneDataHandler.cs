@@ -606,6 +606,8 @@ namespace Terra.Studio
         #region Miscellaneous
 
         public GameObject ScoreManagerObj;
+        private GameObject playerHealthObj;
+        private int playerHealthObjReqs;
         private List<string> modifiers = new();
 
         private void SetupSceneDefaultObjects()
@@ -692,6 +694,24 @@ namespace Terra.Studio
                 Resolve<EditorEssentialsLoader>().
                 Load(EditorObjectType.Timer, out var timerObj);
             timerObj.transform.SetAsFirstSibling();
+        }
+
+        public void SetupPlayerHealthManager(bool add)
+        {
+            if (add)
+            {
+                playerHealthObjReqs++;
+                if (EditorOp.Resolve<PlayerHealth>()) return;
+                playerHealthObj = new GameObject("PlayerHealth");
+                playerHealthObj.AddComponent<PlayerHealth>();
+            }
+            else
+            {
+                playerHealthObjReqs--;
+                if (playerHealthObjReqs != 0) return;
+                if (!EditorOp.Resolve<PlayerHealth>()) return;
+                Object.Destroy(playerHealthObj);
+            }
         }
 
         #endregion

@@ -40,15 +40,14 @@ namespace Terra.Studio
 
         #endregion
 
-        public static readonly Type[] HideAddButtonForTypes = new[] { typeof(InGameTimer), typeof(GameScore) };
-        public static readonly Type[] HideRemoveButtonForTypes = new[] { typeof(Checkpoint), typeof(InGameTimer), typeof(GameScore) };
+        public static readonly Type[] HideAddButtonForTypes = new[] { typeof(InGameTimer), typeof(GameScore), typeof(PlayerHealth) };
+        public static readonly Type[] HideRemoveButtonForTypes = new[] { typeof(Checkpoint), typeof(InGameTimer), typeof(GameScore), typeof(PlayerHealth) };
+        public static readonly Type[] GameEssentialBehaviours = new[] { typeof(PlayerSpawnPoint), typeof(Checkpoint), typeof(InGameTimer), typeof(GameScore), typeof(PlayerHealth) };
 
         [SerializeField] private List<SystemData> systemData;
         [SerializeField] private List<EventData> eventData;
         private List<CachedSystemData> cachedSystemData = new();
         private List<Type> cachedEventTypes = new();
-
-        public static readonly Type[] GameEssentialBehaviours = new Type[] { typeof(PlayerSpawnPoint), typeof(InGameTimer), typeof(GameScore), typeof(PlayerHealth) };
 
         #region Getter Methods
 
