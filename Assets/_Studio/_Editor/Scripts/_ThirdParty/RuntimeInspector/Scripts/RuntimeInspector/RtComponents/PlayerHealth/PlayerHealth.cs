@@ -44,6 +44,7 @@ namespace Terra.Studio
             broadcast.broadcast = component.Broadcast;
             regenerationPerSec = component.regenerationPerSec;
             healthRegeneration = component.regenerateHealth;
+            ImportVisualisation(broadcast.broadcast, null);
         }
     }
 }

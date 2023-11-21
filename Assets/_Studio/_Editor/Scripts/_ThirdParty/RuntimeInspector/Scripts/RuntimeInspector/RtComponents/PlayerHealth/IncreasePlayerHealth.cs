@@ -1,5 +1,6 @@
-using Newtonsoft.Json;
 using UnityEngine;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -21,7 +22,7 @@ namespace Terra.Studio
         [SerializeField] private Atom.Broadcast broadcast = new();
 
         public override string ComponentName => nameof(IncreasePlayerHealth);
-        public override bool CanPreview => false;
+        public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => true;
         protected override string[] BroadcasterRefs => new string[] { broadcast.broadcast };
@@ -86,6 +87,36 @@ namespace Terra.Studio
             {
                 when.data.listenName = component.ConditionData;
             }
+            ImportVisualisation(broadcast.broadcast, when.data.listenName);
+        }
+
+        public override BehaviourPreviewUI.PreviewData GetPreviewData()
+        {
+            var startOn = (StartOn)when.data.startIndex;
+            var eventName = startOn.GetStringValue();
+            var properties = new Dictionary<string, object>[1];
+            properties[0] = new()
+            {
+                { "When", eventName },
+                { "By Point", byPoint }
+            };
+            if (playSFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.SFX_PREVIEW_NAME, playSFX.data.clipName);
+            }
+            if (playVFX.data.canPlay)
+            {
+                properties[0].Add(BehaviourPreview.Constants.VFX_PREVIEW_NAME, playVFX.data.clipName);
+            }
+            var previewData = new BehaviourPreviewUI.PreviewData()
+            {
+                DisplayName = GetDisplayName(),
+                Broadcast = new string[] { broadcast.broadcast },
+                Properties = properties,
+                EventName = eventName,
+                Listen = when.data.listenName
+            };
+            return previewData;
         }
     }
 }
