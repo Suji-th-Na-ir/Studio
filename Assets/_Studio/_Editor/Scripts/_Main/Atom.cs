@@ -386,8 +386,35 @@ namespace Terra.Studio
             public void UpdateTRS(Vector3[] trs)
             {
                 trs[2] = new Vector3(Mathf.Abs(trs[2].x), Mathf.Abs(trs[2].y), Mathf.Abs(trs[2].z));
+                StackIntoUR(trs);
+                PostProcessUpdateData(trs);
+            }
+
+            private void PostProcessUpdateData(Vector3[] trs)
+            {
                 UpdateTRS_WithoutMultiselect(trs);
                 CheckForMultiselectScenario(trs);
+            }
+
+            private void StackIntoUR(Vector3[] trs)
+            {
+                var oldValue = new Vector3[]
+                {
+                    this.trs[0],
+                    this.trs[1],
+                    this.trs[2]
+                };
+                var newValue = new Vector3[]
+                {
+                    trs[0],
+                    trs[1],
+                    trs[2]
+                };
+                EditorOp.Resolve<IURCommand>().Record(oldValue, newValue, "Random Range Modified", (value) =>
+                {
+                    var newValue = (Vector3[])value;
+                    PostProcessUpdateData(newValue);
+                });
             }
 
             public void UpdateTRS_WithoutMultiselect(Vector3[] trs)
