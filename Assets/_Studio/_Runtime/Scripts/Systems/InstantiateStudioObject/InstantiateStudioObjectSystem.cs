@@ -65,7 +65,11 @@ namespace Terra.Studio
             Vector3[] points;
             if (component.spawnWhere == SpawnWhere.CurrentPoint)
             {
-                points = new Vector3[] { component.RefObj.transform.position };
+                points = new Vector3[iterations];
+                for (int i = 0; i < iterations; i++)
+                {
+                    points[i] = component.RefObj.transform.position;
+                }
             }
             else
             {
