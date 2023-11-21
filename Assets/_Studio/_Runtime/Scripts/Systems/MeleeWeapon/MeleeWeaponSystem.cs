@@ -65,25 +65,31 @@ namespace Terra.Studio
                       {
                           ref MeleeWeaponComponent componentToCheck = ref entity1.GetComponent<MeleeWeaponComponent>();
                           componentToCheck.isEquipped = false;
+                          RuntimeOp.Resolve<View>().RemoveDynamicUI(entity);
                           break;
                       }
                   }
               });
-            LoadUI(in component, entity);
             component.isEquipped = true;
+            LoadUI(in component, entity);
         }
 
         private void LoadUI(in MeleeWeaponComponent component, int entity)
         {
-            var go = RuntimeOp.Resolve<View>().AttachDynamicUI(entity, meleeAttack);
-            var btn = go.GetComponent<Button>();
-            btn.onClick.RemoveAllListeners();
             var value = component.attackAnimation;
             var obj = component.RefObj;
-            btn.onClick.AddListener(() => {
-                RuntimeOp.Resolve<GameData>()
-              .ExecutePlayerMeleeAttack(obj);
-            });
+            CoroutineService.RunCoroutine(() =>
+            {
+                var go = RuntimeOp.Resolve<View>().AttachDynamicUI(entity, meleeAttack);
+                var btn = go.GetComponent<Button>();
+                btn.onClick.RemoveAllListeners();
+                
+                btn.onClick.AddListener(() =>
+                {
+                    RuntimeOp.Resolve<GameData>()
+                  .ExecutePlayerMeleeAttack(obj);
+                });
+            }, CoroutineService.DelayType.WaitForXFrames, 1);
         }
 
         public override void OnHaltRequested(EcsWorld currentWorld)

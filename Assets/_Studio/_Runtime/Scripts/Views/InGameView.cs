@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace Terra.Studio
         [SerializeField] private TextMeshProUGUI timerText;
 
         private int entity = int.MinValue;
-        private GameObject dynamicSpawnedGO;
+        private Dictionary<int, GameObject> dynamicSpawnedGO = new();
 
         public override void Init()
         {
@@ -57,17 +58,23 @@ namespace Terra.Studio
 
         public override GameObject AttachDynamicUI(int entity, GameObject go)
         {
-            if (this.entity == entity)
+            if (dynamicSpawnedGO.TryGetValue(entity, out var value))
             {
-                return dynamicSpawnedGO;
+                return value;
             }
-            if (dynamicSpawnedGO)
+
+            var newUI = Instantiate(go, transform);
+            dynamicSpawnedGO.Add(entity, newUI);
+            return newUI;
+        }
+
+        public override void RemoveDynamicUI(int entity)
+        {
+            if (dynamicSpawnedGO.TryGetValue(entity, out var value))
             {
-                Destroy(dynamicSpawnedGO);
+                Destroy(value);
+                dynamicSpawnedGO.Remove(entity);
             }
-            dynamicSpawnedGO = Instantiate(go, transform);
-            this.entity = entity;
-            return dynamicSpawnedGO;
         }
     }
 }

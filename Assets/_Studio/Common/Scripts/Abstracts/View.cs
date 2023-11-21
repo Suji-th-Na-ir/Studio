@@ -9,5 +9,6 @@ namespace Terra.Studio
         public virtual void Flush() { }
         public virtual void Repaint() { }
         public virtual GameObject AttachDynamicUI(int entity, GameObject go) { return default; }
+        public virtual void RemoveDynamicUI(int entity) {  }
     }
 }
