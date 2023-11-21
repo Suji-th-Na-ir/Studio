@@ -34,7 +34,7 @@ namespace Terra.Studio
         {
             spawnWhenField = CreateDrawerForField(nameof(unboxedData.spawnWhen));
             GenerateEveryXSecondsDrawer();
-            spawnWhereField = CreateDrawer(typeof(SpawnWhere), "Spawn Where", () => { return unboxedData.spawnWhere; }, OnSpawnWhereUpdated, true);
+            spawnWhereField = CreateDrawer(typeof(SpawnWhere), "Where", () => { return unboxedData.spawnWhere; }, OnSpawnWhereUpdated, true);
             SpawnDynamicUI();
             GenerateHowManyDrawer();
             ToggleNativeStackingIntoIUR(false);
@@ -125,7 +125,7 @@ namespace Terra.Studio
             if (unboxedData.instantiateOn != InstantiateOn.EveryXSeconds) return;
             intervalField = CreateDrawer(typeof(int), "Interval", () => { return unboxedData.interval; }, (value) => { PostProcessDataUpdate(UpdateType.Interval, unboxedData.interval, value); }, true);
             roundsField = CreateDrawer(typeof(uint), "Rounds", () => { return unboxedData.rounds; }, (value) => { PostProcessDataUpdate(UpdateType.Rounds, unboxedData.rounds, value); }, true);
-            repeatForeverField = CreateDrawer(typeof(bool), "Repeat Forever", () => { return unboxedData.repeatForever; }, OnRepeatForeverChecked, true);
+            repeatForeverField = CreateDrawer(typeof(bool), "Forever", () => { return unboxedData.repeatForever; }, OnRepeatForeverChecked, true);
             OnRepeatForeverChecked(unboxedData.repeatForever);
         }
 
@@ -139,7 +139,7 @@ namespace Terra.Studio
         private void GenerateHowManyDrawer()
         {
             if (unboxedData.spawnWhere != SpawnWhere.Random) return;
-            howManyField = CreateDrawer(typeof(uint), "How Many", () => { return unboxedData.howMany; }, (value) => { PostProcessDataUpdate(UpdateType.HowMany, unboxedData.howMany, value); }, true);
+            howManyField = CreateDrawer(typeof(uint), "Count", () => { return unboxedData.howMany; }, (value) => { PostProcessDataUpdate(UpdateType.HowMany, unboxedData.howMany, value); }, true);
         }
 
         protected override void OnBound(MemberInfo variable)

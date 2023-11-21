@@ -357,12 +357,12 @@ namespace Terra.Studio
         [Serializable]
         public class InstantiateOnData : BaseTargetTemplate
         {
-            [AliasDrawer("Spawn when")] public StartOn spawnWhen = new();
-            [AliasDrawer("Spawn where")] public SpawnWhere spawnWhere;
-            [AliasDrawer("How many")] public uint howMany;
+            [AliasDrawer("Spawn When")] public StartOn spawnWhen = new();
+            [AliasDrawer("Where")] public SpawnWhere spawnWhere;
+            [AliasDrawer("Count")] public uint howMany;
             [AliasDrawer("Interval")] public int interval;
             [AliasDrawer("Rounds")] public uint rounds;
-            [AliasDrawer("Repeat forever")] public bool repeatForever;
+            [AliasDrawer("Forever")] public bool repeatForever;
             [HideInInspector] public bool isDirty;
             [HideInInspector] public InstantiateOn instantiateOn;
             [HideInInspector] public Vector3[] trs;

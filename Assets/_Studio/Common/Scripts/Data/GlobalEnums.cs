@@ -157,6 +157,7 @@ namespace Terra.Studio
     {
         [AliasDrawer("This Point")]
         CurrentPoint,
+        [AliasDrawer("Random In Area")]
         Random
     }
 }
