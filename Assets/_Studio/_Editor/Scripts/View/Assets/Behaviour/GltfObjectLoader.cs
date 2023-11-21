@@ -8,18 +8,6 @@ using UnityEngine;
 
 namespace Terra.Studio
 {
-    [Serializable]
-    public class GltfData
-    {
-        public BufferData[] buffers;
-    }
-
-    [Serializable]
-    public struct BufferData
-    {
-        public string uri;
-    }
-
     public class GltfObjectLoader : MonoBehaviour
     {
         [SerializeField] private string cloudUrl;
@@ -186,6 +174,9 @@ namespace Terra.Studio
             Debug.Log($"Loading Textures why.");
             bool success = await _importer.PrepareTextures(UriHelper.GetBaseUri(new Uri(OgUrl)));
 
+            var s_Parser = new GltfJsonUtilityParser();
+            var rootBase = s_Parser.ParseJson(_importer.FinalJson);
+            
 
             foreach (var (ren, meshResult) in _instantiator.results)
             {
@@ -194,39 +185,48 @@ namespace Terra.Studio
                 {
                     var material = _importer.GetMaterial(meshResult.materialIndices[index]) ?? _importer.GetDefaultMaterial();
                     
+                    var baseTextureTrs = rootBase.Materials[index].PbrMetallicRoughness?.BaseColorTexture?.Extensions?.KHR_texture_transform;
+                    var metallicRoughnessTrs = rootBase.Materials[index].PbrMetallicRoughness?.MetallicRoughnessTexture?.Extensions?.KHR_texture_transform;
+                    var emissiveTextureTrs = rootBase.Materials[index].EmissiveTexture?.Extensions?.KHR_texture_transform;
+                    var normalTextureTrs = rootBase.Materials[index].NormalTexture?.Extensions?.KHR_texture_transform;
+                    var occlusionTextureTrs = rootBase.Materials[index].OcclusionTexture?.Extensions?.KHR_texture_transform;
+
+                    if (baseTextureTrs != null)
+                    {
+                        material.SetTextureScale(BaseColorTextureSt, new Vector2(baseTextureTrs.scale[0],baseTextureTrs.scale[1]));
+                        material.SetTextureOffset(BaseColorTextureSt, new Vector2(baseTextureTrs.offset[0],baseTextureTrs.offset[1]));
+                    }
+
+                    if (metallicRoughnessTrs != null)
+                    {
+                        material.SetTextureScale(MetallicRoughnessSt,new Vector2(metallicRoughnessTrs.scale[0],metallicRoughnessTrs.scale[1]));
+                        material.SetTextureOffset(MetallicRoughnessSt,new Vector2(metallicRoughnessTrs.offset[0],metallicRoughnessTrs.offset[1]));
+                    }
+
+                    if (emissiveTextureTrs != null)
+                    {
+                        material.SetTextureScale(EmissiveTextureSt,new Vector2(emissiveTextureTrs.scale[0],emissiveTextureTrs.scale[1]));
+                        material.SetTextureOffset(EmissiveTextureSt,new Vector2(emissiveTextureTrs.offset[0],emissiveTextureTrs.offset[1]));
+                    }
+
+                    if (normalTextureTrs != null)
+                    {
+                        material.SetTextureScale(NormalTextureSt,new Vector2(normalTextureTrs.scale[0],normalTextureTrs.scale[1]));
+                        material.SetTextureOffset(NormalTextureSt,new Vector2(normalTextureTrs.offset[0],normalTextureTrs.offset[1]));
+                    }
+
+                    if (occlusionTextureTrs != null)
+                    {
+                        material.SetTextureScale(OcclusionTextureSt,new Vector2(occlusionTextureTrs.scale[0],occlusionTextureTrs.scale[1]));
+                        material.SetTextureOffset(OcclusionTextureSt,new Vector2(occlusionTextureTrs.offset[0],occlusionTextureTrs.offset[1]));
+                    }
                     
-                    // var oldVec = material.GetVector(BaseColorTextureSt);
-                    // var newVec = new Vector4(1, -1, oldVec.z, oldVec.w);
-                    // material.SetVector(BaseColorTextureSt, new Vector4(1,-1,0,1));
-                    
-                    Debug.Log($"AA -> {material.shader}");
-                    
-                    Debug.Log($"OG - BASE -> {material.GetTextureScale(BaseColorTextureSt)}     {material.GetTextureOffset(BaseColorTextureSt)}");
-                    Debug.Log($"OG - EMISSIVE -> {material.GetTextureScale(EmissiveTextureSt)}     {material.GetTextureOffset(EmissiveTextureSt)}");
-                    Debug.Log($"OG - NORMAL -> {material.GetTextureScale(NormalTextureSt)}     {material.GetTextureOffset(NormalTextureSt)}");
-                    Debug.Log($"OG - OCCLUSION -> {material.GetTextureScale(OcclusionTextureSt)}     {material.GetTextureOffset(OcclusionTextureSt)}");
-                    Debug.Log($"OG - MROUGHNESS -> {material.GetTextureScale(MetallicRoughnessSt)}     {material.GetTextureOffset(MetallicRoughnessSt)}");
-                    
-                    
-                    material.SetTextureScale(BaseColorTextureSt, new Vector2(1,-1));
-                    material.SetTextureOffset(BaseColorTextureSt, new Vector2(0,1));
-                    
-                    material.SetTextureScale(EmissiveTextureSt, new Vector2(1,-1));
-                    material.SetTextureOffset(EmissiveTextureSt, new Vector2(0,1));
-                    
-                    material.SetTextureScale(NormalTextureSt, new Vector2(1,-1));
-                    material.SetTextureOffset(NormalTextureSt, new Vector2(0,1));
-                    
-                    material.SetTextureScale(OcclusionTextureSt, new Vector2(1,-1));
-                    material.SetTextureOffset(OcclusionTextureSt, new Vector2(0,1));
-                    
-                    material.SetTextureScale(MetallicRoughnessSt, new Vector2(1,-1));
-                    material.SetTextureOffset(MetallicRoughnessSt, new Vector2(0,1));
                     materials[index] = material;
                 }
 
                 ren.sharedMaterials = materials;
             }
+            
             LoadedPoolValidator.AddToPool(_uniqueName, LoadedObject.gameObject);
             onTextureLoadCompleted?.Invoke(success);
             _importer.DisposeVolatileDataFromTextures();
