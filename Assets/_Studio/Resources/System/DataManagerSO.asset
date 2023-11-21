@@ -123,6 +123,16 @@ MonoBehaviour:
     ComponentName: Terra.Studio.DecreasePlayerHealthComponent
     SystemName: Terra.Studio.DecreasePlayerHealthSystem
     DrawerName: Terra.Studio.DecreasePlayerHealth
+  - Key: Terra.Studio.MeleeDamageable
+    ComponentName: Terra.Studio.MeleeDamageableComponent
+    SystemName: Terra.Studio.MeleeDamageableSystem
+    DrawerName: Terra.Studio.MeleeDamageable
+    DisplayName: MeleeDamageable
+  - Key: Terra.Studio.MeleeWeapon
+    ComponentName: Terra.Studio.MeleeWeaponComponent
+    SystemName: Terra.Studio.MeleeWeaponSystem
+    DrawerName: Terra.Studio.MeleeWeapon
+    DisplayName: Melee Weapon
   - DisplayName: Instantiate
     Key: Terra.Studio.InstantiateStudioObject
     ComponentName: Terra.Studio.InstantiateStudioObjectComponent

@@ -77,6 +77,10 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: d7d045eb4073549a2be814dd268b9a9a, type: 3}
   - type: UpdateTimer
     icon: {fileID: 21300000, guid: 849afc16a82f84a55a1613d8875c44e1, type: 3}
+  - type: MeleeWeapon
+    icon: {fileID: 21300000, guid: bad3a876ede9643ca96dfc88796ec039, type: 3}
+  - type: MeleeDamageable
+    icon: {fileID: 21300000, guid: 40d712de9a9d045d7a9802c07f3f5f29, type: 3}
   - type: Every x seconds
     icon: {fileID: 21300000, guid: 10490c9945d974eacb6999636ebaacb0, type: 3}
   - type: GameStart

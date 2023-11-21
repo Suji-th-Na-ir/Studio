@@ -134,6 +134,7 @@ namespace Terra.Studio
             {
                 CheckAndHandleDestroyType<DestroyOnComponent>(world, toCheckEntity);
                 CheckAndHandleDestroyType<CollectableComponent>(world, toCheckEntity);
+                CheckAndHandleDestroyType<MeleeDamageableComponent>(world, toCheckEntity);
             }
 
             private void CheckAndHandleDestroyType<T>(EcsWorld world, int toCheckEntity) where T : struct, IBaseComponent
