@@ -155,6 +155,9 @@ MonoBehaviour:
   - ComponentName: MeleeDamageable
     hideAddButton: 0
     hideRemoveButton: 0
+  - ComponentName: MeleeWeapon
+    hideAddButton: 0
+    hideRemoveButton: 0
   m_GameEssentials:
   - InGameTimer
   - GameScore

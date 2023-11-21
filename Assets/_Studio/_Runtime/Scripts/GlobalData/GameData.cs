@@ -68,11 +68,10 @@ namespace Terra.Studio
         {
             weapon.GetComponent<Collider>().isTrigger = true;
             PlayerAnimator.SetTrigger("Attack");
-            CoroutineService.RunCoroutine(() =>
+            PlayerAnimator.GetBehaviour<MeleeStateBehaviour>().OnExit = () =>
             {
                 weapon.GetComponent<Collider>().isTrigger = false;
-            },
-            CoroutineService.DelayType.WaitForXSeconds, playerAnimator.GetCurrentAnimatorStateInfo(0).length);
+            };
         }
     }
 }
