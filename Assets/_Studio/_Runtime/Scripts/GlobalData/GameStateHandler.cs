@@ -40,7 +40,7 @@ namespace Terra.Studio
         {
             if (currentGameState == State.Game && subscribe)
             {
-                callback?.Invoke(null);
+                WaitForAFrameAndProvideCallback(callback);
                 return;
             }
             if (callback == null)
@@ -61,7 +61,7 @@ namespace Terra.Studio
         {
             if (currentGameState == State.PostGame && subscribe)
             {
-                callback?.Invoke(null);
+                WaitForAFrameAndProvideCallback(callback);
                 return;
             }
             if (callback == null)
@@ -92,6 +92,15 @@ namespace Terra.Studio
             {
                 OnStateChanged -= callback;
             }
+        }
+
+        private void WaitForAFrameAndProvideCallback(Action<object> callback)
+        {
+            CoroutineService.RunCoroutine(() =>
+            {
+                callback?.Invoke(null);
+            },
+            CoroutineService.DelayType.WaitForFrame);
         }
     }
 }

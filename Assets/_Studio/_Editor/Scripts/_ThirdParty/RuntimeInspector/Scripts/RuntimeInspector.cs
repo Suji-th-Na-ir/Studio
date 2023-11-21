@@ -253,15 +253,6 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        public ShownComponent[] ShownComponents
-        {
-            get
-            {
-                if (settings[0] != null)
-                    return settings[0].ShowComponents;
-                return null;
-            }
-        }
         protected override void Awake()
         {
             base.Awake();

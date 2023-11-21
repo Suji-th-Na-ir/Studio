@@ -19,6 +19,18 @@
     "Terra.Studio.Listener",
     null
   ],
+  "Terra.Studio.InstantiateOn.GameStart": [
+    "Terra.Studio.GameStart",
+    "Start"
+  ],
+  "Terra.Studio.InstantiateOn.BroadcastListen": [
+    "Terra.Studio.Listener",
+    ""
+  ],
+  "Terra.Studio.InstantiateOn.EveryXSeconds": [
+    "Terra.Studio.InvokeAfter",
+    "1"
+  ],
   "Terra.Studio.Collectible+StartOnCollectible.OnPlayerCollide": [
     "Terra.Studio.TriggerAction",
     "Player"

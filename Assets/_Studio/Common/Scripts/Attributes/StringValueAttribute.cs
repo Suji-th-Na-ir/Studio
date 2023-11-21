@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 
 namespace Terra.Studio
 {
@@ -29,7 +30,13 @@ namespace Terra.Studio
             var type = value.GetType();
             var fieldInfo = type.GetField(value.ToString());
             var attribs = fieldInfo.GetCustomAttributes(typeof(StringValueAttribute), false) as StringValueAttribute[];
-            return attribs.Length > 0 ? attribs[0].Value : null;
+            return attribs.Length > 0 ? attribs[0].Value : GetStringValueFromAlias(fieldInfo);
+        }
+
+        private static string GetStringValueFromAlias(FieldInfo fieldInfo)
+        {
+            var attribs = fieldInfo.GetCustomAttributes(typeof(AliasDrawerAttribute), false) as AliasDrawerAttribute[];
+            return attribs.Length > 0 ? attribs[0].Alias : fieldInfo.Name;
         }
 
         public static Type GetStoredType(this Enum value)

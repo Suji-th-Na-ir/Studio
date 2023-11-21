@@ -15,6 +15,7 @@ namespace RuntimeInspectorNamespace
         protected Action<string, string> onStringUpdated;
         public virtual Action<object> OnValueUpdated { get; set; }
         public virtual Action<string> OnStringValueSubmitted { get; set; }
+        public bool shouldPopulateIntoUndoRedoStack = true;
 
 #pragma warning disable 0649
         [SerializeField]
@@ -188,14 +189,14 @@ namespace RuntimeInspectorNamespace
             return true;
         }
 
-        public virtual void SetInteractable(bool on,bool disableAlso=false)
+        public virtual void SetInteractable(bool on, bool disableAlso = false)
         {
-            if(disableAlso)
+            if (disableAlso)
             {
                 gameObject.SetActive(on);
             }
         }
-        public virtual void InvokeUpdateDropdown(List<string> dropdowns){ }
+        public virtual void InvokeUpdateDropdown(List<string> dropdowns) { }
 
         public void BindTo(InspectorField parent, MemberInfo variable, string variableName = null)
         {
@@ -624,19 +625,16 @@ namespace RuntimeInspectorNamespace
 
         private void GenerateExposedMethodButtons()
         {
-            bool hideRemoveButtonInAny = false;
-            if (elements != null)
+            bool showRemoveButton = true;
+            if (elements != null && elements.Count > 0)
             {
-                if (elements[elements.Count - 1].ComponentType != null)
+                var type = elements[^1].ComponentType;
+                if (type != null)
                 {
-                    var comp = Inspector.ShownComponents.FirstOrDefault(component => component.ComponentName == elements[elements.Count - 1].ComponentType.Name);
-                    if (comp.hideRemoveButton && !hideRemoveButtonInAny)
-                    {
-                        hideRemoveButtonInAny = true;
-                    }
+                    showRemoveButton = !RTDataManagerSO.HideRemoveButtonForTypes.Any(x => x == type);
                 }
             }
-            if (!hideRemoveButtonInAny)
+            if (showRemoveButton)
             {
                 if (Inspector.ShowRemoveComponentButton && typeof(Component).IsAssignableFrom(BoundVariableType) && !typeof(Transform).IsAssignableFrom(BoundVariableType) && Inspector.currentPageIndex == 1)
                     CreateExposedMethodButton(GameObjectField.removeComponentMethod, () => this, (value) => { });
@@ -665,6 +663,15 @@ namespace RuntimeInspectorNamespace
 
             elements.Clear();
             exposedMethods.Clear();
+        }
+
+        protected virtual void ClearElement(InspectorField inspectorField)
+        {
+            if (elements.Contains(inspectorField))
+            {
+                inspectorField.Unbind();
+                elements.Remove(inspectorField);
+            }
         }
 
         public override void Refresh()
@@ -721,7 +728,7 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        public InspectorField CreateDrawerForVariable(MemberInfo variable, string variableName = null,bool takeOriginalDepth=false)
+        public InspectorField CreateDrawerForVariable(MemberInfo variable, string variableName = null, bool takeOriginalDepth = false)
         {
             // xnx 
             if (variable.Name.ToLower() == "enabled")
@@ -732,7 +739,7 @@ namespace RuntimeInspectorNamespace
             variableName = string.IsNullOrEmpty(displayName) ? variableName : displayName;
 
             int depth = Depth;
-            if(!takeOriginalDepth)
+            if (!takeOriginalDepth)
             {
                 depth += 1;
             }
@@ -777,9 +784,7 @@ namespace RuntimeInspectorNamespace
             if (variableDrawer != null)
             {
                 variableDrawer.BindTo(variableType, variableName == null ? null : string.Empty, variableName == null ? null : string.Empty, getter, setter);
-                if (variableName != null)
-                    variableDrawer.NameRaw = variableName;
-
+                if (variableName != null) variableDrawer.NameRaw = variableName;
                 elements.Add(variableDrawer);
             }
 
