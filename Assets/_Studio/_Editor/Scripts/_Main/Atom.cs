@@ -385,6 +385,7 @@ namespace Terra.Studio
 
             public void UpdateTRS(Vector3[] trs)
             {
+                trs[2] = new Vector3(Mathf.Abs(trs[2].x), Mathf.Abs(trs[2].y), Mathf.Abs(trs[2].z));
                 UpdateTRS_WithoutMultiselect(trs);
                 CheckForMultiselectScenario(trs);
             }

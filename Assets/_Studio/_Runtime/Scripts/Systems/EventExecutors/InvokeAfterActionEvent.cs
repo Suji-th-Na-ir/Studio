@@ -13,7 +13,6 @@ namespace Terra.Studio
 
         public void Execute(bool subscribe, EventContext context)
         {
-            Debug.Log($"Invoke execution status: {subscribe}");
             lookOutObjects ??= new();
             var isFound = lookOutObjects.TryGetValue(context, out var coroutineService);
             if (subscribe)

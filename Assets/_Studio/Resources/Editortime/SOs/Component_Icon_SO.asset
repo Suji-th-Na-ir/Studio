@@ -87,3 +87,5 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: 6e925fd1abbf84a07b63d28c723c5aad, type: 3}
   - type: Broadcast Listened
     icon: {fileID: 21300000, guid: 6e925fd1abbf84a07b63d28c723c5aad, type: 3}
+  - type: InstantiateStudioObject
+    icon: {fileID: 21300000, guid: 48c4f099a307f48ffa2a2ac826bdd79b, type: 3}

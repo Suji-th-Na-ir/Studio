@@ -16,6 +16,7 @@ namespace Terra.Studio
                 rounds = rounds,
                 invokeAtStart = true
             };
+            if (entityRef.instantiateOn == InstantiateOn.EveryXSeconds) entityRef.rounds--;
             entityRef.EventContext = context;
             base.Init<T>(entity);
         }
@@ -39,27 +40,26 @@ namespace Terra.Studio
             {
                 entityRef.IsExecuted = true;
             }
-            OnDemandRun(in entityRef);
+            OnDemandRun(entityRef);
         }
 
-        public void OnDemandRun(in InstantiateStudioObjectComponent component)
+        public void OnDemandRun(InstantiateStudioObjectComponent component)
         {
             Instantiate(component);
             if (component.canPlaySFX)
             {
                 RuntimeWrappers.PlaySFX(component.sfxName);
             }
-            if (component.canPlayVFX)
+            CoroutineService.RunCoroutine(() =>
             {
-                RuntimeWrappers.PlayVFX(component.vfxName, component.RefObj.transform.position);
-            }
-            if (component.IsBroadcastable)
-            {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
-            }
+                if (component.IsBroadcastable)
+                {
+                    RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
+                }
+            }, CoroutineService.DelayType.WaitForFrame);
         }
 
-        private void Instantiate(in InstantiateStudioObjectComponent component)
+        private void Instantiate(InstantiateStudioObjectComponent component)
         {
             var iterations = component.duplicatesToSpawn;
             Vector3[] points;
@@ -91,24 +91,27 @@ namespace Terra.Studio
                         entityData.shouldLoadAssetAtRuntime = true;
                         EntityAuthorOp.ProvideGameobjectForEntity(entityData, (go) =>
                         {
-                            go.transform.SetParent(refTr);
-                            SetupChildGo(go, in entityData);
+                            SetupChildGo(go, in entityData, component);
                         });
                     }
                     else
                     {
                         childGo = refTr.GetChild(j).gameObject;
                         RuntimeWrappers.ResolveTRS(childGo, null, entityData.position, entityData.rotation, entityData.scale);
-                        SetupChildGo(childGo, in entityData);
+                        SetupChildGo(childGo, in entityData, component);
                     }
                 }
             }
         }
 
-        private void SetupChildGo(GameObject childGo, in VirtualEntity entityData)
+        private void SetupChildGo(GameObject childGo, in VirtualEntity entityData, InstantiateStudioObjectComponent component)
         {
             RuntimeOp.Resolve<SceneDataHandler>().SetColliderData(childGo, entityData.metaData);
             EntityAuthorOp.HandleEntityAndComponentsGeneration(childGo, entityData);
+            if (component.canPlayVFX)
+            {
+                RuntimeWrappers.PlayVFX(component.vfxName, childGo.transform.position);
+            }
         }
 
         public override void OnHaltRequested(EcsWorld currentWorld)
