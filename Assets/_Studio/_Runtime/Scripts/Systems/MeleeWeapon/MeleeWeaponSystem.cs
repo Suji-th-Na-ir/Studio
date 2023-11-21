@@ -65,7 +65,7 @@ namespace Terra.Studio
                       {
                           ref MeleeWeaponComponent componentToCheck = ref entity1.GetComponent<MeleeWeaponComponent>();
                           componentToCheck.isEquipped = false;
-                          RuntimeOp.Resolve<View>().RemoveDynamicUI(entity);
+                          RuntimeOp.Resolve<View>().RemoveDynamicUI(nameof(MeleeWeaponComponent));
                           break;
                       }
                   }
@@ -81,7 +81,7 @@ namespace Terra.Studio
             var comp = component;
             CoroutineService.RunCoroutine(() =>
             {
-                var go = RuntimeOp.Resolve<View>().AttachDynamicUI(entity, meleeAttack);
+                var go = RuntimeOp.Resolve<View>().AttachDynamicUI(nameof(MeleeWeaponComponent), meleeAttack);
                 if (!go)
                     return;
                 var btn = go.GetComponent<Button>();
