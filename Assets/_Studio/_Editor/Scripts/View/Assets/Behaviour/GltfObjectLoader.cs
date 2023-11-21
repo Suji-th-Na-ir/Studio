@@ -184,7 +184,13 @@ namespace Terra.Studio
                 for (var index = 0; index < materials.Length; index++)
                 {
                     var material = _importer.GetMaterial(meshResult.materialIndices[index]) ?? _importer.GetDefaultMaterial();
-                    
+
+                    if (index >= rootBase.Materials.Count)
+                    {
+                        Debug.LogError($"Something is wrong with this model/material.");
+                        materials[index] = material;
+                        continue;
+                    }
                     var baseTextureTrs = rootBase.Materials[index].PbrMetallicRoughness?.BaseColorTexture?.Extensions?.KHR_texture_transform;
                     var metallicRoughnessTrs = rootBase.Materials[index].PbrMetallicRoughness?.MetallicRoughnessTexture?.Extensions?.KHR_texture_transform;
                     var emissiveTextureTrs = rootBase.Materials[index].EmissiveTexture?.Extensions?.KHR_texture_transform;
