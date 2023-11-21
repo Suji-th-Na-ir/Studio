@@ -78,6 +78,7 @@ namespace Terra.Studio
         {
             var value = component.attackAnimation;
             var obj = component.RefObj;
+            var comp = component;
             CoroutineService.RunCoroutine(() =>
             {
                 var go = RuntimeOp.Resolve<View>().AttachDynamicUI(entity, meleeAttack);
@@ -86,10 +87,23 @@ namespace Terra.Studio
                 
                 btn.onClick.AddListener(() =>
                 {
-                    RuntimeOp.Resolve<GameData>()
-                  .ExecutePlayerMeleeAttack(obj);
+                    Attack(in comp, obj);
                 });
             }, CoroutineService.DelayType.WaitForXFrames, 1);
+        }
+
+        private void Attack(in MeleeWeaponComponent component, GameObject obj)
+        {
+            RuntimeOp.Resolve<GameData>()
+                 .ExecutePlayerMeleeAttack(obj);
+            if (component.canPlaySFXAttack)
+            {
+                RuntimeWrappers.PlaySFX(component.sfxNameAttack);
+            }
+            if (component.canPlayVFXAttack)
+            {
+                RuntimeWrappers.PlayVFX(component.vfxNameAttack, component.RefObj.transform.position);
+            }
         }
 
         public override void OnHaltRequested(EcsWorld currentWorld)
