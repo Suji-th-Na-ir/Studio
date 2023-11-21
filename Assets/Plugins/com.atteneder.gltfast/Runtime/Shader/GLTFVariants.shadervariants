@@ -163,5 +163,7 @@ ShaderVariantCollection:
         passType: 13
       - keywords: _SPECULAR_SETUP _TEXTURE_TRANSFORM _TRANSMISSION
         passType: 13
+      - keywords: _SURFACE_TYPE_TRANSPARENT _TEXTURE_TRANSFORM
+        passType: 13
       - keywords: _TEXTURE_TRANSFORM
         passType: 13
