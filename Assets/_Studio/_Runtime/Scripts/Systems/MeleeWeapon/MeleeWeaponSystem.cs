@@ -1,7 +1,7 @@
-using Leopotam.EcsLite;
-using PlayShifu.Terra;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayShifu.Terra;
+using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
@@ -9,6 +9,7 @@ namespace Terra.Studio
     {
         private const string ATTACK_RESOURCE_NAME = "MeleeAttack";
         private GameObject meleeAttack;
+
         public override void Init<T>(int entity)
         {
             base.Init<T>(entity);
@@ -16,10 +17,10 @@ namespace Terra.Studio
             var rb = entityRef.RefObj.AddRigidbody();
             rb.isKinematic = true;
             rb.useGravity = false;
-            InitializeUI(in entityRef, entity);
+            InitializeUI();
         }
 
-        private void InitializeUI(in MeleeWeaponComponent component, int entity)
+        private void InitializeUI()
         {
             if (meleeAttack)
             {
@@ -51,9 +52,7 @@ namespace Terra.Studio
             {
                 RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
             }
-
-            RuntimeOp.Resolve<PlayerData>()
-              .SetMeleeWeaponParentTransform(component.RefObj.transform, UnequipExistingWeapon);
+            RuntimeOp.Resolve<PlayerData>().SetMeleeWeaponParentTransform(component.RefObj.transform, UnequipExistingWeapon);
             component.isEquipped = true;
             LoadUI(in component, entity);
 
@@ -82,11 +81,9 @@ namespace Terra.Studio
             CoroutineService.RunCoroutine(() =>
             {
                 var go = RuntimeOp.Resolve<View>().AttachDynamicUI(nameof(MeleeWeaponComponent), meleeAttack);
-                if (!go)
-                    return;
+                if (!go) return;
                 var btn = go.GetComponent<Button>();
                 btn.onClick.RemoveAllListeners();
-
                 btn.onClick.AddListener(() =>
                 {
                     Attack(in comp, obj);
