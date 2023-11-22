@@ -3,14 +3,6 @@ using System;
 namespace Terra.Studio
 {
     [Serializable]
-    public class AssetsAPIResponse
-    {
-        public bool success;
-        public string message;
-        public AssetData[] data;
-    }
-
-    [Serializable]
     public class AssetData
     {
         public string _id;

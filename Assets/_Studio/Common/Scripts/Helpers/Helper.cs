@@ -4,7 +4,10 @@ using System;
 using System.Linq;
 using UnityEngine.EventSystems;
 using System.Collections;
+using System.IO;
 using System.Reflection;
+using System.Text;
+using Ionic.Zlib;
 using Terra.Studio;
 
 namespace PlayShifu.Terra
@@ -821,6 +824,22 @@ namespace PlayShifu.Terra
         public static string ReplaceHttpsFromUrl(string url)
         {
             return url.Replace("https", "http");
+        }
+        
+        public static string UnzipBase64String(string compressedText)
+        {
+            byte[] compressedBytes = Convert.FromBase64String(compressedText); // Assuming the string is Base64-encoded
+
+            using (MemoryStream memoryStream = new MemoryStream(compressedBytes))
+            {
+                using (GZipStream gzipStream = new GZipStream(memoryStream, CompressionMode.Decompress))
+                {
+                    using (StreamReader reader = new StreamReader(gzipStream, Encoding.UTF8))
+                    {
+                        return reader.ReadToEnd();
+                    }
+                }
+            }
         }
     }
 }

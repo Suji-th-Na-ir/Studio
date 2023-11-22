@@ -117,11 +117,12 @@ namespace Terra.Studio
                     });
                     _currGo.LoadModel(ModelDownloaded, null);
                 }
+
                 return;
             }
 
             var ray = Camera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out var hit))
+            if (Physics.SphereCast(ray, 1f, out var hit))
             {
                 if (_currGo)
                 {
@@ -146,6 +147,7 @@ namespace Terra.Studio
                 {
                     SetLayerOfAllChildren(_currGo.LoadedObject.gameObject, "Default");
                 }
+
                 var go = _currGo.LoadedObject.gameObject;
                 _currGo.LoadTextures((status) =>
                 {
@@ -163,6 +165,7 @@ namespace Terra.Studio
                     Destroy(_currGo.gameObject);
                 }
             }
+
             _currGo = null;
             if (_actuallyLoadedGo)
             {
@@ -175,6 +178,7 @@ namespace Terra.Studio
         {
             _view.Selected(this, true);
         }
+
         public void OnPointerExit()
         {
             _view.Selected(this, false);
@@ -196,6 +200,7 @@ namespace Terra.Studio
                 transform1.gameObject.layer = layerNum;
             }
         }
+
         private void OnDestroy()
         {
             if (_textureDownloadRoutine != null)
@@ -209,10 +214,12 @@ namespace Terra.Studio
                 {
                     _textureRequest.Abort();
                 }
+
                 if (_textureRequest.downloadHandler is DownloadHandlerTexture dht && _textureRequest.isDone)
                 {
                     Destroy(dht.texture);
                 }
+
                 _textureRequest.Dispose();
             }
         }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using PlayShifu.Terra;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,7 @@ namespace Terra.Studio
 
         private bool useSampleJson = true;
         private const int NumberOfAssetsToShowForNow = 21;
-        private AssetsAPIResponse _fullData;
+        private AssetData[] _fullData;
         private ButtonScroll _scroll;
         private SearchBar _search;
         private AssetData[] _currentData;
@@ -36,18 +37,20 @@ namespace Terra.Studio
             else
             {
                 var text = EditorOp.Load<TextAsset>(sampleJson);
-                OnDataFetchSuccess(true, text.text);
+                var json = text.text;
+                var temp = JsonConvert.DeserializeObject<APIResponse>(json);
+                OnDataFetchSuccess(true, temp.data);
             }
         }
 
         private void OnDataFetchSuccess(bool success, string response)
         {
-            var data = JsonConvert.DeserializeObject<AssetsAPIResponse>(response);
-            data.data = data.data.Where(x => x.flags != null && x.flags.Any(y => y == "Premium")).ToArray();
-            _fullData = data;
-            _currentData = _fullData.data;
+            var json = Helper.UnzipBase64String(response);
+            _fullData = JsonConvert.DeserializeObject<AssetData[]>(json);
+            // _fullData = _fullData.Where(x => x.flags != null && x.flags.Any(y => y == "Premium")).ToArray();
+            _currentData = _fullData;
             _scroll = GetComponentInChildren<ButtonScroll>();
-            _scroll.Init(_fullData.data.Length / NumberOfAssetsToShowForNow, PageChanged);
+            _scroll.Init(_fullData.Length / NumberOfAssetsToShowForNow, PageChanged);
             _search = GetComponentInChildren<SearchBar>();
             _search.Init(OnSearch);
             MakeUIBetter();
@@ -69,7 +72,7 @@ namespace Terra.Studio
             }
             else
             {
-                _currentData = _fullData.data;
+                _currentData = _fullData;
                 _scroll.Init(_currentData.Length/NumberOfAssetsToShowForNow, PageChanged);
             }
         }
@@ -77,9 +80,9 @@ namespace Terra.Studio
         private IEnumerator SearchRoutine(string query)
         {
             List<AssetData> queriedAssetData = new(); 
-            for (var i = 0; i < _fullData.data.Length; i++)
+            for (var i = 0; i < _fullData.Length; i++)
             {
-                var d = _fullData.data[i];
+                var d = _fullData[i];
                 var pass = d.display_name.Contains(query) || d.unique_name.Contains(query) || d.category.Contains(query);
                 if (pass)
                 {

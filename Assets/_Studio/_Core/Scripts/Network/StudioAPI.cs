@@ -195,6 +195,6 @@ namespace Terra.Studio
     {
         protected override string DOMAIN => "https://game-assets-api.letsterra.com";
         public override RequestType RequestType => RequestType.Get;
-        protected override string Route => "getAllModels?type=assets_gltf";
+        protected override string Route => "studio/get/assets?type=assets_gltf";
     }
 }
