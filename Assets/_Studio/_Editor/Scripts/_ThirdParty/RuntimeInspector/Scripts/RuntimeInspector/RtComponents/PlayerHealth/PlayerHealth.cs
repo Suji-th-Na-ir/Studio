@@ -40,6 +40,8 @@ namespace Terra.Studio
         {
             var component = new PlayerHealthComponent()
             {
+                ConditionType = "Terra.Studio.GameStart",
+                ConditionData = "GameStart",
                 IsBroadcastable = !string.IsNullOrEmpty(broadcast.broadcast),
                 Broadcast = broadcast.broadcast,
                 regenerateHealth = healthRegeneration,

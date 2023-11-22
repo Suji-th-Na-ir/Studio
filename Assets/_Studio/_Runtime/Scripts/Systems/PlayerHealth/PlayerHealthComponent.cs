@@ -19,14 +19,11 @@ namespace Terra.Studio
         [JsonIgnore] public EventContext EventContext { get; set; }
         [JsonIgnore] public GameObject RefObj { get; set; }
 
-        public bool canPlaySFX;
-        public string sfxName;
-        public int sfxIndex;
-        public bool canPlayVFX;
-        public string vfxName;
-        public int vfxIndex;
-
         public bool regenerateHealth;
         public float regenerationPerSec;
+        [JsonIgnore] public bool trackUI;
+        [JsonIgnore] public GameObject healthUI;
+        [JsonIgnore] public UnityEngine.UI.Image slider;
+        [JsonIgnore] public float playerHealth;
     }
 }

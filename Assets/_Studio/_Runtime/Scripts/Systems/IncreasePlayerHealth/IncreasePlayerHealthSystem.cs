@@ -12,7 +12,7 @@ namespace Terra.Studio
 
         public void OnDemandRun(in IncreasePlayerHealthComponent component)
         {
-            RuntimeOp.Resolve<PlayerData>().ModifyPlayerHealth((int)component.playerHealthModifier);
+            RuntimeOp.Resolve<PlayerData>().OnPlayerHealthChangeRequested?.Invoke((int)component.playerHealthModifier);
             if (component.canPlaySFX)
             {
                 RuntimeWrappers.PlaySFX(component.sfxName);
