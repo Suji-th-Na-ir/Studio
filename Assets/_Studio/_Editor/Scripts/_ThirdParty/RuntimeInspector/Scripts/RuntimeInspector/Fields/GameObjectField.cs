@@ -109,7 +109,11 @@ namespace RuntimeInspectorNamespace
             {
                 if (Inspector.ShowAddComponentButton && Inspector.currentPageIndex == 1)
                 {
-                    CreateExposedMethodButton(addComponentMethod, () => this, (value) => { });
+                    Inspector.EnableAddBehaviour(addComponentMethod, () => this);
+                }
+                else
+                {
+                    Inspector.DisableAddBehaviourButton();
                 }
             }
             componentsExpandedStates.Clear();
