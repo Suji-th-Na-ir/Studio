@@ -91,7 +91,7 @@ namespace Terra.Studio
             CategoryChanged(0);
             _search.Init((x) =>
             {
-                OnSearch(x, SearchType.Search);
+                OnSearch(x,SearchType.FilteredSearch);
             });
         }
 
@@ -151,11 +151,13 @@ namespace Terra.Studio
         {
             _searchInProgress = isSearching;
         }
-        
+
+        private string _lastSearchedString;
         #region Local String Search
 
         private void OnSearch(string searchString, SearchType searchType)
         {
+            _lastSearchedString = searchString;
             if (!string.IsNullOrEmpty(searchString))
             {
                 SetSearchTypeInProgress(searchType);
@@ -166,7 +168,7 @@ namespace Terra.Studio
             {
                 _currentData = _fullData;
                 _currentMaxAssets = _totalMaxAssets;
-                SetSearchTypeInProgress(SearchType.Filter);
+                SetSearchTypeInProgress(SearchType.FilteredSearch);
                 StartCoroutine(LocalSearchRoutine(null));
             }
         }
@@ -174,6 +176,7 @@ namespace Terra.Studio
         private IEnumerator LocalSearchRoutine(string query)
         {
             List<AssetData> queriedAssetData = new();
+            var willSearch = !string.IsNullOrEmpty(query);
             for (var i = 0; i < _fullData.Length; i++)
             {
                 var d = _fullData[i];
@@ -184,14 +187,14 @@ namespace Terra.Studio
                     if (_activeCategory != NONE)
                     {
                         pass = d.category.Contains(_activeCategory);
-                        if (pass && _activeSubCategory != NONE)
+                        if (pass && _activeSubCategory != NONE && d.sub_category != null)
                         {
-                            pass = d.category.Contains(_activeSubCategory);
+                            pass = d.sub_category.Contains(_activeSubCategory);
                         }
                     }
                 }
                 
-                if (pass && (_searchInProgress == SearchType.Search  || _searchInProgress == SearchType.FilteredSearch))
+                if (pass && willSearch && (_searchInProgress == SearchType.Search  || _searchInProgress == SearchType.FilteredSearch))
                 {
                     pass = d.display_name.Contains(query) || d.unique_name.Contains(query) || d.category.Contains(query);
                 }
@@ -224,8 +227,9 @@ namespace Terra.Studio
 
         private void SubCatChanged(int idx)
         {
-            _activeSubCategory = catDatas[idx].text;
-            OnSearch(null, SearchType.Filter);
+            subCatDropDown.value = idx;
+            _activeSubCategory = subCatDatas[idx].text;
+            OnSearch(_lastSearchedString, SearchType.FilteredSearch);
         }
         
         private List<TMP_Dropdown.OptionData> GetCategoryNames()
