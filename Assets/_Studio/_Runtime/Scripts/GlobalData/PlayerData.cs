@@ -54,11 +54,17 @@ namespace Terra.Studio
 
         public void ExecutePlayerMeleeAttack(GameObject weapon)
         {
-            weapon.GetComponent<Collider>().isTrigger = true;
+            if (!weapon.TryGetComponent(out BoxCollider collider))
+            {
+                collider = weapon.AddComponent<BoxCollider>();
+            }
+            collider.SetBoundsValue(1.1f);
+
+            collider.SetTrigger(true);
             playerAnimator.SetTrigger("Attack");
             playerAnimator.GetBehaviour<MeleeStateBehaviour>().OnExit = () =>
             {
-                weapon.GetComponent<Collider>().isTrigger = false;
+                collider.SetTrigger(false);
             };
         }
     }

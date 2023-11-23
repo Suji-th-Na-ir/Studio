@@ -548,6 +548,8 @@ namespace PlayShifu.Terra
 
         public static void TrySetTrigger(this GameObject gameObject, bool isTrigger, bool fitChildrenSize = false)
         {
+            //Commented until further notice
+            return;
             if (!gameObject.TryGetComponent(out Collider collider))
             {
                 collider = gameObject.AddComponent<BoxCollider>();
@@ -559,7 +561,7 @@ namespace PlayShifu.Terra
             }
         }
 
-        private static void SetBoundsValue(this Collider collider, float multiplySizeBy = 0f)
+        public static void SetBoundsValue(this Collider collider, float multiplySizeBy = 0f)
         {
             if (collider.GetType() != typeof(BoxCollider)) return;
             var bx = (BoxCollider)collider;

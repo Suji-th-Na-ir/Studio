@@ -17,6 +17,7 @@ namespace Terra.Studio
             var rb = entityRef.RefObj.AddRigidbody();
             rb.isKinematic = true;
             rb.useGravity = false;
+            entityRef.RefObj.layer = LayerMask.NameToLayer("Damager");
             InitializeUI();
         }
 
