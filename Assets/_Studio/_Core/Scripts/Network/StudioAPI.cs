@@ -1,6 +1,7 @@
 using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Terra.Studio
 {
@@ -10,6 +11,7 @@ namespace Terra.Studio
         public int status;
         public string message;
         public string data;
+        public int count;
     }
 
     [Serializable]
@@ -44,6 +46,8 @@ namespace Terra.Studio
         protected abstract string Route { get; }
 
         protected virtual string DOMAIN => "https://game-assets-api.letsterra.com/studio";
+        
+        public APIResponse ResponseData { get; private set; }
 
         protected virtual string GetURL()
         {
@@ -68,11 +72,11 @@ namespace Terra.Studio
                 {
                     try
                     {
-                        var unpackedData = JsonConvert.DeserializeObject<APIResponse>(response);
-                        status = unpackedData.status == 200;
-                        content = unpackedData.data;
+                        ResponseData = JsonConvert.DeserializeObject<APIResponse>(response);
+                        status = ResponseData.status == 200;
+                        content = ResponseData.data;
                     }
-                    catch
+                    catch (Exception e)
                     {
                         status = false;
                     }
@@ -195,6 +199,28 @@ namespace Terra.Studio
     {
         protected override string DOMAIN => "https://game-assets-api.letsterra.com";
         public override RequestType RequestType => RequestType.Get;
-        protected override string Route => "studio/get/assets?type=assets_gltf";
+        protected override string Route => $"studio/get/assets?type=assets_gltf{_additionalParameters}";
+
+        private readonly string _additionalParameters = "";
+        public AssetsWindowAPI(int pageNumber, int limit)
+        {
+            // additionalParameters = $"&page={pageNumber}&limit={limit}";
+            Debug.LogError($"Hitting Assets....{pageNumber}....{limit}");
+        }
+    }
+
+    public class SearchAPI : StudioAPI
+    {
+        protected override string DOMAIN => "https://game-assets-api.letsterra.com";
+        public override RequestType RequestType => RequestType.Get;
+        protected override string Route => $"studio/search?key={SearchKey}{additionalParameters}";
+        
+        public readonly string SearchKey;
+        private string additionalParameters;
+        public SearchAPI(string searchKey, int pageNumber, int limit)
+        {
+            SearchKey = searchKey;
+            additionalParameters = $"&page={pageNumber}&limit={limit}";
+        }
     }
 }

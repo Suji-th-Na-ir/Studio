@@ -14,13 +14,17 @@ namespace Terra.Studio
         private int _max = 10;
 
         private Action<int> _onPageChanged;
-        public void Init(int currentMax, Action<int> pageChanged)
+        public void Init(int currentMax, Action<int> pageChanged, bool overrideDefaultPageChange = false)
         {
             _max = currentMax; 
             _onPageChanged = pageChanged;
-            _currentPage = 1;
-            SetButtonRange(1);
-            PageChanged();
+
+            if (!overrideDefaultPageChange)
+            {
+                _currentPage = 1;
+                PageChanged();
+                SetButtonRange(1);
+            }
 
             for (var i = 0; i < buttons.Length; i++)
             {
@@ -64,25 +68,13 @@ namespace Terra.Studio
                 buttons [i].gameObject.SetActive(lowestRange + i <= _max && lowestRange+i>0);
             }
 
-            if (_currentPage > 2 && _currentPage < _max - 2)
+            for (var i = 0; i < textInButtons.Length; i++)
             {
-                SetActiveButton(2);
-            }
-            else if (_currentPage == 1)
-            {
-                SetActiveButton(0);
-            }
-            else if (_currentPage == 2)
-            {
-                SetActiveButton(1);
-            }
-            else if (_currentPage == _max - 1)
-            {
-                SetActiveButton(4);
-            }
-            else if (_currentPage == _max - 2)
-            {
-                SetActiveButton(3);
+                if (textInButtons[i].text==_currentPage.ToString())
+                {
+                    SetActiveButton(i);
+                    break;
+                }
             }
         }
         
@@ -115,7 +107,7 @@ namespace Terra.Studio
             }
 
             _currentPage = newMin;
-            SetButtonRange(Mathf.Min(Mathf.Max(_currentPage-2,1),_max-4));
+            SetButtonRange(Mathf.Min(Mathf.Max(_currentPage-2,1),Mathf.Max(1,_max-4)));
             PageChanged();
         }
 
