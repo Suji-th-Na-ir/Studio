@@ -636,8 +636,15 @@ namespace RuntimeInspectorNamespace
             }
             if (showRemoveButton)
             {
-                if (Inspector.ShowRemoveComponentButton && typeof(Component).IsAssignableFrom(BoundVariableType) && !typeof(Transform).IsAssignableFrom(BoundVariableType) && Inspector.currentPageIndex == 1)
-                    CreateExposedMethodButton(GameObjectField.removeComponentMethod, () => this, (value) => { });
+                if (Inspector.ShowRemoveComponentButton && typeof(Component).IsAssignableFrom(BoundVariableType) && !typeof(Transform).IsAssignableFrom(BoundVariableType))
+                {
+                    //CreateExposedMethodButton(GameObjectField.removeComponentMethod, () => this, (value) => { });
+                    var objField = (ObjectField)this;
+                    if(objField!=null)
+                    {
+                        objField.AddRemoveBehaviour(GameObjectField.removeComponentMethod, () => this);
+                    }
+                }
             }
 
             ExposedMethod[] methods = BoundVariableType.GetExposedMethods();

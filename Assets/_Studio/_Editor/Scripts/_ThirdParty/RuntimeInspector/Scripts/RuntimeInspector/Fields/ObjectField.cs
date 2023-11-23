@@ -18,10 +18,10 @@ namespace RuntimeInspectorNamespace
         private bool elementsInitialized = false;
         private IRuntimeInspectorCustomEditor customEditor;
         private bool didCheckForExpand;
-        Button copyButton, pasteButton;
+        Button copyButton, pasteButton,removeButton;
         GameObject copyPastePanel;
         private Button openCopyPaste;
-        Text pasteText;
+        bool canRemove = false;
         protected override int Length
         {
             get
@@ -54,15 +54,26 @@ namespace RuntimeInspectorNamespace
             copyPastePanel = Helper.FindDeepChild(transform, "CopyPastePanel").gameObject;
             copyButton = Helper.FindDeepChild(transform, "CopyButton").GetComponent<Button>();
             pasteButton = Helper.FindDeepChild(transform, "PasteButton").GetComponent<Button>();
+            removeButton = Helper.FindDeepChild(transform, "RemoveButton").GetComponent<Button>();
             copyPastePanel.SetActive(false);
             copyButton.onClick.RemoveAllListeners();
             copyButton.onClick.AddListener(() => CopyBehaviour());
             pasteButton.onClick.RemoveAllListeners();
             pasteButton.onClick.AddListener(() => PasteBehaviour());
-            pasteText = pasteButton.GetComponentInChildren<Text>();
             openCopyPaste = Helper.FindDeepChild(transform, "OpenCopyPasteBtn").GetComponent<Button>();
             openCopyPaste.onClick.RemoveAllListeners();
             openCopyPaste.onClick.AddListener(() => OpenCopyPastePanel());
+        }
+
+        public void AddRemoveBehaviour(ExposedMethod method,Getter getter)
+        {
+            removeButton.onClick.RemoveAllListeners();
+            canRemove = true;
+            removeButton.onClick.AddListener(() =>
+            {
+                copyPastePanel.SetActive(false);
+                method.Call(getter.Target);
+                });
         }
 
         private void Update()
@@ -91,17 +102,19 @@ namespace RuntimeInspectorNamespace
             {
                 bool activate = EditorOp.Resolve<CopyPasteSystem>().IsLastBehaviourDataSame(behaviour.GetType());
                 pasteButton.interactable = activate;
-                if (!activate)
+                pasteButton.SetInteractableButtonText(activate);
+                if (!canRemove)
                 {
-                    var color = Helper.GetColorFromHex("#C8C8C8");
-                    color.a = 0.6f;
-                    pasteText.color = color;
+                    removeButton.interactable = false;
+                    removeButton.SetInteractableButtonText(false);
                 }
                 else
                 {
-                    pasteText.color = Helper.GetColorFromHex("#FFFFFF");
+                    removeButton.interactable = true;
+                    removeButton.SetInteractableButtonText(true);
                 }
             }
+            
             copyPastePanel.SetActive(open);
         }
 

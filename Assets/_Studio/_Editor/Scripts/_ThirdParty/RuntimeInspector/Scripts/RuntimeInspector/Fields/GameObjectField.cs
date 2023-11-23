@@ -381,11 +381,10 @@ namespace RuntimeInspectorNamespace
             HideSelectionGhostIfAny(component);
             Destroy(component);
 
-            // Destroy operation doesn't take place immediately, wait for the component to be fully destroyed
             yield return null;
 
             inspector.Refresh();
-            inspector.EnsureScrollViewIsWithinBounds(); // Scroll view's contents can get out of bounds after removing a component
+            inspector.EnsureScrollViewIsWithinBounds();
         }
 
         private static void HideSelectionGhostIfAny(Component component)
