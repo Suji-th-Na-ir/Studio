@@ -16,7 +16,9 @@ namespace RuntimeInspectorNamespace
         public virtual Action<object> OnValueUpdated { get; set; }
         public virtual Action<string> OnStringValueSubmitted { get; set; }
         public bool shouldPopulateIntoUndoRedoStack = true;
-
+        protected GameObject dividerDrawer;
+        protected GameObject divider;
+        public GameObject Divider { get { return divider; } set { divider = value; } }
 #pragma warning disable 0649
         [SerializeField]
         protected LayoutElement layoutElement;
@@ -180,6 +182,8 @@ namespace RuntimeInspectorNamespace
         {
             if (visibleArea)
                 visibleArea.onCullStateChanged.AddListener((bool isCulled) => m_isVisible = !isCulled);
+
+            dividerDrawer = EditorOp.Load<GameObject>("Editortime/Prefabs/DividerDrawer");
         }
 
         public abstract bool SupportsType(Type type);
@@ -327,6 +331,7 @@ namespace RuntimeInspectorNamespace
         protected virtual void OnUnbound()
         {
             m_value = null;
+            Destroy(Divider);
         }
 
         protected virtual void OnInspectorChanged()
@@ -701,6 +706,8 @@ namespace RuntimeInspectorNamespace
         public InspectorField CreateDrawerForComponent(Component component, string variableName = null)
         {
             InspectorField variableDrawer = Inspector.CreateDrawerForType(component.GetType(), drawArea, Depth + 1, false);
+            if ((component as BaseBehaviour) != null || (component as Transform)!=null)
+              variableDrawer.Divider=  Instantiate(dividerDrawer, drawArea);
             if (variableDrawer != null)
             {
                 if (variableName == null)
