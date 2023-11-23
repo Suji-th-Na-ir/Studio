@@ -78,6 +78,7 @@ namespace Terra.Studio
                     }
                     catch (Exception e)
                     {
+                        Debug.LogError($"Exception => {e}");
                         status = false;
                     }
                 }
@@ -221,5 +222,13 @@ namespace Terra.Studio
             SearchKey = searchKey;
             additionalParameters = $"&page={pageNumber}&limit={limit}";
         }
+    }
+
+    public class AssetsCategoryAPI : StudioAPI
+    {
+        protected override string DOMAIN => "https://game-assets-api.letsterra.com";
+        public override RequestType RequestType => RequestType.Get;
+        protected override string Route => $"studio/categories";
+
     }
 }

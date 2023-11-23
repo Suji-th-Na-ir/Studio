@@ -14,4 +14,18 @@ namespace Terra.Studio
     {
         public string uri;
     }
+
+    [Serializable]
+    public class AssetsCategoriesData
+    {
+        public CategoryData[] categoriesData;
+    }
+
+    [Serializable]
+    public class CategoryData
+    {
+        public string category;
+        public string[] subCategory;
+        public string[] tags;
+    }
 }
