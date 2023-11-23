@@ -7,7 +7,7 @@ using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
-    public class RecordedVector3Field : Vector3Field
+    public class RecordedVector3Field : Vector3Field, ITooltipContent, ITooltipManager
     {
         [SerializeField] private Button recordButton;
         [SerializeField] private Button resetButton;
@@ -17,9 +17,19 @@ namespace Terra.Studio
 
         private bool isRecording;
 
+        bool ITooltipContent.IsActive { get { return this && gameObject.activeSelf; } }
+        string ITooltipContent.TooltipText => "Record";
+
+        public Canvas Canvas => Inspector.Canvas;
+
+        public float TooltipDelay => 0.4f;
+
         public override void Initialize()
         {
             base.Initialize();
+            var listner = gameObject.AddComponent<TooltipListener>();
+            listner.Initialize(this);
+            recordButton.gameObject.AddComponent<TooltipArea>().Initialize(listner, this);
         }
 
         public override bool SupportsType(Type type)
