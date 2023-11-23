@@ -205,7 +205,6 @@ namespace Terra.Studio
         public AssetsWindowAPI(int pageNumber, int limit)
         {
             // additionalParameters = $"&page={pageNumber}&limit={limit}";
-            Debug.LogError($"Hitting Assets....{pageNumber}....{limit}");
         }
     }
 
