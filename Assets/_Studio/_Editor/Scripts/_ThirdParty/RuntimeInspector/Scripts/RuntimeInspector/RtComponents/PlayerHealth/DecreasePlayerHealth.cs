@@ -16,7 +16,7 @@ namespace Terra.Studio
         }
 
         [SerializeField] private Atom.StartOn when = new();
-        [SerializeField, Range(0, 100)] private uint byPoint;
+        [SerializeField, Range(0, 100)] private uint byPoint = 10;
         [SerializeField] private Atom.PlaySfx playSFX = new();
         [SerializeField] private Atom.PlayVfx playVFX = new();
         [SerializeField] private Atom.Broadcast broadcast = new();

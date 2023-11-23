@@ -12,8 +12,8 @@ namespace Terra.Studio
         protected override bool CanListen => false;
 
         [Header("Player Health \t 100")]
-        [SerializeField] private bool healthRegeneration;
-        [SerializeField] private float regenerationPerSec;
+        [SerializeField, AliasDrawer("Auto Heal")] private bool healthRegeneration;
+        [SerializeField, AliasDrawer("Per Sec")] private float regenerationPerSec;
         [Header("When Dead:")]
         [SerializeField] private Atom.Broadcast broadcast = new();
         protected override string[] BroadcasterRefs => new string[] { broadcast.broadcast };
