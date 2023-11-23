@@ -32,7 +32,7 @@ namespace Terra.Studio
                 RuntimeOp.Resolve<ScoreHandler>().AddScore(component.AddScoreValue);
             if (component.IsBroadcastable)
             {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
+                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast);
             }
         }
 

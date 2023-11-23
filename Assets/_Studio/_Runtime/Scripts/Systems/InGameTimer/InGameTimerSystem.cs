@@ -71,7 +71,7 @@ namespace Terra.Studio
             timer.IsExecuted = true;
             if (timer.IsBroadcastable)
             {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(timer.Broadcast, true);
+                RuntimeOp.Resolve<Broadcaster>().Broadcast(timer.Broadcast);
             }
         }
     }

@@ -28,10 +28,9 @@ namespace Terra.Studio
             {
                 RuntimeWrappers.PlayVFX(data.vfxName, component.RefObj.transform.position);
             }
-            var listenMultipleTimes = component.listen == Listen.Always;
             if (data.isBroadcastable)
             {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(data.broadcast, !listenMultipleTimes);
+                RuntimeOp.Resolve<Broadcaster>().Broadcast(data.broadcast);
             }
         }
 

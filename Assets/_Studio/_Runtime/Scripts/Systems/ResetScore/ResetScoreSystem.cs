@@ -27,7 +27,7 @@ namespace Terra.Studio
             RuntimeOp.Resolve<ScoreHandler>().ResetScore();
             if (component.IsBroadcastable)
             {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
+                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast);
             }
         }
 

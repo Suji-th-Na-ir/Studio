@@ -16,7 +16,7 @@ namespace Terra.Studio
             var rb = entityRef.RefObj.AddRigidbody();
             rb.isKinematic = true;
             rb.useGravity = false;
-            InitializeUI(in entityRef,entity);
+            InitializeUI(in entityRef, entity);
         }
 
         private void InitializeUI(in MeleeWeaponComponent component, int entity)
@@ -31,7 +31,7 @@ namespace Terra.Studio
         }
 
         public override void OnConditionalCheck(int entity, object data)
-        {  
+        {
             ref var entityRef = ref EntityAuthorOp.GetComponent<MeleeWeaponComponent>(entity);
             if (entityRef.isEquipped)
                 return;
@@ -50,7 +50,7 @@ namespace Terra.Studio
             }
             if (component.IsBroadcastable)
             {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
+                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast);
             }
 
 
@@ -86,7 +86,7 @@ namespace Terra.Studio
                     return;
                 var btn = go.GetComponent<Button>();
                 btn.onClick.RemoveAllListeners();
-                
+
                 btn.onClick.AddListener(() =>
                 {
                     Attack(in comp, obj);

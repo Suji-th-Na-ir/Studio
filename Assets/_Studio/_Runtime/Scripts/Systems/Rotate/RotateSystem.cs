@@ -49,7 +49,7 @@ namespace Terra.Studio
             }
             entityRef.currentStartRotation = Quaternion.Euler(entityRef.startRotation);
             entityRef.currentTargetRotation = Quaternion.Euler(entityRef.trueRotateTarget);
-           
+
             if (entityRef.shouldPingPong)
             {
                 if (entityRef.currentRotateCount % 2 == 1)
@@ -157,7 +157,7 @@ namespace Terra.Studio
                 {
                     continue;
                 }
-                else 
+                else
                 {
                     component.RefObj.transform.rotation = component.currentTargetRotation;
                 }
@@ -190,11 +190,11 @@ namespace Terra.Studio
             {
                 if (rotatable.broadcastAt == BroadcastAt.AtEveryPause && !isDone)
                 {
-                    RuntimeOp.Resolve<Broadcaster>().Broadcast(rotatable.Broadcast, false);
+                    RuntimeOp.Resolve<Broadcaster>().Broadcast(rotatable.Broadcast);
                 }
                 if (rotatable.broadcastAt == BroadcastAt.End && isDone)
                 {
-                    RuntimeOp.Resolve<Broadcaster>().Broadcast(rotatable.Broadcast, true);
+                    RuntimeOp.Resolve<Broadcaster>().Broadcast(rotatable.Broadcast);
                 }
             }
             if (rotatable.listen == Listen.Always && !rotatable.ConditionType.Equals("Terra.Studio.GameStart") && isDone)

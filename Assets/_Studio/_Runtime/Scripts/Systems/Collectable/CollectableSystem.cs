@@ -35,7 +35,7 @@ namespace Terra.Studio
             }
             if (component.IsBroadcastable)
             {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
+                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast);
             }
             if (component.canUpdateScore)
             {

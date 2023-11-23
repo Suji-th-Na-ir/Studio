@@ -37,7 +37,7 @@ namespace Terra.Studio
             {
                 entityRef.isInitialProcessDone = true;
             }
-            var targetPos =  entityRef.startPosition + entityRef.targetPosition;
+            var targetPos = entityRef.startPosition + entityRef.targetPosition;
             var pauseDistance = Vector3.Distance(entityRef.startPosition, targetPos);
             var direction = targetPos - entityRef.startPosition;
             entityRef.pauseDistance = pauseDistance;
@@ -74,11 +74,11 @@ namespace Terra.Studio
             {
                 if (translatable.broadcastAt == BroadcastAt.AtEveryPause && !isDone)
                 {
-                    RuntimeOp.Resolve<Broadcaster>().Broadcast(translatable.Broadcast, false);
+                    RuntimeOp.Resolve<Broadcaster>().Broadcast(translatable.Broadcast);
                 }
                 if (translatable.broadcastAt == BroadcastAt.End && isDone)
                 {
-                    RuntimeOp.Resolve<Broadcaster>().Broadcast(translatable.Broadcast, true);
+                    RuntimeOp.Resolve<Broadcaster>().Broadcast(translatable.Broadcast);
                 }
             }
             if (translatable.listen == Listen.Always && !translatable.ConditionType.Equals("Terra.Studio.GameStart") && isDone)

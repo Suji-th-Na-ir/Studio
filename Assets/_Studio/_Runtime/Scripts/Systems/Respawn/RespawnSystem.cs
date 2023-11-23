@@ -22,7 +22,7 @@ namespace Terra.Studio
             }
             if (component.IsBroadcastable)
             {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
+                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast);
             }
             var respawnPoint = RuntimeOp.Resolve<GameData>().RespawnPoint;
             RuntimeOp.Resolve<GameData>().SetPlayerPosition(respawnPoint);

@@ -11,8 +11,7 @@ namespace Terra.Studio
             {
                 if (compData.IsBroadcastable)
                 {
-                    RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(compData.Broadcast);
-                    RuntimeOp.Resolve<Broadcaster>().Broadcast(compData.Broadcast, true);
+                    RuntimeOp.Resolve<Broadcaster>().Broadcast(compData.Broadcast);
                 }
             };
         }

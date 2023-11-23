@@ -11,20 +11,11 @@ namespace Terra.Studio
         private readonly string[] CORE_BROADCAST_KEYS = new[] { "Game Win", "Game Lose" };
         private Dictionary<string, List<Action<object>>> broadcastDict = new();
 
-        public void SetBroadcastable(string broadcastData)
-        {
-            if (broadcastDict.ContainsKey(broadcastData))
-            {
-                return;
-            }
-            broadcastDict.Add(broadcastData, new List<Action<object>>());
-        }
-
         public void ListenTo(string broadcastData, Action<object> onBroadcastListened)
         {
             if (!broadcastDict.ContainsKey(broadcastData))
             {
-                SetBroadcastable(broadcastData);
+                broadcastDict.Add(broadcastData, new List<Action<object>>());
             }
             broadcastDict[broadcastData].Add(onBroadcastListened);
         }
@@ -34,10 +25,14 @@ namespace Terra.Studio
             if (broadcastDict.ContainsKey(broadcastData))
             {
                 broadcastDict[broadcastData].Remove(onBroadcastListened);
+                if (broadcastDict[broadcastData].Count == 0)
+                {
+                    broadcastDict.Remove(broadcastData);
+                }
             }
         }
 
-        public void Broadcast(string broadcastData, bool removeOnceBroadcasted = false)
+        public void Broadcast(string broadcastData)
         {
             var canBroadcast = SystemOp.Resolve<System>().CanInitiateSubsystemProcess?.Invoke() ?? true;
             if (!canBroadcast)
@@ -57,23 +52,10 @@ namespace Terra.Studio
                 return;
             }
             var filteredListeners = listeners.ToList();
-            if (removeOnceBroadcasted)
-            {
-                RemoveBroadcastable(broadcastData);
-            }
             foreach (var listener in filteredListeners)
             {
                 listener?.Invoke(null);
             }
-        }
-
-        private void RemoveBroadcastable(string broadcastData)
-        {
-            if (!broadcastDict.ContainsKey(broadcastData))
-            {
-                return;
-            }
-            broadcastDict.Remove(broadcastData);
         }
 
         private IEnumerable<Action<object>> GetListeners(string broadcastData)

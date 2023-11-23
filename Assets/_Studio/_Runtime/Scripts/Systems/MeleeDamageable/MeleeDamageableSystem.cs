@@ -17,7 +17,7 @@ namespace Terra.Studio
 
             if (data == null)
                 return;
-            
+
             var go = data as GameObject;
             if (go)
             {
@@ -41,7 +41,7 @@ namespace Terra.Studio
                     }
                 }
             }
-           
+
             if (entityRef.currentHealth <= 0)
             {
                 entityRef.IsExecuted = true;
@@ -49,7 +49,7 @@ namespace Terra.Studio
             }
         }
 
-        
+
 
         public void OnDemandRun(ref MeleeDamageableComponent component, int damage)
         {
@@ -66,7 +66,7 @@ namespace Terra.Studio
                 }
                 if (component.IsBroadcastableDead)
                 {
-                    RuntimeOp.Resolve<Broadcaster>().Broadcast(component.BroadcastDead, true);
+                    RuntimeOp.Resolve<Broadcaster>().Broadcast(component.BroadcastDead);
                 }
             }
             else
@@ -81,7 +81,7 @@ namespace Terra.Studio
                 }
                 if (component.IsBroadcastable)
                 {
-                    RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, false);
+                    RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast);
                 }
             }
         }

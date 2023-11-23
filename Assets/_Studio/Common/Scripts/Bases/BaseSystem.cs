@@ -16,10 +16,6 @@ namespace Terra.Studio
             entityRef.IsExecuted = false;
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(true, entityRef.EventContext);
-            if (entityRef.IsBroadcastable)
-            {
-                RuntimeOp.Resolve<Broadcaster>().SetBroadcastable(entityRef.Broadcast);
-            }
         }
         public virtual void OnConditionalCheck(int entity, object data) { }
         public virtual void OnHaltRequested(EcsWorld currentWorld) { }
