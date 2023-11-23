@@ -797,7 +797,18 @@ namespace PlayShifu.Terra
             if (shortWay)
             {
                 if (dot < 0.0f)
-                    return Slerp(ScalarMultiply(p, -1.0f), q, t, true);
+                {
+                    q = ScalarMultiply(q, -1.0f);
+                    dot = -dot;
+                }
+            }
+            else
+            {
+                if (dot > 0.0f)
+                {
+                    q = ScalarMultiply(q, -1.0f);
+                    dot = -dot;
+                }
             }
 
             float angle = Mathf.Acos(dot);

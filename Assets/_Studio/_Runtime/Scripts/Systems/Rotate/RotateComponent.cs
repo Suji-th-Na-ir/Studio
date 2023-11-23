@@ -46,7 +46,6 @@ namespace Terra.Studio
         [JsonIgnore] public float rotationTime;
         [JsonIgnore] public float elapsedTime;
         [JsonIgnore] public int currentRotateCount;
-        [JsonIgnore] public int directionFactor;
         [JsonIgnore] public bool canPause;
         [JsonIgnore] public bool isPaused;
         [JsonIgnore] public bool shouldPingPong;
