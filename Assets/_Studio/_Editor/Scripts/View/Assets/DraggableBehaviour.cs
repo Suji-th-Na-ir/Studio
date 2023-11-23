@@ -121,7 +121,7 @@ namespace Terra.Studio
             }
 
             var ray = Camera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out var hit))
+            if (Physics.SphereCast(ray, 1f, out var hit))
             {
                 if (_currGo)
                 {

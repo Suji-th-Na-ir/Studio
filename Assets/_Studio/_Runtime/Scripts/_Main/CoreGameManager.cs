@@ -19,21 +19,13 @@ namespace Terra.Studio
         {
             IntializeDataManagers();
             SpawnGameUI();
-            RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameStart(true, (data) => { SpawnPlayer(); });
+            RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameStart(true, (data) => { RuntimeOp.Resolve<PlayerData>().SpawnPlayer(); });
         }
 
         public void IntializeDataManagers()
         {
             RuntimeOp.Register(new GameData());
             RuntimeOp.Register(new GameStateHandler());
-        }
-
-        public void SpawnPlayer()
-        {
-            var playerObj = (GameObject)RuntimeOp.Load(ResourceTag.Player);
-            var reference = Object.Instantiate(playerObj);
-            reference.transform.position = RuntimeOp.Resolve<GameData>().RespawnPoint;
-            RuntimeOp.Resolve<GameData>().PlayerRef = reference.transform;
         }
 
         private void SpawnGameUI()

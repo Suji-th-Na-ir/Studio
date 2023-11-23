@@ -85,6 +85,10 @@ namespace Terra.Studio
                 EntityAuthorOp.HandleComponentsGeneration(duplicate, component.componentsOnSelf);
                 var refTr = duplicate.transform;
                 var childrenEntities = component.childrenEntities;
+                if (component.canPlayVFX)
+                {
+                    RuntimeWrappers.PlayVFX(component.vfxName, duplicate.transform.position);
+                }
                 if (childrenEntities == null || childrenEntities.Length == 0) continue;
                 for (int j = 0; j < childrenEntities.Length; j++)
                 {
@@ -112,10 +116,6 @@ namespace Terra.Studio
         {
             RuntimeOp.Resolve<SceneDataHandler>().SetColliderData(childGo, entityData.metaData);
             EntityAuthorOp.HandleEntityAndComponentsGeneration(childGo, entityData);
-            if (component.canPlayVFX)
-            {
-                RuntimeWrappers.PlayVFX(component.vfxName, childGo.transform.position);
-            }
         }
 
         public override void OnHaltRequested(EcsWorld currentWorld)

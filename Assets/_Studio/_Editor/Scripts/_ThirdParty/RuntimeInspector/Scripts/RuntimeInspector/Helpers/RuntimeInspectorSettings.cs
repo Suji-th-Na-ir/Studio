@@ -21,10 +21,6 @@ namespace RuntimeInspectorNamespace
         [SerializeField]
         private VariableSet[] m_exposedVariables;
         public VariableSet[] ExposedVariables { get { return m_exposedVariables; } }
-
-        [SerializeField]
-        private string[] m_GameEssentials;
-        public string[] GameEssentials { get { return m_GameEssentials; } }
 #pragma warning restore 0649
     }
 }

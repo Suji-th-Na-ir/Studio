@@ -11,7 +11,8 @@ namespace Terra.Studio
             WaitForFrame,
             WaitForXFrames,
             WaitForXSeconds,
-            WaitUntil
+            WaitUntil,
+            UntilPredicateFailed
         }
 
         public static CoroutineService RunCoroutine(Action onCoroutineDone, DelayType delayType, float delay = 0, Func<bool> predicate = null)
@@ -41,12 +42,31 @@ namespace Terra.Studio
             return coroutine;
         }
 
+        public static CoroutineService LerpBetweenTwoFloats(float a, float b, float rate, Action<float> onValueModified, Action onLerpDone = null)
+        {
+            var coroutineService = new GameObject("LerpCoroutineHelper-Service");
+            DontDestroyOnLoad(coroutineService);
+            var coroutine = coroutineService.AddComponent<CoroutineService>();
+            coroutine.a = a;
+            coroutine.b = b;
+            coroutine.rate = rate;
+            coroutine.onValueModified = onValueModified;
+            coroutine.onPerformed = onLerpDone;
+            coroutine.DoLerpCoroutine();
+            return coroutine;
+        }
+
         private Coroutine coroutine;
         private Coroutine localCoroutine;
+        private Coroutine lerpCoroutine;
         private DelayType delayType;
         private Func<bool> predicate;
+        private Action<float> onValueModified;
         private Action onPerformed;
         private float delay;
+        private float a;
+        private float b;
+        private float rate;
         private uint rounds;
 
         public void DoSimpleCoroutine()
@@ -57,6 +77,11 @@ namespace Terra.Studio
         public void DoBatchedCoroutine()
         {
             coroutine = StartCoroutine(PerformBatchedCoroutine());
+        }
+
+        public void DoLerpCoroutine()
+        {
+            lerpCoroutine = StartCoroutine(DoFloatLerp());
         }
 
         public void Stop()
@@ -70,6 +95,11 @@ namespace Terra.Studio
             {
                 StopCoroutine(localCoroutine);
                 localCoroutine = null;
+            }
+            if (lerpCoroutine != null)
+            {
+                StopCoroutine(lerpCoroutine);
+                lerpCoroutine = null;
             }
             Destroy(gameObject);
         }
@@ -107,15 +137,37 @@ namespace Terra.Studio
                         yield return new WaitUntil(predicate);
                     }
                     break;
+                case DelayType.UntilPredicateFailed:
+                    while (predicate?.Invoke() ?? false)
+                    {
+                        onPerformed?.Invoke();
+                        yield return new WaitForSeconds(delay);
+                    }
+                    break;
+            }
+            if (delayType != DelayType.UntilPredicateFailed) onPerformed?.Invoke();
+            if (currentRound == -1) Destroy(gameObject);
+        }
+
+        private IEnumerator DoFloatLerp()
+        {
+            var delta = 0f;
+            while (delta <= 1f)
+            {
+                delta += rate * Time.deltaTime;
+                var newValue = Mathf.Lerp(a, b, delta);
+                onValueModified?.Invoke(newValue);
+                yield return null;
             }
             onPerformed?.Invoke();
-            if (currentRound == -1) Destroy(gameObject);
+            Destroy(gameObject);
         }
 
         private void OnDestroy()
         {
             coroutine = null;
             localCoroutine = null;
+            lerpCoroutine = null;
             StopAllCoroutines();
         }
     }

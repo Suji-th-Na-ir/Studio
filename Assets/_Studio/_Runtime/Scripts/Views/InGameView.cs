@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -11,8 +11,7 @@ namespace Terra.Studio
         [SerializeField] private GameObject timerGo;
         [SerializeField] private TextMeshProUGUI timerText;
 
-        private int entity = int.MinValue;
-        private Dictionary<int, GameObject> dynamicSpawnedGO = new();
+        private Dictionary<string, GameObject> dynamicSpawnedGO;
 
         public override void Init()
         {
@@ -26,22 +25,13 @@ namespace Terra.Studio
                 timerGo.SetActive(true);
                 RuntimeOp.Resolve<InGameTimeHandler>().OnTimeModified += SetTime;
             });
+            dynamicSpawnedGO = new();
         }
 
         public override void Draw()
         {
             var score = RuntimeOp.Resolve<ScoreHandler>().CurrentScore;
             SetScore(score);
-        }
-
-        public override void Flush()
-        {
-
-        }
-
-        public override void Repaint()
-        {
-
         }
 
         private void SetScore(int currentScore)
@@ -56,24 +46,24 @@ namespace Terra.Studio
             timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         }
 
-        public override GameObject AttachDynamicUI(int entity, GameObject go)
+        public override GameObject AttachDynamicUI(string component, GameObject go)
         {
-            if (dynamicSpawnedGO.TryGetValue(entity, out var value))
+            if (dynamicSpawnedGO.TryGetValue(component, out var value))
             {
                 return value;
             }
 
             var newUI = Instantiate(go, transform);
-            dynamicSpawnedGO.Add(entity, newUI);
+            dynamicSpawnedGO.Add(component, newUI);
             return newUI;
         }
 
-        public override void RemoveDynamicUI(int entity)
+        public override void RemoveDynamicUI(string component)
         {
-            if (dynamicSpawnedGO.TryGetValue(entity, out var value))
+            if (dynamicSpawnedGO.TryGetValue(component, out var value))
             {
                 Destroy(value);
-                dynamicSpawnedGO.Remove(entity);
+                dynamicSpawnedGO.Remove(component);
             }
         }
     }

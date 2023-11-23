@@ -463,7 +463,7 @@ public class SelectionHandler : View
         runtimeHierarchy.Refresh();
     }
 
-    public void SetWorkGizmoId(GizmoId gizmoId)
+    public void SetWorkGizmoId(GizmoId gizmoId, bool shouldRefreshTRSOfGizmo = true)
     {
         // If the specified gizmo id is the same as the current id, there is nothing left to do
         if (gizmoId == _workGizmoId) return;
@@ -480,7 +480,11 @@ public class SelectionHandler : View
         if (_selectedObjects.Count != 0)
         {
             _workGizmo.Gizmo.SetEnabled(true);
-            _workGizmo.RefreshPositionAndRotation();
+            if (shouldRefreshTRSOfGizmo)
+            {
+                _workGizmo.SetTargetObjects(GetSelectedObjects());
+                _workGizmo.RefreshPositionAndRotation();
+            }
         }
         OnGizmoChanged?.Invoke(gizmoId);
     }
@@ -566,7 +570,7 @@ public class SelectionHandler : View
     public void OverrideGizmoOntoTarget(List<GameObject> targets, GizmoId gizmoId)
     {
         DisableGizmo();
-        SetWorkGizmoId(gizmoId);
+        SetWorkGizmoId(gizmoId, false);
         _workGizmo.SetTargetObjects(targets);
         _workGizmo.Gizmo.SetEnabled(true);
         _workGizmo.RefreshPositionAndRotation();
