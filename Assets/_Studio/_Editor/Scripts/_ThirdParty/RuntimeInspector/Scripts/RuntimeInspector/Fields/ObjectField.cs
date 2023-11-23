@@ -24,7 +24,7 @@ namespace RuntimeInspectorNamespace
         bool canRemove = false;
 
         bool ITooltipContent.IsActive { get { return this && gameObject.activeSelf; } }
-        string ITooltipContent.TooltipText => "Preview";
+        string ITooltipContent.TooltipText => "Preview Behaviour";
         protected override int Length
         {
             get
