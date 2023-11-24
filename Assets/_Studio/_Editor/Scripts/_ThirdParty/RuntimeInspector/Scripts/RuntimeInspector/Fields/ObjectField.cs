@@ -156,6 +156,7 @@ namespace RuntimeInspectorNamespace
 
         protected override void OnBound(MemberInfo variable)
         {
+            canRemove = false;
             elementsInitialized = false;
             base.OnBound(variable);
             SetupPreview();
