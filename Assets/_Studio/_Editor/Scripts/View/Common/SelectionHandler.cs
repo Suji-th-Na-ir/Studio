@@ -174,6 +174,7 @@ public class SelectionHandler : View
         objectRotationGizmo.SetTargetObjects(_selectedObjects);
         objectRotationGizmo.onRotationRefreshed += RefreshObjectTRS;
         objectScaleGizmo.SetTargetObjects(_selectedObjects);
+        objectScaleGizmo.onScaleRefreshed += RefreshObjectTRS;
         objectUniversalGizmo.SetTargetObjects(_selectedObjects);
 
         _workGizmo = objectMoveGizmo;

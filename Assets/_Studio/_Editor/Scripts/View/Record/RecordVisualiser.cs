@@ -576,10 +576,11 @@ namespace Terra.Studio
         RepeatDirectionType cachedDirectionType;
         public Transform GhostMeshTransform { get { return childGhostMesh; } }
         public bool HasRecorder => baseRecorder != null;
-
+        private GameObject targetObject;
         public RecordVisualiser(GameObject gameObject, Record recordFor, Action onGhostDataModified, params Vector3[] trs)
         {
             this.recordFor = recordFor;
+            targetObject = gameObject;
             this.onGhostDataModified = onGhostDataModified;
             ghostMaterial = EditorOp.Load<Material>(GHOST_MATERIAL_PATH);
             var ghostObj = EditorOp.Load<GameObject>(GHOST_RESOURCE_PATH);
@@ -685,6 +686,7 @@ namespace Terra.Studio
         public void UpdateTRS(params Vector3[] trs)
         {
             RuntimeWrappers.ResolveTRS(ghost, null, trs);
+            childGhostMesh.localScale = targetObject.transform.lossyScale;
         }
 
         private void CleanCollider(Transform child)
