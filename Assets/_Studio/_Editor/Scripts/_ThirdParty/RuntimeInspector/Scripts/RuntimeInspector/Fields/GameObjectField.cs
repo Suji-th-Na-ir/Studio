@@ -116,6 +116,10 @@ namespace RuntimeInspectorNamespace
                     Inspector.DisableAddBehaviourButton();
                 }
             }
+            else
+            {
+                Inspector.DisableAddBehaviourButton();
+            }
             componentsExpandedStates.Clear();
         }
 
