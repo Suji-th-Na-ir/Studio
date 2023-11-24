@@ -60,7 +60,14 @@ namespace Terra.Studio
         private bool _downloadCheck;
         private const string NONE = "None";
         private CacheValidator _cacheValidator;
-        
+        private CrossSceneDataHolder _crossSceneDataHolder;
+        private bool _assetJsonDownloaded;
+        private bool _categoryJsonDownloaded;
+
+        private const string KeyAssetData = "AssetData";
+        private const string KeyCategoryData = "CategoryData";
+        private const string KeyAssetDataCount = "AssetDataCount";
+
         public void Awake()
         {
             EditorOp.Register(this);
@@ -68,10 +75,24 @@ namespace Terra.Studio
 
         public override void Init()
         {
+            _crossSceneDataHolder ??= SystemOp.Resolve<CrossSceneDataHolder>();
             _cacheValidator ??= SystemOp.Resolve<CacheValidator>();
             _scroll = GetComponentInChildren<ButtonScroll>();
             _search = GetComponentInChildren<SearchBar>();
-            StartCoroutine(SendApis());
+
+
+            if (_crossSceneDataHolder.Get(KeyAssetData, out var assetData) 
+                && _crossSceneDataHolder.Get(KeyCategoryData, out var categoryData) 
+                && _crossSceneDataHolder.Get(KeyAssetDataCount, out var assetDataCount) )
+            {
+                OnAssetsDataFetchCompleted(true, (string)assetData, (int)assetDataCount);
+                OnCategoryDataFetchCompleted(true, (string)categoryData);
+                AllDataReceived();
+            }
+            else
+            {
+                StartCoroutine(SendApis());
+            }
         }
 
         private IEnumerator SendApis()
@@ -95,6 +116,11 @@ namespace Terra.Studio
             }
 
             yield return new WaitUntil(() => _assetJsonDownloaded && _categoryJsonDownloaded);
+            AllDataReceived();
+        }
+
+        private void AllDataReceived()
+        {
             UpdateThemeNames(false);
             UpdateCategoryNames(false);
             ThemeChanged(0);
@@ -104,11 +130,10 @@ namespace Terra.Studio
             });
         }
 
-        private bool _assetJsonDownloaded;
-        private bool _categoryJsonDownloaded;
-        
         private void OnAssetsDataFetchCompleted(bool success, string response, int count)
         {
+            _crossSceneDataHolder.Set(KeyAssetData, response);
+            _crossSceneDataHolder.Set(KeyAssetDataCount, count);
             _assetJsonDownloaded = true;
             _totalMaxAssets = count;
             _currentMaxAssets = count;
@@ -119,7 +144,8 @@ namespace Terra.Studio
         }
         private void OnCategoryDataFetchCompleted(bool success, string response)
         {
-            _categoryJsonDownloaded = true;
+            _crossSceneDataHolder.Set(KeyCategoryData, response);
+
             _assetsCategories = JsonConvert.DeserializeObject<AssetsCategoriesData>(response);
             
             catDropDown.onValueChanged.AddListener(CategoryChanged);
@@ -128,6 +154,7 @@ namespace Terra.Studio
             downloadToggle.isOn = false;
             downloadToggle.onValueChanged.AddListener(DownloadOnlyToggleChanged);
             clearFiltersButton.onClick.AddListener(ClearFiltersClicked);
+            _categoryJsonDownloaded = true;
         }
         
         private void PageChanged(int obj)
