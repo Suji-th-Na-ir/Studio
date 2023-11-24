@@ -97,7 +97,7 @@ namespace Terra.Studio
             yield return new WaitUntil(() => _assetJsonDownloaded && _categoryJsonDownloaded);
             UpdateThemeNames(false);
             UpdateCategoryNames(false);
-            CategoryChanged(0);
+            ThemeChanged(0);
             _search.Init((x) =>
             {
                 OnSearch(x,SearchType.FilteredSearch);
@@ -188,17 +188,30 @@ namespace Terra.Studio
 
         private IEnumerator LocalSearchRoutine(string query)
         {
+            Debug.LogError($"Searching.");
+            Debug.LogError($"Query -> {query}");
+            Debug.LogError($"Category -> {_activeCategory}");
+            Debug.LogError($"SubCategory -> {(_activeSubCategory)}");
+            Debug.LogError($"Theme -> {((_activeTheme))}");
+            Debug.LogError($"DownloadOnlt -> {_downloadCheck}");
             List<AssetData> queriedAssetData = new();
             var willSearch = !string.IsNullOrEmpty(query);
             for (var i = 0; i < _fullData.Length; i++)
             {
                 var d = _fullData[i];
                 var pass = true;
+                //download check
                 if (_downloadCheck)
                 {
                     pass = _cacheValidator.IsFileInCache($"{d.unique_name}.gltf", out _);
                 }
-                if (_searchTypeToUse is SearchType.Filter or SearchType.FilteredSearch)
+                //theme check
+                if(pass && _activeTheme != NONE)
+                {
+                    pass = d.theme == _activeTheme;
+                }
+                //cat and subcat check
+                if (pass && _searchTypeToUse is SearchType.Filter or SearchType.FilteredSearch)
                 {
                     if (_activeCategory != NONE)
                     {
@@ -208,12 +221,9 @@ namespace Terra.Studio
                             pass = d.sub_category.Contains(_activeSubCategory);
                         }
                     }
-                    else if(_activeTheme != NONE)
-                    {
-                        pass = d.theme == _activeTheme;
-                    }
+                    
                 }
-                
+                //search check
                 if (pass && willSearch && _searchTypeToUse is SearchType.Search or SearchType.FilteredSearch)
                 {
                     pass = d.display_name.Contains(query) || d.unique_name.Contains(query) || d.category.Contains(query);
@@ -241,37 +251,33 @@ namespace Terra.Studio
 
         private void ClearFiltersClicked()
         {
+            themeDropDown.value = 0;
+            catDropDown.value = 0;
+            subCatDropDown.value = 0;
             DownloadOnlyToggleChanged(false);
         }
         private void DownloadOnlyToggleChanged(bool newVal)
         {
             downloadToggle.isOn = newVal;
             _downloadCheck = newVal;
-            UpdateThemeNames(newVal);
-            ThemeChanged(0);
+            // UpdateThemeNames(newVal);
+            ThemeChanged(themeDropDown.value);
         }
         private void ThemeChanged(int idx)
         {
             themeDropDown.value = idx;
             _activeTheme = themeDatas[idx].text;
 
-            if (idx != 0)
-            {
-                UpdateCategoryNames(true);
-                CategoryChanged(0);
-            }
-            else
-            {
-                UpdateCategoryNames(false);
-                CategoryChanged(0);
-            }
+            CategoryChanged(catDropDown.value);
         }
         
         private void CategoryChanged(int idx)
         {
             catDropDown.value = idx;
+            var oldCat = _activeCategory;
+            var newCat = catDatas[idx].text;
             _activeCategory = catDatas[idx].text;
-            UpdateSubCategories();
+            UpdateSubCategories(oldCat, newCat);
         }
 
         private void SubCatChanged(int idx)
@@ -316,9 +322,9 @@ namespace Terra.Studio
             catDropDown.options = catDatas;
         }
 
-        private void UpdateSubCategories()
+        private void UpdateSubCategories(string oldCategory, string newCategory)
         {
-            var x = _assetsCategories.categoriesData.FirstOrDefault(x => x.category == _activeCategory);
+            var x = _assetsCategories.categoriesData.FirstOrDefault(x => x.category == newCategory);
             if (x == null)
             {
                 subCatDatas.Clear();
@@ -336,7 +342,14 @@ namespace Terra.Studio
             }
 
             subCatDropDown.options = subCatDatas;
-            SubCatChanged(0);
+            if (oldCategory != newCategory)
+            {
+                SubCatChanged(0);
+            }
+            else
+            {
+                SubCatChanged(subCatDropDown.value);
+            }
         }
 
         #endregion
