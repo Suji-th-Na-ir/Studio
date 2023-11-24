@@ -75,8 +75,9 @@ namespace Terra.Studio
             else
             {
                 Debug.Log($"Loading started.");
-                CacheValidator.IsFileInCache($"{_uniqueName}.gltf",
-                    (inCache, localPath) => { LoadFromCacheOrDownload(inCache, localPath, onModelLoaded, finalParent); });
+                
+                var x = CacheValidator.IsFileInCache($"{_uniqueName}.gltf", out string localPath);
+                LoadFromCacheOrDownload(x, localPath, onModelLoaded, finalParent);
             }
         }
 

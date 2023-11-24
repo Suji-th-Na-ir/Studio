@@ -37,11 +37,13 @@ namespace Terra.Studio
         [SerializeField] private TMP_Dropdown catDropDown;
         [SerializeField] private TMP_Dropdown subCatDropDown;
         [SerializeField] private TMP_Dropdown themeDropDown;
+        [SerializeField] private Toggle downloadToggle;
+        [SerializeField] private Button clearFiltersButton;
 
         private DraggableBehaviour _currHighlight;
         private bool _currentlyDragging;
 
-        private SearchType _searchInProgress;
+        private SearchType _searchTypeToUse;
         private int _totalMaxAssets;
         private int _currentMaxAssets;
 
@@ -55,8 +57,9 @@ namespace Terra.Studio
         private string _activeCategory;
         private string _activeSubCategory;
         private string _activeTheme;
+        private bool _downloadCheck;
         private const string NONE = "None";
-        
+        private CacheValidator _cacheValidator;
         
         public void Awake()
         {
@@ -65,6 +68,7 @@ namespace Terra.Studio
 
         public override void Init()
         {
+            _cacheValidator ??= SystemOp.Resolve<CacheValidator>();
             _scroll = GetComponentInChildren<ButtonScroll>();
             _search = GetComponentInChildren<SearchBar>();
             StartCoroutine(SendApis());
@@ -91,7 +95,7 @@ namespace Terra.Studio
             }
 
             yield return new WaitUntil(() => _assetJsonDownloaded && _categoryJsonDownloaded);
-            UpdateThemeNames();
+            UpdateThemeNames(false);
             UpdateCategoryNames(false);
             CategoryChanged(0);
             _search.Init((x) =>
@@ -121,6 +125,9 @@ namespace Terra.Studio
             catDropDown.onValueChanged.AddListener(CategoryChanged);
             subCatDropDown.onValueChanged.AddListener(SubCatChanged);
             themeDropDown.onValueChanged.AddListener(ThemeChanged);
+            downloadToggle.isOn = false;
+            downloadToggle.onValueChanged.AddListener(DownloadOnlyToggleChanged);
+            clearFiltersButton.onClick.AddListener(ClearFiltersClicked);
         }
         
         private void PageChanged(int obj)
@@ -153,9 +160,9 @@ namespace Terra.Studio
             return maxPageCount;
         }
         
-        private void SetSearchTypeInProgress(SearchType isSearching)
+        private void SetSearchTypeInProgress(SearchType searchType)
         {
-            _searchInProgress = isSearching;
+            _searchTypeToUse = searchType;
         }
 
         
@@ -187,8 +194,11 @@ namespace Terra.Studio
             {
                 var d = _fullData[i];
                 var pass = true;
-                
-                if (_searchInProgress is SearchType.Filter or SearchType.FilteredSearch)
+                if (_downloadCheck)
+                {
+                    pass = _cacheValidator.IsFileInCache($"{d.unique_name}.gltf", out _);
+                }
+                if (_searchTypeToUse is SearchType.Filter or SearchType.FilteredSearch)
                 {
                     if (_activeCategory != NONE)
                     {
@@ -204,7 +214,7 @@ namespace Terra.Studio
                     }
                 }
                 
-                if (pass && willSearch && _searchInProgress is SearchType.Search or SearchType.FilteredSearch)
+                if (pass && willSearch && _searchTypeToUse is SearchType.Search or SearchType.FilteredSearch)
                 {
                     pass = d.display_name.Contains(query) || d.unique_name.Contains(query) || d.category.Contains(query);
                 }
@@ -229,6 +239,17 @@ namespace Terra.Studio
 
         #region Local Filter Search
 
+        private void ClearFiltersClicked()
+        {
+            DownloadOnlyToggleChanged(false);
+        }
+        private void DownloadOnlyToggleChanged(bool newVal)
+        {
+            downloadToggle.isOn = newVal;
+            _downloadCheck = newVal;
+            UpdateThemeNames(newVal);
+            ThemeChanged(0);
+        }
         private void ThemeChanged(int idx)
         {
             themeDropDown.value = idx;
@@ -260,20 +281,23 @@ namespace Terra.Studio
             OnSearch(_lastSearchedString, SearchType.FilteredSearch);
         }
 
-        private void UpdateThemeNames()
+        private void UpdateThemeNames(bool downloadOnlyActive)
         {
             themeDatas ??= new List<TMP_Dropdown.OptionData>(_assetsCategories.themes.Length+1);
             themeDatas.Clear();
             themeDatas.Add(new TMP_Dropdown.OptionData(NONE));
-            foreach (var themeName in _assetsCategories.themes)
+            if (!downloadOnlyActive)
             {
-                themeDatas.Add(new TMP_Dropdown.OptionData(themeName));
+                foreach (var themeName in _assetsCategories.themes)
+                {
+                    themeDatas.Add(new TMP_Dropdown.OptionData(themeName));
+                }
             }
             themeDropDown.options = themeDatas;
         }
         private void UpdateCategoryNames(bool isThemesActive)
         {
-            if (!isThemesActive)
+            if (!isThemesActive && !_downloadCheck)
             {
                 catDatas ??= new List<TMP_Dropdown.OptionData>(_assetsCategories.categoriesData.Length + 1);
                 catDatas.Clear();

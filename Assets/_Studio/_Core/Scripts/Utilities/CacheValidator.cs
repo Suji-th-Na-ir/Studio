@@ -50,25 +50,24 @@ namespace Terra.Studio
         }
 
 
-        public void IsFileInCache(string key, Action<bool, string> invoked)
+        public bool IsFileInCache(string key, out string localPath)
         {
-            string localPath = "";
+            localPath = "";
             if (!_cachedData.CloudUrlToLocalMap.ContainsKey(key))
             {
-                invoked?.Invoke(false, localPath);
-                return;
+                
+                return false;
             }
 
             var path = Path.Combine(basePath, _cachedData.CloudUrlToLocalMap[key]);
             if (File.Exists(path))
             {
                 localPath = path;
-                invoked?.Invoke(true, localPath);
-                return;
+                return true;
             }
-
-            Debug.LogError($"THIS IS FUCKING WRONG. FILE EXISTED IN MAP BUT IN IN FS");
-            invoked?.Invoke(false, localPath);
+            
+            Debug.Log($"Where did the file go?");
+            return false;
         }
 
         public void Save(string localPath, string content, string uniqueName)
