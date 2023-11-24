@@ -53,15 +53,16 @@ namespace Terra.Studio
             {
                 SwapStartAndTargetRotation(ref entityRef);
             }
-            var angle = Quaternion.Angle(entityRef.currentStartRotation, entityRef.currentTargetRotation);
+        
+            float angleRadians = Quaternion.Angle(entityRef.currentStartRotation, entityRef.currentTargetRotation) * Mathf.Deg2Rad;
+            float angleDegrees = Mathf.Rad2Deg * angleRadians;
+           
             if (entityRef.direction == Direction.Clockwise)
             {
-                entityRef.rotationTime = angle / entityRef.speed;
+                angleDegrees = 360 - angleDegrees;
             }
-            else
-            {
-                entityRef.rotationTime = Mathf.Abs(angle - 360f) / entityRef.speed;
-            }
+            entityRef.rotationTime = angleDegrees / entityRef.speed;
+            entityRef.angle = angleDegrees;
             entityRef.currentRatio = 0f;
             entityRef.elapsedTime = 0f;
         }
@@ -140,7 +141,14 @@ namespace Terra.Studio
 
                 component.currentRatio = component.elapsedTime / component.rotationTime;
                 component.elapsedTime += Time.deltaTime;
-                var isShortWay = component.direction == Direction.Clockwise;
+                var isShortWay = component.angle <=179f;
+                if(component.angle==180f)
+                {
+                    if (component.direction == Direction.Clockwise)
+                        isShortWay = false;
+                    else
+                        isShortWay = true;
+                }
                 var newRotation = Helper.Slerp(component.currentStartRotation, component.currentTargetRotation, component.currentRatio, isShortWay);
                 component.RefObj.transform.rotation = newRotation;
 
