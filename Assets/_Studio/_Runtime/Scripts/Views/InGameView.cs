@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -11,8 +11,7 @@ namespace Terra.Studio
         [SerializeField] private GameObject timerGo;
         [SerializeField] private TextMeshProUGUI timerText;
 
-        private int entity = int.MinValue;
-        private Dictionary<string, GameObject> dynamicSpawnedGO = new();
+        private Dictionary<string, GameObject> dynamicSpawnedGO;
 
         public override void Init()
         {
@@ -26,22 +25,13 @@ namespace Terra.Studio
                 timerGo.SetActive(true);
                 RuntimeOp.Resolve<InGameTimeHandler>().OnTimeModified += SetTime;
             });
+            dynamicSpawnedGO = new();
         }
 
         public override void Draw()
         {
             var score = RuntimeOp.Resolve<ScoreHandler>().CurrentScore;
             SetScore(score);
-        }
-
-        public override void Flush()
-        {
-
-        }
-
-        public override void Repaint()
-        {
-
         }
 
         private void SetScore(int currentScore)

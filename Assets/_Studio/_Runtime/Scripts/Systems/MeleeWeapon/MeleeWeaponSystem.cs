@@ -1,7 +1,7 @@
-using Leopotam.EcsLite;
-using PlayShifu.Terra;
 using UnityEngine;
 using UnityEngine.UI;
+using PlayShifu.Terra;
+using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
@@ -9,6 +9,7 @@ namespace Terra.Studio
     {
         private const string ATTACK_RESOURCE_NAME = "MeleeAttack";
         private GameObject meleeAttack;
+
         public override void Init<T>(int entity)
         {
             base.Init<T>(entity);
@@ -16,10 +17,11 @@ namespace Terra.Studio
             var rb = entityRef.RefObj.AddRigidbody();
             rb.isKinematic = true;
             rb.useGravity = false;
-            InitializeUI(in entityRef,entity);
+            entityRef.RefObj.layer = LayerMask.NameToLayer("Damager");
+            InitializeUI();
         }
 
-        private void InitializeUI(in MeleeWeaponComponent component, int entity)
+        private void InitializeUI()
         {
             if (meleeAttack)
             {
@@ -31,10 +33,9 @@ namespace Terra.Studio
         }
 
         public override void OnConditionalCheck(int entity, object data)
-        {  
+        {
             ref var entityRef = ref EntityAuthorOp.GetComponent<MeleeWeaponComponent>(entity);
-            if (entityRef.isEquipped)
-                return;
+            if (entityRef.isEquipped) return;
             OnDemandRun(ref entityRef, entity);
         }
 
@@ -52,26 +53,25 @@ namespace Terra.Studio
             {
                 RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast, true);
             }
-
-
-            RuntimeOp.Resolve<GameData>()
-              .SetMeleeWeaponParentTransform(component.RefObj.transform, () =>
-              {
-                  var currentWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
-                  var filter = currentWorld.Filter<MeleeWeaponComponent>().End();
-                  foreach (var entity1 in filter)
-                  {
-                      if (entity1 == entity)
-                      {
-                          ref MeleeWeaponComponent componentToCheck = ref entity1.GetComponent<MeleeWeaponComponent>();
-                          componentToCheck.isEquipped = false;
-                          RuntimeOp.Resolve<View>().RemoveDynamicUI(nameof(MeleeWeaponComponent));
-                          break;
-                      }
-                  }
-              });
+            RuntimeOp.Resolve<PlayerData>().SetMeleeWeaponParentTransform(component.RefObj.transform, UnequipExistingWeapon);
             component.isEquipped = true;
             LoadUI(in component, entity);
+
+            void UnequipExistingWeapon()
+            {
+                var currentWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
+                var filter = currentWorld.Filter<MeleeWeaponComponent>().End();
+                foreach (var otherEntity in filter)
+                {
+                    if (otherEntity == entity)
+                    {
+                        ref MeleeWeaponComponent componentToCheck = ref otherEntity.GetComponent<MeleeWeaponComponent>();
+                        componentToCheck.isEquipped = false;
+                        RuntimeOp.Resolve<View>().RemoveDynamicUI(nameof(MeleeWeaponComponent));
+                        break;
+                    }
+                }
+            }
         }
 
         private void LoadUI(in MeleeWeaponComponent component, int entity)
@@ -82,11 +82,9 @@ namespace Terra.Studio
             CoroutineService.RunCoroutine(() =>
             {
                 var go = RuntimeOp.Resolve<View>().AttachDynamicUI(nameof(MeleeWeaponComponent), meleeAttack);
-                if (!go)
-                    return;
+                if (!go) return;
                 var btn = go.GetComponent<Button>();
                 btn.onClick.RemoveAllListeners();
-                
                 btn.onClick.AddListener(() =>
                 {
                     Attack(in comp, obj);
@@ -96,8 +94,7 @@ namespace Terra.Studio
 
         private void Attack(in MeleeWeaponComponent component, GameObject obj)
         {
-            RuntimeOp.Resolve<GameData>()
-                 .ExecutePlayerMeleeAttack(obj);
+            RuntimeOp.Resolve<PlayerData>().ExecutePlayerMeleeAttack(obj);
             if (component.canPlaySFXAttack)
             {
                 RuntimeWrappers.PlaySFX(component.sfxNameAttack);

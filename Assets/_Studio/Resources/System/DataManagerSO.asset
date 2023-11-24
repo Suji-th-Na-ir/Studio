@@ -113,6 +113,16 @@ MonoBehaviour:
     ComponentName: Terra.Studio.ResetTimerComponent
     SystemName: Terra.Studio.ResetTimerSystem
     DrawerName: Terra.Studio.ResetTimer
+  - DisplayName: Increase Player Health
+    Key: Terra.Studio.IncreasePlayerHealth
+    ComponentName: Terra.Studio.IncreasePlayerHealthComponent
+    SystemName: Terra.Studio.IncreasePlayerHealthSystem
+    DrawerName: Terra.Studio.IncreasePlayerHealth
+  - DisplayName: Decrease Player Health
+    Key: Terra.Studio.DecreasePlayerHealth
+    ComponentName: Terra.Studio.DecreasePlayerHealthComponent
+    SystemName: Terra.Studio.DecreasePlayerHealthSystem
+    DrawerName: Terra.Studio.DecreasePlayerHealth
   - Key: Terra.Studio.MeleeDamageable
     ComponentName: Terra.Studio.MeleeDamageableComponent
     SystemName: Terra.Studio.MeleeDamageableSystem
@@ -128,6 +138,11 @@ MonoBehaviour:
     ComponentName: Terra.Studio.InstantiateStudioObjectComponent
     SystemName: Terra.Studio.InstantiateStudioObjectSystem
     DrawerName: Terra.Studio.InstantiateStudioObject
+  - DisplayName: Player Health
+    Key: Terra.Studio.PlayerHealth
+    ComponentName: Terra.Studio.PlayerHealthComponent
+    SystemName: Terra.Studio.PlayerHealthSystem
+    DrawerName: Terra.Studio.PlayerHealth
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent

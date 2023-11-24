@@ -256,7 +256,7 @@ namespace GLTFast
 
         /// <summary>Main glTF data structure</summary>
         protected abstract RootBase Root { get; set; }
-        UnityEngine.Material[] m_Materials;
+        public UnityEngine.Material[] m_Materials;
         List<UnityEngine.Object> m_Resources;
 
         /// <summary>

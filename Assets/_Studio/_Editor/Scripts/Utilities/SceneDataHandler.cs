@@ -11,12 +11,13 @@ namespace Terra.Studio
 {
     public class SceneDataHandler : IDisposable
     {
-        private Camera editorCamera;
         public Func<string> GetAssetName;
         public event Action OnSceneSetupDone;
         public Func<GameObject, string> TryGetAssetPath;
-
         public Vector3 PlayerSpawnPoint { get; private set; }
+
+        private Camera editorCamera;
+        private SceneState sceneState;
 
         public SceneDataHandler()
         {
@@ -115,6 +116,7 @@ namespace Terra.Studio
 
         public void LoadScene()
         {
+            sceneState = SceneState.Importing;
             var prevState = SystemOp.Resolve<System>().PreviousStudioState;
             if (prevState != StudioState.Runtime)
             {
@@ -169,6 +171,7 @@ namespace Terra.Studio
 #if UNITY_WEBGL && !UNITY_EDITOR
             WebGLWrapper.HideLoadingScreen();
 #endif
+                    sceneState = SceneState.Stale;
                 });
             }
             else
@@ -177,6 +180,7 @@ namespace Terra.Studio
                 {
                     var entity = worldData.entities[i];
                     SpawnObjects(entity);
+                    sceneState = SceneState.Stale;
                 }
             }
         }
@@ -307,6 +311,7 @@ namespace Terra.Studio
 
         private string ExportSceneData()
         {
+            sceneState = SceneState.Exporting;
             var worldMetaData = new WorldMetaData();
             var allGos = SceneManager.GetActiveScene().GetRootGameObjects();
             var virtualEntities = new List<VirtualEntity>();
@@ -335,6 +340,7 @@ namespace Terra.Studio
             };
             var json = JsonConvert.SerializeObject(worldData);
             Debug.Log($"Generated json: {json}");
+            sceneState = SceneState.Stale;
             return json;
         }
 
@@ -606,6 +612,8 @@ namespace Terra.Studio
         #region Miscellaneous
 
         public GameObject ScoreManagerObj;
+        private GameObject playerHealthObj;
+        private int playerHealthObjReqs;
         private List<string> modifiers = new();
 
         private void SetupSceneDefaultObjects()
@@ -694,6 +702,32 @@ namespace Terra.Studio
             timerObj.transform.SetAsFirstSibling();
         }
 
+        public void SetupPlayerHealthManager(bool add)
+        {
+            if (add)
+            {
+                playerHealthObjReqs++;
+                if (sceneState != SceneState.Stale) return;
+                if (EditorOp.Resolve<PlayerHealth>()) return;
+                playerHealthObj = new GameObject("PlayerHealth");
+                playerHealthObj.AddComponent<PlayerHealth>();
+            }
+            else
+            {
+                playerHealthObjReqs--;
+                if (playerHealthObjReqs != 0) return;
+                if (!EditorOp.Resolve<PlayerHealth>()) return;
+                Object.Destroy(playerHealthObj);
+            }
+        }
+
         #endregion
+
+        private enum SceneState
+        {
+            Stale,
+            Importing,
+            Exporting
+        }
     }
 }

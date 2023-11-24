@@ -25,15 +25,21 @@ namespace Terra.Studio
             {
                 Debug.Log("Game ended");
                 currentGameState = (State)index;
-                OnGameEnded?.Invoke(null);
             }
             else
             {
                 var nextState = (State)index;
                 currentGameState = nextState;
-                OnGameStarted?.Invoke(null);
             }
             OnStateChanged?.Invoke();
+            if (currentGameState == State.Game)
+            {
+                OnGameStarted?.Invoke(null);
+            }
+            else if (currentGameState == State.PostGame)
+            {
+                OnGameEnded?.Invoke(null);
+            }
         }
 
         public void SubscribeToGameStart(bool subscribe, Action<object> callback)
