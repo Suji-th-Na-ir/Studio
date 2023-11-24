@@ -128,7 +128,7 @@ namespace RuntimeInspectorNamespace
             if (m_setterMode == Mode.OnSubmit)
                 Value = input;
 
-            if (Value != lastSubmittedValue && useSubmitButton == false)
+            if (Value != lastSubmittedValue && useSubmitButton == false && shouldPopulateIntoUndoRedoStack)
             {
                 EditorOp.Resolve<IURCommand>().Record(
                     lastSubmittedValue, input,

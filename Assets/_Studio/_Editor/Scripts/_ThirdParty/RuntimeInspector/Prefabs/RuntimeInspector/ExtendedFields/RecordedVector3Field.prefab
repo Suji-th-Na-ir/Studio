@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 2094951642779769049}
   - component: {fileID: 7795761633941799516}
   - component: {fileID: 845217383550616965}
+  - component: {fileID: 3385008669279961468}
   m_Layer: 5
   m_Name: record-btn
   m_TagString: Untagged
@@ -207,6 +208,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3385008669279961468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 917462472162741500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bc5603e79d2a48c59345ed24003f88c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Record
 --- !u!1 &1398820388060873964
 GameObject:
   m_ObjectHideFlags: 0
@@ -1242,6 +1256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be77964c5747145cda4af47e28bebfbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shouldPopulateIntoUndoRedoStack: 1
   layoutElement: {fileID: 1367989905796473340}
   ignoreLayout: 1
   variableNameText: {fileID: 1368915778517736310}
@@ -1408,6 +1423,7 @@ GameObject:
   - component: {fileID: 8172657808220399951}
   - component: {fileID: 4406301983939444295}
   - component: {fileID: 2624023891387888832}
+  - component: {fileID: 992179904962753971}
   m_Layer: 5
   m_Name: reset-btn
   m_TagString: Untagged
@@ -1517,6 +1533,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &992179904962753971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2019520637360327727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bc5603e79d2a48c59345ed24003f88c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Reset
 --- !u!1 &4074574525268362854
 GameObject:
   m_ObjectHideFlags: 0

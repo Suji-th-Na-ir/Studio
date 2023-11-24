@@ -102,7 +102,7 @@ namespace Terra.Studio
             {
                 return;
             }
-            var go = RuntimeOp.Resolve<View>().AttachDynamicUI(entity, resetPrefabObj);
+            var go = RuntimeOp.Resolve<View>().AttachDynamicUI(nameof(PushComponent), resetPrefabObj);
             var btn = go.GetComponent<Button>();
             var refTr = component.RefObj.transform;
             var newPos = component.initialPosition;

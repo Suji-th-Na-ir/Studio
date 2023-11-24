@@ -1,8 +1,8 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using PlayShifu.Terra;
 using Newtonsoft.Json;
-using RuntimeInspectorNamespace;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -12,10 +12,12 @@ namespace Terra.Studio
     public class SceneDataHandler : IDisposable
     {
         public Func<string> GetAssetName;
+        public event Action OnSceneSetupDone;
         public Func<GameObject, string> TryGetAssetPath;
-        private Camera editorCamera;
-
         public Vector3 PlayerSpawnPoint { get; private set; }
+
+        private Camera editorCamera;
+        private SceneState sceneState;
 
         public SceneDataHandler()
         {
@@ -100,7 +102,10 @@ namespace Terra.Studio
                     {
                         if (status)
                         {
-                            SystemOp.Resolve<User>().UploadSaveDataToCloud(sceneData, null);
+                            if (SystemOp.Resolve<System>().ConfigSO.ServeFromCloud)
+                            {
+                                SystemOp.Resolve<User>().UploadSaveDataToCloud(sceneData, null);
+                            }
                             onPreparationDone?.Invoke();
                         }
                     }
@@ -111,6 +116,7 @@ namespace Terra.Studio
 
         public void LoadScene()
         {
+            sceneState = SceneState.Importing;
             var prevState = SystemOp.Resolve<System>().PreviousStudioState;
             if (prevState != StudioState.Runtime)
             {
@@ -139,6 +145,7 @@ namespace Terra.Studio
             }
             SetupSceneDefaultObjects();
             EditorOp.Resolve<EditorEssentialsLoader>().LoadEssentials();
+            OnSceneSetupDone?.Invoke();
         }
 
 #if UNITY_EDITOR
@@ -164,6 +171,7 @@ namespace Terra.Studio
 #if UNITY_WEBGL && !UNITY_EDITOR
             WebGLWrapper.HideLoadingScreen();
 #endif
+                    sceneState = SceneState.Stale;
                 });
             }
             else
@@ -172,6 +180,7 @@ namespace Terra.Studio
                 {
                     var entity = worldData.entities[i];
                     SpawnObjects(entity);
+                    sceneState = SceneState.Stale;
                 }
             }
         }
@@ -194,24 +203,23 @@ namespace Terra.Studio
                 generatedObj = x;
                 generatedObj.name = entity.name;
                 SetColliderData(generatedObj, entity.metaData);
-                AttachComponents(generatedObj, entity);
+                AttachComponents(generatedObj, entity.components);
                 HandleChildren(generatedObj, entity.children);
             }
-
         }
 
-        private void AttachComponents(
+        public void AttachComponents(
             GameObject gameObject,
-            VirtualEntity entity,
-            Action<GameObject, VirtualEntity> onComponentDependencyFound = null
+            EntityBasedComponent[] components,
+            Action<GameObject, EntityBasedComponent[]> onComponentDependencyFound = null
         )
         {
-            for (int i = 0; i < entity.components.Length; i++)
+            for (int i = 0; i < components.Length; i++)
             {
                 if (Helper.IsInUnityEditorMode())
                 {
                     var metaData = gameObject.AddComponent<EditorMetaData>();
-                    metaData.componentData = entity.components[i];
+                    metaData.componentData = components[i];
                 }
                 else
                 {
@@ -219,23 +227,26 @@ namespace Terra.Studio
                     {
                         var type = EditorOp
                             .Resolve<DataProvider>()
-                            .GetVariance(entity.components[i].type);
-                        if (type == null || string.IsNullOrEmpty((string)entity.components[i].data))
+                            .GetVariance(components[i].type);
+                        if (type == null || string.IsNullOrEmpty(components[i].data))
                         {
                             continue;
                         }
                         var component = gameObject.AddComponent(type) as IComponent;
-                        component?.Import(entity.components[i]);
+                        component?.Import(components[i]);
                     }
                 }
             }
-            onComponentDependencyFound?.Invoke(gameObject, entity);
+            if (components != null && components.Length != 0)
+            {
+                onComponentDependencyFound?.Invoke(gameObject, components);
+            }
         }
 
         public void HandleChildren(
             GameObject gameObject,
             VirtualEntity[] children,
-            Action<GameObject, VirtualEntity> onComponentDependencyFound = null
+            Action<GameObject, EntityBasedComponent[]> onComponentDependencyFound = null
         )
         {
             if (children == null || children.Length == 0)
@@ -274,17 +285,13 @@ namespace Terra.Studio
                         child.localScale = childEntity.scale.WorldToLocalScale(tr);
                         child.name = childEntity.name;
                         SetColliderData(child.gameObject, childEntity.metaData);
-                        AttachComponents(child.gameObject, childEntity, onComponentDependencyFound);
+                        AttachComponents(child.gameObject, childEntity.components, onComponentDependencyFound);
                         HandleChildren(child.gameObject, childEntity.children, onComponentDependencyFound);
                     }
                 }
                 else
                 {
                     child = gameObject.transform.GetChild(i);
-                    RuntimeWrappers.AttachPrerequisities(
-                        child.gameObject,
-                        ResourceDB.GetItemData(childEntity.assetPath)
-                    );
                     child.SetPositionAndRotation(
                         childEntity.position,
                         Quaternion.Euler(childEntity.rotation)
@@ -292,10 +299,9 @@ namespace Terra.Studio
                     child.localScale = childEntity.scale.WorldToLocalScale(child.parent);
                     child.name = childEntity.name;
                     SetColliderData(child.gameObject, childEntity.metaData);
-                    AttachComponents(child.gameObject, childEntity, onComponentDependencyFound);
+                    AttachComponents(child.gameObject, childEntity.components, onComponentDependencyFound);
                     HandleChildren(child.gameObject, childEntity.children, onComponentDependencyFound);
                 }
-
             }
         }
 
@@ -305,6 +311,7 @@ namespace Terra.Studio
 
         private string ExportSceneData()
         {
+            sceneState = SceneState.Exporting;
             var worldMetaData = new WorldMetaData();
             var allGos = SceneManager.GetActiveScene().GetRootGameObjects();
             var virtualEntities = new List<VirtualEntity>();
@@ -333,14 +340,11 @@ namespace Terra.Studio
             };
             var json = JsonConvert.SerializeObject(worldData);
             Debug.Log($"Generated json: {json}");
+            sceneState = SceneState.Stale;
             return json;
         }
 
-        public VirtualEntity GetVirtualEntity(
-            GameObject go,
-            int index,
-            bool shouldCheckForAssetPath
-        )
+        public VirtualEntity GetVirtualEntity(GameObject go, int index, bool shouldCheckForAssetPath)
         {
             var newEntity = new VirtualEntity
             {
@@ -366,6 +370,7 @@ namespace Terra.Studio
                 newEntity.uniqueName = x.itemData.Name;
             }
             EntityBasedComponent[] entityComponents;
+            var isInstantiable = false;
             if (Helper.IsInUnityEditorMode())
             {
                 var metaComponents = go.GetComponents<EditorMetaData>();
@@ -377,26 +382,46 @@ namespace Terra.Studio
             }
             else
             {
-                var editorComponents = go.GetComponents<IComponent>();
-                entityComponents = new EntityBasedComponent[editorComponents.Length];
-                for (int j = 0; j < editorComponents.Length; j++)
+                var attachedComponents = go.GetComponents<IComponent>();
+                var instantiableTypeName = nameof(InstantiateStudioObject);
+                isInstantiable = attachedComponents.Any(x => x.ComponentName.Equals(instantiableTypeName));
+                var isSubsystemEnabled = SystemOp.Resolve<System>().CanInitiateSubsystemProcess?.Invoke() ?? true;
+                if (isInstantiable && isSubsystemEnabled)
                 {
-                    var (type, data) = editorComponents[j].Export();
-                    entityComponents[j] = new EntityBasedComponent() { type = type, data = data };
+                    entityComponents = attachedComponents.
+                        Where(x => x.ComponentName.Equals(instantiableTypeName)).
+                        Select(y =>
+                        {
+                            var (type, data) = y.Export();
+                            return new EntityBasedComponent()
+                            {
+                                type = type,
+                                data = data
+                            };
+                        }).
+                        ToArray();
+                }
+                else
+                {
+                    entityComponents = new EntityBasedComponent[attachedComponents.Length];
+                    for (int j = 0; j < attachedComponents.Length; j++)
+                    {
+                        var (type, data) = attachedComponents[j].Export();
+                        entityComponents[j] = new EntityBasedComponent() { type = type, data = data };
+                    }
                 }
             }
             newEntity.components = entityComponents;
-            var childrenEntities = new VirtualEntity[go.transform.childCount];
-            for (int k = 0; k < go.transform.childCount; k++)
-            {
-                childrenEntities[k] = GetVirtualEntity(
-                    go.transform.GetChild(k).gameObject,
-                    k,
-                    true
-                );
-            }
-            newEntity.children = childrenEntities;
             GetColliderData(go, ref newEntity.metaData);
+            if (!isInstantiable)
+            {
+                var childrenEntities = new VirtualEntity[go.transform.childCount];
+                for (int k = 0; k < go.transform.childCount; k++)
+                {
+                    childrenEntities[k] = GetVirtualEntity(go.transform.GetChild(k).gameObject, k, true);
+                }
+                newEntity.children = childrenEntities;
+            }
             return newEntity;
         }
 
@@ -587,6 +612,8 @@ namespace Terra.Studio
         #region Miscellaneous
 
         public GameObject ScoreManagerObj;
+        private GameObject playerHealthObj;
+        private int playerHealthObjReqs;
         private List<string> modifiers = new();
 
         private void SetupSceneDefaultObjects()
@@ -675,6 +702,32 @@ namespace Terra.Studio
             timerObj.transform.SetAsFirstSibling();
         }
 
+        public void SetupPlayerHealthManager(bool add)
+        {
+            if (add)
+            {
+                playerHealthObjReqs++;
+                if (sceneState != SceneState.Stale) return;
+                if (EditorOp.Resolve<PlayerHealth>()) return;
+                playerHealthObj = new GameObject("PlayerHealth");
+                playerHealthObj.AddComponent<PlayerHealth>();
+            }
+            else
+            {
+                playerHealthObjReqs--;
+                if (playerHealthObjReqs != 0) return;
+                if (!EditorOp.Resolve<PlayerHealth>()) return;
+                Object.Destroy(playerHealthObj);
+            }
+        }
+
         #endregion
+
+        private enum SceneState
+        {
+            Stale,
+            Importing,
+            Exporting
+        }
     }
 }

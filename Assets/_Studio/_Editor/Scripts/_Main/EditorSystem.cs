@@ -84,6 +84,7 @@ namespace Terra.Studio
             IsIncognitoEnabled = enable;
             OnIncognitoEnabled?.Invoke(enable);
         }
+
         public void RequestPreviewMode(bool enable)
         {
             IsPreviewEnabled = enable;

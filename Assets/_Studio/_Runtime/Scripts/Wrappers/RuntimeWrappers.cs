@@ -47,7 +47,7 @@ namespace Terra.Studio
                     break;
 
             }
-            if(go)
+            if (go)
                 go.layer = LayerMask.NameToLayer("Default");
             // return go;
         }
@@ -225,7 +225,7 @@ namespace Terra.Studio
 
         public static void RemoveOutline(Transform child)
         {
-            child.gameObject.layer = LayerMask.NameToLayer("Default");
+            EditorUtils.ApplyLayerToChildren(child, "Default");
         }
 
         public static void MoveGameObjectToActiveScene(GameObject go)
@@ -234,10 +234,11 @@ namespace Terra.Studio
             {
                 return;
             }
-            var scene = SystemOp.Resolve<ISubsystem>().GetScene();
-            if (go.scene != scene)
+            var subsystem = SystemOp.Resolve<ISubsystem>();
+            var scene = subsystem?.GetScene();
+            if (scene != null && go.scene != scene)
             {
-                SceneManager.MoveGameObjectToScene(go, scene);
+                SceneManager.MoveGameObjectToScene(go, scene.Value);
             }
         }
     }

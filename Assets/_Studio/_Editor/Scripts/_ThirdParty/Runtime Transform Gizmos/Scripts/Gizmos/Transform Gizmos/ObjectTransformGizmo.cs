@@ -134,6 +134,7 @@ namespace RTG
 
         public Action<List<GameObject>> onPositionRefreshed;
         public Action<List<GameObject>> onRotationRefreshed;
+        public Action<List<GameObject>> onScaleRefreshed;
 
         public override void OnAttached()
         {
@@ -355,6 +356,7 @@ namespace RTG
         {
             RefreshPosition();
             RefreshRotation();
+            onScaleRefreshed?.Invoke(_targetObjects.ToList());
         }
 
         public override void OnGizmoDragBegin(int handleId)
@@ -376,7 +378,11 @@ namespace RTG
                 RotateObjects(Gizmo.RelativeDragRotation);
                 onRotationRefreshed?.Invoke(_targetObjects.ToList());
             }
-            if (CanAffectScale && Gizmo.ActiveDragChannel == GizmoDragChannel.Scale) ScaleObjects();
+            if (CanAffectScale && Gizmo.ActiveDragChannel == GizmoDragChannel.Scale)
+            {
+                ScaleObjects();
+                onScaleRefreshed?.Invoke(_targetObjects.ToList());
+            }
         }
 
         public override void OnGizmoDragEnd(int handleId)
@@ -404,7 +410,6 @@ namespace RTG
                     });
                 }
             }
-
             RefreshPositionAndRotation();
         }
 

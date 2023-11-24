@@ -18,7 +18,7 @@ namespace Terra.Studio
 
         public void OnDemandRun(in TeleportComponent component)
         {
-            RuntimeOp.Resolve<GameData>().SetPlayerPosition(component.teleportTo);
+            RuntimeOp.Resolve<PlayerData>().SetPlayerPosition(component.teleportTo);
             if (component.canPlaySFX)
             {
                 RuntimeWrappers.PlaySFX(component.sfxName);

@@ -834,7 +834,7 @@ namespace RuntimeInspectorNamespace
                     bool isessential = false;
                     for (int j = 0; j < components.Count; j++)
                     {
-                        if (m_internalSettings.GameEssentials.Any(component => component == components[j].GetType().Name))
+                        if (RTDataManagerSO.GameEssentialBehaviours.Any(component => component == components[j].GetType()))
                         {
                             if (!GetPseudoScene("Game Essentials", true).ContainsChild(goo.transform))
                             {

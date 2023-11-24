@@ -12,6 +12,7 @@ using EasyUI.Helpers;
 using PlayShifu.Terra;
 using EasyUI.Toast;
 using UnityEngine.UI;
+using System;
 
 public class SelectionHandler : View
 {
@@ -24,13 +25,11 @@ public class SelectionHandler : View
     }
 
     [SerializeField] private ToastUI toastUI;
-
     private RuntimeHierarchy runtimeHierarchy;
     private ObjectTransformGizmo objectMoveGizmo;
     private ObjectTransformGizmo objectRotationGizmo;
     private ObjectTransformGizmo objectScaleGizmo;
     private ObjectTransformGizmo objectUniversalGizmo;
-
     private GizmoId _workGizmoId;
     private ObjectTransformGizmo _workGizmo;
     private List<GameObject> _selectedObjects = new List<GameObject>();
@@ -39,12 +38,13 @@ public class SelectionHandler : View
     private Camera mainCamera;
     private Selectable nextSelecteField;
     private EditorSystem cachedEditorSystem;
+    private PointerEventData pointerEventData;
+    private float tabTrailTimer = 0;
+    private const float TAB_TRAILTIME = 0.5f;
     public bool canUndo, canRedo;
     public delegate void SelectionChangedDelegate(List<GameObject> gm);
     public SelectionChangedDelegate SelectionChanged;
-    PointerEventData pointerEventData;
-    float tabTrailTimer = 0;
-    const float TAB_TRAILTIME = 0.5f;
+    public event Action<GizmoId> OnGizmoChanged;
 
     private void Awake()
     {
@@ -174,6 +174,7 @@ public class SelectionHandler : View
         objectRotationGizmo.SetTargetObjects(_selectedObjects);
         objectRotationGizmo.onRotationRefreshed += RefreshObjectTRS;
         objectScaleGizmo.SetTargetObjects(_selectedObjects);
+        objectScaleGizmo.onScaleRefreshed += RefreshObjectTRS;
         objectUniversalGizmo.SetTargetObjects(_selectedObjects);
 
         _workGizmo = objectMoveGizmo;
@@ -297,9 +298,9 @@ public class SelectionHandler : View
     {
         if (_selectedObjects.Count > 0)
         {
-            if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
-            {
-                if (RTInput.WasKeyPressedThisFrame(KeyCode.Backspace))
+            //if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
+            //{
+                if (RTInput.WasKeyPressedThisFrame(KeyCode.Backspace) || RTInput.WasKeyPressedThisFrame(KeyCode.Delete))
                 {
                     var selections = new List<GameObject>(_selectedObjects);
                     runtimeHierarchy.Deselect();
@@ -316,7 +317,7 @@ public class SelectionHandler : View
                     _selectedObjects.Clear();
                     OnSelectionChanged();
                 }
-            }
+            //}
         }
     }
 
@@ -379,7 +380,7 @@ public class SelectionHandler : View
 
             if (pickedObject != null)
             {
-                if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
+                if (RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl))
                 {
                     if (_selectedObjects.Contains(pickedObject))
                         _selectedObjects.Remove(pickedObject);
@@ -463,7 +464,7 @@ public class SelectionHandler : View
         runtimeHierarchy.Refresh();
     }
 
-    public void SetWorkGizmoId(GizmoId gizmoId)
+    public void SetWorkGizmoId(GizmoId gizmoId, bool shouldRefreshTRSOfGizmo = true)
     {
         // If the specified gizmo id is the same as the current id, there is nothing left to do
         if (gizmoId == _workGizmoId) return;
@@ -480,8 +481,13 @@ public class SelectionHandler : View
         if (_selectedObjects.Count != 0)
         {
             _workGizmo.Gizmo.SetEnabled(true);
-            _workGizmo.RefreshPositionAndRotation();
+            if (shouldRefreshTRSOfGizmo)
+            {
+                _workGizmo.SetTargetObjects(GetSelectedObjects());
+                _workGizmo.RefreshPositionAndRotation();
+            }
         }
+        OnGizmoChanged?.Invoke(gizmoId);
     }
 
     private void OnSelectionChanged(GameObject sObject = null, SelectOptions selectOption = SelectOptions.FocusOnSelection)
@@ -490,7 +496,7 @@ public class SelectionHandler : View
         {
             if (prevSelectedObjects[i] != null)
             {
-                prevSelectedObjects[i].layer = LayerMask.NameToLayer("Default");
+                EditorUtils.ApplyLayerToChildren(prevSelectedObjects[i].transform, "Default");
             }
 
             var behaviours = prevSelectedObjects[i].GetComponents<BaseBehaviour>();
@@ -509,7 +515,7 @@ public class SelectionHandler : View
             if (_selectedObjects.Contains(sObject))
             {
                 _selectedObjects.Remove(sObject);
-                sObject.layer = LayerMask.NameToLayer("Default");
+                EditorUtils.ApplyLayerToChildren(sObject.transform, "Default");
             }
             else
             {
@@ -520,13 +526,14 @@ public class SelectionHandler : View
 
         for (int i = 0; i < _selectedObjects.Count; i++)
         {
-            if (_selectedObjects[i] != null && _selectedObjects[i].layer== LayerMask.NameToLayer("Outline"))
+            if (_selectedObjects[i] != null && _selectedObjects[i].layer == LayerMask.NameToLayer("Outline"))
             {
+                EditorUtils.ApplyLayerToChildren(_selectedObjects[i].transform, "Default");
                 _selectedObjects[i].layer = LayerMask.NameToLayer("Default");
             }
             else
             {
-                _selectedObjects[i].layer = LayerMask.NameToLayer("Outline");
+                EditorUtils.ApplyLayerToChildren(_selectedObjects[i].transform, "Outline");
             }
         }
 
@@ -565,7 +572,7 @@ public class SelectionHandler : View
     public void OverrideGizmoOntoTarget(List<GameObject> targets, GizmoId gizmoId)
     {
         DisableGizmo();
-        SetWorkGizmoId(gizmoId);
+        SetWorkGizmoId(gizmoId, false);
         _workGizmo.SetTargetObjects(targets);
         _workGizmo.Gizmo.SetEnabled(true);
         _workGizmo.RefreshPositionAndRotation();

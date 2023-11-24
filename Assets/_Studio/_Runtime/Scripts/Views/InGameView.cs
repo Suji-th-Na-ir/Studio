@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Terra.Studio
 {
@@ -10,8 +11,7 @@ namespace Terra.Studio
         [SerializeField] private GameObject timerGo;
         [SerializeField] private TextMeshProUGUI timerText;
 
-        private int entity = int.MinValue;
-        private GameObject dynamicSpawnedGO;
+        private Dictionary<string, GameObject> dynamicSpawnedGO;
 
         public override void Init()
         {
@@ -25,22 +25,13 @@ namespace Terra.Studio
                 timerGo.SetActive(true);
                 RuntimeOp.Resolve<InGameTimeHandler>().OnTimeModified += SetTime;
             });
+            dynamicSpawnedGO = new();
         }
 
         public override void Draw()
         {
             var score = RuntimeOp.Resolve<ScoreHandler>().CurrentScore;
             SetScore(score);
-        }
-
-        public override void Flush()
-        {
-
-        }
-
-        public override void Repaint()
-        {
-
         }
 
         private void SetScore(int currentScore)
@@ -55,19 +46,25 @@ namespace Terra.Studio
             timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
         }
 
-        public override GameObject AttachDynamicUI(int entity, GameObject go)
+        public override GameObject AttachDynamicUI(string component, GameObject go)
         {
-            if (this.entity == entity)
+            if (dynamicSpawnedGO.TryGetValue(component, out var value))
             {
-                return dynamicSpawnedGO;
+                return value;
             }
-            if (dynamicSpawnedGO)
+
+            var newUI = Instantiate(go, transform);
+            dynamicSpawnedGO.Add(component, newUI);
+            return newUI;
+        }
+
+        public override void RemoveDynamicUI(string component)
+        {
+            if (dynamicSpawnedGO.TryGetValue(component, out var value))
             {
-                Destroy(dynamicSpawnedGO);
+                Destroy(value);
+                dynamicSpawnedGO.Remove(component);
             }
-            dynamicSpawnedGO = Instantiate(go, transform);
-            this.entity = entity;
-            return dynamicSpawnedGO;
         }
     }
 }

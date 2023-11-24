@@ -17,6 +17,7 @@ namespace Terra.Studio
 
         private bool isRecording;
 
+
         public override void Initialize()
         {
             base.Initialize();

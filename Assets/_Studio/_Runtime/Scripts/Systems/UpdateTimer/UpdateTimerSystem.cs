@@ -1,4 +1,3 @@
-using UnityEngine;
 using Leopotam.EcsLite;
 
 namespace Terra.Studio
@@ -8,10 +7,6 @@ namespace Terra.Studio
         public override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref EntityAuthorOp.GetComponent<UpdateTimerComponent>(entity);
-            if (entityRef.ConditionData.Equals("Terra.Studio.MouseAction"))
-            {
-                if (data == null || data as GameObject != entityRef.RefObj) return;
-            }
             RuntimeOp.Resolve<CoreGameManager>().EnableModule<InGameTimeHandler>();
             OnDemandRun(in entityRef);
         }

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 662790853773780718}
   - component: {fileID: 3374959243588309540}
   - component: {fileID: -2888479318337569441}
-  - component: {fileID: -7599256839911857891}
   m_Layer: 6
   m_Name: Cliff_Edge_1
   m_TagString: Untagged
@@ -99,20 +98,3 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -4421378749897151829, guid: b3c597b13eaefc8429522793a3f82013, type: 3}
---- !u!114 &-7599256839911857891
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3879499221487793137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff99be84a607f104fb7bd707581c2285, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tileEdgeMeshs:
-  - {fileID: -4421378749897151829, guid: b3c597b13eaefc8429522793a3f82013, type: 3}
-  - {fileID: -3393830820117976359, guid: fbb288e6aa58c054685023866aa1e7df, type: 3}
-  - {fileID: 5687445625572138935, guid: d8c0bd8c89ac64648b7a876dad56352e, type: 3}
-  - {fileID: 421741821786238366, guid: a6d8e30c1e5bfa74ea07ca24222042e1, type: 3}
