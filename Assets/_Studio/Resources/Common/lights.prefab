@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3137538102977064652}
   - component: {fileID: 8204589999346625170}
   - component: {fileID: 829254435918921782}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: direction-light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,14 +25,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 175163431725385644}
-  m_LocalRotation: {x: 0.30668005, y: -0.19224395, z: -0.06339243, w: 0.93003815}
+  m_LocalRotation: {x: 0.30552092, y: -0.5587893, z: 0.06876679, w: 0.767908}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4153433544894543451}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 33.098, y: -28.246, z: -16.35}
+  m_LocalEulerAnglesHint: {x: 33.098, y: -76.974, z: -16.35}
 --- !u!108 &8204589999346625170
 Light:
   m_ObjectHideFlags: 0
@@ -45,7 +45,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.8
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 5835597272965677588}
   - component: {fileID: 4908034808424472520}
   - component: {fileID: 3751368701118772802}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: direction-light (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,14 +140,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 355072575483760917}
-  m_LocalRotation: {x: 0.8108883, y: 0.18766871, z: 0.3641737, w: 0.4178733}
+  m_LocalRotation: {x: 0.58844334, y: -0.0014283356, z: 0.66625583, w: 0.4580783}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4153433544894543451}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 147.248, y: -62.716003, z: -46.36798}
+  m_LocalEulerAnglesHint: {x: 147.248, y: -111.444, z: -46.36798}
 --- !u!108 &4908034808424472520
 Light:
   m_ObjectHideFlags: 0
@@ -160,13 +160,13 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.8
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -239,8 +239,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4153433544894543451}
-  m_Layer: 0
-  m_Name: internal-obby-lights
+  - component: {fileID: 7329166674827520193}
+  m_Layer: 6
+  m_Name: lights
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -263,3 +264,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7329166674827520193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7180999060315744526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fe15c2e8e37946a8913e3bf9d0606e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  assetType: 0
+  itemData:
+    name: lights
+    absolutePath: Assets/_Studio/Resources/Common/lights.prefab
+    resourcePath: Common/lights
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 794592809dbf7491286dce1498b40a74
+    isPrimitive: 0
+    primitiveType: 0
+  type: 0

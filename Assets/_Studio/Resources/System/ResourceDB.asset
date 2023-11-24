@@ -13,6 +13,14 @@ MonoBehaviour:
   m_Name: ResourceDB
   m_EditorClassIdentifier: 
   itemsData:
+  - name: lights
+    absolutePath: Assets/_Studio/Resources/Common/lights.prefab
+    resourcePath: Common/lights
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 794592809dbf7491286dce1498b40a74
+    isPrimitive: 0
+    primitiveType: 0
   - name: CheckPoint
     absolutePath: Assets/_Studio/Resources/Common/Prefabs/CheckPoint.prefab
     resourcePath: Common/Prefabs/CheckPoint
