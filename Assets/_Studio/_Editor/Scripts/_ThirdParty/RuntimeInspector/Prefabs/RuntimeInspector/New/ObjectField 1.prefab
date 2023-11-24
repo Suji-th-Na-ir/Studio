@@ -173,6 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d38ee2071d272894a98794fdb1e97dbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shouldPopulateIntoUndoRedoStack: 1
   layoutElement: {fileID: 0}
   ignoreLayout: 0
   variableNameText: {fileID: 114392269213132144}
@@ -821,6 +822,7 @@ GameObject:
   - component: {fileID: 5687083077442371945}
   - component: {fileID: 6535897646231654511}
   - component: {fileID: 8730933796920908162}
+  - component: {fileID: 5426981186799933356}
   m_Layer: 5
   m_Name: PreviewBtn
   m_TagString: Untagged
@@ -930,6 +932,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5426981186799933356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 733944474804885513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bc5603e79d2a48c59345ed24003f88c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Preview Behaviour
 --- !u!1 &778116984917787491
 GameObject:
   m_ObjectHideFlags: 0

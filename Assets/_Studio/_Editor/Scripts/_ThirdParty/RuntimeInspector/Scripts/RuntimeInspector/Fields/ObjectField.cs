@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace RuntimeInspectorNamespace
 {
-    public class ObjectField : ExpandableInspectorField,ITooltipContent
+    public class ObjectField : ExpandableInspectorField
     {
 #pragma warning disable 0649
         [SerializeField] private Button initializeObjectButton;
@@ -22,9 +22,6 @@ namespace RuntimeInspectorNamespace
         GameObject copyPastePanel;
         private Button openCopyPaste;
         bool canRemove = false;
-
-        bool ITooltipContent.IsActive { get { return this && gameObject.activeSelf; } }
-        string ITooltipContent.TooltipText => "Preview Behaviour";
         protected override int Length
         {
             get
@@ -66,8 +63,6 @@ namespace RuntimeInspectorNamespace
             openCopyPaste = Helper.FindDeepChild(transform, "OpenCopyPasteBtn").GetComponent<Button>();
             openCopyPaste.onClick.RemoveAllListeners();
             openCopyPaste.onClick.AddListener(() => OpenCopyPastePanel());
-
-            previewButton.gameObject.AddComponent<TooltipArea>().Initialize(EditorOp.Resolve<ToolbarView>().TooltipListener, this);
         }
 
         public void AddRemoveBehaviour(ExposedMethod method,Getter getter)

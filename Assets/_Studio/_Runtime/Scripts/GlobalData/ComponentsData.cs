@@ -10,6 +10,7 @@ namespace Terra.Studio
         private static readonly string[] IGNORE_SIMULATION_TYPES = new[] { "Terra.Studio.InvokeAfter" };
         private Dictionary<string, IEventExecutor> cachedReferences = new();
         private List<EventContext> eventContexts = new();
+        public bool ContinueExecutingWhileSimulationInProgress = false;
 
         public void ProvideEventContext(bool subscribe, EventContext context)
         {
@@ -19,7 +20,19 @@ namespace Terra.Studio
             {
                 if (subscribe)
                 {
-                    eventContexts.Add(context);
+                    if (ContinueExecutingWhileSimulationInProgress)
+                    {
+                        context.onConditionMet?.Invoke(context.goRef);
+                        return;
+                    }
+                    else
+                    {
+                        eventContexts.Add(context);
+                    }
+                }
+                else if (eventContexts.Contains(context))
+                {
+                    eventContexts.Remove(context);
                 }
             }
             else
@@ -52,6 +65,7 @@ namespace Terra.Studio
                 var context = eventContexts[i];
                 context.onConditionMet?.Invoke(context.goRef);
             }
+            ContinueExecutingWhileSimulationInProgress = true;
         }
     }
 }

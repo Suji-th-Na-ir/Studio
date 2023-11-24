@@ -7,7 +7,7 @@ using RuntimeInspectorNamespace;
 
 namespace Terra.Studio
 {
-    public class RecordedVector3Field : Vector3Field, ITooltipContent
+    public class RecordedVector3Field : Vector3Field
     {
         [SerializeField] private Button recordButton;
         [SerializeField] private Button resetButton;
@@ -17,14 +17,10 @@ namespace Terra.Studio
 
         private bool isRecording;
 
-        bool ITooltipContent.IsActive { get { return this && gameObject.activeSelf; } }
-        string ITooltipContent.TooltipText => "Record";
-
 
         public override void Initialize()
         {
             base.Initialize();
-            recordButton.gameObject.AddComponent<TooltipArea>().Initialize(EditorOp.Resolve<ToolbarView>().TooltipListener, this);
         }
 
         public override bool SupportsType(Type type)

@@ -415,7 +415,7 @@ namespace RuntimeInspectorNamespace
                     var component = obj.GetComponent(ComponentType);
                     if (component != null)
                     {
-                        var mInfo = ComponentType.GetField(ReflectedName, BindingFlags.Public | BindingFlags.Instance);
+                        var mInfo = ComponentType.GetField(ReflectedName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                         mInfo?.SetValue(component, Value);
                     }
                 }

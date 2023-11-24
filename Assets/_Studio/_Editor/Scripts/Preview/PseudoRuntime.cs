@@ -135,6 +135,7 @@ namespace Terra.Studio
         public void Dispose()
         {
             RuntimeOp.Resolve<Broadcaster>().OnToBroadcastRequestReceived = null;
+            RuntimeOp.Resolve<ComponentsData>().ContinueExecutingWhileSimulationInProgress = false;
             SystemOp.Resolve<ISubsystem>().Dispose();
             var unloadOperation = SceneManager.UnloadSceneAsync(RuntimeSceneName, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
             unloadOperation.completed += OnUnloadDone;
