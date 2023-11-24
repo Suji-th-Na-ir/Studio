@@ -225,7 +225,7 @@ namespace Terra.Studio
 
         public static void RemoveOutline(Transform child)
         {
-            child.gameObject.layer = LayerMask.NameToLayer("Default");
+            EditorUtils.ApplyLayerToChildren(child, "Default");
         }
 
         public static void MoveGameObjectToActiveScene(GameObject go)

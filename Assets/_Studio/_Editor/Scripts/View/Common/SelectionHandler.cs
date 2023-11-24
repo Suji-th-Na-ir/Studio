@@ -495,7 +495,7 @@ public class SelectionHandler : View
         {
             if (prevSelectedObjects[i] != null)
             {
-                prevSelectedObjects[i].layer = LayerMask.NameToLayer("Default");
+                EditorUtils.ApplyLayerToChildren(prevSelectedObjects[i].transform, "Default");
             }
 
             var behaviours = prevSelectedObjects[i].GetComponents<BaseBehaviour>();
@@ -514,7 +514,7 @@ public class SelectionHandler : View
             if (_selectedObjects.Contains(sObject))
             {
                 _selectedObjects.Remove(sObject);
-                sObject.layer = LayerMask.NameToLayer("Default");
+                EditorUtils.ApplyLayerToChildren(sObject.transform, "Default");
             }
             else
             {
@@ -525,13 +525,14 @@ public class SelectionHandler : View
 
         for (int i = 0; i < _selectedObjects.Count; i++)
         {
-            if (_selectedObjects[i] != null && _selectedObjects[i].layer== LayerMask.NameToLayer("Outline"))
+            if (_selectedObjects[i] != null && _selectedObjects[i].layer == LayerMask.NameToLayer("Outline"))
             {
+                EditorUtils.ApplyLayerToChildren(_selectedObjects[i].transform, "Default");
                 _selectedObjects[i].layer = LayerMask.NameToLayer("Default");
             }
             else
             {
-                _selectedObjects[i].layer = LayerMask.NameToLayer("Outline");
+                EditorUtils.ApplyLayerToChildren(_selectedObjects[i].transform, "Outline");
             }
         }
 
