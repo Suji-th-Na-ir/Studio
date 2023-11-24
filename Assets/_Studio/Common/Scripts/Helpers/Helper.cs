@@ -703,7 +703,7 @@ namespace PlayShifu.Terra
             }
             if (gameObject.TryGetComponent(out MeshCollider meshCollider))
             {
-                meshCollider.convex = true;
+                meshCollider.convex = false;
             }
             return rb;
         }
