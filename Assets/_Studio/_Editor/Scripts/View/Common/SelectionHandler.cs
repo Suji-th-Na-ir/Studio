@@ -298,9 +298,9 @@ public class SelectionHandler : View
     {
         if (_selectedObjects.Count > 0)
         {
-            if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
-            {
-                if (RTInput.WasKeyPressedThisFrame(KeyCode.Backspace))
+            //if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
+            //{
+                if (RTInput.WasKeyPressedThisFrame(KeyCode.Backspace) || RTInput.WasKeyPressedThisFrame(KeyCode.Delete))
                 {
                     var selections = new List<GameObject>(_selectedObjects);
                     runtimeHierarchy.Deselect();
@@ -317,7 +317,7 @@ public class SelectionHandler : View
                     _selectedObjects.Clear();
                     OnSelectionChanged();
                 }
-            }
+            //}
         }
     }
 
@@ -380,7 +380,7 @@ public class SelectionHandler : View
 
             if (pickedObject != null)
             {
-                if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
+                if (RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl))
                 {
                     if (_selectedObjects.Contains(pickedObject))
                         _selectedObjects.Remove(pickedObject);
