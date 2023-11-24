@@ -40,6 +40,8 @@ namespace Terra.Studio
             _assetData = data;
             _ghostMaterial = ghMat;
             StartCoroutine(SendThumbnailRequest());
+            TooltipContent x = gameObject.AddComponent<TooltipContent>();
+            x.tooltipText = data.display_name;
         }
 
         private IEnumerator SendThumbnailRequest()
