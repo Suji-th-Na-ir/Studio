@@ -19,6 +19,18 @@
     "Terra.Studio.Listener",
     null
   ],
+  "Terra.Studio.InstantiateOn.GameStart": [
+    "Terra.Studio.GameStart",
+    "Start"
+  ],
+  "Terra.Studio.InstantiateOn.BroadcastListen": [
+    "Terra.Studio.Listener",
+    ""
+  ],
+  "Terra.Studio.InstantiateOn.EveryXSeconds": [
+    "Terra.Studio.InvokeAfter",
+    "1"
+  ],
   "Terra.Studio.Collectible+StartOnCollectible.OnPlayerCollide": [
     "Terra.Studio.TriggerAction",
     "Player"
@@ -48,6 +60,38 @@
     "OnClick"
   ],
   "Terra.Studio.DestroyOn+DestroyOnEnum.BroadcastListen": [
+    "Terra.Studio.Listener",
+    null
+  ],
+  "Terra.Studio.MeleeWeapon+StartEnum.GameStart": [
+    "Terra.Studio.GameStart",
+    "Start"
+  ],
+  "Terra.Studio.MeleeWeapon+StartEnum.OnPlayerCollide": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "Terra.Studio.MeleeWeapon+StartEnum.OnClick": [
+    "Terra.Studio.MouseAction",
+    "OnClick"
+  ],
+  "Terra.Studio.MeleeWeapon+StartEnum.BroadcastListen": [
+    "Terra.Studio.Listener",
+    null
+  ],
+  "Terra.Studio.DecreasePlayerHealth+StartOn.PlayerTouches": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "Terra.Studio.DecreasePlayerHealth+StartOn.BroadcastListen": [
+    "Terra.Studio.Listener",
+    null
+  ],
+  "Terra.Studio.IncreasePlayerHealth+StartOn.PlayerTouches": [
+    "Terra.Studio.TriggerAction",
+    "Player"
+  ],
+  "Terra.Studio.IncreasePlayerHealth+StartOn.BroadcastListen": [
     "Terra.Studio.Listener",
     null
   ],

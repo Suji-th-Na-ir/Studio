@@ -41,7 +41,7 @@ namespace RuntimeInspectorNamespace
         private void LoadListenOptions()
         {
             listenOn.options.Clear();
-            listenOn.AddOptions(SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings.FindAll(s=>(s!="Game Win"&& s != "Game Lose")));
+            listenOn.AddOptions(SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings.FindAll(s => (s != "Game Win" && s != "Game Lose")));
             Atom.StartOn atom = (Atom.StartOn)Value;
             for (int i = 0; i < listenOn.options.Count; i++)
             {
@@ -114,10 +114,15 @@ namespace RuntimeInspectorNamespace
                     $"Start on changed to: {atom.data.startName}",
                     (value) =>
                     {
-                        OnStartOnValueSubmitted(((StartOnData)value).startIndex);
+                        var startOnData = (StartOnData)value;
+                        var index = startOnData.startIndex;
+                        OnStartOnValueSubmitted(index);
+                        UpdateListenString(startOnData.listenName);
+                        atom.OnStartOnUpdated?.Invoke(index);
                     });
             }
             lastSubmittedValue = atom.data;
+            atom.OnStartOnUpdated?.Invoke(_index);
         }
 
         private void OnStartOnValueSubmitted(int _index)
@@ -126,7 +131,6 @@ namespace RuntimeInspectorNamespace
             atom.data.startIndex = _index;
             atom.data.startName = atom.startList[_index];
             UpdateListenValue(0);
-           
             if (Inspector) Inspector.RefreshDelayed();
         }
 
@@ -144,17 +148,17 @@ namespace RuntimeInspectorNamespace
                         for (int i = 0; i < listenOn.options.Count; i++)
                         {
                             var listenstring = ((StartOnData)value).listenName;
-                            
+
                             if (string.IsNullOrEmpty(listenstring))
                                 listenstring = "None";
-                           
+
                             if (listenOn.options[i].text == listenstring)
                             {
                                 UpdateListenValue(i);
                                 break;
                             }
                         }
-                       
+
                     });
             }
             lastSubmittedValue = atom.data;
@@ -162,15 +166,21 @@ namespace RuntimeInspectorNamespace
 
         private void UpdateListenValue(int value)
         {
-            Atom.StartOn atom = (Atom.StartOn)Value;
-
-            var oldstering = atom.data.listenName;
             var listenstring = listenOn.options[value].text;
+            UpdateListenString(listenstring);
+        }
+
+        private void UpdateListenString(string listenstring)
+        {
+            Atom.StartOn atom = (Atom.StartOn)Value;
+            var oldString = atom.data.listenName;
             if (listenstring == "None")
+            {
                 listenstring = string.Empty;
+            }
             atom.data.listenName = listenstring;
             UpdateOtherCompData(atom);
-            atom.OnListenerUpdated?.Invoke(listenstring, oldstering);
+            atom.OnListenerUpdated?.Invoke(listenstring, oldString);
         }
 
 
@@ -213,7 +223,7 @@ namespace RuntimeInspectorNamespace
             if (atom != null)
             {
                 startOn.SetValueWithoutNotify(atom.data.startIndex);
-                if (SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings.Count-2 > listenOn.options.Count)
+                if (SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings.Count - 2 > listenOn.options.Count)
                 {
                     listenOn.ClearOptions();
                     listenOn.AddOptions(SystemOp.Resolve<CrossSceneDataHolder>().BroadcastStrings.FindAll(s => (s != "Game Win" && s != "Game Lose")));
@@ -237,7 +247,7 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        public override void SetInteractable(bool on , bool disableAlso=false)
+        public override void SetInteractable(bool on, bool disableAlso = false)
         {
             startOn.interactable = on;
             listenOn.interactable = on;

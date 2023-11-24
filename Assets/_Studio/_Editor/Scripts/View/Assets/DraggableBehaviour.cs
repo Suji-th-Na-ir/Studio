@@ -108,6 +108,7 @@ namespace Terra.Studio
                 if (_currGo == null)
                 {
                     _currGo = new GameObject().AddComponent<GltfObjectLoader>();
+                    _currGo.transform.forward = Vector3.ProjectOnPlane(-Camera.transform.forward, Vector3.up);
                     _currGo.gameObject.AddComponent<HideInHierarchy>();
                     _currGo.Init(_assetData.gltf[0], _assetData.unique_name, new ImportSettings()
                     {
@@ -121,16 +122,18 @@ namespace Terra.Studio
             }
 
             var ray = Camera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out var hit))
+            if (Physics.SphereCast(ray, 1f, out var hit))
             {
                 if (_currGo)
                 {
                     _currGo.transform.position = hit.point;
                     _currGo.SetPositionForDragInAssetsWindow(hit.point);
+                    _currGo.transform.forward = Vector3.ProjectOnPlane(-Camera.transform.forward, Vector3.up);
                 }
                 else if (_actuallyLoadedGo)
                 {
                     _actuallyLoadedGo.transform.position = hit.point;
+                    _actuallyLoadedGo.transform.forward = Vector3.ProjectOnPlane(-Camera.transform.forward, Vector3.up);
                 }
             }
         }

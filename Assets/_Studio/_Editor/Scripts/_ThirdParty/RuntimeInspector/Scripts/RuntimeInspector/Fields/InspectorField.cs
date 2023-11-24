@@ -15,7 +15,10 @@ namespace RuntimeInspectorNamespace
         protected Action<string, string> onStringUpdated;
         public virtual Action<object> OnValueUpdated { get; set; }
         public virtual Action<string> OnStringValueSubmitted { get; set; }
-
+        public bool shouldPopulateIntoUndoRedoStack = true;
+        protected GameObject dividerDrawer;
+        protected GameObject divider;
+        public GameObject Divider { get { return divider; } set { divider = value; } }
 #pragma warning disable 0649
         [SerializeField]
         protected LayoutElement layoutElement;
@@ -179,6 +182,8 @@ namespace RuntimeInspectorNamespace
         {
             if (visibleArea)
                 visibleArea.onCullStateChanged.AddListener((bool isCulled) => m_isVisible = !isCulled);
+
+            dividerDrawer = EditorOp.Load<GameObject>("Editortime/Prefabs/DividerDrawer");
         }
 
         public abstract bool SupportsType(Type type);
@@ -188,14 +193,14 @@ namespace RuntimeInspectorNamespace
             return true;
         }
 
-        public virtual void SetInteractable(bool on,bool disableAlso=false)
+        public virtual void SetInteractable(bool on, bool disableAlso = false)
         {
-            if(disableAlso)
+            if (disableAlso)
             {
                 gameObject.SetActive(on);
             }
         }
-        public virtual void InvokeUpdateDropdown(List<string> dropdowns){ }
+        public virtual void InvokeUpdateDropdown(List<string> dropdowns) { }
 
         public void BindTo(InspectorField parent, MemberInfo variable, string variableName = null)
         {
@@ -326,6 +331,7 @@ namespace RuntimeInspectorNamespace
         protected virtual void OnUnbound()
         {
             m_value = null;
+            Destroy(Divider);
         }
 
         protected virtual void OnInspectorChanged()
@@ -409,7 +415,7 @@ namespace RuntimeInspectorNamespace
                     var component = obj.GetComponent(ComponentType);
                     if (component != null)
                     {
-                        var mInfo = ComponentType.GetField(ReflectedName, BindingFlags.Public | BindingFlags.Instance);
+                        var mInfo = ComponentType.GetField(ReflectedName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                         mInfo?.SetValue(component, Value);
                     }
                 }
@@ -624,22 +630,26 @@ namespace RuntimeInspectorNamespace
 
         private void GenerateExposedMethodButtons()
         {
-            bool hideRemoveButtonInAny = false;
-            if (elements != null)
+            bool showRemoveButton = true;
+            if (elements != null && elements.Count > 0)
             {
-                if (elements[elements.Count - 1].ComponentType != null)
+                var type = elements[^1].ComponentType;
+                if (type != null)
                 {
-                    var comp = Inspector.ShownComponents.FirstOrDefault(component => component.ComponentName == elements[elements.Count - 1].ComponentType.Name);
-                    if (comp.hideRemoveButton && !hideRemoveButtonInAny)
-                    {
-                        hideRemoveButtonInAny = true;
-                    }
+                    showRemoveButton = !RTDataManagerSO.HideRemoveButtonForTypes.Any(x => x == type);
                 }
             }
-            if (!hideRemoveButtonInAny)
+            if (showRemoveButton)
             {
-                if (Inspector.ShowRemoveComponentButton && typeof(Component).IsAssignableFrom(BoundVariableType) && !typeof(Transform).IsAssignableFrom(BoundVariableType) && Inspector.currentPageIndex == 1)
-                    CreateExposedMethodButton(GameObjectField.removeComponentMethod, () => this, (value) => { });
+                if (Inspector.ShowRemoveComponentButton && typeof(Component).IsAssignableFrom(BoundVariableType) && !typeof(Transform).IsAssignableFrom(BoundVariableType))
+                {
+                    //CreateExposedMethodButton(GameObjectField.removeComponentMethod, () => this, (value) => { });
+                    var objField = (ObjectField)this;
+                    if(objField!=null)
+                    {
+                        objField.AddRemoveBehaviour(GameObjectField.removeComponentMethod, () => this);
+                    }
+                }
             }
 
             ExposedMethod[] methods = BoundVariableType.GetExposedMethods();
@@ -667,6 +677,15 @@ namespace RuntimeInspectorNamespace
             exposedMethods.Clear();
         }
 
+        protected virtual void ClearElement(InspectorField inspectorField)
+        {
+            if (elements.Contains(inspectorField))
+            {
+                inspectorField.Unbind();
+                elements.Remove(inspectorField);
+            }
+        }
+
         public override void Refresh()
         {
             base.Refresh();
@@ -687,6 +706,8 @@ namespace RuntimeInspectorNamespace
         public InspectorField CreateDrawerForComponent(Component component, string variableName = null)
         {
             InspectorField variableDrawer = Inspector.CreateDrawerForType(component.GetType(), drawArea, Depth + 1, false);
+            if ((component as BaseBehaviour) != null || (component as Transform)!=null)
+              variableDrawer.Divider=  Instantiate(dividerDrawer, drawArea);
             if (variableDrawer != null)
             {
                 if (variableName == null)
@@ -721,7 +742,7 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        public InspectorField CreateDrawerForVariable(MemberInfo variable, string variableName = null,bool takeOriginalDepth=false)
+        public InspectorField CreateDrawerForVariable(MemberInfo variable, string variableName = null, bool takeOriginalDepth = false)
         {
             // xnx 
             if (variable.Name.ToLower() == "enabled")
@@ -732,7 +753,7 @@ namespace RuntimeInspectorNamespace
             variableName = string.IsNullOrEmpty(displayName) ? variableName : displayName;
 
             int depth = Depth;
-            if(!takeOriginalDepth)
+            if (!takeOriginalDepth)
             {
                 depth += 1;
             }
@@ -777,9 +798,7 @@ namespace RuntimeInspectorNamespace
             if (variableDrawer != null)
             {
                 variableDrawer.BindTo(variableType, variableName == null ? null : string.Empty, variableName == null ? null : string.Empty, getter, setter);
-                if (variableName != null)
-                    variableDrawer.NameRaw = variableName;
-
+                if (variableName != null) variableDrawer.NameRaw = variableName;
                 elements.Add(variableDrawer);
             }
 

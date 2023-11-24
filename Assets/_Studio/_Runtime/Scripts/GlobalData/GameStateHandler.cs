@@ -25,22 +25,28 @@ namespace Terra.Studio
             {
                 Debug.Log("Game ended");
                 currentGameState = (State)index;
-                OnGameEnded?.Invoke(null);
             }
             else
             {
                 var nextState = (State)index;
                 currentGameState = nextState;
-                OnGameStarted?.Invoke(null);
             }
             OnStateChanged?.Invoke();
+            if (currentGameState == State.Game)
+            {
+                OnGameStarted?.Invoke(null);
+            }
+            else if (currentGameState == State.PostGame)
+            {
+                OnGameEnded?.Invoke(null);
+            }
         }
 
         public void SubscribeToGameStart(bool subscribe, Action<object> callback)
         {
             if (currentGameState == State.Game && subscribe)
             {
-                callback?.Invoke(null);
+                WaitForAFrameAndProvideCallback(callback);
                 return;
             }
             if (callback == null)
@@ -61,7 +67,7 @@ namespace Terra.Studio
         {
             if (currentGameState == State.PostGame && subscribe)
             {
-                callback?.Invoke(null);
+                WaitForAFrameAndProvideCallback(callback);
                 return;
             }
             if (callback == null)
@@ -92,6 +98,15 @@ namespace Terra.Studio
             {
                 OnStateChanged -= callback;
             }
+        }
+
+        private void WaitForAFrameAndProvideCallback(Action<object> callback)
+        {
+            CoroutineService.RunCoroutine(() =>
+            {
+                callback?.Invoke(null);
+            },
+            CoroutineService.DelayType.WaitForFrame);
         }
     }
 }

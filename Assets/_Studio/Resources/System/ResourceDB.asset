@@ -85,6 +85,14 @@ MonoBehaviour:
     guid: f7c4e2fbd3b4a48009fd40fa826f1e2c
     isPrimitive: 0
     primitiveType: 0
+  - name: Quad
+    absolutePath: Assets/_Studio/Resources/Common/Quad.prefab
+    resourcePath: Common/Quad
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 528e8f69335924122b68ec6ca3db9e3e
+    isPrimitive: 0
+    primitiveType: 0
   - name: Aqua Blast
     absolutePath: Assets/_Studio/Resources/Common/vfx/Aqua Blast.prefab
     resourcePath: Common/vfx/Aqua Blast
@@ -501,12 +509,28 @@ MonoBehaviour:
     guid: a22b8c429f521429084d616c68dda19a
     isPrimitive: 0
     primitiveType: 0
+  - name: HealthBar
+    absolutePath: Assets/_Studio/Resources/Runtime/DynamicUI/HealthBar.prefab
+    resourcePath: Runtime/DynamicUI/HealthBar
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 423806ea23df14e3fbd4cb6c710859a2
+    isPrimitive: 0
+    primitiveType: 0
+  - name: MeleeAttack
+    absolutePath: Assets/_Studio/Resources/Runtime/DynamicUI/MeleeAttack.prefab
+    resourcePath: Runtime/DynamicUI/MeleeAttack
+    type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+    guid: 6faf040b94a2340e6852ac7147957674
+    isPrimitive: 0
+    primitiveType: 0
   - name: ResetParent
     absolutePath: Assets/_Studio/Resources/Runtime/DynamicUI/ResetParent.prefab
     resourcePath: Runtime/DynamicUI/ResetParent
     type: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-    guid: 0dc4dbe0925e54796a9351fdd141e67f
+    guid: 65caaa9497fad41779a9ff71dede5df9
     isPrimitive: 0
     primitiveType: 0
   - name: GameViewCanvas

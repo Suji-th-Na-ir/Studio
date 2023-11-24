@@ -48,10 +48,10 @@ namespace Terra.Studio
 
         public PseudoRuntime(T baseBehaviour)
         {
-            DoExport(baseBehaviour);
             SystemOp.Resolve<System>().SetSimulationState(true);
             SystemOp.Resolve<System>().CanInitiateSubsystemProcess = () => { return false; };
             SystemOp.Unregister(EditorOp.Resolve<EditorSystem>() as ISubsystem);
+            DoExport(baseBehaviour);
             LoadRuntime();
         }
 
@@ -61,7 +61,7 @@ namespace Terra.Studio
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
-        private void OnSceneLoaded(Scene scene, LoadSceneMode __)
+        private void OnSceneLoaded(Scene scene, LoadSceneMode _)
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
             CoroutineService.RunCoroutine(() => { OnRuntimeActive(scene); }, CoroutineService.DelayType.WaitUntil, predicate: IsRuntimeActive);
@@ -135,6 +135,7 @@ namespace Terra.Studio
         public void Dispose()
         {
             RuntimeOp.Resolve<Broadcaster>().OnToBroadcastRequestReceived = null;
+            RuntimeOp.Resolve<ComponentsData>().ContinueExecutingWhileSimulationInProgress = false;
             SystemOp.Resolve<ISubsystem>().Dispose();
             var unloadOperation = SceneManager.UnloadSceneAsync(RuntimeSceneName, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
             unloadOperation.completed += OnUnloadDone;
@@ -153,6 +154,7 @@ namespace Terra.Studio
         {
             SetObjectPathData();
             var system = RuntimeOp.Resolve<RuntimeSystem>();
+            RuntimeOp.Resolve<EntitiesGraphics>()?.FlushAllTrackedVisuals();
             system.Dispose();
             system.UnstageAll();
             OnRuntimeActive(cachedRuntimeScene);

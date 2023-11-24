@@ -149,5 +149,13 @@ namespace RuntimeInspectorNamespace
             }
            
         }
+
+        public static void SetInteractableButtonText(this Button button, bool isInteractable)
+        {
+            var text = button.GetComponentInChildren<Text>();
+            if (!text)
+                return;
+            text.color = GetInteractableColor(isInteractable);
+        }
     }
 }

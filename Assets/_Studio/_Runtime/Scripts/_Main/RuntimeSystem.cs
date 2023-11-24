@@ -1,3 +1,7 @@
+#if UNITY_EDITOR
+#define DEBUG
+#endif
+
 using System;
 using UnityEngine;
 using System.Linq;
@@ -123,7 +127,12 @@ namespace Terra.Studio
             typeToInstances.Add(type, instance);
             if (type.GetInterfaces().Contains(typeof(IEcsRunSystem)))
             {
-                var newSystem = new EcsSystems(World).Add((IEcsRunSystem)instance);
+                var newSystem = new EcsSystems(World)
+#if DEBUG
+                    .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
+                    .Add(new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())
+#endif
+                    .Add((IEcsRunSystem)instance);
                 newSystem.Init();
                 customUpdateSystems.Add(type, newSystem);
                 customUpdateEnumerator = customUpdateSystems.GetEnumerator();

@@ -242,6 +242,9 @@ namespace RuntimeInspectorNamespace
         public int currentPageIndex = 1;
         public delegate void PageIndexChangeDelegate(int index);
         public PageIndexChangeDelegate OnPageIndexChanged;
+
+        private Button AddBehaviourButton;
+
         private ComponentFilterDelegate m_componentFilter;
         public ComponentFilterDelegate ComponentFilter
         {
@@ -253,15 +256,6 @@ namespace RuntimeInspectorNamespace
             }
         }
 
-        public ShownComponent[] ShownComponents
-        {
-            get
-            {
-                if (settings[0] != null)
-                    return settings[0].ShowComponents;
-                return null;
-            }
-        }
         protected override void Awake()
         {
             base.Awake();
@@ -280,7 +274,8 @@ namespace RuntimeInspectorNamespace
             nullPointerEventData = new PointerEventData(null);
             designButton = Helper.FindDeepChild(transform, "design_button", true).GetComponent<Button>();
             behaviourButton = Helper.FindDeepChild(transform, "behaviour_button", true).GetComponent<Button>();
-
+            AddBehaviourButton = Helper.FindDeepChild(transform, "AddBehaviourButton", true).GetComponent<Button>();
+            AddBehaviourButton.SetSkinButton(Skin);
             designButton.GetComponent<Image>().color = Skin.SelectedItemBackgroundColor;
             behaviourButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
             designButton.GetComponentInChildren<Text>().color = Skin.ButtonTextColor;
@@ -460,7 +455,14 @@ namespace RuntimeInspectorNamespace
                 }
             }
             else if (currentDrawer != null)
+            {
                 StopInspectInternal();
+               
+            }
+            else
+            {
+                DisableAddBehaviourButton();
+            }    
         }
 
         public void Refresh()
@@ -468,10 +470,17 @@ namespace RuntimeInspectorNamespace
             if (IsBound)
             {
                 if (currentDrawer == null)
+                {
                     m_inspectedObject = null;
+                    DisableAddBehaviourButton();
+                }
                 else
                     currentDrawer.Refresh();
             }
+            else
+            {
+                DisableAddBehaviourButton();
+            }    
         }
 
         // Refreshes the Inspector in the next Update. Called by most of the InspectorDrawers
@@ -616,6 +625,19 @@ namespace RuntimeInspectorNamespace
             ObjectReferencePicker.Instance.Close();
         }
 
+        public void EnableAddBehaviour(ExposedMethod method, InspectorField.Getter getter)
+        {
+            AddBehaviourButton.onClick.RemoveAllListeners();
+            AddBehaviourButton.onClick.AddListener(() => method.Call(getter.Target));
+            AddBehaviourButton.gameObject.SetActive(true);
+        }
+
+        public void DisableAddBehaviourButton()
+        {
+            AddBehaviourButton.onClick.RemoveAllListeners();
+            AddBehaviourButton.gameObject.SetActive(false);
+        }
+
         public InspectorField CreateDrawerForType(Type type, Transform drawerParent, int depth, bool drawObjectsAsFields = true, MemberInfo variable = null)
         {
             InspectorField[] variableDrawers = GetDrawersForType(type, drawObjectsAsFields);
@@ -659,6 +681,7 @@ namespace RuntimeInspectorNamespace
             }
 
             InspectorField newDrawer = (InspectorField)Instantiate(drawer, drawerParent, false);
+            newDrawer.Inspector = this;
             newDrawer.Initialize();
             return newDrawer;
         }

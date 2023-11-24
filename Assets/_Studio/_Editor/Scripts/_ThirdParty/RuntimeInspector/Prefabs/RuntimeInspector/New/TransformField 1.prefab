@@ -137,7 +137,7 @@ MonoBehaviour:
     m_Left: 0
     m_Right: 0
     m_Top: 30
-    m_Bottom: 0
+    m_Bottom: 10
   m_ChildAlignment: 0
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
@@ -173,16 +173,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f03ec8a5368c074ab74980eda08414f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shouldPopulateIntoUndoRedoStack: 1
   layoutElement: {fileID: 0}
   ignoreLayout: 0
   variableNameText: {fileID: 114392269213132144}
   variableNameMask: {fileID: 0}
   visibleArea: {fileID: 0}
+  SubmmitButton: {fileID: 0}
   drawArea: {fileID: 224941589156239646}
   expandToggle: {fileID: 114481830803369218}
   isExpandable: 0
   layoutGroup: {fileID: 114810597662585366}
   expandArrow: {fileID: 114337546039104162}
+  ignoreHeadingSpace: 0
 --- !u!1 &1301415271833618
 GameObject:
   m_ObjectHideFlags: 0

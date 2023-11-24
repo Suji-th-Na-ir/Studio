@@ -9,12 +9,15 @@ namespace Terra.Studio
         {
             typeof(InGameTimer),
             typeof(InGameScoreSystem),
-            typeof(PlayerSpawnPoint)
+            typeof(PlayerSpawnPoint),
+            typeof(PlayerHealth)
         };
 
         public static readonly Type[] NON_DELETABLES = new Type[]
         {
-            typeof(PlayerSpawnPoint)
+            typeof(PlayerSpawnPoint),
+            typeof(PlayerHealth),
+            typeof(InGameScoreSystem),
         };
 
         public static bool CanBeDuplicated(string type)

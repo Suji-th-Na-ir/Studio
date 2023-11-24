@@ -28,6 +28,13 @@ namespace Terra.Studio
                 componentType = typeof(T);
                 this.fieldName = fieldName;
             }
+
+            public void Import(bool canPlay, int clipIndex, string clipName)
+            {
+                data.canPlay = canPlay;
+                data.clipIndex = clipIndex;
+                data.clipName = clipName;
+            }
         }
 
         public class BaseTargetTemplate
@@ -66,6 +73,7 @@ namespace Terra.Studio
             public List<string> startList = new();
             public List<string> aliasNameList = new();
             public Action<string, string> OnListenerUpdated;
+            public Action<int> OnStartOnUpdated;
 
             public void Setup<T>(GameObject target, string componentType) where T : Enum
             {
@@ -101,6 +109,10 @@ namespace Terra.Studio
                 if (!allStartOns.Contains(this))
                 {
                     allStartOns.Add(this);
+                }
+                else
+                {
+                    Debug.Log($"Attempting to add multiple start on instance!");
                 }
             }
         }
@@ -323,7 +335,7 @@ namespace Terra.Studio
         [Serializable]
         public class Broadcast : BaseTargetTemplate
         {
-            [AliasDrawer("Custom"), OnValueChanged( UpdateBroadcast = true)]
+            [AliasDrawer("Custom"), OnValueChanged(UpdateBroadcast = true)]
             public string broadcast = string.Empty;
 
             public override void Setup(GameObject target, BaseBehaviour behaviour)
@@ -334,6 +346,169 @@ namespace Terra.Studio
                 {
                     allbroadcasts.Add(this);
                 }
+            }
+
+            public void Import(string value)
+            {
+                broadcast = value;
+            }
+        }
+
+        [Serializable]
+        public class InstantiateOnData : BaseTargetTemplate
+        {
+            [AliasDrawer("Spawn When")] public StartOn spawnWhen = new();
+            [AliasDrawer("Where")] public SpawnWhere spawnWhere;
+            [AliasDrawer("Count")] public uint howMany;
+            [AliasDrawer("Interval")] public int interval;
+            [AliasDrawer("Rounds")] public uint rounds;
+            [AliasDrawer("Forever")] public bool repeatForever;
+            [HideInInspector] public bool isDirty;
+            [HideInInspector] public InstantiateOn instantiateOn;
+            [HideInInspector] public Vector3[] trs;
+            public Action<InstantiateOn> OnSpawnWhenUpdated;
+            public Action<bool> OnRecordToggled;
+
+            public override void Setup(GameObject target, BaseBehaviour behaviour)
+            {
+                base.Setup(target, behaviour);
+                spawnWhen.Setup<InstantiateOn>(target, behaviour.ComponentName, behaviour.OnListenerUpdated, spawnWhen.data.startIndex == 2);
+                spawnWhen.OnStartOnUpdated += (index) =>
+                {
+                    instantiateOn = (InstantiateOn)index;
+                    OnSpawnWhenUpdated?.Invoke(instantiateOn);
+                    CheckForMultiselectScenario(instantiateOn);
+                };
+                SetupTRS();
+                SetupDefault();
+            }
+
+            public void UpdateTRS(Vector3[] trs)
+            {
+                trs[2] = new Vector3(Mathf.Abs(trs[2].x), Mathf.Abs(trs[2].y), Mathf.Abs(trs[2].z));
+                StackIntoUR(trs);
+                PostProcessUpdateData(trs);
+            }
+
+            private void PostProcessUpdateData(Vector3[] trs)
+            {
+                UpdateTRS_WithoutMultiselect(trs);
+                CheckForMultiselectScenario(trs);
+            }
+
+            private void StackIntoUR(Vector3[] trs)
+            {
+                var oldValue = new Vector3[]
+                {
+                    this.trs[0],
+                    this.trs[1],
+                    this.trs[2]
+                };
+                var newValue = new Vector3[]
+                {
+                    trs[0],
+                    trs[1],
+                    trs[2]
+                };
+                EditorOp.Resolve<IURCommand>().Record(oldValue, newValue, "Random Range Modified", (value) =>
+                {
+                    var newValue = (Vector3[])value;
+                    PostProcessUpdateData(newValue);
+                });
+            }
+
+            public void UpdateTRS_WithoutMultiselect(Vector3[] trs)
+            {
+                Array.Copy(trs, this.trs, trs.Length);
+            }
+
+            public void Import(InstantiateStudioObjectComponent component)
+            {
+                spawnWhere = component.spawnWhere;
+                howMany = component.duplicatesToSpawn;
+                rounds = component.rounds;
+                repeatForever = component.canRepeatForver;
+                trs = InstantiateStudioObjectComponent.TRS.GetVector3Array(component.trs);
+                var isAvailable = EditorOp.Resolve<DataProvider>().TryGetEnum(component.ConditionType, typeof(InstantiateOn), out var result);
+                if (isAvailable)
+                {
+                    instantiateOn = (InstantiateOn)result;
+                    spawnWhen.data.startIndex = (int)instantiateOn;
+                    spawnWhen.data.startName = instantiateOn.GetStringValue();
+                    if (instantiateOn == InstantiateOn.EveryXSeconds)
+                    {
+                        interval = int.Parse(component.ConditionData);
+                    }
+                    else if (instantiateOn == InstantiateOn.BroadcastListen)
+                    {
+                        spawnWhen.data.listenName = component.ConditionData;
+                    }
+                }
+            }
+
+            private void SetupTRS()
+            {
+                var tr = target.transform;
+                var position = tr.position;
+                var rotation = tr.eulerAngles;
+                var scale = GetBoundsSize();
+                trs = new Vector3[]
+                {
+                    position,
+                    rotation,
+                    scale
+                };
+            }
+
+            private void SetupDefault()
+            {
+                howMany = 1;
+                interval = 1;
+                rounds = 1;
+            }
+
+            private void CheckForMultiselectScenario(Vector3[] trs)
+            {
+                var selectedObjs = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+                foreach (var obj in selectedObjs)
+                {
+                    if (obj == target) continue;
+                    if (obj.TryGetComponent(out InstantiateStudioObject component))
+                    {
+                        component.instantiateData.UpdateTRS_WithoutMultiselect(trs);
+                    }
+                }
+            }
+
+            private void CheckForMultiselectScenario(InstantiateOn instantiateOn)
+            {
+                var selectedObjs = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+                foreach (var obj in selectedObjs)
+                {
+                    if (obj == target) continue;
+                    if (obj.TryGetComponent(out InstantiateStudioObject component))
+                    {
+                        component.instantiateData.spawnWhen.data.startIndex = (int)instantiateOn;
+                        component.instantiateData.spawnWhen.data.startName = instantiateOn.ToString();
+                        component.instantiateData.instantiateOn = instantiateOn;
+                        component.instantiateData.OnSpawnWhenUpdated?.Invoke(instantiateOn);
+                    }
+                }
+            }
+
+            private Vector3 GetBoundsSize()
+            {
+                var renderers = target.GetComponentsInChildren<Renderer>();
+                if (renderers.Length == 0)
+                {
+                    return Vector3.one;
+                }
+                var bounds = renderers[0].bounds;
+                foreach (var renderer in renderers)
+                {
+                    bounds.Encapsulate(renderer.bounds);
+                }
+                return bounds.size;
             }
         }
     }

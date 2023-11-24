@@ -40,6 +40,7 @@ namespace Terra.Studio
             EditorOp.Resolve<NavigationToolbar>().Init();
             EditorOp.Resolve<SceneView>().Init();
             EditorOp.Resolve<AssetsView>().Init();
+            EditorOp.Resolve<LeftToolbar>().Init();
 
             EditorOp.Resolve<UILogicDisplayProcessor>().Init();
             EditorOp.Resolve<SceneDataHandler>().LoadScene();
@@ -83,6 +84,7 @@ namespace Terra.Studio
             IsIncognitoEnabled = enable;
             OnIncognitoEnabled?.Invoke(enable);
         }
+
         public void RequestPreviewMode(bool enable)
         {
             IsPreviewEnabled = enable;

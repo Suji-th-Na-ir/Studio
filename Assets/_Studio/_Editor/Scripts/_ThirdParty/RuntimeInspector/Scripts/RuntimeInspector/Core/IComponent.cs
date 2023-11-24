@@ -1,12 +1,10 @@
-using Terra.Studio;
-
-namespace RuntimeInspectorNamespace
+namespace Terra.Studio
 {
     public interface IComponent
     {
-        (string type, string data) Export();
-
-        void Import(EntityBasedComponent data);
-        void Import(string data);
+        public (string type, string data) Export();
+        public void Import(EntityBasedComponent data);
+        public void Import(string data);
+        public string ComponentName { get; }
     }
 }

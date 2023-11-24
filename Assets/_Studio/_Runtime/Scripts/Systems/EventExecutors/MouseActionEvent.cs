@@ -95,12 +95,5 @@ namespace Terra.Studio
                 isListeningToEvents = false;
             }
         }
-
-        private struct ObjectToEvent
-        {
-            public string componentName;
-            public GameObject objRef;
-            public Action<object> action;
-        }
     }
 }

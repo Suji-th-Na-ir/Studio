@@ -5,10 +5,11 @@ using UnityEngine.UI;
 using PlayShifu.Terra;
 using System.Collections.Generic;
 using RuntimeInspectorNamespace;
+using System.Linq;
 
 namespace Terra.Studio
 {
-    public class ToolbarView : View
+    public class ToolbarView : View, ITooltipManager
     {
         public event Action OnPublishRequested;
 
@@ -29,13 +30,22 @@ namespace Terra.Studio
         private const string UNDO_BUTTON_LOC = "UndoButton";
         private const string REDO_BUTTON_LOC = "RedoButton";
         private const string SAVE_MESSAGE_TEXT_LOC = "SaveText";
+        private const string LEFT_GROUP_LOC = "LeftGroup";
 
         private GameObject primitivePanel;
-        private CanvasGroup canvasGroup;
+        private CanvasGroup[] canvasGroups;
         private TextMeshProUGUI saveTextField;
         private Button saveButton;
         private Button publishButton;
         private Button timerButton;
+
+        public UISkin Skin => EditorOp.Resolve<RuntimeInspector>().Skin;
+
+        public Canvas Canvas => EditorOp.Resolve<RuntimeInspector>().Canvas;
+
+        public float TooltipDelay => 0.5f;
+
+        public TooltipListener TooltipListener;
 
         private void Awake()
         {
@@ -44,6 +54,9 @@ namespace Terra.Studio
 
         public override void Init()
         {
+            TooltipListener = gameObject.AddComponent<TooltipListener>();
+            TooltipListener.Initialize(this);
+            
             SpawnPrimitivePrefab();
             var addButtonTr = Helper.FindDeepChild(transform, ADD_BUTTON_LOC);
             var playButtonTr = Helper.FindDeepChild(transform, PLAY_BUTTON_LOC);
@@ -190,11 +203,22 @@ namespace Terra.Studio
                 primitivePanel.SetActive(false);
             };
 
-            canvasGroup = GetComponentInChildren<CanvasGroup>();
+            var leftGroup = Helper.FindDeepChild<Transform>(transform, LEFT_GROUP_LOC);
+            canvasGroups = leftGroup.GetComponentsInChildren<CanvasGroup>();
             EditorOp.Resolve<EditorSystem>().OnIncognitoEnabled += (isEnabled) =>
             {
-                canvasGroup.SetInteractive(!isEnabled);
+                foreach (var canvasGroup in canvasGroups)
+                {
+                    canvasGroup.SetInteractive(!isEnabled);
+                }
             };
+        }
+
+        public void ToggleInteractionOfGroup(string groupName, bool status)
+        {
+            var results = canvasGroups.Where(x => x.name.Contains(groupName)).Select(y => y);
+            if (results.Count() == 0) return;
+            results.First().SetInteractive(status);
         }
 
         private void AddListenerEvent<T, T1>(Button button, Action<T, T1> callback, T name, T1 type) where T1 : Enum
@@ -225,7 +249,7 @@ namespace Terra.Studio
             Snapshots.SpawnGameObjectSnapshot.CreateSnapshot(obj);
             EditorOp.Resolve<SelectionHandler>().DeselectAll();
             EditorOp.Resolve<RuntimeHierarchy>().Refresh();
-            EditorOp.Resolve<SelectionHandler>().SelectObjectsInHierarchy(new List<Transform>() {obj.transform }) ;
+            EditorOp.Resolve<SelectionHandler>().SelectObjectsInHierarchy(new List<Transform>() { obj.transform });
         }
 
         public void SetSaveMessage(bool setInteractable, SaveState state)

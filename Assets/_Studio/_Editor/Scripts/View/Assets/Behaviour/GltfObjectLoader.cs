@@ -8,18 +8,6 @@ using UnityEngine;
 
 namespace Terra.Studio
 {
-    [Serializable]
-    public class GltfData
-    {
-        public BufferData[] buffers;
-    }
-
-    [Serializable]
-    public struct BufferData
-    {
-        public string uri;
-    }
-
     public class GltfObjectLoader : MonoBehaviour
     {
         [SerializeField] private string cloudUrl;
@@ -47,7 +35,11 @@ namespace Terra.Studio
         private Action<bool> onTextureLoadCompleted;
 
         private bool _loadTexturesCalled;
-        private static readonly int BaseColorTextureSt = Shader.PropertyToID("baseColorTexture_ST");
+        private static readonly int BaseColorTextureSt = Shader.PropertyToID("baseColorTexture");
+        private static readonly int EmissiveTextureSt = Shader.PropertyToID("emissiveTexture");
+        private static readonly int OcclusionTextureSt = Shader.PropertyToID("occlusionTexture");
+        private static readonly int NormalTextureSt = Shader.PropertyToID("normalTexture");
+        private static readonly int MetallicRoughnessSt = Shader.PropertyToID("metallicRoughnessTexture");
 
         public void Init(string fullUrl, string uniqueName, ImportSettings settings)
         {
@@ -182,26 +174,65 @@ namespace Terra.Studio
             Debug.Log($"Loading Textures why.");
             bool success = await _importer.PrepareTextures(UriHelper.GetBaseUri(new Uri(OgUrl)));
 
+            var s_Parser = new GltfJsonUtilityParser();
+            var rootBase = s_Parser.ParseJson(_importer.FinalJson);
+            
 
             foreach (var (ren, meshResult) in _instantiator.results)
             {
                 var materials = new Material[meshResult.materialIndices.Length];
                 for (var index = 0; index < materials.Length; index++)
                 {
-                    var material = _importer.GetMaterial(meshResult.materialIndices[index]) ??
-                                   _importer.GetDefaultMaterial();
-                    //var oldVec = material.GetVector(BaseColorTextureSt);
-                    //if (!(oldVec.x == 1 && oldVec.y == -1))
-                    //{
-                    //    var newVec = new Vector4(1, -1, oldVec.z, oldVec.w);
-                    //    material.SetVector(BaseColorTextureSt, newVec);
-                    //    Debug.Log($"Setting {oldVec}.....{newVec}");
-                    //}
+                    var material = _importer.GetMaterial(meshResult.materialIndices[index]) ?? _importer.GetDefaultMaterial();
+
+                    if (index >= rootBase.Materials.Count)
+                    {
+                        Debug.LogError($"Something is wrong with this model/material.");
+                        materials[index] = material;
+                        continue;
+                    }
+                    var baseTextureTrs = rootBase.Materials[index].PbrMetallicRoughness?.BaseColorTexture?.Extensions?.KHR_texture_transform;
+                    var metallicRoughnessTrs = rootBase.Materials[index].PbrMetallicRoughness?.MetallicRoughnessTexture?.Extensions?.KHR_texture_transform;
+                    var emissiveTextureTrs = rootBase.Materials[index].EmissiveTexture?.Extensions?.KHR_texture_transform;
+                    var normalTextureTrs = rootBase.Materials[index].NormalTexture?.Extensions?.KHR_texture_transform;
+                    var occlusionTextureTrs = rootBase.Materials[index].OcclusionTexture?.Extensions?.KHR_texture_transform;
+
+                    if (baseTextureTrs != null)
+                    {
+                        material.SetTextureScale(BaseColorTextureSt, new Vector2(baseTextureTrs.scale[0],baseTextureTrs.scale[1]));
+                        material.SetTextureOffset(BaseColorTextureSt, new Vector2(baseTextureTrs.offset[0],baseTextureTrs.offset[1]));
+                    }
+
+                    if (metallicRoughnessTrs != null)
+                    {
+                        material.SetTextureScale(MetallicRoughnessSt,new Vector2(metallicRoughnessTrs.scale[0],metallicRoughnessTrs.scale[1]));
+                        material.SetTextureOffset(MetallicRoughnessSt,new Vector2(metallicRoughnessTrs.offset[0],metallicRoughnessTrs.offset[1]));
+                    }
+
+                    if (emissiveTextureTrs != null)
+                    {
+                        material.SetTextureScale(EmissiveTextureSt,new Vector2(emissiveTextureTrs.scale[0],emissiveTextureTrs.scale[1]));
+                        material.SetTextureOffset(EmissiveTextureSt,new Vector2(emissiveTextureTrs.offset[0],emissiveTextureTrs.offset[1]));
+                    }
+
+                    if (normalTextureTrs != null)
+                    {
+                        material.SetTextureScale(NormalTextureSt,new Vector2(normalTextureTrs.scale[0],normalTextureTrs.scale[1]));
+                        material.SetTextureOffset(NormalTextureSt,new Vector2(normalTextureTrs.offset[0],normalTextureTrs.offset[1]));
+                    }
+
+                    if (occlusionTextureTrs != null)
+                    {
+                        material.SetTextureScale(OcclusionTextureSt,new Vector2(occlusionTextureTrs.scale[0],occlusionTextureTrs.scale[1]));
+                        material.SetTextureOffset(OcclusionTextureSt,new Vector2(occlusionTextureTrs.offset[0],occlusionTextureTrs.offset[1]));
+                    }
+                    
                     materials[index] = material;
                 }
 
                 ren.sharedMaterials = materials;
             }
+            
             LoadedPoolValidator.AddToPool(_uniqueName, LoadedObject.gameObject);
             onTextureLoadCompleted?.Invoke(success);
             _importer.DisposeVolatileDataFromTextures();

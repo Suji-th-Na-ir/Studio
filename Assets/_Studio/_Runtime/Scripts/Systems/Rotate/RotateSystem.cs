@@ -37,7 +37,6 @@ namespace Terra.Studio
             entityRef.canPause = entityRef.pauseFor > 0f;
             entityRef.shouldPingPong = entityRef.repeatType == RepeatDirectionType.PingPong;
             entityRef.rotateForever = entityRef.repeatForever;
-            entityRef.directionFactor = (entityRef.direction == Direction.Clockwise) ? -1 : 1;
             RefreshRotation(ref entityRef);
         }
 
@@ -49,45 +48,39 @@ namespace Terra.Studio
             }
             entityRef.currentStartRotation = Quaternion.Euler(entityRef.startRotation);
             entityRef.currentTargetRotation = Quaternion.Euler(entityRef.trueRotateTarget);
+
+            if (entityRef.shouldPingPong && entityRef.currentRotateCount % 2 == 1)
+            {
+                SwapStartAndTargetRotation(ref entityRef);
+            }
+        
+            float angleRadians = Quaternion.Angle(entityRef.currentStartRotation, entityRef.currentTargetRotation) * Mathf.Deg2Rad;
+            float angleDegrees = Mathf.Rad2Deg * angleRadians;
            
-            if (entityRef.shouldPingPong)
+            if (entityRef.direction == Direction.Clockwise)
             {
-                if (entityRef.currentRotateCount % 2 == 1)
-                {
-                    entityRef.currentStartRotation = Quaternion.Euler(entityRef.trueRotateTarget);
-                    entityRef.currentTargetRotation = Quaternion.Euler(entityRef.startRotation);
-                }
+                angleDegrees = 360 - angleDegrees;
             }
-            if (entityRef.direction == Direction.AntiClockwise)
-            {
-                var inverseX = entityRef.rotateTo.x - 360f;
-                var inverseY = entityRef.rotateTo.y - 360f;
-                var inverseZ = entityRef.rotateTo.z - 360f;
-                var newRotateTarget = entityRef.RefObj.transform.eulerAngles + new Vector3(inverseX, inverseY, inverseZ);
-                if (entityRef.shouldPingPong)
-                {
-                    if (entityRef.currentRotateCount % 2 == 1)
-                    {
-                        entityRef.currentStartRotation = Quaternion.Euler(newRotateTarget);
-                    }
-                    else
-                    {
-                        entityRef.currentTargetRotation = Quaternion.Euler(newRotateTarget);
-                    }
-                }
-                else
-                    entityRef.currentTargetRotation = Quaternion.Euler(newRotateTarget);
-            }
-            var angle = Quaternion.Angle(entityRef.currentStartRotation, entityRef.currentTargetRotation);
-            entityRef.rotationTime = angle / entityRef.speed;
+            entityRef.rotationTime = angleDegrees / entityRef.speed;
+            entityRef.angle = angleDegrees;
             entityRef.currentRatio = 0f;
             entityRef.elapsedTime = 0f;
+        }
+
+        private void SwapStartAndTargetRotation(ref RotateComponent entityRef)
+        {
+            var tempRotation = entityRef.currentStartRotation;
+            entityRef.currentStartRotation = entityRef.currentTargetRotation;
+            entityRef.currentTargetRotation = tempRotation;
         }
 
         private void CalculateStartAndTargetRotation(ref RotateComponent entityRef)
         {
             entityRef.startRotation = entityRef.RefObj.transform.eulerAngles;
-            entityRef.trueRotateTarget = entityRef.RefObj.transform.eulerAngles + entityRef.rotateTo;
+            Quaternion initialRotation = Quaternion.Euler(entityRef.startRotation);
+            Quaternion deltaRotation = Quaternion.Euler(entityRef.rotateTo);
+            Quaternion targetRotation = initialRotation * deltaRotation;
+            entityRef.trueRotateTarget = targetRotation.eulerAngles;
         }
 
         public void OnDemandRun(in RotateComponent rotatable)
@@ -148,10 +141,16 @@ namespace Terra.Studio
 
                 component.currentRatio = component.elapsedTime / component.rotationTime;
                 component.elapsedTime += Time.deltaTime;
-                var isShortWay = component.direction == Direction.Clockwise;
+                var isShortWay = component.angle <=179f;
+                if(component.angle==180f)
+                {
+                    if (component.direction == Direction.Clockwise)
+                        isShortWay = false;
+                    else
+                        isShortWay = true;
+                }
                 var newRotation = Helper.Slerp(component.currentStartRotation, component.currentTargetRotation, component.currentRatio, isShortWay);
                 component.RefObj.transform.rotation = newRotation;
-
 
                 if (Mathf.Abs(component.currentRatio) < 1)
                 {

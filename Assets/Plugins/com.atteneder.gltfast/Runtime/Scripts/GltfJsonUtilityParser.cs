@@ -12,7 +12,7 @@ namespace GLTFast
     /// glTF JSON parser implemented with Unity JsonUtility
     /// </summary>
     /// <seealso href="https://docs.unity3d.com/ScriptReference/JsonUtility.html"/>
-    class GltfJsonUtilityParser
+    public class GltfJsonUtilityParser
     {
         /// <inheritdoc/>
         public RootBase ParseJson(string json)

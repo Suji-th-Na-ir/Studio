@@ -13,106 +13,136 @@ MonoBehaviour:
   m_Name: DataManagerSO
   m_EditorClassIdentifier: 
   systemData:
-  - Key: Terra.Studio.Checkpoint
+  - DisplayName: Checkpoint
+    Key: Terra.Studio.Checkpoint
     ComponentName: Terra.Studio.CheckpointComponent
     SystemName: Terra.Studio.CheckpointSystem
     DrawerName: Terra.Studio.Checkpoint
-    DisplayName: Checkpoint
-  - Key: Terra.Studio.Collectable
+  - DisplayName: Collectable
+    Key: Terra.Studio.Collectable
     ComponentName: Terra.Studio.CollectableComponent
     SystemName: Terra.Studio.CollectableSystem
     DrawerName: Terra.Studio.Collectible
-    DisplayName: Collectable
-  - Key: Terra.Studio.DestroyOn
+  - DisplayName: Destroy Self
+    Key: Terra.Studio.DestroyOn
     ComponentName: Terra.Studio.DestroyOnComponent
     SystemName: Terra.Studio.DestroyOnSystem
     DrawerName: Terra.Studio.DestroyOn
-    DisplayName: Destroy Self
-  - Key: Terra.Studio.InGameTimer
+  - DisplayName: Game Timer
+    Key: Terra.Studio.InGameTimer
     ComponentName: Terra.Studio.InGameTimerComponent
     SystemName: Terra.Studio.InGameTimerSystem
     DrawerName: Terra.Studio.InGameTimer
-    DisplayName: Game Timer
-  - Key: Terra.Studio.Respawn
+  - DisplayName: Kill Player
+    Key: Terra.Studio.Respawn
     ComponentName: Terra.Studio.RespawnComponent
     SystemName: Terra.Studio.RespawnSystem
     DrawerName: Terra.Studio.Respawn
-    DisplayName: Kill Player
-  - Key: Terra.Studio.Rotate
+  - DisplayName: Rotate
+    Key: Terra.Studio.Rotate
     ComponentName: Terra.Studio.RotateComponent
     SystemName: Terra.Studio.RotateSystem
     DrawerName: Terra.Studio.Rotate
-    DisplayName: Rotate
-  - Key: Terra.Studio.Translate
+  - DisplayName: Move
+    Key: Terra.Studio.Translate
     ComponentName: Terra.Studio.TranslateComponent
     SystemName: Terra.Studio.TranslateSystem
     DrawerName: Terra.Studio.Translate
-    DisplayName: Move
-  - Key: Terra.Studio.GameScore
+  - DisplayName: Game Score
+    Key: Terra.Studio.GameScore
     ComponentName: Terra.Studio.InGameScoreComponent
     SystemName: Terra.Studio.InGameScoreSystem
     DrawerName: Terra.Studio.GameScore
-    DisplayName: Game Score
-  - Key: Terra.Studio.Push
+  - DisplayName: Push
+    Key: Terra.Studio.Push
     ComponentName: Terra.Studio.PushComponent
     SystemName: Terra.Studio.PushSystem
     DrawerName: Terra.Studio.Push
-    DisplayName: Push
-  - Key: Terra.Studio.Switch
+  - DisplayName: Switch
+    Key: Terra.Studio.Switch
     ComponentName: Terra.Studio.SwitchComponent
     SystemName: Terra.Studio.SwitchSystem
     DrawerName: Terra.Studio.Switch
-    DisplayName: Switch
-  - Key: Terra.Studio.Teleport
+  - DisplayName: Teleport Player
+    Key: Terra.Studio.Teleport
     ComponentName: Terra.Studio.TeleportComponent
     SystemName: Terra.Studio.TeleportSystem
     DrawerName: Terra.Studio.Teleport
-    DisplayName: Teleport Player
-  - Key: Terra.Studio.Collide
+  - DisplayName: Collide
+    Key: Terra.Studio.Collide
     ComponentName: Terra.Studio.CollideComponent
     SystemName: Terra.Studio.CollideSystem
     DrawerName: Terra.Studio.Collide
-    DisplayName: Collide
-  - Key: Terra.Studio.Click
+  - DisplayName: Click
+    Key: Terra.Studio.Click
     ComponentName: Terra.Studio.ClickComponent
     SystemName: Terra.Studio.ClickSystem
     DrawerName: Terra.Studio.Click
-    DisplayName: Click
-  - Key: Terra.Studio.StopRotate
+  - DisplayName: Stop Rotate
+    Key: Terra.Studio.StopRotate
     ComponentName: Terra.Studio.StopRotateComponent
     SystemName: Terra.Studio.StopRotateSystem
     DrawerName: Terra.Studio.StopRotate
-    DisplayName: Stop Rotate
-  - Key: Terra.Studio.StopTranslate
+  - DisplayName: Stop Translate
+    Key: Terra.Studio.StopTranslate
     ComponentName: Terra.Studio.StopTranslateComponent
     SystemName: Terra.Studio.StopTranslateSystem
     DrawerName: Terra.Studio.StopTranslate
-    DisplayName: Stop Translate
-  - Key: Terra.Studio.SetObjectPosition
+  - DisplayName: Teleport Self
+    Key: Terra.Studio.SetObjectPosition
     ComponentName: Terra.Studio.SetObjectPositionComponent
     SystemName: Terra.Studio.SetObjectPositionSystem
     DrawerName: Terra.Studio.SetObjectPosition
-    DisplayName: Teleport Self
-  - Key: Terra.Studio.UpdateScore
+  - DisplayName: Update Score
+    Key: Terra.Studio.UpdateScore
     ComponentName: Terra.Studio.UpdateScoreComponent
     SystemName: Terra.Studio.UpdateScoreSystem
     DrawerName: Terra.Studio.UpdateScore
-    DisplayName: Update Score
-  - Key: Terra.Studio.ResetScore
+  - DisplayName: Reset Score
+    Key: Terra.Studio.ResetScore
     ComponentName: Terra.Studio.ResetScoreComponent
     SystemName: Terra.Studio.ResetScoreSystem
     DrawerName: Terra.Studio.ResetScore
-    DisplayName: Reset Score
-  - Key: Terra.Studio.UpdateTimer
+  - DisplayName: Update Timer
+    Key: Terra.Studio.UpdateTimer
     ComponentName: Terra.Studio.UpdateTimerComponent
     SystemName: Terra.Studio.UpdateTimerSystem
     DrawerName: Terra.Studio.UpdateTimer
-    DisplayName: Update Timer
-  - Key: Terra.Studio.ResetTimer
+  - DisplayName: Reset Timer
+    Key: Terra.Studio.ResetTimer
     ComponentName: Terra.Studio.ResetTimerComponent
     SystemName: Terra.Studio.ResetTimerSystem
     DrawerName: Terra.Studio.ResetTimer
-    DisplayName: Reset Timer
+  - DisplayName: Increase Player Health
+    Key: Terra.Studio.IncreasePlayerHealth
+    ComponentName: Terra.Studio.IncreasePlayerHealthComponent
+    SystemName: Terra.Studio.IncreasePlayerHealthSystem
+    DrawerName: Terra.Studio.IncreasePlayerHealth
+  - DisplayName: Decrease Player Health
+    Key: Terra.Studio.DecreasePlayerHealth
+    ComponentName: Terra.Studio.DecreasePlayerHealthComponent
+    SystemName: Terra.Studio.DecreasePlayerHealthSystem
+    DrawerName: Terra.Studio.DecreasePlayerHealth
+  - Key: Terra.Studio.MeleeDamageable
+    ComponentName: Terra.Studio.MeleeDamageableComponent
+    SystemName: Terra.Studio.MeleeDamageableSystem
+    DrawerName: Terra.Studio.MeleeDamageable
+    DisplayName: MeleeDamageable
+  - Key: Terra.Studio.MeleeWeapon
+    ComponentName: Terra.Studio.MeleeWeaponComponent
+    SystemName: Terra.Studio.MeleeWeaponSystem
+    DrawerName: Terra.Studio.MeleeWeapon
+    DisplayName: Melee Weapon
+  - DisplayName: Instantiate
+    Key: Terra.Studio.InstantiateStudioObject
+    ComponentName: Terra.Studio.InstantiateStudioObjectComponent
+    SystemName: Terra.Studio.InstantiateStudioObjectSystem
+    DrawerName: Terra.Studio.InstantiateStudioObject
+  - DisplayName: Player Health
+    Key: Terra.Studio.PlayerHealth
+    ComponentName: Terra.Studio.PlayerHealthComponent
+    SystemName: Terra.Studio.PlayerHealthSystem
+    DrawerName: Terra.Studio.PlayerHealth
   eventData:
   - Key: Terra.Studio.GameStart
     EventName: Terra.Studio.GameStartActionEvent
@@ -139,3 +169,8 @@ MonoBehaviour:
     EventValue: 2
     DefaultData: Other
     DisplayName: Object Touched
+  - Key: Terra.Studio.InvokeAfter
+    EventName: Terra.Studio.InvokeAfterActionEvent
+    EventValue: 2
+    DefaultData: Other
+    DisplayName: Invoke After
