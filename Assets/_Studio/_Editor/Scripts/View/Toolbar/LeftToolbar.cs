@@ -1,32 +1,61 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Terra.Studio
 {
-    public class LeftToolbar : MonoBehaviour
+    public class LeftToolbar : View
     {
-        [SerializeField] private CanvasGroup defaultGroup;
+        [SerializeField] private bool showAssetsWindowByDefault;
         [SerializeField] private CanvasGroup assetsWindowGroup;
         [SerializeField] private CanvasGroup hierarchyGroup;
-
-        private void Start()
+        
+        [SerializeField] private Button assetsWindowButton;
+        [SerializeField] private Button hierarchyWindowButton;
+        
+        private CrossSceneDataHolder _crossSceneDataHolder;
+        private const string LastActiveSideView = "LastActiveSideView";
+        private void Awake()
         {
-            var nonDefaultGroup = defaultGroup == assetsWindowGroup ? hierarchyGroup : assetsWindowGroup;
-            EnableGroup(defaultGroup);
-            DisableGroup(nonDefaultGroup);
+            EditorOp.Register(this);
         }
 
+        public override void Init()
+        {
+            _crossSceneDataHolder = SystemOp.Resolve<CrossSceneDataHolder>();
+            
+            if (_crossSceneDataHolder.Get(LastActiveSideView, out var data))
+            {
+                showAssetsWindowByDefault = (bool)data;
+            }
+
+
+            if (showAssetsWindowByDefault)
+            {
+                assetsWindowButton.onClick.Invoke();
+            }
+            else
+            {
+                hierarchyWindowButton.onClick.Invoke();
+            }
+        }
+        
         public void AssetsWindowClicked()
         {
+            UpdateLastActiveToAssetsWindow(true);
             EnableGroup(assetsWindowGroup);
             DisableGroup(hierarchyGroup);
         }
 
         public void HierarchyWindowClicked()
         {
+            UpdateLastActiveToAssetsWindow(false);
             EnableGroup(hierarchyGroup);
             DisableGroup(assetsWindowGroup);
+        }
+        
+        private void UpdateLastActiveToAssetsWindow(bool isAssetsWindow)
+        {
+            _crossSceneDataHolder.Set(LastActiveSideView, isAssetsWindow);
         }
 
         private void EnableGroup(CanvasGroup group)
@@ -41,6 +70,11 @@ namespace Terra.Studio
             group.alpha = 0;
             group.interactable = false;
             group.blocksRaycasts = false;
+        }
+
+        private void OnDestroy()
+        {
+            EditorOp.Unregister(this);
         }
     }
 }
