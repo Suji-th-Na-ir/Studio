@@ -36,6 +36,7 @@ namespace Terra.Studio
 
         [SerializeField] private TMP_Dropdown catDropDown;
         [SerializeField] private TMP_Dropdown subCatDropDown;
+        [SerializeField] private TMP_Dropdown themeDropDown;
 
         private DraggableBehaviour _currHighlight;
         private bool _currentlyDragging;
@@ -46,11 +47,14 @@ namespace Terra.Studio
 
         private AssetsCategoriesData _assetsCategories;
 
+        private string _lastSearchedString;
         private string currCategory;
         private List<TMP_Dropdown.OptionData> catDatas;
         private List<TMP_Dropdown.OptionData> subCatDatas = new();
+        private List<TMP_Dropdown.OptionData> themeDatas = new();
         private string _activeCategory;
         private string _activeSubCategory;
+        private string _activeTheme;
         private const string NONE = "None";
         
         
@@ -87,7 +91,8 @@ namespace Terra.Studio
             }
 
             yield return new WaitUntil(() => _assetJsonDownloaded && _categoryJsonDownloaded);
-            catDropDown.options = GetCategoryNames();
+            UpdateThemeNames();
+            UpdateCategoryNames(false);
             CategoryChanged(0);
             _search.Init((x) =>
             {
@@ -115,6 +120,7 @@ namespace Terra.Studio
             
             catDropDown.onValueChanged.AddListener(CategoryChanged);
             subCatDropDown.onValueChanged.AddListener(SubCatChanged);
+            themeDropDown.onValueChanged.AddListener(ThemeChanged);
         }
         
         private void PageChanged(int obj)
@@ -152,7 +158,7 @@ namespace Terra.Studio
             _searchInProgress = isSearching;
         }
 
-        private string _lastSearchedString;
+        
         #region Local String Search
 
         private void OnSearch(string searchString, SearchType searchType)
@@ -182,7 +188,7 @@ namespace Terra.Studio
                 var d = _fullData[i];
                 var pass = true;
                 
-                if (_searchInProgress == SearchType.Filter || _searchInProgress == SearchType.FilteredSearch)
+                if (_searchInProgress is SearchType.Filter or SearchType.FilteredSearch)
                 {
                     if (_activeCategory != NONE)
                     {
@@ -192,9 +198,13 @@ namespace Terra.Studio
                             pass = d.sub_category.Contains(_activeSubCategory);
                         }
                     }
+                    else if(_activeTheme != NONE)
+                    {
+                        pass = d.theme == _activeTheme;
+                    }
                 }
                 
-                if (pass && willSearch && (_searchInProgress == SearchType.Search  || _searchInProgress == SearchType.FilteredSearch))
+                if (pass && willSearch && _searchInProgress is SearchType.Search or SearchType.FilteredSearch)
                 {
                     pass = d.display_name.Contains(query) || d.unique_name.Contains(query) || d.category.Contains(query);
                 }
@@ -219,8 +229,26 @@ namespace Terra.Studio
 
         #region Local Filter Search
 
+        private void ThemeChanged(int idx)
+        {
+            themeDropDown.value = idx;
+            _activeTheme = themeDatas[idx].text;
+
+            if (idx != 0)
+            {
+                UpdateCategoryNames(true);
+                CategoryChanged(0);
+            }
+            else
+            {
+                UpdateCategoryNames(false);
+                CategoryChanged(0);
+            }
+        }
+        
         private void CategoryChanged(int idx)
         {
+            catDropDown.value = idx;
             _activeCategory = catDatas[idx].text;
             UpdateSubCategories();
         }
@@ -231,20 +259,37 @@ namespace Terra.Studio
             _activeSubCategory = subCatDatas[idx].text;
             OnSearch(_lastSearchedString, SearchType.FilteredSearch);
         }
-        
-        private List<TMP_Dropdown.OptionData> GetCategoryNames()
+
+        private void UpdateThemeNames()
         {
-            if (catDatas == null)
+            themeDatas ??= new List<TMP_Dropdown.OptionData>(_assetsCategories.themes.Length+1);
+            themeDatas.Clear();
+            themeDatas.Add(new TMP_Dropdown.OptionData(NONE));
+            foreach (var themeName in _assetsCategories.themes)
             {
-                catDatas = new List<TMP_Dropdown.OptionData>(_assetsCategories.categoriesData.Length + 1);
+                themeDatas.Add(new TMP_Dropdown.OptionData(themeName));
+            }
+            themeDropDown.options = themeDatas;
+        }
+        private void UpdateCategoryNames(bool isThemesActive)
+        {
+            if (!isThemesActive)
+            {
+                catDatas ??= new List<TMP_Dropdown.OptionData>(_assetsCategories.categoriesData.Length + 1);
+                catDatas.Clear();
                 catDatas.Add(new TMP_Dropdown.OptionData(NONE));
                 foreach (var categoryData in _assetsCategories.categoriesData)
                 {
                     catDatas.Add(new TMP_Dropdown.OptionData(categoryData.category));
                 }
             }
-
-            return catDatas;
+            else
+            {
+                catDatas ??= new List<TMP_Dropdown.OptionData>(_assetsCategories.themes.Length + 1);
+                catDatas.Clear();
+                catDatas.Add(new TMP_Dropdown.OptionData(NONE));
+            }
+            catDropDown.options = catDatas;
         }
 
         private void UpdateSubCategories()

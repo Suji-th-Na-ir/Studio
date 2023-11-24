@@ -19,6 +19,7 @@ namespace Terra.Studio
     public class AssetsCategoriesData
     {
         public CategoryData[] categoriesData;
+        public string[] themes;
     }
 
     [Serializable]

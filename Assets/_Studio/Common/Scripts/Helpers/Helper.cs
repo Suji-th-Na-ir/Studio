@@ -5,9 +5,9 @@ using System.Linq;
 using UnityEngine.EventSystems;
 using System.Collections;
 using System.IO;
+using System.IO.Compression;
 using System.Reflection;
 using System.Text;
-using Ionic.Zlib;
 using Terra.Studio;
 
 namespace PlayShifu.Terra

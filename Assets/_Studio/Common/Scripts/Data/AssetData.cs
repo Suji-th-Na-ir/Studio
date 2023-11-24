@@ -14,6 +14,7 @@ namespace Terra.Studio
         public string[] thumbnails;
         public string[] category;
         public string[] sub_category;
+        public string theme;
         public bool terras3;
         public int asset_id;
         public string[] flags;
