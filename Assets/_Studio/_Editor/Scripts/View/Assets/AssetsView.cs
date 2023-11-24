@@ -188,12 +188,6 @@ namespace Terra.Studio
 
         private IEnumerator LocalSearchRoutine(string query)
         {
-            Debug.LogError($"Searching.");
-            Debug.LogError($"Query -> {query}");
-            Debug.LogError($"Category -> {_activeCategory}");
-            Debug.LogError($"SubCategory -> {(_activeSubCategory)}");
-            Debug.LogError($"Theme -> {((_activeTheme))}");
-            Debug.LogError($"DownloadOnlt -> {_downloadCheck}");
             List<AssetData> queriedAssetData = new();
             var willSearch = !string.IsNullOrEmpty(query);
             for (var i = 0; i < _fullData.Length; i++)
