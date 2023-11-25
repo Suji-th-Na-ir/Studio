@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6670960655422425437
+--- !u!1 &3712085245728684713
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,10 +8,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1049533561212015351}
-  - component: {fileID: 6741250006679160918}
-  - component: {fileID: 3152339565798001785}
-  - component: {fileID: 1779905798559903213}
+  - component: {fileID: 7027668982841434371}
+  - component: {fileID: 3646299038801329058}
+  - component: {fileID: 4947387397334859661}
+  - component: {fileID: 8621161162571898393}
   m_Layer: 0
   m_Name: Wooden_box_v2_1 (24)
   m_TagString: Untagged
@@ -19,13 +19,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1049533561212015351
+--- !u!4 &7027668982841434371
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6670960655422425437}
+  m_GameObject: {fileID: 3712085245728684713}
   m_LocalRotation: {x: 3.674923e-11, y: -0.021800673, z: -0.000000021855664, w: 0.9997624}
   m_LocalPosition: {x: 2.9893186, y: 1.3941909, z: -5.886251}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -34,21 +34,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -2.498, z: 0}
---- !u!33 &6741250006679160918
+--- !u!33 &3646299038801329058
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6670960655422425437}
+  m_GameObject: {fileID: 3712085245728684713}
   m_Mesh: {fileID: -8440289566322089510, guid: f426998b089ba2442a355f5fdcd76871, type: 3}
---- !u!23 &3152339565798001785
+--- !u!23 &4947387397334859661
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6670960655422425437}
+  m_GameObject: {fileID: 3712085245728684713}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -84,13 +84,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &1779905798559903213
+--- !u!65 &8621161162571898393
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6670960655422425437}
+  m_GameObject: {fileID: 3712085245728684713}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
