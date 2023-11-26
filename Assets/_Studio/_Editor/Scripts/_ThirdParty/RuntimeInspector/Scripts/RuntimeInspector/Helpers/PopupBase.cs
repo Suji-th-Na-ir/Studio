@@ -41,10 +41,7 @@ namespace RuntimeInspectorNamespace
 					borderLayoutElement.SetHeight( m_skin.LineHeight * 2.5f );
 					background.GetComponent<LayoutElement>().minHeight = m_skin.LineHeight;
 
-					float alpha = background.color.a;
-					Color skinColor = m_skin.InputFieldNormalBackgroundColor.Tint( 0.05f );
-					skinColor.a = alpha;
-					background.color = skinColor;
+					background.color = Color.black;
 
 					label.SetSkinInputFieldText( m_skin );
 				}
@@ -74,7 +71,7 @@ namespace RuntimeInspectorNamespace
 		{
 			Vector2 touchPos;
 			if( RectTransformUtility.ScreenPointToLocalPointInRectangle( canvasTransform, pointer.position, worldCamera, out touchPos ) )
-				rectTransform.anchoredPosition = touchPos;
+				rectTransform.anchoredPosition = touchPos+Vector2.down*70;
 		}
 
 		protected abstract void DestroySelf();

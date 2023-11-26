@@ -124,10 +124,10 @@ namespace Terra.Studio
             return;
 #endif
             Debug.Log($"Saving cache file!");
-            var bla = SystemOp.Resolve<FileService>();
+            var fileService = SystemOp.Resolve<FileService>();
             Validate();
             var fp = FileService.GetSavedFilePath(Path.GetFileNameWithoutExtension(cacheFileName));
-            bla.WriteFile(JsonConvert.SerializeObject(_cachedData), fp, false, b =>
+            fileService.WriteFile(JsonConvert.SerializeObject(_cachedData), fp, false, b =>
             {
                 if (!b)
                 {

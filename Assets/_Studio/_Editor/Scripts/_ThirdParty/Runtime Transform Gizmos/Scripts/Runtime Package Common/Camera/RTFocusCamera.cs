@@ -307,7 +307,7 @@ namespace RTG
 
         public void Update_SystemCall()
         {
-            if (RTInput.WasKeyPressedThisFrame(KeyCode.F))
+            if (RTInput.WasKeyPressedThisFrame(KeyCode.F) && EditorOp.Resolve<FocusFieldsSystem>().CurrentFocuedGameobject == null)
             {
                 Focus(EditorOp.Resolve<SelectionHandler>().GetSelectedObjects());
             }

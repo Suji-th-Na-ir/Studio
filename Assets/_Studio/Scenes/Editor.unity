@@ -496,9 +496,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0368858c115b450688449448484414ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultGroup: {fileID: 1251905029}
+  showAssetsWindowByDefault: 1
   assetsWindowGroup: {fileID: 1251905029}
   hierarchyGroup: {fileID: 1532164640}
+  assetsWindowButton: {fileID: 1394769876}
+  hierarchyWindowButton: {fileID: 1655917891}
 --- !u!1 &229643029
 GameObject:
   m_ObjectHideFlags: 0

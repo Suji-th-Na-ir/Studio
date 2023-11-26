@@ -174,6 +174,7 @@ public class SelectionHandler : View
         objectRotationGizmo.SetTargetObjects(_selectedObjects);
         objectRotationGizmo.onRotationRefreshed += RefreshObjectTRS;
         objectScaleGizmo.SetTargetObjects(_selectedObjects);
+        objectScaleGizmo.onScaleRefreshed += RefreshObjectTRS;
         objectUniversalGizmo.SetTargetObjects(_selectedObjects);
 
         _workGizmo = objectMoveGizmo;
@@ -297,9 +298,9 @@ public class SelectionHandler : View
     {
         if (_selectedObjects.Count > 0)
         {
-            if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
-            {
-                if (RTInput.WasKeyPressedThisFrame(KeyCode.Backspace))
+            //if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
+            //{
+                if (RTInput.WasKeyPressedThisFrame(KeyCode.Backspace) || RTInput.WasKeyPressedThisFrame(KeyCode.Delete))
                 {
                     var selections = new List<GameObject>(_selectedObjects);
                     runtimeHierarchy.Deselect();
@@ -316,7 +317,7 @@ public class SelectionHandler : View
                     _selectedObjects.Clear();
                     OnSelectionChanged();
                 }
-            }
+            //}
         }
     }
 
@@ -379,7 +380,7 @@ public class SelectionHandler : View
 
             if (pickedObject != null)
             {
-                if (RTInput.IsKeyPressed(KeyCode.LeftCommand))
+                if (RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl))
                 {
                     if (_selectedObjects.Contains(pickedObject))
                         _selectedObjects.Remove(pickedObject);
@@ -495,7 +496,7 @@ public class SelectionHandler : View
         {
             if (prevSelectedObjects[i] != null)
             {
-                prevSelectedObjects[i].layer = LayerMask.NameToLayer("Default");
+                EditorUtils.ApplyLayerToChildren(prevSelectedObjects[i].transform, "Default");
             }
 
             var behaviours = prevSelectedObjects[i].GetComponents<BaseBehaviour>();
@@ -514,7 +515,7 @@ public class SelectionHandler : View
             if (_selectedObjects.Contains(sObject))
             {
                 _selectedObjects.Remove(sObject);
-                sObject.layer = LayerMask.NameToLayer("Default");
+                EditorUtils.ApplyLayerToChildren(sObject.transform, "Default");
             }
             else
             {
@@ -525,13 +526,14 @@ public class SelectionHandler : View
 
         for (int i = 0; i < _selectedObjects.Count; i++)
         {
-            if (_selectedObjects[i] != null && _selectedObjects[i].layer== LayerMask.NameToLayer("Outline"))
+            if (_selectedObjects[i] != null && _selectedObjects[i].layer == LayerMask.NameToLayer("Outline"))
             {
+                EditorUtils.ApplyLayerToChildren(_selectedObjects[i].transform, "Default");
                 _selectedObjects[i].layer = LayerMask.NameToLayer("Default");
             }
             else
             {
-                _selectedObjects[i].layer = LayerMask.NameToLayer("Outline");
+                EditorUtils.ApplyLayerToChildren(_selectedObjects[i].transform, "Outline");
             }
         }
 

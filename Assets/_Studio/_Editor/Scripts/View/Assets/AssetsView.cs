@@ -75,14 +75,14 @@ namespace Terra.Studio
 
         private IEnumerator SearchRoutine(string query)
         {
-            List<AssetData> bla = new();
+            List<AssetData> queriedAssetData = new(); 
             for (var i = 0; i < _fullData.data.Length; i++)
             {
                 var d = _fullData.data[i];
                 var pass = d.display_name.Contains(query) || d.unique_name.Contains(query) || d.category.Contains(query);
                 if (pass)
                 {
-                    bla.Add(d);
+                    queriedAssetData.Add(d);
                 }
 
                 if (i % 1000 == 0)
@@ -90,10 +90,9 @@ namespace Terra.Studio
                     yield return null;
                 }
             }
-
-            Debug.Log($"Ended searching for {query}");
-            _currentData = bla.ToArray();
-            _scroll.Init(_currentData.Length / NumberOfAssetsToShowForNow, PageChanged);
+            
+            _currentData = queriedAssetData.ToArray();
+            _scroll.Init(_currentData.Length/NumberOfAssetsToShowForNow, PageChanged);
         }
 
         private void PageChanged(int obj)
@@ -150,7 +149,7 @@ namespace Terra.Studio
             }
         }
 
-        public void Dragger(DraggableBehaviour bla, bool highlight)
+        public void Dragger(DraggableBehaviour assetCell, bool highlight)
         {
             currentlyDragging = highlight;
             if (highlight)
@@ -159,16 +158,16 @@ namespace Terra.Studio
                 {
                     currHighlight.SetHighlight(false);
                 }
-                currHighlight = bla;
+                currHighlight = assetCell;
                 currHighlight.SetHighlight(true);
             }
             else
             {
-                if (bla == currHighlight)
+                if (assetCell == currHighlight)
                 {
                     currHighlight = null;
                 }
-                bla.SetHighlight(false);
+                assetCell.SetHighlight(false);
             }
         }
 

@@ -93,3 +93,11 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: 6e925fd1abbf84a07b63d28c723c5aad, type: 3}
   - type: InstantiateStudioObject
     icon: {fileID: 21300000, guid: 48c4f099a307f48ffa2a2ac826bdd79b, type: 3}
+  - type: DecreasePlayerHealth
+    icon: {fileID: 21300000, guid: fb7e2ab7916be434fa158ec5c01cf84e, type: 3}
+  - type: IncreasePlayerHealth
+    icon: {fileID: 21300000, guid: 43ec93fcbc4cd4285ad962a7f756fcb4, type: 3}
+  - type: PlayerHealth
+    icon: {fileID: 21300000, guid: 90979c67086524ec6a390ac8a28bd81c, type: 3}
+  - type: Player Touches
+    icon: {fileID: 21300000, guid: 3880aaf41534345f1be3f0cd5ed26c4e, type: 3}

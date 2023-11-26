@@ -109,8 +109,16 @@ namespace RuntimeInspectorNamespace
             {
                 if (Inspector.ShowAddComponentButton && Inspector.currentPageIndex == 1)
                 {
-                    CreateExposedMethodButton(addComponentMethod, () => this, (value) => { });
+                    Inspector.EnableAddBehaviour(addComponentMethod, () => this);
                 }
+                else
+                {
+                    Inspector.DisableAddBehaviourButton();
+                }
+            }
+            else
+            {
+                Inspector.DisableAddBehaviourButton();
             }
             componentsExpandedStates.Clear();
         }
@@ -381,11 +389,10 @@ namespace RuntimeInspectorNamespace
             HideSelectionGhostIfAny(component);
             Destroy(component);
 
-            // Destroy operation doesn't take place immediately, wait for the component to be fully destroyed
             yield return null;
 
             inspector.Refresh();
-            inspector.EnsureScrollViewIsWithinBounds(); // Scroll view's contents can get out of bounds after removing a component
+            inspector.EnsureScrollViewIsWithinBounds();
         }
 
         private static void HideSelectionGhostIfAny(Component component)

@@ -16,7 +16,7 @@ namespace Terra.Studio
             PlayFXIfExists(component, 0);
             Broadcast(component);
             var respawnPoint = RuntimeOp.Resolve<GameData>().RespawnPoint;
-            RuntimeOp.Resolve<GameData>().SetPlayerPosition(respawnPoint);
+            RuntimeOp.Resolve<PlayerData>().SetPlayerPosition(respawnPoint);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Terra.Studio
         [SerializeField] private TextMeshProUGUI scoreText;
         [SerializeField] private GameObject timerGo;
         [SerializeField] private TextMeshProUGUI timerText;
-        private Dictionary<string, GameObject> dynamicSpawnedGO = new();
+        private Dictionary<string, GameObject> dynamicSpawnedGO;
 
         public override void Init()
         {
@@ -24,6 +24,7 @@ namespace Terra.Studio
                 timerGo.SetActive(true);
                 RuntimeOp.Resolve<InGameTimeHandler>().OnTimeModified += SetTime;
             });
+            dynamicSpawnedGO = new();
         }
 
         public override void Draw()

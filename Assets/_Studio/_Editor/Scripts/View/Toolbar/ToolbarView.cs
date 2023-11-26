@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Terra.Studio
 {
-    public class ToolbarView : View
+    public class ToolbarView : View, ITooltipManager
     {
         public event Action OnPublishRequested;
 
@@ -39,6 +39,14 @@ namespace Terra.Studio
         private Button publishButton;
         private Button timerButton;
 
+        public UISkin Skin => EditorOp.Resolve<RuntimeInspector>().Skin;
+
+        public Canvas Canvas => EditorOp.Resolve<RuntimeInspector>().Canvas;
+
+        public float TooltipDelay => 0.5f;
+
+        public TooltipListener TooltipListener;
+
         private void Awake()
         {
             EditorOp.Register(this);
@@ -46,6 +54,9 @@ namespace Terra.Studio
 
         public override void Init()
         {
+            TooltipListener = gameObject.AddComponent<TooltipListener>();
+            TooltipListener.Initialize(this);
+            
             SpawnPrimitivePrefab();
             var addButtonTr = Helper.FindDeepChild(transform, ADD_BUTTON_LOC);
             var playButtonTr = Helper.FindDeepChild(transform, PLAY_BUTTON_LOC);

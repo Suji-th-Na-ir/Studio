@@ -14,9 +14,15 @@ namespace Terra.Studio
         {
             public string DisplayName;
             public string Key;
-            [ComponentList] public string ComponentName;
-            [SystemList] public string SystemName;
-            [EditorDrawerList] public string DrawerName;
+
+            [ComponentList]
+            public string ComponentName;
+
+            [SystemList]
+            public string SystemName;
+
+            [EditorDrawerList]
+            public string DrawerName;
         }
 
         [Serializable]
@@ -40,12 +46,33 @@ namespace Terra.Studio
 
         #endregion
 
-        public static readonly Type[] HideAddButtonForTypes = new[] { typeof(InGameTimer), typeof(GameScore) };
-        public static readonly Type[] HideRemoveButtonForTypes = new[] { typeof(Checkpoint), typeof(InGameTimer), typeof(GameScore) };
-        public static readonly Type[] GameEssentialBehaviours = new Type[] { typeof(PlayerSpawnPoint), typeof(InGameTimer), typeof(GameScore), typeof(Checkpoint) };
+        public static readonly Type[] HideAddButtonForTypes = new[]
+        {
+            typeof(InGameTimer),
+            typeof(GameScore),
+            typeof(PlayerHealth)
+        };
+        public static readonly Type[] HideRemoveButtonForTypes = new[]
+        {
+            typeof(Checkpoint),
+            typeof(InGameTimer),
+            typeof(GameScore),
+            typeof(PlayerHealth)
+        };
+        public static readonly Type[] GameEssentialBehaviours = new[]
+        {
+            typeof(PlayerSpawnPoint),
+            typeof(Checkpoint),
+            typeof(InGameTimer),
+            typeof(GameScore),
+            typeof(PlayerHealth)
+        };
 
-        [SerializeField] private List<SystemData> systemData;
-        [SerializeField] private List<EventData> eventData;
+        [SerializeField]
+        private List<SystemData> systemData;
+
+        [SerializeField]
+        private List<EventData> eventData;
         private List<CachedSystemData> cachedSystemData = new();
         private List<Type> cachedEventTypes = new();
 
@@ -74,7 +101,11 @@ namespace Terra.Studio
             return key != null;
         }
 
-        public bool TryGetComponentAndSystemForType(string type, out Type component, out Type system)
+        public bool TryGetComponentAndSystemForType(
+            string type,
+            out Type component,
+            out Type system
+        )
         {
             component = system = null;
             var foundData = systemData.Find(x => x.Key.Equals(type));
