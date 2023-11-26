@@ -50,9 +50,8 @@ namespace Terra.Studio
                 ConditionData = GetStartCondition(),
                 IsBroadcastable = !string.IsNullOrEmpty(broadcast.broadcast),
                 Broadcast = broadcast.broadcast,
-                canPlaySFX = false,
-                canPlayVFX = false,
-                updateBy = updateBy
+                updateBy = updateBy,
+                Listen = Listen.Always
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp);

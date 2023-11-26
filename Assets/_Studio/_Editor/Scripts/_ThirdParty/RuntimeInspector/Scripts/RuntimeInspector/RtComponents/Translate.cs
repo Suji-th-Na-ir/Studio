@@ -19,7 +19,7 @@ namespace Terra.Studio
         public override string ComponentName => nameof(Translate);
         public override bool CanPreview => true;
         protected override bool CanBroadcast => true;
-        protected override bool CanListen =>true;
+        protected override bool CanListen => true;
         protected override bool UpdateListenOnEnable => StartOn.data.startIndex == 4;
         public override Atom.RecordedVector3 RecordedVector3 { get { return Type.recordedVector3; } }
         protected override string[] BroadcasterRefs => new string[]
@@ -29,6 +29,14 @@ namespace Terra.Studio
         protected override string[] ListenerRefs => new string[]
         {
             StartOn.data.listenName
+        };
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
+        {
+            PlaySFX
+        };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
+        {
+            PlayVFX
         };
 
         protected override void Awake()
@@ -50,7 +58,7 @@ namespace Terra.Studio
                 SelectionGhostsTRS = GetCurrentRepeatOffsetInWorld,
                 ToggleRecordMode = () =>
                 {
-                    EditorOp.Resolve<Recorder>().TrackPosition_Multiselect(this,false);
+                    EditorOp.Resolve<Recorder>().TrackPosition_Multiselect(this, false);
                 },
                 ShowSelectionGhost = () =>
                 {
@@ -68,7 +76,7 @@ namespace Terra.Studio
                 {
                     EditorOp.Resolve<Recorder>().UpdateGhostRepeatCount_Multiselect(this, repeat.repeatForever ? int.MaxValue : repeat.repeat, repeat.repeatType);
                 },
-                GetLastValue = () => { return Type.LastVector3+transform.position; },
+                GetLastValue = () => { return Type.LastVector3 + transform.position; },
                 GetRecentValue = () => { return (Vector3)Type.recordedVector3.Get() + transform.position; },
                 OnGhostModeToggled = (state) =>
                 {
@@ -88,7 +96,7 @@ namespace Terra.Studio
         {
             var comp = new TranslateComponent
             {
-                translateType = (RepeatDirectionType)repeat.repeatType,
+                translateType = repeat.repeatType,
                 speed = speed,
                 pauseFor = (repeat.repeat <= 1 && !repeat.repeatForever) ? 0 : repeat.pauseFor,
                 repeatForever = repeat.repeatForever,
@@ -101,16 +109,9 @@ namespace Terra.Studio
                 broadcastAt = repeat.broadcastAt,
                 IsBroadcastable = !string.IsNullOrEmpty(repeat.broadcastData.broadcast),
                 Broadcast = repeat.broadcastData.broadcast,
-                canPlaySFX = PlaySFX.data.canPlay,
-                canPlayVFX = PlayVFX.data.canPlay,
-                sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
-                vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName,
-                sfxIndex = PlaySFX.data.clipIndex,
-                vfxIndex = PlayVFX.data.clipIndex,
-                listen = Listen.Always,
+                FXData = GetFXData(),
+                Listen = Listen.Always
             };
-
-            //ModifyDataAsPerGiven(ref comp);
             gameObject.TrySetTrigger(false, true);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp, Formatting.Indented);
@@ -154,12 +155,7 @@ namespace Terra.Studio
         public override void Import(EntityBasedComponent cdata)
         {
             var comp = JsonConvert.DeserializeObject<TranslateComponent>(cdata.data);
-            PlaySFX.data.canPlay = comp.canPlaySFX;
-            PlaySFX.data.clipIndex = comp.sfxIndex;
-            PlaySFX.data.clipName = comp.sfxName;
-            PlayVFX.data.canPlay = comp.canPlayVFX;
-            PlayVFX.data.clipIndex = comp.vfxIndex;
-            PlayVFX.data.clipName = comp.vfxName;
+            MapSFXAndVFXData(comp.FXData);
             repeat.repeatType = comp.translateType;
             speed = comp.speed;
             repeat.pauseFor = comp.pauseFor;
@@ -208,10 +204,6 @@ namespace Terra.Studio
                 count = 10;
             for (int i = 0; i < count; i++)
             {
-                //if (transform.parent != null && i==0)
-                //{
-                //    localOffset = transform.TransformDirection(localOffset);
-                //}
                 pos += localOffset;
                 trs.Add(pos);
                 trs.Add(transform.localRotation.eulerAngles);
@@ -224,10 +216,6 @@ namespace Terra.Studio
         {
             var vector3 = (Vector3)data;
             var delta = vector3 - transform.position;
-            //if (transform.parent != null)
-            //{
-            //    delta = transform.InverseTransformDirection(delta);
-            //}
             if (delta != (Vector3)Type.recordedVector3.Get())
             {
                 Type.recordedVector3.Set(delta);

@@ -22,6 +22,8 @@ namespace Terra.Studio
         protected virtual string[] BroadcasterRefs { get; }
         protected virtual string[] ListenerRefs { get; }
         protected virtual ComponentDisplayDock DisplayDock { get; private set; }
+        protected virtual Atom.PlaySfx[] Sfxes { get; set; }
+        protected virtual Atom.PlayVfx[] Vfxes { get; set; }
 
         protected virtual void Awake()
         {
@@ -60,6 +62,16 @@ namespace Terra.Studio
             {
                 EditorOp.Resolve<UILogicDisplayProcessor>().RemoveComponentIcon(DisplayDock);
             }
+        }
+
+        protected virtual FXData GetFXData()
+        {
+            return FXData.GetFXData(Sfxes, Vfxes);
+        }
+
+        protected virtual void MapSFXAndVFXData(FXData fxData)
+        {
+            FXData.MapSFXandVFXData(fxData, Sfxes, Vfxes);
         }
 
         protected void ImportVisualisation(string broadcast, string broadcastListen)

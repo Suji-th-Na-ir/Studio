@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 #define DEBUG
+using Leopotam.EcsLite.UnityEditor;
 #endif
 
 using System;
@@ -37,8 +38,8 @@ namespace Terra.Studio
         {
             this.scene = scene;
             ResolveEssentials();
-            RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameStart(true, (data) => { canRunSystems = true; });
-            RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameEnd(true, (data) => { DestroyEcsSystemsAndWorld(); });
+            RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameStart(true, (_) => { canRunSystems = true; });
+            RuntimeOp.Resolve<GameStateHandler>().SubscribeToGameEnd(true, (_) => { CoroutineService.RunCoroutine(DestroyEcsSystemsAndWorld, CoroutineService.DelayType.WaitForXFrames, 2); });
             InitializeEcs();
         }
 
@@ -79,7 +80,10 @@ namespace Terra.Studio
             customUpdateSystemToRemove = new();
             coroutineRunners = new();
             globalUpdateSystems = new EcsSystems(ecsWorld)
-                                    .Add(new InputSystem());
+#if DEBUG
+                .Add(new EcsWorldDebugSystem())
+#endif
+                .Add(new InputSystem());
             globalUpdateSystems.Init();
         }
 
@@ -116,33 +120,32 @@ namespace Terra.Studio
             }
         }
 
-        public BaseSystem AddRunningInstance<T>() where T : BaseSystem
+        public BaseSystem<T> AddRunningInstance<T>(Type type) where T : struct, IBaseComponent
         {
-            var type = typeof(T);
             if (typeToInstances.ContainsKey(type))
             {
-                return (BaseSystem)typeToInstances[type];
+                return (BaseSystem<T>)typeToInstances[type];
             }
-            var instance = Activator.CreateInstance<T>();
+            var instance = Activator.CreateInstance(type);
             typeToInstances.Add(type, instance);
             if (type.GetInterfaces().Contains(typeof(IEcsRunSystem)))
             {
                 var newSystem = new EcsSystems(World)
 #if DEBUG
-                    .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
-                    .Add(new Leopotam.EcsLite.UnityEditor.EcsSystemsDebugSystem())
+                    .Add(new EcsSystemsDebugSystem())
 #endif
                     .Add((IEcsRunSystem)instance);
                 newSystem.Init();
                 customUpdateSystems.Add(type, newSystem);
                 customUpdateEnumerator = customUpdateSystems.GetEnumerator();
             }
-            return instance;
+            return (BaseSystem<T>)instance;
         }
 
-        public void RemoveRunningInstance<T>(T _) where T : BaseSystem
+        public void RemoveRunningInstance<T1, T2>() where T1 : BaseSystem<T2>
+                                                        where T2 : struct, IBaseComponent
         {
-            var type = typeof(T);
+            var type = typeof(T1);
             if (!typeToInstances.ContainsKey(type))
             {
                 return;
@@ -204,7 +207,7 @@ namespace Terra.Studio
             {
                 foreach (var type in typeToInstances)
                 {
-                    var instance = (BaseSystem)type.Value;
+                    var instance = (IWorldActions)type.Value;
                     instance.OnHaltRequested(ecsWorld);
                 }
                 typeToInstances = null;

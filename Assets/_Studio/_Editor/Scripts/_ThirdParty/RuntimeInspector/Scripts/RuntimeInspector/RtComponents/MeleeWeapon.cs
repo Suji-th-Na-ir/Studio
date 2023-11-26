@@ -25,7 +25,7 @@ namespace Terra.Studio
         public Atom.PlayVfx PlayVFX = new();
         public Atom.Broadcast broadcastData = new();
 
-        [Header("Hitting:"),AliasDrawer("Animation")]
+        [Header("Hitting:"), AliasDrawer("Animation")]
         public MeleeWeaponComponent.AttackAnimation attackAnimation;
         [Range(0, 100)]
         public int damage = 10;
@@ -33,12 +33,22 @@ namespace Terra.Studio
         [AliasDrawer("Play SFX")]
         public Atom.PlaySfx PlaySFXAttack = new();
         [AliasDrawer("Play VFX")]
-        public Atom.PlayVfx PlayVFXAttack= new();
+        public Atom.PlayVfx PlayVFXAttack = new();
 
         public override string ComponentName => nameof(MeleeWeapon);
         public override bool CanPreview => false;
         protected override bool CanBroadcast => true;
         protected override bool CanListen => true;
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
+        {
+            PlaySFX,
+            PlaySFXAttack
+        };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
+        {
+            PlayVFX,
+            PlayVFXAttack
+        };
 
         protected override void Awake()
         {
@@ -53,26 +63,14 @@ namespace Terra.Studio
         {
             MeleeWeaponComponent comp = new()
             {
-                damage = this.damage,
-                attackAnimation = this.attackAnimation,
-                canPlaySFX = PlaySFX.data.canPlay,
-                canPlayVFX = PlayVFX.data.canPlay,
-                sfxName = Helper.GetSfxClipNameByIndex(PlaySFX.data.clipIndex),
-                vfxName = Helper.GetVfxClipNameByIndex(PlayVFX.data.clipIndex),
-                sfxIndex = PlaySFX.data.clipIndex,
-                vfxIndex = PlayVFX.data.clipIndex,
-
-                canPlaySFXAttack = PlaySFXAttack.data.canPlay,
-                canPlayVFXAttack = PlayVFXAttack.data.canPlay,
-                sfxNameAttack = Helper.GetSfxClipNameByIndex(PlaySFXAttack.data.clipIndex),
-                vfxNameAttack = Helper.GetVfxClipNameByIndex(PlayVFXAttack.data.clipIndex),
-                sfxIndexAttack = PlaySFXAttack.data.clipIndex,
-                vfxIndexAttack = PlayVFXAttack.data.clipIndex,
+                damage = damage,
+                attackAnimation = attackAnimation,
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
-                Broadcast = broadcastData.broadcast
+                Broadcast = broadcastData.broadcast,
+                FXData = GetFXData()
             };
             gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -110,7 +108,7 @@ namespace Terra.Studio
                 var res = (StartEnum)result;
                 if (res == StartEnum.OnPlayerCollide)
                 {
-                    
+
                     if (comp.ConditionData.Equals("Player"))
                     {
                         StartOn.data.startIndex = (int)res;
@@ -126,18 +124,7 @@ namespace Terra.Studio
             damage = comp.damage;
             attackAnimation = comp.attackAnimation;
             broadcastData.broadcast = comp.Broadcast;
-            PlaySFX.data.canPlay = comp.canPlaySFX;
-            PlaySFX.data.clipIndex = comp.sfxIndex;
-            PlaySFX.data.clipName = comp.sfxName;
-            PlayVFX.data.canPlay = comp.canPlayVFX;
-            PlayVFX.data.clipIndex = comp.vfxIndex;
-            PlayVFX.data.clipName = comp.vfxName;
-            PlaySFXAttack.data.canPlay = comp.canPlaySFXAttack;
-            PlaySFXAttack.data.clipIndex = comp.sfxIndexAttack;
-            PlaySFXAttack.data.clipName = comp.sfxNameAttack;
-            PlayVFXAttack.data.canPlay = comp.canPlayVFXAttack;
-            PlayVFXAttack.data.clipIndex = comp.vfxIndexAttack;
-            PlayVFXAttack.data.clipName = comp.vfxNameAttack;
+            MapSFXAndVFXData(comp.FXData);
             string listenstring = "";
             if (StartOn.data.startIndex == 3)
             {

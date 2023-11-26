@@ -20,11 +20,6 @@ namespace Terra.Studio
             Author.Generate(data);
         }
 
-        public static void Degenerate(int entityID)
-        {
-            Author.Degenerate(entityID);
-        }
-
         public static void Flush()
         {
             Author<ComponentAuthor>.Flush();
@@ -61,7 +56,7 @@ namespace Terra.Studio
             [Preserve]
             private void Generate<T1, T2>(ComponentAuthorData authorData)
                                                         where T1 : struct, IBaseComponent
-                                                        where T2 : BaseSystem
+                                                        where T2 : BaseSystem<T1>
             {
                 var component = JsonConvert.DeserializeObject<T1>(authorData.compData);
                 var world = RuntimeOp.Resolve<RuntimeSystem>().World;
@@ -69,8 +64,8 @@ namespace Terra.Studio
                 pool.Add(authorData.entity);
                 ref var compRef = ref pool.Get(authorData.entity);
                 ((IBaseComponent)component).Clone(component, ref compRef, authorData.obj);
-                var instance = RuntimeOp.Resolve<RuntimeSystem>().AddRunningInstance<T2>();
-                instance.Init<T1>(authorData.entity);
+                var instance = RuntimeOp.Resolve<RuntimeSystem>().AddRunningInstance<T1>(typeof(T2));
+                instance.Init(authorData.entity);
             }
 
             private MethodInfo GetMethodForTypes(Type componentType, Type systemType)

@@ -1,61 +1,29 @@
 using PlayShifu.Terra;
-using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
-    public class CollideSystem : BaseSystem
+    public class CollideSystem : BaseSystem<CollideComponent>
     {
-        public override void Init<T>(int entity)
+        public override void Init(int entity)
         {
-            base.Init<T>(entity);
+            base.Init(entity);
             ref var entityRef = ref entity.GetComponent<CollideComponent>();
             var rb = entityRef.RefObj.AddRigidbody();
             rb.isKinematic = true;
             rb.useGravity = false;
         }
 
-        public override void OnConditionalCheck(int entity, object data)
+        protected override void OnConditionalCheck(int entity, object data)
         {
+            base.OnConditionalCheck(entity, data);
             ref var entityRef = ref entity.GetComponent<CollideComponent>();
-            if (entityRef.listen != Listen.Always)
-            {
-                var compsData = RuntimeOp.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(false, entityRef.EventContext);
-                entityRef.IsExecuted = true;
-            }
             OnDemandRun(in entityRef);
         }
 
         public void OnDemandRun(in CollideComponent component)
         {
-            if (component.canPlaySFX)
-            {
-                RuntimeWrappers.PlaySFX(component.sfxName);
-            }
-            if (component.canPlayVFX)
-            {
-                RuntimeWrappers.PlayVFX(component.vfxName, component.RefObj.transform.position);
-            }
-            if (component.IsBroadcastable)
-            {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast);
-            }
-        }
-
-        public override void OnHaltRequested(EcsWorld currentWorld)
-        {
-            var filter = currentWorld.Filter<CollideComponent>().End();
-            var compPool = currentWorld.GetPool<CollideComponent>();
-            foreach (var entity in filter)
-            {
-                var component = compPool.Get(entity);
-                if (component.IsExecuted)
-                {
-                    continue;
-                }
-                var compsData = RuntimeOp.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(false, component.EventContext);
-            }
+            PlayFXIfExists(component, 0);
+            Broadcast(component);
         }
     }
 }

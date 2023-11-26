@@ -1,5 +1,4 @@
 using Newtonsoft.Json;
-using PlayShifu.Terra;
 using System.Collections.Generic;
 
 namespace Terra.Studio
@@ -15,7 +14,7 @@ namespace Terra.Studio
             OnObjectCollide
         }
 
-        public Atom.StartOn startOn = new();
+        public StartOn startOn = StartOn.OnPlayerCollide;
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
         public Atom.Broadcast broadcastData = new();
@@ -28,14 +27,18 @@ namespace Terra.Studio
         {
             broadcastData.broadcast
         };
-
-        //[AliasDrawer("Do\nAlways")]
-        //public bool executeMultipleTimes = true;
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
+        {
+            playSFX
+        };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
+        {
+            playVFX
+        };
 
         protected override void Awake()
         {
             base.Awake();
-            startOn.Setup<StartOn>(gameObject, ComponentName);
             playSFX.Setup<Collide>(gameObject);
             playVFX.Setup<Collide>(gameObject);
             broadcastData.Setup(gameObject, this);
@@ -43,23 +46,15 @@ namespace Terra.Studio
 
         public override (string type, string data) Export()
         {
-            var start = Helper.GetEnumValueByIndex<StartOn>(startOn.data.startIndex);
             var data = new CollideComponent()
             {
-                canPlaySFX = playSFX.data.canPlay,
-                sfxName = playSFX.data.clipName,
-                sfxIndex = playSFX.data.clipIndex,
-                canPlayVFX = playVFX.data.canPlay,
-                vfxName = playVFX.data.clipName,
-                vfxIndex = playVFX.data.clipIndex,
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
                 Broadcast = broadcastData.broadcast,
                 IsConditionAvailable = true,
-                ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(start),
-                ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(start),
-                startIndex = startOn.data.startIndex,
-                startName = startOn.data.startName,
-                listen = Listen.Always
+                ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(startOn),
+                ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(startOn),
+                Listen = Listen.Always,
+                FXData = GetFXData()
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var json = JsonConvert.SerializeObject(data);
@@ -69,16 +64,16 @@ namespace Terra.Studio
         public override void Import(EntityBasedComponent data)
         {
             var obj = JsonConvert.DeserializeObject<CollideComponent>(data.data);
-            playSFX.data.canPlay = obj.canPlaySFX;
-            playSFX.data.clipName = obj.sfxName;
-            playSFX.data.clipIndex = obj.sfxIndex;
-            playVFX.data.canPlay = obj.canPlayVFX;
-            playVFX.data.clipName = obj.vfxName;
-            playVFX.data.clipIndex = obj.vfxIndex;
             broadcastData.broadcast = obj.Broadcast;
-            startOn.data.startIndex = obj.startIndex;
-            startOn.data.startName = obj.startName;
-            //executeMultipleTimes = obj.listen == Listen.Always;
+            if (obj.ConditionData.Equals("Player"))
+            {
+                startOn = StartOn.OnPlayerCollide;
+            }
+            else
+            {
+                startOn = StartOn.OnObjectCollide;
+            }
+            MapSFXAndVFXData(obj.FXData);
             ImportVisualisation(broadcastData.broadcast, null);
         }
 

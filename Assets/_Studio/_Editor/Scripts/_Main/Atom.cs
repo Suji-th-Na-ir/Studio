@@ -28,13 +28,6 @@ namespace Terra.Studio
                 componentType = typeof(T);
                 this.fieldName = fieldName;
             }
-
-            public void Import(bool canPlay, int clipIndex, string clipName)
-            {
-                data.canPlay = canPlay;
-                data.clipIndex = clipIndex;
-                data.clipName = clipName;
-            }
         }
 
         public class BaseTargetTemplate
@@ -519,6 +512,55 @@ namespace Terra.Studio
         public string startName;
         public int startIndex;
         public string listenName;
+    }
+
+    [Serializable]
+    public struct FXData
+    {
+        public PlayFXData[] SFXData;
+        public PlayFXData[] VFXData;
+
+        public static FXData GetFXData(Atom.PlaySfx[] sfxFields, Atom.PlayVfx[] vfxFields)
+        {
+            var fxData = new FXData()
+            {
+                SFXData = new PlayFXData[sfxFields?.Length ?? 0],
+                VFXData = new PlayFXData[vfxFields?.Length ?? 0]
+            };
+            if (sfxFields != null)
+            {
+                for (int i = 0; i < sfxFields.Length; i++)
+                {
+                    fxData.SFXData[i] = sfxFields[i].data;
+                }
+            }
+            if (vfxFields != null)
+            {
+                for (int i = 0; i < vfxFields.Length; i++)
+                {
+                    fxData.VFXData[i] = vfxFields[i].data;
+                }
+            }
+            return fxData;
+        }
+
+        public static void MapSFXandVFXData(FXData fxData, Atom.PlaySfx[] sfxFields, Atom.PlayVfx[] vfxFields)
+        {
+            if (sfxFields != null)
+            {
+                for (int i = 0; i < sfxFields.Length && i < fxData.SFXData?.Length; i++)
+                {
+                    sfxFields[i].data = fxData.SFXData[i];
+                }
+            }
+            if (vfxFields != null)
+            {
+                for (int i = 0; i < vfxFields.Length && i < fxData.VFXData?.Length; i++)
+                {
+                    vfxFields[i].data = fxData.VFXData[i];
+                }
+            }
+        }
     }
 
     [Serializable]

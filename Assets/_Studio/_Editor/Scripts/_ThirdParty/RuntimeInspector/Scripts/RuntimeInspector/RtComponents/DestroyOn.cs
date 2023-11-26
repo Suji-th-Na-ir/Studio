@@ -38,12 +38,20 @@ namespace Terra.Studio
         {
             StartOn.data.listenName
         };
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
+        {
+            PlaySFX
+        };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
+        {
+            PlayVFX
+        };
 
         protected override void Awake()
         {
             base.Awake();
             StartOn.Setup<DestroyOnEnum>(gameObject, ComponentName, OnListenerUpdated, StartOn.data.startIndex == 3);
-            broadcastData.Setup(gameObject,this);
+            broadcastData.Setup(gameObject, this);
             PlaySFX.Setup<DestroyOn>(gameObject);
             PlayVFX.Setup<DestroyOn>(gameObject);
         }
@@ -52,17 +60,13 @@ namespace Terra.Studio
         {
             DestroyOnComponent comp = new()
             {
-                canPlaySFX = PlaySFX.data.canPlay,
-                canPlayVFX = PlayVFX.data.canPlay,
-                sfxName = Helper.GetSfxClipNameByIndex(PlaySFX.data.clipIndex),
-                vfxName = Helper.GetVfxClipNameByIndex(PlayVFX.data.clipIndex),
-                sfxIndex = PlaySFX.data.clipIndex,
-                vfxIndex = PlayVFX.data.clipIndex,
+                FXData = GetFXData(),
                 IsConditionAvailable = true,
                 ConditionType = GetStartEvent(),
                 ConditionData = GetStartCondition(),
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
-                Broadcast = broadcastData.broadcast
+                Broadcast = broadcastData.broadcast,
+                Listen = Listen.Once
             };
             gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -117,12 +121,7 @@ namespace Terra.Studio
             }
             StartOn.data.listenName = comp.ConditionData;
             broadcastData.broadcast = comp.Broadcast;
-            PlaySFX.data.canPlay = comp.canPlaySFX;
-            PlaySFX.data.clipIndex = comp.sfxIndex;
-            PlaySFX.data.clipName = comp.sfxName;
-            PlayVFX.data.canPlay = comp.canPlayVFX;
-            PlayVFX.data.clipIndex = comp.vfxIndex;
-            PlayVFX.data.clipName = comp.vfxName;
+            MapSFXAndVFXData(comp.FXData);
             string listenstring = "";
             if (StartOn.data.startIndex == 3)
             {

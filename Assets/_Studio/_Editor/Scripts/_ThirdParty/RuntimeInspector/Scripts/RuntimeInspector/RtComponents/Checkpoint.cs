@@ -17,6 +17,14 @@ namespace Terra.Studio
         {
            broadcastData.broadcast
         };
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
+        {
+            PlaySFX
+        };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
+        {
+            PlayVFX
+        };
 
         protected override void Awake()
         {
@@ -30,18 +38,14 @@ namespace Terra.Studio
         {
             var component = new CheckpointComponent()
             {
-                canPlaySFX = PlaySFX.data.canPlay,
-                sfxName = PlaySFX.data.clipName,
-                sfxIndex = PlaySFX.data.clipIndex,
-                canPlayVFX = PlayVFX.data.canPlay,
-                vfxName = PlayVFX.data.clipName,
-                vfxIndex = PlayVFX.data.clipIndex,
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
                 respawnPoint = transform.position,
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.TriggerAction",
                 ConditionData = "Player",
-                Broadcast = broadcastData.broadcast
+                Broadcast = broadcastData.broadcast,
+                Listen = Listen.Always,
+                FXData = GetFXData()
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(component);
@@ -52,12 +56,7 @@ namespace Terra.Studio
         {
             var json = data.data;
             var component = JsonConvert.DeserializeObject<CheckpointComponent>(json);
-            PlaySFX.data.canPlay = component.canPlaySFX;
-            PlaySFX.data.clipName = component.sfxName;
-            PlaySFX.data.clipIndex = component.sfxIndex;
-            PlayVFX.data.canPlay = component.canPlayVFX;
-            PlayVFX.data.clipName = component.vfxName;
-            PlayVFX.data.clipIndex = component.vfxIndex;
+            MapSFXAndVFXData(component.FXData);
             broadcastData.broadcast = component.Broadcast;
             ImportVisualisation(broadcastData.broadcast, null);
         }

@@ -9,7 +9,6 @@ namespace Terra.Studio
         public Atom.PlaySfx PlaySFX = new();
         public Atom.PlayVfx PlayVFX = new();
         public Atom.Broadcast broadcastData = new();
-        //public bool executeMultipleTimes = true;
 
         public override string ComponentName => nameof(Click);
         public override bool CanPreview => true;
@@ -18,6 +17,14 @@ namespace Terra.Studio
         protected override string[] BroadcasterRefs => new string[]
         {
             broadcastData.broadcast
+        };
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
+        {
+            PlaySFX
+        };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
+        {
+            PlayVFX
         };
 
         protected override void Awake()
@@ -32,18 +39,13 @@ namespace Terra.Studio
         {
             var data = new ClickComponent()
             {
-                canPlaySFX = PlaySFX.data.canPlay,
-                sfxName = PlaySFX.data.clipName,
-                sfxIndex = PlaySFX.data.clipIndex,
-                canPlayVFX = PlayVFX.data.canPlay,
-                vfxName = PlayVFX.data.clipName,
-                vfxIndex = PlayVFX.data.clipIndex,
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
                 Broadcast = broadcastData.broadcast,
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.MouseAction",
                 ConditionData = "OnClick",
-                listen = Listen.Always
+                Listen = Listen.Always,
+                FXData = GetFXData()
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var json = JsonConvert.SerializeObject(data);
@@ -53,14 +55,8 @@ namespace Terra.Studio
         public override void Import(EntityBasedComponent data)
         {
             var obj = JsonConvert.DeserializeObject<ClickComponent>(data.data);
-            PlaySFX.data.canPlay = obj.canPlaySFX;
-            PlaySFX.data.clipName = obj.sfxName;
-            PlaySFX.data.clipIndex = obj.sfxIndex;
-            PlayVFX.data.canPlay = obj.canPlayVFX;
-            PlayVFX.data.clipName = obj.vfxName;
-            PlayVFX.data.clipIndex = obj.vfxIndex;
+            MapSFXAndVFXData(obj.FXData);
             broadcastData.broadcast = obj.Broadcast;
-            //executeMultipleTimes = obj.listen == Listen.Always;
             ImportVisualisation(broadcastData.broadcast, null);
         }
 

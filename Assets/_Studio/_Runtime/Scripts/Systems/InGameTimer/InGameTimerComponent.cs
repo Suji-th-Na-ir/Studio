@@ -14,10 +14,13 @@ namespace Terra.Studio
         public string Broadcast { get; set; }
         public bool IsTargeted { get; set; }
         public int TargetId { get; set; }
-        [JsonIgnore] public bool CanExecute { get; set; }
-        [JsonIgnore] public bool IsExecuted { get; set; }
+        public FXData FXData { get; set; }
+        public Listen Listen { get; set; }
         public EventContext EventContext { get; set; }
         public GameObject RefObj { get; set; }
+        [JsonIgnore] public bool CanExecute { get; set; }
+        [JsonIgnore] public bool IsExecuted { get; set; }
+
         public uint totalTime;
         public TimerType timerType;
     }

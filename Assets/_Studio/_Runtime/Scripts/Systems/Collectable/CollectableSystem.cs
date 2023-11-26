@@ -1,12 +1,10 @@
-using Leopotam.EcsLite;
-
 namespace Terra.Studio
 {
-    public class CollectableSystem : BaseSystem
+    public class CollectableSystem : BaseSystem<CollectableComponent>
     {
-        public override void Init<T>(int entity)
+        public override void Init(int entity)
         {
-            base.Init<T>(entity);
+            base.Init(entity);
             ref var collectable = ref entity.GetComponent<CollectableComponent>();
             if (collectable.canUpdateScore)
             {
@@ -14,50 +12,22 @@ namespace Terra.Studio
             }
         }
 
-        public override void OnConditionalCheck(int entity, object data)
+        protected override void OnConditionalCheck(int entity, object data)
         {
+            base.OnConditionalCheck(entity, data);
             ref var entityRef = ref entity.GetComponent<CollectableComponent>();
-            var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(false, entityRef.EventContext);
-            entityRef.IsExecuted = true;
             OnDemandRun(entityRef, entity);
         }
 
         public void OnDemandRun(in CollectableComponent component, int entityID)
         {
-            if (component.canPlaySFX)
-            {
-                RuntimeWrappers.PlaySFX(component.sfxName);
-            }
-            if (component.canPlayVFX)
-            {
-                RuntimeWrappers.PlayVFX(component.vfxName, component.RefObj.transform.position);
-            }
-            if (component.IsBroadcastable)
-            {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast);
-            }
             if (component.canUpdateScore)
             {
-                RuntimeWrappers.AddScore(component.scoreValue);
+                RuntimeOp.Resolve<ScoreHandler>().AddScore(component.scoreValue);
             }
-            EntityAuthorOp.Degenerate(entityID);
-        }
-
-        public override void OnHaltRequested(EcsWorld currentWorld)
-        {
-            var filter = currentWorld.Filter<CollectableComponent>().End();
-            var collectablePool = currentWorld.GetPool<CollectableComponent>();
-            var compsData = RuntimeOp.Resolve<ComponentsData>();
-            foreach (var entity in filter)
-            {
-                var collectable = collectablePool.Get(entity);
-                if (collectable.IsExecuted)
-                {
-                    continue;
-                }
-                compsData.ProvideEventContext(false, collectable.EventContext);
-            }
+            PlayFXIfExists(component, 0);
+            Broadcast(component);
+            DeleteEntity(entityID);
         }
     }
 }

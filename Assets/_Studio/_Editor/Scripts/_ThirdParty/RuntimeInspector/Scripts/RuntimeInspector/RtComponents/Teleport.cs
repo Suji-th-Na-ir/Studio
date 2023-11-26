@@ -12,8 +12,6 @@ namespace Terra.Studio
         public Atom.PlaySfx playSFX = new();
         public Atom.PlayVfx playVFX = new();
         public Atom.Broadcast broadcastData = new();
-        //[AliasDrawer("Do\nAlways")]
-        //public bool executeMultipleTimes = true;
 
         public override string ComponentName => nameof(Teleport);
         public override bool CanPreview => true;
@@ -23,6 +21,14 @@ namespace Terra.Studio
         protected override string[] BroadcasterRefs => new string[]
         {
             broadcastData.broadcast
+        };
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
+        {
+            playSFX
+        };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
+        {
+            playVFX
         };
 
         protected override void Awake()
@@ -55,7 +61,7 @@ namespace Terra.Studio
                 },
                 ToggleRecordMode = () =>
                 {
-                    EditorOp.Resolve<Recorder>().TrackPosition_Multiselect(this,true);
+                    EditorOp.Resolve<Recorder>().TrackPosition_Multiselect(this, true);
                 },
                 ShowSelectionGhost = () =>
                 {
@@ -89,18 +95,13 @@ namespace Terra.Studio
             var data = new TeleportComponent()
             {
                 teleportTo = (Vector3)teleportTo.Get(),
-                canPlaySFX = playSFX.data.canPlay,
-                sfxName = playSFX.data.clipName,
-                sfxIndex = playSFX.data.clipIndex,
-                canPlayVFX = playVFX.data.canPlay,
-                vfxName = playVFX.data.clipName,
-                vfxIndex = playVFX.data.clipIndex,
+                FXData = GetFXData(),
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
                 Broadcast = broadcastData.broadcast,
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.TriggerAction",
                 ConditionData = "Player",
-                listen = Listen.Always
+                Listen = Listen.Always
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var json = JsonConvert.SerializeObject(data);
@@ -111,12 +112,7 @@ namespace Terra.Studio
         {
             var obj = JsonConvert.DeserializeObject<TeleportComponent>(data.data);
             teleportTo.Set(obj.teleportTo);
-            playSFX.data.canPlay = obj.canPlaySFX;
-            playSFX.data.clipName = obj.sfxName;
-            playSFX.data.clipIndex = obj.sfxIndex;
-            playVFX.data.canPlay = obj.canPlayVFX;
-            playVFX.data.clipName = obj.vfxName;
-            playVFX.data.clipIndex = obj.vfxIndex;
+            MapSFXAndVFXData(obj.FXData);
             broadcastData.broadcast = obj.Broadcast;
             ImportVisualisation(broadcastData.broadcast, null);
         }

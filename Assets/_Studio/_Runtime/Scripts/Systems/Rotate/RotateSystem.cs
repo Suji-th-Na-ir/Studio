@@ -4,24 +4,22 @@ using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
-    public class RotateSystem : BaseSystem, IEcsRunSystem
+    public class RotateSystem : BaseSystem<RotateComponent>, IEcsRunSystem
     {
-        public override void Init<T>(int entity)
+        public override void Init(int entity)
         {
-            base.Init<T>(entity);
+            base.Init(entity);
             ref var entityRef = ref entity.GetComponent<RotateComponent>();
             var rb = entityRef.RefObj.AddRigidbody();
             rb.isKinematic = true;
             rb.useGravity = false;
         }
 
-        public override void OnConditionalCheck(int entity, object data)
+        protected override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref entity.GetComponent<RotateComponent>();
             Init(ref entityRef);
-            var compsData = RuntimeOp.Resolve<ComponentsData>();
-            compsData.ProvideEventContext(false, entityRef.EventContext);
-            OnDemandRun(in entityRef);
+            PlayFXIfExists(entityRef, 0);
         }
 
         private void Init(ref RotateComponent entityRef)
@@ -88,18 +86,6 @@ namespace Terra.Studio
         {
             entityRef.startRotation = entityRef.RefObj.transform.eulerAngles;
             entityRef.trueRotateTarget = entityRef.RefObj.transform.eulerAngles + entityRef.rotateTo;
-        }
-
-        public void OnDemandRun(in RotateComponent rotatable)
-        {
-            if (rotatable.canPlaySFX)
-            {
-                RuntimeWrappers.PlaySFX(rotatable.sfxName);
-            }
-            if (rotatable.canPlayVFX)
-            {
-                RuntimeWrappers.PlayVFX(rotatable.vfxName, rotatable.RefObj.transform.position);
-            }
         }
 
         public void Run(IEcsSystems systems)
@@ -179,7 +165,7 @@ namespace Terra.Studio
             }
             if (totalEntitiesFinishedJob == filter.GetEntitiesCount())
             {
-                RuntimeOp.Resolve<RuntimeSystem>().RemoveRunningInstance(this);
+                RemoveRunningInstance();
             }
         }
 
@@ -197,7 +183,7 @@ namespace Terra.Studio
                     RuntimeOp.Resolve<Broadcaster>().Broadcast(rotatable.Broadcast);
                 }
             }
-            if (rotatable.listen == Listen.Always && !rotatable.ConditionType.Equals("Terra.Studio.GameStart") && isDone)
+            if (rotatable.Listen == Listen.Always && !rotatable.ConditionType.Equals("Terra.Studio.GameStart") && isDone)
             {
                 rotatable.IsExecuted = false;
                 rotatable.CanExecute = false;

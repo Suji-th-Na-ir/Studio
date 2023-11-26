@@ -8,36 +8,6 @@ namespace Terra.Studio
     [Serializable]
     public struct InstantiateStudioObjectComponent : IBaseComponent
     {
-        [Serializable]
-        public struct TRS
-        {
-            [JsonConverter(typeof(Vector3Converter))] public Vector3 Position;
-            [JsonConverter(typeof(Vector3Converter))] public Vector3 Rotation;
-            [JsonConverter(typeof(Vector3Converter))] public Vector3 Scale;
-
-            public static TRS GetTRS(Vector3[] trs)
-            {
-                var trsData = new TRS()
-                {
-                    Position = trs[0],
-                    Rotation = trs[1],
-                    Scale = trs[2],
-                };
-                return trsData;
-            }
-
-            public static Vector3[] GetVector3Array(TRS trs)
-            {
-                var vector3s = new Vector3[]
-                {
-                    trs.Position,
-                    trs.Rotation,
-                    trs.Scale
-                };
-                return vector3s;
-            }
-        }
-
         public bool IsConditionAvailable { get; set; }
         public string ConditionType { get; set; }
         public string ConditionData { get; set; }
@@ -45,17 +15,13 @@ namespace Terra.Studio
         public string Broadcast { get; set; }
         public bool IsTargeted { get; set; }
         public int TargetId { get; set; }
+        public FXData FXData { get; set; }
+        public Listen Listen { get; set; }
         [JsonIgnore] public bool CanExecute { get; set; }
         [JsonIgnore] public bool IsExecuted { get; set; }
         [JsonIgnore] public EventContext EventContext { get; set; }
         [JsonIgnore] public GameObject RefObj { get; set; }
 
-        public bool canPlaySFX;
-        public string sfxName;
-        public int sfxIndex;
-        public bool canPlayVFX;
-        public string vfxName;
-        public int vfxIndex;
         public float interval;
         public uint rounds;
         public bool canRepeatForver;
@@ -87,6 +53,35 @@ namespace Terra.Studio
                 points[i] = new Vector3(randomX, randomY, randomZ);
             }
             return points;
+        }
+        [Serializable]
+        public struct TRS
+        {
+            [JsonConverter(typeof(Vector3Converter))] public Vector3 Position;
+            [JsonConverter(typeof(Vector3Converter))] public Vector3 Rotation;
+            [JsonConverter(typeof(Vector3Converter))] public Vector3 Scale;
+
+            public static TRS GetTRS(Vector3[] trs)
+            {
+                var trsData = new TRS()
+                {
+                    Position = trs[0],
+                    Rotation = trs[1],
+                    Scale = trs[2],
+                };
+                return trsData;
+            }
+
+            public static Vector3[] GetVector3Array(TRS trs)
+            {
+                var vector3s = new Vector3[]
+                {
+                    trs.Position,
+                    trs.Rotation,
+                    trs.Scale
+                };
+                return vector3s;
+            }
         }
     }
 }

@@ -2,46 +2,21 @@ using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
-    public class RespawnSystem : BaseSystem
+    public class RespawnSystem : BaseSystem<RespawnComponent>
     {
-        public override void OnConditionalCheck(int entity, object data)
+        protected override void OnConditionalCheck(int entity, object data)
         {
+            base.OnConditionalCheck(entity, data);
             ref var entityRef = ref entity.GetComponent<RespawnComponent>();
             OnDemandRun(in entityRef);
         }
 
         public void OnDemandRun(in RespawnComponent component)
         {
-            if (component.canPlaySFX)
-            {
-                RuntimeWrappers.PlaySFX(component.sfxName);
-            }
-            if (component.canPlayVFX)
-            {
-                RuntimeWrappers.PlaySFX(component.vfxName);
-            }
-            if (component.IsBroadcastable)
-            {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast);
-            }
+            PlayFXIfExists(component, 0);
+            Broadcast(component);
             var respawnPoint = RuntimeOp.Resolve<GameData>().RespawnPoint;
             RuntimeOp.Resolve<GameData>().SetPlayerPosition(respawnPoint);
-        }
-
-        public override void OnHaltRequested(EcsWorld currentWorld)
-        {
-            var filter = currentWorld.Filter<RespawnComponent>().End();
-            var respawnPool = currentWorld.GetPool<RespawnComponent>();
-            var compsData = RuntimeOp.Resolve<ComponentsData>();
-            foreach (var entity in filter)
-            {
-                var respawn = respawnPool.Get(entity);
-                if (respawn.IsExecuted)
-                {
-                    continue;
-                }
-                compsData.ProvideEventContext(false, respawn.EventContext);
-            }
         }
     }
 }

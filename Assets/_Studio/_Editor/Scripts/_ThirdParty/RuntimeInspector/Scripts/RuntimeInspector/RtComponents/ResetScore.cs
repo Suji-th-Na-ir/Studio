@@ -17,11 +17,11 @@ namespace Terra.Studio
             [EditorEnumField("Terra.Studio.Listener"), AliasDrawer("Broadcast Listened")]
             BroadcastListen
         }
+
         [AliasDrawer("Update When")]
         public Atom.StartOn startOn = new();
         public Atom.Broadcast broadcastData = new();
-
-        private Atom.ScoreData score= new();//Bypassing the logic of spawing gamescore based on components
+        private Atom.ScoreData score = new();//Bypassing the logic of spawing gamescore based on components
 
         public override string ComponentName => nameof(UpdateScore);
         public override bool CanPreview => false;
@@ -50,7 +50,7 @@ namespace Terra.Studio
                 ConditionData = GetStartCondition(),
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
                 Broadcast = broadcastData.broadcast,
-                listen = Listen.Always
+                Listen = Listen.Always
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var json = JsonConvert.SerializeObject(data);
@@ -93,7 +93,7 @@ namespace Terra.Studio
         protected override void OnEnable()
         {
             base.OnEnable();
-                EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(true, score.instanceId);
+            EditorOp.Resolve<SceneDataHandler>()?.UpdateScoreModifiersCount(true, score.instanceId);
         }
 
         protected override void OnDisable()

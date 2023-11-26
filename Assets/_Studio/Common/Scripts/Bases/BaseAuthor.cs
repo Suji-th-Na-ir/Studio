@@ -9,7 +9,7 @@ namespace Terra.Studio
 
         public virtual void Generate(object data) { }
 
-        public virtual void Degenerate(int entityID) { }
+        public virtual void Degenerate<T>(int entityID) where T : struct, IBaseComponent { }
 
         protected struct ComponentGenerateData
         {

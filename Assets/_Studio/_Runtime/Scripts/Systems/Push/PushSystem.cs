@@ -1,18 +1,17 @@
 using UnityEngine;
 using UnityEngine.UI;
 using PlayShifu.Terra;
-using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
-    public class PushSystem : BaseSystem
+    public class PushSystem : BaseSystem<PushComponent>
     {
         private const string RESET_GO_RESOURCE_NAME = "ResetParent";
         private GameObject resetPrefabObj;
 
-        public override void Init<T>(int entity)
+        public override void Init(int entity)
         {
-            base.Init<T>(entity);
+            base.Init(entity);
             ref var entityRef = ref entity.GetComponent<PushComponent>();
             var rb = entityRef.RefObj.AddRigidbody();
             rb.mass = entityRef.mass;
@@ -32,7 +31,7 @@ namespace Terra.Studio
             resetPrefabObj = RuntimeOp.Load<GameObject>(itemData.ResourcePath);
         }
 
-        public override void OnConditionalCheck(int entity, object data)
+        protected override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref entity.GetComponent<PushComponent>();
             if (data == null)
@@ -44,12 +43,6 @@ namespace Terra.Studio
             if (!isValid)
             {
                 return;
-            }
-            if (entityRef.listen != Listen.Always)
-            {
-                var compsData = RuntimeOp.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(false, entityRef.EventContext);
-                entityRef.IsExecuted = true;
             }
             OnDemandRun(in entityRef, entity);
         }
@@ -80,18 +73,8 @@ namespace Terra.Studio
 
         public void OnDemandRun(in PushComponent component, int entity)
         {
-            if (component.canPlaySFX)
-            {
-                RuntimeWrappers.PlaySFX(component.sfxName);
-            }
-            if (component.canPlayVFX)
-            {
-                RuntimeWrappers.PlayVFX(component.vfxName, component.RefObj.transform.position);
-            }
-            if (component.IsBroadcastable)
-            {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast);
-            }
+            PlayFXIfExists(component, 0);
+            Broadcast(component);
             LoadUI(component, entity);
         }
 
@@ -107,22 +90,6 @@ namespace Terra.Studio
             var newPos = component.initialPosition;
             btn.onClick.RemoveAllListeners();
             btn.onClick.AddListener(() => { refTr.position = newPos; });
-        }
-
-        public override void OnHaltRequested(EcsWorld currentWorld)
-        {
-            var filter = currentWorld.Filter<PushComponent>().End();
-            var compPool = currentWorld.GetPool<PushComponent>();
-            foreach (var entity in filter)
-            {
-                var component = compPool.Get(entity);
-                if (component.IsExecuted)
-                {
-                    continue;
-                }
-                var compsData = RuntimeOp.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(false, component.EventContext);
-            }
         }
     }
 }

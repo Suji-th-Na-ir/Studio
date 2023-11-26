@@ -18,13 +18,8 @@ namespace Terra.Studio
         [JsonIgnore] public bool IsExecuted { get; set; }
         [JsonIgnore] public EventContext EventContext { get; set; }
         [JsonIgnore] public GameObject RefObj { get; set; }
-
-        public bool canPlaySFX;
-        public string sfxName;
-        public int sfxIndex;
-        public bool canPlayVFX;
-        public string vfxName;
-        public int vfxIndex;
+        public FXData FXData { get; set; }
+        public Listen Listen { get; set; }
         public int updateBy;
     }
 }

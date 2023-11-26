@@ -19,6 +19,14 @@ namespace Terra.Studio
         {
             broadcastData.broadcast
         };
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
+        {
+            PlaySFX
+        };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
+        {
+            PlayVFX
+        };
 
         protected override void Awake()
         {
@@ -37,12 +45,8 @@ namespace Terra.Studio
                 comp.ConditionData = "Player";
                 comp.IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast);
                 comp.Broadcast = broadcastData.broadcast;
-                comp.canPlaySFX = PlaySFX.data.canPlay;
-                comp.canPlayVFX = PlayVFX.data.canPlay;
-                comp.sfxName = PlaySFX.data.clipName;
-                comp.vfxName = PlayVFX.data.clipName;
-                comp.sfxIndex = PlaySFX.data.clipIndex;
-                comp.vfxIndex = PlayVFX.data.clipIndex;
+                comp.FXData = GetFXData();
+                comp.Listen = Listen.Always;
             }
             gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -54,12 +58,7 @@ namespace Terra.Studio
         {
             RespawnComponent comp = JsonConvert.DeserializeObject<RespawnComponent>(data.data);
             broadcastData.broadcast = comp.Broadcast;
-            PlaySFX.data.canPlay = comp.canPlaySFX;
-            PlaySFX.data.clipIndex = comp.sfxIndex;
-            PlaySFX.data.clipName = comp.sfxName;
-            PlayVFX.data.canPlay = comp.canPlayVFX;
-            PlayVFX.data.clipIndex = comp.vfxIndex;
-            PlayVFX.data.clipName = comp.vfxName;
+            MapSFXAndVFXData(comp.FXData);
             ImportVisualisation(broadcastData.broadcast, null);
         }
 

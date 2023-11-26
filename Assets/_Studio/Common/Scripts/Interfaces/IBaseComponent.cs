@@ -15,7 +15,9 @@ namespace Terra.Studio
         public bool IsTargeted { get; set; }
         public int TargetId { get; set; }
         public EventContext EventContext { get; set; }
+        public FXData FXData { get; set; }
         public GameObject RefObj { get; set; }
+        public Listen Listen { get; set; }
 
         public virtual void Clone<T>(T actualData, ref T targetData, GameObject go) where T : struct, IBaseComponent
         {
@@ -28,6 +30,8 @@ namespace Terra.Studio
             targetData.IsTargeted = actualData.IsTargeted;
             targetData.TargetId = actualData.TargetId;
             targetData.EventContext = actualData.EventContext;
+            targetData.FXData = actualData.FXData;
+            targetData.Listen = actualData.Listen;
             targetData.RefObj = go;
             targetData.EventContext = new()
             {
@@ -36,6 +40,26 @@ namespace Terra.Studio
                 conditionData = targetData.ConditionData,
                 goRef = targetData.RefObj
             };
+        }
+
+        public virtual PlayFXData? GetSFXData(int index)
+        {
+            var sfxArray = FXData.SFXData;
+            if (sfxArray == null || sfxArray.Length == 0 || sfxArray.Length < index)
+            {
+                return null;
+            }
+            return sfxArray[index];
+        }
+
+        public virtual PlayFXData? GetVFXData(int index)
+        {
+            var vfxArray = FXData.VFXData;
+            if (vfxArray == null || vfxArray.Length == 0 || vfxArray.Length < index)
+            {
+                return null;
+            }
+            return vfxArray[index];
         }
     }
 }

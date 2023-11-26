@@ -1,6 +1,6 @@
+using UnityEngine;
 using PlayShifu.Terra;
 using Newtonsoft.Json;
-using UnityEngine;
 
 namespace Terra.Studio
 {
@@ -36,15 +36,23 @@ namespace Terra.Studio
             broadcastDataHit.broadcast,
             broadcastDataDead.broadcast
         };
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
+        {
+            PlaySFXHit,
+            PlaySFXDead
+        };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
+        {
+            PlayVFXHit,
+            PlayVFXDead
+        };
 
         protected override void Awake()
         {
             base.Awake();
-
             broadcastDataHit.Setup(gameObject, this);
             PlaySFXHit.Setup<MeleeDamageable>(gameObject);
             PlayVFXHit.Setup<MeleeDamageable>(gameObject);
-
             broadcastDataDead.Setup(gameObject, this);
             PlaySFXDead.Setup<MeleeDamageable>(gameObject);
             PlayVFXDead.Setup<MeleeDamageable>(gameObject);
@@ -58,21 +66,9 @@ namespace Terra.Studio
                 health = Health,
                 ConditionType = "Terra.Studio.TriggerAction",
                 ConditionData = "Any",
-                canPlaySFXHit = PlaySFXHit.data.canPlay,
-                canPlayVFXHit = PlayVFXHit.data.canPlay,
-                sfxNameHit = Helper.GetSfxClipNameByIndex(PlaySFXHit.data.clipIndex),
-                vfxNameHit = Helper.GetVfxClipNameByIndex(PlayVFXHit.data.clipIndex),
-                sfxIndexHit = PlaySFXHit.data.clipIndex,
-                vfxIndexHit = PlayVFXHit.data.clipIndex,
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastDataHit.broadcast),
                 Broadcast = broadcastDataHit.broadcast,
-
-                canPlaySFXDead = PlaySFXDead.data.canPlay,
-                canPlayVFXDead = PlayVFXDead.data.canPlay,
-                sfxNameDead = Helper.GetSfxClipNameByIndex(PlaySFXDead.data.clipIndex),
-                vfxNameDead = Helper.GetVfxClipNameByIndex(PlayVFXDead.data.clipIndex),
-                sfxIndexDead = PlaySFXDead.data.clipIndex,
-                vfxIndexDead = PlayVFXDead.data.clipIndex,
+                FXData = GetFXData(),
                 IsBroadcastableDead = !string.IsNullOrEmpty(broadcastDataDead.broadcast),
                 BroadcastDead = broadcastDataDead.broadcast,
             };
@@ -86,18 +82,7 @@ namespace Terra.Studio
         {
             MeleeDamageableComponent comp = JsonConvert.DeserializeObject<MeleeDamageableComponent>(data.data);
             Health = comp.health;
-            PlaySFXHit.data.canPlay = comp.canPlaySFXHit;
-            PlayVFXHit.data.canPlay = comp.canPlayVFXHit;
-            PlaySFXHit.data.clipIndex = comp.sfxIndexHit;
-            PlayVFXHit.data.clipIndex = comp.vfxIndexHit;
-            PlaySFXHit.data.clipName = comp.sfxNameHit;
-            PlayVFXHit.data.clipName = comp.vfxNameHit;
-            PlaySFXDead.data.canPlay = comp.canPlaySFXDead;
-            PlayVFXDead.data.canPlay = comp.canPlayVFXDead;
-            PlaySFXDead.data.clipIndex = comp.sfxIndexDead;
-            PlayVFXDead.data.clipIndex = comp.vfxIndexDead;
-            PlaySFXDead.data.clipName = comp.sfxNameDead;
-            PlayVFXDead.data.clipName = comp.vfxNameDead;
+            MapSFXAndVFXData(comp.FXData);
             broadcastDataHit.broadcast = comp.Broadcast;
             broadcastDataDead.broadcast = comp.BroadcastDead;
             ImportVisualisation(broadcastDataHit.broadcast, string.Empty);

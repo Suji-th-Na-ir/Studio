@@ -30,6 +30,14 @@ namespace Terra.Studio
         {
             broadcastData.broadcast
         };
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
+        {
+            PlaySFX
+        };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
+        {
+            PlayVFX
+        };
 
         protected override void Awake()
         {
@@ -37,7 +45,7 @@ namespace Terra.Studio
             StartOn.Setup<StartOnCollectible>(gameObject, ComponentName);
             PlaySFX.Setup<Collectible>(gameObject);
             PlayVFX.Setup<Collectible>(gameObject);
-            Score.Setup(gameObject,this);
+            Score.Setup(gameObject, this);
             broadcastData.Setup(gameObject, this);
         }
 
@@ -50,14 +58,10 @@ namespace Terra.Studio
                 comp.ConditionData = GetStartCondition();
                 comp.IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast);
                 comp.Broadcast = broadcastData.broadcast;
-                comp.canPlaySFX = PlaySFX.data.canPlay;
-                comp.canPlayVFX = PlayVFX.data.canPlay;
-                comp.sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName;
-                comp.vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName;
-                comp.sfxIndex = PlaySFX.data.clipIndex;
-                comp.vfxIndex = PlayVFX.data.clipIndex;
+                comp.FXData = GetFXData();
                 comp.canUpdateScore = Score.score != 0;
                 comp.scoreValue = Score.score;
+                comp.Listen = Listen.Once;
             }
             gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -84,12 +88,7 @@ namespace Terra.Studio
         {
             CollectableComponent comp = JsonConvert.DeserializeObject<CollectableComponent>(cdata.data);
             Score.score = comp.scoreValue;
-            PlaySFX.data.canPlay = comp.canPlaySFX;
-            PlaySFX.data.clipIndex = comp.sfxIndex;
-            PlaySFX.data.clipName = comp.sfxName;
-            PlayVFX.data.canPlay = comp.canPlayVFX;
-            PlayVFX.data.clipIndex = comp.vfxIndex;
-            PlayVFX.data.clipName = comp.vfxName;
+            MapSFXAndVFXData(comp.FXData);
             if (EditorOp.Resolve<DataProvider>().TryGetEnum(comp.ConditionType, typeof(StartOnCollectible), out object result))
             {
                 StartOn.data.startIndex = (int)(StartOnCollectible)result;

@@ -37,6 +37,16 @@ namespace Terra.Studio
             broadcastWhenOnData.broadcast,
             broadcastWhenOffData.broadcast
         };
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
+        {
+            playSFXWhenOn,
+            playSFXWhenOff
+        };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
+        {
+            playVFXWhenOn,
+            playVFXWhenOff
+        };
 
         protected override void Awake()
         {
@@ -57,9 +67,10 @@ namespace Terra.Studio
                 ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(switchWhen),
                 ConditionData = EditorOp.Resolve<DataProvider>().GetEnumConditionDataValue(switchWhen),
                 currentState = defaultState,
-                onStateData = GetSwitchComponentData(SwitchState.On, playSFXWhenOn.data, playVFXWhenOn.data, broadcastWhenOnData.broadcast),
-                offStateData = GetSwitchComponentData(SwitchState.Off, playSFXWhenOff.data, playVFXWhenOff.data, broadcastWhenOffData.broadcast),
-                listen = Listen.Always
+                onStateData = GetSwitchComponentData(SwitchState.On, broadcastWhenOnData.broadcast),
+                offStateData = GetSwitchComponentData(SwitchState.Off, broadcastWhenOffData.broadcast),
+                Listen = Listen.Always,
+                FXData = GetFXData()
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var json = JsonConvert.SerializeObject(data);
@@ -73,25 +84,16 @@ namespace Terra.Studio
             switchWhen = GetStartOn(component.ConditionType, component.ConditionData);
             broadcastWhenOnData.broadcast = GetBroadcastData(component.onStateData);
             broadcastWhenOffData.broadcast = GetBroadcastData(component.offStateData);
-            playSFXWhenOn.data = GetPlaySFXData(component.onStateData);
-            playSFXWhenOff.data = GetPlaySFXData(component.offStateData);
-            playVFXWhenOn.data = GetPlayVFXData(component.onStateData);
-            playVFXWhenOff.data = GetPlayVFXData(component.offStateData);
+            MapSFXAndVFXData(component.FXData);
             ImportVisualisation(broadcastWhenOnData.broadcast, null);
             ImportVisualisation(broadcastWhenOffData.broadcast, null);
         }
 
-        private SwitchComponentData GetSwitchComponentData(SwitchState state, PlayFXData playSFXData, PlayFXData playVFXData, string broadcast)
+        private SwitchComponentData GetSwitchComponentData(SwitchState state, string broadcast)
         {
             return new SwitchComponentData()
             {
                 state = state,
-                canPlaySFX = playSFXData.canPlay,
-                sfxName = playSFXData.clipName,
-                sfxIndex = playSFXData.clipIndex,
-                canPlayVFX = playVFXData.canPlay,
-                vfxName = playVFXData.clipName,
-                vfxIndex = playVFXData.clipIndex,
                 isBroadcastable = !string.IsNullOrEmpty(broadcast),
                 broadcast = broadcast
             };
@@ -100,26 +102,6 @@ namespace Terra.Studio
         private string GetBroadcastData(SwitchComponentData data)
         {
             return data.broadcast;
-        }
-
-        private PlayFXData GetPlaySFXData(SwitchComponentData data)
-        {
-            return new PlayFXData()
-            {
-                canPlay = data.canPlaySFX,
-                clipIndex = data.sfxIndex,
-                clipName = data.sfxName
-            };
-        }
-
-        private PlayFXData GetPlayVFXData(SwitchComponentData data)
-        {
-            return new PlayFXData()
-            {
-                canPlay = data.canPlayVFX,
-                clipIndex = data.vfxIndex,
-                clipName = data.vfxName
-            };
         }
 
         private StartOn GetStartOn(string type, string data)

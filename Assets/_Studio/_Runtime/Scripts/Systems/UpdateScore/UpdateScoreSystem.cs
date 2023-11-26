@@ -1,12 +1,10 @@
-using Leopotam.EcsLite;
-
 namespace Terra.Studio
 {
-    public class UpdateScoreSystem : BaseSystem
+    public class UpdateScoreSystem : BaseSystem<UpdateScoreComponent>
     {
-        public override void Init<T>(int entity)
+        public override void Init(int entity)
         {
-            base.Init<T>(entity);
+            base.Init(entity);
             ref var entityRef = ref entity.GetComponent<UpdateScoreComponent>();
             if (entityRef.AddScoreValue > 0)
             {
@@ -14,42 +12,20 @@ namespace Terra.Studio
             }
         }
 
-        public override void OnConditionalCheck(int entity, object data)
+        protected override void OnConditionalCheck(int entity, object data)
         {
+            base.OnConditionalCheck(entity, data);
             ref var entityRef = ref entity.GetComponent<UpdateScoreComponent>();
-            if (entityRef.listen != Listen.Always)
-            {
-                var compsData = RuntimeOp.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(false, entityRef.EventContext);
-                entityRef.IsExecuted = true;
-            }
             OnDemandRun(in entityRef);
         }
 
         public void OnDemandRun(in UpdateScoreComponent component)
         {
             if (component.AddScoreValue != 0)
+            {
                 RuntimeOp.Resolve<ScoreHandler>().AddScore(component.AddScoreValue);
-            if (component.IsBroadcastable)
-            {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast);
             }
-        }
-
-        public override void OnHaltRequested(EcsWorld currentWorld)
-        {
-            var filter = currentWorld.Filter<UpdateScoreComponent>().End();
-            var compPool = currentWorld.GetPool<UpdateScoreComponent>();
-            foreach (var entity in filter)
-            {
-                var component = compPool.Get(entity);
-                if (component.IsExecuted)
-                {
-                    continue;
-                }
-                var compsData = RuntimeOp.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(false, component.EventContext);
-            }
+            Broadcast(component);
         }
     }
 }

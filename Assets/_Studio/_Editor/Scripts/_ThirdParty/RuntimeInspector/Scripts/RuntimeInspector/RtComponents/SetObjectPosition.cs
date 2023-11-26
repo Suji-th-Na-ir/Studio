@@ -42,6 +42,14 @@ namespace Terra.Studio
         {
             startOn.data.listenName
         };
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
+        {
+            playSFX
+        };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
+        {
+            playVFX
+        };
 
         protected override void Awake()
         {
@@ -66,7 +74,7 @@ namespace Terra.Studio
                 },
                 ToggleRecordMode = () =>
                 {
-                    EditorOp.Resolve<Recorder>().TrackPosition_Multiselect(this,true);
+                    EditorOp.Resolve<Recorder>().TrackPosition_Multiselect(this, true);
                 },
                 ShowSelectionGhost = () =>
                 {
@@ -112,13 +120,9 @@ namespace Terra.Studio
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
                 Broadcast = broadcastData.broadcast,
                 targetPosition = (Vector3)GhostDescription.GetRecentValue.Invoke(),
-                startIndex = startOn.data.startIndex,
-                canPlaySFX = playSFX.data.canPlay,
-                sfxIndex = playSFX.data.clipIndex,
-                sfxName = playSFX.data.clipName,
-                canPlayVFX = playVFX.data.canPlay,
-                vfxIndex = playVFX.data.clipIndex,
-                vfxName = playVFX.data.clipName,
+                FXData = GetFXData(),
+                Listen = Listen.Always,
+                startIndex = startOn.data.startIndex
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var json = JsonConvert.SerializeObject(data);
@@ -156,7 +160,7 @@ namespace Terra.Studio
             broadcastData.broadcast = obj.Broadcast;
             targetPosition.Set(obj.targetPosition);
             AssignStartOnData(obj);
-            AssignSFXandVFXData(obj);
+            MapSFXAndVFXData(obj.FXData);
             var listenString = "";
             if (startOn.data.startIndex == 3)
             {
@@ -186,16 +190,6 @@ namespace Terra.Studio
             }
             startOn.data.startIndex = comp.startIndex;
             startOn.data.listenName = comp.ConditionData;
-        }
-
-        private void AssignSFXandVFXData(SetObjectPositionComponent comp)
-        {
-            playSFX.data.canPlay = comp.canPlaySFX;
-            playSFX.data.clipIndex = comp.sfxIndex;
-            playSFX.data.clipName = comp.sfxName;
-            playVFX.data.canPlay = comp.canPlayVFX;
-            playVFX.data.clipIndex = comp.vfxIndex;
-            playVFX.data.clipName = comp.vfxName;
         }
 
         private void SetLastValue()

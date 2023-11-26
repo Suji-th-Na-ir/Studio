@@ -20,6 +20,14 @@ namespace Terra.Studio
         {
            broadcastData.broadcast
         };
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
+        {
+            PlaySFX
+        };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
+        {
+            PlayVFX
+        };
 
         protected override void Awake()
         {
@@ -36,15 +44,10 @@ namespace Terra.Studio
                 IsConditionAvailable = true,
                 ConditionType = "Terra.Studio.TriggerAction",
                 ConditionData = "Any",
-                canPlaySFX = PlaySFX.data.canPlay,
-                sfxName = PlaySFX.data.clipName,
-                sfxIndex = PlaySFX.data.clipIndex,
-                canPlayVFX = PlayVFX.data.canPlay,
-                vfxName = PlayVFX.data.clipName,
-                vfxIndex = PlayVFX.data.clipIndex,
                 mass = resistance,
                 showResetButton = showResetButton,
-                listen = Listen.Always,
+                FXData = GetFXData(),
+                Listen = Listen.Always,
                 Broadcast = broadcastData.broadcast,
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast)
             };
@@ -58,12 +61,7 @@ namespace Terra.Studio
             var comp = JsonConvert.DeserializeObject<PushComponent>(data.data);
             resistance = comp.mass;
             showResetButton = comp.showResetButton;
-            PlaySFX.data.canPlay = comp.canPlaySFX;
-            PlaySFX.data.clipIndex = comp.sfxIndex;
-            PlaySFX.data.clipName = comp.sfxName;
-            PlayVFX.data.canPlay = comp.canPlayVFX;
-            PlayVFX.data.clipIndex = comp.vfxIndex;
-            PlayVFX.data.clipName = comp.vfxName;
+            MapSFXAndVFXData(comp.FXData);
             broadcastData.broadcast = comp.Broadcast;
             ImportVisualisation(broadcastData.broadcast, null);
         }

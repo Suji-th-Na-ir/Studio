@@ -32,6 +32,14 @@ namespace Terra.Studio
         {
             StartOn.data.listenName
         };
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
+        {
+            PlaySFX
+        };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
+        {
+            PlayVFX
+        };
 
         protected override void Awake()
         {
@@ -99,13 +107,8 @@ namespace Terra.Studio
                 broadcastAt = repeat.broadcastAt,
                 IsBroadcastable = !string.IsNullOrEmpty(repeat.broadcastData.broadcast),
                 Broadcast = string.IsNullOrEmpty(repeat.broadcastData.broadcast) ? null : repeat.broadcastData.broadcast,
-                canPlaySFX = PlaySFX.data.canPlay,
-                canPlayVFX = PlayVFX.data.canPlay,
-                sfxName = string.IsNullOrEmpty(PlaySFX.data.clipName) ? null : PlaySFX.data.clipName,
-                vfxName = string.IsNullOrEmpty(PlayVFX.data.clipName) ? null : PlayVFX.data.clipName,
-                sfxIndex = PlaySFX.data.clipIndex,
-                vfxIndex = PlayVFX.data.clipIndex,
-                listen = Listen.Always,
+                FXData = GetFXData(),
+                Listen = Listen.Always,
             };
             gameObject.TrySetTrigger(false, true);
             string type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
@@ -150,12 +153,7 @@ namespace Terra.Studio
         public override void Import(EntityBasedComponent cdata)
         {
             RotateComponent comp = JsonConvert.DeserializeObject<RotateComponent>(cdata.data);
-            PlaySFX.data.canPlay = comp.canPlaySFX;
-            PlaySFX.data.clipIndex = comp.sfxIndex;
-            PlaySFX.data.clipName = comp.sfxName;
-            PlayVFX.data.canPlay = comp.canPlayVFX;
-            PlayVFX.data.clipIndex = comp.vfxIndex;
-            PlayVFX.data.clipName = comp.vfxName;
+            MapSFXAndVFXData(comp.FXData);
             direction = comp.direction;
             speed = comp.speed;
             Type.vector3.Set(comp.rotateTo);

@@ -25,6 +25,14 @@ namespace Terra.Studio
         {
             instantiateData.spawnWhen.data.listenName
         };
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
+        {
+            playSFX
+        };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
+        {
+            playVFX
+        };
 
         protected override void Awake()
         {
@@ -82,12 +90,7 @@ namespace Terra.Studio
                 IsConditionAvailable = true,
                 ConditionType = EditorOp.Resolve<DataProvider>().GetEnumValue(instantiateData.instantiateOn),
                 ConditionData = GetCondition(),
-                canPlaySFX = playSFX.data.canPlay,
-                sfxIndex = playSFX.data.clipIndex,
-                sfxName = playSFX.data.clipName,
-                canPlayVFX = playVFX.data.canPlay,
-                vfxIndex = playVFX.data.clipIndex,
-                vfxName = playVFX.data.clipName,
+                FXData = GetFXData(),
                 childrenEntities = virtualEntities,
                 componentsOnSelf = components,
                 instantiateOn = instantiateData.instantiateOn,
@@ -97,7 +100,8 @@ namespace Terra.Studio
                 duplicatesToSpawn = instantiateData.howMany,
                 IsBroadcastable = !string.IsNullOrEmpty(broadcast.broadcast),
                 Broadcast = broadcast.broadcast,
-                trs = InstantiateStudioObjectComponent.TRS.GetTRS(instantiateData.trs)
+                trs = InstantiateStudioObjectComponent.TRS.GetTRS(instantiateData.trs),
+                Listen = Listen.Always
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp);
@@ -126,8 +130,7 @@ namespace Terra.Studio
 
         private void ImportComponentData(InstantiateStudioObjectComponent component)
         {
-            playSFX.Import(component.canPlaySFX, component.sfxIndex, component.sfxName);
-            playVFX.Import(component.canPlayVFX, component.vfxIndex, component.vfxName);
+            MapSFXAndVFXData(component.FXData);
             broadcast.Import(component.Broadcast);
             instantiateData.Import(component);
             ImportVisualisation(component.Broadcast, instantiateData.spawnWhen.data.listenName);

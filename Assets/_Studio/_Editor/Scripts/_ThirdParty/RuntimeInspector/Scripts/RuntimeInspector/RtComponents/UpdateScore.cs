@@ -35,8 +35,8 @@ namespace Terra.Studio
         protected override void Awake()
         {
             base.Awake();
-            Score.Setup(gameObject,this);
-            startOn.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated,startOn.data.startIndex==3);
+            Score.Setup(gameObject, this);
+            startOn.Setup<StartOn>(gameObject, ComponentName, OnListenerUpdated, startOn.data.startIndex == 3);
             broadcastData.Setup(gameObject, this);
         }
 
@@ -50,7 +50,7 @@ namespace Terra.Studio
                 AddScoreValue = Score.score,
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
                 Broadcast = broadcastData.broadcast,
-                listen = Listen.Always
+                Listen = Listen.Always
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var json = JsonConvert.SerializeObject(data);

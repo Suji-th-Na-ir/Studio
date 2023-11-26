@@ -4,24 +4,24 @@ using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
-    public class TranslateSystem : BaseSystem, IEcsRunSystem
+    public class TranslateSystem : BaseSystem<TranslateComponent>, IEcsRunSystem
     {
-        public override void Init<T>(int entity)
+        public override void Init(int entity)
         {
-            base.Init<T>(entity);
+            base.Init(entity);
             ref var entityRef = ref entity.GetComponent<TranslateComponent>();
             var rb = entityRef.RefObj.AddRigidbody();
             rb.isKinematic = true;
             rb.useGravity = false;
         }
 
-        public override void OnConditionalCheck(int entity, object data)
+        protected override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref entity.GetComponent<TranslateComponent>();
-            Init(ref entityRef);
             var compsData = RuntimeOp.Resolve<ComponentsData>();
             compsData.ProvideEventContext(false, entityRef.EventContext);
-            OnDemandRun(ref entityRef);
+            Init(ref entityRef);
+            PlayFXIfExists(entityRef, 0);
         }
 
         private void Init(ref TranslateComponent entityRef)
@@ -55,18 +55,6 @@ namespace Terra.Studio
             entityRef.remainingDistance = pauseDistance;
         }
 
-        public void OnDemandRun(ref TranslateComponent translatable)
-        {
-            if (translatable.canPlaySFX)
-            {
-                RuntimeWrappers.PlaySFX(translatable.sfxName);
-            }
-            if (translatable.canPlayVFX)
-            {
-                RuntimeWrappers.PlayVFX(translatable.vfxName, translatable.RefObj.transform.position);
-            }
-        }
-
         private void OnTranslateDone(bool isDone, int entity)
         {
             ref var translatable = ref entity.GetComponent<TranslateComponent>();
@@ -81,28 +69,12 @@ namespace Terra.Studio
                     RuntimeOp.Resolve<Broadcaster>().Broadcast(translatable.Broadcast);
                 }
             }
-            if (translatable.listen == Listen.Always && !translatable.ConditionType.Equals("Terra.Studio.GameStart") && isDone)
+            if (translatable.Listen == Listen.Always && !translatable.ConditionType.Equals("Terra.Studio.GameStart") && isDone)
             {
                 translatable.CanExecute = false;
                 translatable.IsExecuted = false;
                 var compsData = RuntimeOp.Resolve<ComponentsData>();
                 compsData.ProvideEventContext(true, translatable.EventContext);
-            }
-        }
-
-        public override void OnHaltRequested(EcsWorld currentWorld)
-        {
-            var filter = currentWorld.Filter<TranslateComponent>().End();
-            var translatePool = currentWorld.GetPool<TranslateComponent>();
-            foreach (var entity in filter)
-            {
-                var translatable = translatePool.Get(entity);
-                if (translatable.CanExecute)
-                {
-                    continue;
-                }
-                var compsData = RuntimeOp.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(false, translatable.EventContext);
             }
         }
 
@@ -155,7 +127,7 @@ namespace Terra.Studio
             }
             if (totalEntitiesFinishedJob == filter.GetEntitiesCount())
             {
-                RuntimeOp.Resolve<RuntimeSystem>().RemoveRunningInstance(this);
+                RemoveRunningInstance();
             }
         }
 

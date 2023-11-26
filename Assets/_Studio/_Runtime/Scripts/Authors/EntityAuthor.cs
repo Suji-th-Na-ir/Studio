@@ -30,9 +30,9 @@ namespace Terra.Studio
             ((EntityAuthor)Author).HandleEntityAndComponentGeneration(go, virtualEntity);
         }
 
-        public static void Degenerate(int entityID)
+        public static void Degenerate<T>(int entityID) where T : struct, IBaseComponent
         {
-            Author.Degenerate(entityID);
+            ((EntityAuthor)Author).Degenerate<T>(entityID);
         }
 
         public static void Flush()
@@ -107,16 +107,16 @@ namespace Terra.Studio
                 RuntimeOp.Resolve<SceneDataHandler>().HandleChildren(go, virtualEntity.children, HandleComponentsGeneration);
             }
 
-            public override void Degenerate(int entityID)
+            public override void Degenerate<T>(int entityID)
             {
                 CoroutineService.RunCoroutine(() =>
                 {
-                    DestroyEntity(entityID);
+                    DestroyEntity<T>(entityID);
                 },
                 CoroutineService.DelayType.WaitForFrame);
             }
 
-            private void DestroyEntity(int entityID)
+            private void DestroyEntity<T>(int entityID) where T : struct, IBaseComponent
             {
                 var ecsWorld = RuntimeOp.Resolve<RuntimeSystem>().World;
                 var entities = new int[0];
@@ -126,15 +126,12 @@ namespace Terra.Studio
                     Debug.Log($"Entity {entityID} not found!");
                     return;
                 }
-                CheckAndHandleDestroyTypes(ecsWorld, entityID);
+                CheckAndHandleDestroyType<T>(ecsWorld, entityID);
                 ecsWorld.DelEntity(entityID);
-            }
-
-            private void CheckAndHandleDestroyTypes(EcsWorld world, int toCheckEntity)
-            {
-                CheckAndHandleDestroyType<DestroyOnComponent>(world, toCheckEntity);
-                CheckAndHandleDestroyType<CollectableComponent>(world, toCheckEntity);
-                CheckAndHandleDestroyType<MeleeDamageableComponent>(world, toCheckEntity);
+                if (entities.Length == 1)
+                {
+                    RuntimeOp.Resolve<RuntimeSystem>().RemoveRunningInstance<BaseSystem<T>, T>();
+                }
             }
 
             private void CheckAndHandleDestroyType<T>(EcsWorld world, int toCheckEntity) where T : struct, IBaseComponent

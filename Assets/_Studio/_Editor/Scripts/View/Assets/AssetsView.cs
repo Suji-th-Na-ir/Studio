@@ -20,12 +20,12 @@ namespace Terra.Studio
         private SearchBar _search;
         private AssetData[] _currentData;
         [SerializeField] private GridLayoutGroup m_refMainGridGroup;
-        
+
         public void Awake()
         {
             EditorOp.Register(this);
         }
-        
+
         public override void Init()
         {
             var api = new AssetsWindowAPI();
@@ -56,7 +56,6 @@ namespace Terra.Studio
         private void MakeUIBetter()
         {
             int columnCount = m_refMainGridGroup.constraintCount;
-            Debug.Log("m_refMainGridGroup : " + m_refMainGridGroup.gameObject.GetComponent<RectTransform>().rect);
             float ySize = m_refMainGridGroup.gameObject.GetComponent<RectTransform>().rect.height / (NumberOfAssetsToShowForNow / columnCount);
             m_refMainGridGroup.cellSize = new Vector2(m_refMainGridGroup.cellSize.x, ySize - m_refMainGridGroup.spacing.y);
         }
@@ -70,14 +69,13 @@ namespace Terra.Studio
             else
             {
                 _currentData = _fullData.data;
-                _scroll.Init(_currentData.Length/NumberOfAssetsToShowForNow, PageChanged);
+                _scroll.Init(_currentData.Length / NumberOfAssetsToShowForNow, PageChanged);
             }
         }
 
         private IEnumerator SearchRoutine(string query)
         {
-            Debug.Log($"Started searching for {query}");
-            List<AssetData> bla = new(); 
+            List<AssetData> bla = new();
             for (var i = 0; i < _fullData.data.Length; i++)
             {
                 var d = _fullData.data[i];
@@ -87,7 +85,7 @@ namespace Terra.Studio
                     bla.Add(d);
                 }
 
-                if (i%1000 == 0)
+                if (i % 1000 == 0)
                 {
                     yield return null;
                 }
@@ -95,24 +93,24 @@ namespace Terra.Studio
 
             Debug.Log($"Ended searching for {query}");
             _currentData = bla.ToArray();
-            _scroll.Init(_currentData.Length/NumberOfAssetsToShowForNow, PageChanged);
+            _scroll.Init(_currentData.Length / NumberOfAssetsToShowForNow, PageChanged);
         }
-        
+
         private void PageChanged(int obj)
         {
             ClearDataIfAny();
-            
+
             var buttonPrefab = EditorOp.Load<GameObject>(assetsWindowButtonPath);
             var ghostMat = EditorOp.Load<Material>(ghostMatPath);
             var temp = GetComponentInChildren<GridLayoutGroup>();
             var x = Mathf.Max(obj - 1, 0);
             int counter = 0;
-            for (var i = NumberOfAssetsToShowForNow * x; i < _currentData.Length && counter<NumberOfAssetsToShowForNow; i++)
+            for (var i = NumberOfAssetsToShowForNow * x; i < _currentData.Length && counter < NumberOfAssetsToShowForNow; i++)
             {
                 counter++;
                 var data = _currentData[i];
                 var button = Instantiate(buttonPrefab, temp.transform);
-                button.GetComponent<DraggableBehaviour>().Init(this,data, ghostMat);
+                button.GetComponent<DraggableBehaviour>().Init(this, data, ghostMat);
             }
             MakeUIBetter();
         }
@@ -125,11 +123,11 @@ namespace Terra.Studio
                 Destroy(o.gameObject);
             }
         }
-        
-        
+
+
         private DraggableBehaviour currHighlight;
         private bool currentlyDragging;
-        
+
         public void Selected(DraggableBehaviour currHover, bool highlight)
         {
             if (currentlyDragging)
@@ -139,7 +137,7 @@ namespace Terra.Studio
             {
                 currHighlight.SetHighlight(false);
             }
-            
+
             if (currHighlight != null && highlight)
             {
                 currHighlight.SetHighlight(false);
@@ -173,7 +171,7 @@ namespace Terra.Studio
                 bla.SetHighlight(false);
             }
         }
-        
+
         private void OnDestroy()
         {
             EditorOp.Unregister(this);

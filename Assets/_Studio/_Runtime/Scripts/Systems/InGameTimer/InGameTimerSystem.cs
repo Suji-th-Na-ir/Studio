@@ -3,24 +3,24 @@ using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
-    public class InGameTimerSystem : BaseSystem, IEcsRunSystem
+    public class InGameTimerSystem : BaseSystem<InGameTimerComponent>, IEcsRunSystem
     {
-        public override void Init<T>(int entity)
+        public override void Init(int entity)
         {
             var entityRef = EntityAuthorOp.GetComponent<InGameTimerComponent>(entity);
             if (entityRef.totalTime == 0)
             {
-                RuntimeOp.Resolve<RuntimeSystem>().RemoveRunningInstance(this);
+                RemoveRunningInstance();
                 return;
             }
-            base.Init<T>(entity);
+            base.Init(entity);
         }
 
-        public override void OnConditionalCheck(int entity, object data)
+        protected override void OnConditionalCheck(int entity, object data)
         {
+            base.OnConditionalCheck(entity, data);
             ref var entityRef = ref EntityAuthorOp.GetComponent<InGameTimerComponent>(entity);
-            var compData = RuntimeOp.Resolve<ComponentsData>();
-            compData.ProvideEventContext(false, entityRef.EventContext);
+            entityRef.IsExecuted = false;
             entityRef.CanExecute = true;
             RuntimeOp.Resolve<CoreGameManager>().EnableModule<InGameTimeHandler>();
             var startTime = entityRef.timerType == TimerType.CountUp ? 0f : entityRef.totalTime;
@@ -62,17 +62,14 @@ namespace Terra.Studio
             }
             if (totalEntitiesFinishedJob == filter.GetEntitiesCount())
             {
-                RuntimeOp.Resolve<RuntimeSystem>().RemoveRunningInstance(this);
+                RemoveRunningInstance();
             }
         }
 
         private void BroadcastOnTimerEnd(ref InGameTimerComponent timer)
         {
             timer.IsExecuted = true;
-            if (timer.IsBroadcastable)
-            {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(timer.Broadcast);
-            }
+            Broadcast(timer);
         }
     }
 }

@@ -19,25 +19,14 @@ namespace Terra.Studio
         public string Broadcast { get; set; }
         public bool IsTargeted { get; set; }
         public int TargetId { get; set; }
+        public FXData FXData { get; set; }
+        public Listen Listen { get; set; }
         [JsonIgnore] public bool CanExecute { get; set; }
         [JsonIgnore] public bool IsExecuted { get; set; }
         [JsonIgnore] public EventContext EventContext { get; set; }
         [JsonIgnore] public GameObject RefObj { get; set; }
-        [JsonIgnore] public bool isEquipped { get; set; }
-
-        public bool canPlaySFX;
-        public string sfxName;
-        public int sfxIndex;
-        public bool canPlayVFX;
-        public string vfxName;
-        public int vfxIndex;
+        [JsonIgnore] public bool isEquipped;
         public int damage;
         public AttackAnimation attackAnimation;
-        public bool canPlaySFXAttack;
-        public string sfxNameAttack;
-        public int sfxIndexAttack;
-        public bool canPlayVFXAttack;
-        public string vfxNameAttack;
-        public int vfxIndexAttack;
     }
 }

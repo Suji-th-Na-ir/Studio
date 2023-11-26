@@ -191,11 +191,6 @@ namespace Terra.Studio
             MoveGameObjectToActiveScene(vfx);
         }
 
-        public static void AddScore(float addBy)
-        {
-            RuntimeOp.Resolve<ScoreHandler>().AddScore((int)addBy);
-        }
-
         public static void CleanAllBehaviours(Transform transform)
         {
             CleanBehaviour(transform);

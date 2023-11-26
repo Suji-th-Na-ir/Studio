@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Linq;
 using Terra.Studio;
 using System.Reflection;
-using RuntimeInspectorNamespace;
 
 [AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
 public class ComponentListAttribute : PropertyAttribute
@@ -41,7 +40,7 @@ public class SystemListAttribute : PropertyAttribute
     {
         var assembly = Assembly.GetAssembly(typeof(IBaseComponent));
         var systemNames = assembly.GetTypes()
-            .Where(type => type.IsClass && typeof(BaseSystem).IsAssignableFrom(type))
+            .Where(type => type.IsClass && typeof(IWorldActions).IsAssignableFrom(type))
             .Select(type => type.FullName)
             .ToList();
         systemNames.Insert(0, "None");

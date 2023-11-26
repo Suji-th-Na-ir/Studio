@@ -58,7 +58,8 @@ namespace Terra.Studio
     public enum Listen
     {
         Once,
-        Always
+        Always,
+        ConditionBased
     }
 
     public enum StudioState

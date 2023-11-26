@@ -1,9 +1,9 @@
 using TMPro;
+using System;
 using GLTFast;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
-using PlayShifu.Terra;
 using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine.EventSystems;
@@ -205,15 +205,25 @@ namespace Terra.Studio
 
             if (_textureRequest != null)
             {
-                if (!_textureRequest.isDone)
+                try
                 {
-                    _textureRequest.Abort();
+                    if (!_textureRequest.isDone)
+                    {
+                        _textureRequest.Abort();
+                    }
+                    if (_textureRequest.downloadHandler is DownloadHandlerTexture dht && _textureRequest.isDone)
+                    {
+                        Destroy(dht.texture);
+                    }
                 }
-                if (_textureRequest.downloadHandler is DownloadHandlerTexture dht && _textureRequest.isDone)
+                catch (Exception ex)
                 {
-                    Destroy(dht.texture);
+                    Debug.Log($"Exception while destroying texture request is: {ex}");
                 }
-                _textureRequest.Dispose();
+                finally
+                {
+                    _textureRequest.Dispose();
+                }
             }
         }
     }

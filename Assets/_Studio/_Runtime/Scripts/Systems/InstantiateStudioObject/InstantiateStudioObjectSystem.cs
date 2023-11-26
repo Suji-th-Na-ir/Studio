@@ -1,11 +1,10 @@
 using UnityEngine;
-using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
-    public class InstantiateStudioObjectSystem : BaseSystem
+    public class InstantiateStudioObjectSystem : BaseSystem<InstantiateStudioObjectComponent>
     {
-        public override void Init<T>(int entity)
+        public override void Init(int entity)
         {
             ref var entityRef = ref entity.GetComponent<InstantiateStudioObjectComponent>();
             entityRef.RefObj.SetActive(false);
@@ -18,10 +17,10 @@ namespace Terra.Studio
             };
             if (entityRef.instantiateOn == InstantiateOn.EveryXSeconds) entityRef.rounds--;
             entityRef.EventContext = context;
-            base.Init<T>(entity);
+            base.Init(entity);
         }
 
-        public override void OnConditionalCheck(int entity, object data)
+        protected override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref entity.GetComponent<InstantiateStudioObjectComponent>();
             entityRef.CanExecute = true;
@@ -46,10 +45,7 @@ namespace Terra.Studio
         public void OnDemandRun(InstantiateStudioObjectComponent component)
         {
             Instantiate(component);
-            if (component.canPlaySFX)
-            {
-                RuntimeWrappers.PlaySFX(component.sfxName);
-            }
+            PlaySFXIfExists(component, 0);
             CoroutineService.RunCoroutine(() =>
             {
                 if (component.IsBroadcastable)
@@ -85,10 +81,7 @@ namespace Terra.Studio
                 EntityAuthorOp.HandleComponentsGeneration(duplicate, component.componentsOnSelf);
                 var refTr = duplicate.transform;
                 var childrenEntities = component.childrenEntities;
-                if (component.canPlayVFX)
-                {
-                    RuntimeWrappers.PlayVFX(component.vfxName, duplicate.transform.position);
-                }
+                PlayVFXIfExists(component, 0);
                 if (childrenEntities == null || childrenEntities.Length == 0) continue;
                 for (int j = 0; j < childrenEntities.Length; j++)
                 {
@@ -99,39 +92,23 @@ namespace Terra.Studio
                         entityData.shouldLoadAssetAtRuntime = true;
                         EntityAuthorOp.ProvideGameobjectForEntity(entityData, (go) =>
                         {
-                            SetupChildGo(go, in entityData, component);
+                            SetupChildGo(go, in entityData);
                         });
                     }
                     else
                     {
                         childGo = refTr.GetChild(j).gameObject;
                         RuntimeWrappers.ResolveTRS(childGo, null, entityData.position, entityData.rotation, entityData.scale);
-                        SetupChildGo(childGo, in entityData, component);
+                        SetupChildGo(childGo, in entityData);
                     }
                 }
             }
         }
 
-        private void SetupChildGo(GameObject childGo, in VirtualEntity entityData, InstantiateStudioObjectComponent component)
+        private void SetupChildGo(GameObject childGo, in VirtualEntity entityData)
         {
             RuntimeOp.Resolve<SceneDataHandler>().SetColliderData(childGo, entityData.metaData);
             EntityAuthorOp.HandleEntityAndComponentsGeneration(childGo, entityData);
-        }
-
-        public override void OnHaltRequested(EcsWorld currentWorld)
-        {
-            var filter = currentWorld.Filter<InstantiateStudioObjectComponent>().End();
-            var compPool = currentWorld.GetPool<InstantiateStudioObjectComponent>();
-            foreach (var entity in filter)
-            {
-                var component = compPool.Get(entity);
-                if (component.IsExecuted)
-                {
-                    continue;
-                }
-                var compsData = RuntimeOp.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(false, component.EventContext);
-            }
         }
     }
 }

@@ -1,50 +1,20 @@
-using Leopotam.EcsLite;
-
 namespace Terra.Studio
 {
-    public class SetObjectPositionSystem : BaseSystem
+    public class SetObjectPositionSystem : BaseSystem<SetObjectPositionComponent>
     {
-        public override void OnConditionalCheck(int entity, object data)
+        protected override void OnConditionalCheck(int entity, object data)
         {
+            base.OnConditionalCheck(entity, data);
             ref var entityRef = ref entity.GetComponent<SetObjectPositionComponent>();
             entityRef.CanExecute = true;
-            entityRef.IsExecuted = true;
-            var comp = RuntimeOp.Resolve<ComponentsData>();
-            comp.ProvideEventContext(false, entityRef.EventContext);
             OnDemandRun(in entityRef);
         }
 
         public void OnDemandRun(in SetObjectPositionComponent component)
         {
-            if (component.canPlaySFX)
-            {
-                RuntimeWrappers.PlaySFX(component.sfxName);
-            }
-            if (component.canPlayVFX)
-            {
-                RuntimeWrappers.PlayVFX(component.vfxName, component.RefObj.transform.position);
-            }
-            if (component.IsBroadcastable)
-            {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast);
-            }
+            PlayFXIfExists(component, 0);
+            Broadcast(component);
             component.RefObj.transform.position = component.targetPosition;
-        }
-
-        public override void OnHaltRequested(EcsWorld currentWorld)
-        {
-            var filter = currentWorld.Filter<SetObjectPositionComponent>().End();
-            var compPool = currentWorld.GetPool<SetObjectPositionComponent>();
-            foreach (var entity in filter)
-            {
-                var component = compPool.Get(entity);
-                if (component.IsExecuted)
-                {
-                    continue;
-                }
-                var compsData = RuntimeOp.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(false, component.EventContext);
-            }
         }
     }
 }

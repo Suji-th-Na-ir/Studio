@@ -53,7 +53,8 @@ namespace Terra.Studio
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
                 Broadcast = broadcastData.broadcast,
                 totalTime = timer,
-                timerType = timerType
+                timerType = timerType,
+                Listen = Listen.Once
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var data = JsonConvert.SerializeObject(comp);

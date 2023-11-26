@@ -40,7 +40,10 @@ namespace Terra.Studio
             {
                 targetScore = targetScore,
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast) && targetScore != 0,
-                Broadcast = broadcastData.broadcast
+                Broadcast = broadcastData.broadcast,
+                ConditionType = "Terra.Studio.GameStart",
+                ConditionData = "OnStart",
+                Listen = Listen.Once
             };
             var json = JsonConvert.SerializeObject(compData);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);

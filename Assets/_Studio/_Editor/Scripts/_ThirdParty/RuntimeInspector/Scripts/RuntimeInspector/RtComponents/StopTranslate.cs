@@ -34,6 +34,14 @@ namespace Terra.Studio
         {
             startOn.data.listenName
         };
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
+        {
+            playSFX
+        };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
+        {
+            playVFX
+        };
 
         protected override void Awake()
         {
@@ -54,12 +62,8 @@ namespace Terra.Studio
                 IsBroadcastable = !string.IsNullOrEmpty(broadcastData.broadcast),
                 Broadcast = broadcastData.broadcast,
                 startIndex = startOn.data.startIndex,
-                canPlaySFX = playSFX.data.canPlay,
-                sfxName = playSFX.data.clipName,
-                sfxIndex = playSFX.data.clipIndex,
-                canPlayVFX = playVFX.data.canPlay,
-                vfxName = playVFX.data.clipName,
-                vfxIndex = playVFX.data.clipIndex
+                FXData = GetFXData(),
+                Listen = Listen.Always
             };
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);
             var json = JsonConvert.SerializeObject(data);
@@ -99,12 +103,7 @@ namespace Terra.Studio
             startOn.data.listenName = GetListenValues(obj);
             startOn.data.startIndex = obj.startIndex;
             broadcastData.broadcast = obj.Broadcast;
-            playSFX.data.canPlay = obj.canPlaySFX;
-            playSFX.data.clipIndex = obj.sfxIndex;
-            playSFX.data.clipName = obj.sfxName;
-            playVFX.data.canPlay = obj.canPlayVFX;
-            playVFX.data.clipIndex = obj.vfxIndex;
-            playVFX.data.clipName = obj.vfxName;
+            MapSFXAndVFXData(obj.FXData);
             var listenString = "";
             if (startOn.data.startIndex == 1)
             {

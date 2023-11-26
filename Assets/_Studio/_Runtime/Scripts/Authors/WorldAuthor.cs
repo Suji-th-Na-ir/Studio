@@ -12,11 +12,6 @@ namespace Terra.Studio
             Author.Generate(data);
         }
 
-        public static void Degenerate(int entityID)
-        {
-            Author.Degenerate(entityID);
-        }
-
         public static void Flush()
         {
             Author<WorldAuthor>.Flush();

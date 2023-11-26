@@ -1,21 +1,20 @@
 using UnityEngine;
 using PlayShifu.Terra;
-using Leopotam.EcsLite;
 
 namespace Terra.Studio
 {
-    public class StopTranslateSystem : BaseSystem
+    public class StopTranslateSystem : BaseSystem<StopTranslateComponent>
     {
-        public override void Init<T>(int entity)
+        public override void Init(int entity)
         {
-            base.Init<T>(entity);
+            base.Init(entity);
             ref var entityRef = ref entity.GetComponent<StopTranslateComponent>();
             var rb = entityRef.RefObj.AddRigidbody();
             rb.isKinematic = true;
             rb.useGravity = false;
         }
 
-        public override void OnConditionalCheck(int entity, object data)
+        protected override void OnConditionalCheck(int entity, object data)
         {
             ref var entityRef = ref entity.GetComponent<StopTranslateComponent>();
             var isTranslateFound = CheckIfRotateComponentExistsOnEntity(entity);
@@ -36,39 +35,8 @@ namespace Terra.Studio
                 compsData.ProvideEventContext(true, translateRef.EventContext);
             }
             translateRef.isHaltedByEvent = true;
-            OnDemandRun(in entityRef);
-        }
-
-        public void OnDemandRun(in StopTranslateComponent component)
-        {
-            if (component.canPlaySFX)
-            {
-                RuntimeWrappers.PlaySFX(component.sfxName);
-            }
-            if (component.canPlayVFX)
-            {
-                RuntimeWrappers.PlayVFX(component.vfxName, component.RefObj.transform.position);
-            }
-            if (component.IsBroadcastable)
-            {
-                RuntimeOp.Resolve<Broadcaster>().Broadcast(component.Broadcast);
-            }
-        }
-
-        public override void OnHaltRequested(EcsWorld currentWorld)
-        {
-            var filter = currentWorld.Filter<StopTranslateComponent>().End();
-            var compPool = currentWorld.GetPool<StopTranslateComponent>();
-            foreach (var entity in filter)
-            {
-                var component = compPool.Get(entity);
-                if (component.IsExecuted)
-                {
-                    continue;
-                }
-                var compsData = RuntimeOp.Resolve<ComponentsData>();
-                compsData.ProvideEventContext(false, component.EventContext);
-            }
+            PlayFXIfExists(entityRef, 0);
+            Broadcast(entityRef);
         }
 
         private bool CheckIfRotateComponentExistsOnEntity(int entity)

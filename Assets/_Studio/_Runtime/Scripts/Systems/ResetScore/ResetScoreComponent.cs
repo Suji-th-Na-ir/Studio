@@ -7,8 +7,6 @@ namespace Terra.Studio
     [Serializable]
     public struct ResetScoreComponent : IBaseComponent
     {
-        public Listen listen;
-
         public bool IsConditionAvailable { get; set; }
         public string ConditionType { get; set; }
         public string ConditionData { get; set; }
@@ -16,6 +14,8 @@ namespace Terra.Studio
         public string Broadcast { get; set; }
         public bool IsTargeted { get; set; }
         public int TargetId { get; set; }
+        public FXData FXData { get; set; }
+        public Listen Listen { get; set; }
         [JsonIgnore] public bool CanExecute { get; set; }
         [JsonIgnore] public bool IsExecuted { get; set; }
         [JsonIgnore] public EventContext EventContext { get; set; }
