@@ -81,7 +81,7 @@ namespace Terra.Studio
                 EntityAuthorOp.HandleComponentsGeneration(duplicate, component.componentsOnSelf);
                 var refTr = duplicate.transform;
                 var childrenEntities = component.childrenEntities;
-                PlayVFXIfExists(component, 0);
+                PlayVFXOnChildren(component, 0, duplicate);
                 if (childrenEntities == null || childrenEntities.Length == 0) continue;
                 for (int j = 0; j < childrenEntities.Length; j++)
                 {
@@ -109,6 +109,16 @@ namespace Terra.Studio
         {
             RuntimeOp.Resolve<SceneDataHandler>().SetColliderData(childGo, entityData.metaData);
             EntityAuthorOp.HandleEntityAndComponentsGeneration(childGo, entityData);
+        }
+
+        private void PlayVFXOnChildren(in InstantiateStudioObjectComponent instance, int index, GameObject gameObject)
+        {
+            var baseComponent = (IBaseComponent)instance;
+            var fxData = baseComponent.GetVFXData(index);
+            if (fxData != null && fxData.Value.canPlay)
+            {
+                RuntimeWrappers.PlayVFX(fxData.Value.clipName, gameObject.transform.position);
+            }
         }
     }
 }
