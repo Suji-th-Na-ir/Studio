@@ -279,10 +279,11 @@ namespace RuntimeInspectorNamespace
 			listView.UpdateList();
 		}
 
-		void IListViewAdapter.SetItemContent( RecycledListItem item )
+		void IListViewAdapter.SetItemContent(RecycledListItem item)
 		{
-			ObjectReferencePickerItem it = (ObjectReferencePickerItem) item;
-			it.SetContent( filteredReferences[it.Position], referenceDisplayNameGetter( filteredReferences[it.Position] ) );
+			ObjectReferencePickerItem it = (ObjectReferencePickerItem)item;
+
+			it.SetContent(filteredReferences[it.Position], referenceDisplayNameGetter(filteredReferences[it.Position]), referenceNameGetter(filteredReferences[it.Position]));
 
 			if( it.Reference == currentlySelectedObject )
 			{

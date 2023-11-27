@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Terra.Studio;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
@@ -17,6 +18,10 @@ namespace RuntimeInspectorNamespace
 
 		[SerializeField]
 		private Text referenceNameText;
+
+		[SerializeField]
+		private Image icon;
+
 #pragma warning restore 0649
 
 		public object Reference { get; private set; }
@@ -46,7 +51,9 @@ namespace RuntimeInspectorNamespace
 		}
 
 		private bool m_isSelected = false;
-		public bool IsSelected
+        private ComponentIconsPreset iconsPreset;
+
+        public bool IsSelected
 		{
 			get { return m_isSelected; }
 			set
@@ -72,12 +79,15 @@ namespace RuntimeInspectorNamespace
 			GetComponent<PointerEventListener>().PointerClick += ( eventData ) => OnClick();
 		}
 
-		public void SetContent( object reference, string displayName )
+		public void SetContent( object reference, string displayName,string originalName )
 		{
 			Reference = reference;
 			referenceNameText.text = displayName.Split(".").Last();
-
-			Texture previewTex = ( reference as Object ).GetTexture();
+            if (!iconsPreset)
+                iconsPreset = EditorOp.Load<ComponentIconsPreset>("SOs/Component_Icon_SO");
+			originalName = originalName.Replace("Terra.Studio.", "");
+            icon.sprite = iconsPreset.GetIcon(originalName);
+            Texture previewTex = ( reference as Object ).GetTexture();
 			if( previewTex != null )
 			{
 				texturePreview.gameObject.SetActive( true );
