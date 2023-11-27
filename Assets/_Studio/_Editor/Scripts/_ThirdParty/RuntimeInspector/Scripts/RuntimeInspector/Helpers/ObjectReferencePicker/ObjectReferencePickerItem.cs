@@ -95,6 +95,11 @@ namespace RuntimeInspectorNamespace
 			}
 			else
 				texturePreview.gameObject.SetActive( false );
+
+			var tooltip=gameObject.AddComponent<TooltipContent>();
+			tooltip.tooltipText = originalName;
+
+
 		}
 	}
 }
