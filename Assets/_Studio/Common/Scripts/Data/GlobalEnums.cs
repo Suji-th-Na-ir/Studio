@@ -29,8 +29,8 @@ namespace Terra.Studio
 
     public enum RepeatDirectionType
     {
-        SameDirection,
-        PingPong
+        PingPong,
+        SameDirection
     }
 
     public enum TransFormCopyValues

@@ -203,13 +203,17 @@ namespace RuntimeInspectorNamespace
                             }
 
                             bool canSkip = false;
-                            foreach (var c in target.GetComponents<BaseBehaviour>())
+                            var selected = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
+                            foreach (var s in selected)
                             {
-                                if(c.GetType().Equals(type))
+                                foreach (var c in s.GetComponents<BaseBehaviour>())
                                 {
-                                    canSkip = true;
-                                    break;
-                                }    
+                                    if (c.GetType().Equals(type))
+                                    {
+                                        canSkip = true;
+                                        break;
+                                    }
+                                }
                             }
 
                             if (canSkip)
