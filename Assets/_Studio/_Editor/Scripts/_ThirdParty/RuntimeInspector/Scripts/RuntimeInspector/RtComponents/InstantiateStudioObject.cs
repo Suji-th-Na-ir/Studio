@@ -15,24 +15,12 @@ namespace Terra.Studio
 
         public override string ComponentName => nameof(InstantiateStudioObject);
         public override bool CanPreview => true;
-        protected override bool CanBroadcast => false;
+        protected override bool CanBroadcast => true;
         protected override bool CanListen => true;
-        protected override string[] BroadcasterRefs => new string[]
-        {
-            broadcast.broadcast
-        };
-        protected override string[] ListenerRefs => new string[]
-        {
-            instantiateData.spawnWhen.data.listenName
-        };
-        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[]
-        {
-            playSFX
-        };
-        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[]
-        {
-            playVFX
-        };
+        protected override string[] BroadcasterRefs => new string[] { broadcast.broadcast };
+        protected override string[] ListenerRefs => new string[] { instantiateData.spawnWhen.data.listenName };
+        protected override Atom.PlaySfx[] Sfxes => new Atom.PlaySfx[] { playSFX };
+        protected override Atom.PlayVfx[] Vfxes => new Atom.PlayVfx[] { playVFX };
 
         protected override void Awake()
         {
