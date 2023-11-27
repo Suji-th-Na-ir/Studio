@@ -335,7 +335,11 @@ namespace RuntimeInspectorNamespace
             designButton.GetComponent<Image>().color = Skin.ButtonBackgroundColor;
             OnPageIndexChanged?.Invoke(1);
             initialized = true;
-
+            
+            //Remove this when design tab is needed
+            {
+                designButton.gameObject.SetActive(false);
+            }
 #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
 			// On new Input System, scroll sensitivity is much higher than legacy Input system
 			scrollView.scrollSensitivity *= 0.25f;
