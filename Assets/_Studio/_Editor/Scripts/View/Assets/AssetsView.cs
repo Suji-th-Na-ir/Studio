@@ -66,7 +66,6 @@ namespace Terra.Studio
 
         private const string KeyAssetData = "AssetData";
         private const string KeyCategoryData = "CategoryData";
-        private const string KeyAssetDataCount = "AssetDataCount";
 
         public void Awake()
         {
@@ -82,10 +81,9 @@ namespace Terra.Studio
 
 
             if (_crossSceneDataHolder.Get(KeyAssetData, out var assetData) 
-                && _crossSceneDataHolder.Get(KeyCategoryData, out var categoryData) 
-                && _crossSceneDataHolder.Get(KeyAssetDataCount, out var assetDataCount) )
+                && _crossSceneDataHolder.Get(KeyCategoryData, out var categoryData))
             {
-                OnAssetsDataFetchCompleted(true, (string)assetData, (int)assetDataCount);
+                OnAssetsDataFetchCompleted(true, (string)assetData);
                 OnCategoryDataFetchCompleted(true, (string)categoryData);
                 AllDataReceived();
             }
@@ -104,7 +102,7 @@ namespace Terra.Studio
                 var assetsApi = new AssetsWindowAPI(1, SmoothNumberPerApi);
                 assetsApi.DoRequest((status, response) =>
                 {
-                    OnAssetsDataFetchCompleted(status, response, assetsApi.ResponseData.count);
+                    OnAssetsDataFetchCompleted(status, response);
                 });
             }
             else
@@ -112,7 +110,7 @@ namespace Terra.Studio
                 var text = EditorOp.Load<TextAsset>(sampleJson);
                 var json = text.text;
                 var temp = JsonConvert.DeserializeObject<APIResponse>(json);
-                OnAssetsDataFetchCompleted(true, temp.data, 2000);
+                OnAssetsDataFetchCompleted(true, temp.data);
             }
 
             yield return new WaitUntil(() => _assetJsonDownloaded && _categoryJsonDownloaded);
@@ -130,16 +128,16 @@ namespace Terra.Studio
             });
         }
 
-        private void OnAssetsDataFetchCompleted(bool success, string response, int count)
+        private void OnAssetsDataFetchCompleted(bool success, string response)
         {
             _crossSceneDataHolder.Set(KeyAssetData, response);
-            _crossSceneDataHolder.Set(KeyAssetDataCount, count);
             _assetJsonDownloaded = true;
-            _totalMaxAssets = count;
-            _currentMaxAssets = count;
+            
             _fullData = ParseAssetDataFrom64Zipped(response);
             // _fullData = _fullData.Where(x => x.flags != null && x.flags.Any(y => y == "Premium")).ToArray();
             _currentData = _fullData;
+            _totalMaxAssets = _fullData.Length;
+            _currentMaxAssets = _fullData.Length;
            
         }
         private void OnCategoryDataFetchCompleted(bool success, string response)

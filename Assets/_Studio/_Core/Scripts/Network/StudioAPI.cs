@@ -11,7 +11,6 @@ namespace Terra.Studio
         public int status;
         public string message;
         public string data;
-        public int count;
     }
 
     [Serializable]
