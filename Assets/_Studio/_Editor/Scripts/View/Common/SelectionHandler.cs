@@ -380,7 +380,7 @@ public class SelectionHandler : View
 
             if (pickedObject != null)
             {
-                if (RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl))
+                if (RTInput.IsKeyPressed(KeyCode.LeftCommand) || RTInput.IsKeyPressed(KeyCode.LeftControl)|| RTInput.IsKeyPressed(KeyCode.LeftShift) || RTInput.IsKeyPressed(KeyCode.RightShift))
                 {
                     if (_selectedObjects.Contains(pickedObject))
                         _selectedObjects.Remove(pickedObject);
