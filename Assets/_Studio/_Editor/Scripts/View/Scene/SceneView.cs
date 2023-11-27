@@ -10,6 +10,7 @@ namespace Terra.Studio
         private const string TOGGLE_IN_STATE_KEY = "Sine In";
         private Animator previewToggleAnim;
 
+        GameObject dynamicUI;
         private void Awake()
         {
             EditorOp.Register(this);
@@ -33,6 +34,16 @@ namespace Terra.Studio
         public override void Repaint()
         {
 
+        }
+
+        public override GameObject AttachDynamicUI(string component, GameObject go)
+        {
+            if (dynamicUI != null)
+            {
+                Destroy(dynamicUI);
+            }
+            dynamicUI = Instantiate(go, transform);
+            return dynamicUI;
         }
 
         public void TogglePreviewAnim(bool sineOut)

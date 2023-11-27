@@ -4,11 +4,14 @@ using UnityEngine;
 using PlayShifu.Terra;
 using System.Collections.Generic;
 using Object = UnityEngine.Object;
+using UnityEngine.UI;
 
 namespace Terra.Studio
 {
     public class Recorder : IDisposable
     {
+        private const string RECORD_STOP_RESOURCE_NAME = "Prefabs/StopRecord";
+        private GameObject recordStopResource;
         private struct MultiselectUndoRedoChanges
         {
             public BaseBehaviour instance;
@@ -310,7 +313,7 @@ namespace Terra.Studio
                 for (int i = 0; i < count; i++)
                 {
                     var contextTrs = new Vector3[] { trs[i * 3], trs[i * 3 + 1], trs[i * 3 + 2] };
-                    var visualiser = new RecordVisualiser(instance.GhostDescription.GhostTo,
+                    var visualiser = new RecordVisualiser(instance,
                     recorder,
                     () =>
                     {
@@ -551,6 +554,27 @@ namespace Terra.Studio
                 EditorOp.Resolve<SelectionHandler>().OverrideGizmoOntoTarget(new List<GameObject>() { instantiateRecorder.Recorder }, gizmoId);
             }
         }
+
+        public void EnterRecordMode(Action onRecordStop)
+        {
+            if(recordStopResource==null)
+            {
+                recordStopResource = EditorOp.Load<GameObject>(RECORD_STOP_RESOURCE_NAME);
+            }
+            EditorOp.Resolve<SceneView>().TogglePreviewAnim(true);
+            EditorOp.Resolve<SceneView>().OnAnimationDone = () =>
+            {
+                var recordStopButton = EditorOp.Resolve<SceneView>().AttachDynamicUI("record", recordStopResource).GetComponent<Button>();
+                recordStopButton.onClick.AddListener(() =>
+                {
+                    onRecordStop?.Invoke();
+                    EditorOp.Resolve<SceneView>().OnAnimationDone = null;
+                    GameObject.Destroy(recordStopButton.gameObject);
+                    EditorOp.Resolve<SceneView>().TogglePreviewAnim(false);
+                });
+
+            };
+        }
     }
 
     public class RecordVisualiser : IDisposable
@@ -576,23 +600,23 @@ namespace Terra.Studio
         RepeatDirectionType cachedDirectionType;
         public Transform GhostMeshTransform { get { return childGhostMesh; } }
         public bool HasRecorder => baseRecorder != null;
-        private GameObject targetObject;
-        public RecordVisualiser(GameObject gameObject, Record recordFor, Action onGhostDataModified, params Vector3[] trs)
+        private BaseBehaviour targetBehaviour;
+        public RecordVisualiser(BaseBehaviour behaviour, Record recordFor, Action onGhostDataModified, params Vector3[] trs)
         {
             this.recordFor = recordFor;
-            targetObject = gameObject;
+            targetBehaviour = behaviour;
             this.onGhostDataModified = onGhostDataModified;
             ghostMaterial = EditorOp.Load<Material>(GHOST_MATERIAL_PATH);
             var ghostObj = EditorOp.Load<GameObject>(GHOST_RESOURCE_PATH);
-
+         
             ghost = Object.Instantiate(ghostObj);
-            ghost.name = string.Concat(ghost.name, "_", gameObject.name);
-            RuntimeWrappers.DuplicateGameObject(gameObject, ghost.transform, Vector3.zero);
+            ghost.name = string.Concat(ghost.name, "_", behaviour.gameObject.name);
+            RuntimeWrappers.DuplicateGameObject(behaviour.gameObject, ghost.transform, Vector3.zero);
             RuntimeWrappers.ResolveTRS(ghost, null, trs);
             childGhostMesh = ghost.transform.GetChild(0);
             childGhostMesh.localPosition = Vector3.zero;
             childGhostMesh.localRotation = Quaternion.identity;
-            childGhostMesh.localScale = gameObject.transform.lossyScale;
+            childGhostMesh.localScale = behaviour.transform.lossyScale;
             Clean();
             ghost.SetActive(true);
 
@@ -620,6 +644,7 @@ namespace Terra.Studio
         {
             EditorOp.Resolve<EditorSystem>().RequestIncognitoMode(true);
             EditorOp.Resolve<Recorder>().TrackGhost(true, ghost);
+            EditorOp.Resolve<Recorder>().EnterRecordMode(() => { targetBehaviour.GhostDescription.ToggleRecordMode?.Invoke(); });
 
             baseRecorder = recordFor switch
             {
@@ -686,7 +711,7 @@ namespace Terra.Studio
         public void UpdateTRS(params Vector3[] trs)
         {
             RuntimeWrappers.ResolveTRS(ghost, null, trs);
-            childGhostMesh.localScale = targetObject.transform.lossyScale;
+            childGhostMesh.localScale = targetBehaviour.gameObject.transform.lossyScale;
         }
 
         private void CleanCollider(Transform child)
@@ -825,6 +850,7 @@ namespace Terra.Studio
             recorder = Object.Instantiate(obj);
             RuntimeWrappers.ResolveTRS(recorder, null, trs);
             this.onRecordDone = onRecordDone;
+            EditorOp.Resolve<Recorder>().EnterRecordMode(() => { EditorOp.Resolve<Recorder>().ToggleInstantiateRecorder(false, null, null); });
         }
 
         public void Dispose()

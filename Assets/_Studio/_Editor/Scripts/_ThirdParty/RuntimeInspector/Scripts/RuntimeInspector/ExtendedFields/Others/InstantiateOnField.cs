@@ -104,20 +104,11 @@ namespace Terra.Studio
         {
             currentRecordState = !currentRecordState;
             unboxedData.OnRecordToggled?.Invoke(currentRecordState);
-            ToggleInteractivityOfAllFields(!currentRecordState);
+            
             if (currentRecordState)
             {
                 EditorOp.Resolve<ToolbarView>().ToggleInteractionOfGroup("GizmoToolGroup", true);
             }
-        }
-
-        private void ToggleInteractivityOfAllFields(bool status)
-        {
-            if (spawnWhereField) spawnWhereField.SetInteractable(status);
-            if (intervalField) intervalField.SetInteractable(status);
-            if (repeatForeverField) repeatForeverField.SetInteractable(status);
-            if (howManyField) howManyField.SetInteractable(status);
-            if (roundsField && !unboxedData.repeatForever) roundsField.SetInteractable(status);
         }
 
         private void GenerateEveryXSecondsDrawer()

@@ -13,10 +13,6 @@ namespace Terra.Studio
         [SerializeField] private Button resetButton;
         [SerializeField] private Image recordImageHolder;
         [SerializeField] private Sprite recordImage;
-        [SerializeField] private Sprite saveImage;
-
-        private bool isRecording;
-
 
         public override void Initialize()
         {
@@ -85,17 +81,12 @@ namespace Terra.Studio
         {
             var recordedObj = (RecordedVector3)ObscuredValue;
             recordedObj.ToggleRecordMode?.Invoke();
-            isRecording = !isRecording;
-            if (isRecording)
-            {
-                recordImageHolder.sprite = saveImage;
-                SetInteractable(false);
-            }
-            else
-            {
-                recordImageHolder.sprite = recordImage;
-                SetInteractable(true);
-            }
+            CheckAndToggleInteractivityOfResetButton();
+        }
+
+        public override void Refresh()
+        {
+            base.Refresh();
             CheckAndToggleInteractivityOfResetButton();
         }
 
@@ -103,6 +94,7 @@ namespace Terra.Studio
         {
             var recordedObj = (RecordedVector3)ObscuredValue;
             recordedObj.Reset();
+            recordedObj.UpdateGhostTrs?.Invoke();
             ToggleInteractivityOfResetButton(false);
         }
 
