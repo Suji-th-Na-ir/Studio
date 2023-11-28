@@ -71,6 +71,7 @@ namespace Terra.Studio
                 FXData = GetFXData(),
                 IsBroadcastableDead = !string.IsNullOrEmpty(broadcastDataDead.broadcast),
                 BroadcastDead = broadcastDataDead.broadcast,
+                Listen = Listen.Always
             };
             gameObject.TrySetTrigger(false, true);
             var type = EditorOp.Resolve<DataProvider>().GetCovariance(this);

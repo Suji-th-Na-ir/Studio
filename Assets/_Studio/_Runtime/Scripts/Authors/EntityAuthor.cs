@@ -126,6 +126,7 @@ namespace Terra.Studio
                     Debug.Log($"Entity {entityID} not found!");
                     return;
                 }
+                InvokeToBeDestroyedEventsToAllRunningInstances<T>(entityID);
                 CheckAndHandleDestroyType<T>(ecsWorld, entityID);
                 ecsWorld.DelEntity(entityID);
                 if (entities.Length == 1)
@@ -148,6 +149,18 @@ namespace Terra.Studio
                         }
                         return;
                     }
+                }
+            }
+
+            private void InvokeToBeDestroyedEventsToAllRunningInstances<T>(int entity) where T : struct, IBaseComponent
+            {
+                var runningInstances = RuntimeOp.Resolve<RuntimeSystem>().RunningInstances;
+                while (runningInstances.MoveNext())
+                {
+                    var instance = runningInstances.Current;
+                    var isSameType = typeof(T).Equals(instance.Key.GetType());
+                    if (isSameType) continue;
+                    ((IWorldActions)instance.Value).OnEntityQueuedToDestroy(entity);
                 }
             }
         }

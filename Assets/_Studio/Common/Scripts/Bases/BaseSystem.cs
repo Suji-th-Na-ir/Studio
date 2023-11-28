@@ -85,5 +85,7 @@ namespace Terra.Studio
         {
             EntityAuthorOp.Degenerate<T>(entity);
         }
+
+        public virtual void OnEntityQueuedToDestroy(int entity) { }
     }
 }

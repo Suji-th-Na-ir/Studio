@@ -27,6 +27,7 @@ namespace Terra.Studio
 
         public EcsWorld World { get { return ecsWorld; } }
         public Action<GameObject> OnClicked { get; set; }
+        public Dictionary<Type, object>.Enumerator RunningInstances => typeToInstances.GetEnumerator();
 
         private void Awake()
         {

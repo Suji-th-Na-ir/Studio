@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using Newtonsoft.Json;
 
 namespace Terra.Studio
@@ -26,5 +27,7 @@ namespace Terra.Studio
         public int health;
         public bool IsBroadcastableDead;
         public string BroadcastDead;
+        [JsonIgnore] public GameObject healthUI;
+        [JsonIgnore] public Image healthBar;
     }
 }
