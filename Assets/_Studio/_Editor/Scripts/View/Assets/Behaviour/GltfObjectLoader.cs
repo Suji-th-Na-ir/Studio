@@ -158,7 +158,7 @@ namespace Terra.Studio
             CompleteModelFlow();
             if (_loadTexturesCalled)
             {
-                LoadTextures();
+                LoadTextures(onTextureLoadCompleted);
             }
         }
 
@@ -168,11 +168,10 @@ namespace Terra.Studio
             if (!_modelLoaded)
             {
                 _loadTexturesCalled = true;
-                Debug.LogError($"Still Loading the model.", gameObject);
+                // Debug.LogError($"Still Loading the model.", gameObject);
                 return;
             }
-
-            Debug.Log($"Loading Textures why.");
+            
             bool success = await _importer.PrepareTextures(UriHelper.GetBaseUri(new Uri(OgUrl)));
 
             var s_Parser = new GltfJsonUtilityParser();

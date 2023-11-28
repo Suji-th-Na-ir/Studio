@@ -1,9 +1,7 @@
 using TMPro;
 using GLTFast;
 using UnityEngine;
-using System.Linq;
 using UnityEngine.UI;
-using PlayShifu.Terra;
 using System.Collections;
 using UnityEngine.Networking;
 using UnityEngine.EventSystems;
@@ -153,16 +151,11 @@ namespace Terra.Studio
                     SetLayerOfAllChildren(_currGo.LoadedObject.gameObject, "Default");
                 }
 
-                var go = _currGo.LoadedObject.gameObject;
                 _currGo.LoadTextures((status) =>
                 {
-                    if (status)
+                    if (!status)
                     {
-                        var currentSelectedObjs = EditorOp.Resolve<SelectionHandler>().GetSelectedObjects();
-                        if (currentSelectedObjs != null && !currentSelectedObjs.Any(x => x == go))
-                        {
-                            EditorOp.Resolve<SelectionHandler>().Select(go);
-                        }
+                        Debug.Log($"Textures failed downloading. Why?");
                     }
                 });
                 if (EventSystem.current.IsPointerOverGameObject())
@@ -174,6 +167,7 @@ namespace Terra.Studio
             _currGo = null;
             if (_actuallyLoadedGo)
             {
+                EventSystem.current.SetSelectedGameObject(null);
                 SetLayerOfAllChildren(_actuallyLoadedGo, "Default");
                 EditorOp.Resolve<SelectionHandler>().Select(_actuallyLoadedGo);
             }
